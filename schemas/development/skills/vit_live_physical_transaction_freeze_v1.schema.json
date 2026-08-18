@@ -1,5 +1,79 @@
 {
   "$defs": {
+    "frontierLedgerEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "a2_proof_b64": {
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "type": "string"
+        },
+        "a2_proof_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "assurance_generation_b64": {
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "type": "string"
+        },
+        "assurance_generation_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "authority_effect": {
+          "const": "NONE"
+        },
+        "frontier_lineage_b64": {
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "type": "string"
+        },
+        "frontier_lineage_record_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "pip_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "placement_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "record_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "schema": {
+          "const": "ovc-vit-frontier-ledger-envelope/v1"
+        },
+        "source_head_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "vit_generation_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema",
+        "source_head_id",
+        "pip_id",
+        "vit_generation_id",
+        "placement_id",
+        "frontier_lineage_record_id",
+        "frontier_lineage_b64",
+        "assurance_generation_id",
+        "assurance_generation_b64",
+        "a2_proof_id",
+        "a2_proof_b64",
+        "authority_effect",
+        "record_id"
+      ],
+      "type": "object"
+    },
     "transaction": {
       "additionalProperties": false,
       "properties": {
@@ -124,7 +198,10 @@
           "type": "string"
         },
         "source": {
-          "const": "VIT_ROUTING_PREFLIGHT_BEFORE_PHYSICAL_WRITE"
+          "enum": [
+            "VIT_ROUTING_PREFLIGHT_BEFORE_PHYSICAL_WRITE",
+            "SIQ_PHYSICAL_LANE_AFTER_A2"
+          ]
         },
         "workflow_run_id": {
           "minLength": 1,
@@ -138,6 +215,9 @@
         "evidence_rule"
       ],
       "type": "object"
+    },
+    "frontier_ledger_envelope": {
+      "$ref": "#/$defs/frontierLedgerEnvelope"
     },
     "generation_id": {
       "pattern": "^[0-9a-f]{64}$",

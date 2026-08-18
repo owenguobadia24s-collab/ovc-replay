@@ -33,9 +33,15 @@ def main():
  tests=actual['.github/workflows/tests.yml'].read_text(); tiered=actual['.github/workflows/ovc-tiered-tests.yml'].read_text(); resolver=RESOLVER.read_text()
  assert tests.count(FULL)==1 and 'python-version: "3.11"' in tests
  assert FULL not in tiered and 'python-version: "3.11"' in tiered and 'OVC merge readiness' in tiered and 'OVC tiered test selection shadow' in tiered
- assert all(name in resolver for name in REQUIRED_PYTHON_CHECKS) and 'PROFILE_JOB_NAME = "OVC profile assurance"' in resolver, 'PRVITR resolver must retain exact-head legacy and PYT-WP1 parity checks'
+ assert all(name in resolver for name in REQUIRED_PYTHON_CHECKS) and 'PROFILE_JOB_NAME = "OVC profile assurance"' in resolver, 'PRVITR resolver must retain exact source-head A0 and PYT-WP1 parity checks'
  for command in ('ready','acquire','finalize'): assert f'prvitr_live_admission.py {command}' in tiered, f'missing PRVITR live admission command: {command}'
- assert 'OVC_RECONCILE_REQUIRED' in resolver and 'OVC_BASE_MOVED_DURING_READINESS' in resolver and 'OVC_SIQ_READY_ADMITTED' in resolver
+ assert 'OVC_SIQ_READY_ADMITTED' in resolver
+ assert 'PREDECESSOR_MOVED' in resolver
+ assert 'qualified prospective tree' in resolver
+ assert 'source_head' in resolver and 'prospective_result_tree' in resolver
+ assert '_is_ancestor(' not in resolver, 'source PR ancestry must not control VIT materialisation readiness'
+ assert 'OVC_RECONCILE_REQUIRED' not in resolver, 'frontier movement must recompose the same PIP rather than replace the PR'
+ assert 'OVC_ASSURANCE_GENERATION_B64' in tiered and 'A2_PROSPECTIVE' in tiered
  for path in r['push_manual_preserved_workflows']:
   text=actual[path].read_text(); assert 'pull_request:' not in text and 'push:' in text and 'workflow_dispatch:' in text and 'concurrency:' in text and 'cancel-in-progress: true' in text, path
  assert d['decision']=='PASS'
@@ -44,5 +50,5 @@ def main():
  assert rs['current_required_contexts']==['tests','OVC tiered test selection shadow'] and rs['target_required_contexts']==['OVC merge readiness'] and rs['accepted_source']=={'app_id':15368,'app_slug':'github-actions'}
  material='\n'.join([REG.read_text(),QA.read_text(),DECISION.read_text(),RULESET.read_text()])
  for token in ('ghp_','github_pat_','-----BEGIN PRIVATE KEY-----','sk-proj_','Bearer '): assert token not in material
- print(f'DA2-G1 orchestration validation PASS; workflows={len(actual)}; pr_workflows={len(pr)}'); return 0
+ print(f'DA2-G1 orchestration validation PASS; workflows={len(actual)}; pr_workflows={len(pr)}; frontier_decoupled=true'); return 0
 if __name__=='__main__': raise SystemExit(main())

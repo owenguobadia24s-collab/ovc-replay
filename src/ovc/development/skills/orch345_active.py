@@ -22,11 +22,13 @@ from ovc.development.skills.orch345_diagnostics import (
 DEFAULT_MAX_PARALLEL_BUILDS = 4
 DEFAULT_MAX_TRAIN_PACKETS = 8
 DEFAULT_MAX_REQUEUE_ATTEMPTS = 2
-AUTO_REQUEUE_REASON_CODES = {
-    "OVC_BASE_MOVED_BEFORE_READINESS",
-    "OVC_BASE_MOVED_DURING_READINESS",
+FRONTIER_RECOMPOSITION_REASON_CODES = {
+    "PREDECESSOR_MOVED",
+    "OVC_BASE_MOVED_BEFORE_READINESS",  # historical input alias
+    "OVC_BASE_MOVED_DURING_READINESS",  # historical input alias
     "MAIN_ADVANCED_AFTER_ASSURANCE",
 }
+AUTO_REQUEUE_REASON_CODES = FRONTIER_RECOMPOSITION_REASON_CODES
 
 
 def _require_active(authority_resolution: Mapping[str, Any]) -> None:
@@ -180,10 +182,12 @@ def build_authorized_requeue_reconciliation(
     authority_surface_changed: bool = False,
     frozen_surface_changed: bool = False,
 ) -> dict[str, Any]:
-    """Return a fail-closed automatic stale-main requeue/reconciliation decision.
+    """Return a fail-closed same-PIP frontier recomposition decision.
 
-    This is a scheduling decision only. It never rewrites history, force-pushes,
-    merges in parallel, changes packet scope, or crosses an operator gate.
+    Physical-main movement is no longer a request to construct a fresh branch or
+    replacement PR.  For an unchanged low-risk packet it keeps the source head and
+    PIP, recomputes VIT placement on current main, reuses A0, and renews A1/A2.
+    Semantic, authority, frozen-surface or write-set drift still stops serially.
     """
     _require_active(authority_resolution)
     packet_id = str(packet.get("packet_id", "")).strip()
@@ -198,12 +202,10 @@ def build_authorized_requeue_reconciliation(
     packet_class = str(packet.get("packet_class", "")).upper()
 
     blockers: list[str] = []
-    if reason not in AUTO_REQUEUE_REASON_CODES:
-        blockers.append("FAILURE_REASON_NOT_AUTO_REQUEUE_ELIGIBLE")
-    if attempt > DEFAULT_MAX_REQUEUE_ATTEMPTS:
-        blockers.append("AUTO_REQUEUE_ATTEMPTS_EXHAUSTED")
+    if reason not in FRONTIER_RECOMPOSITION_REASON_CODES:
+        blockers.append("FAILURE_REASON_NOT_FRONTIER_RECOMPOSITION_ELIGIBLE")
     if packet_class != LOW_RISK_PACKET_CLASS:
-        blockers.append("PACKET_CLASS_NOT_AUTO_REQUEUE_ELIGIBLE")
+        blockers.append("PACKET_CLASS_NOT_FRONTIER_RECOMPOSITION_ELIGIBLE")
     if gate_class in OPERATOR_GATE_CLASSES:
         blockers.append("OPERATOR_GATE_BOUNDARY")
     if authority_delta != "NONE":
@@ -221,21 +223,31 @@ def build_authorized_requeue_reconciliation(
     if frozen_surface_changed:
         blockers.append("FROZEN_SURFACE_DRIFT")
 
-    action = "REQUEUE_RECONCILE_FROM_CURRENT_MAIN" if not blockers else "STOP_SERIAL_REQUIRED"
+    action = (
+        "RECOMPOSE_SAME_PIP_CURRENT_FRONTIER"
+        if not blockers
+        else "STOP_SERIAL_REQUIRED"
+    )
     return _active_record(
-        "ovc-dsai2-orch345-requeue-reconciliation/v1",
-        "DSAI2_ORCH345_REQUEUE_RECONCILIATION",
+        "ovc-dsai2-orch345-frontier-recomposition/v2",
+        "DSAI2_ORCH345_FRONTIER_RECOMPOSITION",
         {
             "packet_id": packet_id,
             "failure_reason": reason,
             "attempt": attempt,
-            "max_auto_requeue_attempts": DEFAULT_MAX_REQUEUE_ATTEMPTS,
+            "max_auto_requeue_attempts": None,
             "previous_base": previous_base,
             "current_main": current_main,
             "action": action,
             "blockers": sorted(set(blockers)),
-            "fresh_branch_required": action == "REQUEUE_RECONCILE_FROM_CURRENT_MAIN",
-            "fresh_exact_head_assurance_required": action == "REQUEUE_RECONCILE_FROM_CURRENT_MAIN",
+            "same_pr_required": action == "RECOMPOSE_SAME_PIP_CURRENT_FRONTIER",
+            "same_source_head_required": action == "RECOMPOSE_SAME_PIP_CURRENT_FRONTIER",
+            "same_pip_required": action == "RECOMPOSE_SAME_PIP_CURRENT_FRONTIER",
+            "fresh_branch_required": False,
+            "fresh_exact_head_assurance_required": False,
+            "a0_reuse_required": action == "RECOMPOSE_SAME_PIP_CURRENT_FRONTIER",
+            "a1_recomposition_required": action == "RECOMPOSE_SAME_PIP_CURRENT_FRONTIER",
+            "a2_prospective_assurance_required": action == "RECOMPOSE_SAME_PIP_CURRENT_FRONTIER",
             "scope_identity_must_be_preserved": True,
             "write_set_identity_must_be_preserved": True,
             "semantic_owner_identity_must_be_preserved": True,

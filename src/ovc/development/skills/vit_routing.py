@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any, Mapping
 
 from ovc.development.identity import canonical_sha256, normalize_relative_path, resolve_under
@@ -13,6 +13,7 @@ UNLAWFUL = "UNLAWFUL"
 ROUTE_CLASSES = frozenset({VIT_MANDATORY, REGISTERED_EXCEPTION, UNLAWFUL})
 
 LINEAGE_SCHEMA = "ovc-vit-routing-lineage/v1"
+SOURCE_HEAD_SCHEMA = "ovc-vit-source-head/v1"
 VIT_CONTROLLER = "DSAI_VIT_PHYSICAL_CONTROLLER"
 SIQ_GATEWAY = "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY"
 
@@ -40,6 +41,62 @@ def _tree_sha(tree: Mapping[str, Any], name: str) -> str:
     return tree_sha
 
 
+def _validated_source_head(value: object) -> tuple[dict[str, Any], str] | None:
+    if value is None:
+        return None
+    source = _required_mapping(value, "source_head")
+    allowed = {
+        "schema",
+        "commit_sha",
+        "tree_sha",
+        "pr_number",
+        "head_ref",
+        "development_base_commit",
+        "development_base_tree",
+    }
+    if set(source) - allowed:
+        raise VitContractError("VIT_LINEAGE_SOURCE_HEAD_FIELDS_INVALID")
+    if source.get("schema") != SOURCE_HEAD_SCHEMA:
+        raise VitContractError("VIT_LINEAGE_SOURCE_HEAD_SCHEMA_INVALID")
+    commit_sha = str(source.get("commit_sha", ""))
+    tree_sha = str(source.get("tree_sha", ""))
+    if not _is_hex(commit_sha, 40) or not _is_hex(tree_sha, 40):
+        raise VitContractError("VIT_LINEAGE_SOURCE_HEAD_GIT_ID_INVALID")
+    try:
+        pr_number = int(source.get("pr_number", -1))
+    except (TypeError, ValueError) as exc:
+        raise VitContractError("VIT_LINEAGE_SOURCE_HEAD_PR_INVALID") from exc
+    if pr_number < 1:
+        raise VitContractError("VIT_LINEAGE_SOURCE_HEAD_PR_INVALID")
+    head_ref = str(source.get("head_ref", "")).strip()
+    if (
+        not head_ref
+        or head_ref.startswith("/")
+        or ".." in PurePosixPath(head_ref).parts
+    ):
+        raise VitContractError("VIT_LINEAGE_SOURCE_HEAD_REF_INVALID")
+    base_commit = source.get("development_base_commit")
+    base_tree = source.get("development_base_tree")
+    if (base_commit is None) != (base_tree is None):
+        raise VitContractError("VIT_LINEAGE_SOURCE_BASE_INCOMPLETE")
+    normalized: dict[str, Any] = {
+        "schema": SOURCE_HEAD_SCHEMA,
+        "commit_sha": commit_sha,
+        "tree_sha": tree_sha,
+        "pr_number": pr_number,
+        "head_ref": head_ref,
+    }
+    if base_commit is not None:
+        base_commit = str(base_commit)
+        base_tree = str(base_tree)
+        if not _is_hex(base_commit, 40) or not _is_hex(base_tree, 40):
+            raise VitContractError("VIT_LINEAGE_SOURCE_BASE_GIT_ID_INVALID")
+        normalized["development_base_commit"] = base_commit
+        normalized["development_base_tree"] = base_tree
+    source_id = canonical_sha256(normalized, role="OVC_VIT_SOURCE_HEAD")
+    return normalized, source_id
+
+
 @dataclass(frozen=True)
 class ValidatedVitLineage:
     programme_id: str
@@ -49,6 +106,7 @@ class ValidatedVitLineage:
     placement_id: str
     route_class: str
     lineage_ref: str | None = None
+    source_head_id: str | None = None
 
 
 def build_vit_lineage_record(
@@ -62,8 +120,14 @@ def build_vit_lineage_record(
     result_tree_sha: str,
     apply_profile: str,
     route_class: str = VIT_MANDATORY,
+    source_head: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Build one canonical PIP -> VirtualIntegrationGeneration -> LedgerPlacement lineage."""
+    """Build one canonical PIP -> VirtualIntegrationGeneration -> LedgerPlacement lineage.
+
+    ``source_head`` is transport/provenance only.  It is deliberately excluded from
+    PIP/generation/placement identities so a lawful frontier refresh can preserve the
+    semantic packet while producing a new placement.
+    """
     pip = dict(pip_identity_payload)
     if str(pip.get("programme_id", "")) != programme_id or str(pip.get("packet_id", "")) != packet_id:
         raise VitContractError("VIT_LINEAGE_PIP_PACKET_MISMATCH")
@@ -99,7 +163,7 @@ def build_vit_lineage_record(
         "authority_manifest_id": authority_manifest_id,
     }
     placement_id = canonical_sha256(placement)
-    record = {
+    record: dict[str, Any] = {
         "schema": LINEAGE_SCHEMA,
         "status": "ADMITTED",
         "programme_id": str(programme_id),
@@ -117,6 +181,13 @@ def build_vit_lineage_record(
             "route_class": route_class,
         },
     }
+    validated_source = _validated_source_head(source_head)
+    if validated_source is not None:
+        normalized, source_id = validated_source
+        if normalized["tree_sha"] != result_tree_sha:
+            raise VitContractError("VIT_LINEAGE_SOURCE_HEAD_NOT_RESULT_TREE")
+        record["source_head"] = normalized
+        record["source_head_id"] = source_id
     validate_vit_lineage_record(record)
     return record
 
@@ -191,6 +262,17 @@ def validate_vit_lineage_record(record: Mapping[str, Any], *, lineage_ref: str |
     if str(routing.get("route_class", "")) != route_class:
         raise VitContractError("VIT_LINEAGE_ROUTING_CLASS_MISMATCH")
 
+    source_head_id: str | None = None
+    validated_source = _validated_source_head(record.get("source_head"))
+    if validated_source is not None:
+        source_head, source_head_id = validated_source
+        if source_head["tree_sha"] != result_sha:
+            raise VitContractError("VIT_LINEAGE_SOURCE_HEAD_NOT_RESULT_TREE")
+        if record.get("source_head_id") != source_head_id:
+            raise VitContractError("VIT_LINEAGE_SOURCE_HEAD_ID_INVALID")
+    elif record.get("source_head_id") is not None:
+        raise VitContractError("VIT_LINEAGE_SOURCE_HEAD_ID_WITHOUT_SOURCE")
+
     return ValidatedVitLineage(
         programme_id=programme_id,
         packet_id=packet_id,
@@ -199,6 +281,7 @@ def validate_vit_lineage_record(record: Mapping[str, Any], *, lineage_ref: str |
         placement_id=placement_id,
         route_class=route_class,
         lineage_ref=lineage_ref,
+        source_head_id=source_head_id,
     )
 
 
@@ -227,14 +310,26 @@ def classify_main_movement(
     if not _is_hex(previous_pip_id, 64) or not _is_hex(current_pip_id, 64):
         raise VitContractError("VIT_PIP_ID_INVALID")
     payload_changed = previous_pip_id != current_pip_id or packet_local_defect_changed_payload
-    if not payload_changed and not dependency_frontier_changed and not authority_changed:
+    if authority_changed:
+        return {
+            "disposition": "AUTHORITY_REVIEW_REQUIRED",
+            "payload_rebuild_required": False,
+            "assurance_renewal_required": True,
+        }
+    if dependency_frontier_changed:
+        return {
+            "disposition": "PAYLOAD_REBUILD_REQUIRED",
+            "payload_rebuild_required": True,
+            "assurance_renewal_required": True,
+        }
+    if not payload_changed:
         return {
             "disposition": "PLACEMENT_RECOMPUTE_ONLY",
             "payload_rebuild_required": False,
             "assurance_renewal_required": True,
         }
     return {
-        "disposition": "PAYLOAD_REBUILD_REQUIRED" if payload_changed or dependency_frontier_changed else "AUTHORITY_REVIEW_REQUIRED",
-        "payload_rebuild_required": bool(payload_changed or dependency_frontier_changed),
+        "disposition": "PAYLOAD_REBUILD_REQUIRED",
+        "payload_rebuild_required": True,
         "assurance_renewal_required": True,
     }

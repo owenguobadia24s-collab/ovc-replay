@@ -48,7 +48,9 @@ class CiPerformanceShadowPacketTests(unittest.TestCase):
         self.assertIn("OVC_SIQ_READY_ADMITTED", self.resolver)
         self.assertIn("OVC_SIQ_BASE_SENSITIVE_LEASE_ACQUIRED", self.resolver)
         self.assertIn("tools/ci/ovc_run_with_main_lease.py", self.tiered_workflow)
-        self.assertIn("OVC_RECONCILE_REQUIRED", self.resolver); self.assertIn("OVC_BASE_MOVED_DURING_READINESS", self.resolver)
+        self.assertIn("PREDECESSOR_MOVED", self.resolver)
+        self.assertIn("prospective_result_tree", self.resolver)
+        self.assertNotIn("OVC_RECONCILE_REQUIRED", self.resolver)
 
     def test_packet_state_preserves_non_activation_boundary(self):
         self.assertIn(self.state["status"], {"RUNNING", "APPROVED"})

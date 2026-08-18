@@ -9,16 +9,25 @@
   "capacity": {
     "max_parallel_builds": 4,
     "max_train_packets": 8,
-    "max_auto_requeue_attempts": 2
+    "max_auto_requeue_attempts": 2,
+    "max_same_pip_frontier_recompositions": "UNTIL_SEMANTIC_AUTHORITY_OR_OPERATOR_BOUNDARY"
   },
   "auto_requeue": {
     "reason_codes": [
+      "PREDECESSOR_MOVED",
       "OVC_BASE_MOVED_BEFORE_READINESS",
       "OVC_BASE_MOVED_DURING_READINESS",
       "MAIN_ADVANCED_AFTER_ASSURANCE"
     ],
-    "fresh_branch_required": true,
-    "fresh_exact_head_assurance_required": true,
+    "disposition": "RECOMPOSE_SAME_PIP_CURRENT_FRONTIER",
+    "same_pr_required": true,
+    "same_source_head_required": true,
+    "same_pip_required": true,
+    "fresh_branch_required": false,
+    "fresh_exact_head_assurance_required": false,
+    "a0_reuse_required": true,
+    "a1_recomposition_required": true,
+    "a2_prospective_assurance_required": true,
     "scope_identity_preserved": true,
     "write_set_identity_preserved": true,
     "semantic_owner_identity_preserved": true,
@@ -32,7 +41,8 @@
     "merge_method": "squash",
     "direct_main_mutation": false,
     "force_push": false,
-    "history_rewrite": false
+    "history_rewrite": false,
+    "physical_predecessor_freeze_timing": "AFTER_CURRENT_VIT_HEAD_REACHES_PHYSICAL_LANE"
   },
   "operator_required_gate_behavior": "STOP",
   "non_none_authority_delta_behavior": "STOP",

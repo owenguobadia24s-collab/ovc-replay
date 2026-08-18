@@ -59,13 +59,10 @@ class VitPostMergeCompletionToolTests(unittest.TestCase):
 
     def test_job_log_request_authenticates_api_request(self) -> None:
         opener = _Opener(b"OVC_VIT_PHYSICAL_TRANSACTION_FREEZE_B64=abc")
-
         with patch.object(TOOL, "build_opener", return_value=opener) as factory:
             body = TOOL._request_job_log(
-                "https://api.github.com/repos/o/r/actions/jobs/123/logs",
-                "token",
+                "https://api.github.com/repos/o/r/actions/jobs/123/logs", "token"
             )
-
         factory.assert_called_once()
         self.assertEqual(len(opener.requests), 1)
         request = opener.requests[0]
@@ -81,11 +78,10 @@ class VitPostMergeCompletionToolTests(unittest.TestCase):
             headers={
                 "Accept": "application/vnd.github+json",
                 "Authorization": "Bearer token",
-                "User-Agent": "ovc-vit-local-post-merge-completion/v1",
+                "User-Agent": "ovc-vit-local-post-merge-completion/v2",
                 "X-GitHub-Api-Version": "2022-11-28",
             },
         )
-
         redirected = handler.redirect_request(
             request,
             None,
@@ -94,14 +90,10 @@ class VitPostMergeCompletionToolTests(unittest.TestCase):
             {},
             "https://signed-log-storage.example/job-log",
         )
-
         self.assertIsNotNone(redirected)
         self.assertIsNone(redirected.get_header("Authorization"))
         self.assertEqual(redirected.get_header("Accept"), "application/vnd.github+json")
-        self.assertEqual(
-            redirected.full_url,
-            "https://signed-log-storage.example/job-log",
-        )
+        self.assertEqual(redirected.full_url, "https://signed-log-storage.example/job-log")
 
     def test_non_log_request_remains_fail_closed_on_401(self) -> None:
         calls = []
@@ -113,16 +105,57 @@ class VitPostMergeCompletionToolTests(unittest.TestCase):
         with patch.object(TOOL, "urlopen", side_effect=fake_urlopen):
             with self.assertRaises(TOOL.PostMergeCompletionError):
                 TOOL._request("https://api.github.com/repos/o/r", "token")
-
         self.assertEqual(len(calls), 1)
 
-    def test_freeze_lookup_scopes_redirect_aware_download_to_job_log(self) -> None:
-        freeze = {
-            "pr_number": 42,
-            "head_sha": "f" * 40,
-            "transaction": {},
-        }
+    def test_freeze_lookup_prefers_late_merge_readiness_job(self) -> None:
+        freeze = {"pr_number": 42, "head_sha": "f" * 40, "transaction": {}}
         calls = []
+
+        def fake_json(url, token):
+            if "/actions/runs?" in url:
+                return {
+                    "workflow_runs": [
+                        {
+                            "id": 9002,
+                            "name": "OVC tiered test selection shadow",
+                            "conclusion": "success",
+                        },
+                        {"id": 9001, "name": "tests", "conclusion": "success"},
+                    ]
+                }
+            if "/actions/runs/9002/jobs" in url:
+                return {
+                    "jobs": [
+                        {
+                            "id": 8002,
+                            "name": "OVC merge readiness",
+                            "conclusion": "success",
+                        }
+                    ]
+                }
+            raise AssertionError(url)
+
+        def fake_job_log(url, token):
+            calls.append(url)
+            return b"OVC_VIT_PHYSICAL_TRANSACTION_FREEZE_B64=payload"
+
+        with (
+            patch.object(TOOL, "_json", side_effect=fake_json),
+            patch.object(TOOL, "_request_job_log", side_effect=fake_job_log),
+            patch.object(TOOL, "decode_freeze_marker", return_value=freeze),
+        ):
+            observed = TOOL._freeze_from_physical_lane_logs(
+                repository="o/r",
+                head_sha="f" * 40,
+                pr_number=42,
+                token="token",
+            )
+        self.assertEqual(observed, freeze)
+        self.assertEqual(len(calls), 1)
+        self.assertTrue(calls[0].endswith("/actions/jobs/8002/logs"))
+
+    def test_historical_routing_preflight_is_fallback_only(self) -> None:
+        freeze = {"pr_number": 42, "head_sha": "f" * 40, "transaction": {}}
 
         def fake_json(url, token):
             if "/actions/runs?" in url:
@@ -143,46 +176,66 @@ class VitPostMergeCompletionToolTests(unittest.TestCase):
                 }
             raise AssertionError(url)
 
-        def fake_job_log(url, token):
-            calls.append(url)
-            return b"OVC_VIT_PHYSICAL_TRANSACTION_FREEZE_B64=payload"
-
-        with (
-            patch.object(TOOL, "_json", side_effect=fake_json),
-            patch.object(TOOL, "_request_job_log", side_effect=fake_job_log),
-            patch.object(TOOL, "decode_freeze_marker", return_value=freeze),
-        ):
-            observed = TOOL._freeze_from_prewrite_logs(
-                repository="o/r",
-                head_sha="f" * 40,
-                pr_number=42,
-                token="token",
-            )
-
-        self.assertEqual(observed, freeze)
-        self.assertEqual(len(calls), 1)
-        self.assertTrue(calls[0].endswith("/actions/jobs/8001/logs"))
-
-    def test_freeze_lookup_accepts_github_timestamp_prefix_without_weakening_uniqueness(self) -> None:
-        freeze = {"pr_number": 42, "head_sha": "f" * 40, "transaction": {}}
-
-        def fake_json(url, token):
-            if "/actions/runs?" in url:
-                return {"workflow_runs": [{"id": 9001, "name": "tests", "conclusion": "success"}]}
-            return {"jobs": [{"id": 8001, "name": "VIT routing preflight", "conclusion": "success"}]}
-
         log = b"2026-08-17T10:48:28Z OVC_VIT_PHYSICAL_TRANSACTION_FREEZE_B64=payload\n"
         with (
             patch.object(TOOL, "_json", side_effect=fake_json),
             patch.object(TOOL, "_request_job_log", return_value=log),
             patch.object(TOOL, "decode_freeze_marker", return_value=freeze) as decode,
         ):
-            observed = TOOL._freeze_from_prewrite_logs(
+            observed = TOOL._freeze_from_physical_lane_logs(
                 repository="o/r", head_sha="f" * 40, pr_number=42, token="token"
             )
-
         self.assertEqual(observed, freeze)
         decode.assert_called_once_with("OVC_VIT_PHYSICAL_TRANSACTION_FREEZE_B64=payload")
+
+    def test_frontier_ledger_envelope_is_revalidated_and_persisted_as_four_records(self) -> None:
+        freeze = {"frontier_ledger_envelope": {"schema": "ovc-vit-frontier-ledger-envelope/v1"}}
+        decoded = {
+            "frontier_lineage": {"schema": "lineage"},
+            "frontier_lineage_record_id": "1" * 64,
+            "assurance_generation": {"schema": "assurance"},
+            "assurance_generation_id": "2" * 64,
+            "a2_proof": {"schema": "a2"},
+            "a2_proof_id": "3" * 64,
+            "envelope_record": {"schema": "envelope"},
+            "envelope_record_id": "4" * 64,
+        }
+
+        class Store:
+            def __init__(self):
+                self.rows = []
+
+            def put_record(self, record, record_id):
+                self.rows.append((record, record_id))
+
+        store = Store()
+        with patch.object(TOOL, "validate_frontier_ledger_envelope", return_value=decoded) as validate:
+            ids = TOOL._persist_frontier_ledger(freeze=freeze, receipt_store=store)
+        validate.assert_called_once_with(freeze["frontier_ledger_envelope"])
+        self.assertEqual([row[1] for row in store.rows], ["1" * 64, "2" * 64, "3" * 64, "4" * 64])
+        self.assertEqual(ids["frontier_ledger_envelope_id"], "4" * 64)
+
+    def test_multiple_late_freezes_fail_closed(self) -> None:
+        freeze = {"pr_number": 42, "head_sha": "f" * 40, "transaction": {}}
+
+        def fake_json(url, token):
+            if "/actions/runs?" in url:
+                return {"workflow_runs": [{"id": 9002, "name": "OVC tiered test selection shadow", "conclusion": "success"}]}
+            return {"jobs": [{"id": 8002, "name": "OVC merge readiness", "conclusion": "success"}]}
+
+        log = (
+            b"OVC_VIT_PHYSICAL_TRANSACTION_FREEZE_B64=one\n"
+            b"OVC_VIT_PHYSICAL_TRANSACTION_FREEZE_B64=two\n"
+        )
+        with (
+            patch.object(TOOL, "_json", side_effect=fake_json),
+            patch.object(TOOL, "_request_job_log", return_value=log),
+            patch.object(TOOL, "decode_freeze_marker", return_value=freeze),
+        ):
+            with self.assertRaisesRegex(TOOL.PostMergeCompletionError, "expected one"):
+                TOOL._freeze_from_physical_lane_logs(
+                    repository="o/r", head_sha="f" * 40, pr_number=42, token="token"
+                )
 
 
 if __name__ == "__main__":

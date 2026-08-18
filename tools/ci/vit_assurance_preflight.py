@@ -5,18 +5,12 @@ import json
 import os
 from pathlib import Path
 import re
-import subprocess
 from typing import Any, Mapping
 import urllib.error
 import urllib.request
 
 from ovc.development.skills.vit_assurance_decoupling import validate_aa0_reuse_authorization
-from ovc.development.skills.vit_local_completion_executor import (
-    build_live_transaction_freeze,
-    encode_freeze_marker,
-)
 from ovc.development.skills.vit_routing import validate_vit_lineage_record
-from ovc.development.skills.vit_core import VitContractError
 from tools.ci.vit_lineage_source import resolve_lineage_source
 
 REUSE = re.compile(r"(?im)^VIT-AA0-Reuse-B64:\s*([A-Za-z0-9_\-=]+)\s*$")
@@ -45,40 +39,6 @@ def _write_output(name: str, value: str) -> None:
     print(f"OVC_VIT_ASSURANCE_{name.upper()}={value}")
 
 
-def _git_tree(root: Path, commit: str) -> str:
-    proc = subprocess.run(
-        ["git", "-C", str(root), "rev-parse", f"{commit}^{{tree}}"],
-        check=False,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    if proc.returncode != 0:
-        raise RuntimeError(proc.stderr.strip() or "VIT_ASSURANCE_GIT_TREE_RESOLUTION_FAILED")
-    return proc.stdout.strip()
-
-
-def _emit_prewrite_freeze(
-    *, event: Mapping[str, Any], pr: Mapping[str, Any], lineage_record: Mapping[str, Any]
-) -> None:
-    head = pr.get("head")
-    base = pr.get("base")
-    if not isinstance(head, Mapping) or not isinstance(base, Mapping):
-        raise RuntimeError("VIT_ASSURANCE_LIVE_PR_HEAD_BASE_MISSING")
-    root = Path(os.environ.get("GITHUB_WORKSPACE", ".")).resolve()
-    freeze = build_live_transaction_freeze(
-        lineage_record=lineage_record,
-        pr_number=int(event.get("number", pr.get("number", -1))),
-        base_sha=str(base.get("sha", "")),
-        head_sha=str(head.get("sha", "")),
-        base_tree=_git_tree(root, str(base.get("sha", ""))),
-        head_tree=_git_tree(root, str(head.get("sha", ""))),
-        workflow_run_id=os.environ.get("GITHUB_RUN_ID", ""),
-        run_attempt=os.environ.get("GITHUB_RUN_ATTEMPT", ""),
-    )
-    print(encode_freeze_marker(freeze))
-
-
 def _live_pr_payload(event: Mapping[str, Any]) -> Mapping[str, Any]:
     """Resolve the current PR generation/body in Actions; event data is provenance only."""
     event_pr = event.get("pull_request")
@@ -95,7 +55,7 @@ def _live_pr_payload(event: Mapping[str, Any]) -> Mapping[str, Any]:
     headers = {
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
-        "User-Agent": "ovc-vit-assurance-preflight/1",
+        "User-Agent": "ovc-vit-assurance-preflight/2",
     }
     token = os.environ.get("GITHUB_TOKEN", "").strip()
     if token:
@@ -126,6 +86,7 @@ def main() -> int:
         _write_output("lineage_ref", sha)
         _write_output("aa0_reuse_authorized", "false")
         _write_output("aa0_reuse_reason", "NON_PULL_REQUEST")
+        _write_output("assurance_scope", "A0_PIP_ONLY")
         return 0
 
     event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text(encoding="utf-8"))
@@ -137,7 +98,7 @@ def main() -> int:
     if head_sha != event_head_sha:
         raise RuntimeError(
             f"VIT_ASSURANCE_SUPERSEDED_EVENT_HEAD:event {event_head_sha}, live {head_sha}; "
-            "obsolete generation may not acquire assurance identity"
+            "obsolete source generation may not acquire A0 assurance identity"
         )
 
     lineage_source = resolve_lineage_source(body, require=False)
@@ -153,6 +114,7 @@ def main() -> int:
         _write_output("lineage_ref", head_sha)
         _write_output("aa0_reuse_authorized", "false")
         _write_output("aa0_reuse_reason", "REGISTERED_EXCEPTION_OR_NO_LINEAGE")
+        _write_output("assurance_scope", "A0_SOURCE_HEAD_EXCEPTION")
         return 0
 
     lineage_record = lineage_source.record
@@ -162,15 +124,12 @@ def main() -> int:
     _write_output("pip_id", lineage.pip_id)
     _write_output("lineage_source", lineage_source.source)
     _write_output("lineage_ref", lineage_source.immutable_ref)
-    try:
-        _emit_prewrite_freeze(event=event, pr=pr, lineage_record=lineage_record)
-    except VitContractError as exc:
-        # A0/PIP identity is placement-independent. A stale placement may not
-        # prevent base-independent assurance from acquiring/reusing its exact
-        # PIP identity; the subsequent routing preflight remains fail-closed.
-        if "PREDECESSOR_TREE_MISMATCH" not in str(exc) and "RESULT_TREE_MISMATCH" not in str(exc):
-            raise
-        print(f"OVC_VIT_PREWRITE_FREEZE_DEFERRED=PLACEMENT_SENSITIVE:{exc}")
+    _write_output("source_head_sha", head_sha)
+    _write_output("assurance_scope", "A0_PIP_ONLY")
+    print(
+        "OVC_VIT_PHYSICAL_TRANSACTION_FREEZE_DEFERRED=SIQ_PHYSICAL_LANE; "
+        "A0 is PIP-bound and does not freeze current main."
+    )
 
     if reuse_record is None:
         _write_output("aa0_reuse_authorized", "false")

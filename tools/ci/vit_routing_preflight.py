@@ -5,13 +5,23 @@ import os
 from pathlib import Path
 import re
 import subprocess
-import tempfile
 from typing import Any, Mapping, Sequence
 import urllib.error
 import urllib.request
 
 from ovc.development.skills.vit_apply import REFERENCE_APPLY_PROFILE
 from ovc.development.skills.vit_core import TREE_IDENTITY_PROFILE, VitContractError
+from ovc.development.skills.vit_frontier_decoupling import (
+    SourceHead,
+    build_frontier_lineage,
+    classify_frontier_movement,
+    compose_pip_tree,
+    diff_tree_paths,
+    encode_record,
+    git_tree,
+    tree_is_in_commit_ancestry,
+    waiting_predecessor_decision,
+)
 from ovc.development.skills.vit_routing import validate_vit_lineage_record
 from tools.ci.vit_lineage_source import resolve_lineage_source
 
@@ -26,16 +36,17 @@ def _load_json(path: Path) -> Mapping[str, Any]:
     return raw
 
 
-def _git(root: Path, args: Sequence[str], *, env: Mapping[str, str] | None = None) -> str:
+def _git(root: Path, args: Sequence[str]) -> str:
     proc = subprocess.run(
         ["git", "-C", str(root), *args],
-        check=True,
+        check=False,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
-        env=dict(os.environ, **dict(env or {})),
-        timeout=30,
+        timeout=60,
     )
+    if proc.returncode != 0:
+        raise RuntimeError(proc.stderr.strip() or f"git {' '.join(args)} failed")
     return proc.stdout.strip()
 
 
@@ -44,14 +55,17 @@ def _tree(root: Path, commitish: str) -> str:
 
 
 def _fetch_commit_if_needed(root: Path, sha: str) -> None:
-    try:
-        _git(root, ["cat-file", "-e", f"{sha}^{{commit}}"])
+    proc = subprocess.run(
+        ["git", "-C", str(root), "cat-file", "-e", f"{sha}^{{commit}}"],
+        check=False,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    if proc.returncode == 0:
         return
-    except subprocess.CalledProcessError:
-        pass
     try:
-        _git(root, ["fetch", "--no-tags", "--depth=1", "origin", sha])
-    except subprocess.CalledProcessError as exc:
+        _git(root, ["fetch", "--no-tags", "origin", sha])
+    except RuntimeError as exc:
         raise RuntimeError("VIT_LIVE_BASE_FETCH_FAILED") from exc
 
 
@@ -73,7 +87,7 @@ def _live_pr_payload(root: Path, event: Mapping[str, Any]) -> tuple[Mapping[str,
     headers = {
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
-        "User-Agent": "ovc-vit-routing-preflight/1",
+        "User-Agent": "ovc-vit-routing-preflight/2",
     }
     token = os.environ.get("GITHUB_TOKEN", "").strip()
     if token:
@@ -95,7 +109,13 @@ def _live_pr_payload(root: Path, event: Mapping[str, Any]) -> tuple[Mapping[str,
     return value, True
 
 
-def _live_base_sha(root: Path, *, base_ref: str, event_base_sha: str, live_base_sha: str | None = None) -> str:
+def _live_base_sha(
+    root: Path,
+    *,
+    base_ref: str,
+    event_base_sha: str,
+    live_base_sha: str | None = None,
+) -> str:
     """Resolve current base head; event-time base remains provenance/fallback only."""
     if not base_ref or not SAFE_REF.fullmatch(base_ref) or base_ref.startswith("/") or ".." in Path(base_ref).parts:
         raise RuntimeError(f"VIT_LIVE_BASE_REF_INVALID:{base_ref!r}")
@@ -107,7 +127,7 @@ def _live_base_sha(root: Path, *, base_ref: str, event_base_sha: str, live_base_
         return candidate
     try:
         output = _git(root, ["ls-remote", "--heads", "origin", f"refs/heads/{base_ref}"])
-    except subprocess.CalledProcessError:
+    except RuntimeError:
         return event_base_sha
     rows = [row for row in output.splitlines() if row.strip()]
     if not rows:
@@ -117,43 +137,6 @@ def _live_base_sha(root: Path, *, base_ref: str, event_base_sha: str, live_base_
         raise RuntimeError("VIT_LIVE_BASE_SHA_INVALID")
     _fetch_commit_if_needed(root, candidate)
     return candidate
-
-
-def _safe_path(raw: object) -> str:
-    value = str(raw or "")
-    path = Path(value)
-    if not value or path.is_absolute() or ".." in path.parts or value == ".git" or value.startswith(".git/"):
-        raise RuntimeError(f"unsafe PIP path {value!r}")
-    return value.replace("\\", "/")
-
-
-def _compose_pip_tree(root: Path, predecessor_tree: str, logical_changes: Sequence[Mapping[str, Any]]) -> str:
-    """Reference-apply the identity-bearing PIP changes and return the exact Git tree."""
-    with tempfile.TemporaryDirectory() as td:
-        env = {"GIT_INDEX_FILE": str(Path(td) / "index")}
-        _git(root, ["read-tree", predecessor_tree], env=env)
-        seen: set[str] = set()
-        for change in logical_changes:
-            path = _safe_path(change.get("path"))
-            if path in seen:
-                raise RuntimeError(f"duplicate PIP path mutation: {path}")
-            seen.add(path)
-            op = str(change.get("op", ""))
-            if op == "DELETE":
-                _git(root, ["update-index", "--force-remove", "--", path], env=env)
-                continue
-            if op not in {"ADD", "MODIFY"}:
-                raise RuntimeError(f"unsupported PIP op {op!r} for {path}")
-            blob_sha = str(change.get("blob_sha", ""))
-            mode = str(change.get("mode", "100644"))
-            if not re.fullmatch(r"[0-9a-f]{40}", blob_sha):
-                raise RuntimeError(f"invalid PIP blob SHA for {path}")
-            if mode not in {"100644", "100755", "120000", "160000"}:
-                raise RuntimeError(f"invalid PIP mode for {path}: {mode}")
-            object_type = "commit" if mode == "160000" else "blob"
-            _git(root, ["cat-file", "-e", f"{blob_sha}^{{{object_type}}}"])
-            _git(root, ["update-index", "--add", "--cacheinfo", mode, blob_sha, path], env=env)
-        return _git(root, ["write-tree"], env=env)
 
 
 def _exception_matches(exception: Mapping[str, Any], *, pr_number: int, head_sha: str, head_branch: str) -> bool:
@@ -166,6 +149,54 @@ def _exception_matches(exception: Mapping[str, Any], *, pr_number: int, head_sha
     if pinned_branch:
         return pinned_branch == head_branch and bool(exception.get("self_bootstrap", False))
     return False
+
+
+def _source_head(
+    *,
+    record: Mapping[str, Any],
+    pr_number: int,
+    head_sha: str,
+    head_tree: str,
+    head_branch: str,
+) -> SourceHead:
+    raw = record.get("source_head")
+    if isinstance(raw, Mapping):
+        source = SourceHead(**dict(raw))
+        if source.commit_sha != head_sha or source.tree_sha != head_tree or source.pr_number != pr_number:
+            raise RuntimeError("VIT_SOURCE_HEAD_PROVENANCE_MISMATCH")
+        return source
+    return SourceHead(
+        commit_sha=head_sha,
+        tree_sha=head_tree,
+        pr_number=pr_number,
+        head_ref=head_branch,
+    )
+
+
+def _validate_source_transport(
+    *, root: Path, record: Mapping[str, Any], head_tree: str
+) -> None:
+    generation = record["generation"]
+    placement = record["placement"]
+    predecessor = generation["predecessor_tree"]
+    result = generation["result_tree"]
+    if predecessor.get("profile") != TREE_IDENTITY_PROFILE or result.get("profile") != TREE_IDENTITY_PROFILE:
+        raise RuntimeError("VIT_LINEAGE_TREE_PROFILE_INVALID")
+    predecessor_tree = str(predecessor.get("tree_sha", ""))
+    source_result_tree = str(result.get("tree_sha", ""))
+    if source_result_tree != head_tree:
+        raise RuntimeError("VIT_SOURCE_LINEAGE_RESULT_NOT_PR_HEAD_TREE")
+    if placement.get("predecessor_tree") != predecessor_tree or placement.get("result_tree") != source_result_tree:
+        raise RuntimeError("VIT_SOURCE_LINEAGE_PLACEMENT_TREE_MISMATCH")
+    if placement.get("apply_profile") != REFERENCE_APPLY_PROFILE:
+        raise RuntimeError("VIT_LINEAGE_APPLY_PROFILE_NOT_REFERENCE")
+    pip = record["pip"]
+    logical_changes = pip.get("logical_changes")
+    if not isinstance(logical_changes, list) or not logical_changes:
+        raise RuntimeError("VIT_LINEAGE_PIP_CHANGES_INVALID")
+    composed_tree = compose_pip_tree(root, predecessor_tree, logical_changes)
+    if composed_tree != head_tree:
+        raise RuntimeError("VIT_SOURCE_PIP_DOES_NOT_REPRODUCE_PR_HEAD_TREE")
 
 
 def check_pull_request_event(*, root: Path, event: Mapping[str, Any]) -> str:
@@ -193,7 +224,7 @@ def check_pull_request_event(*, root: Path, event: Mapping[str, Any]) -> str:
 
     if head_sha != event_head_sha:
         raise RuntimeError(
-            f"VIT_SUPERSEDED_EVENT_HEAD: event {event_head_sha}, live {head_sha}; obsolete generation may not acquire assurance"
+            f"VIT_SUPERSEDED_EVENT_HEAD: event {event_head_sha}, live {head_sha}; obsolete source generation may not acquire assurance"
         )
 
     register = _load_json(root / REGISTER_PATH)
@@ -224,41 +255,73 @@ def check_pull_request_event(*, root: Path, event: Mapping[str, Any]) -> str:
     if lineage.route_class != "VIT_MANDATORY":
         raise RuntimeError("permanent integration PR lineage must be VIT_MANDATORY")
 
-    generation = record["generation"]
-    placement = record["placement"]
-    predecessor = generation["predecessor_tree"]
-    result = generation["result_tree"]
-    if predecessor.get("profile") != TREE_IDENTITY_PROFILE or result.get("profile") != TREE_IDENTITY_PROFILE:
-        raise RuntimeError("VIT_LINEAGE_TREE_PROFILE_INVALID")
+    head_tree = _tree(root, head_sha)
+    _validate_source_transport(root=root, record=record, head_tree=head_tree)
+    source_head = _source_head(
+        record=record,
+        pr_number=pr_number,
+        head_sha=head_sha,
+        head_tree=head_tree,
+        head_branch=head_branch,
+    )
+
     live_base_sha = _live_base_sha(
         root,
         base_ref=base_ref,
         event_base_sha=event_base_sha,
         live_base_sha=live_base_hint,
     )
-    base_tree = _tree(root, live_base_sha)
-    head_tree = _tree(root, head_sha)
-    if predecessor.get("tree_sha") != base_tree:
-        raise RuntimeError("VIT_REANCHOR_REQUIRED:VIT_LINEAGE_PREDECESSOR_NOT_LIVE_PR_BASE_TREE")
-    if result.get("tree_sha") != head_tree:
-        raise RuntimeError("VIT_LINEAGE_RESULT_NOT_PR_HEAD_TREE")
-    if placement.get("predecessor_tree") != base_tree or placement.get("result_tree") != head_tree:
-        raise RuntimeError("VIT_LINEAGE_PLACEMENT_TREE_NOT_PR_TREE")
-    if placement.get("apply_profile") != REFERENCE_APPLY_PROFILE:
-        raise RuntimeError("VIT_LINEAGE_APPLY_PROFILE_NOT_REFERENCE")
+    live_base_tree = _tree(root, live_base_sha)
+    source_predecessor_tree = str(record["generation"]["predecessor_tree"]["tree_sha"])
 
-    pip = record["pip"]
-    logical_changes = pip.get("logical_changes")
-    if not isinstance(logical_changes, list) or not logical_changes:
-        raise RuntimeError("VIT_LINEAGE_PIP_CHANGES_INVALID")
-    composed_tree = _compose_pip_tree(root, base_tree, logical_changes)
-    if composed_tree != head_tree:
-        raise RuntimeError("VIT_LINEAGE_PIP_DOES_NOT_REPRODUCE_PR_HEAD_TREE")
+    if source_predecessor_tree == live_base_tree or tree_is_in_commit_ancestry(
+        root, tree_sha=source_predecessor_tree, descendant_commit=live_base_sha
+    ):
+        changed_paths = diff_tree_paths(root, source_predecessor_tree, live_base_tree)
+        movement = classify_frontier_movement(
+            pip=record["pip"],
+            source_predecessor_tree=source_predecessor_tree,
+            current_predecessor_tree=live_base_tree,
+            changed_paths=changed_paths,
+        )
+        if movement.disposition in {"PAYLOAD_REBUILD_REQUIRED", "AUTHORITY_REVIEW_REQUIRED"}:
+            raise RuntimeError(
+                f"VIT_FRONTIER_RECOMPOSITION_BLOCKED:{movement.disposition}:"
+                f"{movement.decision_id}"
+            )
+        prospective_tree = compose_pip_tree(
+            root, live_base_tree, record["pip"]["logical_changes"]
+        )
+        frontier = build_frontier_lineage(
+            source_lineage_record=record,
+            source_head=source_head,
+            predecessor_commit=live_base_sha,
+            predecessor_tree=live_base_tree,
+            prospective_result_tree=prospective_tree,
+            movement=movement,
+        )
+        current = validate_vit_lineage_record(frontier)
+        print("OVC_VIT_FRONTIER_LINEAGE_B64=" + encode_record(frontier))
+        return (
+            f"VIT_MANDATORY:{current.packet_id}:{current.pip_id}:"
+            f"source={lineage.generation_id}:frontier={current.generation_id}:"
+            f"placement={current.placement_id}:movement={movement.disposition}:"
+            f"same_pr=true:{source.source}:{source.immutable_ref}"
+        )
 
-    base_note = "LIVE_BASE" if live_base_sha != event_base_sha else "EVENT_BASE_CURRENT"
+    waiting = waiting_predecessor_decision(
+        source_predecessor_tree=source_predecessor_tree,
+        current_main_tree=live_base_tree,
+    )
+    print(
+        "OVC_VIT_FRONTIER_WAITING_PREDECESSOR="
+        f"{waiting.decision_id}:{source_predecessor_tree}"
+    )
     return (
-        f"VIT_MANDATORY:{lineage.packet_id}:{lineage.pip_id}:{lineage.generation_id}:"
-        f"{lineage.placement_id}:{base_note}:{source.source}:{source.immutable_ref}"
+        f"VIT_MANDATORY:{lineage.packet_id}:{lineage.pip_id}:"
+        f"source={lineage.generation_id}:placement={lineage.placement_id}:"
+        "movement=WAITING_VIT_PREDECESSOR:same_pr=true:"
+        f"{source.source}:{source.immutable_ref}"
     )
 
 

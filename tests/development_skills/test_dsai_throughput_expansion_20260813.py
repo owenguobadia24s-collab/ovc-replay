@@ -20,10 +20,7 @@ CAPACITY = ROOT / "registries/development/skills/orch345_operational_capacity_v0
 
 
 def active_authority() -> dict:
-    return {
-        "status": "ACTIVE_AUTHORIZED",
-        "record_present_on_main": True,
-    }
+    return {"status": "ACTIVE_AUTHORIZED", "record_present_on_main": True}
 
 
 class DSAIThroughputExpansionTests(unittest.TestCase):
@@ -54,97 +51,51 @@ class DSAIThroughputExpansionTests(unittest.TestCase):
         for index in range(1, 11):
             packet_id = f"P{index}"
             prerequisites = () if index == 1 else (f"P{index - 1}",)
-            packets.append(
-                build_packet_descriptor(
-                    programme_id="PROGRAMME-A",
-                    packet_id=packet_id,
-                    prerequisites=prerequisites,
-                    write_paths=(f"src/a/{index}.py",),
-                    semantic_owners=(f"owner-{index}",),
-                )
-            )
-
-        result = build_authorized_packet_train(
-            authority_resolution=active_authority(),
-            programme_id="PROGRAMME-A",
-            packets=packets,
-        )
+            packets.append(build_packet_descriptor(programme_id="PROGRAMME-A", packet_id=packet_id, prerequisites=prerequisites, write_paths=(f"src/a/{index}.py",), semantic_owners=(f"owner-{index}",)))
+        result = build_authorized_packet_train(authority_resolution=active_authority(), programme_id="PROGRAMME-A", packets=packets)
         self.assertEqual(result["selected_packet_ids"], [f"P{i}" for i in range(1, 9)])
         self.assertEqual(result["max_train_packets"], 8)
         self.assertFalse(result["parallel_merge"])
-
         with self.assertRaises(PermissionError):
-            build_authorized_packet_train(
-                authority_resolution=active_authority(),
-                programme_id="PROGRAMME-A",
-                packets=packets,
-                max_packets=9,
-            )
+            build_authorized_packet_train(authority_resolution=active_authority(), programme_id="PROGRAMME-A", packets=packets, max_packets=9)
 
     def test_orch5_default_fills_four_disjoint_parallel_build_slots(self) -> None:
-        packets = [
-            build_packet_descriptor(
-                programme_id=f"PROGRAMME-{index}",
-                packet_id=f"Q{index}",
-                write_paths=(f"src/q{index}/",),
-                semantic_owners=(f"owner-q{index}",),
-                priority=index,
-            )
-            for index in range(1, 7)
-        ]
-        result = build_authorized_portfolio_schedule(
-            authority_resolution=active_authority(),
-            packets=packets,
-        )
+        packets = [build_packet_descriptor(programme_id=f"PROGRAMME-{index}", packet_id=f"Q{index}", write_paths=(f"src/q{index}/",), semantic_owners=(f"owner-q{index}",), priority=index) for index in range(1, 7)]
+        result = build_authorized_portfolio_schedule(authority_resolution=active_authority(), packets=packets)
         self.assertEqual(result["selected_packet_ids"], ["Q1", "Q2", "Q3", "Q4"])
         self.assertEqual(result["max_parallel_builds"], 4)
         self.assertEqual(len(result["waiting"]), 2)
         self.assertFalse(result["parallel_merge"])
-
         with self.assertRaises(PermissionError):
-            build_authorized_portfolio_schedule(
-                authority_resolution=active_authority(),
-                packets=packets,
-                max_parallel=5,
-            )
+            build_authorized_portfolio_schedule(authority_resolution=active_authority(), packets=packets, max_parallel=5)
 
-    def test_stale_main_requeue_is_automatic_only_inside_exact_fail_closed_scope(self) -> None:
-        packet = build_packet_descriptor(
-            programme_id="PROGRAMME-A",
-            packet_id="R1",
-            write_paths=("src/r1/",),
-            semantic_owners=("owner-r1",),
-        )
+    def test_main_movement_recomposes_same_pip_and_never_creates_replacement_pr(self) -> None:
+        packet = build_packet_descriptor(programme_id="PROGRAMME-A", packet_id="R1", write_paths=("src/r1/",), semantic_owners=("owner-r1",))
         allowed = build_authorized_requeue_reconciliation(
             authority_resolution=active_authority(),
             packet=packet,
-            failure_reason="OVC_BASE_MOVED_BEFORE_READINESS",
-            attempt=1,
+            failure_reason="PREDECESSOR_MOVED",
+            attempt=7,
             previous_base="a" * 40,
             current_main="b" * 40,
         )
-        self.assertEqual(allowed["action"], "REQUEUE_RECONCILE_FROM_CURRENT_MAIN")
-        self.assertTrue(allowed["fresh_branch_required"])
-        self.assertTrue(allowed["fresh_exact_head_assurance_required"])
+        self.assertEqual(allowed["action"], "RECOMPOSE_SAME_PIP_CURRENT_FRONTIER")
+        self.assertTrue(allowed["same_pr_required"])
+        self.assertTrue(allowed["same_source_head_required"])
+        self.assertTrue(allowed["same_pip_required"])
+        self.assertTrue(allowed["a0_reuse_required"])
+        self.assertTrue(allowed["a1_recomposition_required"])
+        self.assertTrue(allowed["a2_prospective_assurance_required"])
+        self.assertFalse(allowed["fresh_branch_required"])
+        self.assertFalse(allowed["fresh_exact_head_assurance_required"])
         self.assertEqual(allowed["blockers"], [])
         self.assertFalse(allowed["force_push"])
         self.assertFalse(allowed["history_rewrite"])
 
-        exhausted = build_authorized_requeue_reconciliation(
-            authority_resolution=active_authority(),
-            packet=packet,
-            failure_reason="OVC_BASE_MOVED_BEFORE_READINESS",
-            attempt=3,
-            previous_base="a" * 40,
-            current_main="b" * 40,
-        )
-        self.assertEqual(exhausted["action"], "STOP_SERIAL_REQUIRED")
-        self.assertIn("AUTO_REQUEUE_ATTEMPTS_EXHAUSTED", exhausted["blockers"])
-
         drift = build_authorized_requeue_reconciliation(
             authority_resolution=active_authority(),
             packet=packet,
-            failure_reason="OVC_BASE_MOVED_DURING_READINESS",
+            failure_reason="PREDECESSOR_MOVED",
             attempt=1,
             previous_base="a" * 40,
             current_main="b" * 40,
@@ -153,18 +104,12 @@ class DSAIThroughputExpansionTests(unittest.TestCase):
         self.assertEqual(drift["action"], "STOP_SERIAL_REQUIRED")
         self.assertIn("SEMANTIC_OWNER_DRIFT", drift["blockers"])
 
-    def test_requeue_never_crosses_operator_or_authority_boundaries(self) -> None:
-        operator_packet = build_packet_descriptor(
-            programme_id="PROGRAMME-A",
-            packet_id="R2",
-            write_paths=("src/r2/",),
-            semantic_owners=("owner-r2",),
-            gate_class="OPERATOR_REQUIRED",
-        )
+    def test_recomposition_never_crosses_operator_or_authority_boundaries(self) -> None:
+        operator_packet = build_packet_descriptor(programme_id="PROGRAMME-A", packet_id="R2", write_paths=("src/r2/",), semantic_owners=("owner-r2",), gate_class="OPERATOR_REQUIRED")
         result = build_authorized_requeue_reconciliation(
             authority_resolution=active_authority(),
             packet=operator_packet,
-            failure_reason="OVC_BASE_MOVED_BEFORE_READINESS",
+            failure_reason="PREDECESSOR_MOVED",
             attempt=1,
             previous_base="a" * 40,
             current_main="b" * 40,

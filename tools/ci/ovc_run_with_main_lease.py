@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
-"""Run one required-assurance command while an exact main-bound lease remains valid.
+"""Run A2 on an exact prospective VIT tree while physical main is frozen.
 
-The lease is read-only and supplied by the final-integration admission job as
-``{head_sha, base_sha, base_branch}``.  The child command is never started when
-the current base already differs.  If the base advances while the command is
-running, the child process group is terminated and the recognised
-``OVC_BASE_MOVED_DURING_READINESS`` reason is emitted so the existing bounded
-reconciliation/requeue path can create a fresh immutable candidate.
+The source PR head is provenance only.  The checked-out commit is a deterministic
+local-only commit whose tree equals the qualified VIT prospective result.  The
+lease freezes the physical predecessor, generation and result tree; a predecessor
+move terminates A2 and requires recomposition of the same PIP, not a replacement PR.
 """
 
 from __future__ import annotations
@@ -14,10 +12,8 @@ from __future__ import annotations
 import argparse
 import json
 import os
-from pathlib import Path
 import signal
 import subprocess
-import sys
 import time
 from typing import Sequence
 from urllib.error import HTTPError, URLError
@@ -62,7 +58,7 @@ def _current_branch_sha(
     )
     headers = {
         "Accept": "application/vnd.github+json",
-        "User-Agent": "ovc-required-assurance-lease/v1",
+        "User-Agent": "ovc-required-assurance-lease/v2",
         "X-GitHub-Api-Version": "2022-11-28",
     }
     if token:
@@ -82,15 +78,17 @@ def _current_branch_sha(
     return sha
 
 
-def _checkout_head() -> str:
+def _git_rev_parse(value: str) -> str:
     completed = subprocess.run(
-        ["git", "rev-parse", "HEAD"],
+        ["git", "rev-parse", value],
         check=False,
         capture_output=True,
         text=True,
     )
     if completed.returncode != 0:
-        raise LeaseError(f"cannot resolve checked-out HEAD: {completed.stderr.strip()}")
+        raise LeaseError(
+            f"cannot resolve {value}: {completed.stderr.strip()}"
+        )
     return completed.stdout.strip()
 
 
@@ -123,17 +121,36 @@ def run_with_lease(command: Sequence[str]) -> int:
         return subprocess.call(list(command))
 
     base_sha = _required_env("OVC_LEASE_BASE_SHA")
-    head_sha = _required_env("OVC_LEASE_HEAD_SHA")
+    source_head_sha = os.environ.get("OVC_LEASE_SOURCE_HEAD_SHA", "").strip()
+    prospective_commit = (
+        os.environ.get("OVC_LEASE_PROSPECTIVE_COMMIT_SHA", "").strip()
+        or os.environ.get("OVC_LEASE_HEAD_SHA", "").strip()
+    )
+    result_tree = os.environ.get("OVC_LEASE_RESULT_TREE", "").strip()
     branch = _required_env("OVC_LEASE_BRANCH")
     repository = _required_env("GITHUB_REPOSITORY")
     token = os.environ.get("GITHUB_TOKEN", "")
     poll_seconds = float(os.environ.get("OVC_LEASE_POLL_SECONDS", DEFAULT_POLL_SECONDS))
 
-    checkout = _checkout_head()
-    if checkout != head_sha:
+    if len(prospective_commit) != 40:
+        raise LeaseError("OVC_LEASE_PROSPECTIVE_COMMIT_SHA is invalid")
+    if source_head_sha and len(source_head_sha) != 40:
+        raise LeaseError("OVC_LEASE_SOURCE_HEAD_SHA is invalid")
+    if result_tree and len(result_tree) != 40:
+        raise LeaseError("OVC_LEASE_RESULT_TREE is invalid")
+
+    checkout = _git_rev_parse("HEAD")
+    if checkout != prospective_commit:
         raise LeaseError(
-            "checked-out candidate does not match shared lease: "
-            f"HEAD={checkout}, lease_head={head_sha}"
+            "checked-out prospective generation does not match shared lease: "
+            f"HEAD={checkout}, prospective_commit={prospective_commit}, "
+            f"source_head={source_head_sha or 'UNRECORDED'}"
+        )
+    observed_tree = _git_rev_parse("HEAD^{tree}")
+    if result_tree and observed_tree != result_tree:
+        raise LeaseError(
+            "checked-out prospective commit tree does not match lease result tree: "
+            f"observed={observed_tree}, expected={result_tree}"
         )
 
     current = _current_branch_sha(
@@ -143,10 +160,10 @@ def run_with_lease(command: Sequence[str]) -> int:
     )
     if current != base_sha:
         print(
-            "::error title=Required assurance lease stale before command::"
-            "OVC_BASE_MOVED_BEFORE_READINESS: "
-            f"{branch} moved from lease base {base_sha} to {current} before "
-            f"required command for {head_sha} started.",
+            "::error title=VIT predecessor moved before A2::"
+            "PREDECESSOR_MOVED: "
+            f"{branch} moved from {base_sha} to {current} before A2 started for "
+            f"source {source_head_sha or 'UNRECORDED'}; recompose the same PIP.",
             flush=True,
         )
         return EXIT_BASE_MOVED
@@ -171,9 +188,8 @@ def run_with_lease(command: Sequence[str]) -> int:
         except LeaseError as exc:
             consecutive_observation_failures += 1
             print(
-                "::warning title=Required assurance lease observation retry::"
-                f"{exc}; attempt "
-                f"{consecutive_observation_failures}/"
+                "::warning title=VIT predecessor observation retry::"
+                f"{exc}; attempt {consecutive_observation_failures}/"
                 f"{MAX_CONSECUTIVE_OBSERVATION_FAILURES}.",
                 flush=True,
             )
@@ -181,10 +197,10 @@ def run_with_lease(command: Sequence[str]) -> int:
                 continue
             _terminate_process_group(process)
             print(
-                "::error title=Required assurance lease unobservable::"
+                "::error title=VIT physical lease unobservable::"
                 "OVC_REQUIRED_ASSURANCE_LEASE_OBSERVABILITY_FAILED: "
-                f"could not prove {branch}@{base_sha} remained current for "
-                f"{head_sha}; required work was terminated fail-closed.",
+                f"could not prove {branch}@{base_sha} remained the physical predecessor; "
+                "A2 was terminated fail-closed.",
                 flush=True,
             )
             return EXIT_LEASE_OBSERVABILITY
@@ -193,12 +209,11 @@ def run_with_lease(command: Sequence[str]) -> int:
         if current != base_sha:
             _terminate_process_group(process)
             print(
-                "::error title=Required assurance lease invalidated::"
-                "OVC_REQUIRED_ASSURANCE_LEASE_INVALIDATED: "
-                "OVC_BASE_MOVED_DURING_READINESS: "
-                f"{branch} moved from {base_sha} to {current} while required "
-                f"assurance was running for {head_sha}. The stale command was "
-                "terminated; create a fresh immutable reconciliation candidate.",
+                "::error title=VIT predecessor moved during A2::"
+                "OVC_REQUIRED_ASSURANCE_LEASE_INVALIDATED: PREDECESSOR_MOVED: "
+                f"{branch} moved from {base_sha} to {current} while A2 was running "
+                f"for source {source_head_sha or 'UNRECORDED'}. The exact prospective "
+                "run was terminated; recompose the same PIP on the new frontier.",
                 flush=True,
             )
             return EXIT_BASE_MOVED
@@ -217,7 +232,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         return run_with_lease(command)
     except (LeaseError, ValueError) as exc:
         print(
-            "::error title=Required assurance lease invalid::"
+            "::error title=Required VIT lease invalid::"
             f"OVC_REQUIRED_ASSURANCE_LEASE_INVALID: {exc}",
             flush=True,
         )

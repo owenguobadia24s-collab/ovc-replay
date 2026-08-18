@@ -13,13 +13,33 @@ import urllib.parse
 import urllib.request
 
 from ovc.development.prvit_remediation import (
-    IntegrationAdmissionReceipt,
-    IntegrationAssuranceGeneration,
     ShadowGRTProof,
     TypedAssuranceResult,
-    semantic_dispatch_key,
 )
 from ovc.development.skills.vit_core import VitContractError
+from ovc.development.skills.vit_frontier_decoupling import (
+    FrontierIntegrationAdmissionReceipt,
+    FrontierIntegrationAssuranceGeneration,
+    SourceHead,
+    a1_proof_id,
+    assurance_generation_from_record,
+    build_a2_proof,
+    build_frontier_ledger_envelope,
+    build_frontier_lineage,
+    classify_frontier_movement,
+    compose_pip_tree,
+    create_prospective_commit,
+    decode_record,
+    diff_tree_paths,
+    encode_record,
+    git_tree,
+    tree_is_in_commit_ancestry,
+    validate_a2_proof,
+)
+from ovc.development.skills.vit_local_completion_executor import (
+    build_live_transaction_freeze,
+    encode_freeze_marker,
+)
 from ovc.development.skills.vit_predecessor import (
     OpenVitPlacement,
     resolve_vit_train_predecessor,
@@ -27,7 +47,7 @@ from ovc.development.skills.vit_predecessor import (
 from ovc.development.skills.vit_routing import validate_vit_lineage_record
 from tools.ci.vit_lineage_source import resolve_lineage_source
 
-POLICY_ID = "PRVITR-LIVE-ADMISSION-POLICY-v0.1"
+POLICY_ID = "PRVITR-VIT-FRONTIER-DECOUPLING-POLICY-v0.1"
 TESTS_WORKFLOW = "tests.yml"
 TIERED_WORKFLOW = "ovc-tiered-tests.yml"
 TEST_JOB_NAMES = (
@@ -56,7 +76,7 @@ def _api(path: str, *, timeout: float = 15.0) -> Any:
     headers = {
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
-        "User-Agent": "ovc-prvitr-live-admission/1",
+        "User-Agent": "ovc-prvitr-live-admission/2",
     }
     token = _token()
     if token:
@@ -71,12 +91,13 @@ def _api(path: str, *, timeout: float = 15.0) -> Any:
         raise RuntimeError(f"PRVITR_GITHUB_API_FAILED:{path}:{exc}") from exc
 
 
-def _write_output(name: str, value: str) -> None:
+def _write_output(name: str, value: str, *, echo: bool = True) -> None:
     output = os.environ.get("GITHUB_OUTPUT", "").strip()
     if output:
         with open(output, "a", encoding="utf-8") as handle:
             handle.write(f"{name}={value}\n")
-    print(f"OVC_PRVITR_{name.upper()}={value}")
+    if echo:
+        print(f"OVC_PRVITR_{name.upper()}={value}")
 
 
 def _event() -> Mapping[str, Any]:
@@ -138,22 +159,6 @@ def _ensure_commit(sha: str) -> None:
     if proc.returncode == 0:
         return
     _git("fetch", "--no-tags", "origin", sha)
-
-
-def _is_ancestor(ancestor: str, descendant: str) -> bool:
-    _ensure_commit(ancestor)
-    _ensure_commit(descendant)
-    proc = subprocess.run(
-        ["git", "merge-base", "--is-ancestor", ancestor, descendant],
-        check=False,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-    )
-    if proc.returncode == 0:
-        return True
-    if proc.returncode == 1:
-        return False
-    raise RuntimeError("PRVITR_GIT_ANCESTRY_PROOF_FAILED")
 
 
 def _tree(commit: str) -> str:
@@ -267,17 +272,17 @@ def _wait_exact_assurance(
         )
         if tests_state == "FAIL":
             raise RuntimeError(
-                f"SIQ_EXACT_TESTS_WORKFLOW_FAILED:{tests_run.get('id')}"
+                f"SIQ_EXACT_A0_TESTS_WORKFLOW_FAILED:{tests_run.get('id')}"
             )
         if profile_state == "FAIL":
             raise RuntimeError(
-                f"SIQ_EXACT_PROFILE_WORKFLOW_FAILED:{tiered_run.get('id')}"
+                f"SIQ_EXACT_A0_PROFILE_WORKFLOW_FAILED:{tiered_run.get('id')}"
             )
         if tests_state == "PASS" and profile_state == "PASS":
             return tests_run, test_jobs, tiered_run, profile_jobs[0]
         time.sleep(10)
     raise RuntimeError(
-        "SIQ_READY_ADMISSION_TIMEOUT: exact required assurance did not complete"
+        "SIQ_READY_ADMISSION_TIMEOUT: exact PIP-bound A0 assurance did not complete"
     )
 
 
@@ -301,77 +306,32 @@ def _typed_result(
     )
 
 
-def command_ready() -> int:
-    event = _event()
-    event_pr = _event_pr(event)
-    pr_number = int(event.get("number", event_pr.get("number", -1)))
-    event_head = str((event_pr.get("head") or {}).get("sha", ""))
-    live = _live_pr(pr_number)
-    live_head = str((live.get("head") or {}).get("sha", ""))
-    if live_head != event_head:
-        raise RuntimeError(
-            f"OVC_SIQ_SUPERSEDED_EVENT_HEAD:event {event_head}, live {live_head}"
-        )
-    if str(live.get("state", "")) != "open":
-        raise RuntimeError(f"OVC_SIQ_PR_NOT_OPEN:{pr_number}")
-
-    record, lineage = _lineage_from_pr(live)
-    tests_run, test_jobs, tiered_run, profile_job = _wait_exact_assurance(
-        pr_number, live_head
+def _source_head(
+    pr: Mapping[str, Any], record: Mapping[str, Any]
+) -> SourceHead:
+    number = int(pr.get("number", -1))
+    head = pr.get("head")
+    if not isinstance(head, Mapping):
+        raise RuntimeError("PRVITR_LIVE_PR_HEAD_INVALID")
+    head_sha = str(head.get("sha", ""))
+    head_ref = str(head.get("ref", ""))
+    head_tree = _tree(head_sha)
+    raw = record.get("source_head")
+    if isinstance(raw, Mapping):
+        source = SourceHead(**dict(raw))
+        if (
+            source.commit_sha != head_sha
+            or source.tree_sha != head_tree
+            or source.pr_number != number
+        ):
+            raise RuntimeError("VIT_SOURCE_HEAD_PROVENANCE_MISMATCH")
+        return source
+    return SourceHead(
+        commit_sha=head_sha,
+        tree_sha=head_tree,
+        pr_number=number,
+        head_ref=head_ref,
     )
-    frontier = str(record["pip"]["dependency_frontier_id"])
-    authority = str(record["pip"]["authority_manifest_id"])
-    results = [
-        _typed_result(str(job.get("name", "")), job, frontier, int(tests_run["id"]))
-        for job in test_jobs
-    ]
-    results.append(
-        _typed_result(PROFILE_JOB_NAME, profile_job, frontier, int(tiered_run["id"]))
-    )
-    generation = IntegrationAssuranceGeneration(
-        pip_id=lineage.pip_id,
-        head_tree=_tree(live_head),
-        placement_id=lineage.placement_id,
-        predecessor_tree=str(
-            record["generation"]["predecessor_tree"]["tree_sha"]
-        ),
-        authority_manifest_id=authority,
-        dependency_frontier_id=frontier,
-        policy_id=POLICY_ID,
-        assurance_result_ids=tuple(item.result_id for item in results),
-        source_run_ids=tuple(
-            str(item.source_run_id) for item in results if item.source_run_id
-        ),
-    )
-    base_ref = str((live.get("base") or {}).get("ref", "main"))
-    current_main = _branch_sha(base_ref)
-    if not _is_ancestor(current_main, live_head):
-        dispatch = semantic_dispatch_key(
-            str(record["programme_id"]), str(record["packet_id"]), lineage.pip_id
-        )
-        print(
-            f"OVC_PLACEMENT_RECOMPUTE_ONLY_REQUEUE dispatch_key={dispatch} "
-            f"base={current_main} head={live_head}"
-        )
-        raise RuntimeError(
-            f"OVC_RECONCILE_REQUIRED: candidate {live_head} does not contain live "
-            f"{base_ref}@{current_main}; PLACEMENT_RECOMPUTE_ONLY selective renewal is required"
-        )
-    print(
-        "OVC_INTEGRATION_ASSURANCE_GENERATION="
-        + json.dumps(asdict(generation), sort_keys=True, separators=(",", ":"))
-    )
-    _write_output("base_sha", current_main)
-    _write_output("head_sha", live_head)
-    _write_output("assurance_generation_id", generation.generation_id)
-    _write_output("tests_run_id", str(tests_run["id"]))
-    _write_output("profile_run_id", str(tiered_run["id"]))
-    print(
-        f"OVC_SIQ_READY_ADMITTED: {live_head} exact tests run {tests_run['id']} + "
-        f"profile run {tiered_run['id']} -> assurance_generation "
-        f"{generation.generation_id}; contains live {base_ref}@{current_main}"
-    )
-    return 0
 
 
 def _open_pulls(base_ref: str) -> list[Mapping[str, Any]]:
@@ -420,150 +380,367 @@ def _open_vit_placements(
     return tuple(placements)
 
 
-def _find_predecessor(
-    current_pr: Mapping[str, Any], base_ref: str, main_sha: str
-) -> Mapping[str, Any] | None:
-    current_number = int(current_pr.get("number", -1))
-    record, _ = _lineage_from_pr(current_pr)
-    main_tree = _tree(main_sha)
-    expected_tree = str(record["generation"]["predecessor_tree"]["tree_sha"])
-
-    # The exact placement predecessor is already physical.  This is the normal
-    # path and intentionally does not scan/sort unrelated open PRs.
-    if main_tree == expected_tree:
-        print(
-            "OVC_FINAL_INTEGRATION_NO_VIT_PLACEMENT_PREDECESSOR: "
-            f"physical main tree {main_tree} is the exact VIT predecessor tree for PR "
-            f"#{current_number}."
-        )
-        return None
-
-    predecessor = resolve_vit_train_predecessor(
+def _exact_open_predecessor(
+    *,
+    record: Mapping[str, Any],
+    base_ref: str,
+    current_pr_number: int,
+    current_main_tree: str,
+):
+    return resolve_vit_train_predecessor(
         current_lineage_record=record,
-        current_main_tree=main_tree,
+        current_main_tree=current_main_tree,
         open_placements=_open_vit_placements(
-            base_ref, current_pr_number=current_number
+            base_ref, current_pr_number=current_pr_number
         ),
     )
+
+
+def _resolve_frontier(
+    *, pr: Mapping[str, Any], base_ref: str, current_main_sha: str
+) -> tuple[Mapping[str, Any], SourceHead, str]:
+    source_record, source_lineage = _lineage_from_pr(pr)
+    source_head = _source_head(pr, source_record)
+    source_generation = source_record["generation"]
+    source_result_tree = str(source_generation["result_tree"]["tree_sha"])
+    if source_result_tree != source_head.tree_sha:
+        raise RuntimeError("VIT_SOURCE_LINEAGE_RESULT_NOT_SOURCE_HEAD_TREE")
+
+    current_main_tree = _tree(current_main_sha)
+    source_predecessor_tree = str(source_generation["predecessor_tree"]["tree_sha"])
+    historical = source_predecessor_tree == current_main_tree or tree_is_in_commit_ancestry(
+        Path.cwd(),
+        tree_sha=source_predecessor_tree,
+        descendant_commit=current_main_sha,
+    )
+
+    if historical:
+        changed_paths = diff_tree_paths(
+            Path.cwd(), source_predecessor_tree, current_main_tree
+        )
+        movement = classify_frontier_movement(
+            pip=source_record["pip"],
+            source_predecessor_tree=source_predecessor_tree,
+            current_predecessor_tree=current_main_tree,
+            changed_paths=changed_paths,
+        )
+        if movement.disposition == "PAYLOAD_REBUILD_REQUIRED":
+            raise RuntimeError(
+                f"VIT_PAYLOAD_REBUILD_REQUIRED:{movement.decision_id}:"
+                f"same PIP cannot overwrite changed frontier paths"
+            )
+        if movement.disposition == "AUTHORITY_REVIEW_REQUIRED":
+            raise RuntimeError(
+                f"VIT_AUTHORITY_REVIEW_REQUIRED:{movement.decision_id}"
+            )
+        prospective_tree = compose_pip_tree(
+            Path.cwd(), current_main_tree, source_record["pip"]["logical_changes"]
+        )
+        frontier = build_frontier_lineage(
+            source_lineage_record=source_record,
+            source_head=source_head,
+            predecessor_commit=current_main_sha,
+            predecessor_tree=current_main_tree,
+            prospective_result_tree=prospective_tree,
+            movement=movement,
+        )
+        return frontier, source_head, movement.disposition
+
+    predecessor = _exact_open_predecessor(
+        record=source_record,
+        base_ref=base_ref,
+        current_pr_number=int(pr.get("number", -1)),
+        current_main_tree=current_main_tree,
+    )
     if predecessor is None:
-        return None
-    return {
-        "number": predecessor.pr_number,
-        "head_sha": predecessor.head_sha,
-        "base_sha": main_sha,
-        "generation_id": predecessor.generation_id,
-        "placement_id": predecessor.placement_id,
-        "train_generation_id": predecessor.train_generation_id,
-        "result_tree": predecessor.result_tree,
-    }
+        raise RuntimeError("VIT_PLACEMENT_PREDECESSOR_RESOLUTION_INVALID")
+    # The source generation remains the exact planned generation until its encoded
+    # predecessor becomes physical.  It is wrapped in current frontier provenance
+    # without changing PIP/generation/placement identity.
+    from ovc.development.skills.vit_frontier_decoupling import FrontierMovementDecision
+
+    movement = FrontierMovementDecision(
+        disposition="NO_MOVEMENT",
+        source_predecessor_tree=source_predecessor_tree,
+        current_predecessor_tree=source_predecessor_tree,
+        a1_renewal_required=False,
+        a2_renewal_required=True,
+    )
+    frontier = build_frontier_lineage(
+        source_lineage_record=source_record,
+        source_head=source_head,
+        predecessor_commit=predecessor.head_sha,
+        predecessor_tree=source_predecessor_tree,
+        prospective_result_tree=source_result_tree,
+        movement=movement,
+    )
+    return frontier, source_head, "WAITING_VIT_PREDECESSOR"
+
+
+def _assurance_generation(
+    *,
+    frontier: Mapping[str, Any],
+    source_head: SourceHead,
+    tests_run: Mapping[str, Any],
+    test_jobs: Iterable[Mapping[str, Any]],
+    tiered_run: Mapping[str, Any],
+    profile_job: Mapping[str, Any],
+    supersedes: str | None = None,
+) -> FrontierIntegrationAssuranceGeneration:
+    lineage = validate_vit_lineage_record(frontier)
+    pip = frontier["pip"]
+    dependency_frontier = str(pip["dependency_frontier_id"])
+    results = [
+        _typed_result(
+            str(job.get("name", "")),
+            job,
+            dependency_frontier,
+            int(tests_run["id"]),
+        )
+        for job in test_jobs
+    ]
+    results.append(
+        _typed_result(
+            PROFILE_JOB_NAME,
+            profile_job,
+            dependency_frontier,
+            int(tiered_run["id"]),
+        )
+    )
+    resolution = frontier["frontier_resolution"]
+    return FrontierIntegrationAssuranceGeneration(
+        source_head_id=source_head.source_head_id,
+        source_head_commit=source_head.commit_sha,
+        pip_id=lineage.pip_id,
+        vit_generation_id=lineage.generation_id,
+        placement_id=lineage.placement_id,
+        predecessor_commit=str(resolution["current_predecessor_commit"]),
+        predecessor_tree=str(resolution["current_predecessor_tree"]),
+        prospective_result_tree=str(resolution["prospective_result_tree"]),
+        authority_manifest_id=str(pip["authority_manifest_id"]),
+        dependency_frontier_id=dependency_frontier,
+        policy_id=POLICY_ID,
+        a0_result_ids=tuple(item.result_id for item in results),
+        a1_proof_id=a1_proof_id(frontier),
+        assurance_stage="A0_A1_BOUND",
+        source_run_ids=tuple(
+            str(item.source_run_id) for item in results if item.source_run_id
+        ),
+        supersedes_assurance_generation_id=supersedes,
+    )
+
+
+def command_ready() -> int:
+    event = _event()
+    event_pr = _event_pr(event)
+    pr_number = int(event.get("number", event_pr.get("number", -1)))
+    event_head = str((event_pr.get("head") or {}).get("sha", ""))
+    live = _live_pr(pr_number)
+    live_head = str((live.get("head") or {}).get("sha", ""))
+    if live_head != event_head:
+        raise RuntimeError(
+            f"OVC_SIQ_SUPERSEDED_EVENT_HEAD:event {event_head}, live {live_head}"
+        )
+    if str(live.get("state", "")) != "open":
+        raise RuntimeError(f"OVC_SIQ_PR_NOT_OPEN:{pr_number}")
+
+    tests_run, test_jobs, tiered_run, profile_job = _wait_exact_assurance(
+        pr_number, live_head
+    )
+    base_ref = str((live.get("base") or {}).get("ref", "main"))
+    current_main = _branch_sha(base_ref)
+    frontier, source_head, movement = _resolve_frontier(
+        pr=live, base_ref=base_ref, current_main_sha=current_main
+    )
+    assurance = _assurance_generation(
+        frontier=frontier,
+        source_head=source_head,
+        tests_run=tests_run,
+        test_jobs=test_jobs,
+        tiered_run=tiered_run,
+        profile_job=profile_job,
+    )
+    lineage = validate_vit_lineage_record(frontier)
+    resolution = frontier["frontier_resolution"]
+    print(
+        "OVC_FRONTIER_INTEGRATION_ASSURANCE_GENERATION="
+        + json.dumps(asdict(assurance), sort_keys=True, separators=(",", ":"))
+    )
+    _write_output("base_sha", current_main)
+    _write_output("source_head_sha", source_head.commit_sha)
+    _write_output("head_sha", source_head.commit_sha)
+    _write_output("frontier_generation_id", lineage.generation_id)
+    _write_output("placement_id", lineage.placement_id)
+    _write_output("predecessor_commit_sha", str(resolution["current_predecessor_commit"]))
+    _write_output("predecessor_tree", str(resolution["current_predecessor_tree"]))
+    _write_output("prospective_result_tree", str(resolution["prospective_result_tree"]))
+    _write_output("frontier_lineage_b64", encode_record(frontier), echo=False)
+    _write_output("assurance_generation_b64", encode_record(asdict(assurance)), echo=False)
+    _write_output("assurance_generation_id", assurance.assurance_generation_id)
+    _write_output("tests_run_id", str(tests_run["id"]))
+    _write_output("profile_run_id", str(tiered_run["id"]))
+    _write_output("movement_disposition", movement)
+    print(
+        f"OVC_SIQ_READY_ADMITTED: source_head={source_head.commit_sha} "
+        f"pip={lineage.pip_id} frontier_generation={lineage.generation_id} "
+        f"placement={lineage.placement_id} result_tree={resolution['prospective_result_tree']} "
+        f"movement={movement}; PR identity retained."
+    )
+    return 0
 
 
 def command_acquire() -> int:
     event = _event()
     event_pr = _event_pr(event)
     pr_number = int(event.get("number", event_pr.get("number", -1)))
-    expected_head = os.environ.get("OVC_READY_HEAD_SHA", "").strip() or str(
+    expected_source_head = os.environ.get("OVC_READY_SOURCE_HEAD_SHA", "").strip() or str(
         (event_pr.get("head") or {}).get("sha", "")
     )
-    ready_base = os.environ.get("OVC_READY_BASE_SHA", "").strip()
     live = _live_pr(pr_number)
     live_head = str((live.get("head") or {}).get("sha", ""))
-    if live_head != expected_head:
+    if live_head != expected_source_head:
         raise RuntimeError(
-            f"OVC_SIQ_SUPERSEDED_EVENT_HEAD:READY {expected_head}, live {live_head}"
+            f"OVC_SIQ_SUPERSEDED_EVENT_HEAD:READY {expected_source_head}, live {live_head}"
         )
     base_ref = str((live.get("base") or {}).get("ref", "main"))
     started = time.time()
     deadline = started + PREDECESSOR_TIMEOUT_SECONDS
     lease_owner: Mapping[str, Any] | None = None
+    selected_frontier: Mapping[str, Any] | None = None
+    selected_source: SourceHead | None = None
+    main_snapshot = ""
 
     while time.time() < deadline:
         current_live = _live_pr(pr_number)
         current_head = str((current_live.get("head") or {}).get("sha", ""))
-        if current_head != expected_head:
+        if current_head != expected_source_head:
             raise RuntimeError(
-                f"OVC_SIQ_SUPERSEDED_EVENT_HEAD:READY {expected_head}, live {current_head}"
+                f"OVC_SIQ_SUPERSEDED_EVENT_HEAD:READY {expected_source_head}, live {current_head}"
             )
         current_main = _branch_sha(base_ref)
-        if lease_owner is None:
-            lease_owner = _find_predecessor(current_live, base_ref, current_main)
-            if lease_owner is None:
-                print(
-                    "OVC_CI_METRIC "
-                    + json.dumps(
-                        {
-                            "schema": "ovc-ci-metric/v1",
-                            "metric": "final_integration_predecessor_lease_wait_ms",
-                            "value_ms": int((time.time() - started) * 1000),
-                            "head_sha": expected_head,
-                            "predecessor_pr": None,
-                            "result": "NO_VIT_PLACEMENT_PREDECESSOR",
-                        },
-                        separators=(",", ":"),
-                    )
-                )
-                break
+        current_main_tree = _tree(current_main)
+        frontier, source_head, movement = _resolve_frontier(
+            pr=current_live, base_ref=base_ref, current_main_sha=current_main
+        )
+        predecessor = resolve_vit_train_predecessor(
+            current_lineage_record=frontier,
+            current_main_tree=current_main_tree,
+            open_placements=_open_vit_placements(
+                base_ref, current_pr_number=pr_number
+            ),
+        )
+        if predecessor is None:
+            selected_frontier = frontier
+            selected_source = source_head
+            main_snapshot = current_main
             print(
-                "OVC_FINAL_INTEGRATION_VIT_TRAIN_PREDECESSOR_HELD: "
-                f"PR #{lease_owner['number']} head {lease_owner['head_sha']} "
-                f"placement {lease_owner['placement_id']}."
+                "OVC_CI_METRIC "
+                + json.dumps(
+                    {
+                        "schema": "ovc-ci-metric/v1",
+                        "metric": "final_integration_predecessor_lease_wait_ms",
+                        "value_ms": int((time.time() - started) * 1000),
+                        "source_head_sha": expected_source_head,
+                        "predecessor_pr": None,
+                        "result": "CURRENT_VIT_PREDECESSOR_PHYSICAL",
+                        "movement": movement,
+                    },
+                    separators=(",", ":"),
+                )
             )
+            break
 
-        terminal = _live_pr(int(lease_owner["number"]))
+        lease_owner = {
+            "number": predecessor.pr_number,
+            "head_sha": predecessor.head_sha,
+            "base_sha": current_main,
+            "generation_id": predecessor.generation_id,
+            "placement_id": predecessor.placement_id,
+            "result_tree": predecessor.result_tree,
+        }
+        print(
+            "OVC_FINAL_INTEGRATION_VIT_TRAIN_PREDECESSOR_HELD: "
+            f"PR #{predecessor.pr_number} head {predecessor.head_sha} "
+            f"placement {predecessor.placement_id}."
+        )
+        terminal = _live_pr(predecessor.pr_number)
         new_main = _branch_sha(base_ref)
         terminal_head = str((terminal.get("head") or {}).get("sha", ""))
-        if terminal_head != lease_owner["head_sha"]:
+        if terminal_head != predecessor.head_sha:
             print(
                 "OVC_FINAL_INTEGRATION_VIT_TRAIN_PREDECESSOR_SUPERSEDED: "
-                f"PR #{lease_owner['number']}."
+                f"PR #{predecessor.pr_number}."
             )
             lease_owner = None
             continue
-        if terminal.get("merged_at") and new_main != lease_owner["base_sha"]:
+        if terminal.get("merged_at") and new_main != current_main:
             print(
                 "OVC_FINAL_INTEGRATION_VIT_TRAIN_PREDECESSOR_MERGED: "
-                f"PR #{lease_owner['number']}; successor re-resolves exact placement."
+                f"PR #{predecessor.pr_number}; same PIP re-resolves on new frontier."
             )
             lease_owner = None
             continue
         if str(terminal.get("state", "")) == "closed":
             print(
                 "OVC_FINAL_INTEGRATION_VIT_TRAIN_PREDECESSOR_RELEASED_UNMERGED: "
-                f"PR #{lease_owner['number']}; current placement must re-resolve."
+                f"PR #{predecessor.pr_number}; placement must re-resolve."
             )
             lease_owner = None
             continue
-        if new_main != lease_owner["base_sha"]:
+        if new_main != current_main:
             print(
                 "OVC_FINAL_INTEGRATION_VIT_TRAIN_PREDECESSOR_INVALIDATED: "
-                f"PR #{lease_owner['number']}; physical main moved."
+                f"PR #{predecessor.pr_number}; physical main moved."
             )
             lease_owner = None
             continue
         time.sleep(5)
 
-    if lease_owner is not None:
+    if selected_frontier is None or selected_source is None:
+        owner = lease_owner["number"] if lease_owner is not None else "UNKNOWN"
         raise RuntimeError(
             "OVC_FINAL_INTEGRATION_VIT_TRAIN_PREDECESSOR_TERMINAL_TIMEOUT: "
-            f"PR #{lease_owner['number']}"
+            f"PR #{owner}"
         )
 
-    main_snapshot = _branch_sha(base_ref)
-    if not _is_ancestor(main_snapshot, expected_head):
-        raise RuntimeError(
-            f"OVC_RECONCILE_REQUIRED: candidate {expected_head} does not contain acquired "
-            f"{base_ref}@{main_snapshot}; READY base was {ready_base}"
-        )
-    if ready_base and main_snapshot != ready_base:
-        print(
-            f"OVC_READY_BASE_REFRESHED_BEFORE_FINAL_LEASE: READY {ready_base} -> "
-            f"live {main_snapshot}; candidate {expected_head} already contains newer base."
-        )
+    # Rebind the same completed A0 evidence to the exact current A1 placement.
+    tests_run, test_jobs, tiered_run, profile_job = _wait_exact_assurance(
+        pr_number, expected_source_head
+    )
+    ready_assurance = os.environ.get("OVC_READY_ASSURANCE_GENERATION_ID", "").strip()
+    assurance = _assurance_generation(
+        frontier=selected_frontier,
+        source_head=selected_source,
+        tests_run=tests_run,
+        test_jobs=test_jobs,
+        tiered_run=tiered_run,
+        profile_job=profile_job,
+        supersedes=(ready_assurance if len(ready_assurance) == 64 else None),
+    )
+    lineage = validate_vit_lineage_record(selected_frontier)
+    resolution = selected_frontier["frontier_resolution"]
+    result_tree = str(resolution["prospective_result_tree"])
+    prospective_commit = create_prospective_commit(
+        Path.cwd(),
+        predecessor_commit=main_snapshot,
+        result_tree=result_tree,
+        generation_id=lineage.generation_id,
+    )
     _write_output("base_sha", main_snapshot)
-    _write_output("head_sha", expected_head)
+    _write_output("base_tree", str(resolution["current_predecessor_tree"]))
+    _write_output("source_head_sha", selected_source.commit_sha)
+    _write_output("head_sha", selected_source.commit_sha)
+    _write_output("frontier_generation_id", lineage.generation_id)
+    _write_output("placement_id", lineage.placement_id)
+    _write_output("prospective_result_tree", result_tree)
+    _write_output("prospective_commit_sha", prospective_commit)
+    _write_output("frontier_lineage_b64", encode_record(selected_frontier), echo=False)
+    _write_output("assurance_generation_b64", encode_record(asdict(assurance)), echo=False)
+    _write_output("assurance_generation_id", assurance.assurance_generation_id)
     print(
         f"OVC_SIQ_BASE_SENSITIVE_LEASE_ACQUIRED: {base_ref}@{main_snapshot} "
-        f"for {expected_head}."
+        f"tree={resolution['current_predecessor_tree']} generation={lineage.generation_id} "
+        f"result_tree={result_tree} source_head={selected_source.commit_sha}."
     )
     return 0
 
@@ -572,73 +749,209 @@ def command_finalize() -> int:
     event = _event()
     event_pr = _event_pr(event)
     pr_number = int(event.get("number", event_pr.get("number", -1)))
-    head_sha = os.environ.get("OVC_WINDOW_HEAD_SHA", "").strip()
+    source_head_sha = os.environ.get("OVC_WINDOW_SOURCE_HEAD_SHA", "").strip()
     base_sha = os.environ.get("OVC_WINDOW_BASE_SHA", "").strip()
-    assurance_generation_id = os.environ.get(
+    base_tree = os.environ.get("OVC_WINDOW_BASE_TREE", "").strip()
+    prospective_commit = os.environ.get("OVC_WINDOW_PROSPECTIVE_COMMIT_SHA", "").strip()
+    prospective_tree = os.environ.get("OVC_WINDOW_PROSPECTIVE_RESULT_TREE", "").strip()
+    preliminary_assurance_id = os.environ.get(
         "OVC_ASSURANCE_GENERATION_ID", ""
     ).strip()
-    if (
-        len(head_sha) != 40
-        or len(base_sha) != 40
-        or len(assurance_generation_id) != 64
-    ):
+    preliminary_assurance_token = os.environ.get(
+        "OVC_ASSURANCE_GENERATION_B64", ""
+    ).strip()
+    frontier_token = os.environ.get("OVC_FRONTIER_LINEAGE_B64", "").strip()
+    if any(
+        len(value) != length
+        for value, length in (
+            (source_head_sha, 40),
+            (base_sha, 40),
+            (base_tree, 40),
+            (prospective_commit, 40),
+            (prospective_tree, 40),
+            (preliminary_assurance_id, 64),
+        )
+    ) or not frontier_token or not preliminary_assurance_token:
         raise RuntimeError("PRVITR_FINALIZE_INPUT_INVALID")
+
     live = _live_pr(pr_number)
     live_head = str((live.get("head") or {}).get("sha", ""))
-    if live_head != head_sha:
+    if live_head != source_head_sha:
         raise RuntimeError(
-            f"OVC_SIQ_SUPERSEDED_EVENT_HEAD:lease {head_sha}, live {live_head}"
+            f"OVC_SIQ_SUPERSEDED_EVENT_HEAD:lease source {source_head_sha}, live {live_head}"
         )
     base_ref = str((live.get("base") or {}).get("ref", "main"))
     final_main = _branch_sha(base_ref)
-    if final_main != base_sha:
+    final_main_tree = _tree(final_main)
+    if final_main != base_sha or final_main_tree != base_tree:
         raise RuntimeError(
-            f"OVC_BASE_MOVED_DURING_READINESS: {base_ref} moved from "
-            f"{base_sha} to {final_main}"
+            f"PREDECESSOR_MOVED: {base_ref} moved from {base_sha}/{base_tree} "
+            f"to {final_main}/{final_main_tree}; recompose the same PIP."
         )
-    if not _is_ancestor(base_sha, head_sha):
-        raise RuntimeError("OVC_CANDIDATE_NOT_RECONCILED_TO_CURRENT_MAIN")
-    record, lineage = _lineage_from_pr(live)
-    head_tree = _tree(head_sha)
-    if str(record["generation"]["result_tree"]["tree_sha"]) != head_tree:
-        raise RuntimeError("PRVITR_FINAL_RESULT_TREE_MISMATCH")
+
+    frontier = decode_record(frontier_token)
+    lineage = validate_vit_lineage_record(frontier)
+    resolution = frontier.get("frontier_resolution")
+    if not isinstance(resolution, Mapping):
+        raise RuntimeError("PRVITR_FRONTIER_RESOLUTION_MISSING")
+    if str(resolution.get("current_predecessor_commit")) != base_sha:
+        raise RuntimeError("PRVITR_FRONTIER_PREDECESSOR_COMMIT_MISMATCH")
+    if str(resolution.get("current_predecessor_tree")) != base_tree:
+        raise RuntimeError("PRVITR_FRONTIER_PREDECESSOR_TREE_MISMATCH")
+    if str(resolution.get("prospective_result_tree")) != prospective_tree:
+        raise RuntimeError("PRVITR_FRONTIER_RESULT_TREE_MISMATCH")
+    recomposed = compose_pip_tree(
+        Path.cwd(), base_tree, frontier["pip"]["logical_changes"]
+    )
+    if recomposed != prospective_tree:
+        raise RuntimeError("PRVITR_QUALIFIED_PROSPECTIVE_TREE_RECOMPOSITION_MISMATCH")
+    if git_tree(Path.cwd(), prospective_commit) != prospective_tree:
+        raise RuntimeError("PRVITR_PROSPECTIVE_COMMIT_TREE_MISMATCH")
+
+    preliminary_record = decode_record(preliminary_assurance_token)
+    preliminary = assurance_generation_from_record(
+        preliminary_record, expected_id=preliminary_assurance_id
+    )
+    if preliminary.pip_id != lineage.pip_id:
+        raise RuntimeError("PRVITR_PRELIMINARY_ASSURANCE_PIP_MISMATCH")
+    if preliminary.vit_generation_id != lineage.generation_id:
+        raise RuntimeError("PRVITR_PRELIMINARY_ASSURANCE_GENERATION_MISMATCH")
+    if preliminary.placement_id != lineage.placement_id:
+        raise RuntimeError("PRVITR_PRELIMINARY_ASSURANCE_PLACEMENT_MISMATCH")
+    if preliminary.prospective_result_tree != prospective_tree:
+        raise RuntimeError("PRVITR_PRELIMINARY_ASSURANCE_RESULT_TREE_MISMATCH")
+
+    a2_proof = build_a2_proof(
+        frontier_lineage=frontier,
+        workflow_run_id=os.environ.get("GITHUB_RUN_ID", ""),
+        run_attempt=os.environ.get("GITHUB_RUN_ATTEMPT", ""),
+    )
+    a2_proof_id = validate_a2_proof(a2_proof, frontier_lineage=frontier)
+    final_assurance = FrontierIntegrationAssuranceGeneration(
+        source_head_id=preliminary.source_head_id,
+        source_head_commit=preliminary.source_head_commit,
+        pip_id=preliminary.pip_id,
+        vit_generation_id=preliminary.vit_generation_id,
+        placement_id=preliminary.placement_id,
+        predecessor_commit=preliminary.predecessor_commit,
+        predecessor_tree=preliminary.predecessor_tree,
+        prospective_result_tree=preliminary.prospective_result_tree,
+        authority_manifest_id=preliminary.authority_manifest_id,
+        dependency_frontier_id=preliminary.dependency_frontier_id,
+        policy_id=preliminary.policy_id,
+        a0_result_ids=preliminary.a0_result_ids,
+        a1_proof_id=preliminary.a1_proof_id,
+        assurance_stage="A2_QUALIFIED",
+        a2_result_ids=(a2_proof_id,),
+        source_run_ids=tuple(
+            list(preliminary.source_run_ids)
+            + [
+                f"github-actions-run:{os.environ.get('GITHUB_RUN_ID', '')}:"
+                f"attempt:{os.environ.get('GITHUB_RUN_ATTEMPT', '')}:"
+                "job:OVC merge readiness"
+            ]
+        ),
+        supersedes_assurance_generation_id=preliminary_assurance_id,
+    )
+
+    freeze = build_live_transaction_freeze(
+        lineage_record=frontier,
+        pr_number=pr_number,
+        base_sha=base_sha,
+        head_sha=source_head_sha,
+        base_tree=base_tree,
+        head_tree=prospective_tree,
+        workflow_run_id=os.environ.get("GITHUB_RUN_ID", ""),
+        run_attempt=os.environ.get("GITHUB_RUN_ATTEMPT", ""),
+    )
+    # The historical freeze builder remains API-compatible, but this transaction
+    # is observed in the late SIQ lane only after A2 has qualified the exact
+    # prospective tree.  Do not mislabel it as routing-preflight evidence.
+    freeze["freeze_provenance"]["source"] = "SIQ_PHYSICAL_LANE_AFTER_A2"
+
+    # The late transaction freeze carries one closed, reconstructible ledger
+    # envelope.  Post-merge A3 decodes, revalidates and persists each canonical
+    # record separately through the existing content-addressed ReceiptStore.
+    ledger_envelope = build_frontier_ledger_envelope(
+        frontier_lineage=frontier,
+        assurance_generation=final_assurance,
+        a2_proof=a2_proof,
+    )
+    freeze["frontier_ledger_envelope"] = ledger_envelope
+    freeze_marker = encode_freeze_marker(freeze)
+    transaction = freeze["transaction"]
+    if str(freeze.get("pip_id")) != lineage.pip_id:
+        raise RuntimeError("PRVITR_TRANSACTION_PIP_MISMATCH")
+    if str(freeze.get("generation_id")) != lineage.generation_id:
+        raise RuntimeError("PRVITR_TRANSACTION_GENERATION_MISMATCH")
+    if str(freeze.get("placement_id")) != lineage.placement_id:
+        raise RuntimeError("PRVITR_TRANSACTION_PLACEMENT_MISMATCH")
+    if str(transaction["expected_predecessor_commit"]) != base_sha:
+        raise RuntimeError("PRVITR_TRANSACTION_PREDECESSOR_COMMIT_MISMATCH")
+    if str(transaction["expected_predecessor_tree"]) != base_tree:
+        raise RuntimeError("PRVITR_TRANSACTION_PREDECESSOR_TREE_MISMATCH")
+    if str(transaction["expected_result_tree"]) != prospective_tree:
+        raise RuntimeError("PRVITR_TRANSACTION_RESULT_TREE_MISMATCH")
+
     grt = ShadowGRTProof(
-        result_tree=head_tree,
+        result_tree=prospective_tree,
         proof_id=(
-            f"exact-tree:{os.environ.get('GITHUB_RUN_ID', 'unknown')}:"
+            f"exact-prospective-tree:{os.environ.get('GITHUB_RUN_ID', 'unknown')}:"
             f"{os.environ.get('GITHUB_RUN_ATTEMPT', '1')}"
         ),
-        constitution_id="GRT-v0.2-exact-tree",
+        constitution_id="GRT-v0.2-exact-prospective-tree",
         state="PASS",
     )
-    receipt = IntegrationAdmissionReceipt(
-        assurance_generation_id=assurance_generation_id,
+    source = SourceHead(**dict(resolution["source_head"]))
+    receipt = FrontierIntegrationAdmissionReceipt(
+        assurance_generation_id=final_assurance.assurance_generation_id,
+        transaction_id=str(freeze["transaction_id"]),
+        source_head_id=source.source_head_id,
+        source_head_commit=source_head_sha,
         pip_id=lineage.pip_id,
+        vit_generation_id=lineage.generation_id,
         placement_id=lineage.placement_id,
-        result_tree=head_tree,
+        predecessor_commit=base_sha,
+        predecessor_tree=base_tree,
+        prospective_result_tree=prospective_tree,
         grt_proof_binding_id=grt.proof_binding_id,
-        disposition="SHADOW_READY",
+        disposition="FRONTIER_READY",
         reason_codes=(
-            "LIVE_SWITCH_OPERATOR_PASS",
-            "EXACT_ASSURANCE_BOUND",
-            "LOCAL_GIT_ANCESTRY_PASS",
-            "BASE_STABLE",
+            "SAME_PIP_SOURCE_HEAD_RETAINED",
+            "A0_PIP_BOUND",
+            "A1_RECOMPOSITION_EXACT",
+            "A2_PROSPECTIVE_TREE_EXACT",
+            "PREDECESSOR_STABLE_INSIDE_LEASE",
         ),
     )
     print(
-        "OVC_INTEGRATION_ADMISSION_RECEIPT="
+        "OVC_FRONTIER_A2_PROOF="
+        + json.dumps(a2_proof, sort_keys=True, separators=(",", ":"))
+    )
+    print(
+        "OVC_FRONTIER_INTEGRATION_ASSURANCE_GENERATION="
+        + json.dumps(asdict(final_assurance), sort_keys=True, separators=(",", ":"))
+    )
+    print(
+        "OVC_FRONTIER_INTEGRATION_ADMISSION_RECEIPT="
         + json.dumps(asdict(receipt), sort_keys=True, separators=(",", ":"))
     )
+    # Exactly one late physical transaction freeze is emitted for post-merge A3.
+    print(freeze_marker)
     _write_output("admission_receipt_id", receipt.receipt_id)
+    _write_output("assurance_generation_id", final_assurance.assurance_generation_id)
+    _write_output("a2_proof_id", a2_proof_id)
     _write_output("grt_proof_binding_id", grt.proof_binding_id)
+    _write_output("transaction_id", str(freeze["transaction_id"]))
+    _write_output("frontier_ledger_envelope_id", str(ledger_envelope["record_id"]))
     print(
-        f"OVC_FINAL_INTEGRATION_WINDOW_PASS: exact-final assurance bound by "
-        f"admission receipt {receipt.receipt_id} on {head_sha} while {base_ref} "
-        f"remained {base_sha}."
+        f"OVC_FINAL_INTEGRATION_WINDOW_PASS: source_head={source_head_sha} "
+        f"generation={lineage.generation_id} qualified prospective tree={prospective_tree} "
+        f"while {base_ref} remained {base_sha}/{base_tree}."
     )
     print(
-        f"OVC_SIQ_BASE_SENSITIVE_LEASE_RELEASED: {head_sha}; immediate successor "
-        "advancement is eligible."
+        f"OVC_SIQ_BASE_SENSITIVE_LEASE_RELEASED: {source_head_sha}; "
+        "physical write remains serialized and A3 must prove the resulting main tree."
     )
     return 0
 
@@ -654,7 +967,7 @@ def main() -> int:
             return command_acquire()
         return command_finalize()
     except (RuntimeError, VitContractError) as exc:
-        print(f"::error title=PRVITR live admission::{exc}")
+        print(f"::error title=PRVITR frontier-decoupled live admission::{exc}")
         return 1
 
 

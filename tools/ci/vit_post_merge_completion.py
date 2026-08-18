@@ -15,6 +15,9 @@ from urllib.request import HTTPRedirectHandler, Request, build_opener, urlopen
 from ovc.development.dsai3v_live_trace import build_observed_completion_trace
 from ovc.development.identity import canonical_sha256
 from ovc.development.skills.vit_core import VitContractError
+from ovc.development.skills.vit_frontier_decoupling import (
+    validate_frontier_ledger_envelope,
+)
 from ovc.development.skills.vit_local_completion_executor import (
     FREEZE_MARKER_PREFIX,
     complete_frozen_transaction,
@@ -55,7 +58,7 @@ def _headers(token: str, *, accept: str = "application/vnd.github+json") -> dict
     return {
         "Accept": accept,
         "Authorization": f"Bearer {token}",
-        "User-Agent": "ovc-vit-local-post-merge-completion/v1",
+        "User-Agent": "ovc-vit-local-post-merge-completion/v2",
         "X-GitHub-Api-Version": "2022-11-28",
     }
 
@@ -154,9 +157,9 @@ def _pr_head_workflow_observations(
     return runs, jobs_by_run
 
 
-def _freeze_from_prewrite_logs(
-    *, repository: str, head_sha: str, pr_number: int, token: str
-) -> Mapping[str, Any]:
+def _workflow_runs_for_head(
+    *, repository: str, head_sha: str, token: str
+) -> list[Mapping[str, Any]]:
     owner, repo = repository.split("/", 1)
     query = urlencode(
         {
@@ -166,57 +169,129 @@ def _freeze_from_prewrite_logs(
             "per_page": "100",
         }
     )
-    runs = _json(
+    payload = _json(
         f"https://api.github.com/repos/{quote(owner)}/{quote(repo)}/actions/runs?{query}",
         token,
     )
-    if not isinstance(runs, Mapping):
+    if not isinstance(payload, Mapping):
         raise PostMergeCompletionError("workflow run response invalid")
-    candidates = [
+    return [
         row
-        for row in runs.get("workflow_runs", [])
+        for row in payload.get("workflow_runs", [])
         if isinstance(row, Mapping)
-        and row.get("name") == "tests"
-        and row.get("conclusion") == "success"
     ]
-    candidates.sort(key=lambda row: int(row.get("id", 0)), reverse=True)
-    markers: list[Mapping[str, Any]] = []
-    for run in candidates:
-        run_id = int(run["id"])
-        jobs = _json(
-            f"https://api.github.com/repos/{quote(owner)}/{quote(repo)}/actions/runs/{run_id}/jobs?per_page=100",
-            token,
-        )
-        for job in jobs.get("jobs", []) if isinstance(jobs, Mapping) else []:
-            if (
-                isinstance(job, Mapping)
-                and job.get("name") == "VIT routing preflight"
+
+
+def _freeze_markers_from_job(
+    *, repository: str, job: Mapping[str, Any], token: str
+) -> list[Mapping[str, Any]]:
+    owner, repo = repository.split("/", 1)
+    text = _request_job_log(
+        f"https://api.github.com/repos/{quote(owner)}/{quote(repo)}/actions/jobs/{int(job['id'])}/logs",
+        token,
+    ).decode("utf-8", errors="replace")
+    tokens = re.findall(
+        re.escape(FREEZE_MARKER_PREFIX) + r"([A-Za-z0-9_\-=]+)",
+        text,
+    )
+    return [
+        decode_freeze_marker(FREEZE_MARKER_PREFIX + marker_token)
+        for marker_token in tokens
+    ]
+
+
+def _freeze_from_physical_lane_logs(
+    *, repository: str, head_sha: str, pr_number: int, token: str
+) -> Mapping[str, Any]:
+    """Resolve the single late SIQ physical transaction freeze.
+
+    Frontier-decoupled transactions are emitted only by the successful
+    ``OVC merge readiness`` job after the physical lease and A2 exact prospective
+    assurance.  The historical tests/VIT-routing location remains a read-only
+    fallback for already-merged pre-cutover packets.
+    """
+
+    runs = _workflow_runs_for_head(
+        repository=repository, head_sha=head_sha, token=token
+    )
+    search_order = (
+        ("OVC tiered test selection shadow", "OVC merge readiness"),
+        ("tests", "VIT routing preflight"),  # historical recovery only
+    )
+    for workflow_name, job_name in search_order:
+        candidates = [
+            row
+            for row in runs
+            if row.get("name") == workflow_name
+            and row.get("conclusion") == "success"
+        ]
+        candidates.sort(key=lambda row: int(row.get("id", 0)), reverse=True)
+        for run in candidates:
+            owner, repo = repository.split("/", 1)
+            jobs = _json(
+                f"https://api.github.com/repos/{quote(owner)}/{quote(repo)}/actions/runs/{int(run['id'])}/jobs?per_page=100",
+                token,
+            )
+            matching_jobs = [
+                job
+                for job in (jobs.get("jobs", []) if isinstance(jobs, Mapping) else [])
+                if isinstance(job, Mapping)
+                and job.get("name") == job_name
                 and job.get("conclusion") == "success"
-            ):
-                text = _request_job_log(
-                    f"https://api.github.com/repos/{quote(owner)}/{quote(repo)}/actions/jobs/{int(job['id'])}/logs",
-                    token,
-                ).decode("utf-8", errors="replace")
-                tokens = re.findall(
-                    re.escape(FREEZE_MARKER_PREFIX) + r"([A-Za-z0-9_\-=]+)",
-                    text,
+            ]
+            matching_jobs.sort(key=lambda row: int(row.get("id", 0)), reverse=True)
+            for job in matching_jobs:
+                markers = _freeze_markers_from_job(
+                    repository=repository, job=job, token=token
                 )
-                for marker_token in tokens:
-                    markers.append(
-                        decode_freeze_marker(FREEZE_MARKER_PREFIX + marker_token)
+                if not markers:
+                    continue
+                if len(markers) != 1:
+                    raise PostMergeCompletionError(
+                        f"expected one physical transaction freeze in {workflow_name}/{job_name}, found {len(markers)}"
                     )
-        if markers:
-            break
-    if len(markers) != 1:
-        raise PostMergeCompletionError(
-            f"expected one pre-write transaction freeze for PR #{pr_number}, found {len(markers)}"
-        )
-    freeze = markers[0]
-    if int(freeze.get("pr_number", -1)) != int(pr_number):
-        raise PostMergeCompletionError("pre-write freeze PR mismatch")
-    if str(freeze.get("head_sha")) != head_sha:
-        raise PostMergeCompletionError("pre-write freeze head mismatch")
-    return freeze
+                freeze = markers[0]
+                if int(freeze.get("pr_number", -1)) != int(pr_number):
+                    raise PostMergeCompletionError("physical transaction freeze PR mismatch")
+                if str(freeze.get("head_sha")) != head_sha:
+                    raise PostMergeCompletionError("physical transaction freeze source-head mismatch")
+                return freeze
+    raise PostMergeCompletionError(
+        f"expected one late physical transaction freeze for PR #{pr_number}, found none"
+    )
+
+
+def _persist_frontier_ledger(
+    *, freeze: Mapping[str, Any], receipt_store: ReceiptStore
+) -> Mapping[str, str] | None:
+    """Persist the canonical frontier lineage/A2 assurance records after A3.
+
+    Historical pre-cutover freezes legitimately omit this envelope.  New
+    frontier-decoupled freezes fail closed when an envelope is present but invalid.
+    """
+
+    raw = freeze.get("frontier_ledger_envelope")
+    if raw is None:
+        return None
+    if not isinstance(raw, Mapping):
+        raise PostMergeCompletionError("frontier ledger envelope is not an object")
+    decoded = validate_frontier_ledger_envelope(raw)
+    receipt_store.put_record(
+        decoded["frontier_lineage"], decoded["frontier_lineage_record_id"]
+    )
+    receipt_store.put_record(
+        decoded["assurance_generation"], decoded["assurance_generation_id"]
+    )
+    receipt_store.put_record(decoded["a2_proof"], decoded["a2_proof_id"])
+    receipt_store.put_record(
+        decoded["envelope_record"], decoded["envelope_record_id"]
+    )
+    return {
+        "frontier_lineage_record_id": str(decoded["frontier_lineage_record_id"]),
+        "assurance_generation_id": str(decoded["assurance_generation_id"]),
+        "a2_proof_id": str(decoded["a2_proof_id"]),
+        "frontier_ledger_envelope_id": str(decoded["envelope_record_id"]),
+    }
 
 
 def _check_runs(repository: str, head_sha: str, token: str) -> list[Mapping[str, Any]]:
@@ -288,7 +363,7 @@ def run(repo_root: Path, merge_sha: str) -> Mapping[str, Any]:
     merged_at = str(pr.get("merged_at") or "")
     if not merged_at:
         raise PostMergeCompletionError("associated PR merged_at is required")
-    freeze = _freeze_from_prewrite_logs(
+    freeze = _freeze_from_physical_lane_logs(
         repository=repository,
         head_sha=head_sha,
         pr_number=pr_number,
@@ -301,7 +376,7 @@ def run(repo_root: Path, merge_sha: str) -> Mapping[str, Any]:
         )
     if str(transaction["expected_result_tree"]) != observed_tree:
         raise PostMergeCompletionError(
-            "physical tree does not match frozen transaction"
+            "physical tree does not match frozen qualified prospective result"
         )
 
     external_root = resolve_external_root(
@@ -345,6 +420,10 @@ def run(repo_root: Path, merge_sha: str) -> Mapping[str, Any]:
                 raise PostMergeCompletionError("DEVOBS trace event id missing")
             receipt_store.put(dict(event), record_id)
 
+    frontier_ledger_ids = _persist_frontier_ledger(
+        freeze=freeze, receipt_store=receipt_store
+    )
+
     proof = complete_frozen_transaction(
         freeze=freeze,
         observed_commit=merge_sha,
@@ -373,6 +452,8 @@ def run(repo_root: Path, merge_sha: str) -> Mapping[str, Any]:
         "receipt_ids": proof["receipt_ids"],
         "authority_effect": proof["authority_effect"],
     }
+    if frontier_ledger_ids is not None:
+        safe["frontier_ledger_ids"] = dict(frontier_ledger_ids)
     if proof.get("trace_summary_id"):
         safe["trace_summary_id"] = proof["trace_summary_id"]
     print("OVC_VIT_POST_MERGE_COMPLETION_PROOF " + json.dumps(safe, sort_keys=True))
