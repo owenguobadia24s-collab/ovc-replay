@@ -4,7 +4,7 @@
   "plan_id": "OVC.DEVOBS.LATENCY.20260813.v2",
   "plan_version": "v2",
   "packet_id": "DEVOBS-DSAI3V-ROUTINE-TRACE-CAPTURE",
-  "status": "IMPLEMENTED",
+  "status": "APPROVED",
   "prerequisites": [
     "CANONICAL_DEVOBS_COMPLETION_RECEIPT_ATTACHED",
     "github:issue:986:completed",
@@ -14,12 +14,23 @@
   "authority_delta": "NONE_DIAGNOSTIC_OBSERVABILITY",
   "baseline_commit": "05cf4eef36bc06b7e7d6036a9555e16c5ec18dc3",
   "branch": "reconcile/devobs-routine-trace-current-main-r3-20260818",
-  "candidate_commit": null,
-  "tests": [],
-  "qa_packet": null,
-  "decision_record": null,
+  "candidate_commit": "340c53e1ce2e3d54809202bf79ab448fff074bc7",
+  "tests": [
+    "github-actions:32120682956:PASS",
+    "github-actions:32120683051:PASS",
+    "VIT_ROUTING_PREFLIGHT:PASS",
+    "REPOSITORY_SUITE:PASS",
+    "RUNNER_PARITY:PASS",
+    "PYTEST_UNITTEST_PARITY:PASS",
+    "FINAL_HEAD:PASS",
+    "SIQ_READY:PASS",
+    "MERGE_READINESS:PASS"
+  ],
+  "qa_packet": "docs/releases/development-observability-v0-2/routine-trace-capture/DEVOBS_DSAI3V_ROUTINE_TRACE_CAPTURE_QA.json",
+  "decision_record": "docs/releases/development-observability-v0-2/routine-trace-capture/DEVOBS_DSAI3V_ROUTINE_TRACE_CAPTURE_DELEGATED_PASS.json",
   "merge_commit": null,
   "blockers": [],
-  "next_packet": "DEVOBS-DSAI3V-ROUTINE-TRACE-CAPTURE-QA",
-  "authority_effect": "NONE"
+  "next_packet": null,
+  "authority_effect": "NONE",
+  "integration_state": "EXACT_DECISION_HEAD_ASSURANCE_PENDING"
 }
