@@ -1,0 +1,84 @@
+name: C2P2 IAD pre-real assurance
+
+on:
+  push:
+    branches:
+      - tool/c2p2-iad-pre-real-assurance-20260818
+    paths:
+      - tools/ci/c2p2_iad_assurance_target.json
+      - .github/workflows/c2p2-iad-pre-real-assurance.yml
+
+permissions:
+  contents: read
+
+env:
+  PYTHONPATH: src:.
+
+jobs:
+  assure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout assurance controller
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          show-progress: false
+
+      - name: Resolve exact target
+        id: target
+        shell: bash
+        run: |
+          set -euo pipefail
+          ref="$(python -c 'import json; print(json.load(open("tools/ci/c2p2_iad_assurance_target.json"))["target_ref"])')"
+          sha="$(python -c 'import json; print(json.load(open("tools/ci/c2p2_iad_assurance_target.json"))["target_sha"])')"
+          packet="$(python -c 'import json; print(json.load(open("tools/ci/c2p2_iad_assurance_target.json"))["packet_id"])')"
+          echo "ref=$ref" >> "$GITHUB_OUTPUT"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "packet=$packet" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout exact packet candidate
+        shell: bash
+        env:
+          TARGET_REF: ${{ steps.target.outputs.ref }}
+          TARGET_SHA: ${{ steps.target.outputs.sha }}
+        run: |
+          set -euo pipefail
+          git fetch origin "+refs/heads/${TARGET_REF}:refs/remotes/origin/${TARGET_REF}" --no-tags
+          live="$(git rev-parse "refs/remotes/origin/${TARGET_REF}")"
+          test "$live" = "$TARGET_SHA" || { echo "C2P2_IAD_STALE_TARGET:$live:$TARGET_SHA" >&2; exit 42; }
+          git checkout --detach "$TARGET_SHA"
+          test "$(git rev-parse HEAD)" = "$TARGET_SHA"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install repository and test dependencies
+        run: python -m pip install -e ".[test]" -r requirements-console-vnext.txt
+
+      - name: Run targeted IAD assurance
+        shell: bash
+        run: |
+          set -o pipefail
+          python -m pytest -q tests/opt_b/c2p/v0_2/test_c2p2_iad_*.py --tb=short | tee /tmp/c2p2-iad-targeted.txt
+
+      - name: Run repository-wide regression
+        shell: bash
+        run: |
+          set -o pipefail
+          python -m pytest tests -q --tb=short | tee /tmp/c2p2-iad-repository.txt
+
+      - name: Emit assurance summary
+        shell: bash
+        run: |
+          {
+            echo "## ${{ steps.target.outputs.packet }}"
+            echo "- Target ref: `${{ steps.target.outputs.ref }}`"
+            echo "- Target SHA: `${{ steps.target.outputs.sha }}`"
+            echo "- Targeted: `$(tail -n 1 /tmp/c2p2-iad-targeted.txt)`"
+            echo "- Repository: `$(tail -n 1 /tmp/c2p2-iad-repository.txt)`"
+            echo "- Authority effect: `NONE_ASSURANCE_ONLY`"
+          } >> "$GITHUB_STEP_SUMMARY"
