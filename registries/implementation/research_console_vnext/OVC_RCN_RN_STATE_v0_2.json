@@ -5,17 +5,37 @@
   "plan_version": "0.3 RATIFIED + WP5 ARCHITECTURE RECONCILIATION v0.1",
   "implementation_generation": "v0.3",
   "phase_id": "PVS3",
+  "packet_id": "RCN-RN-WP5B1",
   "current_packet": "RCN-RN-WP5B1",
   "status": "QA_REVIEW",
   "current_gate": "RCN-RN-WP5B1-CLOSEOUT",
   "baseline_commit": "57995c54e2963984776832b7522841e6b7c834b0",
   "baseline_tree": "f67c49b8c3422948bfd96e1e2f7de3f1e19459a8",
-  "branch": "build/rcn-rn-wp5b1-dmrp-real-r1-20260818",
+  "branch": "build/rcn-rn-wp5b1-dmrp-real-r2-20260818",
   "candidate_commit": null,
   "authority_required": "OPERATOR_SOURCE_GATE_SATISFIED_PACKET_CLOSEOUT_AUTO_EXECUTABLE",
-  "authority_delta": "BOUNDED_READ_ONLY_DMRP_PRESENTATION_SOURCE_ADMISSION_ONLY",
-  "current_authority": "G4_MARKET_C1_C2_C2E_READ_ONLY_PLUS_G5_DMRP_READ_ONLY_SOURCE_SCOPED",
-  "real_source_routes": "MARKET_C1_C2_C2E_PREAUTHORISED; DMRP_OPERATOR_APPROVED_SOURCE_SCOPED; RCCR_PRSC_EC1_OPT_C_OPT_D_DENIED_PENDING_PER_SOURCE_PREFLIGHT",
+  "authority_delta": "NONE",
+  "current_authority": "G4_APPROVED_READ_ONLY_REAL_SOURCE_INVESTIGATE_PRESENTATION_MARKET_C1_C2_C2E",
+  "real_source_routes": "BOUND_EXPLICIT_REAL_MODE_MARKET_C1_C2_C2E__NO_FIXTURE_FALLBACK__OTHERS_DENIED",
+  "operator_decision_record": "artifacts/research_console_vnext/pvs3/RCN_RN_G4_OPERATOR_DECISION.json",
+  "source_authority_overlays": {
+    "DMRP": {
+      "gate_id": "RCN-RN-G5-FIRST-NEW-SOURCE[DMRP]",
+      "decision": "PASS",
+      "scope": "GET_READ_ONLY_PRESENTATION_ONLY",
+      "owner": "DMRP",
+      "authority_effect": "SOURCE_SCOPED_PRESENTATION_ADMISSION_ONLY",
+      "transitive": false,
+      "decision_record": "docs/implementation/research-console-vnext/rcn-rn-wp5b1/RCN_RN_G5_FIRST_NEW_SOURCE_DMRP_OPERATOR_DECISION_v0_1.json"
+    }
+  },
+  "source_scoped_real_routes": {
+    "DMRP": "OPERATOR_APPROVED_GET_ONLY_NO_FIXTURE_FALLBACK",
+    "RCCR": "DENIED_PENDING_INDEPENDENT_SOURCE_PREFLIGHT",
+    "PRSC_EC1": "DENIED_PENDING_INDEPENDENT_SOURCE_PREFLIGHT",
+    "OPT_C": "DENIED_PENDING_INDEPENDENT_SOURCE_PREFLIGHT",
+    "OPT_D": "DENIED_PENDING_INDEPENDENT_SOURCE_PREFLIGHT"
+  },
   "validation": "LOCKED_SEPARATE_DENIED",
   "write_authority": "NONE",
   "reanchor_record": "docs/implementation/research-console-vnext/rcn-rn-wp5b1/RCN_RN_WP5B1_REANCHOR_v0_1.json",
@@ -88,11 +108,12 @@
   "merge_commit": null,
   "blockers": [],
   "warnings": [
-    "DMRP source admission is source-scoped and non-transitive.",
+    "DMRP source admission is source-scoped and non-transitive; base G4 Investigate authority remains unchanged.",
     "No bound ResearchCandidateGeneration or cross-mode exposure record is fabricated; missing exposure remains independence UNKNOWN.",
     "RCCR, PRSC/EC1, OPT-C and OPT-D retain separate source-admission gates.",
     "Validation remains locked and Console remains GET/read-only."
   ],
   "rollback": "Disable the DMRP real-source Console binding and return WP5B1 to fixture/shadow-only while preserving the operator decision and owner records.",
+  "stop_boundary": "RCN-RN-G5-FIRST-NEW-SOURCE_OR_OTHER_RESERVED_AUTHORITY_CHANGE",
   "next_packet": "RCN-RN-WP5B2"
 }
