@@ -35,6 +35,25 @@ def existing(result: dict) -> dict:
     return {key: result[key] for key in ("series", "generation", "projection")}
 
 
+def dmrp_evidence(left: str, right: str, state: str = "AFFIRMATIVELY_DEPENDENT") -> dict:
+    return {
+        "record_id": "fixture:dmrp:1",
+        "owner": "DMRP_EXPOSURE_INFLUENCE_RECORDS",
+        "left_generation_id": left,
+        "right_generation_id": right,
+        "source_ref": "fixture:dmrp:exposure:1",
+        "source_generation": "fixture:dmrp:generation:1",
+        "source_sha256": "d" * 64,
+        "current_source_ref": "fixture:dmrp:exposure:1",
+        "current_source_generation": "fixture:dmrp:generation:1",
+        "current_source_sha256": "d" * 64,
+        "evidence_first_valid_time": "2026-02-01T00:00:00Z",
+        "currentness_state": "CURRENT",
+        "independence_state": state,
+        "authority_effect": "NONE",
+    }
+
+
 def test_identity_is_deterministic_schema_valid_and_exact_rediscovery_is_idempotent() -> None:
     first = bundle()
     second = bundle()
@@ -105,6 +124,12 @@ def test_correspondence_exact_auto_admission_and_non_exact_review_only() -> None
         planes=FIXTURE["non_exact_planes"],
         admission_basis="SOURCE_EXPLICIT_DETERMINISTIC_RELATION",
         source_relation_ref="fixture:source:relation",
+        independence_evidence=[
+            dmrp_evidence(
+                first["projection"]["generation_id"],
+                changed["generation_id"],
+            )
+        ],
     )
     assert staged["record"]["executability"] == "REVIEW_REQUIRED"
     validate_contract(
@@ -144,7 +169,7 @@ def test_evidence_algebra_is_order_independent_non_scalar_and_schema_valid() -> 
     left = assemble()
     right = assemble(list(reversed(FIXTURE["vector_inputs"])))
     assert left == right
-    assert left["confidence_score"] is None
+    assert "confidence_score" not in left
     assert left["vector"]["denominator"] == "CAPACITY_INCOMPLETE"
     assert left["vector"]["recurrence"] == "NOT_EVALUABLE"
     assert left["vector"]["dependence"] == "DEPENDENT"
