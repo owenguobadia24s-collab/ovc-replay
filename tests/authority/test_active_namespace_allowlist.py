@@ -15,6 +15,7 @@ EXPECTED_OVC_PACKAGES = {
     "ovc.context.occurrence_context",
     "ovc.development",
     "ovc.development.skills",
+    "ovc.development.skills.cers",
     "ovc.opt_a",
     "ovc.opt_b",
     "ovc.opt_b.c1",
