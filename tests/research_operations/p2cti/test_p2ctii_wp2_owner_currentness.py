@@ -267,10 +267,13 @@ def test_consolidated_review_packet_stops_at_independent_boundary() -> None:
         (ROOT / "records/research_operations/p2cti/P2CTII_PROGRAMME_STATE_v0_1.json").read_text()
     )
     assert review["gate_class"] == "INDEPENDENT_NON_OPERATOR_BLOCKING"
-    assert review["reviewer_binding"] == "UNBOUND"
-    assert review["gate_decision"] == "NOT_TAKEN"
-    assert review["decision_bearing_before_pass"] is False
-    assert review["operational_pointer_switch"] == "DENIED"
-    assert state["packet_id"] == "P2CTII-WP2"
-    assert state["next_packet"] == "P2CTII-G2-ALG"
-    assert state["blockers"] == ["P2CTII_G2_ALG_INDEPENDENT_REVIEW_REQUIRED"]
+    assert review["reviewer_binding"]["status"] == "BOUND"
+    assert review["gate_decision"] == "BLOCK"
+    assert review["decision_bearing_pointer"] == "DENIED"
+    assert review["operational_current_pointer_publication"] == "DENIED_SEPARATELY_GOVERNED"
+    assert state["packet_id"] == "P2CTII-G2-ALG"
+    assert state["next_packet"] == "P2CTII-WP2-REMEDIATION-1"
+    assert state["blockers"] == [
+        "P2CTII_G2_ALG_BLOCK_001_REQUIRED_OWNER_COMPLETENESS_NOT_BOUND",
+        "P2CTII_G2_ALG_BLOCK_002_RUNTIME_FRONTIER_SCHEMA_ENFORCEMENT_GAP",
+    ]
