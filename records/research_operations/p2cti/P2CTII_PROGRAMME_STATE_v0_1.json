@@ -4,27 +4,32 @@
   "packet_id": "P2CTII-WP1",
   "plan_id": "OVC-P2CTI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1",
   "plan_version": "0.1_REVISED_1",
-  "status": "QA_REVIEW",
+  "status": "APPROVED",
   "completed_packets": [
-    {"packet_id":"P2CTII-WP0","status":"COMPLETED","merge_commit":"49fc565541fe33ec5cdc42296528fc449ea86fff","decision":"PASS"}
+    {"packet_id":"P2CTII-WP0","status":"COMPLETED","merge_commit":"49fc565541fe33ec5cdc42296528fc449ea86fff","decision":"PASS"},
+    {"packet_id":"P2CTII-WP1","status":"COMPLETED","merge_commit":"05cf4eef36bc06b7e7d6036a9555e16c5ec18dc3","decision":"PASS"}
   ],
   "prerequisites": ["P2CTII-WP0_COMPLETED@49fc565541fe33ec5cdc42296528fc449ea86fff"],
   "authority_required": "DELEGATED_WITHIN_APPROVED_G0",
   "authority_delta": "NONE",
-  "baseline_commit": "cd2385ef7ec3d16bcbb0357f71cbe9c09d8deded",
-  "baseline_tree": "24d32663a65191dddcd1125d8ec74aaf9d6358b8",
-  "branch": "build/p2ctii-wp1-current-main-r3-20260818",
+  "baseline_commit": "05cf4eef36bc06b7e7d6036a9555e16c5ec18dc3",
+  "baseline_tree": "f6ef1fb6edca089819ff28233ca3f2df69381732",
+  "branch": "closeout/p2ctii-wp1-current-main-20260818",
   "candidate_commit": "PENDING_FINAL_PR_HEAD",
   "tests": [
     "tests/research_operations/p2cti/test_p2ctii_wp1_contracts.py",
     "tests/research_operations/p2cti/test_p2ctii_wp1_schemas.py",
-    "REPOSITORY_REQUIRED_CI",
-    "VIT_ROUTING_PREFLIGHT",
-    "FINAL_HEAD_ASSURANCE"
+    "REPOSITORY_REQUIRED_CI@32119851382:PASS",
+    "VIT_ROUTING_PREFLIGHT@32119851382:PASS",
+    "FINAL_HEAD_ASSURANCE@32119851526:PASS",
+    "ASSURANCE_GENERATION@7806e1232eb30576fec4a02ce0cf7d8087be219729766753b5c6a85a3094b8fe:PASS",
+    "GRT_PROOF_BINDING@188a8a188b678aad099db67d35e3af5b6a37442b4821ec21e88145e63163818e:PASS",
+    "SIQ_READY@32119851526:PASS",
+    "MERGE_READINESS@32119851526:PASS"
   ],
-  "qa_packet": null,
-  "decision_record": null,
-  "merge_commit": null,
+  "qa_packet": "docs/programmes/p2cti-v0-1/wp1/P2CTII_WP1_QA_PACKET_v0_1.json",
+  "decision_record": "docs/programmes/p2cti-v0-1/wp1/P2CTII_WP1_DELEGATED_DECISION_v0_1.json",
+  "merge_commit": "05cf4eef36bc06b7e7d6036a9555e16c5ec18dc3",
   "blockers": [],
   "superseded_candidates": [
     "PR1022",
