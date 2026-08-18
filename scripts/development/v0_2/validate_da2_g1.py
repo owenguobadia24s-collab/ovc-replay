@@ -31,7 +31,7 @@ def main():
  assert not missing_concurrency, f'pull_request workflows missing concurrency ({len(missing_concurrency)}): {sorted(missing_concurrency)}'
  assert full=={'.github/workflows/tests.yml'}, f'complete-suite PR workflows: {sorted(full)}'
  tests=actual['.github/workflows/tests.yml'].read_text(); tiered=actual['.github/workflows/ovc-tiered-tests.yml'].read_text(); resolver=RESOLVER.read_text()
- assert tests.count(FULL)==1 and 'python-version: "3.11"' in tests
+ assert tests.count(FULL)==1 and 'python-version: "3.11.15"' in tests
  assert FULL not in tiered and 'python-version: "3.11"' in tiered and 'OVC merge readiness' in tiered and 'OVC tiered test selection shadow' in tiered
  assert all(name in resolver for name in REQUIRED_PYTHON_CHECKS) and 'PROFILE_JOB_NAME = "OVC profile assurance"' in resolver, 'PRVITR resolver must retain exact source-head A0 and PYT-WP1 parity checks'
  for command in ('ready','acquire','finalize'): assert f'prvitr_live_admission.py {command}' in tiered, f'missing PRVITR live admission command: {command}'
