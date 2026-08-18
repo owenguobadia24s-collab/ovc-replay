@@ -1,0 +1,122 @@
+{
+  "schema": "ovc-c2p2-rs0-semantic-scalability-design/v1",
+  "programme_id": "OVC-C2P2-RS0-SHADOW-EVIDENCE-v0.1",
+  "packet_id": "C2P2-RS0-SEMANTIC-SCALABILITY-RECOVERY",
+  "authority_ref": "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_SEMANTIC_SCALABILITY_RECOVERY_OPERATOR_DECISION_v0_1.json",
+  "status": "DESIGN_CHOICE_FROZEN_FOR_BOUNDED_IMPLEMENTATION",
+  "problem": "The v0.1 runtime persists one evidence vector for every assertion and open-tracklet comparison. Candidate A synthetic density qualification proved exact N*(N-1)/2 negative-evidence growth; the current real-source shape implies at least 26,629,672,948 first-occurrence comparison vectors.",
+  "alternatives": [
+    {
+      "id": "ALT-1-EXACT-FULL-EVIDENCE-STREAM",
+      "equivalence_target": "BYTE_LOGICAL_EXACT_EVIDENCE_STREAM_PLUS_TERMINAL_OUTCOME",
+      "approach": "Retain exhaustive traversal but physically compress or hash every legacy evidence vector.",
+      "assessment": "REJECTED",
+      "reason": "Can reduce bytes but cannot remove quadratic traversal or logical evidence cardinality; therefore it does not resolve the proved blocker."
+    },
+    {
+      "id": "ALT-2-OUTCOME-EQUIVALENT-NEGATIVE-COVERAGE",
+      "equivalence_target": "EXACT_CANDIDATE_TRACKLET_ASSERTION_LIFECYCLE_AND_TERMINAL_MATCH_OUTCOMES_WITH_VERSIONED_NEGATIVE_EVIDENCE_CONTRACT",
+      "approach": "Persist only pair vectors for competitors that satisfy a candidate-specific necessary retrieval key and replace exhaustive impossible-competitor vectors with one deterministic negative-coverage certificate per candidate observation.",
+      "assessment": "SELECTED"
+    },
+    {
+      "id": "ALT-3-INDEX-ONLY-WITH-LEGACY-EVIDENCE",
+      "equivalence_target": "LEGACY_EVIDENCE_STREAM",
+      "approach": "Use indexes to find potential positives but reconstruct every skipped negative vector before final output.",
+      "assessment": "REJECTED",
+      "reason": "Restores quadratic work during evidence reconstruction and therefore fails the scaling objective."
+    }
+  ],
+  "selected_design": {
+    "id": "ALT-2-OUTCOME-EQUIVALENT-NEGATIVE-COVERAGE",
+    "runtime_generation": "C2P2_RS0_INDEXED_OUTCOME_EQUIVALENT_RUNTIME_v0_2",
+    "evidence_contract_id": "C2P2_RS0_NEGATIVE_COVERAGE_CERTIFICATE_v0_2",
+    "authority": "RESEARCH_SIDECAR_INACTIVE_SYNTHETIC_QUALIFICATION_ONLY",
+    "legacy_runtime_status": "UNCHANGED_FROZEN_REFERENCE",
+    "candidate_set": [
+      "C2P2-PS0-OP-A-STRICT-CONTINUITY-v3",
+      "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v3",
+      "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v3"
+    ]
+  },
+  "necessary_retrieval_keys": {
+    "C2P2-PS0-OP-A-STRICT-CONTINUITY-v2": {
+      "within_hard_scope": true,
+      "key_fields": ["geometry_signature"],
+      "proof_basis": "same_geometry_signature is a required conjunct of same_object_pair_supported"
+    },
+    "C2P2-PS0-OP-B-RELATIONAL-CONTINUITY-v2": {
+      "within_hard_scope": true,
+      "key_fields": ["source_record_kind", "owner_geometry_class", "relation_topology"],
+      "proof_basis": "same_relation_topology and owner_declared_geometry_compatible are required conjuncts; owner compatibility requires source-kind and owner-geometry-class equality"
+    },
+    "C2P2-PS0-OP-C-EPISODE-ENRICHED-CONTINUITY-v2": {
+      "within_hard_scope": true,
+      "key_fields": ["source_record_kind", "owner_geometry_class"],
+      "proof_basis": "owner_declared_geometry_compatible is a required conjunct; the frozen dependency registry is empty and the C2E disposition remains NOT_APPLICABLE_C2_ONLY"
+    }
+  },
+  "global_current_observation_blockers": [
+    "explicit_discontinuity",
+    "prior_terminal_break"
+  ],
+  "coverage_certificate_contract": {
+    "one_certificate_per_candidate_observation": true,
+    "records": [
+      "hard_scope_key",
+      "candidate_specific_necessary_key",
+      "assertion_scope_total",
+      "assertion_examined_count",
+      "assertion_pruned_by_necessary_key_count",
+      "open_tracklet_scope_total_when_reached",
+      "open_tracklet_examined_count_when_reached",
+      "open_tracklet_pruned_by_necessary_key_count_when_reached",
+      "global_blocker",
+      "necessary_predicate_theorem_id"
+    ],
+    "claim": "Every competitor omitted from pair evaluation failed at least one frozen necessary predicate by construction of the index key, or all competitors were blocked by a current-observation discontinuity/terminal-break predicate.",
+    "auditability": "Deterministic replay can reconstruct and verify index membership, totals and candidate terminal outcomes without materialising one JSON record per impossible pair."
+  },
+  "equivalence_target": {
+    "must_match_reference_exactly": [
+      "processed source-record identity and order",
+      "candidate IDs and candidate records",
+      "tracklet IDs, membership, states, reason codes and latest material",
+      "ObjectAssertion IDs, observation counts and latest material",
+      "eligible assertion IDs",
+      "eligible tracklet IDs",
+      "terminal decision labels",
+      "resulting subject IDs"
+    ],
+    "intentionally_versioned_delta": [
+      "negative evidence vectors are not individually materialised",
+      "match decision evidence_vector_ids contain only evaluated necessary-key competitors",
+      "legacy decision_id is therefore not an equivalence target",
+      "negative coverage is represented by C2P2_RS0_NEGATIVE_COVERAGE_CERTIFICATE_v0_2"
+    ]
+  },
+  "complexity_target": {
+    "normal_stream_competitor_lookup": "O(log state + eligible_key_bucket)",
+    "negative_evidence_storage": "O(N) certificates instead of O(N^2) impossible-pair vectors",
+    "candidate_A_all_unique_geometry_expected": "O(N log N) traversal and O(N) evidence certificates with zero pair vectors",
+    "discontinuity_note": "Censoring open tracklets remains proportional to affected open state at each explicit discontinuity; qualification must measure this separately and must not disguise it as pair-evidence work."
+  },
+  "required_qualification": [
+    "A/B/C bounded exact-reference terminal and lifecycle equivalence",
+    "ambiguity equivalence",
+    "discontinuity and prior-terminal-break equivalence",
+    "equal-time canonical-order compatibility",
+    "duplicate and nonmonotonic fail-closed behaviour",
+    "restart/checkpoint determinism",
+    "all-unique hard-scope density scaling",
+    "repeated-match density scaling",
+    "complete repository regression",
+    "GitHub-hosted capacity receipt"
+  ],
+  "real_source_execution": "FORBIDDEN",
+  "fresh_run_token": "NONE",
+  "selection": "NONE",
+  "activation": "NONE",
+  "validation": "LOCKED_UNCONSUMED",
+  "rollback": "DELETE_OR_SUPERSEDE_ONLY_THE_NEW_INACTIVE_SIDECAR_GENERATION; PRESERVE_ALL_FROZEN_R3_REFERENCE SEMANTICS AND EVIDENCE"
+}
