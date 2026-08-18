@@ -1,0 +1,45 @@
+{
+  "schema": "p1cdii-wp1-reference-objects/v0.1",
+  "examples": [
+    {
+      "schema_path": "schemas/research_operations/p1cdi/p1cdi_identity_v0_1.schema.json",
+      "record": {"record_type":"P1DistinctionSemanticProjection","schema_version":"0.1","authority_effect":"NONE","generation_id":"p1:gen:001","profile_id":"P1CDI-SEMANTIC-PROJECTION-v1","owner_semantic_binding":"owner:ec1:path1","identity_fields":{"unit_type":"STRUCTURAL_CORE","structural_predicates":["predicate:a"],"structural_relations":["relation:a>b"],"complete_minimal_core_set":["core:a"],"applicability_scope":{"instrument":"EURUSD"},"identity_defining_dependencies":["dep:a"],"first_valid_semantics":"2026-01-01T00:00:00Z","missingness_semantics":"EXPLICIT_UNKNOWN","representation_dependency":"OWNER_BOUND","method_dependency":"OWNER_BOUND","boundary_dependency":"OWNER_BOUND"},"projection_sha256":"1111111111111111111111111111111111111111111111111111111111111111"}
+    },
+    {
+      "schema_path": "schemas/research_operations/p1cdi/p1cdi_intake_v0_1.schema.json",
+      "record": {"record_type":"P1DiscoveryIntakeEnvelope","schema_version":"0.1","envelope_id":"p1:intake:001","source_ref":"ec1:result:001","source_sha256":"2222222222222222222222222222222222222222222222222222222222222222","source_owner":"EC1","source_first_valid_time":"2026-01-01T00:00:00Z","received_time":"2026-08-18T00:00:00Z","inventory_first_valid_time":"2026-08-18T00:00:00Z","intake_class":"DISCOVERY_RESULT","intake_state":"PENDING_RESOLUTION","visibility_class":"PROTECTED","reason_codes":["UNRESOLVED_SOURCE_GENERATION"],"authority_effect":"NONE"}
+    },
+    {
+      "schema_path": "schemas/research_operations/p1cdi/p1cdi_evidence_v0_1.schema.json",
+      "record": {"record_type":"P1DistinctionEvidenceStateVector","schema_version":"0.1","record_id":"p1:evidence:001","generation_id":"p1:gen:001","source_refs":["ec1:evidence:001"],"denominator":"NOT_EVALUABLE","recurrence":"NOT_TESTED","dependence":"INDEPENDENCE_UNKNOWN","separation":"NOT_COMPARABLE","integrity":"UNRESOLVED","other_planes":{"capacity":"CAPACITY_INCOMPLETE"},"authority_effect":"NONE"}
+    },
+    {
+      "schema_path": "schemas/research_operations/p1cdi/p1cdi_correspondence_v0_1.schema.json",
+      "record": {"record_type":"P1DistinctionCorrespondenceRecord","schema_version":"0.1","correspondence_id":"p1:corr:001","left_generation_id":"p1:gen:001","right_generation_id":"p1:gen:001","semantic_relation":"EXACT_EQUIVALENT","core_relation":"EXACT_CORE","occurrence_relation":"SAME_MEMBERSHIP","envelope_relation":"SAME_ENVELOPE","lineage_relation":"REAPPEARS_AS","independence_state":"INDEPENDENCE_UNKNOWN","admission_basis":"EXACT_CANONICAL_BYTES","executability":"AUTO_ADMITTED","authority_effect":"NONE"}
+    },
+    {
+      "schema_path": "schemas/research_operations/p1cdi/p1cdi_lifecycle_currentness_v0_1.schema.json",
+      "record": {"record_type":"CurrentnessResolutionRecord","schema_version":"0.1","resolution_id":"p1:currentness:001","generation_id":"p1:gen:001","prebuild_frontier_ref":"p1:frontier:a","prepublish_frontier_ref":"p1:frontier:a","frontiers_equal":true,"currentness":"CURRENT","reason_codes":[],"decision_bearing":false,"authority_effect":"NONE"}
+    },
+    {
+      "schema_path": "schemas/research_operations/p1cdi/p1cdi_demand_rccr_v0_1.schema.json",
+      "record": {"record_type":"P1DiscoveryWorkRecommendation","schema_version":"0.1","recommendation_id":"p1:recommendation:001","demand_refs":["p1:demand:001"],"reason_trace":["UNRESOLVED_CURRENTNESS"],"route_class":"ADVISORY_ONLY","actuation":"DENIED","write_capability":"NONE","authority_effect":"NONE"}
+    },
+    {
+      "schema_path": "schemas/research_operations/p1cdi/p1cdi_candidate_links_v0_1.schema.json",
+      "record": {"record_type":"P1ProposalReadinessAssessment","schema_version":"0.1","record_id":"p1:readiness:001","authority_effect":"NONE","candidate_write":"DENIED","generation_id":"p1:gen:001","result":"MECHANICAL_REVIEW_READY","source_completeness_refs":["source:completeness:001"],"reason_codes":[]}
+    },
+    {
+      "schema_path": "schemas/research_operations/p1cdi/p1cdi_visibility_v0_1.schema.json",
+      "record": {"record_type":"P1CDIVisibilityDecision","schema_version":"0.1","decision_id":"p1:visibility:001","source_ref":"ec1:result:001","classification":"PROTECTED","classified_before_indexing":true,"permission_refs":[],"redacted_fields":["payload"],"denied_surfaces":["FIELDS","TITLES","IDS","COUNTS","AGGREGATES","GRAPH_NEIGHBOURS","DEMAND_TEXT","CANDIDATE_COUNTS","SEARCH_SUGGESTIONS","CACHE_METADATA","ERRORS","PATHS"],"validation_access":"DENIED","authority_effect":"NONE"}
+    },
+    {
+      "schema_path": "schemas/research_operations/p1cdi/p1cdi_bootstrap_v0_1.schema.json",
+      "record": {"record_type":"P1CDIBootstrapSourceCensusManifest","schema_version":"0.1","census_id":"p1:census:001","as_of_commit":"05cf4eef36bc06b7e7d6036a9555e16c5ec18dc3","subjects":[],"expected_subject_count":0,"silent_omission":"FORBIDDEN","reconstruction_from_summary":"FORBIDDEN","authority_effect":"NONE"}
+    },
+    {
+      "schema_path": "schemas/research_operations/p1cdi/p1cdi_assurance_receipts_v0_1.schema.json",
+      "record": {"record_type":"P1CDIQAReceipt","schema_version":"0.1","receipt_id":"p1:qa:wp1","packet_id":"P1CDII-WP1","assertions":[{"assertion_id":"AUTHORITY_NON_TRANSITIVITY","result":"PASS","reason_codes":[]}],"result":"PASS","authority_effect":"NONE","source_evidence_refs":["tests:wp1"]}
+    }
+  ]
+}

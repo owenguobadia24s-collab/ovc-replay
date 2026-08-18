@@ -1,0 +1,15 @@
+{
+  "schema": "p1cdi-visibility-registry/v0.1",
+  "status": "CLOSED",
+  "classes": [
+    {"id":"PATH1_FULL","default":"DENY_UNLESS_ELIGIBLE"},
+    {"id":"PATH1_SAFE","default":"REDACT_PATH2_CANDIDATE_DEFINING_CONTENT"},
+    {"id":"CROSS_MODE_POST_FREEZE","default":"DENY_UNLESS_EXACT_DMRP_FREEZE_AND_VISIBILITY"},
+    {"id":"OPERATOR_RESTRICTED","default":"DENY"},
+    {"id":"PROTECTED","default":"DENY"}
+  ],
+  "classification_timing": "BEFORE_INDEXING",
+  "incomplete_classification": "PROTECTED",
+  "leak_surfaces": ["FIELDS","TITLES","IDS","COUNTS","AGGREGATES","GRAPH_NEIGHBOURS","DEMAND_TEXT","CANDIDATE_COUNTS","SEARCH_SUGGESTIONS","CACHE_METADATA","ERRORS","PATHS"],
+  "validation": "NEGATIVE_REACHABILITY_HARD_DENY"
+}
