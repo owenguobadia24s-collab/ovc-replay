@@ -6,35 +6,36 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 WORKFLOW = ROOT / ".github" / "workflows" / "ovc-tiered-tests.yml"
+ADMISSION = ROOT / "tools" / "ci" / "prvitr_live_admission.py"
 
 
 class SIQCompareAPIFallbackTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.text = WORKFLOW.read_text(encoding="utf-8")
+        cls.workflow = WORKFLOW.read_text(encoding="utf-8")
+        cls.admission = ADMISSION.read_text(encoding="utf-8")
 
-    def test_compare_api_remains_primary_ancestry_path(self) -> None:
-        self.assertGreaterEqual(self.text.count("github.rest.repos.compareCommits"), 2)
+    def test_provider_compare_api_is_not_decision_bearing_ancestry(self) -> None:
+        self.assertNotIn("github.rest.repos.compareCommits", self.workflow)
+        self.assertNotIn("compareCommits", self.admission)
+        self.assertNotIn("OVC_COMPARE_API_404_FALLBACK_GIT", self.workflow)
 
-    def test_compare_404_has_git_ancestry_fallback(self) -> None:
-        self.assertIn("const {execFileSync} = require('node:child_process');", self.text)
-        self.assertGreaterEqual(self.text.count("OVC_COMPARE_API_404_FALLBACK_GIT"), 2)
-        self.assertGreaterEqual(
-            self.text.count("['merge-base', '--is-ancestor', base, head]"),
-            2,
-        )
+    def test_local_git_is_normative_ancestry_path(self) -> None:
+        self.assertGreaterEqual(self.workflow.count("git merge-base --is-ancestor"), 2)
+        self.assertIn('["git", "merge-base", "--is-ancestor"', self.admission)
+        self.assertIn("PRVITR_GIT_ANCESTRY_PROOF_FAILED", self.admission)
+        self.assertIn("OVC_RECONCILE_REQUIRED", self.admission)
 
-    def test_non_404_compare_errors_still_fail_closed(self) -> None:
-        self.assertGreaterEqual(
-            self.text.count("if (error?.status !== 404) throw error;"),
-            2,
-        )
+    def test_missing_local_commit_is_fetched_before_ancestry_proof(self) -> None:
+        self.assertIn('_git("fetch", "--no-tags", "origin", sha)', self.admission)
+        self.assertIn("git cat-file -e", self.workflow)
 
-    def test_missing_local_commit_is_fetched_before_fallback_proof(self) -> None:
-        self.assertGreaterEqual(
-            self.text.count("execFileSync('git', ['fetch', '--no-tags', 'origin', ref]"),
-            2,
-        )
+    def test_github_api_is_metadata_and_exact_run_identity_only(self) -> None:
+        self.assertIn("/pulls/{pr_number}", self.admission)
+        self.assertIn("/actions/workflows/{workflow}/runs", self.admission)
+        self.assertIn("/actions/runs/{run_id}/jobs", self.admission)
+        self.assertIn("_exact_run(TESTS_WORKFLOW", self.admission)
+        self.assertIn("_exact_run(TIERED_WORKFLOW", self.admission)
 
 
 if __name__ == "__main__":
