@@ -8,7 +8,7 @@ import sqlite3
 
 ROOT = Path(__file__).resolve().parents[3]
 SCRIPT = ROOT / "scripts/c2p2_rs0_real_source_shadow_r2.py"
-WORKFLOW = ROOT / ".github/workflows/c2p2-rs0-real-source-shadow-run-r2.yml"
+R2_TRIGGER = ROOT / "docs/releases/c2p-persistent-structural-objects-v0-2/c2p2-rs0/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R2_TRIGGER_v0_1.json"
 AUTHORITY = ROOT / "registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_AUTHORITY_v0_3.json"
 PRIOR_CONSUMPTION = ROOT / "registries/authority/C2P2_RS0_REAL_SOURCE_SHADOW_RUN_CONSUMPTION_v0_1.json"
 
@@ -77,13 +77,28 @@ def test_compact_summary_materialises_whole_population_aggregates_without_rankin
     assert "rank" not in json.dumps(summary).lower()
 
 
-def test_r2_workflow_is_exact_branch_push_only_and_non_promotional() -> None:
-    text = WORKFLOW.read_text(encoding="utf-8")
-    assert "run/c2p2-rs0-real-source-shadow-r2-20260817" in text
-    assert "C2P2_RS0_REAL_SOURCE_SHADOW_RUN_R2_TRIGGER_v0_1.json" in text
-    assert "pull_request:" not in text
-    assert "actions/download-artifact@v4" in text
-    assert "AUTH.C2P2.RS0.REAL_SOURCE_SHADOW.ONE_RUN.v0.3" in text
-    assert "C2P2-RS0-SCIENTIFIC-REVIEW-SELECTION" in text
-    assert "SELECT_OBJECTPACK" not in text
-    assert "ACTIVATE_C2P" not in text
+def test_r2_historical_trigger_preserves_exact_non_promotional_run_contract() -> None:
+    trigger = json.loads(R2_TRIGGER.read_text(encoding="utf-8"))
+    runner = SCRIPT.read_text(encoding="utf-8")
+
+    assert trigger["schema"] == "ovc-c2p2-rs0-real-source-shadow-run-r2-trigger/v1"
+    assert trigger["packet_id"] == "C2P2-RS0-REAL-SOURCE-SHADOW-RUN-R2"
+    assert trigger["authority_id"] == "AUTH.C2P2.RS0.REAL_SOURCE_SHADOW.ONE_RUN.v0.3"
+    assert trigger["run_count"] == 1
+    assert trigger["candidate_generation_id"] == "C2P2-PS0-EMPIRICAL-RUNTIME-GENERATION-v3"
+    assert trigger["source_materialisation_id"] == "C2P2.RS0.CURRENT.C2VNEXT.C2E.2021_2023.v1"
+    assert trigger["adapter_binding_id"] == "C2P2_RS0_EMPIRICAL_RUNTIME_SPOOLED_ADAPTER_BINDING_v0_1"
+    assert trigger["selection_state"] == "NONE_SELECTED"
+    assert trigger["activation_state"] == "NONE"
+    assert trigger["validation"] == "LOCKED_UNCONSUMED"
+    assert trigger["sampling"] == "FORBIDDEN"
+    assert trigger["reduced_precision"] == "FORBIDDEN"
+    assert trigger["population_change"] == "FORBIDDEN"
+    assert trigger["objectpack_change"] == "FORBIDDEN"
+    assert trigger["success_boundary"] == "C2P2-RS0-SCIENTIFIC-REVIEW-SELECTION"
+    assert trigger["post_semantic_failure_boundary"] == "C2P2-RS0-RUN-RECOVERY-R2"
+    assert trigger["single_use_authority_consumption"] == "ON_SEMANTIC_EXECUTION_START_ONLY"
+
+    assert "AUTH.C2P2.RS0.REAL_SOURCE_SHADOW.ONE_RUN.v0.3" in runner
+    assert "SELECT_OBJECTPACK" not in runner
+    assert "ACTIVATE_C2P" not in runner
