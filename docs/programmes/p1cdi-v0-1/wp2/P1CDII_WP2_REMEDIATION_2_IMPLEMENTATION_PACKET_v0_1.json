@@ -1,0 +1,90 @@
+{
+  "schema": "ovc-p1cdii-wp2-remediation-2-implementation-packet/v0.1",
+  "programme_id": "OVC-P1CDI-CONFORMANCE-v0.1",
+  "packet_id": "P1CDII-WP2-REMEDIATION-2",
+  "status": "IMPLEMENTED_AWAITING_EXACT_FINAL_ASSURANCE",
+  "baseline_main": "4b1307342ad82e4b41bf57f7c3926ac403e5ae93",
+  "baseline_tree": "41fc3d24d8c72fec9e1811d6b90767544897dab9",
+  "authority": "DELEGATED_MECHANICAL_REMEDIATION_UNDER_P1CDII_G0_AND_FRESH_RECORDED_G2_ALG_BLOCK",
+  "authority_delta": "NONE",
+  "immutable_fresh_block_review": {
+    "reviewed_base": "17e448c2598bcbe70cb07c780f82ad6b5d1d0335",
+    "reviewer_commit": "f24fba3e5cd39a6a4e9ad3b4f1364da221e32143",
+    "packet_path": "docs/programmes/p1cdi-v0-1/wp2/P1CDII_G2_ALG_FRESH_INDEPENDENT_REVIEW_PACKET_v0_2.json",
+    "packet_sha256": "8f68fe58d93394ebaa17f914958e263a9b3713f79106f5bc6ff042db912f4794",
+    "clean_process_digest": "7698676fedb19aadff3459c1b3c156f37e7aef4b18afeeae041387c721c72183",
+    "decision": "BLOCK",
+    "materialisation_pull_request": 1163,
+    "materialisation_merge": "4b1307342ad82e4b41bf57f7c3926ac403e5ae93",
+    "materialisation_tree": "41fc3d24d8c72fec9e1811d6b90767544897dab9"
+  },
+  "immutable_prior_block_review": {
+    "packet_path": "docs/programmes/p1cdi-v0-1/wp2/P1CDII_G2_ALG_REVIEW_PACKET_v0_1.json",
+    "packet_sha256": "3ccb7c1fa33eae7ec44bbc737105fbdd1496465fadf53fc7ee6ded14170e71b2",
+    "decision": "BLOCK"
+  },
+  "remediated_blockers": [
+    "P1CDII_G2_ALG_BLOCK_003_SCHEMA_INVALID_RESOLVED_SOURCE_IDENTITY_FALSE_CURRENT"
+  ],
+  "bounded_implementation": [
+    "resolver evidence validates predicate, owner, source_ref, generation_ref, source_sha256 and resolution_state against exact contract types before predicate selection",
+    "frontier admission uses the same exact typed source-identity validation and preserves string/null values without coercion",
+    "currentness independently validates every hash-bound owner entry before completeness or CURRENT evaluation",
+    "integer source_ref, integer generation_ref and integer source_sha256 are rejected before frontier construction and resolver admission",
+    "valid string source_ref, string generation_ref, null generation_ref and lowercase string SHA-256 neighbors retain their frozen contract behavior"
+  ],
+  "scope_non_changes": [
+    "NO_FROZEN_SCHEMA_CHANGE",
+    "NO_OWNER_REGISTRY_CHANGE",
+    "NO_SEMANTIC_MATCHING_RULE_CHANGE",
+    "NO_SOURCE_PRECEDENCE_CHANGE",
+    "NO_CURRENTNESS_STATE_EXPANSION",
+    "NO_AUTHORITY_CHANGE"
+  ],
+  "decision_bearing_outputs": "DENIED",
+  "generation_zero_pointer": "DENIED",
+  "canonical_intake_writes": "DENIED",
+  "p1cdii_g2_alg_status": "UNRESOLVED_REQUIRES_ANOTHER_FRESH_INDEPENDENT_REVIEW",
+  "remediation_author_may_issue_g2_alg_pass": false,
+  "wp3_authorised": false,
+  "implementation_hashes": {
+    "src/ovc/research_operations/p1cdi/source_resolution.py": "d0335b47382c4a1b7be74f4daa09ca28a3a3113d168346fa7f921c89c1417432",
+    "src/ovc/research_operations/p1cdi/currentness.py": "5b6425006f0d8ffe1b9381c987c2bbd6ec94e4b82e9cddebe184ff841db5ec86",
+    "fixtures/research_operations/p1cdi/P1CDII_WP2_RESOLVER_FIXTURES_v0_1.json": "40c48b924bfc7934da2b49490aa6695d9da09f46e518bb5c91a4db30dcb6267b",
+    "tests/research_operations/p1cdi/test_p1cdii_wp2_resolver_currentness.py": "ac31d54fdad3142c7e2da4e99b79a37bcfdf0ae3f80bc1291b09b0dad98b58d7"
+  },
+  "local_assurance": {
+    "all_p1cdii_wp1_wp2_tests": "PASS_52_OF_52",
+    "exact_fresh_review_regressions": "PASS_3_OF_3",
+    "adjacent_invalid_type_routes": "PASS_5_OF_5",
+    "valid_string_null_neighbors": "PASS_4_OF_4",
+    "hash_bound_invalid_currentness_rejections": "PASS_3_OF_3",
+    "clean_process_count": 2,
+    "clean_process_output_sha256": "57941545dba24e6fd2eb5ae3e75d4705266844929169f36a7f5d39aaa4c48f23",
+    "clean_process_byte_equal": true,
+    "json_parse": "PASS",
+    "compileall": "PASS",
+    "git_diff_check": "PASS",
+    "repository_wide_windows_attempt": "ENVIRONMENT_BLOCKED_RESOURCE_MODULE_UNAVAILABLE",
+    "repository_wide_windows_affected_out_of_scope_modules": [
+      "tests/opt_b/c2p/v0_2/test_c2p2_rs0_runtime_binding.py",
+      "tests/opt_b/c2p/v0_2/test_c2p2_rs0_source_materialisation.py",
+      "tests/research_operations/mcarb/test_mcarbi_wp8_stage_a_runner.py",
+      "tests/srfd/test_srfdi_wp10a_real_capacity_harness.py"
+    ]
+  },
+  "required_exact_final_assurance": [
+    "ALL_P1CDII_WP1_WP2_TESTS",
+    "THREE_EXACT_FRESH_REVIEW_REGRESSIONS",
+    "NEIGHBORING_INVALID_AND_VALID_TYPED_CASES",
+    "REPOSITORY_WIDE_TESTS_ON_SUPPORTED_LINUX_RUNNER",
+    "PYTEST_UNITTEST_PARITY",
+    "RUNNER_PARITY",
+    "VIT_ROUTING_PREFLIGHT",
+    "OVC_PROFILE_ASSURANCE",
+    "SIQ_READY",
+    "GRT_EXACT_MERGE_READINESS"
+  ],
+  "next_packet_on_exact_final_pass": "P1CDII-WP2-REMEDIATION-2-QA-DECISION",
+  "rollback": "Forward-supersede only this bounded validation remediation while preserving both immutable G2-ALG BLOCK packets and all prior WP2 history."
+}
