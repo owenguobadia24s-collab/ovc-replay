@@ -25,6 +25,31 @@ DEFAULT_GLOBAL_INTEGRATION_PATTERNS = (
 )
 
 
+def assurance_generation_from_record(
+    record: Mapping[str, Any], *, expected_id: str | None = None
+) -> FrontierIntegrationAssuranceGeneration:
+    """Rehydrate canonical JSON assurance records with typed sequence parity.
+
+    JSON persistence necessarily returns array fields as ``list`` objects while the
+    assurance dataclass contract uses tuples.  Normalize only those typed sequence
+    fields at the public reconstruction boundary before delegating to the preserved
+    implementation.  Canonical identity is unchanged because lists and tuples share
+    the same JSON representation.
+    """
+
+    normalized = dict(record)
+    for field in ("a0_result_ids", "a2_result_ids", "source_run_ids"):
+        values = normalized.get(field, ())
+        if not isinstance(values, (list, tuple)):
+            raise _impl.VitContractError(
+                f"VIT_ASSURANCE_{field.upper()}_SEQUENCE_INVALID"
+            )
+        normalized[field] = tuple(values)
+    return _impl.assurance_generation_from_record(
+        normalized, expected_id=expected_id
+    )
+
+
 def classify_frontier_movement(
     *,
     pip: Mapping[str, Any],
