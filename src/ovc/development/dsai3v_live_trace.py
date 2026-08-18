@@ -28,13 +28,6 @@ def _parse_utc(value: str) -> datetime:
     return parsed.astimezone(timezone.utc)
 
 
-def _duration_ms(started_at: str, completed_at: str) -> int:
-    value = int(round((_parse_utc(completed_at) - _parse_utc(started_at)).total_seconds() * 1000))
-    if value < 0:
-        raise ValueError("completed_at precedes started_at")
-    return value
-
-
 def build_observed_completion_trace(
     *,
     programme_id: str,
@@ -50,6 +43,13 @@ def build_observed_completion_trace(
     ``total_wall_ms`` is deliberately scoped to the interval from the earliest
     observed PR-head Actions job creation to the observed physical merge time.
     It is not represented as total human/model packet-development time.
+
+    The trace may record the elapsed interval from the latest individually
+    successful observed job to physical merge as a diagnostic ``OTHER`` span,
+    but it deliberately does not populate the canonical Async Assurance
+    ``workflow_green_to_materialisation_ms`` field: an individually successful
+    job is not sufficient evidence that the exact required-assurance frontier
+    was globally green at that instant.
     """
     observed_starts: list[str] = []
     successful_completions: list[str] = []
@@ -97,14 +97,13 @@ def build_observed_completion_trace(
             jobs=jobs_by_run.get(run_id, ()),
         )
 
-    latest_green: str | None = None
     if successful_completions:
-        latest_green = max(successful_completions, key=_parse_utc)
-        if _parse_utc(merged_at) >= _parse_utc(latest_green):
+        latest_successful_job = max(successful_completions, key=_parse_utc)
+        if _parse_utc(merged_at) >= _parse_utc(latest_successful_job):
             trace.record_external_interval(
                 category="OTHER",
-                operation="workflow_green_to_physical_merge_elapsed",
-                started_at_utc=latest_green,
+                operation="latest_successful_job_to_physical_merge_elapsed",
+                started_at_utc=latest_successful_job,
                 completed_at_utc=merged_at,
                 activity_class="WAIT",
                 source="GITHUB_PULL_REQUEST",
@@ -113,21 +112,19 @@ def build_observed_completion_trace(
                 metadata={
                     "trace_scope": TRACE_SCOPE,
                     "head_sha": str(head_sha),
-                    "interpretation": "ELAPSED_ONLY_NOT_CAUSE_ATTRIBUTED",
+                    "interpretation": (
+                        "ELAPSED_ONLY_NOT_CAUSE_ATTRIBUTED_"
+                        "NOT_GLOBAL_ASSURANCE_GREEN_EVIDENCE"
+                    ),
                 },
             )
 
     summary = trace.finish_run(completed_at_utc=merged_at)
-    workflow_green_to_materialisation_ms = (
-        _duration_ms(latest_green, merged_at) if latest_green is not None else None
-    )
     return {
         "trace_scope": TRACE_SCOPE,
         "trace_summary": summary,
         "trace_events": list(trace.events),
-        "async_assurance_metrics": {
-            "workflow_green_to_materialisation_ms": workflow_green_to_materialisation_ms,
-        },
+        "async_assurance_metrics": {},
         "evidence_rule": "OBSERVED_GITHUB_TIMESTAMPS_ONLY_NO_CAUSAL_INFERENCE",
         "authority_effect": "NONE",
     }
