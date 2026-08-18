@@ -14,6 +14,12 @@ from .bootstrap import (
 from .currentness import evaluate_two_point_currentness, require_g2_alg_for_pointer
 from .identity import build_semantic_projection, exact_semantic_equal, projection_bytes
 from .intake import build_intake_envelope, classify_exact_intake
+from .reference import (
+    assemble_evidence_reference,
+    assign_series_generation,
+    replay_as_of,
+    stage_correspondence,
+)
 from .source_resolution import build_source_frontier, resolve_owner_predicate
 
 __all__ = [
@@ -22,12 +28,16 @@ __all__ = [
     "build_semantic_projection",
     "build_source_frontier",
     "classify_exact_intake",
+    "assemble_evidence_reference",
+    "assign_series_generation",
     "evaluate_two_point_currentness",
     "exact_semantic_equal",
     "projection_bytes",
     "freeze_source_census",
     "reconcile_source_census",
+    "replay_as_of",
     "require_g2_alg_for_pointer",
     "resolve_owner_predicate",
     "scan_repository_source_subjects",
+    "stage_correspondence",
 ]
