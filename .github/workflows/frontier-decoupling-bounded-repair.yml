@@ -1,0 +1,98 @@
+name: Frontier decoupling bounded repair
+
+on:
+  push:
+    branches:
+      - fix/prvitr-vit-frontier-decoupling-20260818
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/prvitr-vit-frontier-decoupling-20260818
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify authoritative archive materialisation commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse a230dc135cda25a436b190d8cf758db93967d79b:registries/implementation/dsai_vit_v0_3/OVC_DSAI_VIT_V0_3_STATE_v0_19.json)" = a3c5e497681dcbd5e6eb8a048adbc24b9a2128b0
+          python - <<'PY'
+          import subprocess
+          expected = {
+            '.github/workflows/ovc-tiered-tests.yml':'28f73398f6b26eeacf369fb6955d6b8550b27399',
+            'contracts/development/skills/OVC_PRVITR_VIT_FRONTIER_DECOUPLING_CONTRACT_v0_1.md':'251bef61052e0d79603e40cbe7f37a464f4c4c7a',
+            'docs/releases/development-skills-architecture-v0-3-vit/prvitr-vit-frontier-decoupling/DSAI3V_PRVITR_VIT_FRONTIER_DECOUPLING_IMPLEMENTATION_PACKET_v0_1.json':'9790ec6ba841f52ca792d60dd4d25c42dfc06f3a',
+            'docs/releases/development-skills-architecture-v0-3-vit/prvitr-vit-frontier-decoupling/DSAI3V_PRVITR_VIT_FRONTIER_DECOUPLING_OPERATOR_DIRECTIVE_v0_1.json':'32792bee1e9238916d5c13a6254e5fbcf21a987d',
+            'docs/releases/development-skills-architecture-v0-3-vit/prvitr-vit-frontier-decoupling/DSAI3V_PRVITR_VIT_FRONTIER_DECOUPLING_QA_PACKET_v0_1.json':'d06a903b668e92610a687b99809158e1f273a984',
+            'registries/development/skills/orch345_operational_capacity_v0_2.json':'935374d3fa052fcc2415323cce53ebc83bf1fec2',
+            'schemas/development/skills/prvitr_vit_frontier_decoupling_v0_1.schema.json':'5af0c2ffe9748475f56c2af6d360d55a4d95accb',
+            'schemas/development/skills/vit_live_physical_transaction_freeze_v1.schema.json':'f3edf00c2755c6ec8dcfc2fb1a346082295278f3',
+            'scripts/development/v0_2/validate_da2_g1.py':'0644213caab888fbf1557e89b442fb5157dc15c2',
+            'src/ovc/development/skills/orch345_active.py':'927f668876998b596062cd4a28a581b899573f00',
+            'src/ovc/development/skills/siq_reconciliation.py':'a6a2f395981d543d765406146ad6d77d7f9cebb3',
+            'src/ovc/development/skills/vit_frontier_decoupling.py':'7f965411ca8b3066443e8fcc1fd1ac189e6ddf1c',
+            'src/ovc/development/skills/vit_routing.py':'3a2f62927ac6e9e32b324416863a563620628e42',
+            'tests/development/test_ci_performance_remediation.py':'0616a837ceeb8222f295fc40596d98758e63359e',
+            'tests/development/test_ci_performance_shadow_packet.py':'673c79ab925c55a5337033178f97a08cbc92449e',
+            'tests/development/test_parallel_integration_lane.py':'91f6c7757fb4022c2fa45ee99efe36349a9f9fc0',
+            'tests/development/test_prvitr_vit_frontier_decoupling.py':'8aaf9a908ce33eea3ce204583e9441ccfcb62938',
+            'tests/development/test_siq_compare_api_fallback.py':'222afe983293763d5514a42b4e57ee6985c3c7af',
+            'tests/development/test_siq_live_base_generation.py':'dac6500b8e75516024096f76d268a42de7ee9dd7',
+            'tests/development/test_siq_pdc_contract.py':'e7acd42c3d119709556b1129c539dd73e03e3425',
+            'tests/development/test_siq_reconciliation.py':'e66e4d0e85a17a8c27ff47fc1b39e51ca7f25620',
+            'tests/development_skills/test_dsai3v_vit_live_base_preflight.py':'a29cf5d7f567b1cd74205d70a60fca38a7969108',
+            'tests/development_skills/test_dsai_throughput_expansion_20260813.py':'6563d148316c37011b5e98228ee951b329829703',
+            'tests/development_skills/test_vit_assurance_preflight_tool.py':'a594f33cdeb45879591a5e896311dd553e073ba5',
+            'tests/development_skills/test_vit_post_merge_completion_tool.py':'d8bae0d742c291e4c446bfba73084c932c38d4a0',
+            'tools/ci/build_vit_pr_lineage.py':'e9853e33d8a37ee9ba1eeabf3c97c988c313976c',
+            'tools/ci/ovc_run_with_main_lease.py':'409b86300582165fd18dd5fb8edf8ec8d42bdc88',
+            'tools/ci/prvitr_live_admission.py':'ace1775dac9a71a6d32161966b261246fa917e1b',
+            'tools/ci/vit_assurance_preflight.py':'c398d3ba6ce1109910d2ae4d910fc42a8dc8c379',
+            'tools/ci/vit_post_merge_completion.py':'1cf2611d9b8fe835617be1c0265144b23478b18a',
+            'tools/ci/vit_routing_preflight.py':'fa8214fbf6625e8b98006505b1741592e526338d',
+          }
+          for path, want in expected.items():
+              got=subprocess.check_output(['git','rev-parse',f'a230dc135cda25a436b190d8cf758db93967d79b:{path}'],text=True).strip()
+              if got != want: raise SystemExit(f'archive mismatch {path}: {got} != {want}')
+          print('OVC_FRONTIER_ARCHIVE_32_BYTE_IDENTITY=PASS')
+          PY
+      - name: Repair unrelated-development movement classification
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('src/ovc/development/skills/vit_frontier_decoupling.py')
+          s=p.read_text()
+          old='''DEFAULT_GLOBAL_INTEGRATION_PATTERNS = (\n    ".github/workflows/**",\n    "tools/ci/**",\n    "src/ovc/development/**",\n    "tests/development/**",\n    "registries/development/**",\n)'''
+          new='''DEFAULT_GLOBAL_INTEGRATION_PATTERNS = (\n    # Only machinery that can change VIT/SIQ/GRT integration semantics belongs\n    # here. Programme-local development code is ordinary unrelated frontier\n    # movement and MUST remain PLACEMENT_RECOMPUTE_ONLY.\n    ".github/workflows/ovc-tiered-tests.yml",\n    ".github/workflows/tests.yml",\n    "tools/ci/vit_*",\n    "tools/ci/prvitr_*",\n    "tools/ci/ovc_run_with_main_lease.py",\n    "src/ovc/development/skills/vit_*",\n    "src/ovc/development/skills/siq_*",\n    "registries/development/skills/*vit*",\n    "registries/development/skills/*siq*",\n)'''
+          if old not in s: raise SystemExit('expected broad integration pattern block absent')
+          p.write_text(s.replace(old,new))
+          q=Path('tests/development/test_prvitr_vit_frontier_decoupling.py')
+          t=q.read_text()
+          marker='\nif __name__ == "__main__":\n'
+          test='''\n    def test_programme_local_development_movement_is_placement_only(self):\n        decision = classify_frontier_movement(\n            pip=self.fx.source_lineage["pip"],\n            source_predecessor_tree="1" * 40,\n            current_predecessor_tree="2" * 40,\n            changed_paths=(\n                "src/ovc/development/skills/cers/runtime.py",\n                "tests/development_skills/cers/test_cers_shadow_runtime.py",\n            ),\n        )\n        self.assertEqual(decision.disposition, "PLACEMENT_RECOMPUTE_ONLY")\n        self.assertTrue(decision.a0_reuse_allowed)\n        self.assertTrue(decision.a1_renewal_required)\n        self.assertTrue(decision.a2_renewal_required)\n\n'''
+          if 'test_programme_local_development_movement_is_placement_only' not in t:
+              if marker not in t: raise SystemExit('test insertion marker absent')
+              q.write_text(t.replace(marker,test+marker))
+          PY
+          PYTHONPATH=src python -m unittest tests.development.test_prvitr_vit_frontier_decoupling -v
+      - name: Commit bounded packet-local repair and remove transport residue
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm .github/workflows/frontier-decoupling-bounded-repair.yml
+          git config user.name 'OVC DSAI VIT Controller'
+          git config user.email 'ovc-vit@invalid.local'
+          git add src/ovc/development/skills/vit_frontier_decoupling.py tests/development/test_prvitr_vit_frontier_decoupling.py .github/workflows/frontier-decoupling-bounded-repair.yml
+          git commit -m 'DSAI3V: classify programme-local main movement as placement-only'
+          git push origin HEAD:fix/prvitr-vit-frontier-decoupling-20260818
