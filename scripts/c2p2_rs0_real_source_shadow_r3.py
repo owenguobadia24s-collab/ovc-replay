@@ -14,6 +14,7 @@ from ovc.opt_b.c2p_v0_2.rs0_empirical_runtime_source_order import (
     SOURCE_ORDER_ADAPTER_ID,
     merge_source_factories_with_kind_segmentation,
 )
+assert SOURCE_ORDER_ADAPTER_ID == "C2P2_RS0_SOURCE_ORDER_RECOVERY_ADAPTER_v0_2"
 
 BASE_RUNNER_PATH = Path(__file__).with_name("c2p2_rs0_real_source_shadow_r2.py")
 SPEC = importlib.util.spec_from_file_location("c2p2_rs0_real_source_shadow_r2_base", BASE_RUNNER_PATH)
