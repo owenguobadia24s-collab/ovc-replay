@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/development/skills/cers/cers-records-v0.1",
+  "title": "CERS records v0.1",
+  "type": "object",
+  "$defs": {
+    "side_effect_class": {"enum":["REVERSIBLE_LOCAL","BRANCH_ONLY","READ_ONLY","IRREVERSIBLE_OR_UNKNOWN"]},
+    "quiescence_mode": {"enum":["RUN","DRAIN","HOLD","DISABLE_NEW_DISPATCH"]},
+    "dispatch_phase": {"enum":["INTENT_PERSISTED","DISPATCH_UNKNOWN","START_ACKNOWLEDGED","RUNNING","COMPLETED","FAILED","CANCELLED"]},
+    "executor_capability": {
+      "type":"object",
+      "required":["executor_id","repository_write","branch_ref_write","merge","force_push","irreversible_external_side_effects","supported_actions","environment_id"],
+      "properties": {
+        "executor_id":{"type":"string","minLength":1},
+        "repository_write":{"type":"boolean"},
+        "branch_ref_write":{"type":"boolean"},
+        "merge":{"type":"boolean"},
+        "force_push":{"type":"boolean"},
+        "irreversible_external_side_effects":{"type":"boolean"},
+        "supported_actions":{"type":"array","items":{"type":"string"},"uniqueItems":true},
+        "environment_id":{"type":"string","minLength":1}
+      },
+      "additionalProperties":false
+    },
+    "supervisor_lease": {
+      "type":"object",
+      "required":["scope","holder_identity","fencing_generation"],
+      "properties":{"scope":{"type":"string"},"holder_identity":{"type":"string"},"fencing_generation":{"type":"integer","minimum":1},"active":{"type":"boolean"}},
+      "additionalProperties":false
+    },
+    "quiescence_control": {
+      "type":"object",
+      "required":["mode","source"],
+      "properties":{"mode":{"$ref":"#/$defs/quiescence_mode"},"source":{"type":"string"}},
+      "additionalProperties":false
+    }
+  },
+  "properties": {
+    "record_type":{"enum":["ReconciliationSnapshot","RunnableWorkItem","RunnableWorkSet","ExecutorCapabilityRecord","SupervisorLease","DispatchIdentity","DispatchTransaction","WorkerOwnership","QuiescenceControl","SupervisorCheckpoint"]}
+  },
+  "required":["record_type"],
+  "additionalProperties":true
+}
