@@ -5,9 +5,10 @@
   "programme_id": "OVC-ASOCS-6M-v0.1",
   "plan_id": "OVC-ASOCS-CONFORMANCE-SCIENTIFIC-PREREGISTRATION-IMPLEMENTATION-PLAN-0.1-R1",
   "plan_version": "0.1_REVISED_1",
-  "gate_status": "GATE_READY_OPERATOR_REQUIRED",
-  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
-  "recommended_decision": "PASS",
+  "gate_status": "APPROVED_OPERATOR_PASS",
+  "decision": "PASS",
+  "decision_ref": "docs/programmes/asocs-v0-1/implementation/ASOCSI_G0_OPERATOR_DECISION_v0_1.json",
+  "decision_time": "2026-08-19T10:21:00+01:00",
   "baseline": {
     "main_commit": "baa1492f972446b45e94cd5e3a1a9db6874fd3ed",
     "main_tree": "6af7f659824a5f2a8c265c4fa427bcef5dd3731f",
@@ -15,75 +16,43 @@
   },
   "candidate": {
     "branch": "plan/asocsi-g0-ready-20260819",
-    "candidate_commit": "RESOLVE_AT_PR_HEAD",
-    "candidate_tree": "RESOLVE_AT_PR_HEAD"
+    "candidate_commit": "RESOLVE_AT_FINAL_PR_HEAD",
+    "candidate_tree": "RESOLVE_AT_FINAL_PR_HEAD"
   },
-  "governing_design": {
-    "design_id": "OVC-ASOCS-6M-DESIGN-v0.1-REVISED-1",
-    "sha256": "0d5a9105f3dbe33d21c12119da10b68d1c835de25a7a8fd806c26df71a58b949",
-    "status": "RATIFIED_FORWARD_DESIGN_CANON",
-    "authority_record": "registries/research_operations/asocs/ASOCS_DESIGN_AUTHORITY_v0_1.json"
+  "artifacts": {
+    "governing_design_revised_1_sha256": "0d5a9105f3dbe33d21c12119da10b68d1c835de25a7a8fd806c26df71a58b949",
+    "implementation_plan_original_sha256": "e37d7e7e26ec633d743831395db39f92736c5aa9d4540d1e67bb2f47335ee5a1",
+    "implementation_plan_fresh_pressure_test_sha256": "f1bbdeb76f287d0dcf9f084f936ca0913ef9a1c0d0fc4428dd5629034a60c138",
+    "implementation_plan_revised_1_sha256": "5ae8943ef61ef596c3f9990b717a08d9406532b774e761ff30324b2a77ad4a4e",
+    "source_csv_sha256": "210233ec5761bf82998172832bb554ddf10dfeb3099f6bc6488d5bb0f6bec4f2"
   },
-  "plan_artifacts": {
-    "original_plan": {
-      "name": "OVC_ASOCS_Six_Month_Population_Conformance_and_Scientific_Preregistration_Implementation_Plan_v0_1.docx",
-      "sha256": "e37d7e7e26ec633d743831395db39f92736c5aa9d4540d1e67bb2f47335ee5a1"
-    },
-    "fresh_adversarial_pressure_test": {
-      "name": "OVC_ASOCS_Implementation_Plan_v0_1_Fresh_Adversarial_Pressure_Test_v0_1.docx",
-      "sha256": "f1bbdeb76f287d0dcf9f084f936ca0913ef9a1c0d0fc4428dd5629034a60c138",
-      "disposition": "PASS_WITH_REQUIRED_AMENDMENTS"
-    },
-    "revised_1_plan": {
-      "name": "OVC_ASOCS_Six_Month_Population_Conformance_and_Scientific_Preregistration_Implementation_Plan_v0_1_REVISED_1.docx",
-      "sha256": "5ae8943ef61ef596c3f9990b717a08d9406532b774e761ff30324b2a77ad4a4e",
-      "status": "READY_FOR_OPERATOR_RATIFICATION_NOT_RATIFIED"
-    }
+  "qa": {
+    "packet": "docs/programmes/asocs-v0-1/implementation/ASOCSI_G0_QA_PACKET_v0_1.json",
+    "recommendation": "PASS_ASOCSI_G0",
+    "blocking_findings": []
   },
-  "completed_work": [
-    "ASOCS_ROUNDS_1_10_DESIGN_COMPLETED",
-    "ASOCS_FORMAL_V0_1_CONSOLIDATED",
-    "ASOCS_DESIGN_FRESH_ADVERSARIAL_PRESSURE_TEST_COMPLETED",
-    "ASOCS_DESIGN_REVISED_1_AMENDMENTS_CLOSED",
-    "ASOCS_DESIGN_OPERATOR_RATIFIED_AND_MERGED_MAIN_BAA1492F",
-    "ASOCSI_REPOSITORY_SPECIFIC_IMPLEMENTATION_PLAN_CREATED",
-    "ASOCSI_PLAN_FRESH_ADVERSARIAL_PRESSURE_TEST_COMPLETED",
-    "ASOCSI_PLAN_REVISED_1_IPT_01_THROUGH_IPT_08_CLOSED",
-    "ASOCSI_G0_QA_PASS_RECOMMENDATION_MATERIALISED"
-  ],
-  "source_population": {
-    "name": "2026.8.19GBPUSD_darwinex(2)-M1-No Session.csv",
-    "sha256": "210233ec5761bf82998172832bb554ddf10dfeb3099f6bc6488d5bb0f6bec4f2",
-    "target": "[2026-01-01T00:00:00,2026-07-01T00:00:00)",
-    "authority_class": "ASOCS_AUDIT_ONLY_NONAUTHORITATIVE_REAL_MARKET_SOURCE",
-    "research_role": "ASOCS_AUDIT_OUT_OF_ROLE_H1_2026",
-    "active_provider": false,
-    "known_source_uncertainties": ["PRICE_SIDE_UNRESOLVED_SINGLE_STREAM", "TIMESTAMP_TIMEZONE_UNRESOLVED"]
+  "acceptance_conditions": {
+    "governing_design_ratified": true,
+    "revised_1_plan_hash_bound": true,
+    "fresh_pressure_test_completed": true,
+    "ipt_01_through_ipt_08_closed": true,
+    "audit_only_source_firewall": true,
+    "side_clock_uncertainty_fail_closed": true,
+    "no_source_semantic_fabrication": true,
+    "blind_reveal_access_separation_required": true,
+    "capacity_exceedance_blocks_without_thinning": true,
+    "g2_threshold_preregistration_required": true,
+    "g7_remains_operator_required": true
   },
-  "current_authority": {
-    "design_canon": "RATIFIED_REVISED_1",
-    "implementation_planning": "AUTHORIZED",
-    "repository_implementation": "DENIED_PENDING_ASOCSI_G0",
-    "audit_source_consumption": "DENIED_PENDING_ASOCSI_G0",
-    "active_provider_intake": "NONE",
-    "selector_mutation": "NONE",
-    "active_role_admission": "NONE",
-    "c2_c2e_semantic_change": "NONE",
-    "ec1": "NONE",
-    "validation": "NONE",
-    "deferred_layer_activation": "NONE",
-    "publication": "NONE",
-    "probability_risk_exposure_trading_execution_agent_write": "NONE"
-  },
-  "proposed_authority_delta_if_pass": {
+  "approved_authority_delta": {
     "bounded_repository_implementation": "AUTHORIZE_ASOCSI_WP0_THROUGH_WP9_AND_WP10_WITHIN_REVISED_1_PLAN",
     "exact_supplied_csv_audit_consumption": "AUTHORIZE_LOCAL_ASOCS_AUDIT_USE_BY_EXACT_SHA256_ONLY",
     "source_native_visual_reference": "AUTHORIZE_LOCAL_READ_ONLY_RENDERING_FROM_FROZEN_AUDIT_OHLC",
-    "exact_active_interface_audit": "AUTHORIZE_ONLY_WHEN_EXACT_SOURCE_SIDE_AND_CLOCK_PROVENANCE_CAN_BE_LAWFULLY_MAPPED_WITHOUT_FABRICATION",
-    "single_stream_morphology_audit": "AUTHORIZE_WHEN_CLAIM_CLASS_IS_ASOCS_SINGLE_STREAM_MORPHOLOGY_COHERENCE_AND_EXACT_ONLY_CONSTRUCTS_FAIL_CLOSED",
-    "blind_review_and_staged_reveal": "AUTHORIZE_AS_NONAUTHORITATIVE_RESEARCH_EVIDENCE",
-    "non_reserved_packet_execution": "DELEGATE_AUTO_EXECUTION_AUTO_RATIFICATION_AND_ELIGIBLE_SQUASH_MERGE_ONLY_WHERE_PLAN_ACCEPTANCE_QA_AND_AUTHORITY_DELTA_REMAIN_WHOLELY_AUTO_EXECUTABLE",
-    "final_scientific_gate": "ASOCSI_G7_REMAINS_OPERATOR_REQUIRED"
+    "exact_active_interface_audit": "CONDITIONAL_ON_LAWFUL_SIDE_AND_CLOCK_PROVENANCE",
+    "single_stream_morphology_audit": "AUTHORIZED_WITH_DOWNGRADED_CLAIM_CLASS",
+    "blind_review_and_staged_reveal": "AUTHORIZED_NONAUTHORITATIVE_RESEARCH_EVIDENCE",
+    "non_reserved_packet_execution": "DELEGATED_WITHIN_EXACT_PLAN_AND_PASSING_QA",
+    "final_scientific_gate": "ASOCSI_G7_OPERATOR_REQUIRED"
   },
   "explicit_non_grants": [
     "ACTIVE_DARWINEX_PROVIDER_INTAKE",
@@ -100,56 +69,12 @@
     "AGENT_WRITE_AUTHORITY",
     "FORCE_PUSH_HISTORY_REWRITE_OR_DESTRUCTIVE_CLEANUP"
   ],
-  "acceptance_conditions": [
-    "GOVERNING_DESIGN_RATIFIED_ON_MAIN",
-    "REVISED_1_PLAN_EXACT_HASH_BOUND",
-    "FRESH_PLAN_PRESSURE_TEST_COMPLETED",
-    "IPT_01_THROUGH_IPT_08_REQUIRED_AMENDMENTS_CLOSED",
-    "AUDIT_ONLY_SOURCE_AND_OUT_OF_ROLE_H1_2026_FIREWALL_EXPLICIT",
-    "SIDE_AND_CLOCK_UNCERTAINTY_FAILS_CLOSED_WITH_CLAIM_CLASS_DOWNGRADE",
-    "NO_PRODUCTION_CODE_COERCION_TO_FABRICATE_SOURCE_SEMANTICS",
-    "BLIND_AND_REVEAL_ACCESS_SURFACES_SEPARATED",
-    "SAMPLING_NONCE_AND_STRATUM_METADATA_HIDDEN_FROM_REVIEWER",
-    "CAPACITY_EXCEEDANCE_BLOCKS_WITHOUT_EVIDENCE_THINNING",
-    "G2_SUPPORT_MATERIALITY_EXPANSION_AND_FALSIFICATION_THRESHOLDS_PREREGISTERED",
-    "SOURCE_NATIVE_RENDERER_REQUIRED_OFFLINE_AND_REPRODUCIBLE",
-    "PER_CONSTRUCT_EXACT_INTERFACE_EVALUABILITY_MATRIX_REQUIRED",
-    "UNREVIEWABLE_CASES_REMAIN_IN_DENOMINATOR_ACCOUNTING_WITHOUT_SILENT_REPLACEMENT",
-    "G7_EC1_RESTRICTIONS_MUST_BE_CHECKED_AGAINST_EC1_GOVERNING_PLAN",
-    "FINAL_ASOCSI_G7_REMAINS_OPERATOR_REQUIRED"
+  "known_qualifications": [
+    "PRICE_SIDE_UNRESOLVED_SINGLE_STREAM_UNLESS_EXACT_PROVENANCE_IS_BOUND",
+    "TIMESTAMP_TIMEZONE_UNRESOLVED_UNLESS_EXACT_PROVENANCE_IS_BOUND",
+    "SINGLE_REVIEWER_HUMAN_CONCLUSIONS_BOUNDED_TO_WITHIN_SINGLE_REVIEWER_PROTOCOL_UNLESS_REPLICATED",
+    "EXACT_ACTIVE_INTERFACE_EVALUABILITY_IS_CONSTRUCT_SPECIFIC_AND_FAILS_CLOSED"
   ],
-  "qa": {
-    "packet": "docs/programmes/asocs-v0-1/implementation/ASOCSI_G0_QA_PACKET_v0_1.json",
-    "recommendation": "PASS_ASOCSI_G0",
-    "blocking_findings": []
-  },
-  "warnings_and_qualifications": [
-    "Exact active-stack observational-coherence claims remain unavailable unless side and clock provenance are lawfully resolved.",
-    "Single-stream morphology results cannot be represented as exact active-source equivalence.",
-    "Single-reviewer human conclusions are bounded to WITHIN_SINGLE_REVIEWER_PROTOCOL unless replicated.",
-    "H1 2026 is audit-only and cannot flow into Discovery, Development, Validation or EC1 evidence through this programme."
-  ],
-  "changed_repository_files": [
-    "docs/programmes/asocs-v0-1/implementation/ASOCSI_PLAN_BINDING_v0_1.json",
-    "registries/research_operations/asocs/ASOCSI_AUTHORITY_FRONTIER_v0_1.json",
-    "docs/programmes/asocs-v0-1/implementation/ASOCSI_G0_QA_PACKET_v0_1.json",
-    "docs/programmes/asocs-v0-1/implementation/ASOCSI_G0_GATE_PACKET_v0_1.json",
-    "records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_1.json"
-  ],
-  "external_artifact_hashes": {
-    "governing_design_revised_1": "0d5a9105f3dbe33d21c12119da10b68d1c835de25a7a8fd806c26df71a58b949",
-    "implementation_plan_original": "e37d7e7e26ec633d743831395db39f92736c5aa9d4540d1e67bb2f47335ee5a1",
-    "implementation_plan_fresh_pressure_test": "f1bbdeb76f287d0dcf9f084f936ca0913ef9a1c0d0fc4428dd5629034a60c138",
-    "implementation_plan_revised_1": "5ae8943ef61ef596c3f9990b717a08d9406532b774e761ff30324b2a77ad4a4e",
-    "source_csv": "210233ec5761bf82998172832bb554ddf10dfeb3099f6bc6488d5bb0f6bec4f2"
-  },
-  "rollback": "If G0 is not passed, preserve all planning and review artifacts and leave implementation/audit-source authority denied. If passed, each later packet remains forward-only and evidence-preserving; meaning-bearing changes require a successor generation or separately authorised remediation.",
-  "exact_work_after_pass": [
-    "INTEGRATE_THE_EXACT_G0_DECISION_AND_AUTHORITY_RECORD",
-    "BEGIN_ASOCSI_WP0_FROM_LATEST_LAWFUL_MAIN",
-    "RE_RESOLVE_MAIN_ACTIVE_STACK_OWNER_AUTHORITY_OPEN_PRS_AND_SOURCE_BINDINGS",
-    "MATERIALISE_RATIFIED_PLAN_COURT_RECORD_AND_PROGRAMME_STATE",
-    "CONTINUE_AUTOMATICALLY_THROUGH_WHOLELY_AUTO_EXECUTABLE_WP1_TO_WP9_PACKETS_AND_G1_TO_G6_FREEZES_WHEN_ACCEPTANCE_QA_AND_AUTHORITY_REMAIN_WITHIN_PLAN",
-    "STOP_AT_ANY_NEW_OPERATOR_RESERVED_AUTHORITY_BOUNDARY_BLOCKER_OR_ASOCSI_G7_FINAL_SCIENTIFIC_DISPOSITION"
-  ]
+  "next_packet": "ASOCSI-WP0",
+  "rollback": "Forward-supersede the approved G0 authority only; preserve all design, plan, review, decision and evidence identities."
 }
