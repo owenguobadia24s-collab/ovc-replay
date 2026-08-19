@@ -89,7 +89,7 @@ def test_programme_state_preserves_operator_pass_and_advances_lawfully_through_p
     assert current["physical_gateway"] == "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY"
     assert current["parallel_physical_merge"] is False
 
-    if version == 17:
+    if version in {17, 18}:
         assert p["status"] == "COMPLETED"
         assert p["decision"] == "PASS"
         assert p["next_packet"] is None
@@ -97,7 +97,11 @@ def test_programme_state_preserves_operator_pass_and_advances_lawfully_through_p
         assert current["persistent_run"] == "ACTIVATED"
         assert current["persistent_general_dispatch"] == "ALLOWED_EXACT_ADMITTED_SCOPE_ONLY"
         assert current["post_pilot_dispatch_state"] == "RUN"
-        assert current["authority_delta"] == "PERSISTENT_RUN_FOR_EXACT_ADMITTED_SCOPE_ONLY"
+        expected_delta = {
+            17: "PERSISTENT_RUN_FOR_EXACT_ADMITTED_SCOPE_ONLY",
+            18: "PERSISTENT_UNATTENDED_INVOCATION_ADMISSION_EXPANSION_FOR_EXACT_P2CTI_ASOCSI_GRT2_SCOPE_ONLY",
+        }
+        assert current["authority_delta"] == expected_delta[version]
         assert current["reserved_authority_unchanged"] is True
         return
 
