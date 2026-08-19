@@ -31,6 +31,7 @@ from .persistent_service import (
     PersistentSupervisorService,
     PersistentTimingPolicy,
 )
+from .admission import canonical_record_sha256, validate_inactive_admission_registry
 from .reconcile import ReferenceReconciler, ReconciliationResult
 from .runtime import DispatchCoordinator, EventLedger, FixtureExecutor, LeaseManager
 
@@ -48,6 +49,8 @@ __all__ = [
     "PersistentDispatchProposal",
     "PersistentReconciliationResult",
     "PersistentSupervisorService",
+    "canonical_record_sha256",
+    "validate_inactive_admission_registry",
     "PersistentTimingPolicy",
     "PersistentWorkRequest",
     "QuiescenceControl",
