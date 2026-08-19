@@ -137,6 +137,8 @@ def test_exact_semantic_identity_without_plane_evidence_resolves_only_identity()
     result = stage_correspondence(
         left_projection=first["projection"],
         right_projection=copy.deepcopy(first["projection"]),
+        left_generation_record=first["generation"],
+        right_generation_record=first["generation"],
         planes=FIXTURE["exact_planes"],
         admission_basis="EXACT_CANONICAL_BYTES",
     )
@@ -154,6 +156,8 @@ def test_one_proved_plane_resolves_only_that_plane() -> None:
     result = stage_correspondence(
         left_projection=first["projection"],
         right_projection=copy.deepcopy(first["projection"]),
+        left_generation_record=first["generation"],
+        right_generation_record=first["generation"],
         planes=FIXTURE["exact_planes"],
         admission_basis="EXACT_CANONICAL_BYTES",
         plane_evidence_records=plane_records(
@@ -181,12 +185,16 @@ def test_identical_bytes_cannot_imply_independence_lineage_or_replication() -> N
         stage_correspondence(
             left_projection=first["projection"],
             right_projection=copy.deepcopy(first["projection"]),
+            left_generation_record=first["generation"],
+            right_generation_record=first["generation"],
             planes=planes,
             admission_basis="EXACT_CANONICAL_BYTES",
         )
     partial = stage_correspondence(
         left_projection=first["projection"],
         right_projection=copy.deepcopy(first["projection"]),
+        left_generation_record=first["generation"],
+        right_generation_record=first["generation"],
         planes=FIXTURE["exact_planes"],
         admission_basis="EXACT_CANONICAL_BYTES",
     )
@@ -215,6 +223,8 @@ def test_malformed_or_unregistered_plane_evidence_fails_closed(mutation: str) ->
         stage_correspondence(
             left_projection=first["projection"],
             right_projection=copy.deepcopy(first["projection"]),
+            left_generation_record=first["generation"],
+            right_generation_record=first["generation"],
             planes=FIXTURE["exact_planes"],
             admission_basis="EXACT_CANONICAL_BYTES",
             plane_evidence_records=[evidence],
@@ -232,6 +242,8 @@ def test_contradictory_plane_evidence_fails_closed_under_both_orders() -> None:
             stage_correspondence(
                 left_projection=first["projection"],
                 right_projection=copy.deepcopy(first["projection"]),
+                left_generation_record=first["generation"],
+                right_generation_record=first["generation"],
                 planes=FIXTURE["exact_planes"],
                 admission_basis="EXACT_CANONICAL_BYTES",
                 plane_evidence_records=records,
@@ -248,6 +260,8 @@ def test_stale_plane_evidence_remains_unresolved() -> None:
     result = stage_correspondence(
         left_projection=first["projection"],
         right_projection=copy.deepcopy(first["projection"]),
+        left_generation_record=first["generation"],
+        right_generation_record=first["generation"],
         planes=FIXTURE["exact_planes"],
         admission_basis="EXACT_CANONICAL_BYTES",
         plane_evidence_records=[record],
@@ -277,6 +291,8 @@ def test_noncanonical_projection_wrappers_never_enter_admission(mutation: str) -
         stage_correspondence(
             left_projection=projection,
             right_projection=copy.deepcopy(first["projection"]),
+            left_generation_record=first["generation"],
+            right_generation_record=first["generation"],
             planes=FIXTURE["exact_planes"],
             admission_basis="EXACT_CANONICAL_BYTES",
         )
@@ -356,6 +372,8 @@ def test_same_plane_record_id_with_different_declared_hash_conflicts_under_both_
             stage_correspondence(
                 left_projection=first["projection"],
                 right_projection=copy.deepcopy(first["projection"]),
+                left_generation_record=first["generation"],
+                right_generation_record=first["generation"],
                 planes=FIXTURE["exact_planes"],
                 admission_basis="EXACT_CANONICAL_BYTES",
                 plane_evidence_records=rows,
@@ -391,6 +409,8 @@ def test_same_dmrp_record_id_with_conflicting_state_fails_closed() -> None:
             stage_correspondence(
                 left_projection=first["projection"],
                 right_projection=copy.deepcopy(first["projection"]),
+                left_generation_record=first["generation"],
+                right_generation_record=first["generation"],
                 planes=FIXTURE["exact_planes"],
                 admission_basis="EXACT_CANONICAL_BYTES",
                 independence_evidence=rows,

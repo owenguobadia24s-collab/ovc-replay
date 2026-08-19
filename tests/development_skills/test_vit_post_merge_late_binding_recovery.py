@@ -1,0 +1,195 @@
+from __future__ import annotations
+
+import base64
+from dataclasses import asdict
+import importlib.util
+import json
+from pathlib import Path
+import unittest
+from unittest.mock import patch
+
+from ovc.development.prvit_remediation import IntegrationAdmissionReceipt
+from ovc.development.skills.vit_late_binding import LateBindingPlacement
+from ovc.development.skills.vit_routing import build_vit_payload_lineage_record
+
+
+ROOT = Path(__file__).resolve().parents[2]
+TOOL_PATH = ROOT / "tools" / "ci" / "vit_post_merge_completion_late_binding.py"
+WORKFLOW = ROOT / ".github" / "workflows" / "vit-post-merge-completion.yml"
+RECOVERY = ROOT / "registries" / "development" / "skills" / "VIT_POST_MERGE_RECOVERY_REQUESTS_v0_1.json"
+SPEC = importlib.util.spec_from_file_location("vit_post_merge_completion_late_binding_tool", TOOL_PATH)
+assert SPEC is not None and SPEC.loader is not None
+TOOL = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(TOOL)
+
+
+def _pip() -> dict:
+    return {
+        "schema_version": "packet-integration-payload/v0.1",
+        "programme_id": "PROGRAMME",
+        "packet_id": "PACKET",
+        "logical_changes": [
+            {"op": "ADD", "path": "x.txt", "blob_sha": "1" * 40, "mode": "100644"}
+        ],
+        "authority_manifest_id": "a" * 64,
+        "dependency_frontier_id": "b" * 64,
+        "completion_transition": {"status": "COMPLETED", "next_packet": "NEXT"},
+    }
+
+
+def _body() -> str:
+    record = build_vit_payload_lineage_record(
+        programme_id="PROGRAMME",
+        packet_id="PACKET",
+        pip_identity_payload=_pip(),
+    )
+    raw = json.dumps(record, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    token = base64.urlsafe_b64encode(raw).decode("ascii").rstrip("=")
+    return f"VIT-Lineage-B64: {token}"
+
+
+class VitPostMergeLateBindingRecoveryTests(unittest.TestCase):
+    def _evidence(self):
+        placement = LateBindingPlacement(
+            pip_id=build_vit_payload_lineage_record(
+                programme_id="PROGRAMME",
+                packet_id="PACKET",
+                pip_identity_payload=_pip(),
+            )["pip_id"],
+            candidate_head_sha="1" * 40,
+            physical_base_sha="2" * 40,
+            physical_base_tree="3" * 40,
+            prospective_tree_sha="4" * 40,
+            authority_manifest_id="a" * 64,
+            dependency_frontier_id="b" * 64,
+        )
+        admission = IntegrationAdmissionReceipt(
+            assurance_generation_id="c" * 64,
+            pip_id=placement.pip_id,
+            placement_id=placement.placement_id,
+            result_tree=placement.prospective_tree_sha,
+            grt_proof_binding_id="d" * 64,
+            disposition="SHADOW_READY",
+            reason_codes=("EXACT_ASSURANCE_BOUND", "LATE_BINDING_PLACEMENT", "BASE_STABLE"),
+        )
+        return placement, admission
+
+    def test_late_binding_freeze_is_reconstructed_from_exact_final_prewrite_log(self) -> None:
+        placement, admission = self._evidence()
+
+        def fake_json(url, token):
+            if "/actions/runs?" in url:
+                return {
+                    "workflow_runs": [
+                        {
+                            "id": 9002,
+                            "name": "OVC tiered test selection shadow",
+                            "conclusion": "success",
+                            "run_attempt": 3,
+                        }
+                    ]
+                }
+            if "/actions/runs/9002/jobs" in url:
+                return {
+                    "jobs": [
+                        {
+                            "id": 8002,
+                            "name": "OVC merge readiness",
+                            "conclusion": "success",
+                        }
+                    ]
+                }
+            raise AssertionError(url)
+
+        log = (
+            "2026-08-19T12:30:23Z "
+            + TOOL.LATE_PLACEMENT_MARKER
+            + json.dumps(asdict(placement), sort_keys=True, separators=(",", ":"))
+            + "\n2026-08-19T12:30:28Z "
+            + TOOL.ADMISSION_MARKER
+            + json.dumps(asdict(admission), sort_keys=True, separators=(",", ":"))
+            + "\n"
+        ).encode("utf-8")
+        with (
+            patch.object(TOOL.legacy, "_json", side_effect=fake_json),
+            patch.object(TOOL.legacy, "_request_job_log", return_value=log),
+        ):
+            freeze = TOOL._late_binding_freeze_from_merge_readiness_logs(
+                repository="o/r",
+                head_sha="1" * 40,
+                pr_number=42,
+                pr_body=_body(),
+                token="token",
+            )
+
+        self.assertIsNotNone(freeze)
+        assert freeze is not None
+        self.assertEqual(freeze["binding_policy"], "LATE_PHYSICAL_PLACEMENT")
+        self.assertEqual(
+            freeze["freeze_provenance"]["source"],
+            "OVC_MERGE_READINESS_EXACT_FINAL_PREWRITE_EVIDENCE",
+        )
+        self.assertEqual(freeze["generation_id"], placement.placement_id)
+        self.assertEqual(freeze["placement_id"], placement.placement_id)
+        self.assertEqual(
+            freeze["transaction"]["expected_predecessor_commit"],
+            placement.physical_base_sha,
+        )
+        self.assertEqual(
+            freeze["transaction"]["expected_result_tree"],
+            placement.prospective_tree_sha,
+        )
+        self.assertEqual(freeze["completion_context"]["next_packet"], "NEXT")
+
+    def test_successful_merge_readiness_without_exact_markers_fails_closed(self) -> None:
+        def fake_json(url, token):
+            if "/actions/runs?" in url:
+                return {
+                    "workflow_runs": [
+                        {
+                            "id": 9002,
+                            "name": "OVC tiered test selection shadow",
+                            "conclusion": "success",
+                        }
+                    ]
+                }
+            return {
+                "jobs": [
+                    {"id": 8002, "name": "OVC merge readiness", "conclusion": "success"}
+                ]
+            }
+
+        with (
+            patch.object(TOOL.legacy, "_json", side_effect=fake_json),
+            patch.object(TOOL.legacy, "_request_job_log", return_value=b"no markers\n"),
+        ):
+            with self.assertRaises(TOOL.legacy.PostMergeCompletionError):
+                TOOL._late_binding_freeze_from_merge_readiness_logs(
+                    repository="o/r",
+                    head_sha="1" * 40,
+                    pr_number=42,
+                    pr_body=_body(),
+                    token="token",
+                )
+
+    def test_post_merge_workflow_uses_late_binding_recovery_route(self) -> None:
+        text = WORKFLOW.read_text(encoding="utf-8")
+        self.assertIn("vit_post_merge_completion_late_binding.py", text)
+        self.assertIn("VIT_POST_MERGE_RECOVERY_REQUESTS_v0_1.json", text)
+        self.assertNotIn(
+            "python tools/ci/vit_post_merge_completion.py --repo-root . --merge-sha",
+            text,
+        )
+
+    def test_recovery_manifest_is_authority_inert_and_names_first_late_binding_merge(self) -> None:
+        value = json.loads(RECOVERY.read_text(encoding="utf-8"))
+        self.assertEqual(value["schema"], TOOL.RECOVERY_SCHEMA)
+        self.assertEqual(len(value["requests"]), 1)
+        row = value["requests"][0]
+        self.assertEqual(row["merge_sha"], "b22ea057ddef98acc2e43dfff689b7fa56934385")
+        self.assertEqual(row["packet_id"], "DSAI3V-LB-WP1")
+        self.assertEqual(row["authority_effect"], "NONE")
+
+
+if __name__ == "__main__":
+    unittest.main()
