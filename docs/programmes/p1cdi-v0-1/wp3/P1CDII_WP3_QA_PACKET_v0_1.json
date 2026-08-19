@@ -1,0 +1,48 @@
+{
+  "schema": "p1cdii-wp3-qa-packet/v0.1",
+  "packet_id": "P1CDII-WP3",
+  "gate": "P1CDII-G3",
+  "status": "PASS_PENDING_EXACT_FINAL_INTEGRATION",
+  "authority_delta": "NONE",
+  "checks": {
+    "exact_owner_root_rescan": "PASS_9_JSON_FILES_0_ADMISSIBLE_SUBJECTS",
+    "wp0_draft_preserved": "PASS",
+    "frozen_census_schema": "PASS",
+    "completeness_manifest_schema": "PASS",
+    "silent_omission_negative": "PASS",
+    "extra_subject_negative": "PASS",
+    "source_identity_mutation_negative": "PASS",
+    "pending_disposition_negative": "PASS",
+    "exact_duplicate_neighbor": "PASS",
+    "synthetic_and_summary_exclusion": "PASS",
+    "nested_explicit_source_no_omission": "PASS",
+    "legacy_explicit_class": "PASS",
+    "visibility_blocked_neighbor": "PASS",
+    "historical_not_active_or_current": "PASS",
+    "clean_rebuild": "PASS_BYTE_IDENTICAL",
+    "two_clean_processes": "PASS_BYTE_EQUAL_SHA256_9f26d49a79bef2b703ce5c866039c8bb38ab7a7d9d072cf1cf9fb82b159a79c9",
+    "p1cdii_wp1_wp2_wp3_pytest": "PASS_65_OF_65",
+    "wp3_targeted_pytest": "PASS_13_OF_13",
+    "unittest_native_existing_surface": "PASS_13_OF_13",
+    "git_diff_check": "PASS"
+  },
+  "repository_wide_local": {
+    "status": "PLATFORM_COLLECTION_LIMITATION",
+    "platform": "WINDOWS",
+    "detail": "Four pre-existing pytest collection modules and one legacy-unittest discovery module import the POSIX-only resource module; required Linux repository CI and both parity jobs remain mandatory.",
+    "wp3_failure": false
+  },
+  "required_before_decision": [
+    "REPOSITORY_TESTS",
+    "PYTEST_UNITTEST_PARITY",
+    "RUNNER_PARITY",
+    "VIT_ROUTING_PROFILE_ASSURANCE",
+    "SIQ_READY",
+    "GRT_EXACT_FINAL",
+    "EXACT_FINAL_MERGE_READINESS"
+  ],
+  "g3_decision": "PASS_PENDING_EXACT_FINAL_INTEGRATION",
+  "operational_read_only": "DENIED",
+  "continuous_intake": "DENIED",
+  "wp4_authorised_after_exact_final_integration": true
+}

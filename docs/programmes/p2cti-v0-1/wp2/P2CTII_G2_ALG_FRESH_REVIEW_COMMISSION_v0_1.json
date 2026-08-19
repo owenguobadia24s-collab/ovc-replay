@@ -1,0 +1,80 @@
+{
+  "schema": "ovc-p2ctii-g2-alg-fresh-review-commission/v0.1",
+  "programme_id": "OVC-P2CTI-CONFORMANCE-v0.1",
+  "packet_id": "P2CTII-G2-ALG-FRESH-INDEPENDENT-REVIEW",
+  "status": "COMMISSIONED_AWAITING_CONFLICT_FREE_REVIEWER_BINDING",
+  "gate_class": "INDEPENDENT_NON_OPERATOR_BLOCKING",
+  "authority_delta": "NONE",
+  "reviewer_binding": {
+    "reviewer_identity": null,
+    "required_role": "EXCLUSIVE_P2CTII_G2_ALG_INDEPENDENT_REVIEWER",
+    "must_be_conflict_free_from": [
+      "P2CTII-WP2_IMPLEMENTATION_AUTHOR",
+      "P2CTII-WP2-REMEDIATION-1_AUTHOR",
+      "P2CTII-WP2-REMEDIATION-1_QA_DECISION_AUTHOR"
+    ],
+    "must_start_from_latest_lawful_main": true,
+    "must_import_no_mutable_author_workspace_state": true,
+    "must_inherit_no_review_conclusions": true
+  },
+  "immutable_prior_review": {
+    "decision": "BLOCK",
+    "merge_commit": "dd359448d4c23b617db187297ccad824377dcfdd",
+    "packet_sha256": "d44e1d45e291e3db0932df2b8103b6e3d74941174747013d38f8716da077ba47",
+    "treatment": "IMMUTABLE_EVIDENCE_NOT_REWRITTEN_WEAKENED_SUPERSEDED_OR_REINTERPRETED"
+  },
+  "remediation_subject_main": {
+    "commit": "12e302f40af55ed485058d80e77bdc07c9148d8a",
+    "tree": "8e31ecd15033101e9aaefc124ace1c3ec4f4b219",
+    "pull_request": 1162,
+    "post_merge_completion_run": 32139950883
+  },
+  "exact_review_subjects": [
+    {"path":"src/ovc/research_operations/p2cti/sources.py","git_blob":"165f973c2eff95dc88f15df6261972afba4aa686","sha256":"1a4021adde29687ae52361536c3fa201c0eb86b3a49fe27494c59d3d1d15c82e"},
+    {"path":"src/ovc/research_operations/p2cti/currentness.py","git_blob":"3f05428277cd80d649d754692ef229ede81a7c94","sha256":"669f3f290da01c920932e3c4a1706099726e5d385110d87bdf3232dedd1317a9"},
+    {"path":"registries/research_operations/p2cti/P2CTI_OWNER_SOURCE_REGISTRY_v0_1.json","git_blob":"ebd9f54be04f6a3369e40f9ce4f6f6ad4713906e","sha256":"364c5c6cbc8f43ef0c04b8f61e9b96c672b60094a45c7a55048cdeeb87080eae"},
+    {"path":"schemas/research_operations/p2cti/p2cti_source_frontier_v0_1.schema.json","git_blob":"966d464663a183078908d8c965e7f3ccec1d2eb0","sha256":"878217867fa9731651a1d344e8e21259aa80ead75aac47df41e32ad2f43d92ea"},
+    {"path":"schemas/research_operations/p2cti/p2cti_current_pointer_v0_1.schema.json","git_blob":"7591eba74f582c74dfa21ac64a0aea536a9aeb40","sha256":"673de5a461755c6fb0ae7542594cb3bc47f0911c4e522b1b57fd60b4fba844fa"},
+    {"path":"fixtures/research_operations/p2cti/P2CTII_WP2_OWNER_CURRENTNESS_FIXTURES_v0_1.json","git_blob":"45b0c242bb24da48872667c5ae990fd5b7574708","sha256":"8c0a8ed081ccf9bea303e0ef33ba51c2bf05ed09f5af90c545005c945a7ec126"},
+    {"path":"tests/research_operations/p2cti/test_p2ctii_wp2_owner_currentness.py","git_blob":"3e121ddfed8b6bb986386cfdc0d9f0e1e4ceb9ad","sha256":"46f4cfa41eef76ab4942dc2b8b043077ad8840eaee17c6443b9a55c1b0d28ef7"},
+    {"path":"tests/research_operations/p2cti/test_p2ctii_wp2_remediation_1.py","git_blob":"a9b23e2cb6f0ded432535869f49af504c2d5198a","sha256":"b96db9339f63cc36e5196430b6fd38e9a942e79a2ea784cba577eab2696ead57"}
+  ],
+  "required_reproduction": {
+    "original_declared_matrix": [
+      "DECLARED_OWNER_EXACT_RESOLUTION_ORDER_INDEPENDENT",
+      "WRONG_OWNER_CONFLICT",
+      "MISSING_OWNER_UNRESOLVED",
+      "RECENCY_PATH_TITLE_CONVENIENCE_FIELDS_REJECTED",
+      "SOURCE_FRONTIER_IDENTITY_ORDER_INDEPENDENT",
+      "TWO_POINT_EQUAL_FRONTIER_CURRENT_BUT_ADVISORY",
+      "SOURCE_GENERATION_ADVANCE_NOT_CURRENT",
+      "INCOMPLETE_FRONTIER_NO_HISTORICAL_FALLBACK",
+      "DEPENDENCY_BOUNDED_INVALIDATION",
+      "HISTORICAL_GENERATIONS_RETAINED_ADDRESSABLE",
+      "DECISION_BEARING_POINTER_DENIED_BEFORE_G2_ALG_PASS"
+    ],
+    "mandatory_adversarial_scope": [
+      "MISSING_ONE_REQUIRED_HIGH_RISK_OWNER",
+      "DUPLICATED_OR_CONFLICTING_OWNER_RECORDS",
+      "ORDER_PERMUTATIONS_OF_EQUIVALENT_SOURCE_SETS",
+      "STALE_CURRENT_POINTER_RACE_BETWEEN_TWO_CHECKS",
+      "SOURCE_ADVANCE_BETWEEN_FRONTIER_READS",
+      "MALFORMED_OR_PARTIALLY_COMPLETE_FRONTIER",
+      "CONVENIENCE_FIELD_SEMANTIC_IDENTITY_INVARIANCE",
+      "HISTORICAL_FALLBACK_AFTER_CURRENT_EVIDENCE_DISAPPEARS",
+      "VISIBILITY_COMPLETENESS_NON_DECISION_BEARING",
+      "UNKNOWN_OR_UNREGISTERED_OWNER_TYPE",
+      "TWO_CLEAN_PROCESS_DETERMINISM",
+      "P2CTII_G2_ALG_BLOCK_001_REGRESSION",
+      "P2CTII_G2_ALG_BLOCK_002_REGRESSION"
+    ]
+  },
+  "allowed_recommendations": ["PASS", "BLOCK", "QUARANTINE", "DEFER", "SUPERSEDE"],
+  "pass_effect": "P2CTII-G2-ALG_MAY_MATERIALLY_PASS_THEN_P2CTII-WP3_BECOMES_AUTO_EXECUTABLE",
+  "block_effect": "PRESERVE_REVIEW_AND_ROUTE_SEPARATE_BOUNDED_REMEDIATION",
+  "operational_current_pointer_publication": "SEPARATELY_GOVERNED_NOT_GRANTED",
+  "observability": "DENIED",
+  "continuous_intake_writes": "DENIED",
+  "wp3_authorised_before_material_pass": false,
+  "exact_next_route": "BIND_FRESH_CONFLICT_FREE_REVIEWER_ON_LATEST_LAWFUL_MAIN"
+}

@@ -43,7 +43,11 @@ def _copy_json_value(value: Any, path: str = "identity_fields") -> Any:
     if isinstance(value, Mapping):
         copied: dict[str, Any] = {}
         for key, item in value.items():
-            name = str(key)
+            if type(key) is not str:
+                raise ValueError(
+                    f"semantic projection object keys must be strings: {path}"
+                )
+            name = key
             if name in EVIDENCE_ONLY_FIELDS:
                 raise ValueError(f"evidence/provenance cannot enter semantic identity: {path}.{name}")
             copied[name] = _copy_json_value(item, f"{path}.{name}")
@@ -55,9 +59,11 @@ def _copy_json_value(value: Any, path: str = "identity_fields") -> Any:
     raise ValueError(f"semantic projection contains a non-JSON value: {type(value).__name__}")
 
 
-def _identity_payload(*, owner_semantic_binding: str, identity_fields: Mapping[str, Any]) -> dict[str, Any]:
-    if not owner_semantic_binding:
-        raise ValueError("owner_semantic_binding must be non-empty")
+def _identity_payload(*, owner_semantic_binding: Any, identity_fields: Mapping[str, Any]) -> dict[str, Any]:
+    if type(owner_semantic_binding) is not str or not owner_semantic_binding:
+        raise ValueError("owner_semantic_binding must be a non-empty string")
+    if not isinstance(identity_fields, Mapping):
+        raise ValueError("identity_fields must be an object")
     observed = set(identity_fields)
     if observed != IDENTITY_FIELDS:
         missing = sorted(IDENTITY_FIELDS - observed)
@@ -74,7 +80,7 @@ def projection_bytes(projection: Mapping[str, Any]) -> bytes:
     if projection.get("profile_id") != PROFILE_ID:
         raise ValueError("semantic projection profile is not compatible with v1")
     payload = _identity_payload(
-        owner_semantic_binding=str(projection.get("owner_semantic_binding", "")),
+        owner_semantic_binding=projection.get("owner_semantic_binding"),
         identity_fields=projection.get("identity_fields", {}),
     )
     return canonical_json_bytes(payload, trailing_newline=False)

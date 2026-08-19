@@ -3,21 +3,243 @@
   "programme_id": "OVC-P1CDI-CONFORMANCE-v0.1",
   "packet_id": "P1CDII-G2-ALG",
   "gate_class": "INDEPENDENT_BLOCKING",
-  "status": "READY_AWAITING_INDEPENDENT_REVIEW",
-  "reviewer_binding": "UNBOUND",
-  "reviewer_independence": "UNRESOLVED",
-  "gate_decision": "NOT_TAKEN",
-  "implementation_packet": "P1CDII-WP2",
-  "qualified_candidate_head": "f0078b53dbfba82067034b5435d7109bbba8da4e",
-  "qualified_prospective_tree": "4e9d5fe9211976ab606de3f190391f6c4166639b",
-  "implementation_merge_commit": "c8e2e610eddf59014644ac61e648ce27ae000f38",
-  "implementation_assurance": {"tests_workflow":32125761101,"tiered_assurance_workflow":32125761088,"result":"PASS"},
-  "reproduction_requirements": ["EXACT_SEMANTIC_PROJECTION_BYTES","EXACT_MATCH_BEHAVIOUR","OWNER_SOURCE_PRECEDENCE","MOVED_FRONTIER_HANDLING","INDEPENDENCE_UNKNOWN_DEFAULT","AUTHORITY_NON_TRANSITIVITY"],
-  "required_evidence": ["WP2_REQUIRED_CI_PASS","WP2_FINAL_HEAD_VIT_GRT_SIQ_PASS","CONFLICT_FREE_INDEPENDENT_REVIEWER_REPRODUCTION"],
-  "decision_bearing_before_pass": false,
-  "generation_zero_pointer_before_pass": "DENIED",
-  "blockers": ["P1CDII_G2_ALG_INDEPENDENT_REVIEWER_UNBOUND"],
+  "status": "REVIEW_COMPLETE_BLOCKED",
+  "review_time_utc": "2026-08-18T11:17:33.8029642Z",
+  "reviewer_binding": {
+    "status": "BOUND",
+    "reviewer_identity": "CODEX-INDEPENDENT-REVIEWER-P1CDII-G2-ALG-20260818",
+    "canonical_agent_path": "/root/p1cdii_g2_independent",
+    "role": "SOLE_SUBSTANTIVE_RESOLVER_CURRENTNESS_REVIEWER",
+    "authority_envelope": "INDEPENDENT_REPRODUCTION_AND_DISPOSITION_ONLY_NO_WP2_REPAIR_NO_AUTHORITY_GRANT"
+  },
+  "reviewer_independence": {
+    "status": "DECLARED",
+    "declaration": "I did not author, modify, repair, test-author, qualify, push, review, or merge the P1CDII-WP2 resolver/currentness implementation or its GATE_READY closeout. I began from a fresh worktree after those changes were present on lawful main and changed only this independent review packet.",
+    "implementation_authors_reviewed": [
+      "owenguobadia24s-collab <owenguobadia24s@gmail.com>@f0078b53dbfba82067034b5435d7109bbba8da4e",
+      "owenguobadia24s-collab <owenguobadia24s@gmail.com>@a40edbee797b92f20e0046ed7b56ba9282c42569"
+    ],
+    "independence_conflicts": []
+  },
+  "authority": {
+    "source": "docs/programmes/p1cdi-v0-1/implementation/P1CDII_G0_OPERATOR_DECISION_v0_1.json",
+    "operator_decision": "P1CDII-G0:PASS",
+    "delegation": "P1CDII-WP1..WP10 subject to packet prerequisites, QA, independent blocking gates and later operator boundaries",
+    "review_authority": "P1CDII-G2-ALG_INDEPENDENT_BLOCKING_REVIEW",
+    "authority_delta": "NONE",
+    "non_grants_preserved": [
+      "P1CDI_OPERATIONAL_READ_ONLY_ACTIVATION",
+      "P1CDI_CONTINUOUS_INTAKE_WRITES",
+      "NEW_PATH1_REAL_SOURCE_AUTHORITY",
+      "SCIENTIFIC_DISPOSITION",
+      "NON_EXACT_SEMANTIC_AUTO_ADMISSION",
+      "CANDIDATE_PROPOSAL",
+      "CANDIDATE_FREEZE",
+      "C_ADMISSION",
+      "VALIDATION",
+      "PUBLICATION",
+      "PROBABILITY",
+      "RISK",
+      "EXPOSURE",
+      "TRADING",
+      "EXECUTION",
+      "AGENT_WRITE"
+    ]
+  },
+  "reviewed_frontier": {
+    "latest_lawful_main": "17c2aac536893005fc07f4ec1717d04b6b2f9177",
+    "latest_lawful_main_tree": "5643bf72e0ca54169737474a5ce5437d3c651709",
+    "latest_lawful_main_subject": "DSAI3V: resolve physical predecessor from VIT placement (#1148)",
+    "wp2_qualified_candidate_head": "f0078b53dbfba82067034b5435d7109bbba8da4e",
+    "wp2_qualified_prospective_tree": "4e9d5fe9211976ab606de3f190391f6c4166639b",
+    "wp2_implementation_merge_commit": "c8e2e610eddf59014644ac61e648ce27ae000f38",
+    "wp2_implementation_merge_tree": "4e9d5fe9211976ab606de3f190391f6c4166639b",
+    "wp2_gate_ready_candidate_head": "a40edbee797b92f20e0046ed7b56ba9282c42569",
+    "wp2_gate_ready_merge_commit": "aad5983e66d6d70be54c58557a5a361fdadc572f",
+    "wp2_gate_ready_merge_tree": "fe2fdec3d92fbccdd54256e6a24ecf460d6af8e3",
+    "review_source_frontier_sha256": "ec55bdcf4bc8db194c3803ce8b802d0dfc205975272e2efe74e6983861d14bd2",
+    "review_source_frontier_files": [
+      {"path":"src/ovc/research_operations/p1cdi/identity.py","sha256":"631e074b37bae4d21fbbcc94029e37e22328c9126762fbc8f609b4c1fe336c95"},
+      {"path":"src/ovc/research_operations/p1cdi/intake.py","sha256":"8d8823265f221b6527201eb5781b485d37473748b3940a53ffd356544618cbdd"},
+      {"path":"src/ovc/research_operations/p1cdi/source_resolution.py","sha256":"d48c4ec2b2c380c322e5cdd9fa90f43c8d7ecfd1e51bc8cb3cb24ad3806270e3"},
+      {"path":"src/ovc/research_operations/p1cdi/currentness.py","sha256":"5a727ebe4f296b1a9a2ca30ae1fe64bdbb4259a94e56893904a963e9300e48a4"},
+      {"path":"src/ovc/research_operations/canonical.py","sha256":"89b868cc4bd6363e6ef6e3087f309d5a038df4a999ee186ba82c05356c511f5f"},
+      {"path":"registries/research_operations/p1cdi/semantic_projection_profiles/P1CDI_SEMANTIC_PROJECTION_PROFILE_v1.json","sha256":"3c678a9fad3821375a6d643ffe9fc092e6921ec27b5153a2acf620398af9adc1"},
+      {"path":"registries/research_operations/p1cdi/source_owner_registry.json","sha256":"b70fa899be4be9efeebfb89fef084b19ab0614507388f5a01008b35a62e0df93"},
+      {"path":"schemas/research_operations/p1cdi/p1cdi_identity_v0_1.schema.json","sha256":"81748ca757be2c3c0e6ce3fd1748e4bc3e1066586f003016d4b0413ebd8165df"},
+      {"path":"schemas/research_operations/p1cdi/p1cdi_lifecycle_currentness_v0_1.schema.json","sha256":"2f4f986cc66538416246f38de7e269dda4a9cd678179853594780ede4d2b03b3"},
+      {"path":"schemas/research_operations/p1cdi/p1cdi_candidate_links_v0_1.schema.json","sha256":"28c023851d8c451f035e75b40d4ae4d364c01d482212222353f3a371e0b61bb2"},
+      {"path":"schemas/research_operations/p1cdi/p1cdi_visibility_v0_1.schema.json","sha256":"6436beef59bb5dc58e98fc2e98cfe944c55c5fd2a114e1e89d53b74e8140cbb7"},
+      {"path":"schemas/research_operations/p1cdi/p1cdi_demand_rccr_v0_1.schema.json","sha256":"2c1f8e1cd67f9b0566a92b917609184a5b62965d715ec6c6d14bba83773d0340"},
+      {"path":"fixtures/research_operations/p1cdi/P1CDII_WP2_RESOLVER_FIXTURES_v0_1.json","sha256":"c157009370ce5a423ac304114cb1da862a8962eb4cb4225a1df7b73c58d4d7a2"},
+      {"path":"tests/research_operations/p1cdi/test_p1cdii_wp2_identity_intake.py","sha256":"d8ec55a1b184e814541935c55471a0d5c6a2c6395e070f83064da8f4208bd141"},
+      {"path":"tests/research_operations/p1cdi/test_p1cdii_wp2_resolver_currentness.py","sha256":"0d9a81858e8a19a68bf99aaf61359275abc0855f575092ae8c0751d3e1465be9"}
+    ]
+  },
+  "court_record_verification": {
+    "P1CDII-WP0_G0": {
+      "result": "COMPLETED",
+      "merge_commit": "cd2385ef7ec3d16bcbb0357f71cbe9c09d8deded",
+      "merge_tree": "24d32663a65191dddcd1125d8ec74aaf9d6358b8",
+      "pull_request": 1130,
+      "operator_decision_path": "docs/programmes/p1cdi-v0-1/implementation/P1CDII_G0_OPERATOR_DECISION_v0_1.json",
+      "operator_decision": "PASS",
+      "ancestry_on_reviewed_main": "PASS"
+    },
+    "P1CDII-WP1": {
+      "result": "COMPLETED",
+      "implementation_merge_commit": "c6b5c8ee6ccf89753d7f990584ca4569ba830bf2",
+      "completion_merge_commit": "a11d29569321e4fe608f09dd51c04349c3f1c13f",
+      "completion_tree": "9e5cc15ef1e43b51eade229cd262eea1471bce6d",
+      "pull_requests": [1139, 1141],
+      "implementation_workflows": {"tests":32122534305,"tiered_assurance":32122533974},
+      "closeout_workflows": {"tests":32123698257,"tiered_assurance":32123698299},
+      "delegated_decision": "PASS",
+      "ancestry_on_reviewed_main": "PASS"
+    },
+    "P1CDII-WP2": {
+      "result": "GATE_READY",
+      "programme_state_path": "records/research_operations/p1cdi/P1CDII_PROGRAMME_STATE_v0_1.json",
+      "implementation_pull_request": 1144,
+      "gate_ready_pull_request": 1145,
+      "implementation_qa": "PASS_GATE_READY",
+      "implementation_completion": "PASS",
+      "implementation_workflows": {
+        "tests": {"run_id":32125761101,"head":"f0078b53dbfba82067034b5435d7109bbba8da4e","jobs":{"VIT routing preflight":"PASS","tests":"PASS","runner-parity":"PASS","pytest-unittest-parity":"PASS"}},
+        "tiered_assurance": {"run_id":32125761088,"head":"f0078b53dbfba82067034b5435d7109bbba8da4e","jobs":{"OVC profile assurance":"PASS","SIQ READY admission":"PASS","OVC merge readiness":"PASS"}}
+      },
+      "gate_ready_workflows": {
+        "tests": {"run_id":32126666588,"head":"a40edbee797b92f20e0046ed7b56ba9282c42569","jobs":{"VIT routing preflight":"PASS","tests":"PASS","runner-parity":"PASS","pytest-unittest-parity":"PASS"}},
+        "tiered_assurance": {"run_id":32126666558,"head":"a40edbee797b92f20e0046ed7b56ba9282c42569","jobs":{"OVC profile assurance":"PASS","SIQ READY admission":"PASS","OVC merge readiness":"PASS"}}
+      },
+      "ancestry_on_reviewed_main": "PASS"
+    },
+    "prior_reviewer_state": {
+      "reviewer_binding": "UNBOUND",
+      "reviewer_independence": "UNRESOLVED",
+      "gate_decision": "NOT_TAKEN",
+      "recorded_blocker": "P1CDII_G2_ALG_INDEPENDENT_REVIEWER_UNBOUND"
+    }
+  },
+  "reproduction": {
+    "environment": {"os":"Windows","python":"3.14.2","worktree":"C:/w/p1g2","branch":"codex/p1cdii-g2-alg-independent-review-20260818"},
+    "inputs": {
+      "fixture": "fixtures/research_operations/p1cdi/P1CDII_WP2_RESOLVER_FIXTURES_v0_1.json@c157009370ce5a423ac304114cb1da862a8962eb4cb4225a1df7b73c58d4d7a2",
+      "profile": "registries/research_operations/p1cdi/semantic_projection_profiles/P1CDI_SEMANTIC_PROJECTION_PROFILE_v1.json@3c678a9fad3821375a6d643ffe9fc092e6921ec27b5153a2acf620398af9adc1",
+      "projection_owner_binding": "owner:ec1:path1",
+      "projection_generation_ids": ["p1:gen:left","p1:gen:right"],
+      "non_exact_mutation": {"identity_fields.representation_dependency":"ALTERNATE_OWNER_BOUND"},
+      "type_coercion_adversary": {"valid_owner_semantic_binding":"42","malformed_owner_semantic_binding":42},
+      "moved_frontier_mutation": {"ECX_DMRP_RESEARCH_OPERATIONS.generation_ref":"ec1:generation:002","ECX_DMRP_RESEARCH_OPERATIONS.source_sha256":"3333333333333333333333333333333333333333333333333333333333333333"},
+      "incomplete_frontier": ["ECX_DMRP_RESEARCH_OPERATIONS@ec1:generation:001"],
+      "omitted_required_high_risk_owners": ["OWNING_PATH1_STUDY","DMRP_CANDIDATE_SERVICE_AND_OPERATOR","RCCR","DMRP_EXPOSURE_INFLUENCE_RECORDS","PROTECTED_RESOURCE_AUTHORITY","P1CDI"]
+    },
+    "exact_projection_output": {
+      "canonical_utf8": "{\"identity_fields\":{\"applicability_scope\":{\"instrument\":\"EURUSD\"},\"boundary_dependency\":\"OWNER_BOUND\",\"complete_minimal_core_set\":[\"core:a\"],\"first_valid_semantics\":\"2026-01-01T00:00:00Z\",\"identity_defining_dependencies\":[\"dep:a\"],\"method_dependency\":\"OWNER_BOUND\",\"missingness_semantics\":\"EXPLICIT_UNKNOWN\",\"representation_dependency\":\"OWNER_BOUND\",\"structural_predicates\":[\"predicate:a\"],\"structural_relations\":[\"relation:a>b\"],\"unit_type\":\"STRUCTURAL_CORE\"},\"owner_semantic_binding\":\"owner:ec1:path1\",\"profile_id\":\"P1CDI-SEMANTIC-PROJECTION-v1\"}",
+      "byte_length": 548,
+      "sha256": "a4f8f33c2982c4f5c04da4155feac91f993fd76fe2ed249d8487d60c06bf8771",
+      "declared_sha256": "a4f8f33c2982c4f5c04da4155feac91f993fd76fe2ed249d8487d60c06bf8771"
+    },
+    "exact_outputs": {
+      "same_fields_different_generation_equal": true,
+      "reordered_object_keys_bytes_equal": true,
+      "exact_admission_state": "ADMITTED_EXISTING_DISTINCTION_EVIDENCE",
+      "exact_duplicate_state": "DUPLICATE_EXACT",
+      "exact_duplicate_canonical_write": "DENIED",
+      "non_exact_state": "CORRESPONDENCE_REVIEW_REQUIRED",
+      "non_exact_canonical_write": "DENIED",
+      "wrong_owner_state": "CONFLICT",
+      "ambiguous_generation_state": "CONFLICT",
+      "unchanged_frontier_currentness": "CURRENT",
+      "moved_frontier_currentness": "STALE",
+      "moved_frontier_reason": "SOURCE_FRONTIER_MOVED",
+      "moved_frontier_generation_preserved": "p1:gen:001",
+      "unresolved_frontier_currentness": "UNRESOLVED",
+      "absent_exposure_state": "UNRESOLVED",
+      "absent_exposure_reason": "INDEPENDENCE_UNKNOWN",
+      "pointer_before_gate": "PermissionError:P1CDII-G2-ALG PASS is required before any Generation-0 current pointer"
+    },
+    "blocking_outputs": {
+      "malformed_projection_schema": "REJECT:ContractValidationError:oneOf matched 0 branches",
+      "malformed_projection_bytes_equal_to_valid_string_projection": true,
+      "malformed_projection_exact_semantic_equal": true,
+      "malformed_projection_classifier_state": "ADMITTED_EXISTING_DISTINCTION_EVIDENCE",
+      "incomplete_frontier_schema": "ACCEPT",
+      "incomplete_frontier_currentness": "CURRENT",
+      "incomplete_frontier_reason_codes": []
+    },
+    "clean_process_determinism": {
+      "process_count": 2,
+      "process_1_output_sha256": "50580568aca94f7ccd303a9f4f8ec417bd43120fbd78b076a3e16148e4f6e282",
+      "process_2_output_sha256": "50580568aca94f7ccd303a9f4f8ec417bd43120fbd78b076a3e16148e4f6e282",
+      "byte_equal": true
+    }
+  },
+  "tests_and_adversarial_cases": [
+    {"dimension":1,"case":"EXACT_PROFILE_BYTES_HASH_NORMAL","result":"PASS","evidence":"548 UTF-8 bytes; computed and declared SHA-256 a4f8f33c2982c4f5c04da4155feac91f993fd76fe2ed249d8487d60c06bf8771."},
+    {"dimension":1,"case":"OWNER_BINDING_TYPE_COERCION","result":"BLOCK","evidence":"Integer 42 is coerced to string 42 by projection_bytes; malformed schema-invalid input becomes byte-equal and exact_semantic_equal to valid input."},
+    {"dimension":2,"case":"EXACT_EQUALITY_AND_IDEMPOTENT_DUPLICATE","result":"PASS","evidence":"Different generation IDs with identical semantic projection compare equal; exact source duplicate returns DUPLICATE_EXACT, DENIED write, false decision-bearing."},
+    {"dimension":3,"case":"NON_EXACT_AUTOMATIC_SAME_DISTINCTION_REJECTION","result":"PASS_WITH_BLOCKING_BYPASS","evidence":"Material representation change returns CORRESPONDENCE_REVIEW_REQUIRED, but the dimension-1 type-coercion defect auto-admits a schema-invalid non-byte-exact input as existing-distinction evidence."},
+    {"dimension":4,"case":"OWNER_SOURCE_PRECEDENCE_FAIL_CLOSED","result":"PASS","evidence":"Wrong owner and two distinct resolved generations both return CONFLICT/OWNER_SEMANTIC_CONFLICT; recency fields are rejected by the closed evidence shape."},
+    {"dimension":5,"case":"TWO_POINT_MOVED_FRONTIER","result":"PASS_WITH_BLOCKING_COMPLETENESS_GAP","evidence":"Moved complete fixture returns STALE/SOURCE_FRONTIER_MOVED, but an unchanged frontier containing only one of the required high-risk owners returns CURRENT."},
+    {"dimension":6,"case":"STALE_HISTORICAL_PRESERVATION","result":"PASS","evidence":"Moved-frontier result preserves generation_id p1:gen:001, is non-decision-bearing, and pointer publication remains denied before G2 PASS."},
+    {"dimension":7,"case":"MISSING_AMBIGUOUS_HIGH_RISK_PREDICATES","result":"BLOCK","evidence":"Per-predicate resolver correctly returns typed UNRESOLVED/CONFLICT states, but frontier construction/schema do not require those predicates and currentness therefore false-currents an omitted set."},
+    {"dimension":8,"case":"DMRP_ABSENCE_AS_INDEPENDENCE","result":"PASS","evidence":"No EXPOSURE_AND_INDEPENDENCE evidence returns UNRESOLVED with INDEPENDENCE_UNKNOWN."},
+    {"dimension":9,"case":"CANDIDATE_VALIDATION_RCCR_AUTHORITY_NON_TRANSITIVITY","result":"PASS","evidence":"Reference/schema reproduction preserves candidate_write DENIED, validation_access DENIED, RCCR-derived recommendation actuation DENIED/write NONE, and all reviewed authority_effect values NONE."},
+    {"dimension":10,"case":"DETERMINISTIC_CLEAN_PROCESS_REPRODUCTION","result":"PASS","evidence":"Two separate Python 3.14.2 processes emitted byte-identical sorted JSON, SHA-256 50580568aca94f7ccd303a9f4f8ec417bd43120fbd78b076a3e16148e4f6e282."}
+  ],
+  "test_execution": {
+    "command": "python -m pytest tests/research_operations/p1cdi/test_p1cdii_wp1_contracts.py tests/research_operations/p1cdi/test_p1cdii_wp1_schemas.py tests/research_operations/p1cdi/test_p1cdii_wp2_identity_intake.py tests/research_operations/p1cdi/test_p1cdii_wp2_resolver_currentness.py -q",
+    "result": "PASS",
+    "summary": "33 passed in 1.07s",
+    "adversarial_harness": "PASS_REPRODUCTION_WITH_TWO_BLOCKING_OBSERVATIONS"
+  },
+  "discrepancies": [
+    {
+      "id": "P1CDII_G2_ALG_BLOCK_001_PROJECTION_TYPE_COERCION",
+      "severity": "BLOCKING",
+      "expected": "Exact automatic equality accepts only schema-compatible projections whose identity-bearing types and canonical bytes are exact.",
+      "actual": "projection_bytes string-coerces owner_semantic_binding. Integer 42 and string 42 produce identical projection bytes; exact_semantic_equal returns true; classify_exact_intake auto-admits the malformed projection as existing-distinction evidence although the identity schema rejects it.",
+      "affected_paths": ["src/ovc/research_operations/p1cdi/identity.py","src/ovc/research_operations/p1cdi/intake.py"],
+      "conflict": "NON_EXACT_OR_SCHEMA_INCOMPATIBLE_INPUT_CAN_CROSS_EXACT_AUTOMATIC_ADMISSION_BOUNDARY"
+    },
+    {
+      "id": "P1CDII_G2_ALG_BLOCK_002_INCOMPLETE_FRONTIER_FALSE_CURRENT",
+      "severity": "BLOCKING",
+      "expected": "Both currentness reads cover every required high-risk owner/source predicate; omission is typed unresolved and cannot publish CURRENT.",
+      "actual": "SourceFrontierManifest requires only one generic owner entry and carries no completeness binding. An unchanged frontier containing only ECX_DMRP_RESEARCH_OPERATIONS is schema-valid and evaluate_two_point_currentness returns CURRENT with no reason codes while six required high-risk owners are absent.",
+      "affected_paths": ["src/ovc/research_operations/p1cdi/source_resolution.py","src/ovc/research_operations/p1cdi/currentness.py","schemas/research_operations/p1cdi/p1cdi_lifecycle_currentness_v0_1.schema.json"],
+      "conflict": "MISSING_HIGH_RISK_PREDICATES_CAN_BE_OMITTED_AND_FALSE_CURRENT"
+    }
+  ],
+  "unresolved_conflicts": [
+    "P1CDII_G2_ALG_BLOCK_001_PROJECTION_TYPE_COERCION",
+    "P1CDII_G2_ALG_BLOCK_002_INCOMPLETE_FRONTIER_FALSE_CURRENT"
+  ],
+  "recommended_disposition": "BLOCK",
+  "gate_decision": "BLOCK",
+  "gate_decision_rationale": "The normal implementation and recorded QA reproduce, but two deterministic adversarial cases violate exact automatic semantic admission and fail-closed complete-frontier currentness. G2-ALG cannot PASS while either defect remains.",
+  "authority_delta": "NONE",
   "authority_effect": "NONE_REVIEW_PACKET_ONLY",
-  "next_on_pass": "P1CDII-WP3",
-  "next_on_block": "OPERATOR_ESCALATION_IF_UNRESOLVED_CONFLICT"
+  "decision_bearing_outputs": "DENIED",
+  "generation_zero_pointer": "DENIED",
+  "canonical_intake_writes": "DENIED",
+  "blockers": [
+    "P1CDII_G2_ALG_BLOCK_001_PROJECTION_TYPE_COERCION",
+    "P1CDII_G2_ALG_BLOCK_002_INCOMPLETE_FRONTIER_FALSE_CURRENT"
+  ],
+  "rollback": "No operational pointer, canonical intake write, owner record, or scientific disposition was changed. Preserve WP0/G0, WP1, WP2 implementation history and this BLOCK decision; use forward supersession only.",
+  "remediation_route": {
+    "route_class": "SEPARATE_WP2_REMEDIATION_REQUIRED_NO_INLINE_REPAIR_BY_REVIEWER",
+    "scope": [
+      "Reject non-string or otherwise schema-incompatible identity-bearing values before projection hashing/equality and exact intake admission; add adversarial regression coverage.",
+      "Bind SourceFrontierManifest to an exact required high-risk predicate/owner set and completeness identity at both reads; omitted, duplicate, unexpected, ambiguous, unresolved, conflict, or unavailable entries must not yield CURRENT; add schema and moved/omitted-frontier regression coverage."
+    ],
+    "authority_condition": "Remediation must be separately materialised under the governing P1CDII-G0 delegated mechanical implementation process with authority delta NONE; any scope expansion or unresolved semantic/source conflict requires operator escalation.",
+    "post_remediation_review": "A fresh independent P1CDII-G2-ALG re-review must reproduce all ten dimensions against the remediated exact head and source frontier.",
+    "forbidden_in_this_packet": "WP2_IMPLEMENTATION_MODIFICATION"
+  },
+  "exact_next_packet_if_pass": "P1CDII-WP3",
+  "next_on_current_block": "SEPARATE_P1CDII-WP2_REMEDIATION_THEN_FRESH_P1CDII-G2-ALG_REVIEW",
+  "wp3_authorised": false
 }

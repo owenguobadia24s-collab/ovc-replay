@@ -77,6 +77,18 @@ class P1CDIIWP1ContractTests(unittest.TestCase):
 
         owners = load_json("registries/research_operations/p1cdi/source_owner_registry.json")
         self.assertEqual(owners["status"], "CLOSED")
+        self.assertEqual(
+            owners["currentness_required_predicates"],
+            [
+                "SOURCE_SCIENCE",
+                "P1_SCIENTIFIC_DISPOSITION",
+                "CANDIDATE_PROPOSAL_FREEZE_C_ADMISSION",
+                "GAP_AND_CAPABILITY_NEED",
+                "EXPOSURE_AND_INDEPENDENCE",
+                "VALIDATION_ACCESS",
+                "P1CDI_IDENTITY_ACTIVITY_CURRENTNESS_LINEAGE",
+            ],
+        )
         self.assertIn("REPOSITORY_FALLBACK", owners["forbidden_resolution"])
         self.assertIn("SUMMARY_RECONSTRUCTION", owners["forbidden_resolution"])
 
@@ -117,7 +129,7 @@ class P1CDIIWP1ContractTests(unittest.TestCase):
         self.assertEqual(state["authority"]["operational_read_only"], "DENIED")
         self.assertEqual(state["authority"]["continuous_intake"], "DENIED")
         self.assertIn(state["packets"]["P1CDII-WP1"]["status"], {"APPROVED", "COMPLETED"})
-        self.assertIn(state["next_packet"], {"P1CDII-WP2", "P1CDII-G2-ALG"})
+        self.assertEqual(state["packets"]["P1CDII-WP1"]["next_packet"], "P1CDII-WP2")
 
 
 if __name__ == "__main__":

@@ -18,13 +18,73 @@
     {"predicate":"SOURCE_SCIENCE","owner":"ECX_DMRP_RESEARCH_OPERATIONS","source_ref":"ec1:result:001","generation_ref":"ec1:generation:001","source_sha256":"1111111111111111111111111111111111111111111111111111111111111111","resolution_state":"RESOLVED"},
     {"predicate":"P1_SCIENTIFIC_DISPOSITION","owner":"OWNING_PATH1_STUDY","source_ref":"path1:disposition:001","generation_ref":"path1:generation:001","source_sha256":"2222222222222222222222222222222222222222222222222222222222222222","resolution_state":"RESOLVED"}
   ],
+  "projection_type_coercion_regression": {
+    "valid_owner_semantic_binding": "42",
+    "malformed_owner_semantic_binding": 42
+  },
+  "projection_typed_value_neighbor": {
+    "identity_field": "unit_type",
+    "number_value": 42,
+    "string_value": "42",
+    "expected_exact_equal": false
+  },
+  "required_currentness_owners": [
+    "DMRP_CANDIDATE_SERVICE_AND_OPERATOR",
+    "DMRP_EXPOSURE_INFLUENCE_RECORDS",
+    "ECX_DMRP_RESEARCH_OPERATIONS",
+    "OWNING_PATH1_STUDY",
+    "P1CDI",
+    "PROTECTED_RESOURCE_AUTHORITY",
+    "RCCR"
+  ],
   "frontier_before": [
     {"owner":"ECX_DMRP_RESEARCH_OPERATIONS","source_ref":"ec1:result:001","generation_ref":"ec1:generation:001","source_sha256":"1111111111111111111111111111111111111111111111111111111111111111","resolution_state":"RESOLVED"},
-    {"owner":"OWNING_PATH1_STUDY","source_ref":"path1:disposition:001","generation_ref":"path1:generation:001","source_sha256":"2222222222222222222222222222222222222222222222222222222222222222","resolution_state":"RESOLVED"}
+    {"owner":"OWNING_PATH1_STUDY","source_ref":"path1:disposition:001","generation_ref":"path1:generation:001","source_sha256":"2222222222222222222222222222222222222222222222222222222222222222","resolution_state":"RESOLVED"},
+    {"owner":"DMRP_CANDIDATE_SERVICE_AND_OPERATOR","source_ref":"candidate:state:001","generation_ref":"candidate:generation:001","source_sha256":"3333333333333333333333333333333333333333333333333333333333333333","resolution_state":"RESOLVED"},
+    {"owner":"RCCR","source_ref":"rccr:state:001","generation_ref":"rccr:generation:001","source_sha256":"4444444444444444444444444444444444444444444444444444444444444444","resolution_state":"RESOLVED"},
+    {"owner":"DMRP_EXPOSURE_INFLUENCE_RECORDS","source_ref":"exposure:state:001","generation_ref":"exposure:generation:001","source_sha256":"5555555555555555555555555555555555555555555555555555555555555555","resolution_state":"RESOLVED"},
+    {"owner":"PROTECTED_RESOURCE_AUTHORITY","source_ref":"validation:access:001","generation_ref":"validation:generation:001","source_sha256":"6666666666666666666666666666666666666666666666666666666666666666","resolution_state":"RESOLVED"},
+    {"owner":"P1CDI","source_ref":"p1cdi:lineage:001","generation_ref":"p1cdi:generation:001","source_sha256":"7777777777777777777777777777777777777777777777777777777777777777","resolution_state":"RESOLVED"}
   ],
   "frontier_moved": [
-    {"owner":"ECX_DMRP_RESEARCH_OPERATIONS","source_ref":"ec1:result:001","generation_ref":"ec1:generation:002","source_sha256":"3333333333333333333333333333333333333333333333333333333333333333","resolution_state":"RESOLVED"},
-    {"owner":"OWNING_PATH1_STUDY","source_ref":"path1:disposition:001","generation_ref":"path1:generation:001","source_sha256":"2222222222222222222222222222222222222222222222222222222222222222","resolution_state":"RESOLVED"}
+    {"owner":"ECX_DMRP_RESEARCH_OPERATIONS","source_ref":"ec1:result:001","generation_ref":"ec1:generation:002","source_sha256":"9999999999999999999999999999999999999999999999999999999999999999","resolution_state":"RESOLVED"},
+    {"owner":"OWNING_PATH1_STUDY","source_ref":"path1:disposition:001","generation_ref":"path1:generation:001","source_sha256":"2222222222222222222222222222222222222222222222222222222222222222","resolution_state":"RESOLVED"},
+    {"owner":"DMRP_CANDIDATE_SERVICE_AND_OPERATOR","source_ref":"candidate:state:001","generation_ref":"candidate:generation:001","source_sha256":"3333333333333333333333333333333333333333333333333333333333333333","resolution_state":"RESOLVED"},
+    {"owner":"RCCR","source_ref":"rccr:state:001","generation_ref":"rccr:generation:001","source_sha256":"4444444444444444444444444444444444444444444444444444444444444444","resolution_state":"RESOLVED"},
+    {"owner":"DMRP_EXPOSURE_INFLUENCE_RECORDS","source_ref":"exposure:state:001","generation_ref":"exposure:generation:001","source_sha256":"5555555555555555555555555555555555555555555555555555555555555555","resolution_state":"RESOLVED"},
+    {"owner":"PROTECTED_RESOURCE_AUTHORITY","source_ref":"validation:access:001","generation_ref":"validation:generation:001","source_sha256":"6666666666666666666666666666666666666666666666666666666666666666","resolution_state":"RESOLVED"},
+    {"owner":"P1CDI","source_ref":"p1cdi:lineage:001","generation_ref":"p1cdi:generation:001","source_sha256":"7777777777777777777777777777777777777777777777777777777777777777","resolution_state":"RESOLVED"}
   ],
+  "frontier_incomplete_review_reproduction": [
+    {"owner":"ECX_DMRP_RESEARCH_OPERATIONS","source_ref":"ec1:result:001","generation_ref":"ec1:generation:001","source_sha256":"1111111111111111111111111111111111111111111111111111111111111111","resolution_state":"RESOLVED"}
+  ],
+  "schema_invalid_resolved_source_identity_review_reproductions": [
+    {"field":"source_ref","invalid_value":42,"expected_error":"source_ref must be a non-empty string"},
+    {"field":"generation_ref","invalid_value":42,"expected_error":"generation_ref must be a non-empty string"},
+    {"field":"source_sha256","invalid_value":1111111111111111111111111111111111111111111111111111111111111111,"expected_error":"source_sha256 must be a lowercase SHA-256 string"}
+  ],
+  "source_identity_invalid_type_neighbors": [
+    {"field":"owner","invalid_value":42,"expected_error":"owner must be a non-empty string","targets":["resolver","frontier"]},
+    {"field":"resolution_state","invalid_value":42,"expected_error":"invalid resolution_state","targets":["resolver","frontier"]},
+    {"field":"predicate","invalid_value":42,"expected_error":"predicate must be a non-empty string","targets":["resolver"]}
+  ],
+  "source_identity_valid_typed_neighbors": [
+    {"field":"source_ref","value":"42"},
+    {"field":"generation_ref","value":"42"},
+    {"field":"generation_ref","value":null},
+    {"field":"source_sha256","value":"1111111111111111111111111111111111111111111111111111111111111111"}
+  ],
+  "frontier_state_neighbors": [
+    {"resolution_state":"UNRESOLVED","expected_currentness":"UNRESOLVED","expected_reason":"UNRESOLVED_CURRENTNESS"},
+    {"resolution_state":"UNAVAILABLE","expected_currentness":"UNRESOLVED","expected_reason":"UNRESOLVED_CURRENTNESS"},
+    {"resolution_state":"CONFLICT","expected_currentness":"CONFLICT","expected_reason":"OWNER_SEMANTIC_CONFLICT"}
+  ],
+  "frontier_resolved_optional_owner_neighbor": {
+    "owner":"RESEARCH_CONSOLE",
+    "source_ref":"console:admission:001",
+    "generation_ref":"console:generation:001",
+    "source_sha256":"8888888888888888888888888888888888888888888888888888888888888888",
+    "resolution_state":"RESOLVED"
+  },
   "authority_effect": "NONE"
 }

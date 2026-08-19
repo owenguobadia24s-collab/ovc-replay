@@ -1,0 +1,68 @@
+{
+  "schema": "p1cdii-wp3-bootstrap-fixtures/v0.1",
+  "authority_effect": "NONE",
+  "owner_record_documents": [
+    {
+      "path": "records/research_operations/ec1/study_a.json",
+      "document": {
+        "object_type": "P1StructuralCore",
+        "source_generation": "ec1:g0",
+        "dmrp_conformance_class": "DMRP_CONFORMANT",
+        "visibility_state": "PATH1_FULL",
+        "currentness_state": "CURRENT",
+        "minimal_generators": [["a", "b"]]
+      },
+      "expected_disposition": "MIGRATED"
+    },
+    {
+      "path": "records/research_operations/ec1/study_a_duplicate.json",
+      "document": {
+        "object_type": "P1StructuralCore",
+        "source_generation": "ec1:g0",
+        "dmrp_conformance_class": "DMRP_CONFORMANT",
+        "visibility_state": "PATH1_FULL",
+        "currentness_state": "CURRENT",
+        "minimal_generators": [["a", "b"]]
+      },
+      "expected_disposition": "EXACT_DUPLICATE"
+    },
+    {
+      "path": "records/research_operations/ec1/protected_candidate.json",
+      "document": {
+        "object_type": "Path1CandidateProposal",
+        "source_generation": "candidate:g0",
+        "dmrp_conformance_class": "DMRP_CONFORMANT",
+        "visibility_state": "OPERATOR_RESTRICTED",
+        "currentness_state": "HISTORICAL",
+        "proposal_ref": "proposal:protected"
+      },
+      "expected_disposition": "VISIBILITY_BLOCKED"
+    },
+    {
+      "path": "records/research_operations/ec1/legacy_result.json",
+      "document": {
+        "object_type": "P1DiscoveryResult",
+        "source_generation": "legacy:g0",
+        "dmrp_conformance_class": "LEGACY_PRE_DMRP_DISCOVERY",
+        "visibility_state": "PATH1_SAFE",
+        "currentness_state": "HISTORICAL",
+        "result_ref": "legacy:result:1"
+      },
+      "expected_disposition": "MIGRATED"
+    }
+  ],
+  "excluded_documents": [
+    {
+      "path": "fixtures/research_operations/ec1/synthetic.json",
+      "document": {"object_type": "P1StructuralCore", "synthetic": true},
+      "reason": "SYNTHETIC_ASSURANCE_ONLY"
+    },
+    {
+      "path": "records/research_operations/ec1/near_name.json",
+      "document": {"object_type": "P1StructuralCoreSummary", "summary": true},
+      "reason": "NON_REGISTERED_TYPE_AND_SUMMARY_RECONSTRUCTION_FORBIDDEN"
+    }
+  ],
+  "expected_subject_count": 4,
+  "expected_historical_event_count": 2
+}

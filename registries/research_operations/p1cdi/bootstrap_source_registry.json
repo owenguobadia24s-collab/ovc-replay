@@ -1,0 +1,74 @@
+{
+  "schema": "p1cdi-bootstrap-source-registry/v0.1",
+  "status": "CLOSED",
+  "authority_effect": "NONE",
+  "source_roots": [
+    {
+      "path": "records/research_operations/ec1",
+      "role": "ECX_DMRP_RESEARCH_OPERATIONS_DURABLE_RECORDS",
+      "recursive": true
+    }
+  ],
+  "excluded_roots": [
+    {
+      "path": "fixtures/research_operations/ec1",
+      "reason": "SYNTHETIC_ASSURANCE_ONLY"
+    },
+    {
+      "path": "schemas/research_operations/ec1",
+      "reason": "CONTRACT_TYPES_NOT_SOURCE_OBJECTS"
+    },
+    {
+      "path": "registries/research_operations/ec1",
+      "reason": "REGISTRIES_NOT_SOURCE_OBJECTS"
+    },
+    {
+      "path": "src/ovc/research_operations",
+      "reason": "IMPLEMENTATION_TYPES_NOT_SOURCE_OBJECTS"
+    }
+  ],
+  "source_families": [
+    {
+      "family": "P1PopulationManifest/P1SearchUniverseManifest",
+      "owner": "ECX_DMRP_RESEARCH_OPERATIONS",
+      "object_types": ["P1PopulationManifest", "P1SearchUniverseManifest", "P1SearchAccountingLedger"],
+      "migration_rule": "INDEX_SOURCE_PROVENANCE_ONLY"
+    },
+    {
+      "family": "P1DiscoveryRun/P1DiscoveryResult",
+      "owner": "ECX_DMRP_RESEARCH_OPERATIONS",
+      "object_types": ["P1DiscoveryRun", "P1DiscoveryResult", "ExactSignatureInventory"],
+      "migration_rule": "ADMIT_DISTINCTION_EVIDENCE_ONLY_WHERE_SOURCE_SEMANTICS_SUPPORT_IT"
+    },
+    {
+      "family": "PatternClosureClass/minimal_generators/P1StructuralCore",
+      "owner": "OWNING_PATH1_STUDY",
+      "object_types": ["PatternClosureClass", "P1StructuralCore"],
+      "migration_rule": "PRESERVE_EXACT_SOURCE_OBJECT_AND_ALL_VALID_MINIMAL_CORES"
+    },
+    {
+      "family": "P1CandidateEvidenceDossier/P1AdversarialReview/P1Disposition",
+      "owner": "OWNING_PATH1_STUDY",
+      "object_types": ["P1CandidateEvidenceDossier", "P1AdversarialReview", "P1Disposition"],
+      "migration_rule": "SOURCE_OWNED_EVIDENCE_OR_DISPOSITION_ONLY"
+    },
+    {
+      "family": "Path1CandidateProposal/candidate_generations",
+      "owner": "DMRP_CANDIDATE_SERVICE_AND_OPERATOR",
+      "object_types": ["Path1CandidateProposal", "ResearchCandidateGeneration"],
+      "migration_rule": "ANCESTRY_LINK_ONLY"
+    },
+    {
+      "family": "null/residual/capacity/stack-sufficiency_findings",
+      "owner": "ECX_DMRP_RESEARCH_OPERATIONS",
+      "object_types": ["StackSufficiencyAssessment", "NeedCauseClassification", "UpperLayerNeedRecord", "UpperLayerReadinessAssessment"],
+      "migration_rule": "PRESERVE_FIRST_CLASS_SOURCE_EVIDENCE_INCLUDING_ZERO_CANDIDATE_CYCLES"
+    }
+  ],
+  "legacy_admission_class": "LEGACY_PRE_DMRP_DISCOVERY",
+  "missing_visibility": "PROTECTED",
+  "missing_currentness": "UNRESOLVED",
+  "missing_dmrp_conformance": "UNRESOLVED",
+  "silent_omission": "FORBIDDEN",
+  "summary_reconstruction": "FORBIDDEN"
+}

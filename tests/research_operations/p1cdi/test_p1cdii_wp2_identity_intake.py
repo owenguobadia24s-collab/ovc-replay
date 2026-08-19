@@ -87,6 +87,59 @@ def test_projection_rejects_evidence_or_physical_provenance_as_identity() -> Non
         )
 
 
+def test_projection_preserves_types_and_rejects_owner_binding_coercion() -> None:
+    regression = FIXTURE["projection_type_coercion_regression"]
+    valid = build_semantic_projection(
+        generation_id="p1:gen:string-owner",
+        owner_semantic_binding=regression["valid_owner_semantic_binding"],
+        identity_fields=copy.deepcopy(FIXTURE["identity_fields"]),
+    )
+    malformed = copy.deepcopy(valid)
+    malformed["generation_id"] = "p1:gen:integer-owner"
+    malformed["owner_semantic_binding"] = regression["malformed_owner_semantic_binding"]
+
+    with pytest.raises(ValueError, match="non-empty string"):
+        projection_bytes(malformed)
+    assert not exact_semantic_equal(valid, malformed)
+    with pytest.raises(ValueError, match="non-empty string"):
+        classify_exact_intake(
+            envelope=envelope("ec1:result:type-coercion", "8" * 64),
+            projection=malformed,
+            existing_envelopes=[],
+            existing_projections=[valid],
+        )
+
+    typed_neighbor = FIXTURE["projection_typed_value_neighbor"]
+    field = typed_neighbor["identity_field"]
+    number_fields = copy.deepcopy(FIXTURE["identity_fields"])
+    number_fields[field] = typed_neighbor["number_value"]
+    string_fields = copy.deepcopy(FIXTURE["identity_fields"])
+    string_fields[field] = typed_neighbor["string_value"]
+    number_projection = build_semantic_projection(
+        generation_id="p1:gen:number-value",
+        owner_semantic_binding="owner:typed",
+        identity_fields=number_fields,
+    )
+    string_projection = build_semantic_projection(
+        generation_id="p1:gen:string-value",
+        owner_semantic_binding="owner:typed",
+        identity_fields=string_fields,
+    )
+    assert projection_bytes(number_projection) != projection_bytes(string_projection)
+    assert exact_semantic_equal(number_projection, string_projection) is typed_neighbor[
+        "expected_exact_equal"
+    ]
+
+    non_string_key_fields = copy.deepcopy(FIXTURE["identity_fields"])
+    non_string_key_fields["applicability_scope"] = {42: "EURUSD"}
+    with pytest.raises(ValueError, match="object keys must be strings"):
+        build_semantic_projection(
+            generation_id="p1:gen:bad-key",
+            owner_semantic_binding="owner:typed",
+            identity_fields=non_string_key_fields,
+        )
+
+
 def test_exact_source_duplicate_is_idempotent_and_never_writes() -> None:
     item = envelope()
     result = classify_exact_intake(

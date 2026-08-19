@@ -1,0 +1,77 @@
+{
+  "schema": "ovc-p1cdii-wp2-remediation-implementation-packet/v0.1",
+  "programme_id": "OVC-P1CDI-CONFORMANCE-v0.1",
+  "packet_id": "P1CDII-WP2-REMEDIATION",
+  "status": "IMPLEMENTED_AWAITING_EXACT_FINAL_ASSURANCE",
+  "baseline_main": "7fbba589f432ff02d8d1b6f717f3b4b071d57451",
+  "baseline_tree": "b21c26257f85ac6fd8f745d0f683f6a4c4fc1f52",
+  "authority": "DELEGATED_MECHANICAL_REMEDIATION_UNDER_P1CDII_G0_AND_RECORDED_G2_ALG_BLOCK",
+  "authority_delta": "NONE",
+  "immutable_block_review": {
+    "reviewed_base": "17c2aac536893005fc07f4ec1717d04b6b2f9177",
+    "reviewer_commit": "98a1a7c557270fcf62b29057d47df4dcf71f4abe",
+    "packet_sha256": "3ccb7c1fa33eae7ec44bbc737105fbdd1496465fadf53fc7ee6ded14170e71b2",
+    "adversarial_digest": "50580568aca94f7ccd303a9f4f8ec417bd43120fbd78b076a3e16148e4f6e282",
+    "decision": "BLOCK"
+  },
+  "remediated_blockers": [
+    "P1CDII_G2_ALG_BLOCK_001_PROJECTION_TYPE_COERCION",
+    "P1CDII_G2_ALG_BLOCK_002_INCOMPLETE_FRONTIER_FALSE_CURRENT"
+  ],
+  "implementation": {
+    "P1CDII_G2_ALG_BLOCK_001_PROJECTION_TYPE_COERCION": [
+      "owner_semantic_binding must be an exact non-empty string before projection hashing",
+      "canonical semantic values retain JSON types and non-string object keys are rejected",
+      "schema-incompatible typed input cannot cross exact equality or automatic intake admission"
+    ],
+    "P1CDII_G2_ALG_BLOCK_002_INCOMPLETE_FRONTIER_FALSE_CURRENT": [
+      "the exact seven-owner currentness set is derived from the CLOSED source-owner registry",
+      "frontier identity binds required owners, entries, missing/duplicate owners, completeness and reasons",
+      "missing, unresolved or unavailable required owners yield UNRESOLVED; conflicts or duplicates yield CONFLICT; moved complete frontiers yield STALE"
+    ]
+  },
+  "decision_bearing_outputs": "DENIED",
+  "generation_zero_pointer": "DENIED",
+  "canonical_intake_writes": "DENIED",
+  "p1cdii_g2_alg_status": "UNRESOLVED_REVIEW_BLOCK_REQUIRES_FRESH_INDEPENDENT_REVIEW",
+  "remediation_author_may_issue_g2_alg_pass": false,
+  "wp3_authorised": false,
+  "implementation_hashes": {
+    "src/ovc/research_operations/p1cdi/identity.py": "7cd6e6e70c3e0df228839d7ce71cb5300258beb4c0f0f0a8bc10bb5341378706",
+    "src/ovc/research_operations/p1cdi/source_resolution.py": "85748f6e7bf3f9cf98407463bcdc48dca0cc71d1e6487213960d9e64def3cd77",
+    "src/ovc/research_operations/p1cdi/currentness.py": "c1f7d883c30f0b0fafcfcd635b75a43e8923882d3763fa6ddf9e669c133ebf03",
+    "registries/research_operations/p1cdi/source_owner_registry.json": "d36ec23400d79ab184fe0f7ef4f465b9940e01f45ebefe20ce43c12a7a1c9188",
+    "schemas/research_operations/p1cdi/p1cdi_lifecycle_currentness_v0_1.schema.json": "524a9b72e4c90e0c93a2d653f13e6863a0df1ef0d04a7753c6d46759985843a0",
+    "fixtures/research_operations/p1cdi/P1CDII_WP2_RESOLVER_FIXTURES_v0_1.json": "290c44620fe8a2d0e68d07c677558d3d1d67294a8e658ce7fed18edddd85fe1e"
+  },
+  "local_assurance": {
+    "all_p1cdii_wp1_wp2_tests": "PASS_39_OF_39",
+    "exact_adversarial_regressions": "PASS_2_OF_2",
+    "clean_process_count": 2,
+    "clean_process_output_sha256": "122a2fb6880e6127d54416732252a1512530a056a9d9c5d607aa369eebb8dc73",
+    "clean_process_byte_equal": true,
+    "json_parse": "PASS",
+    "compileall": "PASS",
+    "git_diff_check": "PASS",
+    "repository_wide_windows_attempt": "ENVIRONMENT_BLOCKED_RESOURCE_MODULE_UNAVAILABLE",
+    "repository_wide_windows_affected_out_of_scope_modules": [
+      "tests/opt_b/c2p/v0_2/test_c2p2_rs0_runtime_binding.py",
+      "tests/opt_b/c2p/v0_2/test_c2p2_rs0_source_materialisation.py",
+      "tests/research_operations/mcarb/test_mcarbi_wp8_stage_a_runner.py",
+      "tests/srfd/test_srfdi_wp10a_real_capacity_harness.py"
+    ]
+  },
+  "required_exact_final_assurance": [
+    "ALL_P1CDII_WP1_WP2_TESTS",
+    "TWO_ADVERSARIAL_REGRESSIONS",
+    "REPOSITORY_WIDE_TESTS_ON_SUPPORTED_LINUX_RUNNER",
+    "PYTEST_UNITTEST_PARITY",
+    "RUNNER_PARITY",
+    "VIT_ROUTING_PREFLIGHT",
+    "OVC_PROFILE_ASSURANCE",
+    "SIQ_READY",
+    "GRT_EXACT_MERGE_READINESS"
+  ],
+  "next_packet_on_exact_final_pass": "P1CDII-WP2-REMEDIATION-QA-DECISION",
+  "rollback": "Forward-supersede this bounded remediation while preserving the independent BLOCK packet and original WP2 history."
+}

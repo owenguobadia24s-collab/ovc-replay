@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
+import json
+from pathlib import Path
 import re
 from typing import Any
 
@@ -8,29 +10,86 @@ from ovc.research_operations.canonical import canonical_sha256
 
 
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
-_SOURCE_POLICY = {
-    "SOURCE_SCIENCE": ("ECX_DMRP_RESEARCH_OPERATIONS", "UNRESOLVED_SOURCE_GENERATION"),
-    "P1_SCIENTIFIC_DISPOSITION": ("OWNING_PATH1_STUDY", "UNRESOLVED_SCIENTIFIC_DISPOSITION"),
-    "CANDIDATE_PROPOSAL_FREEZE_C_ADMISSION": ("DMRP_CANDIDATE_SERVICE_AND_OPERATOR", "UNRESOLVED_CANDIDATE_STATE"),
-    "GAP_AND_CAPABILITY_NEED": ("RCCR", "UNRESOLVED_RCCR_STATE"),
-    "EXPOSURE_AND_INDEPENDENCE": ("DMRP_EXPOSURE_INFLUENCE_RECORDS", "INDEPENDENCE_UNKNOWN"),
-    "VALIDATION_ACCESS": ("PROTECTED_RESOURCE_AUTHORITY", "ACCESS_UNRESOLVED"),
-    "P1CDI_IDENTITY_ACTIVITY_CURRENTNESS_LINEAGE": ("P1CDI", "UNRESOLVED_CURRENTNESS"),
-    "CONSOLE_SOURCE_ADMISSION": ("RESEARCH_CONSOLE", "NOT_ADMITTED"),
-    "TOPOLOGY_DEEP_LINK": ("SYSTEM_ATLAS", "UNRESOLVED_REFERENCE"),
-}
 _STATES = frozenset({"RESOLVED", "UNRESOLVED", "CONFLICT", "UNAVAILABLE"})
+_REGISTRY_PATH = (
+    Path(__file__).resolve().parents[4]
+    / "registries/research_operations/p1cdi/source_owner_registry.json"
+)
+
+
+def _load_source_policy() -> tuple[dict[str, tuple[str, str]], tuple[str, ...]]:
+    registry = json.loads(_REGISTRY_PATH.read_text(encoding="utf-8"))
+    if registry.get("schema") != "p1cdi-source-owner-registry/v0.1":
+        raise RuntimeError("P1CDI source-owner registry schema mismatch")
+    if registry.get("status") != "CLOSED":
+        raise RuntimeError("P1CDI source-owner registry must be CLOSED")
+    rows = registry.get("entries")
+    predicates = registry.get("currentness_required_predicates")
+    if not isinstance(rows, list) or not isinstance(predicates, list):
+        raise RuntimeError("P1CDI source-owner registry is incomplete")
+    policy: dict[str, tuple[str, str]] = {}
+    for row in rows:
+        if not isinstance(row, Mapping) or set(row) != {
+            "predicate", "owner", "missing", "p1cdi_write"
+        }:
+            raise RuntimeError("P1CDI source-owner registry entry is invalid")
+        predicate = row["predicate"]
+        owner = row["owner"]
+        missing = row["missing"]
+        if not all(type(value) is str and value for value in (predicate, owner, missing)):
+            raise RuntimeError("P1CDI source-owner registry values must be non-empty strings")
+        if predicate in policy:
+            raise RuntimeError(f"duplicate P1CDI owner predicate: {predicate}")
+        policy[predicate] = (owner, missing)
+    if any(type(predicate) is not str or predicate not in policy for predicate in predicates):
+        raise RuntimeError("P1CDI currentness predicate is not registry-bound")
+    if len(predicates) != len(set(predicates)):
+        raise RuntimeError("P1CDI currentness predicates must be unique")
+    required_owners = tuple(sorted(policy[predicate][0] for predicate in predicates))
+    if len(required_owners) != len(set(required_owners)):
+        raise RuntimeError("P1CDI currentness owners must be unique")
+    return policy, required_owners
+
+
+_SOURCE_POLICY, REQUIRED_CURRENTNESS_OWNERS = _load_source_policy()
 
 
 def _normalized_evidence(evidence: Mapping[str, Any]) -> dict[str, Any]:
     required = {"predicate", "owner", "source_ref", "generation_ref", "source_sha256", "resolution_state"}
     if set(evidence) != required:
         raise ValueError("source evidence must use the exact closed field set")
-    if evidence["resolution_state"] not in _STATES:
-        raise ValueError(f"invalid resolution_state: {evidence['resolution_state']}")
-    if not _SHA256.fullmatch(str(evidence["source_sha256"])):
-        raise ValueError("source_sha256 must be lowercase SHA-256")
+    _require_nonempty_string(evidence["predicate"], "predicate")
+    _validate_source_identity(evidence)
     return {name: evidence[name] for name in sorted(required)}
+
+
+def _require_nonempty_string(value: Any, field: str) -> None:
+    if type(value) is not str or not value:
+        raise ValueError(f"{field} must be a non-empty string")
+
+
+def _validate_source_identity(source: Mapping[str, Any]) -> None:
+    _require_nonempty_string(source["owner"], "owner")
+    _require_nonempty_string(source["source_ref"], "source_ref")
+    generation_ref = source["generation_ref"]
+    if generation_ref is not None:
+        _require_nonempty_string(generation_ref, "generation_ref")
+    source_sha256 = source["source_sha256"]
+    if type(source_sha256) is not str or not _SHA256.fullmatch(source_sha256):
+        raise ValueError("source_sha256 must be a lowercase SHA-256 string")
+    resolution_state = source["resolution_state"]
+    if type(resolution_state) is not str or resolution_state not in _STATES:
+        raise ValueError(f"invalid resolution_state: {resolution_state}")
+
+
+def normalize_source_frontier_entry(raw: Mapping[str, Any]) -> dict[str, Any]:
+    """Return one exact schema-compatible frontier entry without coercion."""
+
+    required = {"owner", "source_ref", "generation_ref", "source_sha256", "resolution_state"}
+    if set(raw) != required:
+        raise ValueError("source frontier entries must use the exact closed field set")
+    _validate_source_identity(raw)
+    return {key: raw[key] for key in sorted(required)}
 
 
 def resolve_owner_predicate(
@@ -41,7 +100,8 @@ def resolve_owner_predicate(
     if predicate not in _SOURCE_POLICY:
         raise ValueError(f"unknown owner predicate: {predicate}")
     expected_owner, missing_reason = _SOURCE_POLICY[predicate]
-    rows = [_normalized_evidence(item) for item in evidence if item.get("predicate") == predicate]
+    normalized_evidence = [_normalized_evidence(item) for item in evidence]
+    rows = [item for item in normalized_evidence if item["predicate"] == predicate]
     wrong_owner = [item for item in rows if item["owner"] != expected_owner]
     if wrong_owner:
         return _resolution(predicate, expected_owner, "CONFLICT", None, ["OWNER_SEMANTIC_CONFLICT"])
@@ -53,7 +113,7 @@ def resolve_owner_predicate(
     if not resolved:
         return _resolution(predicate, expected_owner, "UNRESOLVED", None, [missing_reason])
     identities = {
-        (str(item["source_ref"]), str(item["generation_ref"]), str(item["source_sha256"]))
+        (item["source_ref"], item["generation_ref"], item["source_sha256"])
         for item in resolved
     }
     if len(identities) != 1 or len(resolved) != len(rows):
@@ -87,14 +147,7 @@ def build_source_frontier(
         raise ValueError("frontier_id, resolved_at, and owner_entries are required")
     normalized: list[dict[str, Any]] = []
     for raw in owner_entries:
-        required = {"owner", "source_ref", "generation_ref", "source_sha256", "resolution_state"}
-        if set(raw) != required:
-            raise ValueError("source frontier entries must use the exact closed field set")
-        if raw["resolution_state"] not in _STATES:
-            raise ValueError(f"invalid resolution_state: {raw['resolution_state']}")
-        if not _SHA256.fullmatch(str(raw["source_sha256"])):
-            raise ValueError("source_sha256 must be lowercase SHA-256")
-        normalized.append({key: raw[key] for key in sorted(required)})
+        normalized.append(normalize_source_frontier_entry(raw))
     normalized.sort(
         key=lambda item: (
             str(item["owner"]),
@@ -104,13 +157,36 @@ def build_source_frontier(
             str(item["resolution_state"]),
         )
     )
-    digest = canonical_sha256(normalized)
+    owners = [item["owner"] for item in normalized]
+    duplicate_required_owners = sorted(
+        owner for owner in REQUIRED_CURRENTNESS_OWNERS if owners.count(owner) > 1
+    )
+    missing_required_owners = sorted(set(REQUIRED_CURRENTNESS_OWNERS) - set(owners))
+    states = {item["resolution_state"] for item in normalized}
+    if duplicate_required_owners or "CONFLICT" in states:
+        completeness_state = "CONFLICT"
+        reason_codes = ["OWNER_SEMANTIC_CONFLICT"]
+    elif missing_required_owners or states - {"RESOLVED"}:
+        completeness_state = "UNRESOLVED"
+        reason_codes = ["UNRESOLVED_CURRENTNESS"]
+    else:
+        completeness_state = "COMPLETE"
+        reason_codes = []
+    identity = {
+        "required_owners": list(REQUIRED_CURRENTNESS_OWNERS),
+        "owner_entries": normalized,
+        "missing_required_owners": missing_required_owners,
+        "duplicate_required_owners": duplicate_required_owners,
+        "completeness_state": completeness_state,
+        "reason_codes": reason_codes,
+    }
+    digest = canonical_sha256(identity)
     return {
         "record_type": "SourceFrontierManifest",
         "schema_version": "0.1",
         "frontier_id": frontier_id,
         "resolved_at": resolved_at,
-        "owner_entries": normalized,
+        **identity,
         "frontier_sha256": digest,
         "authority_effect": "NONE",
     }

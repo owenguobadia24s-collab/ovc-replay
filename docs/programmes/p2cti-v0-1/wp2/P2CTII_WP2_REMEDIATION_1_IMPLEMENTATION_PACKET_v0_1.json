@@ -1,0 +1,118 @@
+{
+  "schema": "ovc-p2ctii-wp2-remediation-implementation-packet/v0.1",
+  "programme_id": "OVC-P2CTI-CONFORMANCE-v0.1",
+  "packet_id": "P2CTII-WP2-REMEDIATION-1",
+  "status": "IMPLEMENTED_AWAITING_EXACT_FINAL_ASSURANCE",
+  "baseline_main": "17e448c2598bcbe70cb07c780f82ad6b5d1d0335",
+  "baseline_tree": "a843009a56297f556157f1187f61ef9f0251174d",
+  "branch": "agent/p2ctii-wp2-remediation-1-20260818",
+  "authority": "DELEGATED_MECHANICAL_REMEDIATION_UNDER_P2CTII_G0_AND_RECORDED_G2_ALG_BLOCK",
+  "authority_delta": "NONE",
+  "immutable_block_review": {
+    "merge_commit": "dd359448d4c23b617db187297ccad824377dcfdd",
+    "packet": "docs/programmes/p2cti-v0-1/wp2/P2CTII_G2_ALG_CONSOLIDATED_REVIEW_PACKET_v0_1.json",
+    "packet_sha256": "d44e1d45e291e3db0932df2b8103b6e3d74941174747013d38f8716da077ba47",
+    "decision": "BLOCK",
+    "preserved_unchanged": true
+  },
+  "remediated_blockers": [
+    "P2CTII_G2_ALG_BLOCK_001_REQUIRED_OWNER_COMPLETENESS_NOT_BOUND",
+    "P2CTII_G2_ALG_BLOCK_002_RUNTIME_FRONTIER_SCHEMA_ENFORCEMENT_GAP"
+  ],
+  "bounded_implementation": {
+    "required_owner_contract": {
+      "contract_id": "P2CTI_HIGH_RISK_CURRENTNESS_FRONTIER_v0_1",
+      "required_owner_programmes": ["RCCR", "RESEARCH_OPERATIONS_DMRP_PATH2"],
+      "optional_owner_programmes": ["DMRP", "EC1"],
+      "source": "registries/research_operations/p2cti/P2CTI_OWNER_SOURCE_REGISTRY_v0_1.json",
+      "missing_required_owner": "UNRESOLVED",
+      "conflicting_owner_evidence": "CONFLICT",
+      "historical_fallback": "FORBIDDEN"
+    },
+    "runtime_schema_enforcement": [
+      "EXACT_CLOSED_TOP_LEVEL_FRONTIER_FIELDS",
+      "EXACT_SCHEMA_AND_OBJECT_CONSTANTS",
+      "EXACT_FRONTIER_CONTRACT_ID",
+      "EXACT_REQUIRED_OWNER_SET",
+      "EXACT_BINDING_FIELDS_AND_TYPES",
+      "REGISTERED_OWNER_IDENTIFIERS_ONLY",
+      "REGISTRY_BOUND_REQUIRED_BOOLEAN",
+      "NONEMPTY_BINDINGS",
+      "SHA256_AND_FRONTIER_ID_FORMATS",
+      "COMPLETENESS_RECOMPUTED_FROM_BINDINGS",
+      "CONTENT_AND_SEMANTIC_IDENTITY_RECOMPUTED",
+      "INVALID_FRONTIER_TYPED_UNRESOLVED_NO_POINTER"
+    ]
+  },
+  "permanent_regressions": {
+    "path": "tests/research_operations/p2cti/test_p2ctii_wp2_remediation_1.py",
+    "exact_blocking_regressions": 2,
+    "total_cases": 17,
+    "neighboring_cases": [
+      "EXACTLY_ONE_REQUIRED_OWNER_OMITTED",
+      "MULTIPLE_REQUIRED_OWNERS_OMITTED",
+      "OPTIONAL_OWNER_OMITTED",
+      "ALL_REQUIRED_OWNERS_PRESENT",
+      "INVALID_OWNER_IDENTIFIER_OR_TYPE",
+      "SCHEMA_INVALID_TWO_POINT_BYTE_EQUAL",
+      "VALID_COMPLETE_EQUAL",
+      "VALID_COMPLETE_ADVANCE_BETWEEN_CHECKS",
+      "INVALID_OR_INCOMPLETE_HISTORICAL_FALLBACK",
+      "SOURCE_ORDER_PERMUTATION",
+      "DUPLICATED_OR_CONFLICTING_OWNER_RECORDS",
+      "CONVENIENCE_FIELD_NON_SEMANTICS"
+    ]
+  },
+  "implementation_hashes_sha256": {
+    "src/ovc/research_operations/p2cti/sources.py": "1a4021adde29687ae52361536c3fa201c0eb86b3a49fe27494c59d3d1d15c82e",
+    "src/ovc/research_operations/p2cti/currentness.py": "669f3f290da01c920932e3c4a1706099726e5d385110d87bdf3232dedd1317a9",
+    "registries/research_operations/p2cti/P2CTI_OWNER_SOURCE_REGISTRY_v0_1.json": "364c5c6cbc8f43ef0c04b8f61e9b96c672b60094a45c7a55048cdeeb87080eae",
+    "schemas/research_operations/p2cti/p2cti_source_frontier_v0_1.schema.json": "878217867fa9731651a1d344e8e21259aa80ead75aac47df41e32ad2f43d92ea",
+    "tests/research_operations/p2cti/test_p2ctii_wp2_remediation_1.py": "b96db9339f63cc36e5196430b6fd38e9a942e79a2ea784cba577eab2696ead57"
+  },
+  "local_assurance": {
+    "all_p2ctii_wp1_wp2_tests": "PASS_35_OF_35",
+    "original_declared_g2_alg_matrix": "PASS_11_OF_11",
+    "blocking_adversarial_regressions": "PASS_2_OF_2",
+    "remediation_regressions": "PASS_17_OF_17",
+    "clean_process_count": 2,
+    "clean_process_output_sha256": "314a8611b623286f8257efb77d22ba88757caa6850d1335b2c9d9269f03621a6",
+    "clean_process_byte_equal": true,
+    "json_parse": "PASS",
+    "compileall": "PASS",
+    "git_diff_check": "PASS",
+    "repository_wide_windows_attempt": "ENVIRONMENT_BLOCKED_RESOURCE_MODULE_UNAVAILABLE",
+    "repository_wide_windows_affected_out_of_scope_modules": [
+      "tests/opt_b/c2p/v0_2/test_c2p2_rs0_runtime_binding.py",
+      "tests/opt_b/c2p/v0_2/test_c2p2_rs0_source_materialisation.py",
+      "tests/research_operations/mcarb/test_mcarbi_wp8_stage_a_runner.py",
+      "tests/srfd/test_srfdi_wp10a_real_capacity_harness.py"
+    ]
+  },
+  "required_exact_final_assurance": [
+    "ALL_P2CTII_WP1_WP2_TESTS",
+    "ORIGINAL_DECLARED_G2_ALG_MATRIX",
+    "BOTH_BLOCKING_ADVERSARIAL_REGRESSIONS",
+    "REPOSITORY_WIDE_CI",
+    "PYTEST_UNITTEST_PARITY",
+    "RUNNER_PARITY",
+    "PRVITR_VIT_ROUTING_PREFLIGHT",
+    "OVC_PROFILE_AND_TIERED_ASSURANCE",
+    "GRT_EXACT_TREE",
+    "SIQ_READY",
+    "EXACT_FINAL_MERGE_READINESS"
+  ],
+  "p2ctii_g2_alg": {
+    "status": "UNRESOLVED",
+    "prior_decision": "BLOCK",
+    "fresh_conflict_free_independent_review_required": true,
+    "remediation_author_eligible_to_issue_pass": false
+  },
+  "decision_bearing_pointer": "DENIED",
+  "operational_current_pointer_publication": "DENIED_SEPARATELY_GOVERNED",
+  "observability": "DENIED",
+  "continuous_intake_writes": "DENIED",
+  "wp3_authorised": false,
+  "next_packet_on_exact_final_pass": "P2CTII-WP2-REMEDIATION-1-QA-DECISION",
+  "rollback": "Forward-supersede only this bounded remediation while preserving the immutable G2-ALG BLOCK review and all prior WP0-WP2 evidence."
+}
