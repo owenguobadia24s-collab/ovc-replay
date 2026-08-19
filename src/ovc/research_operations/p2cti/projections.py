@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
+from copy import deepcopy
 from typing import Any
 
 from ovc.research_operations.canonical import canonical_sha256
@@ -17,6 +18,12 @@ REQUIRED_ENVELOPE_FIELDS = (
 
 class ProjectionValidationError(ValueError):
     pass
+
+
+def _digest(value: str, field: str) -> str:
+    if type(value) is not str or len(value) != 64 or any(c not in "0123456789abcdef" for c in value):
+        raise ProjectionValidationError(f"{field} must be lowercase SHA-256")
+    return value
 
 
 def _require_envelope(record: Mapping[str, Any]) -> None:
@@ -57,7 +64,7 @@ def build_console_projection(
         "visibility_state": query_result["visibility_state"],
         "completeness_state": query_result["completeness_state"],
         "warnings": sorted(set(query_result.get("warnings", []))),
-        "result": query_result.get("result"),
+        "result": deepcopy(query_result.get("result")),
         "evidence_passport_refs": refs,
         "system_atlas_deep_link": system_atlas_deep_link,
         "read_only": True,
@@ -80,11 +87,8 @@ def build_source_admission_packet(
         raise ProjectionValidationError("producer authority references are required")
     if type(source_frontier_id) is not str or not source_frontier_id.startswith("p2cti:frontier:"):
         raise ProjectionValidationError("source_frontier_id must be exact P2CTI frontier identity")
-    digest = source_frontier_id.rsplit(":", 1)[1]
-    if len(digest) != 64:
-        raise ProjectionValidationError("source frontier digest is invalid")
-    if type(projection_evidence_sha256) is not str or len(projection_evidence_sha256) != 64:
-        raise ProjectionValidationError("projection evidence SHA-256 is required")
+    _digest(source_frontier_id.rsplit(":", 1)[1], "source_frontier_id")
+    _digest(projection_evidence_sha256, "projection_evidence_sha256")
 
     body = {
         "schema": "ovc-p2ctii-research-console-source-admission-packet/v0.1",
