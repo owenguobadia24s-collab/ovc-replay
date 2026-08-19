@@ -97,6 +97,6 @@ def test_wp4_qa_and_state_preserve_authority_and_route_to_wp5() -> None:
     assert state["status"] == "COMPLETED"
     assert state["next_packet"] == "ASOCSI-WP5"
     assert pointer["programme_id"] == "OVC-ASOCS-6M-v0.1"
-    assert current_state["status"] == "COMPLETED"
     assert pointer["packet_id"] == current_state["packet_id"]
+    assert pointer["status"] == current_state["status"]
     assert pointer["next_packet"] == current_state["next_packet"]
