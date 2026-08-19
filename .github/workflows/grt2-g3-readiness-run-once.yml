@@ -1,0 +1,48 @@
+name: GRT2 G3 readiness one-off exact-candidate run
+
+on:
+  push:
+    branches:
+      - diagnostic/grt2-g3-readiness-92963
+
+permissions:
+  contents: read
+  checks: read
+
+jobs:
+  readiness:
+    name: GRT2 G3 full readiness evidence exact candidate 92963
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 92963aadab2f369acae96a16e525339833d00e76
+          fetch-depth: 0
+          show-progress: false
+      - name: Fetch current main for exact historical replay
+        run: git fetch --no-tags origin main:refs/remotes/origin/main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install test dependencies
+        run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
+      - name: Execute complete fail-closed G3 readiness programme
+        id: readiness
+        shell: bash
+        run: |
+          set +e
+          PYTHONPATH=src:. python3 scripts/governance/grt_v0_2/qualify_g3_readiness.py
+          status=$?
+          echo "readiness_exit=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+      - name: Upload immutable G3 readiness evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: grt2-g3-readiness-evidence-92963
+          path: artifacts/grt2-g3-readiness-evidence.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Enforce G3 readiness result
+        shell: bash
+        run: test "${{ steps.readiness.outputs.readiness_exit }}" -eq 0
