@@ -12,7 +12,7 @@ class T(unittest.TestCase):
  def test_profiles(self):
   for x in ('FAST','PACKET','FINAL_HEAD','OVC merge readiness'): self.assertIn(x,self.o)
  def test_runtime_concurrency(self):
-  for x in (self.t,self.o): self.assertIn('python-version: "3.11"',x); self.assertIn('cancel-in-progress: true',x)
+  for x in (self.t,self.o): self.assertIn('python-version: "3.11.15"',x); self.assertIn('cancel-in-progress: true',x)
  def test_inventory_method(self): self.assertEqual(self.r['inventory_method'],'ALL_WORKFLOW_FILES_SCANNED_AT_VALIDATION_TIME')
  def test_no_run_ids(self): self.assertNotIn('"run_id"',(ROOT/'docs/releases/development-acceleration-v0-2/da2-wp1/DA2_G1_IMPLEMENTATION_PACKET.json').read_text())
  def test_fail_closed_ruleset(self):

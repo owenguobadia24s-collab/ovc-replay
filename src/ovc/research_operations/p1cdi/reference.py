@@ -374,7 +374,9 @@ def assign_series_generation(
     """Resolve exact rediscovery or create one immutable, deterministic generation."""
 
     _require_string(owner_semantic_binding, "owner_semantic_binding")
-    _parse_time(source_first_valid_time, "source_first_valid_time")
+    candidate_first_valid_time = _parse_time(
+        source_first_valid_time, "source_first_valid_time"
+    )
     candidate = build_semantic_projection(
         generation_id="p1:candidate:unassigned",
         owner_semantic_binding=owner_semantic_binding,
@@ -406,6 +408,14 @@ def assign_series_generation(
             raise ReferenceEngineError("semantic successor requires one exact predecessor generation")
         _require_string(source_explicit_successor_ref, "source_explicit_successor_ref")
         predecessor = matches[0]
+        predecessor_first_valid_time = _parse_time(
+            predecessor[1]["source_first_valid_time"],
+            "predecessor.source_first_valid_time",
+        )
+        if candidate_first_valid_time <= predecessor_first_valid_time:
+            raise ReferenceEngineError(
+                "semantic successor source_first_valid_time must move strictly forward"
+            )
         series_id = predecessor[0]["series_id"]
         series = predecessor[0]
         resolution = "SEMANTIC_SUCCESSOR"
@@ -736,12 +746,20 @@ def stage_correspondence(
             raise ReferenceEngineError(f"unregistered correspondence plane value: {field}")
     left_projection = _validate_projection(left_projection)
     right_projection = _validate_projection(right_projection)
+    _validate_projection_generation_binding(left_projection, left_generation_record)
+    _validate_projection_generation_binding(right_projection, right_generation_record)
     left_generation = left_projection["generation_id"]
     right_generation = right_projection["generation_id"]
+    reconciled_evidence = _reconcile_source_record_groups(
+        {
+            "dmrp": independence_evidence,
+            "planes": plane_evidence_records,
+        }
+    )
     resolved_planes, plane_evidence_refs = _resolve_plane_evidence(
         left_generation_id=left_generation,
         right_generation_id=right_generation,
-        evidence_records=plane_evidence_records,
+        evidence_records=reconciled_evidence["planes"],
         as_of_time=as_of_time,
     )
     for plane, resolved_value in resolved_planes.items():
@@ -750,7 +768,7 @@ def stage_correspondence(
     independence = resolve_dmrp_independence(
         left_generation_id=left_generation,
         right_generation_id=right_generation,
-        evidence_records=independence_evidence,
+        evidence_records=reconciled_evidence["dmrp"],
         as_of_time=as_of_time,
     )
     if planes["independence_state"] != independence["state"]:
@@ -825,8 +843,6 @@ def stage_correspondence(
     }
     record = None
     if not unresolved_planes:
-        _validate_projection_generation_binding(left_projection, left_generation_record)
-        _validate_projection_generation_binding(right_projection, right_generation_record)
         record = {
             "record_type": "P1DistinctionCorrespondenceRecord",
             "schema_version": "0.1",

@@ -1,4 +1,3 @@
-from __future__ import annotations
 from pathlib import Path
 import unittest
 
@@ -7,6 +6,7 @@ WORKFLOW = ROOT / ".github/workflows/ovc-tiered-tests.yml"
 TESTS_WORKFLOW = ROOT / ".github/workflows/tests.yml"
 LEASE_RUNNER = ROOT / "tools/ci/ovc_run_with_main_lease.py"
 ADMISSION_TOOL = ROOT / "tools/ci/prvitr_live_admission.py"
+ROUTING_TOOL = ROOT / "tools/ci/vit_routing_preflight.py"
 CONSOLE_PACKAGE = ROOT / "tests/research_console_vnext/__init__.py"
 
 
@@ -16,6 +16,7 @@ class ParallelIntegrationLaneTests(unittest.TestCase):
         self.tests_workflow = TESTS_WORKFLOW.read_text(encoding="utf-8")
         self.lease_runner = LEASE_RUNNER.read_text(encoding="utf-8")
         self.admission = ADMISSION_TOOL.read_text(encoding="utf-8")
+        self.routing = ROUTING_TOOL.read_text(encoding="utf-8")
 
     def test_only_existing_da2_pr_workflows_are_used(self):
         workflow_dir = ROOT / ".github/workflows"
@@ -32,67 +33,58 @@ class ParallelIntegrationLaneTests(unittest.TestCase):
         self.assertIn("cancel-in-progress: true", self.workflow)
         self.assertIn("cancel-in-progress: true", self.tests_workflow)
 
-    def test_single_global_integration_lane_remains(self):
+    def test_single_physical_writer_lane_remains_but_only_after_qualification(self):
         self.assertEqual(self.workflow.count("group: ovc-main-integration-lane-v1"), 1)
-        self.assertIn("cancel-in-progress: false", self.workflow)
+        readiness = self.workflow.split("\n  merge-readiness:\n", 1)[1]
+        self.assertIn("needs: [profile, siq-ready-admission]", readiness)
+        self.assertIn("group: ovc-main-integration-lane-v1", readiness)
+        self.assertIn("Acquire one-writer lease and late-bind current physical main", readiness)
 
-    def test_base_independent_required_work_is_outside_lease(self):
+    def test_base_independent_required_work_is_outside_physical_binding(self):
         self.assertNotIn("final-integration-window-admitted", self.tests_workflow)
         self.assertNotIn("OVC_LEASE_REQUIRED", self.tests_workflow)
         self.assertNotIn("tools/ci/ovc_run_with_main_lease.py", self.tests_workflow)
         self.assertIn("BASE_INDEPENDENT assurance", self.tests_workflow)
         self.assertIn("BASE_INDEPENDENT assurance", self.workflow)
+        self.assertIn("OVC_READY_PHYSICAL_BASE_BINDING=NONE", self.workflow)
 
-    def test_pip_assurance_identity_precedes_placement_routing(self):
+    def test_payload_assurance_precedes_routing_without_live_base_binding(self):
         assurance = "python3 tools/ci/vit_assurance_preflight.py"
-        placement = "python3 tools/ci/vit_routing_preflight.py"
+        routing = "python3 tools/ci/vit_routing_preflight.py"
         self.assertIn(assurance, self.tests_workflow)
-        self.assertIn(placement, self.tests_workflow)
-        self.assertLess(self.tests_workflow.index(assurance), self.tests_workflow.index(placement))
+        self.assertIn(routing, self.tests_workflow)
+        self.assertLess(self.tests_workflow.index(assurance), self.tests_workflow.index(routing))
+        self.assertNotIn("VIT_REANCHOR_REQUIRED", self.routing)
+        self.assertIn("PLACEMENT_NON_AUTHORITATIVE", self.routing)
+        self.assertIn("NO_PHYSICAL_BASE_BINDING", self.routing)
 
-    def test_ready_admission_binds_exact_assurance_generation(self):
-        self.assertIn("SIQ READY admission", self.workflow)
-        self.assertIn("prvitr_live_admission.py ready", self.workflow)
-        self.assertIn("assurance_generation_id", self.workflow)
-        self.assertIn("OVC_SIQ_READY_ADMITTED", self.admission)
-        self.assertIn("IntegrationAssuranceGeneration", self.admission)
+    def test_ready_admission_binds_stable_pip_not_main(self):
+        self.assertIn("OVC_VIT_QUALIFIED_PAYLOAD_READY", self.admission)
+        ready = self.workflow.split("\n  siq-ready-admission:\n", 1)[1].split("\n  merge-readiness:\n", 1)[0]
+        self.assertIn("pip_id", ready)
+        self.assertNotIn("base_sha:", ready)
+        self.assertNotIn("merge-base --is-ancestor", ready)
 
-    def test_base_sensitive_lease_is_late_and_single(self):
+    def test_late_placement_is_ephemeral_and_exact_final_runs_on_it(self):
         readiness = self.workflow.split("\n  merge-readiness:\n", 1)[1]
-        self.assertIn("needs: [profile, siq-ready-admission]", readiness)
-        self.assertIn("group: ovc-main-integration-lane-v1", readiness)
-        self.assertIn("prvitr_live_admission.py acquire", readiness)
-        self.assertIn("prvitr_live_admission.py finalize", readiness)
-        self.assertIn("IntegrationAdmissionReceipt", self.admission)
+        self.assertIn("placement_commit_sha", readiness)
+        self.assertIn("placement_tree_sha", readiness)
+        self.assertIn("git checkout --detach", readiness)
+        self.assertIn("LateBindingPlacement", self.admission)
+        self.assertIn('"merge-tree", "--write-tree"', self.admission)
+        self.assertNotIn("resolve_vit_train_predecessor", self.admission)
+        self.assertNotIn("PREDECESSOR_TIMEOUT_SECONDS", self.admission)
 
-    def test_stable_main_guards_remain_effective_and_local_git_is_normative(self):
+    def test_main_movement_no_longer_demands_new_candidate(self):
+        self.assertIn("discard the ephemeral placement and retry the same qualified payload", self.admission)
+        self.assertNotIn("PLACEMENT_RECOMPUTE_ONLY selective renewal is required", self.admission)
+        self.assertNotIn("candidate does not contain acquired", self.admission)
+
+    def test_stable_main_guard_remains_during_exact_final_only(self):
         self.assertIn("OVC_REQUIRED_ASSURANCE_LEASE_INVALIDATED", self.lease_runner)
-        self.assertIn("OVC_RECONCILE_REQUIRED", self.admission)
         self.assertIn("OVC_BASE_MOVED_DURING_READINESS", self.admission)
-        self.assertIn("git merge-base --is-ancestor", self.workflow)
-        self.assertIn('["git", "merge-base", "--is-ancestor"', self.admission)
-        self.assertNotIn("compareCommits", self.workflow)
-        self.assertNotIn("compareCommits", self.admission)
-
-    def test_vit_predecessor_disposition_advances_successor(self):
-        for marker in [
-            "final_integration_predecessor_lease_wait_ms",
-            "OVC_FINAL_INTEGRATION_VIT_TRAIN_PREDECESSOR_HELD",
-            "OVC_FINAL_INTEGRATION_VIT_TRAIN_PREDECESSOR_MERGED",
-            "OVC_FINAL_INTEGRATION_VIT_TRAIN_PREDECESSOR_RELEASED_UNMERGED",
-            "OVC_FINAL_INTEGRATION_VIT_TRAIN_PREDECESSOR_INVALIDATED",
-        ]:
-            self.assertIn(marker, self.admission)
-
-    def test_predecessor_is_vit_placement_not_pr_number_or_ready_job_order(self):
-        self.assertIn("resolve_vit_train_predecessor", self.admission)
-        self.assertIn("main_tree == expected_tree", self.admission)
-        self.assertIn("OVC_FINAL_INTEGRATION_NO_VIT_PLACEMENT_PREDECESSOR", self.admission)
-        self.assertNotIn("if number>=pr_number", self.admission.replace(" ", ""))
-        self.assertNotIn("_exact_merge_job_pass", self.admission)
-        self.assertNotIn("sorted(_open_pulls", self.admission)
-        self.assertNotIn("checks.listForRef", self.workflow)
-        self.assertNotIn("latestNamedRun", self.workflow)
+        self.assertIn("OVC_LEASE_BASE_SHA", self.workflow)
+        self.assertNotIn("Prove candidate contains acquired current main", self.workflow)
 
     def test_terminal_disposition_does_not_expand_merge_authority(self):
         self.assertIn("permissions:\n  contents: read\n  checks: read\n  pull-requests: read", self.workflow)

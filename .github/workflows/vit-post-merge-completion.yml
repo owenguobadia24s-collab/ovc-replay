@@ -51,4 +51,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           PYTHONPATH: src;.
         run: |
-          python tools/ci/vit_post_merge_completion.py --repo-root . --merge-sha "$env:OVC_VIT_RECOVERY_MERGE_SHA"
+          python tools/ci/vit_post_merge_completion_late_binding.py `
+            --repo-root . `
+            --merge-sha "$env:OVC_VIT_RECOVERY_MERGE_SHA" `
+            --recovery-manifest registries/development/skills/VIT_POST_MERGE_RECOVERY_REQUESTS_v0_1.json
