@@ -39,6 +39,8 @@ def test_cers_ps_wp0_remains_preserved_as_preactivation_state_advances():
     state10 = load("registries/implementation/dsai3v_cers_v0_1/OVC_DSAI3V_CERS_STATE_v0_10.json")
     assert state10["supersedes_state"] == "OVC_DSAI3V_CERS_STATE_v0_9.json"
     assert state10["current_gate"] == "CERS-PS-G1"
+    assert state10["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
+    assert state10["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
     wp0 = next(row for row in state10["packet_register"] if row["packet_id"] == "CERS-PS-WP0")
     wp1 = next(row for row in state10["packet_register"] if row["packet_id"] == "CERS-PS-WP1")
     activation = next(row for row in state10["packet_register"] if row["packet_id"] == "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION")
@@ -48,12 +50,8 @@ def test_cers_ps_wp0_remains_preserved_as_preactivation_state_advances():
     assert activation["authority_required"] == "OPERATOR_REQUIRED"
 
     pointer = load("registries/implementation/dsai3v_cers_v0_1/CURRENT_STATE_POINTER.json")
-    assert pointer["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
-    assert pointer["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
     current = load(pointer["current_state"])
     assert current["plan_id"] == "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED"
-    assert current["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
-    assert current["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
     assert current["packet_id"] in {
         "CERS-PS-WP1",
         "CERS-PS-WP2",
@@ -62,3 +60,23 @@ def test_cers_ps_wp0_remains_preserved_as_preactivation_state_advances():
         "CERS-PS-WP5",
         "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
     }
+
+    if current.get("persistent_run") == "ACTIVE":
+        assert current["supersedes_state"] == "OVC_DSAI3V_CERS_STATE_v0_16.json"
+        assert pointer["status"] == "COMPLETED"
+        assert pointer["decision"] == "PASS"
+        assert pointer["persistent_general_dispatch"] == "ACTIVE_EXACT_ADMITTED_SCOPE_ONLY"
+        assert pointer["post_pilot_dispatch_state"] == "RUN"
+        assert current["persistent_general_dispatch"] == "ACTIVE_EXACT_ADMITTED_SCOPE_ONLY"
+        assert current["post_pilot_dispatch_state"] == "RUN"
+        assert current["activation_gate"]["decision"] == "PASS"
+        assert current["activation_gate"]["admitted_programme_count"] == 1
+        assert current["future_programme_auto_admission"] is False
+        assert current["main_write_capability"] == "NONE"
+        assert current["merge_capability"] == "NONE"
+        assert current["reserved_authority_unchanged"] is True
+    else:
+        assert pointer["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
+        assert pointer["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
+        assert current["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
+        assert current["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
