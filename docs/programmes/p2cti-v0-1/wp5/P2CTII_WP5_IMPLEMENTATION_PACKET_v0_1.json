@@ -1,0 +1,50 @@
+{
+  "schema": "ovc-p2ctii-wp5-implementation-packet/v0.1",
+  "programme_id": "OVC-P2CTI-CONFORMANCE-v0.1",
+  "packet_id": "P2CTII-WP5",
+  "plan_id": "OVC-P2CTI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1",
+  "status": "IMPLEMENTED_AWAITING_EXACT_HEAD_QA",
+  "purpose": "Synthetic intake, DMRP triage and advisory work lifecycle machinery with no durable write activation.",
+  "prerequisites": [
+    "P2CTII-G4-ALG_PASS_MATERIALISATION_PENDING_PR1237",
+    "P2CTII-G0_BOUNDED_IMPLEMENTATION_AUTHORITY"
+  ],
+  "implementation": {
+    "contract": "contracts/research_operations/p2cti/P2CTI_INTAKE_WORK_CONTRACT_v0_1.md",
+    "modules": [
+      "src/ovc/research_operations/p2cti/intake.py",
+      "src/ovc/research_operations/p2cti/work.py"
+    ],
+    "fixture": "fixtures/research_operations/p2cti/P2CTII_WP5_SYNTHETIC_INTAKE_FIXTURE_v0_1.json",
+    "tests": "tests/research_operations/p2cti/test_p2ctii_wp5_intake_work.py"
+  },
+  "acceptance_conditions": [
+    "TheorySeed remains reference-only and cannot create a TheoryRecord",
+    "DMRP intake mapping is exact and unmapped dispositions fail closed to explicit review",
+    "work classes/states are closed-registry and authority-bound",
+    "queue age/effort/operator touches remain telemetry and never scientific or priority scores",
+    "deferral/abandonment/reentry preserve append-only evidence semantics",
+    "all records carry authority_effect NONE and write_activation false",
+    "deterministic input permutations produce identical logical records/projections",
+    "repository-wide and exact-head VIT/GRT/SIQ/profile/parity assurance pass"
+  ],
+  "authority_delta": "NONE",
+  "reserved_denials": [
+    "P2CTI_OBSERVABILITY",
+    "P2CTI_CONTINUOUS_INTAKE_WRITES",
+    "THEORY_SEMANTIC_FREEZE",
+    "P2_6_CANDIDATE_FORMATION",
+    "RESEARCH_CANDIDATE_GENERATION_FREEZE",
+    "OPT_C_ADMISSION",
+    "VALIDATION",
+    "PUBLICATION",
+    "PROBABILITY",
+    "RISK",
+    "EXPOSURE",
+    "TRADING",
+    "EXECUTION",
+    "AGENT_WRITE"
+  ],
+  "rollback": "Forward-supersede WP5 implementation and restore P2CTII-G4-ALG PASS as the current programme boundary. Preserve all WP5 evidence; no history rewrite.",
+  "next_packet_after_pass": "P2CTII-WP6"
+}
