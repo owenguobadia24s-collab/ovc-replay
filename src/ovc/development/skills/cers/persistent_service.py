@@ -27,6 +27,7 @@ class PersistentTimingPolicy:
 
     status: str = "MEASURE_BEFORE_ACTIVATION"
     sweep_cadence_seconds: int | None = None
+    heartbeat_cadence_seconds: int | None = None
     liveness_threshold_seconds: int | None = None
     reclaim_after_seconds: int | None = None
     provider_backoff_seconds: tuple[int, ...] = ()
@@ -35,7 +36,12 @@ class PersistentTimingPolicy:
         if self.status not in {"MEASURE_BEFORE_ACTIVATION", "FROZEN_QUALIFIED"}:
             raise ValueError("UNKNOWN_TIMING_POLICY_STATUS")
         if self.status == "FROZEN_QUALIFIED":
-            values = (self.sweep_cadence_seconds, self.liveness_threshold_seconds, self.reclaim_after_seconds)
+            values = (
+                self.sweep_cadence_seconds,
+                self.heartbeat_cadence_seconds,
+                self.liveness_threshold_seconds,
+                self.reclaim_after_seconds,
+            )
             if any(value is None or value <= 0 for value in values):
                 raise ValueError("FROZEN_TIMING_POLICY_REQUIRES_POSITIVE_MEASURED_VALUES")
             if not self.provider_backoff_seconds or any(value < 0 for value in self.provider_backoff_seconds):

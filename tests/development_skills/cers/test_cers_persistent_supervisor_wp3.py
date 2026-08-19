@@ -136,6 +136,7 @@ class PersistentSupervisorWp3Tests(unittest.TestCase):
         measured = PersistentTimingPolicy(
             status="FROZEN_QUALIFIED",
             sweep_cadence_seconds=11,
+            heartbeat_cadence_seconds=13,
             liveness_threshold_seconds=17,
             reclaim_after_seconds=23,
             provider_backoff_seconds=(1, 2, 5),
