@@ -1,0 +1,50 @@
+{
+  "schema": "ovc-cers-ovc-wide-admission-census/v1",
+  "census_id": "CERS-OVC-WIDE-ADMISSION-CENSUS-20260819",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "gate_id": "CERS-G-OVC-WIDE-ADMISSION-1",
+  "baseline_commit": "5520e887bc4d49b34bceae9130c687058ee56f27",
+  "baseline_tree": "8553b3769811b8eed9306330c433a967d6947de9",
+  "decision_time": "2026-08-19T21:15:00+01:00",
+  "disposition": "PASS_APPROVED_MAXIMAL_LAWFUL_ADMISSION_SET",
+  "admitted": [
+    {"programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1", "root": "registries/implementation/dsai3v_cers_v0_1/CURRENT_STATE_POINTER.json", "status": "PRESERVED_ACTIVE"},
+    {"programme_id": "OVC-P2CTI-CONFORMANCE-v0.1", "root": "records/research_operations/p2cti/P2CTII_PROGRAMME_STATE_v0_1.json", "current_frontier": "P2CTII-WP9", "boundary": "PARK_AT_P2CTII-G-OBSERVABILITY-ACTIVATE_OR_ANY_OPERATOR_REQUIRED_GATE"},
+    {"programme_id": "OVC-ASOCS-6M-v0.1", "root": "registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json", "current_frontier": "ASOCSI-WP7-INFRA_AFTER_G4_PASS", "boundary": "PARK_AT_HUMAN_INPUT_OR_OPERATOR_REQUIRED_GATE"},
+    {"programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE", "root": "registries/implementation/grt_v0_2/CURRENT_STATE_POINTER.json", "current_frontier": "GRT2-G3-READINESS-EVIDENCE", "boundary": "PARK_AT_GRT2-G3"}
+  ],
+  "terminal_exclusions": [
+    "OVC-DSAI-VIT-v0.3",
+    "OVC-DSAI3V-ASYNC-ASSURANCE-CONFORMANCE-v0.1",
+    "OVC-DSAI-v0.2",
+    "OVC-PRVIT-LIVE-REMEDIATION-CONFORMANCE-v0.1"
+  ],
+  "deferred_not_admitted": [
+    {"programme_id": "OVC-P1CDI-CONFORMANCE-v0.1", "reason_codes": ["CURRENT_ROOT_AMBIGUOUS_OR_STALE_FOR_PERSISTENT_DISPATCH"], "required_resolution": "Reconcile exact current programme root before future admission."},
+    {"programme_id": "OVC-SFF-CONFORMANCE-PREREG-v0.1", "reason_codes": ["CURRENT_ROOT_STALE_FOR_PERSISTENT_DISPATCH"], "required_resolution": "Materialise/reconcile the post-WP0 programme state before future admission."},
+    {"programme_id": "OVC-EC1-PRSC-CONFORMANCE-v0.1", "reason_codes": ["CURRENT_OWNER_BOUNDARY_NO_RUNNABLE_LOW_RISK_PACKET"], "required_resolution": "Remain parked at the owner-governed EC1 challenge boundary."},
+    {"programme_id": "OVC-EC1", "reason_codes": ["HOLD_OR_RESERVED_SCIENTIFIC_BOUNDARY"], "required_resolution": "No persistent dispatch until exact owner authority creates eligible work."},
+    {"programme_id": "OVC-C2P2-RS0", "reason_codes": ["RUN_SPECIFIC_AUTHORITY_NOT_GENERIC_LOW_RISK"], "required_resolution": "Use its exact run-token/owner authority rather than generic CERS admission."},
+    {"programme_id": "OVC-SYSTEM-ATLAS", "reason_codes": ["OPERATOR_REQUIRED_ACTIVATION_BOUNDARY"], "required_resolution": "No admission benefit until a separately approved post-shadow action exists."},
+    {"programme_id": "OVC-RESEARCH-CONSOLE-VNEXT", "reason_codes": ["EXACT_CURRENT_ROOT_NOT_SUFFICIENTLY_RESOLVED"], "required_resolution": "Resolve a single machine-readable current root and owner authority surface."},
+    {"programme_id": "PLANNING_ONLY_FOLLOW_ONS", "reason_codes": ["NO_REPOSITORY_EFFECTIVE_IMPLEMENTATION_AUTHORITY"], "required_resolution": "Materialise their governing implementation/G0 authority first."}
+  ],
+  "preserved_boundaries": [
+    "EXACT_PROGRAMME_AUTHORITY_ONLY",
+    "FUTURE_PROGRAMME_AUTO_ADMISSION_FALSE",
+    "OPERATOR_REQUIRED_BOUNDARIES_PARK",
+    "VIT_SIQ_SOLE_PHYSICAL_MAIN_PATH",
+    "NO_CERS_MERGE_CAPABILITY",
+    "NO_FORCE_PUSH_OR_HISTORY_REWRITE",
+    "NO_ACTIVE_DISCOVERY_DEVELOPMENT_VALIDATION_GRANT",
+    "NO_SCIENTIFIC_OR_SEMANTIC_PROMOTION",
+    "NO_CANONICAL_OR_R2_PUBLICATION",
+    "NO_PROBABILITY_RISK_EXPOSURE_TRADING_OR_MARKET_EXECUTION"
+  ],
+  "open_work_reconciliation": [
+    {"programme_id": "OVC-P2CTI-CONFORMANCE-v0.1", "open_pr": 1247, "rule": "RECONCILE_EXISTING_DURABLE_WORK_NO_DUPLICATE_START"},
+    {"programme_id": "OVC-ASOCS-6M-v0.1", "open_pr": 1253, "rule": "RECONCILE_EXISTING_DURABLE_WORK_NO_DUPLICATE_START"},
+    {"programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE", "open_pr": 1252, "rule": "RECONCILE_EXISTING_DURABLE_WORK_NO_DUPLICATE_START_AND_PARK_AT_GRT2_G3"}
+  ],
+  "authority_effect": "UNATTENDED_INVOCATION_ADMISSION_ONLY_PROGRAMME_AUTHORITY_UNCHANGED"
+}
