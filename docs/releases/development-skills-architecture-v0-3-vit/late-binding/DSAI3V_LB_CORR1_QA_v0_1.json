@@ -1,0 +1,35 @@
+{
+  "schema": "ovc-dsai3v-late-binding-correction-qa/v1",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "packet_id": "DSAI3V-LB-CORR1-POSTMERGE-RECOVERY",
+  "baseline_main_sha_observed_at_pr_open": "74293083940a8acb366e63a95825ab427c975cf1",
+  "candidate_head_sha": "9c74824b059b25d7e1ca7b70145d532e56ce4da6",
+  "triggering_failed_run_id": 32254271958,
+  "triggering_failure": "OVC_VIT_POST_MERGE_COMPLETION_FAILED: expected one pre-write transaction freeze for PR #1227, found 0",
+  "tests_workflow": {
+    "run_id": 32256645880,
+    "vit_routing_preflight": "PASS",
+    "repository_suite": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "runner_parity": "PASS"
+  },
+  "tiered_workflow": {
+    "run_id": 32256645777,
+    "profile_assurance": "PASS_FINAL_HEAD",
+    "siq_ready": "PASS",
+    "merge_readiness": "PASS"
+  },
+  "targeted_regression_scope": [
+    "late-binding PMT reconstruction from exact-final pre-write placement/admission evidence",
+    "fail-closed missing/ambiguous marker handling",
+    "post-merge workflow route selection",
+    "bounded authority-inert recovery manifest binding"
+  ],
+  "qa_recommendation": "PASS_TO_SERIALIZED_PHYSICAL_MATERIALISATION_AND_POST_MERGE_RECEIPT_RECOVERY",
+  "blocking_findings": [],
+  "warnings": [
+    "Final external ReceiptStore proof is necessarily post-merge and remains fail-closed until the self-hosted completion workflow succeeds."
+  ],
+  "authority_delta": "NONE",
+  "rollback": "Forward-supersede only the corrected extractor/workflow binding; preserve Git history, exact-final logs and any content-addressed receipts already persisted."
+}

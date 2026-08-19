@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import base64
 import json
+import os
 from pathlib import Path
 import subprocess
 from tempfile import TemporaryDirectory
 import unittest
+from unittest.mock import patch
 
 from ovc.development.skills.siq_core import WAIT, build_queue_state, queue_head
 from ovc.development.skills.vit_apply import REFERENCE_APPLY_PROFILE
@@ -15,6 +17,7 @@ from ovc.development.skills.vit_routing import (
     UNLAWFUL,
     VIT_MANDATORY,
     build_vit_lineage_record,
+    build_vit_payload_lineage_record,
     classify_main_movement,
     validate_vit_lineage_record,
 )
@@ -26,8 +29,8 @@ REGISTER = ROOT / "registries/development/skills/VIT_ROUTING_COVERAGE_REGISTER_v
 AUDIT = ROOT / "docs/releases/development-skills-architecture-v0-3-vit/universal-routing/DSAI3V_VIT_ROUTING_AUDIT_v0_1.json"
 
 
-def lineage_record(programme: str = "PROGRAMME", packet: str = "PACKET", *, predecessor: str = "a" * 40, result: str = "b" * 40, changes: list[dict] | None = None) -> dict:
-    pip = {
+def pip_payload(programme: str = "PROGRAMME", packet: str = "PACKET", changes: list[dict] | None = None) -> dict:
+    return {
         "schema_version": "packet-integration-payload/v0.1",
         "programme_id": programme,
         "packet_id": packet,
@@ -36,10 +39,13 @@ def lineage_record(programme: str = "PROGRAMME", packet: str = "PACKET", *, pred
         "dependency_frontier_id": "3" * 64,
         "completion_transition": {"status": "COMPLETED"},
     }
+
+
+def lineage_record(programme: str = "PROGRAMME", packet: str = "PACKET", *, predecessor: str = "a" * 40, result: str = "b" * 40, changes: list[dict] | None = None) -> dict:
     return build_vit_lineage_record(
         programme_id=programme,
         packet_id=packet,
-        pip_identity_payload=pip,
+        pip_identity_payload=pip_payload(programme, packet, changes),
         train_generation_id="TRAIN-1",
         ordinal=1,
         predecessor_tree_sha=predecessor,
@@ -85,12 +91,22 @@ class Dsai3vUniversalRoutingTests(unittest.TestCase):
         with self.assertRaises(VitContractError):
             validate_vit_lineage_record(tampered)
 
-    def test_unrelated_main_advance_is_zero_payload_rebuild(self) -> None:
+    def test_payload_only_lineage_is_forward_default(self) -> None:
+        record = build_vit_payload_lineage_record(
+            programme_id="PROGRAMME", packet_id="PACKET", pip_identity_payload=pip_payload()
+        )
+        validated = validate_vit_lineage_record(record)
+        self.assertTrue(validated.late_binding)
+        self.assertIsNone(validated.generation_id)
+        self.assertIsNone(validated.placement_id)
+        self.assertNotIn("placement", record)
+
+    def test_unrelated_main_advance_is_zero_payload_and_zero_aa0_rebuild(self) -> None:
         pip = "d" * 64
         result = classify_main_movement(previous_pip_id=pip,current_pip_id=pip,dependency_frontier_changed=False,authority_changed=False,packet_local_defect_changed_payload=False)
         self.assertEqual(result["disposition"], "PLACEMENT_RECOMPUTE_ONLY")
         self.assertFalse(result["payload_rebuild_required"])
-        self.assertTrue(result["assurance_renewal_required"])
+        self.assertFalse(result["assurance_renewal_required"])
 
     def test_identity_bearing_packet_defect_requires_payload_rebuild(self) -> None:
         result = classify_main_movement(previous_pip_id="d"*64,current_pip_id="e"*64,dependency_frontier_changed=False,authority_changed=False,packet_local_defect_changed_payload=True)
@@ -132,19 +148,23 @@ class Dsai3vUniversalRoutingTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "MULTIPLE_SOURCES"):
             resolve_lineage_source(body, fetch_blob=lambda _: canonical_bytes(record))
 
-    def test_pr_preflight_requires_lineage_that_reproduces_exact_head_tree(self) -> None:
+    def test_pr_preflight_accepts_payload_without_requiring_live_main_placement(self) -> None:
         with TemporaryDirectory() as tmp:
             root=Path(tmp); git(root,"init","-q"); git(root,"config","user.email","vit@example.invalid"); git(root,"config","user.name","VIT Test")
             (root/"base.txt").write_text("base\n",encoding="utf-8"); git(root,"add","base.txt"); git(root,"commit","-qm","base")
-            base_sha=git(root,"rev-parse","HEAD"); base_tree=git(root,"rev-parse","HEAD^{tree}")
+            base_sha=git(root,"rev-parse","HEAD")
             (root/"payload.txt").write_text("payload\n",encoding="utf-8"); git(root,"add","payload.txt"); git(root,"commit","-qm","payload")
-            head_sha=git(root,"rev-parse","HEAD"); head_tree=git(root,"rev-parse","HEAD^{tree}"); blob=git(root,"rev-parse","HEAD:payload.txt")
+            head_sha=git(root,"rev-parse","HEAD"); blob=git(root,"rev-parse","HEAD:payload.txt")
             register_path=root/"registries/development/skills/VIT_ROUTING_COVERAGE_REGISTER_v0_1.json"; register_path.parent.mkdir(parents=True); register_path.write_text(json.dumps({"unregistered_bypass_policy":"FAIL_CLOSED","registered_pr_exceptions":[]}),encoding="utf-8")
-            record=lineage_record(predecessor=base_tree,result=head_tree,changes=[{"op":"ADD","path":"payload.txt","blob_sha":blob,"mode":"100644"}]); body=f"VIT-Lineage-B64: {b64_lineage(record)}"
+            record=build_vit_payload_lineage_record(programme_id="PROGRAMME",packet_id="PACKET",pip_identity_payload=pip_payload(changes=[{"op":"ADD","path":"payload.txt","blob_sha":blob,"mode":"100644"}]))
+            body=f"VIT-Lineage-B64: {b64_lineage(record)}"
             event={"number":1,"pull_request":{"body":body,"head":{"sha":head_sha,"ref":"feature"},"base":{"sha":base_sha,"ref":"main"}}}
-            result=check_pull_request_event(root=root,event=event); self.assertTrue(result.startswith("VIT_MANDATORY:PACKET:"))
             missing={"number":2,"pull_request":{"body":"","head":{"sha":head_sha,"ref":"feature2"},"base":{"sha":base_sha,"ref":"main"}}}
-            with self.assertRaises(RuntimeError): check_pull_request_event(root=root,event=missing)
+            with patch.dict(os.environ, {"GITHUB_ACTIONS": "false"}, clear=False):
+                result=check_pull_request_event(root=root,event=event)
+                self.assertTrue(result.startswith("VIT_MANDATORY_LATE_BINDING:PACKET:"))
+                with self.assertRaises(RuntimeError):
+                    check_pull_request_event(root=root,event=missing)
 
 
 if __name__ == "__main__":

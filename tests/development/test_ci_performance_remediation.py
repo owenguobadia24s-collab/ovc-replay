@@ -28,17 +28,18 @@ class CiPerformanceRemediationTests(unittest.TestCase):
         self.assertIn("BASE_INDEPENDENT assurance", self.tests_workflow)
         self.assertNotIn("final-integration-window-admitted", self.tests_workflow)
         self.assertIn("prvitr_live_admission.py ready", self.ready)
-        self.assertIn("OVC_SIQ_READY_ADMITTED", self.resolver)
+        self.assertIn("OVC_VIT_QUALIFIED_PAYLOAD_READY", self.resolver)
         self.assertIn("prvitr_live_admission.py acquire", self.readiness)
         self.assertIn("OVC_SIQ_BASE_SENSITIVE_LEASE_ACQUIRED", self.resolver)
         self.assertLess(self.workflow.index("\n  siq-ready-admission:\n"), self.workflow.index("\n  merge-readiness:\n"))
 
-    def test_ready_admission_rechecks_current_main_and_ancestry(self):
-        self.assertIn("OVC_RECONCILE_REQUIRED", self.resolver)
-        self.assertIn("current_main = _branch_sha(base_ref)", self.resolver)
-        self.assertIn("_is_ancestor(current_main, live_head)", self.resolver)
-        self.assertIn("git merge-base --is-ancestor", self.ready)
-        self.assertIn("Prove READY candidate contains pinned main with local Git", self.ready)
+    def test_ready_admission_is_payload_only_and_does_not_bind_current_main(self):
+        ready_body = self.resolver.split("def command_ready()", 1)[1].split("def command_acquire()", 1)[0]
+        self.assertIn("BaseIndependentAssuranceGeneration", ready_body)
+        self.assertIn("OVC_VIT_QUALIFIED_PAYLOAD_READY", ready_body)
+        self.assertNotIn("current_main = _branch_sha(base_ref)", ready_body)
+        self.assertNotIn("merge-base", ready_body)
+        self.assertIn("no physical-main predecessor is acquired during qualification", ready_body)
 
     def test_required_checks_are_fail_closed_before_ready(self):
         for check_name in ("VIT routing preflight", "tests", "pytest-unittest-parity", "runner-parity"):
@@ -52,28 +53,33 @@ class CiPerformanceRemediationTests(unittest.TestCase):
         self.assertIn("cancel-in-progress: false", self.readiness)
         self.assertIn("Run mandatory SIQ/PDC exact-final assurance inside lease", self.readiness)
         self.assertIn("prvitr_live_admission.py finalize", self.readiness)
-        self.assertIn("OVC_SIQ_BASE_SENSITIVE_LEASE_RELEASED", self.resolver)
         self.assertEqual(self.readiness.count("tools/ci/ovc_run_with_main_lease.py"), 1)
+        self.assertIn("OVC_INTEGRATION_ADMISSION_RECEIPT", self.resolver)
 
-    def test_candidate_is_reconciled_before_exact_final_assurance(self):
-        self.assertIn("git merge-base --is-ancestor", self.readiness)
-        self.assertIn("OVC_CANDIDATE_NOT_RECONCILED_TO_CURRENT_MAIN", self.readiness)
-        self.assertIn("OVC_RECONCILE_REQUIRED", self.resolver)
-        self.assertIn("OVC_READY_BASE_REFRESHED_BEFORE_FINAL_LEASE", self.resolver)
-        self.assertIn("_is_ancestor(main_snapshot, expected_head)", self.resolver)
+    def test_candidate_is_late_composed_before_exact_final_assurance(self):
+        self.assertIn('git checkout --detach "${OVC_PLACEMENT_COMMIT_SHA}"', self.readiness)
+        self.assertIn('test "$(git rev-parse "${OVC_PLACEMENT_COMMIT_SHA}^{tree}")" = "${OVC_PLACEMENT_TREE_SHA}"', self.readiness)
+        self.assertIn('["git", "merge-tree", "--write-tree", base_sha, head_sha]', self.resolver)
+        self.assertIn("VIT_LATE_BINDING_CONTENT_CONFLICT", self.resolver)
+        self.assertIn("OVC_VIT_LATE_BINDING_PLACEMENT_ACQUIRED", self.resolver)
 
-    def test_stable_main_fail_closed_checks_are_retained(self):
-        self.assertIn("OVC_RECONCILE_REQUIRED", self.resolver)
+    def test_stable_main_and_exact_placement_checks_are_fail_closed(self):
         self.assertIn("OVC_BASE_MOVED_DURING_READINESS", self.resolver)
         self.assertIn("final_main = _branch_sha(base_ref)", self.resolver)
-        self.assertIn("_is_ancestor(base_sha, head_sha)", self.resolver)
+        self.assertIn("PRVITR_LATE_BINDING_PLACEMENT_MISMATCH", self.resolver)
+        self.assertIn("recomposed.prospective_tree_sha != placement_tree", self.resolver)
+        self.assertIn("recomposed.placement_id != placement_id", self.resolver)
 
-    def test_structured_metrics_cover_late_acquisition_and_hold(self):
-        self.assertIn("OVC_CI_METRIC", self.resolver)
-        self.assertIn("final_integration_predecessor_lease_wait_ms", self.resolver)
-        self.assertIn("OVC_SIQ_BASE_SENSITIVE_LEASE_ACQUIRED", self.resolver)
-        self.assertIn("OVC_SIQ_BASE_SENSITIVE_LEASE_RELEASED", self.resolver)
-        self.assertIn("NO_VIT_PLACEMENT_PREDECESSOR", self.resolver)
+    def test_late_binding_evidence_covers_qualification_placement_and_receipt(self):
+        for marker in (
+            "OVC_BASE_INDEPENDENT_ASSURANCE_GENERATION",
+            "OVC_VIT_QUALIFIED_PAYLOAD_READY",
+            "OVC_VIT_LATE_BINDING_PLACEMENT_ACQUIRED",
+            "OVC_SIQ_BASE_SENSITIVE_LEASE_ACQUIRED",
+            "OVC_INTEGRATION_ADMISSION_RECEIPT",
+            "OVC_FINAL_INTEGRATION_WINDOW_PASS",
+        ):
+            self.assertIn(marker, self.resolver)
 
     def test_github_script_node_target_is_current(self):
         self.assertNotIn("actions/github-script@v7", self.workflow)

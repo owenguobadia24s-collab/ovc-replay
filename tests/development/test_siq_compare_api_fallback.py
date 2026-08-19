@@ -20,15 +20,16 @@ class SIQCompareAPIFallbackTests(unittest.TestCase):
         self.assertNotIn("compareCommits", self.admission)
         self.assertNotIn("OVC_COMPARE_API_404_FALLBACK_GIT", self.workflow)
 
-    def test_local_git_is_normative_ancestry_path(self) -> None:
-        self.assertGreaterEqual(self.workflow.count("git merge-base --is-ancestor"), 2)
-        self.assertIn('["git", "merge-base", "--is-ancestor"', self.admission)
-        self.assertIn("PRVITR_GIT_ANCESTRY_PROOF_FAILED", self.admission)
-        self.assertIn("OVC_RECONCILE_REQUIRED", self.admission)
+    def test_local_git_is_normative_exact_composition_path(self) -> None:
+        self.assertIn('["git", "merge-tree", "--write-tree", base_sha, head_sha]', self.admission)
+        self.assertIn("VIT_LATE_BINDING_CONTENT_CONFLICT", self.admission)
+        self.assertIn("prospective_tree_sha=result_tree", self.admission)
+        self.assertNotIn("merge-base", self.admission)
+        self.assertNotIn("OVC_RECONCILE_REQUIRED", self.admission)
 
-    def test_missing_local_commit_is_fetched_before_ancestry_proof(self) -> None:
+    def test_missing_local_commit_is_fetched_before_exact_composition(self) -> None:
         self.assertIn('_git("fetch", "--no-tags", "origin", sha)', self.admission)
-        self.assertIn("git cat-file -e", self.workflow)
+        self.assertIn('git cat-file -e "${OVC_PLACEMENT_COMMIT_SHA}^{commit}"', self.workflow)
 
     def test_github_api_is_metadata_and_exact_run_identity_only(self) -> None:
         self.assertIn("/pulls/{pr_number}", self.admission)

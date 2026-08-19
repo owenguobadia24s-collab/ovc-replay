@@ -242,10 +242,12 @@ def test_preserved_record_extra_field_is_rejected_and_negative_evidence_is_retai
 
 
 def test_no_dmrp_record_never_supports_affirmative_independence() -> None:
-    left, right = projections()
+    first = new_bundle()
+    left, right = first["projection"], copy.deepcopy(first["projection"])
     unknown_planes = copy.deepcopy(FIXTURE["exact_planes"])
     accepted = stage_correspondence(
         left_projection=left, right_projection=right, planes=unknown_planes,
+        left_generation_record=first["generation"], right_generation_record=first["generation"],
         admission_basis="EXACT_CANONICAL_BYTES",
     )
     assert accepted["record"] is None
@@ -257,6 +259,7 @@ def test_no_dmrp_record_never_supports_affirmative_independence() -> None:
     with pytest.raises(ReferenceEngineError, match="DMRP-owned"):
         stage_correspondence(
             left_projection=left, right_projection=right, planes=affirmative,
+            left_generation_record=first["generation"], right_generation_record=first["generation"],
             admission_basis="EXACT_CANONICAL_BYTES",
         )
 
@@ -343,6 +346,7 @@ def test_similarity_or_replication_cannot_substitute_for_dmrp_independence() -> 
     with pytest.raises(ReferenceEngineError, match="DMRP-owned"):
         stage_correspondence(
             left_projection=first["projection"], right_projection=changed["projection"],
+            left_generation_record=first["generation"], right_generation_record=changed["generation"],
             planes=planes, admission_basis="SOURCE_EXPLICIT_DETERMINISTIC_RELATION",
             source_relation_ref="fixture:similarity-only",
         )
