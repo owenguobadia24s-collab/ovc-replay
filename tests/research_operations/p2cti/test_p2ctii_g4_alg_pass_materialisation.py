@@ -35,13 +35,14 @@ def test_fresh_g4_pass_packet_is_immutable_and_complete() -> None:
     assert packet["next_packet"] == "P2CTII-WP5"
 
 
-def test_programme_state_advances_to_wp5_without_reserved_authority() -> None:
+def test_programme_state_preserves_g4_pass_without_reserved_authority() -> None:
     state = _load(STATE)
-    assert state["packet_id"] == "P2CTII-G4-ALG"
-    assert state["status"] == "APPROVED"
+    completed = {packet["packet_id"]: packet for packet in state["completed_packets"]}
     assert state["p2ctii_g4_alg_status"] == "PASS"
     assert state["wp5_authorised"] is True
-    assert state["next_packet"] == "P2CTII-WP5"
+    assert "P2CTII-G4-ALG-FRESH-INDEPENDENT-REVIEW-AFTER-WP4-REMEDIATION-2" in completed
+    assert completed["P2CTII-G4-ALG-FRESH-INDEPENDENT-REVIEW-AFTER-WP4-REMEDIATION-2"]["decision"] == "PASS"
+    assert completed["P2CTII-G4-ALG-FRESH-INDEPENDENT-REVIEW-AFTER-WP4-REMEDIATION-2"]["packet_sha256"] == EXPECTED_PACKET_SHA256
     assert state["blockers"] == []
     assert state["fresh_review_packet_sha256"] == EXPECTED_PACKET_SHA256
     assert state["operational_current_pointer_publication"] == "DENIED_SEPARATELY_GOVERNED"
@@ -51,3 +52,15 @@ def test_programme_state_advances_to_wp5_without_reserved_authority() -> None:
         "P2CTII-G-OBSERVABILITY-ACTIVATE",
         "P2CTII-G-CONTINUOUS-INTAKE",
     ]
+    if state["packet_id"] == "P2CTII-G4-ALG":
+        assert state["status"] == "APPROVED"
+        assert state["next_packet"] == "P2CTII-WP5"
+    else:
+        assert state["packet_id"] in {
+            "P2CTII-WP5",
+            "P2CTII-WP6",
+            "P2CTII-WP7",
+            "P2CTII-WP8",
+            "P2CTII-WP9",
+            "P2CTII-G-OBSERVABILITY-ACTIVATE",
+        }

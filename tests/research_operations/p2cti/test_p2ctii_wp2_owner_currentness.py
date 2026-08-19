@@ -302,10 +302,17 @@ def test_fresh_review_pass_is_materialised_without_rewriting_prior_block() -> No
         "P2CTII-WP4-REMEDIATION-1",
         "P2CTII-G4-ALG-FRESH-INDEPENDENT-REVIEW-AFTER-WP4-REMEDIATION-1",
         "P2CTII-WP4-REMEDIATION-2",
+        "P2CTII-WP5",
+        "P2CTII-WP6",
+        "P2CTII-WP7",
+        "P2CTII-WP8",
+        "P2CTII-WP9",
+        "P2CTII-G-OBSERVABILITY-ACTIVATE",
     }
     assert state["status"] in {
         "COMPLETED",
         "APPROVED",
+        "GATE_READY",
         "AWAITING_CONFLICT_FREE_INDEPENDENT_REVIEW",
         "BLOCKED_AWAITING_P2CTII-WP4-REMEDIATION-1",
         "IMPLEMENTED_AWAITING_EXACT_FINAL_ASSURANCE",
@@ -322,8 +329,13 @@ def test_fresh_review_pass_is_materialised_without_rewriting_prior_block() -> No
         "P2CTII-WP4-REMEDIATION-2",
         "P2CTII-G4-ALG-FRESH-INDEPENDENT-REVIEW-AFTER-WP4-REMEDIATION-2",
         "P2CTII-WP5",
+        "P2CTII-WP6",
+        "P2CTII-WP7",
+        "P2CTII-WP8",
+        "P2CTII-WP9",
+        "P2CTII-G-OBSERVABILITY-ACTIVATE",
     }
-    if state["packet_id"] in {"P2CTII-WP3", "P2CTII-G4-ALG"}:
+    if state["packet_id"] in {"P2CTII-WP3", "P2CTII-G4-ALG", "P2CTII-WP5", "P2CTII-WP6", "P2CTII-WP7", "P2CTII-WP8", "P2CTII-WP9", "P2CTII-G-OBSERVABILITY-ACTIVATE"}:
         assert any(
             packet["packet_id"] == "P2CTII-WP3"
             and packet["decision"] == "P2CTII-G3_DELEGATED_PASS"
