@@ -19,22 +19,40 @@ def _json(path: str) -> dict:
 
 def _fixture() -> list[dict]:
     return [
-        {"bucket_id": "A", "interval_start": "2026-01-02 00:00:00", "interval_end": "2026-01-02 00:15:00",
-         "region": "TARGET", "status": "COMPLETE", "open": "1.1", "high": "1.2", "low": "1.0", "close": "1.15"},
-        {"bucket_id": "B", "interval_start": "2026-01-02 00:15:00", "interval_end": "2026-01-02 00:30:00",
-         "region": "TARGET", "status": "INCOMPLETE"},
-        {"bucket_id": "C", "interval_start": "2026-01-02 00:30:00", "interval_end": "2026-01-02 00:45:00",
-         "region": "TARGET", "status": "ABSENT"},
+        {"bar_id": "A", "clock": "15M", "interval_start": "2026-01-02T00:00:00", "interval_end": "2026-01-02T00:15:00",
+         "effective_time": "2026-01-02T00:15:00", "first_valid_time": "2026-01-02T00:15:00",
+         "region": "TARGET", "status": "COMPLETE", "parent_source_row_ids": ["m1:a"], "missing_parent_slots": [],
+         "open": "1.1", "high": "1.2", "low": "1.0", "close": "1.15"},
+        {"bar_id": "B", "clock": "15M", "interval_start": "2026-01-02T00:15:00", "interval_end": "2026-01-02T00:30:00",
+         "effective_time": "2026-01-02T00:30:00", "first_valid_time": "2026-01-02T00:30:00",
+         "region": "TARGET", "status": "COMPLETE", "parent_source_row_ids": ["m1:b"], "missing_parent_slots": [],
+         "open": "1.15", "high": "1.25", "low": "1.1", "close": "1.2"},
+        {"bar_id": "C", "clock": "15M", "interval_start": "2026-01-02T00:30:00", "interval_end": "2026-01-02T00:45:00",
+         "effective_time": "2026-01-02T00:45:00", "first_valid_time": "2026-01-02T00:45:00",
+         "region": "TARGET", "status": "INCOMPLETE", "parent_source_row_ids": ["m1:c"], "missing_parent_slots": ["2026-01-02T00:31:00"]},
+        {"bar_id": "D", "clock": "15M", "interval_start": "2026-01-02T00:45:00", "interval_end": "2026-01-02T01:00:00",
+         "effective_time": "2026-01-02T01:00:00", "first_valid_time": "2026-01-02T01:00:00",
+         "region": "TARGET", "status": "ABSENT", "parent_source_row_ids": [], "missing_parent_slots": ["2026-01-02T00:45:00"]},
     ]
 
 
-def test_census_preserves_complete_incomplete_absent_and_never_invents_upper_stack() -> None:
+def test_census_accepts_real_wp2_bar_id_and_preserves_lineage_missingness() -> None:
     census = build_census(_fixture())
-    assert census["record_count"] == 3
-    assert census["source_status_counts"] == {"ABSENT": 1, "COMPLETE": 1, "INCOMPLETE": 1}
-    assert census["traces"][0]["c1"]["route"] == "MORPHOLOGY_COMPATIBLE"
-    assert census["traces"][1]["c1"]["disposition"] == "NOT_EVALUABLE_SOURCE"
+    assert census["record_count"] == 4
+    assert census["source_status_counts"] == {"ABSENT": 1, "COMPLETE": 2, "INCOMPLETE": 1}
+    assert census["traces"][0]["object_id"] == "A"
+    assert census["traces"][0]["source_lineage"]["parent_source_row_ids"] == ["m1:a"]
+    assert census["traces"][2]["c1"]["disposition"] == "NOT_EVALUABLE_SOURCE"
     assert all(v["disposition"] == "NOT_EVALUABLE" for v in census["traces"][0]["upper_stack"].values())
+
+
+def test_c1_prior_is_used_only_across_complete_contiguous_15m_records() -> None:
+    census = build_census(_fixture())
+    first = census["traces"][0]["c1"]
+    second = census["traces"][1]["c1"]
+    assert first["null_reasons"]["true_range_abs"] == "SOURCE_CONTINUITY_UNRESOLVED_OR_GAP"
+    assert second["measurements"]["true_range_abs"] is not None
+    assert "true_range_abs" not in second["null_reasons"]
 
 
 def test_checkpoint_restart_and_two_run_logical_equality() -> None:
@@ -44,25 +62,26 @@ def test_checkpoint_restart_and_two_run_logical_equality() -> None:
     proof = prove_two_run_equality(_fixture())
     assert proof["result"] == "PASS"
     assert proof["logical_equal"] is True
+    assert proof["ordered_trace_ids_equal"] is True
 
 
-def test_wp5_blocked_state_preserves_g3_and_downstream_boundaries() -> None:
-    state = _json("records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_7_WP5_BLOCKED.json")
-    qa = _json("docs/programmes/asocs-v0-1/implementation/wp5/ASOCSI_WP5_QA_PACKET_v0_1.json")
-    decision = _json("docs/programmes/asocs-v0-1/implementation/wp5/ASOCSI_G3_BLOCK_DECISION_v0_1.json")
-    assert state["status"] == "BLOCKED"
-    assert state["gate_status"] == "BLOCKED"
-    assert state["g3_census_frozen"] is False
+def test_g3_candidate_is_bound_to_recovered_exact_source_but_not_frozen_before_ci() -> None:
+    candidate = _json("docs/programmes/asocs-v0-1/implementation/wp5/ASOCSI_G3_CENSUS_CANDIDATE_v0_1.json")
+    assert candidate["source"]["sha256"] == "210233ec5761bf82998172832bb554ddf10dfeb3099f6bc6488d5bb0f6bec4f2"
+    assert candidate["census"]["census_sha256"] == "c49f34e7af19f0110d24377a54ab8f0bd3fb183e83e924de07bf39cd586de2c7"
+    assert candidate["census"]["record_count"] == 17568
+    assert candidate["census"]["target_record_count"] == 17376
+    assert candidate["two_clean_logical_executions_equal"] is True
+    assert candidate["review_sampling_started"] is False
+    qa = _json("docs/programmes/asocs-v0-1/implementation/wp5/ASOCSI_WP5_QA_PACKET_v0_2.json")
+    assert qa["qa_recommendation"] == "QA_REVIEW"
+    assert qa["gate_decision"] == "NOT_YET_RATIFIED"
+    assert qa["repository_ci"] == "PENDING"
+
+
+def test_wp5_qa_state_does_not_admit_wp6_before_g3_pass() -> None:
+    state = _json("records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_8_WP5_QA_REVIEW.json")
+    assert state["status"] == "QA_REVIEW"
+    assert state["gate_status"] == "QA_REVIEW"
     assert state["review_sampling_started"] is False
-    assert state["next_packet"] == "ASOCSI-WP5_RESUME_AFTER_EXACT_SOURCE_RECOVERY"
-    assert state["blockers"] == [
-        "EXACT_BOUND_SOURCE_ARTIFACT_REQUIRED_FOR_G3",
-        "FULL_CENSUS_ARTIFACT_NOT_MATERIALISED",
-        "TWO_INDEPENDENT_CLEAN_EXECUTIONS_NOT_YET_RUN",
-    ]
-    assert qa["qa_recommendation"] == "BLOCK"
-    assert qa["authority_delta"] == "NONE"
-    assert decision["decision"] == "BLOCK"
-    assert decision["operator_decision_required"] is False
-    assert decision["wp6_admission"] is False
-    assert decision["wp7_human_review_admission"] is False
+    assert state["next_packet"] == "ASOCSI-WP6_AFTER_G3_PASS"
