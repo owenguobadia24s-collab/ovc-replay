@@ -15,6 +15,7 @@ def test_cers_ps_wp0_binds_exact_completed_pilot_and_plan_materialisation():
     assert b["gate_id"] == "CERS-PS-G0"
     p = b["completed_predecessor"]
     assert p["terminal_status"] == "CERS_IMPLEMENTED_QUALIFIED_LIVE_PILOT_PASS"
+    assert p["merge_commit"] == "81faa31be2e59c51081339e17"
     assert p["merge_commit"] == "81faa31be2e59e47bc9784174f971c93a5a3a41c"
     assert p["physical_tree"] == "5faa522134abfae1749a13bb9b53ae51e8054ee7"
     assert p["transaction_id"] == "8e306f0506d1a2199777e267c5321425e97ff3b72a07ca9605a9ef04c47516f9"
@@ -51,7 +52,10 @@ def test_cers_ps_wp0_remains_preserved_as_preactivation_state_advances():
     current = load(pointer["current_state"])
     assert current["plan_id"] == "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED"
 
-    if pointer["current_state"].endswith("OVC_DSAI3V_CERS_STATE_v0_17.json"):
+    if Path(pointer["current_state"]).name in {
+        "OVC_DSAI3V_CERS_STATE_v0_17.json",
+        "OVC_DSAI3V_CERS_STATE_v0_18.json",
+    }:
         assert pointer["status"] == "COMPLETED"
         assert pointer["persistent_run"] == "ACTIVATED"
         assert pointer["persistent_general_dispatch"] == "ALLOWED_EXACT_ADMITTED_SCOPE_ONLY"
