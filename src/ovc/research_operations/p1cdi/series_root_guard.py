@@ -32,7 +32,14 @@ def _validate_correspondence_series_root(
         raise reference_module.ReferenceEngineError(
             "successor correspondence requires exact canonical series/root identity history"
         )
-    reconciled = reference_module._reconcile_identity_bundles(identity_history)
+    try:
+        reconciled = reference_module._reconcile_identity_bundles(identity_history)
+    except reference_module.ReferenceEngineError as exc:
+        if str(exc) == "same series identity has conflicting canonical series content":
+            raise reference_module.ReferenceEngineError(
+                "series first-generation binding conflicts across canonical series/root identity history"
+            ) from exc
+        raise
     matches = [
         bundle
         for bundle in reconciled
