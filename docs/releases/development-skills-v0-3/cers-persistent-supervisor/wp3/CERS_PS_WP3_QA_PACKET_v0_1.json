@@ -1,0 +1,40 @@
+{
+  "schema": "ovc-cers-persistent-supervisor-qa-packet/v1",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "plan_id": "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED",
+  "packet_id": "CERS-PS-WP3",
+  "gate_id": "CERS-PS-G3",
+  "status": "QA_REVIEW_CONDITIONAL_EXACT_HEAD",
+  "qa_recommendation": "PASS_CONDITIONAL_EXACT_HEAD",
+  "authority_delta": "INACTIVE_SHADOW_ZERO_CHAT_PERSISTENT_SERVICE",
+  "implementation": [
+    "src/ovc/development/skills/cers/persistent_service.py",
+    "tests/development_skills/cers/test_cers_persistent_supervisor_wp3.py"
+  ],
+  "assertions": [
+    "one exclusive supervisor lease with monotonic fencing and stale-fence rejection",
+    "explicit liveness-expiry signal required before lease reclaim",
+    "event-triggered reconciliation and reference sweeps are durable/idempotent",
+    "dispatch intent is durable before start and START_ACKNOWLEDGED precedes RUNNING",
+    "unknown starts reconcile before redispatch",
+    "single authoritative worker ownership survives heartbeat/loss/reconciliation",
+    "RUN/DRAIN/HOLD/DISABLE_NEW_DISPATCH semantics are immediate",
+    "checkpoint/restart has chat_dependency_count=0 and reproduces identical durable state",
+    "timing/cadence/liveness/reclaim/backoff values remain MEASURE_BEFORE_ACTIVATION until WP5 evidence freezes them",
+    "service exposes no physical-main write, merge, force-push or history-rewrite operation"
+  ],
+  "required_exact_head_assurance": [
+    "CERS_PS_WP3_TARGETED",
+    "CERS_NEIGHBOURING",
+    "REPOSITORY_SUITE",
+    "PYTEST_UNITTEST_PARITY",
+    "RUNNER_PARITY",
+    "VIT_ROUTING",
+    "GRT_FINAL_HEAD",
+    "SIQ_READY",
+    "MERGE_READINESS"
+  ],
+  "blockers": [],
+  "blocking_warnings": [],
+  "rollback": "Keep persistent general dispatch DISABLE_NEW_DISPATCH; do not instantiate an active persistent service; forward-supersede WP3 state only while preserving durable qualification evidence."
+}

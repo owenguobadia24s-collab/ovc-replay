@@ -1,0 +1,246 @@
+{
+  "schema": "ovc-cers-persistent-supervisor-activation-gate-packet/v1",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "plan_id": "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED",
+  "packet_id": "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
+  "gate_id": "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
+  "status": "GATE_READY",
+  "decision": "PENDING_OPERATOR",
+  "authority_required": "OPERATOR_REQUIRED",
+  "required_operator_phrase": "OVC APPROVE CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION PASS",
+  "authority_effect": "NONE_GATE_PREPARATION_ONLY",
+  "persistent_run": "NOT_ACTIVATED",
+  "current_effective_authority": {
+    "persistent_general_dispatch": "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
+    "post_pilot_dispatch_state": "DISABLE_NEW_DISPATCH",
+    "programme_admission": "INACTIVE_PREACTIVATION",
+    "executor_persistent_unattended_use": "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
+  },
+  "current_main_at_gate_preparation": {
+    "commit": "59d1b7440e60f5165d730b61965828da710d0333",
+    "tree": "f3f27ba0dd1e2a3750a87341f00252c0c3f15e31",
+    "contains_wp0_wp5": true,
+    "operator_time_currentness_requirement": "Re-resolve current main, programme pointers, authority, VIT placement, SIQ state, GRT assurance and admission revocation immediately before any operator decision or activation mutation. Under late-binding VIT semantics renew only physical placement/current-base-sensitive assurance when the stable payload and authority are unchanged."
+  },
+  "runtime": {
+    "service_identity": "OVC-CERS-PERSISTENT-SUPERVISOR-SERVICE-v0.1",
+    "runtime_module": "ovc.development.skills.cers.persistent_service",
+    "runtime_environment_id": "windows-local-python311",
+    "runtime_environment": "Windows AMD64 / CPython 3.11 family",
+    "target_runtime_qualification": "docs/releases/development-skills-v0-3/cers-persistent-supervisor/wp5/CERS_PS_WP5_TARGET_RUNTIME_QUALIFICATION_v0_1.json",
+    "target_runtime_qualification_sha256": "ee263297f9b506f05e7d0c02e61b27e4290955f89cb2500d4b03432911214705",
+    "target_runtime_result": "PASS_1000_ITERATIONS_ZERO_INCIDENTS",
+    "artifacts": [
+      {"path":"src/ovc/development/skills/cers/persistent.py","git_blob":"77bff0dea79b1ca0f6b850f427035d0a36d9ed40"},
+      {"path":"src/ovc/development/skills/cers/persistent_service.py","git_blob":"9531a7633366676084859f7bfc7137a12fe8ac4d"},
+      {"path":"src/ovc/development/skills/cers/admission.py","git_blob":"578297339987c2da33003ed0faca52da393093d9"}
+    ],
+    "zero_chat_restart": "QUALIFIED_DETERMINISTIC_DURABLE_CHECKPOINT_RECONCILIATION",
+    "resident_restartable_without_conversation": "PROPOSED_ONLY_PENDING_OPERATOR_PASS"
+  },
+  "packet_executor": {
+    "executor_identity": "OVC-SKILL-030@0.1.0+sha256:62809d0f5f1d4298fa916766912d4bec7b5a8bf7712f7382d448137f6f12f130|PACKET_EXECUTION|windows-local-python311",
+    "release_id": "OVC-SKILL-030@0.1.0+sha256:62809d0f5f1d4298fa916766912d4bec7b5a8bf7712f7382d448137f6f12f130",
+    "capability_id": "PACKET_EXECUTION",
+    "environment_id": "windows-local-python311",
+    "maturity": "TRUSTED",
+    "existing_authority_sources": [
+      "records/development/skills/DSAI_G8C_OPERATOR_ORCH1_ASSISTED_WRITE_PASS_20260812T164000+0100.json",
+      "docs/plans/development-skills-v0-3/cers/OVC_DSAI3V_CERS_Persistent_Supervisor_Activation_Plan_v0_1_RATIFIED.md"
+    ],
+    "binding_record": "registries/development/skills/cers/CERS_PERSISTENT_EXECUTOR_BINDING_v0_1.json",
+    "binding_git_blob": "24ba3f6b786643aafe7f9367ed6aff11325eed56"
+  },
+  "admission": {
+    "registry": "registries/development/skills/cers/CERS_PERSISTENT_PROGRAMME_ADMISSION_REGISTRY_v0_2.json",
+    "registry_git_blob": "52bad738cee8f1636038d1f68c705f28c39bf59c",
+    "status": "INACTIVE_PREACTIVATION",
+    "unknown_or_absent_programme": "DENY",
+    "future_programme_auto_admission": false,
+    "admitted_set": [
+      {
+        "admission_id": "OVC-CERS-PERSISTENT-ADMISSION-CERS-v0.1",
+        "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+        "status": "INACTIVE_PREACTIVATION",
+        "canonical_sha256": "48c43fed5c6c5a5797701f401c73025acbd7930961bf281b296473436ba92287",
+        "current_state_root": "registries/implementation/dsai3v_cers_v0_1/CURRENT_STATE_POINTER.json"
+      }
+    ],
+    "eligible_authority_classes": ["AUTO_EXECUTABLE", "AUTO_RATIFIABLE"],
+    "eligible_packet_classes": ["LOW_RISK_IMPLEMENTATION"],
+    "operator_required_boundary": "PARK",
+    "owner_authority_intersection_required": true,
+    "automatic_admission_from_repository_presence_or_active_status": false
+  },
+  "actions_and_side_effects": {
+    "registry": "registries/development/skills/cers/CERS_PERSISTENT_ACTION_SIDE_EFFECT_REGISTRY_v0_1.json",
+    "registry_git_blob": "e5f32003de5c281845e2a386c65f93a2ceccf4af",
+    "allowed": [
+      {"action":"READ_ONLY","side_effect_class":"READ_ONLY"},
+      {"action":"WRITE_FILE","side_effect_class":"BRANCH_REVERSIBLE"},
+      {"action":"GIT_COMMIT","side_effect_class":"BRANCH_REVERSIBLE"},
+      {"action":"PUSH_BRANCH","side_effect_class":"BRANCH_REVERSIBLE"}
+    ],
+    "unknown_action_or_side_effect": "DENY",
+    "irreversible_or_unknown_external_side_effect": "DENY"
+  },
+  "repository_ref_and_write_domain_rules": {
+    "repository": "owenguobadia24s-collab/ovc-replay",
+    "packet_branch_only": true,
+    "branch_push": "FAST_FORWARD_ONLY",
+    "write_domain_rule": "PACKET_DECLARED_WRITE_DOMAIN_AND_SEMANTIC_OWNER_ONLY",
+    "semantic_owner_rule": "EXACT_PACKET_SEMANTIC_OWNER_ONLY",
+    "direct_main_mutation": false,
+    "main_write_capability": "NONE",
+    "merge_capability": "NONE",
+    "parallel_physical_merge": false,
+    "force_push": false,
+    "history_rewrite": false,
+    "main_ruleset": {
+      "ruleset_id": 20229411,
+      "name": "OVC main protection",
+      "enforcement": "active",
+      "squash_only": true,
+      "required_check": "OVC merge readiness",
+      "strict_required_check": true,
+      "bypass_actors": [],
+      "deletion_blocked": true,
+      "non_fast_forward_blocked": true
+    }
+  },
+  "capacity_and_timing": {
+    "limits_record": "registries/development/skills/cers/CERS_PERSISTENT_OPERATIONAL_LIMITS_v0_1.json",
+    "limits_git_blob": "b689953ed9faec3cd0f5abde17ed80b18ab8c5e6",
+    "worker_concurrency": 1,
+    "max_speculative_depth": 1,
+    "visible_train_cap": 8,
+    "capacity_source": "exact already-proven CERS-WP6 live-pilot envelope; no increase",
+    "event_triggered_reconciliation": true,
+    "mandatory_reference_sweep": true,
+    "sweep_cadence_seconds": 1,
+    "heartbeat_cadence_seconds": 59,
+    "liveness_threshold_seconds": 117,
+    "reclaim_after_seconds": 176,
+    "provider_backoff_seconds": [1, 59, 117],
+    "timing_source": "observed WP5 qualifications plus completed 117-second WP6 live pilot",
+    "target_runtime_confirmation_changed_frozen_values": false
+  },
+  "ownership_and_start_semantics": {
+    "exclusive_supervisor_lease": true,
+    "monotonic_fencing_generation_required": true,
+    "stale_fence": "DENY",
+    "start_acknowledged_required": true,
+    "heartbeat_required": true,
+    "unknown_start": "RECONCILE_BEFORE_REDISPATCH",
+    "duplicate_authoritative_start": "DENY",
+    "worker_reclaim": "ONLY_AFTER_QUALIFIED_LIVENESS_EXPIRY",
+    "same_durable_snapshot_same_runnable_set_and_dispatch": true
+  },
+  "physical_integration": {
+    "controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
+    "controller_authority": "registries/authority/DSAI3V_VIT_GENERAL_AUTHORITY_v0_1.json",
+    "controller_authority_git_blob": "077ec283df6d97f9cc99af9704e7a34b8bb83c7b",
+    "gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+    "gateway_state": "docs/programmes/siq-runtime-v0-1/SIQ_RUNTIME_PROGRAMME_STATE.json",
+    "gateway_state_git_blob": "ae1c373606b7b8bf8fe89f10314229f0fe5b3a76",
+    "siq_active": true,
+    "final_integration_lease_count": 1,
+    "parallel_merge": false,
+    "binding_policy": "LATE_PHYSICAL_PLACEMENT",
+    "one_active_materialization": true,
+    "CERS_can_physically_integrate_or_merge": false
+  },
+  "g0_g5_assurance": [
+    {"gate":"CERS-PS-G0","pr":1211,"head":"e9fa1b4d76d5cfed08b1fa9c7bb07f2db0f4ad51","merge":"86815018944afc69d330b415c9d4202bc0ade21b","required_merge_readiness_run":32189276770,"postmerge_run":32189993373,"result":"PASS"},
+    {"gate":"CERS-PS-G1","pr":1214,"head":"0da1fbe2842b8c11b320dbebc7e6e1c91526475f","merge":"02192c540a62c50ee79048c449ac7bbe3b7d9ad2","required_merge_readiness_run":32263940952,"postmerge_run":32264574462,"result":"PASS"},
+    {"gate":"CERS-PS-G2","pr":1216,"head":"0fea6154fded32d425e995c08d5cd928dcc41509","merge":"a380984001bc4a77b43e02ba10da79ff9b6fee62","required_merge_readiness_run":32264825806,"postmerge_run":32265442238,"result":"PASS"},
+    {"gate":"CERS-PS-G3","pr":1217,"head":"d3cc05e08b18083b765a66642c9c765bbc6b0c6b","merge":"74eb330911adb951e667b5a932715a407295afa2","required_merge_readiness_run":32265629229,"postmerge_run":32266132307,"result":"PASS"},
+    {"gate":"CERS-PS-G4","pr":1238,"head":"2066877786470900d08b052baeea175f9760bb3a","merge":"6bdb5e4f1b30bf98ec713383b6a5d4cd2d80479d","required_merge_readiness_run":32267258652,"postmerge_run":32267891221,"result":"PASS"},
+    {"gate":"CERS-PS-G5","pr":1240,"head":"772d02f48293fbe0d40b047b363c449455f8bf7e","merge":"59d1b7440e60f5165d730b61965828da710d0333","required_merge_readiness_run":32268848832,"postmerge_run":32269641775,"result":"PASS"}
+  ],
+  "qa_and_adversarial_evidence": {
+    "wp0_wp5_qa_packets": [
+      "docs/releases/development-skills-v0-3/cers-persistent-supervisor/wp0/CERS_PS_WP0_QA_PACKET_v0_1.json",
+      "docs/releases/development-skills-v0-3/cers-persistent-supervisor/wp1/CERS_PS_WP1_QA_PACKET_v0_1.json",
+      "docs/releases/development-skills-v0-3/cers-persistent-supervisor/wp2/CERS_PS_WP2_QA_PACKET_v0_1.json",
+      "docs/releases/development-skills-v0-3/cers-persistent-supervisor/wp3/CERS_PS_WP3_QA_PACKET_v0_1.json",
+      "docs/releases/development-skills-v0-3/cers-persistent-supervisor/wp4/CERS_PS_WP4_QA_PACKET_v0_1.json",
+      "docs/releases/development-skills-v0-3/cers-persistent-supervisor/wp5/CERS_PS_WP5_QA_PACKET_v0_1.json"
+    ],
+    "wp0_wp5_decisions": [
+      "docs/releases/development-skills-v0-3/cers-persistent-supervisor/wp0/CERS_PS_G0_DECISION_v0_1.json",
+      "docs/releases/development-skills-v0-3/cers-persistent-supervisor/wp1/CERS_PS_G1_DECISION_v0_1.json",
+      "docs/releases/development-skills-v0-3/cers-persistent-supervisor/wp2/CERS_PS_G2_DECISION_v0_1.json",
+      "docs/releases/development-skills-v0-3/cers-persistent-supervisor/wp3/CERS_PS_G3_DECISION_v0_1.json",
+      "docs/releases/development-skills-v0-3/cers-persistent-supervisor/wp4/CERS_PS_G4_DECISION_v0_1.json",
+      "docs/releases/development-skills-v0-3/cers-persistent-supervisor/wp5/CERS_PS_G5_DECISION_v0_1.json"
+    ],
+    "adversarial_qualification": "PASS_1000_ITERATIONS_ON_TARGET_RUNTIME_FAMILY",
+    "all_assertions": "PASS",
+    "incidents": []
+  },
+  "warnings": [
+    {
+      "severity": "NON_BLOCKING",
+      "source": "VIT post-merge completion workflow run 32269641775",
+      "detail": "Observed workflow timing could not be attached because canonical completion remains fail-honest: completed_at precedes started_at.",
+      "effect": "No authority or gate-readiness effect; canonical completion and required checks succeeded."
+    },
+    {
+      "severity": "BOUNDARY",
+      "source": "registries/implementation/grt_v0_2/CURRENT_STATE_POINTER.json",
+      "source_git_blob": "74e4ece8490bd6ac386d2c6590d6d8736504c8c9",
+      "detail": "GRT remains QA_REVIEW at GRT2-G2.5; GRT2-G3 is not authorised and is excluded from admission.",
+      "effect": "No CERS activation scope is inferred for GRT."
+    }
+  ],
+  "exclusions": [
+    {"root_id":"DSAI3V_VIT","reason_codes":["PROGRAMME_TERMINAL_NO_NEXT_PACKET"]},
+    {"root_id":"DSAI3V_ASYNC_ASSURANCE","reason_codes":["PROGRAMME_TERMINAL_NO_NEXT_PACKET"]},
+    {"root_id":"DSAI2_ORCH345","reason_codes":["PROGRAMME_TERMINAL_NO_NEXT_PACKET"]},
+    {"root_id":"GRT_V0_2","reason_codes":["AUTHORITY_NOT_AUTO_EXECUTABLE","OPERATOR_REQUIRED_BOUNDARY","PREREQUISITE_UNSATISFIED","WRITE_DOMAIN_UNKNOWN_OR_DENIED"]},
+    {"root_id":"PRVITR","reason_codes":["PROGRAMME_TERMINAL_NO_NEXT_PACKET"]}
+  ],
+  "blockers": [],
+  "incidents": [],
+  "rollback_and_quiescence": {
+    "quiescence_record": "registries/development/skills/cers/CERS_PERSISTENT_QUIESCENCE_STATE_v0_1.json",
+    "quiescence_git_blob": "60e262fef4327fd4b3e54c30e696db546e8b33fa",
+    "first_action": "Set and retain durable DISABLE_NEW_DISPATCH",
+    "then": [
+      "Prevent new starts immediately",
+      "Reconcile all owned workers and unknown starts",
+      "Drain or cancel only CERS-owned reversible work according to packet contracts",
+      "Return new work to explicit foreground or ORCH1-assisted invocation",
+      "Preserve leases, dispatch identities, outcomes, checkpoints, DEVOBS, receipts and Git history"
+    ],
+    "force_push_or_evidence_deletion": "PROHIBITED"
+  },
+  "exact_proposed_activation_delta": {
+    "condition": "IF_AND_ONLY_IF_OPERATOR_RECORDS_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION_PASS_ON_RECONCILED_CURRENT_RECORD",
+    "changes": [
+      "Permit the exact qualified supervisor service to remain resident and restart without conversational context",
+      "Permit continuous reconciliation of exact durable repository and provider state",
+      "Permit selection only of already-authorised work for the exact explicit admitted set",
+      "Permit unattended invocation of the existing trusted Packet Executor only within its already-approved packet-branch capability",
+      "Change durable quiescence from DISABLE_NEW_DISPATCH to RUN for the exact admitted scope",
+      "Activate persistent use of the exact admission entry, policy and executor binding for that scope"
+    ],
+    "does_not_change": [
+      "Programme authority",
+      "Future programme admission",
+      "Operator-required or reserved gates",
+      "Writer identity or Packet Executor write authority",
+      "Direct-main, merge, parallel physical merge, force-push or history-rewrite authority",
+      "ACTIVE_DISCOVERY, ACTIVE_DEVELOPMENT or ACTIVE_VALIDATION authority",
+      "Scientific, selector, model, family, candidate, theory or semantic promotion authority",
+      "Canonical or R2 publication authority",
+      "Validation consumption authority",
+      "Probability, risk, exposure, trading or market-execution authority",
+      "Irreversible or unknown external side-effect authority"
+    ],
+    "automatic_activation_from_this_packet": false
+  },
+  "terminal_instruction": "STOP_WITHOUT_RUN_AND_AWAIT_OPERATOR_DECISION",
+  "next_packet": null
+}

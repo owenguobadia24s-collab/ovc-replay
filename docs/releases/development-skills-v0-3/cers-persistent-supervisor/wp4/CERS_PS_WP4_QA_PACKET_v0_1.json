@@ -1,0 +1,47 @@
+{
+  "schema": "ovc-cers-persistent-supervisor-qa-packet/v1",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "plan_id": "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED",
+  "packet_id": "CERS-PS-WP4",
+  "gate_id": "CERS-PS-G4",
+  "status": "QA_REVIEW_CONDITIONAL_EXACT_HEAD",
+  "qa_recommendation": "PASS_CONDITIONAL_EXACT_HEAD",
+  "authority_delta": "INACTIVE_EXPLICIT_PROGRAMME_ADMISSION_REGISTRY",
+  "implementation": [
+    "src/ovc/development/skills/cers/admission.py",
+    "registries/development/skills/cers/CERS_PERSISTENT_PROGRAMME_ADMISSION_REGISTRY_v0_2.json",
+    "registries/development/skills/cers/CERS_PERSISTENT_REASON_CODE_REGISTRY_v0_2.json",
+    "tests/development_skills/cers/test_cers_persistent_supervisor_wp4.py"
+  ],
+  "source_census": {
+    "registry": "registries/development/skills/cers/CERS_PROGRAMME_ROOT_REGISTRY_v0_1.json",
+    "candidate_count": 6,
+    "admitted_count": 1,
+    "excluded_count": 5,
+    "admitted_programmes": ["OVC-DSAI3V-CERS-CONFORMANCE-v0.1"]
+  },
+  "assertions": [
+    "only the exact CERS owner-authorised programme is recorded as an inactive preactivation admission",
+    "the bounded programme-root census is exhausted by either one admission or a typed exclusion",
+    "terminal programmes with no next packet are excluded rather than inferred runnable",
+    "GRT2-G3 remains excluded at its operator-required and unsatisfied-prerequisite boundary",
+    "unknown or absent programmes deny and future programmes cannot auto-admit",
+    "admission hashes are canonical and fail closed on mutation",
+    "write scope remains packet-declared branch-only under exact semantic ownership",
+    "persistent general dispatch remains denied and durable quiescence remains DISABLE_NEW_DISPATCH"
+  ],
+  "required_exact_head_assurance": [
+    "CERS_PS_WP4_TARGETED",
+    "CERS_NEIGHBOURING",
+    "REPOSITORY_SUITE",
+    "PYTEST_UNITTEST_PARITY",
+    "RUNNER_PARITY",
+    "VIT_ROUTING",
+    "GRT_FINAL_HEAD",
+    "SIQ_READY",
+    "MERGE_READINESS"
+  ],
+  "blockers": [],
+  "blocking_warnings": [],
+  "rollback": "Keep the v0.1 empty registry and DISABLE_NEW_DISPATCH effective; forward-supersede the inactive v0.2 registry without deleting its evidence."
+}

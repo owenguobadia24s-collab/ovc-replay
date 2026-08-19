@@ -1,0 +1,54 @@
+{
+  "schema": "ovc-cers-persistent-supervisor-activation-gate-ready-qa/v1",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "plan_id": "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED",
+  "packet_id": "CERS-PS-WP5-GATE-PREPARATION",
+  "gate_id": "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
+  "status": "PASS_GATE_READY",
+  "qa_recommendation": "PRESENT_TO_OPERATOR_WITHOUT_ACTIVATION",
+  "gate_packet": "docs/releases/development-skills-v0-3/cers-persistent-supervisor/activation/CERS_G_PERSISTENT_SUPERVISOR_ACTIVATION_GATE_PACKET_v0_1.json",
+  "gate_packet_sha256": "322b46efadb182d045a721bafd695b2d108aa3d2b3f5812d884cc00300bea455",
+  "gate_preparation_authority": "AUTO_EXECUTABLE_NON_ACTIVATING_GATE_PREPARATION_UNDER_CERS_PS_WP5",
+  "activation_authority": "OPERATOR_REQUIRED_NOT_SATISFIED",
+  "checks": {
+    "current_main_and_tree_recorded": "PASS",
+    "runtime_identity_and_target_environment_qualified": "PASS",
+    "packet_executor_and_existing_authority_sources_exact": "PASS",
+    "admitted_set_and_hash_exact": "PASS",
+    "authority_packet_action_and_side_effect_classes_exact": "PASS",
+    "repository_ref_and_write_domain_rules_exact": "PASS",
+    "capacity_and_timing_observed_and_frozen": "PASS",
+    "fencing_start_ack_unknown_start_semantics_exact": "PASS",
+    "VIT_SIQ_single_physical_path_exact": "PASS",
+    "merge_and_force_push_capabilities_none": "PASS",
+    "g0_g5_evidence_complete": "PASS",
+    "warnings_incidents_and_exclusions_stated": "PASS",
+    "rollback_and_quiescence_executable": "PASS",
+    "exact_activation_delta_bounded": "PASS",
+    "persistent_run_remains_denied": "PASS"
+  },
+  "target_runtime_assurance": {
+    "environment_id": "windows-local-python311",
+    "python": "3.11.9",
+    "iterations": 1000,
+    "assertions": 12,
+    "result": "PASS",
+    "blocking_warnings": [],
+    "incidents": [],
+    "frozen_values_changed": false
+  },
+  "warnings": [
+    "Non-blocking VIT post-merge timing attachment warning is preserved in the gate packet.",
+    "GRT2-G3 remains not authorised and GRT is excluded from admission.",
+    "Currentness and physical placement must be re-resolved immediately before an operator decision or activation mutation."
+  ],
+  "blockers": [],
+  "incidents": [],
+  "current_effective_authority": {
+    "persistent_general_dispatch": "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
+    "post_pilot_dispatch_state": "DISABLE_NEW_DISPATCH",
+    "authority_effect": "NONE_GATE_PREPARATION_ONLY"
+  },
+  "required_operator_phrase": "OVC APPROVE CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION PASS",
+  "terminal_instruction": "STOP_WITHOUT_RUN_AND_AWAIT_OPERATOR_DECISION"
+}

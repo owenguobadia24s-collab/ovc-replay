@@ -1,0 +1,68 @@
+{
+  "schema": "ovc-cers-persistent-supervisor-qa-packet/v1",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "plan_id": "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED",
+  "packet_id": "CERS-PS-WP5",
+  "gate_id": "CERS-PS-G5",
+  "status": "QA_REVIEW_CONDITIONAL_EXACT_HEAD",
+  "qa_recommendation": "PASS_CONDITIONAL_EXACT_HEAD",
+  "authority_delta": "SHADOW_ADVERSARIAL_QUALIFICATION_CAPACITY_FREEZE_GATE_PREP",
+  "implementation": [
+    "src/ovc/development/skills/cers/qualification.py",
+    "tools/ci/run_cers_persistent_qualification.py",
+    "registries/development/skills/cers/CERS_PERSISTENT_OPERATIONAL_LIMITS_v0_1.json",
+    "docs/releases/development-skills-v0-3/cers-persistent-supervisor/wp5/CERS_PS_WP5_OBSERVED_QUALIFICATION_v0_1.json",
+    "tests/development_skills/cers/test_cers_persistent_supervisor_wp5.py"
+  ],
+  "observed_qualification": {
+    "measurement_source_head": "81a563eddb81082527c5cb734c3853799df9cafa",
+    "measurement_source_tree": "0be3625137a443e81d77893b99c600fb7427d8fa",
+    "iterations": 1000,
+    "result": "PASS",
+    "combined_cycle_maximum_ms": 45.7812,
+    "blocking_warnings": [],
+    "incidents": []
+  },
+  "frozen_capacity": {
+    "worker_concurrency": 1,
+    "max_speculative_depth": 1,
+    "visible_train_cap": 8,
+    "source": "exact already-proven CERS-WP6 live-pilot envelope"
+  },
+  "frozen_timing": {
+    "sweep_cadence_seconds": 1,
+    "heartbeat_cadence_seconds": 59,
+    "liveness_threshold_seconds": 117,
+    "reclaim_after_seconds": 176,
+    "provider_backoff_seconds": [1, 59, 117]
+  },
+  "assertions": [
+    "multiple admitted qualification programmes reconcile deterministically",
+    "unrelated lanes do not create false predecessor or lease blocking",
+    "operator-required gates park while unrelated authorised work proceeds",
+    "main churn selectively invalidates only stale currentness",
+    "stale fences and duplicate authoritative ownership are rejected",
+    "unknown starts and worker loss reconcile idempotently before redispatch",
+    "HOLD and DISABLE_NEW_DISPATCH prevent new starts immediately",
+    "unregistered programmes remain non-dispatchable",
+    "validation, scientific, publication, probability, risk, exposure, trading and execution actions remain unreachable",
+    "VIT/SIQ remains the sole serialized physical integration path",
+    "zero-chat restart preserves identical durable state",
+    "capacity does not exceed the proven live-pilot envelope",
+    "timing values are derived from observed WP5 and prior live-pilot evidence"
+  ],
+  "required_exact_head_assurance": [
+    "CERS_PS_WP5_TARGETED",
+    "CERS_NEIGHBOURING",
+    "REPOSITORY_SUITE",
+    "PYTEST_UNITTEST_PARITY",
+    "RUNNER_PARITY",
+    "VIT_ROUTING",
+    "GRT_FINAL_HEAD",
+    "SIQ_READY",
+    "MERGE_READINESS"
+  ],
+  "blockers": [],
+  "blocking_warnings": [],
+  "rollback": "Keep DISABLE_NEW_DISPATCH, deny persistent RUN, and retain all measured evidence; forward-supersede operational limits if later qualification invalidates them."
+}

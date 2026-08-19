@@ -1,0 +1,36 @@
+{
+  "schema": "ovc-cers-ps-wp1-qa/v1",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "plan_id": "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED",
+  "packet_id": "CERS-PS-WP1",
+  "gate_id": "CERS-PS-G1",
+  "authority_delta": "INACTIVE_CONTRACTS_SCHEMAS_ADMISSION_REGISTRY",
+  "review": {
+    "contracts": "PASS",
+    "schemas": "PASS",
+    "fail_closed_policy": "PASS",
+    "missing_admission_denied": "PASS",
+    "operator_boundary_parked": "PASS",
+    "unknown_action_side_effect_executor_write_domain_denied": "PASS",
+    "future_programme_auto_admission_prohibited": "PASS",
+    "existing_executor_identity_reused_no_broader_authority": "PASS",
+    "physical_main_vit_siq_only": "PASS",
+    "persistent_general_dispatch": "DENIED",
+    "post_pilot_quiescence": "DISABLE_NEW_DISPATCH"
+  },
+  "tests": [
+    "tests/development_skills/cers/test_cers_persistent_supervisor_wp1.py",
+    "tests/development_skills/cers/test_cers_live_dispatch_authority.py",
+    "REPOSITORY_SUITE:REQUIRED_EXACT_HEAD",
+    "PYTEST_UNITTEST_PARITY:REQUIRED",
+    "RUNNER_PARITY:REQUIRED",
+    "VIT_ROUTING:REQUIRED",
+    "FINAL_HEAD:REQUIRED",
+    "SIQ_READY:REQUIRED",
+    "MERGE_READINESS:REQUIRED"
+  ],
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "recommendation": "PASS_CONDITIONAL_EXACT_HEAD_ASSURANCE",
+  "rollback": "Keep DISABLE_NEW_DISPATCH, preserve the empty/inactive admission registry as non-authoritative, and forward-supersede WP1 preactivation records if a defect is found; preserve prior CERS evidence and Git history."
+}

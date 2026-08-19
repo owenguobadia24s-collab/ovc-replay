@@ -8,6 +8,7 @@ from typing import Any
 from ovc.research_operations.canonical import canonical_sha256
 
 from .identity import control_record_id
+from .currentness import evaluate_two_point_currentness
 from .sources import resolve_owner_predicate
 
 
@@ -19,6 +20,11 @@ _OWNER_REGISTRY_PATH = (
     Path(__file__).resolve().parents[4]
     / "registries/research_operations/p2cti/P2CTI_OWNER_SOURCE_REGISTRY_v0_1.json"
 )
+_CURRENT_GENERATION_BUNDLE_PATH = (
+    Path(__file__).resolve().parents[4]
+    / "records/research_operations/p2cti/P2CTII_GENERATION_0_v0_1.json"
+)
+_CURRENT_REFERENCE_SEMANTIC_GENERATION = "v0.1"
 _OWNER_REF_FIELDS = {
     "owner_programme", "object_type", "object_id", "semantic_generation", "source_path",
     "content_sha256", "authority_refs", "scientific_payload_copied",
@@ -46,6 +52,41 @@ def _load_contract() -> tuple[frozenset[str], frozenset[str]]:
 
 DEMAND_CLASSES, WORK_CLASSES = _load_contract()
 _OWNER_REGISTRY = json.loads(_OWNER_REGISTRY_PATH.read_text(encoding="utf-8"))
+
+
+def _canonical_current_context() -> tuple[str, frozenset[str]]:
+    try:
+        bundle = json.loads(_CURRENT_GENERATION_BUNDLE_PATH.read_text(encoding="utf-8"))
+        if bundle.get("schema") != "ovc-p2ctii-generation-zero-bundle/v0.1":
+            raise ValueError("current generation bundle schema mismatch")
+        if bundle.get("content_sha256") != canonical_sha256(
+            {key: value for key, value in bundle.items() if key != "content_sha256"}
+        ):
+            raise ValueError("current generation bundle content hash mismatch")
+        generation = bundle["generation"]
+        frontier = bundle["source_frontier"]
+        series = bundle["series"]
+        currentness = bundle["currentness_evaluation"]
+        reproduced = evaluate_two_point_currentness(
+            series_id=series["series_id"], generation_id=generation["generation_id"],
+            prebuild_frontier=frontier, prepublish_frontier=frontier,
+        )
+        if reproduced != currentness:
+            raise ValueError("current generation bundle does not reproduce two-point currentness")
+        if (
+            currentness.get("currentness_state") != "CURRENT"
+            or currentness.get("completeness_state") != "COMPLETE"
+            or generation.get("completeness_state") != "COMPLETE"
+            or generation.get("source_frontier_id") != frontier.get("frontier_id")
+        ):
+            raise ValueError("current generation bundle is not complete and current")
+        refs = frozenset(
+            canonical_sha256(_exact_ref(entry["source_object_ref"], "current_source_ref"))
+            for entry in bundle["entries"]
+        )
+        return str(frontier["frontier_id"]), refs
+    except (KeyError, TypeError, ValueError) as exc:
+        raise DemandValidationError(f"canonical current context is invalid: {exc}") from exc
 
 
 def _exact_ref(raw: Mapping[str, Any], name: str) -> dict[str, Any]:
@@ -137,12 +178,19 @@ def build_research_demand(
         raise DemandValidationError("exact source_frontier_id is required")
     source = _exact_ref(source_ref, "source_ref")
     question = _exact_ref(research_question_ref, "research_question_ref")
+    current_frontier_id, current_source_refs = _canonical_current_context()
+    if source_frontier_id != current_frontier_id:
+        raise DemandValidationError("research demand source frontier is not the exact current frontier")
+    if canonical_sha256(source) not in current_source_refs:
+        raise DemandValidationError("research demand source is not in the exact current generation")
     if source["object_type"] not in {"THEORY_RECORD", "EXTERNAL_THEORY_RECORD", "IN_HOUSE_THEORY_RECORD", "ARCHITECTURE_NEED_SEED"}:
         raise DemandValidationError("research demand source is not a declared theory-record reference class")
     if question["object_type"] not in {"RESEARCH_PROTOCOL", "EC1_OBJECT"}:
         raise DemandValidationError("research question must be an exact Path2 or EC1 owner reference")
     if research_question_status != "CURRENT":
         raise DemandValidationError("research question must carry exact CURRENT owner status")
+    if question["semantic_generation"] != _CURRENT_REFERENCE_SEMANTIC_GENERATION:
+        raise DemandValidationError("research question generation is not the current v0.1 owner generation")
     _resolved_owner_ref(
         reference=source, predicate="THEORY_IDENTITY", evidence=source_owner_evidence,
         name="source_ref", owner_object_type="THEORY_RECORD",

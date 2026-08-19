@@ -1,0 +1,39 @@
+{
+  "schema": "ovc-cers-persistent-supervisor-qa-packet/v1",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "plan_id": "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED",
+  "packet_id": "CERS-PS-WP2",
+  "gate_id": "CERS-PS-G2",
+  "status": "QA_REVIEW_CONDITIONAL_EXACT_HEAD",
+  "qa_recommendation": "PASS_CONDITIONAL_EXACT_HEAD",
+  "authority_delta": "INACTIVE_REGISTRY_DRIVEN_LIVE_RECONCILER_COORDINATOR",
+  "implementation": [
+    "src/ovc/development/skills/cers/persistent.py",
+    "tests/development_skills/cers/test_cers_persistent_supervisor_wp2.py"
+  ],
+  "assertions": [
+    "deterministic same-snapshot runnable ordering and content-addressed dispatch identity",
+    "exact programme/current-root/governing-plan/owner-authority admission binding",
+    "unknown or stale admission fails closed",
+    "operator-required work parks without manufacturing authority",
+    "quiescence parks new starts and hard deny takes precedence",
+    "exact existing executor binding/action/write-domain/semantic-owner enforcement",
+    "reserved and unknown actions cannot dispatch",
+    "dependency/prerequisite failures park and repair remains owner-routed",
+    "no merge/direct-main/force-push/history-rewrite/irreversible authority is created"
+  ],
+  "required_exact_head_assurance": [
+    "CERS_PS_WP2_TARGETED",
+    "CERS_NEIGHBOURING",
+    "REPOSITORY_SUITE",
+    "PYTEST_UNITTEST_PARITY",
+    "RUNNER_PARITY",
+    "VIT_ROUTING",
+    "GRT_FINAL_HEAD",
+    "SIQ_READY",
+    "MERGE_READINESS"
+  ],
+  "blockers": [],
+  "blocking_warnings": [],
+  "rollback": "Keep persistent quiescence DISABLE_NEW_DISPATCH; remove WP2 from the current preactivation projection by forward supersession only; preserve all evidence and Git history."
+}

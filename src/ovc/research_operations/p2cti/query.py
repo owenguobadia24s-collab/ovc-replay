@@ -35,6 +35,31 @@ _BUNDLE_FIELDS = {
     "source_document_byte_sizes", "source_frontier", "source_reproduction_receipt_id",
     "source_reproduction_sha256",
 }
+_CURRENT_REFERENCE_SEMANTIC_GENERATION = "v0.1"
+_CURRENTNESS_DEGRADING_WARNINGS = frozenset(
+    {
+        "RELATION_CONSTITUENT_NOT_CURRENT",
+        "CROSS_MODE_EXPOSURE_NOT_CURRENT",
+        "CROSS_MODE_RELATION_NOT_CURRENT",
+        "DEMAND_QUESTION_NOT_CURRENT",
+        "CURRENTNESS_UNRESOLVED",
+        "VISIBILITY_DENIED",
+        "AGGREGATE_VISIBILITY_DENIED",
+    }
+)
+_COMPLETENESS_DEGRADING_WARNINGS = frozenset(
+    {
+        "RELATION_OWNER_EVIDENCE_UNRESOLVED",
+        "RELATION_OWNER_EVIDENCE_CONFLICT",
+        "CROSS_MODE_EXPOSURE_UNRESOLVED",
+        "CROSS_MODE_EXPOSURE_NOT_CURRENT",
+        "CROSS_MODE_FORMAL_CORRESPONDENCE_REQUIRED",
+        "CROSS_MODE_RELATION_NOT_CURRENT",
+        "DEMAND_QUESTION_NOT_CURRENT",
+        "VISIBILITY_DENIED",
+        "AGGREGATE_VISIBILITY_DENIED",
+    }
+)
 
 
 class QueryValidationError(ValueError):
@@ -148,6 +173,41 @@ def _record_id(record: Mapping[str, Any]) -> str | None:
     return next((payload.get(name) for name in ("relation_id", "screen_id", "ambiguity_id", "conflict_id") if payload.get(name)), None)
 
 
+def _canonical_record_key(record: Mapping[str, Any]) -> tuple[str, ...]:
+    payload = record.get("payload", {})
+    left = payload.get("left_generation_ref", {})
+    right = payload.get("right_generation_ref", {})
+    return (
+        str(record.get("object_type", "")),
+        str(payload.get("relation_family", "")),
+        str(payload.get("relation_type", "")),
+        str(left.get("object_id", "")),
+        str(left.get("semantic_generation", "")),
+        str(right.get("object_id", "")),
+        str(right.get("semantic_generation", "")),
+        str(_record_id(record) or payload.get("demand_id", "")),
+        str(record.get("record_id", "")),
+        str(record.get("content_sha256", "")),
+    )
+
+
+def _relation_constituent_warnings(rows: Sequence[Mapping[str, Any]]) -> list[str]:
+    warnings: set[str] = set()
+    for row in rows:
+        payload = row.get("payload", {})
+        if payload.get("current_generation_binding") != "CURRENT":
+            warnings.add("RELATION_CONSTITUENT_NOT_CURRENT")
+        evidence_state = payload.get("owner_evidence_state")
+        if evidence_state == "CONFLICT":
+            warnings.add("RELATION_OWNER_EVIDENCE_CONFLICT")
+        elif evidence_state != "RESOLVED":
+            warnings.add("RELATION_OWNER_EVIDENCE_UNRESOLVED")
+        raw = payload.get("warnings", [])
+        if isinstance(raw, Sequence) and not isinstance(raw, (str, bytes)):
+            warnings.update(str(item) for item in raw if type(item) is str and item)
+    return sorted(warnings)
+
+
 class ReferenceQueryEngine:
     """Read-only semantic oracle for WP4 reference query behavior."""
 
@@ -161,11 +221,19 @@ class ReferenceQueryEngine:
         self._bundle = _validate_bundle(generation_bundle)
         frontier_id = self._bundle["generation"]["source_frontier_id"]
         self._visibility = _validate_visibility(visibility_context, frontier_id)
-        self._entries = tuple(deepcopy(self._bundle["entries"]))
-        self._relations = tuple(deepcopy(list(relations)))
-        self._screens = tuple(deepcopy(list(duplicate_screens)))
-        self._demands = tuple(deepcopy(list(demands)))
-        self._history = tuple(deepcopy(list(historical_generations)))
+        self._entries = tuple(sorted(deepcopy(self._bundle["entries"]), key=lambda row: row["entry_id"]))
+        self._relations = tuple(sorted(deepcopy(list(relations)), key=_canonical_record_key))
+        self._screens = tuple(sorted(deepcopy(list(duplicate_screens)), key=_canonical_record_key))
+        self._demands = tuple(sorted(deepcopy(list(demands)), key=_canonical_record_key))
+        self._history = tuple(
+            sorted(
+                deepcopy(list(historical_generations)),
+                key=lambda row: (
+                    str(row.get("generation_id", "")),
+                    str(row.get("generation_ordinal", "")),
+                ),
+            )
+        )
         for collection_name, collection in (
             ("relations", self._relations), ("duplicate_screens", self._screens),
             ("demands", self._demands),
@@ -227,17 +295,27 @@ class ReferenceQueryEngine:
     def _envelope(self, family: str, result: Any, warnings: Sequence[str] = ()) -> dict[str, Any]:
         generation = self._bundle["generation"]
         currentness = self._bundle["currentness_evaluation"]
+        combined_warnings = sorted(set([*currentness.get("warnings", []), *warnings]))
+        currentness_state = currentness["currentness_state"]
+        completeness_state = generation["completeness_state"]
+        if _CURRENTNESS_DEGRADING_WARNINGS.intersection(combined_warnings):
+            currentness_state = "REASSESSMENT_REQUIRED"
+        if _COMPLETENESS_DEGRADING_WARNINGS.intersection(combined_warnings):
+            completeness_state = "UNRESOLVED"
         return deepcopy({
             "schema": "ovc-p2cti-reference-query-result/v0.1",
             "query_family": family,
             "generation_id": generation["generation_id"],
             "source_frontier_id": generation["source_frontier_id"],
-            "currentness_state": currentness["currentness_state"],
+            "currentness_state": currentness_state,
             "visibility_state": self._visibility["visibility_state"],
-            "completeness_state": generation["completeness_state"],
-            "warnings": sorted(set([*currentness.get("warnings", []), *warnings])),
-            "ambiguity_state": "UNRESOLVED" if "RELATION_AMBIGUITY_UNRESOLVED" in warnings else "NONE_VISIBLE",
-            "conflict_state": "BLOCKING" if "RELATION_CONFLICT_BLOCKING" in warnings else "NONE_VISIBLE",
+            "completeness_state": completeness_state,
+            "warnings": combined_warnings,
+            "ambiguity_state": "UNRESOLVED" if "RELATION_AMBIGUITY_UNRESOLVED" in combined_warnings else "NONE_VISIBLE",
+            "conflict_state": "BLOCKING" if any(
+                warning in combined_warnings
+                for warning in ("RELATION_CONFLICT_BLOCKING", "RELATION_OWNER_EVIDENCE_CONFLICT")
+            ) else "NONE_VISIBLE",
             "result": result,
             "read_only": True,
             "decision_bearing": False,
@@ -326,6 +404,7 @@ class ReferenceQueryEngine:
                 ref.get("object_id") for ref in row.get("payload", {}).get("subject_refs", [])
             }]
             direct, warnings, truncation = self._bounded(direct, params.get("limit"))
+            warnings.extend(_relation_constituent_warnings(direct))
             if ambiguities:
                 warnings.append("RELATION_AMBIGUITY_UNRESOLVED")
             if conflicts:
@@ -339,6 +418,8 @@ class ReferenceQueryEngine:
             result = {"screens": rows, "identity_collapse_allowed": False}
         elif family == "OPEN_DEMAND":
             result = [row for row in self._demands if self._visible_demand(row) and row.get("payload", {}).get("status") == "OPEN"]
+            if any(row.get("payload", {}).get("research_question_status") != "CURRENT" for row in result):
+                warnings.append("DEMAND_QUESTION_NOT_CURRENT")
         elif family == "WHY_BLOCKED":
             demand = self._demand(params.get("demand_id"))
             result = None if demand is None else {
@@ -362,12 +443,41 @@ class ReferenceQueryEngine:
             )
         elif family == "ARCHITECTURE_NEED":
             result = [row for row in self._demands if self._visible_demand(row) and row.get("payload", {}).get("demand_class") == "ARCHITECTURE_NEED_HYPOTHESIS"]
+            if any(row.get("payload", {}).get("research_question_status") != "CURRENT" for row in result):
+                warnings.append("DEMAND_QUESTION_NOT_CURRENT")
         elif family == "CROSS_MODE":
+            exposure_source = self._exposure.get("resolved_source")
             if self._exposure["resolution_state"] != "RESOLVED":
                 result = []
                 warnings.append("CROSS_MODE_EXPOSURE_UNRESOLVED")
+            elif (
+                not isinstance(exposure_source, Mapping)
+                or exposure_source.get("semantic_generation") != _CURRENT_REFERENCE_SEMANTIC_GENERATION
+            ):
+                result = []
+                warnings.append("CROSS_MODE_EXPOSURE_NOT_CURRENT")
             else:
-                result = [row for row in self._relations if self._visible_relation(row) and row.get("payload", {}).get("relation_family") == "CROSS_MODE"]
+                candidates = [
+                    row for row in self._relations
+                    if self._visible_relation(row)
+                    and row.get("payload", {}).get("relation_family") == "CROSS_MODE"
+                ]
+                result = [
+                    row for row in candidates
+                    if row.get("payload", {}).get("current_generation_binding") == "CURRENT"
+                    and row.get("payload", {}).get("owner_evidence_state") == "RESOLVED"
+                    and row.get("payload", {}).get("admission_disposition") == "ADMITTED_REVIEWED"
+                    and row.get("payload", {}).get("qualification") in {
+                        "INDEPENDENT_RULE_REVIEWED", "HUMAN_RESEARCH_OPERATIONS_DECISION"
+                    }
+                ]
+                if any(
+                    row.get("payload", {}).get("current_generation_binding") != "CURRENT"
+                    for row in candidates
+                ):
+                    warnings.append("CROSS_MODE_RELATION_NOT_CURRENT")
+                if len(result) != len(candidates):
+                    warnings.append("CROSS_MODE_FORMAL_CORRESPONDENCE_REQUIRED")
         elif family == "PORTFOLIO_STATE":
             if not self._visibility["allow_aggregate_counts"]:
                 result = None

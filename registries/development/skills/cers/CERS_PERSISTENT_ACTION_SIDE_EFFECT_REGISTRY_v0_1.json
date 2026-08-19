@@ -1,0 +1,15 @@
+{
+  "schema": "ovc-cers-persistent-action-side-effect-registry/v1",
+  "registry_id": "OVC-CERS-PERSISTENT-ACTION-SIDE-EFFECT-REGISTRY-v0.1",
+  "status": "INACTIVE_PREACTIVATION",
+  "executor_binding_id": "OVC-CERS-PERSISTENT-EXECUTOR-BINDING-v0.1",
+  "entries": [
+    {"action":"WRITE_FILE","side_effect_class":"BRANCH_REVERSIBLE","allowed":true,"constraints":["EXACT_PACKET_DECLARED_WRITE_DOMAIN","SEMANTIC_OWNER_MATCH","NO_MAIN"]},
+    {"action":"GIT_COMMIT","side_effect_class":"BRANCH_REVERSIBLE","allowed":true,"constraints":["PACKET_BRANCH_ONLY","NO_HISTORY_REWRITE"]},
+    {"action":"PUSH_BRANCH","side_effect_class":"BRANCH_REVERSIBLE","allowed":true,"constraints":["PACKET_BRANCH_ONLY","FAST_FORWARD_ONLY","NO_FORCE_PUSH"]},
+    {"action":"READ_ONLY","side_effect_class":"READ_ONLY","allowed":true,"constraints":["OWNER_SOURCE_PERMISSION_INTERSECTION"]}
+  ],
+  "explicit_denies": ["MERGE","DIRECT_MAIN_WRITE","PARALLEL_PHYSICAL_MERGE","FORCE_PUSH","HISTORY_REWRITE","IRREVERSIBLE","IRREVERSIBLE_OR_UNKNOWN","VALIDATION_READ","SCIENTIFIC_PROMOTION","CANONICAL_PUBLICATION","R2_PUBLICATION","PROBABILITY","RISK","EXPOSURE","TRADING","MARKET_EXECUTION"],
+  "unknown_action": {"side_effect_class":"IRREVERSIBLE_OR_UNKNOWN","decision":"DENY"},
+  "authority_effect": "NONE"
+}
