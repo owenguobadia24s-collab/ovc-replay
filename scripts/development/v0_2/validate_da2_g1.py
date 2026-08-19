@@ -12,6 +12,7 @@ RULESET=ROOT/'docs/releases/development-acceleration-v0-2/da2-wp1/DA2_G1_RULESET
 RESOLVER=ROOT/'tools/ci/prvitr_live_admission.py'
 CANONICAL={'.github/workflows/tests.yml','.github/workflows/ovc-tiered-tests.yml'}
 FULL='python3 -m unittest discover -s tests -v'
+FROZEN_PYTHON='python-version: "3.11.15"'
 REQUIRED_PYTHON_CHECKS=('tests','pytest-unittest-parity','runner-parity')
 def load(p): return json.loads(p.read_text(encoding='utf-8'))
 def main():
@@ -31,8 +32,8 @@ def main():
  assert not missing_concurrency, f'pull_request workflows missing concurrency ({len(missing_concurrency)}): {sorted(missing_concurrency)}'
  assert full=={'.github/workflows/tests.yml'}, f'complete-suite PR workflows: {sorted(full)}'
  tests=actual['.github/workflows/tests.yml'].read_text(); tiered=actual['.github/workflows/ovc-tiered-tests.yml'].read_text(); resolver=RESOLVER.read_text()
- assert tests.count(FULL)==1 and 'python-version: "3.11"' in tests
- assert FULL not in tiered and 'python-version: "3.11"' in tiered and 'OVC merge readiness' in tiered and 'OVC tiered test selection shadow' in tiered
+ assert tests.count(FULL)==1 and FROZEN_PYTHON in tests
+ assert FULL not in tiered and FROZEN_PYTHON in tiered and 'OVC merge readiness' in tiered and 'OVC tiered test selection shadow' in tiered
  assert all(name in resolver for name in REQUIRED_PYTHON_CHECKS) and 'PROFILE_JOB_NAME = "OVC profile assurance"' in resolver, 'PRVITR resolver must retain exact-head legacy and PYT-WP1 parity checks'
  for command in ('ready','acquire','finalize'): assert f'prvitr_live_admission.py {command}' in tiered, f'missing PRVITR live admission command: {command}'
  assert 'OVC_RECONCILE_REQUIRED' in resolver and 'OVC_BASE_MOVED_DURING_READINESS' in resolver and 'OVC_SIQ_READY_ADMITTED' in resolver
