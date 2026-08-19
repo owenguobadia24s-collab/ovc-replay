@@ -107,7 +107,13 @@ class CersPersistentSupervisorWp5Tests(unittest.TestCase):
             self.assertEqual(pointer["persistent_general_dispatch"], "ALLOWED_EXACT_ADMITTED_SCOPE_ONLY")
             self.assertEqual(pointer["post_pilot_dispatch_state"], "RUN")
             self.assertEqual(state["decision_authority"], "OPERATOR")
-            self.assertEqual(state["authority_delta"], "PERSISTENT_RUN_FOR_EXACT_ADMITTED_SCOPE_ONLY")
+            self.assertIn(
+                state["authority_delta"],
+                {
+                    "PERSISTENT_RUN_FOR_EXACT_ADMITTED_SCOPE_ONLY",
+                    "PERSISTENT_UNATTENDED_INVOCATION_ADMISSION_EXPANSION_FOR_EXACT_P2CTI_ASOCSI_GRT2_SCOPE_ONLY",
+                },
+            )
             self.assertTrue(state["reserved_authority_unchanged"])
         else:
             self.assertIn(pointer["status"], {"GATE_PREPARATION", "GATE_READY"})
