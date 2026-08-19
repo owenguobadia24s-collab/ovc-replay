@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import base64
 import json
+import os
 from pathlib import Path
 import subprocess
 from tempfile import TemporaryDirectory
 import unittest
+from unittest.mock import patch
 
 from ovc.development.skills.siq_core import WAIT, build_queue_state, queue_head
 from ovc.development.skills.vit_apply import REFERENCE_APPLY_PROFILE
@@ -157,10 +159,12 @@ class Dsai3vUniversalRoutingTests(unittest.TestCase):
             record=build_vit_payload_lineage_record(programme_id="PROGRAMME",packet_id="PACKET",pip_identity_payload=pip_payload(changes=[{"op":"ADD","path":"payload.txt","blob_sha":blob,"mode":"100644"}]))
             body=f"VIT-Lineage-B64: {b64_lineage(record)}"
             event={"number":1,"pull_request":{"body":body,"head":{"sha":head_sha,"ref":"feature"},"base":{"sha":base_sha,"ref":"main"}}}
-            result=check_pull_request_event(root=root,event=event)
-            self.assertTrue(result.startswith("VIT_MANDATORY_LATE_BINDING:PACKET:"))
             missing={"number":2,"pull_request":{"body":"","head":{"sha":head_sha,"ref":"feature2"},"base":{"sha":base_sha,"ref":"main"}}}
-            with self.assertRaises(RuntimeError): check_pull_request_event(root=root,event=missing)
+            with patch.dict(os.environ, {"GITHUB_ACTIONS": "false"}, clear=False):
+                result=check_pull_request_event(root=root,event=event)
+                self.assertTrue(result.startswith("VIT_MANDATORY_LATE_BINDING:PACKET:"))
+                with self.assertRaises(RuntimeError):
+                    check_pull_request_event(root=root,event=missing)
 
 
 if __name__ == "__main__":

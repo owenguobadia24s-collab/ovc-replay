@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import base64
 import json
+import os
 from pathlib import Path
 import subprocess
 from tempfile import TemporaryDirectory
 import unittest
+from unittest.mock import patch
 
 from ovc.development.skills.vit_apply import REFERENCE_APPLY_PROFILE
 from ovc.development.skills.vit_routing import (
@@ -92,7 +94,8 @@ class Dsai3vVitLiveBasePreflightTests(unittest.TestCase):
                     "base": {"sha": event_base_sha, "ref": "main"},
                 },
             }
-            result = check_pull_request_event(root=root, event=event)
+            with patch.dict(os.environ, {"GITHUB_ACTIONS": "false"}, clear=False):
+                result = check_pull_request_event(root=root, event=event)
             self.assertIn("VIT_MANDATORY_LATE_BINDING", result)
             self.assertIn("NO_PHYSICAL_BASE_BINDING", result)
 
@@ -117,7 +120,8 @@ class Dsai3vVitLiveBasePreflightTests(unittest.TestCase):
                     "base": {"sha": event_base_sha, "ref": "main"},
                 },
             }
-            result = check_pull_request_event(root=root, event=event)
+            with patch.dict(os.environ, {"GITHUB_ACTIONS": "false"}, clear=False):
+                result = check_pull_request_event(root=root, event=event)
             self.assertIn("VIT_MANDATORY_LEGACY_PAYLOAD_ACCEPTED", result)
             self.assertIn("PLACEMENT_NON_AUTHORITATIVE", result)
 
