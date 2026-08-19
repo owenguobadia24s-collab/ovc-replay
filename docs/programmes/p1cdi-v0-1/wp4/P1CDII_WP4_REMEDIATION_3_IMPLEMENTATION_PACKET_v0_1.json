@@ -1,0 +1,59 @@
+{
+  "schema": "p1cdii-wp4-remediation-3-implementation-packet/v0.1",
+  "programme_id": "OVC-P1CDI-CONFORMANCE-v0.1",
+  "packet_id": "P1CDII-WP4-REMEDIATION-3",
+  "status": "IMPLEMENTED_AWAITING_EXACT_FINAL_ASSURANCE",
+  "reviewed_lawful_main": {
+    "commit": "a1fa68a682b7400bb0702db488e9f109a9c739ed",
+    "tree": "82fc2195648d898cba0375660ddf90eaa6b41a76"
+  },
+  "implementation_commit": "e67f744de97e8b4f7e210afc588a08a772895711",
+  "implementation_tree": "a76907f452cf7ed6e3383593c57897717b73a0bc",
+  "immutable_review_2_block": {
+    "reviewed_base": "cc24d44d427c73e874043b2eccf82d754de5ca39",
+    "review_commit": "204c8a2691d546e9b3b65fcefe5ba6e2210bf0c2",
+    "review_tree": "c4fe8547f514ad255a615692a7a7ff636ccee6d5",
+    "packet_sha256": "894d31b1dd1c7408f3fd3f7d65f917fe744c72b23bef33a15560992fdb6b7580",
+    "adversarial_digest": "26750d3f4e2f686bd02408fdbd45910c84a07b39d021ca3b14ed6e4b4dfeb2dc",
+    "decision": "BLOCK",
+    "materialisation_merge": "a1fa68a682b7400bb0702db488e9f109a9c739ed",
+    "preserved_byte_identically": true
+  },
+  "prior_immutable_blocks": [
+    {"packet":"P1CDII_G4_ALG_INDEPENDENT_REVIEW_PACKET_v0_1.json","sha256":"cb86d810309346eeaf8dc4e0ae7c8356ebd9b2592799462aa4975b1b7ea56e35","decision":"BLOCK","preserved_byte_identically":true},
+    {"packet":"P1CDII_G4_ALG_FRESH_INDEPENDENT_REVIEW_PACKET_v0_1.json","sha256":"2d6651e4fddf567292df59ed53c539de558b7afeea9b789a290ac4cc7daf2e19","decision":"BLOCK","preserved_byte_identically":true}
+  ],
+  "remediated_blockers": [
+    "P1CDII_G4_ALG_FRESH_REVIEW_2_BLOCK_001_PARTIAL_ADMISSION_BYPASSES_GENERATION_BINDING",
+    "P1CDII_G4_ALG_FRESH_REVIEW_2_BLOCK_002_CROSS_GROUP_SOURCE_IDENTITY_CONFLICT_NOT_RECONCILED",
+    "P1CDII_G4_ALG_FRESH_REVIEW_2_BLOCK_003_RETROGRADE_SEMANTIC_SUCCESSOR_ACCEPTED"
+  ],
+  "remediation": {
+    "early_generation_binding": "BOTH_CANONICAL_PROJECTION_WRAPPERS_REQUIRE_EXACT_DETERMINISTIC_GENERATION_BINDINGS_BEFORE_ANY_SEMANTIC_OR_PLANE_ADMISSION_RESULT",
+    "whole_frontier_source_identity": "PLANE_AND_DMRP_RECORDS_ARE_JOINTLY_RECONCILED_BY_RECORD_ID_BEFORE_EITHER_GROUP_IS_EVALUATED;DIVERGENT_TYPE_OWNER_OR_CONTENT_FAILS_CLOSED",
+    "forward_successor_time": "SEMANTIC_SUCCESSOR_SOURCE_FIRST_VALID_TIME_MUST_BE_STRICTLY_LATER_THAN_THE_VERIFIED_PREDECESSOR_INSTANT",
+    "semantic_matching_rules": "UNCHANGED",
+    "registry_or_frozen_contract_change": "NONE",
+    "source_record_rewrite": "FORBIDDEN_NOT_PERFORMED"
+  },
+  "artifacts": [
+    {"path":"src/ovc/research_operations/p1cdi/reference.py","sha256":"2b52408b6a74c9cd9e06ea1ece78faea3d1ba350c8dea149ddd817275c808650"},
+    {"path":"tests/research_operations/p1cdi/test_p1cdii_wp4_remediation_1.py","sha256":"599de9cf1eaa60e978767d1b5d0930a7fae59422b2308f9e21f4c72b5b891d38"},
+    {"path":"tests/research_operations/p1cdi/test_p1cdii_wp4_remediation_2.py","sha256":"8941b4dd5e1dfa90a32858dff451c69a65bfb4c83e9d50cae62ef6f348f99bbc"},
+    {"path":"tests/research_operations/p1cdi/test_p1cdii_wp4_remediation_3.py","sha256":"4f2bd7b0ee7ab102098c7c8e8f2372dcf5a245bca02e09813b6dc65bed0f2c4a"}
+  ],
+  "oracle": {
+    "sha256": "4ff86f58bfe5e5f64ebbc403cbcf579eb4a166cdc3c93d1ed01c169a1e410106",
+    "bytes": 15215,
+    "processes": 2,
+    "byte_identical": true,
+    "disposition": "UNCHANGED_VALID_OUTPUT_ORACLE;REMEDIATION_ONLY_FAILS_CLOSED_NEW_INVALID_INPUTS",
+    "silent_historical_rewrite": false
+  },
+  "authority_delta": "NONE",
+  "g4_alg_status": "UNRESOLVED_REQUIRES_FRESH_CONFLICT_FREE_REVIEW_3",
+  "remediation_author_may_issue_g4_alg_pass": false,
+  "successor_beyond_wp4_authorised": false,
+  "rollback": "Revert only remediation-3 while preserving all three immutable G4 BLOCK packets, remediations 1/2, and all WP0-WP4 history.",
+  "next_packet": "P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-3"
+}
