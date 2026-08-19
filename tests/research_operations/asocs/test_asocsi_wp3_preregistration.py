@@ -153,8 +153,9 @@ def test_g2_preregistration_is_frozen_before_census_and_preserves_authority() ->
     assert state["status"] == "COMPLETED"
     assert state["structural_computation_started"] is False
     assert state["next_packet"] == "ASOCSI-WP4"
-    assert current_state["status"] == "COMPLETED"
+    assert pointer["programme_id"] == "OVC-ASOCS-6M-v0.1"
     assert pointer["packet_id"] == current_state["packet_id"]
+    assert pointer["status"] == current_state["status"]
     assert pointer["next_packet"] == current_state["next_packet"]
     assert "VALIDATION_CONSUMPTION" in freeze["retained_denials"]
 
