@@ -105,6 +105,7 @@ def test_wp2_court_record_freezes_exact_population_and_no_authority() -> None:
     root = Path(__file__).resolve().parents[3]
     manifest = json.loads((root / "docs/programmes/asocs-v0-1/implementation/wp2/ASOCS_POPULATION_G1_MANIFEST_v0_1.json").read_text(encoding="utf-8"))
     freeze = json.loads((root / "docs/programmes/asocs-v0-1/implementation/wp2/ASOCSI_G1_POPULATION_FREEZE_v0_1.json").read_text(encoding="utf-8"))
+    wp2_state = json.loads((root / "records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_4_WP2.json").read_text(encoding="utf-8"))
     pointer = json.loads((root / "registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json").read_text(encoding="utf-8"))
     assert manifest["source"]["sha256"] == "210233ec5761bf82998172832bb554ddf10dfeb3099f6bc6488d5bb0f6bec4f2"
     assert manifest["source"]["row_count"] == 186145
@@ -121,8 +122,13 @@ def test_wp2_court_record_freezes_exact_population_and_no_authority() -> None:
     assert freeze["population_manifest_id"] == manifest["population_manifest_id"]
     assert freeze["structural_computation_started"] is False
     assert freeze["review_sampling_started"] is False
-    assert pointer["packet_id"] == "ASOCSI-WP2"
-    assert pointer["next_packet"] == "ASOCSI-WP3"
+    assert wp2_state["status"] == "COMPLETED"
+    assert wp2_state["packet_id"] == "ASOCSI-WP2"
+    assert wp2_state["next_packet"] == "ASOCSI-WP3"
+    current_state = pointer["current_state"]
+    assert current_state.startswith("records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_")
+    assert (root / current_state).is_file()
+    assert pointer["next_packet"] == json.loads((root / current_state).read_text(encoding="utf-8"))["next_packet"]
     assert manifest["active_provider"] is False
     assert manifest["selector_eligible"] is False
     assert manifest["ec1_eligible"] is False
