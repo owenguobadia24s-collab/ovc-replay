@@ -56,8 +56,13 @@ def test_external_artifact_contract_is_content_addressed_and_reproducibility_pas
 def test_wp6_remains_qa_review_before_g4_delegated_pass():
     state=_json('records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_10_WP6_QA_REVIEW.json')
     ptr=_json('registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json')
+    current_state=_json(ptr['current_state'])
     qa=_json('docs/programmes/asocs-v0-1/implementation/wp6/ASOCSI_WP6_QA_PACKET_v0_1.json')
-    assert state['status']==ptr['status']=='QA_REVIEW'
+    assert state['status']=='QA_REVIEW'
     assert state['gate_status']=='QA_REVIEW' and state['review_population_frozen'] is False
     assert qa['qa_recommendation']=='QA_REVIEW' and qa['repository_ci']=='PENDING'
     assert state['human_review_started'] is False
+    assert ptr['programme_id']=='OVC-ASOCS-6M-v0.1'
+    assert ptr['packet_id']==current_state['packet_id']
+    assert ptr['status']==current_state['status']
+    assert ptr['next_packet']==current_state['next_packet']
