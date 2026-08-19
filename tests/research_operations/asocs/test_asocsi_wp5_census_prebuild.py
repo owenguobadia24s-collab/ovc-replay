@@ -95,6 +95,7 @@ def test_g3_delegated_freeze_and_pointer_admit_only_wp6_after_pass() -> None:
     qa = _json("docs/programmes/asocs-v0-1/implementation/wp5/ASOCSI_WP5_QA_PACKET_v0_3.json")
     state = _json("records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_9_WP5.json")
     pointer = _json("registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json")
+    current_state = _json(pointer["current_state"])
     assert freeze["status"] == "FROZEN_G3"
     assert freeze["source"]["sha256"] == exact_source
     assert freeze["census_sha256"] == census_id
@@ -106,6 +107,8 @@ def test_g3_delegated_freeze_and_pointer_admit_only_wp6_after_pass() -> None:
     assert state["status"] == "COMPLETED"
     assert state["gate_status"] == "APPROVED"
     assert state["review_sampling_started"] is False
-    assert pointer["packet_id"] == "ASOCSI-WP5"
-    assert pointer["status"] == "COMPLETED"
-    assert pointer["next_packet"] == "ASOCSI-WP6"
+    assert state["next_packet"] == "ASOCSI-WP6"
+    assert pointer["programme_id"] == "OVC-ASOCS-6M-v0.1"
+    assert pointer["packet_id"] == current_state["packet_id"]
+    assert pointer["status"] == current_state["status"]
+    assert pointer["next_packet"] == current_state["next_packet"]
