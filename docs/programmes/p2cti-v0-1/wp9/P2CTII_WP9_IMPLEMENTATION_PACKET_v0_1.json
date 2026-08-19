@@ -1,0 +1,30 @@
+{
+  "schema": "ovc-p2ctii-wp9-implementation-packet/v0.1",
+  "programme_id": "OVC-P2CTI-CONFORMANCE-v0.1",
+  "packet_id": "P2CTII-WP9",
+  "status": "IMPLEMENTED_AWAITING_PREREQUISITE_AND_LIVE_SHADOW_QA",
+  "scope": "Current-repository read-only shadow, stabilization ledger and incident triggers",
+  "prerequisite": "P2CTII-WP8 COMPLETED",
+  "artifacts": [
+    "src/ovc/research_operations/p2cti/stabilization.py",
+    "tests/research_operations/p2cti/test_p2ctii_wp9_stabilization.py"
+  ],
+  "incident_triggers": [
+    "FALSE_CURRENTNESS",
+    "PROTECTED_SOURCE_LEAK",
+    "REFERENCE_OPTIMIZED_DIVERGENCE",
+    "SOURCE_FRONTIER_UNRESOLVED",
+    "INDEX_CORRUPTION"
+  ],
+  "acceptance": [
+    "exact current repository commit/tree is recorded at qualification time",
+    "currentness remains CURRENT with exact source frontier",
+    "reference/optimized results remain equivalent",
+    "protected-source leak count is zero",
+    "shadow observations are integrity-bound and deterministic",
+    "any incident requires requalification rather than silent fallback",
+    "shadow cannot auto-activate operational reliance"
+  ],
+  "authority_delta": "NONE",
+  "stop_after_pass": "P2CTII-G-OBSERVABILITY-ACTIVATE"
+}
