@@ -41,6 +41,13 @@ _OWNER_RELATION_EVIDENCE_FIELDS = {
     "left_generation_ref", "right_generation_ref", "source_frontier_id", "resolution_state",
     "evidence_origin",
 }
+_SOURCE_RELATION_REF_FIELDS = {
+    "owner_programme", "object_type", "object_id", "semantic_generation", "source_path",
+    "content_sha256", "authority_refs", "scientific_payload_copied",
+}
+_NON_OWNER_PROVENANCE_PREFIXES = (
+    "machine://", "llm://", "similarity://", "retrieval://", "proposed://",
+)
 
 
 class RelationValidationError(ValueError):
@@ -152,6 +159,31 @@ def _current_refs_from_bundle(raw: Mapping[str, Any] | None, source_frontier_id:
     return frozenset(identities)
 
 
+def _source_relation_reference(raw: Mapping[str, Any]) -> dict[str, Any]:
+    if not isinstance(raw, Mapping) or set(raw) != _SOURCE_RELATION_REF_FIELDS:
+        raise RelationValidationError("source_relation_ref must use the exact closed owner-reference shape")
+    for field in _SOURCE_RELATION_REF_FIELDS - {"authority_refs", "scientific_payload_copied"}:
+        if type(raw[field]) is not str or not raw[field]:
+            raise RelationValidationError(f"source_relation_ref {field} is malformed")
+    digest = raw["content_sha256"]
+    if len(digest) != 64 or any(char not in "0123456789abcdef" for char in digest):
+        raise RelationValidationError("source_relation_ref content_sha256 is invalid")
+    refs = raw["authority_refs"]
+    if type(refs) is not list or not refs or any(type(ref) is not str or not ref for ref in refs):
+        raise RelationValidationError("source_relation_ref authority_refs are invalid")
+    if len(refs) != len(set(refs)):
+        raise RelationValidationError("source_relation_ref authority_refs must be unique")
+    if raw["scientific_payload_copied"] is not False:
+        raise RelationValidationError("source_relation_ref must remain reference-only")
+    object_type = raw["object_type"]
+    declared_owner = _OWNER_BY_OBJECT_TYPE.get(object_type)
+    if declared_owner is None:
+        raise RelationValidationError(f"unknown source_relation_ref object_type: {object_type}")
+    normalized = {field: raw[field] for field in sorted(_SOURCE_RELATION_REF_FIELDS)}
+    normalized["authority_refs"] = sorted(refs)
+    return normalized
+
+
 def _owner_relation_evidence(
     raw: Sequence[Mapping[str, Any]], *, relation_type: str, left: Mapping[str, Any],
     right: Mapping[str, Any], source_frontier_id: str,
@@ -161,6 +193,8 @@ def _owner_relation_evidence(
     if not raw:
         return "UNRESOLVED", [], ["OWNER_RELATION_EVIDENCE_MISSING"]
     normalized: list[dict[str, Any]] = []
+    conflicts: set[str] = set()
+    unresolved: set[str] = set()
     for row in raw:
         if not isinstance(row, Mapping) or set(row) != _OWNER_RELATION_EVIDENCE_FIELDS:
             raise RelationValidationError("owner relation evidence must use the exact closed field set")
@@ -172,15 +206,17 @@ def _owner_relation_evidence(
         if declared_owner is None:
             raise RelationValidationError(f"unknown owner relation evidence object_type: {object_type}")
         if declared_owner != "DECLARED_AUTHORITY_OWNER" and owner != declared_owner:
-            return "CONFLICT", [], ["STATE_OWNER_CONFLICT"]
+            conflicts.add("STATE_OWNER_CONFLICT")
         if row["relation_type"] != relation_type:
-            return "CONFLICT", [], ["RELATION_TYPE_OWNER_EVIDENCE_CONFLICT"]
-        if _exact_ref(row["left_generation_ref"], "owner_evidence.left_generation_ref") != dict(left):
-            return "CONFLICT", [], ["LEFT_GENERATION_OWNER_EVIDENCE_CONFLICT"]
-        if _exact_ref(row["right_generation_ref"], "owner_evidence.right_generation_ref") != dict(right):
-            return "CONFLICT", [], ["RIGHT_GENERATION_OWNER_EVIDENCE_CONFLICT"]
+            conflicts.add("RELATION_TYPE_OWNER_EVIDENCE_CONFLICT")
+        normalized_left = _exact_ref(row["left_generation_ref"], "owner_evidence.left_generation_ref")
+        normalized_right = _exact_ref(row["right_generation_ref"], "owner_evidence.right_generation_ref")
+        if normalized_left != dict(left):
+            conflicts.add("LEFT_GENERATION_OWNER_EVIDENCE_CONFLICT")
+        if normalized_right != dict(right):
+            conflicts.add("RIGHT_GENERATION_OWNER_EVIDENCE_CONFLICT")
         if row["source_frontier_id"] != source_frontier_id:
-            return "UNRESOLVED", [], ["SOURCE_FRONTIER_OWNER_EVIDENCE_STALE"]
+            unresolved.add("SOURCE_FRONTIER_OWNER_EVIDENCE_STALE")
         if row["resolution_state"] not in {"RESOLVED", "UNRESOLVED", "CONFLICT", "UNAVAILABLE"}:
             raise RelationValidationError("owner relation evidence resolution_state is invalid")
         if row["evidence_origin"] not in {"OWNER_EXPLICIT", "MACHINE_ASSISTED", "HUMAN_REVIEW"}:
@@ -198,18 +234,30 @@ def _owner_relation_evidence(
             raise RelationValidationError("owner relation evidence authority_refs must be unique")
         if row["scientific_payload_copied"] is not False:
             raise RelationValidationError("owner relation evidence must remain reference-only")
+        if not refs:
+            unresolved.add("OWNER_RELATION_AUTHORITY_REFERENCE_MISSING")
+        if str(row["source_path"]).casefold().startswith(_NON_OWNER_PROVENANCE_PREFIXES):
+            conflicts.add("OWNER_PROVENANCE_CLASS_CONFLICT")
         item = dict(row)
         item["authority_refs"] = sorted(refs)
-        item["left_generation_ref"] = dict(left)
-        item["right_generation_ref"] = dict(right)
+        item["left_generation_ref"] = normalized_left
+        item["right_generation_ref"] = normalized_right
         normalized.append(item)
+    normalized.sort(key=canonical_sha256)
     if any(item["resolution_state"] == "CONFLICT" for item in normalized):
-        return "CONFLICT", normalized, ["STATE_OWNER_CONFLICT"]
+        conflicts.add("STATE_OWNER_CONFLICT")
     if any(item["resolution_state"] != "RESOLVED" for item in normalized):
-        return "UNRESOLVED", normalized, ["CURRENTNESS_UNRESOLVED"]
-    identities = {canonical_sha256(item) for item in normalized}
-    if len(normalized) != 1 or len(identities) != 1:
-        return "CONFLICT", normalized, ["STATE_OWNER_CONFLICT"]
+        unresolved.add("CURRENTNESS_UNRESOLVED")
+    identities = [canonical_sha256(item) for item in normalized]
+    if len(normalized) != 1 or len(set(identities)) != 1:
+        conflicts.add("STATE_OWNER_CONFLICT")
+    origins = {item["evidence_origin"] for item in normalized}
+    if "MACHINE_ASSISTED" in origins and len(origins) > 1:
+        conflicts.add("OWNER_PROVENANCE_CLASS_CONFLICT")
+    if conflicts:
+        return "CONFLICT", normalized, sorted(conflicts | unresolved)
+    if unresolved:
+        return "UNRESOLVED", normalized, sorted(unresolved)
     return "RESOLVED", normalized[:1], []
 
 
@@ -259,7 +307,7 @@ def build_relation(
     elif not isinstance(source_relation_ref, Mapping):
         raise RelationValidationError("source_relation_ref must be an exact typed owner record")
     else:
-        source_ref = dict(source_relation_ref)
+        source_ref = _source_relation_reference(source_relation_ref)
     evidence_state, typed_evidence, evidence_warnings = _owner_relation_evidence(
         owner_relation_evidence, relation_type=relation_type, left=left, right=right,
         source_frontier_id=source_frontier_id,
@@ -275,7 +323,7 @@ def build_relation(
             )
         }:
             evidence_state = "CONFLICT"
-            evidence_warnings = ["SOURCE_RELATION_OWNER_EVIDENCE_CONFLICT"]
+            evidence_warnings = sorted(set([*evidence_warnings, "SOURCE_RELATION_OWNER_EVIDENCE_CONFLICT"]))
     if any(item.get("evidence_origin") == "MACHINE_ASSISTED" for item in typed_evidence):
         if qualification != "PROPOSED_MACHINE_ASSISTED":
             raise RelationValidationError("machine evidence cannot be relabelled as deterministic or reviewed")
