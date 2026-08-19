@@ -85,3 +85,27 @@ def test_wp5_qa_state_does_not_admit_wp6_before_g3_pass() -> None:
     assert state["gate_status"] == "QA_REVIEW"
     assert state["review_sampling_started"] is False
     assert state["next_packet"] == "ASOCSI-WP6_AFTER_G3_PASS"
+
+
+def test_g3_delegated_freeze_and_pointer_admit_only_wp6_after_pass() -> None:
+    exact_source = "210233ec5761bf82998172832bb554ddf10dfeb3099f6bc6488d5bb0f6bec4f2"
+    census_id = "c49f34e7af19f0110d24377a54ab8f0bd3fb183e83e924de07bf39cd586de2c7"
+    freeze = _json("docs/programmes/asocs-v0-1/implementation/wp5/ASOCSI_G3_CENSUS_FREEZE_v0_1.json")
+    decision = _json("docs/programmes/asocs-v0-1/implementation/wp5/ASOCSI_G3_DELEGATED_DECISION_v0_1.json")
+    qa = _json("docs/programmes/asocs-v0-1/implementation/wp5/ASOCSI_WP5_QA_PACKET_v0_3.json")
+    state = _json("records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_9_WP5.json")
+    pointer = _json("registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json")
+    assert freeze["status"] == "FROZEN_G3"
+    assert freeze["source"]["sha256"] == exact_source
+    assert freeze["census_sha256"] == census_id
+    assert freeze["integrity"]["review_sampling_before_freeze"] is False
+    assert freeze["active"] is False and freeze["canonical"] is False and freeze["publication"] is False
+    assert decision["decision"] == "PASS_DELEGATED"
+    assert decision["authority_delta"] == "NONE"
+    assert qa["qa_recommendation"] == "PASS"
+    assert state["status"] == "COMPLETED"
+    assert state["gate_status"] == "APPROVED"
+    assert state["review_sampling_started"] is False
+    assert pointer["packet_id"] == "ASOCSI-WP5"
+    assert pointer["status"] == "COMPLETED"
+    assert pointer["next_packet"] == "ASOCSI-WP6"
