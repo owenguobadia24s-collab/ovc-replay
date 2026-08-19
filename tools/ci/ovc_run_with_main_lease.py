@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Run one required-assurance command while an exact main-bound lease remains valid.
+"""Run exact-final assurance while one late-bound physical-main lease is valid.
 
 The lease is read-only and supplied by the final-integration admission job as
-``{head_sha, base_sha, base_branch}``.  The child command is never started when
-the current base already differs.  If the base advances while the command is
-running, the child process group is terminated and the recognised
-``OVC_BASE_MOVED_DURING_READINESS`` reason is emitted so the existing bounded
-reconciliation/requeue path can create a fresh immutable candidate.
+``{placement_head_sha, base_sha, base_branch}``. The child command is never
+started when the current base already differs. If the base advances while the
+command is running, the ephemeral placement is invalidated and the child is
+terminated. The stable qualified PIP remains valid unless a separately proven
+dependency/authority/payload impact requires renewal; ordinary main movement
+therefore retries placement rather than creating a replacement candidate.
 """
 
 from __future__ import annotations
@@ -23,7 +24,6 @@ from typing import Sequence
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote
 from urllib.request import Request, urlopen
-
 
 EXIT_BASE_MOVED = 86
 EXIT_LEASE_OBSERVABILITY = 87
@@ -46,23 +46,14 @@ def _required_env(name: str) -> str:
     return value
 
 
-def _current_branch_sha(
-    *,
-    repository: str,
-    branch: str,
-    token: str,
-    timeout_seconds: float = 15.0,
-) -> str:
+def _current_branch_sha(*, repository: str, branch: str, token: str, timeout_seconds: float = 15.0) -> str:
     if "/" not in repository:
         raise LeaseError(f"invalid GITHUB_REPOSITORY value {repository!r}")
     owner, repo = repository.split("/", 1)
-    url = (
-        "https://api.github.com/repos/"
-        f"{quote(owner, safe='')}/{quote(repo, safe='')}/branches/{quote(branch, safe='')}"
-    )
+    url = "https://api.github.com/repos/" + f"{quote(owner, safe='')}/{quote(repo, safe='')}/branches/{quote(branch, safe='')}"
     headers = {
         "Accept": "application/vnd.github+json",
-        "User-Agent": "ovc-required-assurance-lease/v1",
+        "User-Agent": "ovc-required-assurance-lease/v2",
         "X-GitHub-Api-Version": "2022-11-28",
     }
     if token:
@@ -83,12 +74,7 @@ def _current_branch_sha(
 
 
 def _checkout_head() -> str:
-    completed = subprocess.run(
-        ["git", "rev-parse", "HEAD"],
-        check=False,
-        capture_output=True,
-        text=True,
-    )
+    completed = subprocess.run(["git", "rev-parse", "HEAD"], check=False, capture_output=True, text=True)
     if completed.returncode != 0:
         raise LeaseError(f"cannot resolve checked-out HEAD: {completed.stderr.strip()}")
     return completed.stdout.strip()
@@ -118,7 +104,6 @@ def _terminate_process_group(process: subprocess.Popen[object]) -> None:
 def run_with_lease(command: Sequence[str]) -> int:
     if not command:
         raise LeaseError("no command supplied after --")
-
     if not _truthy(os.environ.get("OVC_LEASE_REQUIRED")):
         return subprocess.call(list(command))
 
@@ -131,22 +116,14 @@ def run_with_lease(command: Sequence[str]) -> int:
 
     checkout = _checkout_head()
     if checkout != head_sha:
-        raise LeaseError(
-            "checked-out candidate does not match shared lease: "
-            f"HEAD={checkout}, lease_head={head_sha}"
-        )
+        raise LeaseError(f"checked-out prospective placement does not match shared lease: HEAD={checkout}, lease_head={head_sha}")
 
-    current = _current_branch_sha(
-        repository=repository,
-        branch=branch,
-        token=token,
-    )
+    current = _current_branch_sha(repository=repository, branch=branch, token=token)
     if current != base_sha:
         print(
-            "::error title=Required assurance lease stale before command::"
+            "::error title=Late-binding placement stale before exact-final assurance::"
             "OVC_BASE_MOVED_BEFORE_READINESS: "
-            f"{branch} moved from lease base {base_sha} to {current} before "
-            f"required command for {head_sha} started.",
+            f"{branch} moved from lease base {base_sha} to {current}; discard this ephemeral placement and retry the same qualified payload.",
             flush=True,
         )
         return EXIT_BASE_MOVED
@@ -156,25 +133,18 @@ def run_with_lease(command: Sequence[str]) -> int:
         popen_kwargs["start_new_session"] = True
     elif hasattr(subprocess, "CREATE_NEW_PROCESS_GROUP"):
         popen_kwargs["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
-
     process = subprocess.Popen(list(command), **popen_kwargs)
     consecutive_observation_failures = 0
 
     while process.poll() is None:
         time.sleep(max(0.5, poll_seconds))
         try:
-            current = _current_branch_sha(
-                repository=repository,
-                branch=branch,
-                token=token,
-            )
+            current = _current_branch_sha(repository=repository, branch=branch, token=token)
         except LeaseError as exc:
             consecutive_observation_failures += 1
             print(
                 "::warning title=Required assurance lease observation retry::"
-                f"{exc}; attempt "
-                f"{consecutive_observation_failures}/"
-                f"{MAX_CONSECUTIVE_OBSERVATION_FAILURES}.",
+                f"{exc}; attempt {consecutive_observation_failures}/{MAX_CONSECUTIVE_OBSERVATION_FAILURES}.",
                 flush=True,
             )
             if consecutive_observation_failures < MAX_CONSECUTIVE_OBSERVATION_FAILURES:
@@ -183,8 +153,7 @@ def run_with_lease(command: Sequence[str]) -> int:
             print(
                 "::error title=Required assurance lease unobservable::"
                 "OVC_REQUIRED_ASSURANCE_LEASE_OBSERVABILITY_FAILED: "
-                f"could not prove {branch}@{base_sha} remained current for "
-                f"{head_sha}; required work was terminated fail-closed.",
+                f"could not prove {branch}@{base_sha} remained current for ephemeral placement {head_sha}; exact-final work was terminated fail-closed.",
                 flush=True,
             )
             return EXIT_LEASE_OBSERVABILITY
@@ -193,12 +162,10 @@ def run_with_lease(command: Sequence[str]) -> int:
         if current != base_sha:
             _terminate_process_group(process)
             print(
-                "::error title=Required assurance lease invalidated::"
-                "OVC_REQUIRED_ASSURANCE_LEASE_INVALIDATED: "
-                "OVC_BASE_MOVED_DURING_READINESS: "
-                f"{branch} moved from {base_sha} to {current} while required "
-                f"assurance was running for {head_sha}. The stale command was "
-                "terminated; create a fresh immutable reconciliation candidate.",
+                "::error title=Late-binding placement invalidated::"
+                "OVC_REQUIRED_ASSURANCE_LEASE_INVALIDATED: OVC_BASE_MOVED_DURING_READINESS: "
+                f"{branch} moved from {base_sha} to {current} while exact-final assurance was running for placement {head_sha}. "
+                "Discard the ephemeral placement and retry the same qualified PIP; do not create a replacement development candidate solely for main movement.",
                 flush=True,
             )
             return EXIT_BASE_MOVED
@@ -216,11 +183,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         return run_with_lease(command)
     except (LeaseError, ValueError) as exc:
-        print(
-            "::error title=Required assurance lease invalid::"
-            f"OVC_REQUIRED_ASSURANCE_LEASE_INVALID: {exc}",
-            flush=True,
-        )
+        print("::error title=Required assurance lease invalid::" f"OVC_REQUIRED_ASSURANCE_LEASE_INVALID: {exc}", flush=True)
         return EXIT_LEASE_OBSERVABILITY
 
 
