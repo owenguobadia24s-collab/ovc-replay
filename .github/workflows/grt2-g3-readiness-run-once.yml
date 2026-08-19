@@ -14,13 +14,13 @@ permissions:
 
 jobs:
   readiness:
-    name: GRT2 G3 full readiness evidence exact candidate f4f08
+    name: GRT2 G3 full readiness evidence exact candidate 37dc436
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: f4f08a9b942852b0d4c2d588c4bf9958e1506c26
+          ref: 37dc4366647955cbd1a0ad249994bb0da096c45c
           fetch-depth: 0
           show-progress: false
       - name: Fetch current main for exact historical replay
@@ -42,7 +42,7 @@ jobs:
       - name: Upload immutable G3 readiness evidence
         uses: actions/upload-artifact@v4
         with:
-          name: grt2-g3-readiness-evidence-f4f08
+          name: grt2-g3-readiness-evidence-37dc436
           path: artifacts/grt2-g3-readiness-evidence.json
           if-no-files-found: error
           retention-days: 30
