@@ -45,10 +45,12 @@ class CiPerformanceShadowPacketTests(unittest.TestCase):
         for name in ("tests", "pytest-unittest-parity", "runner-parity"): self.assertIn(name, self.resolver)
         self.assertIn('PROFILE_JOB_NAME = "OVC profile assurance"', self.resolver)
         self.assertIn("ovc-main-integration-lane-v1", self.tiered_workflow)
-        self.assertIn("OVC_SIQ_READY_ADMITTED", self.resolver)
+        self.assertIn("OVC_VIT_QUALIFIED_PAYLOAD_READY", self.resolver)
         self.assertIn("OVC_SIQ_BASE_SENSITIVE_LEASE_ACQUIRED", self.resolver)
+        self.assertIn("OVC_INTEGRATION_ADMISSION_RECEIPT", self.resolver)
         self.assertIn("tools/ci/ovc_run_with_main_lease.py", self.tiered_workflow)
-        self.assertIn("OVC_RECONCILE_REQUIRED", self.resolver); self.assertIn("OVC_BASE_MOVED_DURING_READINESS", self.resolver)
+        self.assertIn("OVC_BASE_MOVED_DURING_READINESS", self.resolver)
+        self.assertIn("PRVITR_LATE_BINDING_PLACEMENT_MISMATCH", self.resolver)
 
     def test_packet_state_preserves_non_activation_boundary(self):
         self.assertIn(self.state["status"], {"RUNNING", "APPROVED"})
