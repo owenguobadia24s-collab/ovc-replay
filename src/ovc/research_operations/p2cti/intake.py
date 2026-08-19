@@ -12,10 +12,12 @@ from .identity import control_record_id
 _ROOT = Path(__file__).resolve().parents[4]
 _OPERATIONAL = json.loads((_ROOT / "registries/research_operations/p2cti/P2CTI_OPERATIONAL_VOCABULARY_REGISTRY_v0_1.json").read_text(encoding="utf-8"))
 _DMRP = json.loads((_ROOT / "registries/research_operations/DMRP_PATH2_INTAKE_VOCABULARY_CONFORMANCE_EXT_v0_1.json").read_text(encoding="utf-8"))
+_REASON_REGISTRY = json.loads((_ROOT / "registries/research_operations/p2cti/P2CTI_REASON_CODE_REGISTRY_v0_1.json").read_text(encoding="utf-8"))
 
 _VISIBILITY = frozenset(_OPERATIONAL["visibility_states"])
 _DMRP_DESIGN = frozenset(_DMRP["design_vocabulary"])
 _DMRP_MAPPING = {row["design"]: row for row in _DMRP["mappings"]}
+_REASON_CODES = frozenset(row["code"] for row in _REASON_REGISTRY["reason_codes"])
 _CAPTURE = frozenset({"SYNTHETIC_ONLY", "CAPTURED_REFERENCE_ONLY", "UNRESOLVED_SOURCE", "QUARANTINED"})
 _SOURCE_FIELDS = frozenset({"source_id", "source_kind", "source_locator", "content_sha256", "authority_refs", "scientific_payload_copied"})
 _FORBIDDEN_KEY_FRAGMENTS = (
@@ -44,6 +46,14 @@ def _strings(values: Sequence[str], field: str, *, allow_empty: bool = False) ->
     if not result and not allow_empty:
         raise IntakeValidationError(f"{field} must not be empty")
     return result
+
+
+def _reasons(values: Sequence[str]) -> list[str]:
+    reasons = _strings(values, "reason_codes", allow_empty=True)
+    unknown = set(reasons) - _REASON_CODES
+    if unknown:
+        raise IntakeValidationError(f"unknown reason codes: {sorted(unknown)}")
+    return reasons
 
 
 def _reject_authority_payload(value: Any, path: str = "payload") -> None:
@@ -111,7 +121,14 @@ def build_theory_seed(
     if capture_state not in _CAPTURE:
         raise IntakeValidationError("capture_state is outside the WP5 closed surface")
     source = exact_source_reference(source_ref)
-    seed_id = f"p2cti:seed:{canonical_sha256({'seed_key': seed_key, 'source_ref': source})}"
+    seed_identity = {
+        "seed_key": seed_key,
+        "title": title,
+        "source_ref": source,
+        "visibility_state": visibility_state,
+        "capture_state": capture_state,
+    }
+    seed_id = f"p2cti:seed:{canonical_sha256(seed_identity)}"
     payload = {
         "seed_id": seed_id,
         "title": title,
@@ -140,7 +157,7 @@ def build_intake_triage(
     mapping = _DMRP_MAPPING[design_disposition]
     mapped = mapping.get("implementation")
     disposition = mapped if type(mapped) is str and mapped else "UNMAPPED_REVIEW_REQUIRED"
-    reasons = _strings(reason_codes, "reason_codes", allow_empty=True)
+    reasons = _reasons(reason_codes)
     triage_id = f"p2cti:triage:{canonical_sha256({'subject': seed_or_theory_ref, 'design_disposition': design_disposition, 'disposition': disposition, 'reason_codes': reasons})}"
     payload = {
         "triage_id": triage_id,
