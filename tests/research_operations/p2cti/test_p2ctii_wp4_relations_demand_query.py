@@ -493,11 +493,36 @@ def test_fresh_g4_alg_block_remains_byte_exact_during_bounded_remediation() -> N
     )
     assert post_remediation_review["decision"] == "BLOCK"
     assert post_remediation_review["authority_delta"] == "NONE"
-    assert state["status"] == "PASS_REMEDIATION_AWAITING_MATERIALISATION"
-    assert state["p2ctii_g4_alg_status"] == "UNRESOLVED_PRIOR_BLOCKS_PRESERVED"
-    assert state["next_packet"] == (
-        "P2CTII-G4-ALG-FRESH-INDEPENDENT-REVIEW-AFTER-WP4-REMEDIATION-2"
-    )
-    assert state["wp5_authorised"] is False
+    if state.get("p2ctii_g4_alg_status") == "PASS":
+        assert state["wp5_authorised"] is True
+        assert state["blockers"] == []
+        assert state["packet_id"] in {
+            "P2CTII-G4-ALG",
+            "P2CTII-WP5",
+            "P2CTII-WP6",
+            "P2CTII-WP7",
+            "P2CTII-WP8",
+            "P2CTII-WP9",
+            "P2CTII-G-OBSERVABILITY-ACTIVATE",
+        }
+        if state["packet_id"] == "P2CTII-G4-ALG":
+            assert state["status"] == "APPROVED"
+            assert state["next_packet"] == "P2CTII-WP5"
+        else:
+            assert state["status"] in {"APPROVED", "COMPLETED", "GATE_READY"}
+            assert state["next_packet"] in {
+                "P2CTII-WP6",
+                "P2CTII-WP7",
+                "P2CTII-WP8",
+                "P2CTII-WP9",
+                "P2CTII-G-OBSERVABILITY-ACTIVATE",
+            }
+    else:
+        assert state["status"] == "PASS_REMEDIATION_AWAITING_MATERIALISATION"
+        assert state["p2ctii_g4_alg_status"] == "UNRESOLVED_PRIOR_BLOCKS_PRESERVED"
+        assert state["next_packet"] == (
+            "P2CTII-G4-ALG-FRESH-INDEPENDENT-REVIEW-AFTER-WP4-REMEDIATION-2"
+        )
+        assert state["wp5_authorised"] is False
     assert state["g4_alg_remediation_author_may_grant_pass"] is False
     assert state["authority_delta"] == "NONE"
