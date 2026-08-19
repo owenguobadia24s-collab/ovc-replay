@@ -157,7 +157,17 @@ def main() -> int:
     if summary.get("status") != "GATE_READY":
         blockers.extend(str(x) for x in summary.get("reason_codes", []))
 
-    targeted = _run(sys.executable, "-m", "pytest", "tests/governance/grt_v0_2", "-q", "--tb=short")
+    # The transition-audit test is the end-to-end harness for this script.  Run it
+    # from the outer repository suite, but never recursively from inside itself.
+    targeted = _run(
+        sys.executable,
+        "-m",
+        "pytest",
+        "tests/governance/grt_v0_2",
+        "-q",
+        "--tb=short",
+        "--ignore=tests/governance/grt_v0_2/test_grt2_g3_transition_audit.py",
+    )
     if targeted.returncode != 0:
         blockers.append("GRT2_REPOSITORY_TEST_SUITE_FAIL")
 
