@@ -81,20 +81,33 @@ def test_programme_state_preserves_operator_pass_and_advances_lawfully_through_p
         assert p["packet_id"] == "CERS-PS-WP0"
         return
 
+    suffix = Path(p["current_state"]).name
+    version = int(suffix.split("_v0_")[1].split(".json")[0])
     current = load(p["current_state"])
     assert current["plan_id"] == "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED"
-    assert current["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
-    assert current["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
     assert current["controller_identity"] == "DSAI_VIT_PHYSICAL_CONTROLLER"
     assert current["physical_gateway"] == "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY"
     assert current["parallel_physical_merge"] is False
+
+    if version == 17:
+        assert p["status"] == "COMPLETED"
+        assert p["decision"] == "PASS"
+        assert p["next_packet"] is None
+        assert current["decision_authority"] == "OPERATOR"
+        assert current["persistent_run"] == "ACTIVATED"
+        assert current["persistent_general_dispatch"] == "ALLOWED_EXACT_ADMITTED_SCOPE_ONLY"
+        assert current["post_pilot_dispatch_state"] == "RUN"
+        assert current["authority_delta"] == "PERSISTENT_RUN_FOR_EXACT_ADMITTED_SCOPE_ONLY"
+        assert current["reserved_authority_unchanged"] is True
+        return
+
+    assert current["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
+    assert current["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
     activation = next(row for row in current["packet_register"] if row["packet_id"] == "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION")
     assert activation["authority_required"] == "OPERATOR_REQUIRED"
     assert activation["authority_delta"] == "PERSISTENT_RUN_FOR_EXACT_ADMITTED_SCOPE_ONLY"
     assert activation["status"] in {"PLANNED", "GATE_PREPARATION", "GATE_READY"}
 
-    suffix = Path(p["current_state"]).name
-    version = int(suffix.split("_v0_")[1].split(".json")[0])
     assert 10 <= version <= 16
     expected_packet_by_version = {
         10: "CERS-PS-WP1",
