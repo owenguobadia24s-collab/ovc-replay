@@ -1,0 +1,61 @@
+{
+  "schema": "p1cdii-wp4-remediation-4-implementation-packet/v0.1",
+  "programme_id": "OVC-P1CDI-CONFORMANCE-v0.1",
+  "packet_id": "P1CDII-WP4-REMEDIATION-4",
+  "status": "IMPLEMENTED_AWAITING_EXACT_FINAL_ASSURANCE",
+  "lawful_base": {
+    "commit": "67b548be88aa3c1a7cc1b1bb1f42688e47f3546e",
+    "tree": "ed5224b9d7de00fe6c96701c573cce7b29a9fc11",
+    "subject": "P1CDII-G4-ALG: materialise fresh independent review-3 BLOCK"
+  },
+  "implementation_commit": "0a5e8980a71ba68a9c04f787a6b8abeaa40484c1",
+  "implementation_tree": "7cc5ee9ee0eedf94a66f0d56978d3bb981270063",
+  "immutable_review_3_block": {
+    "review_commit": "e64127071b5f9ec74f804727ac13b85e4948c581",
+    "materialisation_merge": "67b548be88aa3c1a7cc1b1bb1f42688e47f3546e",
+    "decision": "BLOCK",
+    "blocker": "P1CDII_G4_ALG_FRESH_REVIEW_3_BLOCK_001_ORPHAN_GENERATION_SERIES_ROOT_NOT_PROVEN",
+    "review_packet_path": "docs/programmes/p1cdi-v0-1/wp4/P1CDII_G4_ALG_FRESH_INDEPENDENT_REVIEW_3_PACKET_v0_1.json",
+    "review_packet_git_blob": "08e59820be50ffa56a39315c07dc5c4c4df05461",
+    "preserved_immutably": true
+  },
+  "prior_immutable_block_sha256": [
+    "cb86d810309346eeaf8dc4e0ae7c8356ebd9b2592799462aa4975b1b7ea56e35",
+    "2d6651e4fddf567292df59ed53c539de558b7afeea9b789a290ac4cc7daf2e19",
+    "894d31b1dd1c7408f3fd3f7d65f917fe744c72b23bef33a15560992fdb6b7580"
+  ],
+  "remediation": {
+    "series_root_rule": "EVERY_CORRESPONDENCE_GENERATION_MUST_PROVE_CANONICAL_SERIES_ROOT_REACHABILITY_BEFORE_ANY_SEMANTIC_OR_PLANE_ADMISSION",
+    "direct_root": "DETERMINISTIC_FIRST_GENERATION_SERIES_ID_DERIVED_FROM_OWNER_AND_CANONICAL_PROJECTION_HASH",
+    "successor_root": "NON_ROOT_SUCCESSOR_REQUIRES_EXACT_RECONCILED_SERIES_GENERATION_PROJECTION_HISTORY_CONTAINING_THE_CURRENT_GENERATION_AND_CANONICAL_ROOT",
+    "orphan_generation": "FAIL_CLOSED",
+    "cross_series_generation": "FAIL_CLOSED",
+    "corrupt_or_incomplete_history": "FAIL_CLOSED",
+    "semantic_matching_rules": "UNCHANGED",
+    "source_or_scientific_truth": "UNCHANGED",
+    "frozen_contract_change": "NONE"
+  },
+  "implementation_artifacts": [
+    {"path":"src/ovc/research_operations/p1cdi/__init__.py","git_blob":"7d096c5f40c5eda23d17c59eee211022096eb4d9"},
+    {"path":"src/ovc/research_operations/p1cdi/series_root_guard.py","git_blob":"899556d9c9c856768b46028d7d7387992486cc8f"},
+    {"path":"tests/research_operations/p1cdi/test_p1cdii_wp4_remediation_4.py","git_blob":"a3815b530ab04e81673656262aff3db867a8d5cd"}
+  ],
+  "assurance_intent": [
+    "ORPHAN_SELF_CONSISTENT_GENERATION_REJECTED",
+    "FORGED_DIRECT_ROOT_REJECTED",
+    "VALID_DIRECT_ROOT_REMAINS_COMPATIBLE",
+    "VALID_SEMANTIC_SUCCESSOR_REQUIRES_AND_ACCEPTS_EXACT_HISTORY",
+    "MISSING_CORRUPT_OR_CROSS_SERIES_HISTORY_REJECTED",
+    "ALL_PRIOR_G4_BLOCK_REGRESSIONS_RETAINED",
+    "FULL_P1CDII_AND_REPOSITORY_ASSURANCE_REQUIRED_ON_EXACT_FINAL_HEAD"
+  ],
+  "authority": {
+    "source": "P1CDII-G0_OPERATOR_PASS_MATERIALISED_PLUS_REVIEW_3_BLOCK_BOUNDED_REMEDIATION_ROUTE",
+    "authority_delta": "NONE",
+    "remediation_author_may_issue": "PASS_REMEDIATION_ONLY",
+    "remediation_author_may_issue_g4_alg_pass": false,
+    "wp5_authorised": false
+  },
+  "rollback": "Forward-revert only the remediation-4 guard and tests while preserving review-3 BLOCK and all prior immutable evidence; no history rewrite.",
+  "next_packet": "P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-4"
+}
