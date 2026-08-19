@@ -38,10 +38,14 @@ class CersPersistentSupervisorActivationTests(unittest.TestCase):
         self.assertEqual(self.quiescence["mode"], "RUN")
         self.assertEqual(self.admission["status"], "ACTIVE_PERSISTENT")
         self.assertFalse(self.admission["future_programme_auto_admission"])
-        self.assertEqual(len(self.admission["entries"]), 1)
         self.assertEqual(
-            self.admission["entries"][0]["programme_id"],
-            "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+            {entry["programme_id"] for entry in self.admission["entries"]},
+            {
+                "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+                "OVC-P2CTI-CONFORMANCE-v0.1",
+                "OVC-ASOCS-6M-v0.1",
+                "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
+            },
         )
 
     def test_physical_and_reserved_authority_did_not_expand(self):
@@ -63,13 +67,16 @@ class CersPersistentSupervisorActivationTests(unittest.TestCase):
         ):
             self.assertIn(token, preserved)
 
-    def test_grt_remains_outside_activated_admission(self):
-        grt = [
-            x for x in self.admission["exclusions"]
-            if x["programme_id"] == "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE"
-        ]
-        self.assertEqual(len(grt), 1)
-        self.assertIn("NOT_IN_ACTIVATED_ADMISSION_SET", grt[0]["reason_codes"])
+    def test_grt_is_admitted_but_g3_activation_remains_explicitly_prohibited(self):
+        entries = {entry["programme_id"]: entry for entry in self.admission["entries"]}
+        grt = entries["OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE"]
+        self.assertEqual(grt["operator_boundary_policy"], "PARK")
+        self.assertIn("GRT2_G3_ACTIVATION", grt["explicit_prohibitions"])
+        self.assertIn("CONSTITUTION_ACTIVATION", grt["explicit_prohibitions"])
+        self.assertNotIn(
+            "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
+            {row["programme_id"] for row in self.admission["exclusions"]},
+        )
 
 
 if __name__ == "__main__":
