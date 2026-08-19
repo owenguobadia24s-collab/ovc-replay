@@ -30,6 +30,7 @@ EXPECTED_OVC_PACKAGES = {
     "ovc.programme_genesis",
     "ovc.programme_genesis.grt_v0_2",
     "ovc.research_operations",
+    "ovc.research_operations.asocs",
     "ovc.research_operations.p1cdi",
     "ovc.research_operations.prsc",
     "ovc.research_operations.rccr",
