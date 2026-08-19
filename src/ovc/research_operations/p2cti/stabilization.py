@@ -18,6 +18,12 @@ class StabilizationError(ValueError):
     pass
 
 
+def _git_sha(value: str, field: str) -> str:
+    if type(value) is not str or len(value) != 40 or any(c not in "0123456789abcdef" for c in value):
+        raise StabilizationError(f"{field} must be an exact lowercase git SHA")
+    return value
+
+
 def build_shadow_observation(
     *,
     repository_commit: str,
@@ -27,20 +33,24 @@ def build_shadow_observation(
     currentness_state: str,
     reference_optimized_equivalent: bool,
     protected_source_leak_count: int,
+    index_integrity_ok: bool = True,
     warnings: Sequence[str] = (),
 ) -> dict[str, Any]:
-    for value, field in ((repository_commit, "repository_commit"), (repository_tree, "repository_tree")):
-        if type(value) is not str or len(value) != 40:
-            raise StabilizationError(f"{field} must be an exact git SHA")
+    _git_sha(repository_commit, "repository_commit")
+    _git_sha(repository_tree, "repository_tree")
     if type(generation_id) is not str or not generation_id.startswith("p2cti:generation:"):
         raise StabilizationError("generation_id is invalid")
     if type(source_frontier_id) is not str or not source_frontier_id.startswith("p2cti:frontier:"):
         raise StabilizationError("source_frontier_id is invalid")
     if type(reference_optimized_equivalent) is not bool:
         raise StabilizationError("reference_optimized_equivalent must be boolean")
+    if type(index_integrity_ok) is not bool:
+        raise StabilizationError("index_integrity_ok must be boolean")
     if type(protected_source_leak_count) is not int or protected_source_leak_count < 0:
         raise StabilizationError("protected_source_leak_count must be non-negative integer")
     warning_list = sorted(set(warnings))
+    if len(warning_list) != len(warnings) or any(type(value) is not str or not value for value in warning_list):
+        raise StabilizationError("warnings must be unique non-empty strings")
     body = {
         "schema": "ovc-p2ctii-live-shadow-observation/v0.1",
         "repository_commit": repository_commit,
@@ -50,6 +60,7 @@ def build_shadow_observation(
         "currentness_state": currentness_state,
         "reference_optimized_equivalent": reference_optimized_equivalent,
         "protected_source_leak_count": protected_source_leak_count,
+        "index_integrity_ok": index_integrity_ok,
         "warnings": warning_list,
         "read_only_shadow": True,
         "operational_reliance": False,
@@ -66,6 +77,8 @@ def evaluate_incidents(observation: Mapping[str, Any]) -> dict[str, Any]:
         incidents.append("PROTECTED_SOURCE_LEAK")
     if observation.get("reference_optimized_equivalent") is not True:
         incidents.append("REFERENCE_OPTIMIZED_DIVERGENCE")
+    if observation.get("index_integrity_ok") is not True:
+        incidents.append("INDEX_CORRUPTION")
     incidents = sorted(set(incidents))
     if set(incidents) - INCIDENT_CLASSES:
         raise StabilizationError("unknown incident class")
