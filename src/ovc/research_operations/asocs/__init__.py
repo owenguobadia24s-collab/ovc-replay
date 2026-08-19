@@ -1,5 +1,12 @@
 """ASOCS audit-only research operations."""
 
+from .audit_execution import (
+    ASOCSAuditRouteError,
+    MorphologyBar,
+    evaluate_c1_morphology,
+    not_evaluable_record,
+    route_for_construct,
+)
 from .instrumentation import (
     ASOCSInstrumentationError,
     InstrumentationObservation,
@@ -24,6 +31,7 @@ from .source import (
 )
 
 __all__ = [
+    "ASOCSAuditRouteError",
     "ASOCSInstrumentationError",
     "ASOCSPopulationError",
     "ASOCSSourceGap",
@@ -32,12 +40,16 @@ __all__ = [
     "ClaimClassDecision",
     "InstrumentationObservation",
     "MaterializationResult",
+    "MorphologyBar",
     "SourceProvenanceAssessment",
+    "evaluate_c1_morphology",
     "exact_interface_evaluability_matrix",
     "logical_scientific_hash",
     "materialize_population",
+    "not_evaluable_record",
     "observe_record",
     "prove_chain_equivalence",
     "qualify_source",
     "render_source_native_svg",
+    "route_for_construct",
 ]
