@@ -1,0 +1,93 @@
+{
+  "schema": "ovc-cers-persistent-supervisor-wp5-target-runtime-qualification/v1",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "packet_id": "CERS-PS-WP5-TARGET-RUNTIME-QUALIFICATION",
+  "status": "PASS",
+  "supersedes_for_target_runtime_assurance": "CERS_PS_WP5_OBSERVED_QUALIFICATION_v0_1.json",
+  "preserves_prior_observation": true,
+  "observed_at_utc": "2026-08-19T15:26:35.478947+00:00",
+  "qualification_head": "59d1b7440e60f5165d730b61965828da710d0333",
+  "qualification_tree": "f3f27ba0dd1e2a3750a87341f00252c0c3f15e31",
+  "executor_environment_binding": "windows-local-python311",
+  "environment": {
+    "python": "3.11.9",
+    "python_family": "3.11",
+    "implementation": "CPython",
+    "platform": "Windows-10-10.0.19045-SP0",
+    "machine": "AMD64"
+  },
+  "runtime_distribution": {
+    "source": "PYTHON_SOFTWARE_FOUNDATION_OFFICIAL_WINDOWS_AMD64_DISTRIBUTION",
+    "artifact_url": "https://www.python.org/ftp/python/3.11.9/python-3.11.9-amd64.zip",
+    "artifact_sha256": "4ba90a4ab8990891033d37ff04d2047fdae8948d0d2729a68d3a6a17c585b681",
+    "artifact_sha256_verified": true
+  },
+  "qualification": {
+    "iterations": 1000,
+    "wall_clock_ms": 4042.1175,
+    "measurements": {
+      "deterministic_multi_programme_reconciliation": {
+        "minimum_ms": 1.0836,
+        "median_ms": 1.2123,
+        "p95_ms": 1.4103,
+        "p99_ms": 1.7385,
+        "maximum_ms": 4.2565
+      },
+      "fenced_worker_loss_recovery_lifecycle": {
+        "minimum_ms": 0.3157,
+        "median_ms": 0.3643,
+        "p95_ms": 0.4413,
+        "p99_ms": 0.5654,
+        "maximum_ms": 3.276
+      },
+      "zero_chat_checkpoint_restart": {
+        "minimum_ms": 0.0359,
+        "median_ms": 0.0422,
+        "p95_ms": 0.0532,
+        "p99_ms": 0.0779,
+        "maximum_ms": 0.1304
+      },
+      "combined_observed_cycle": {
+        "minimum_ms": 1.4393,
+        "median_ms": 1.62455,
+        "p95_ms": 1.8581,
+        "p99_ms": 2.313,
+        "maximum_ms": 4.6865
+      }
+    },
+    "assertions": {
+      "multiple_programmes_deterministic": "PASS",
+      "unrelated_lanes_not_false_blocked": "PASS",
+      "operator_boundary_parks_without_global_block": "PASS",
+      "main_churn_selective": "PASS",
+      "stale_fence_rejected": "PASS",
+      "unknown_start_idempotent": "PASS",
+      "worker_loss_single_authoritative_owner": "PASS",
+      "hold_and_authority_removal_prevent_new_dispatch": "PASS",
+      "unregistered_programme_denied": "PASS",
+      "reserved_boundaries_unreachable": "PASS",
+      "zero_chat_restart_deterministic": "PASS",
+      "disable_new_dispatch_rollback": "PASS"
+    },
+    "blocking_warnings": [],
+    "incidents": [],
+    "authority_effect": "NONE_SHADOW_QUALIFICATION_ONLY"
+  },
+  "frozen_capacity_confirmed": {
+    "worker_concurrency": 1,
+    "max_speculative_depth": 1,
+    "visible_train_cap": 8,
+    "source": "exact already-proven CERS-WP6 live-pilot envelope; no increase"
+  },
+  "frozen_timing_confirmed": {
+    "sweep_cadence_seconds": 1,
+    "heartbeat_cadence_seconds": 59,
+    "liveness_threshold_seconds": 117,
+    "reclaim_after_seconds": 176,
+    "provider_backoff_seconds": [1, 59, 117],
+    "changed_by_target_runtime_qualification": false
+  },
+  "persistent_general_dispatch": "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
+  "post_pilot_dispatch_state": "DISABLE_NEW_DISPATCH",
+  "authority_effect": "NONE_SHADOW_QUALIFICATION_ONLY"
+}

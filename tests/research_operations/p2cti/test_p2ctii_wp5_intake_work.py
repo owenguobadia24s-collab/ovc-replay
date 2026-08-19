@@ -54,7 +54,15 @@ def test_theory_seed_is_reference_only_content_addressed_and_non_authoritative()
         title=fixture["title"],
         source_ref=dict(reversed(list(fixture["source_ref"].items()))),
     )
+    changed_title = build_theory_seed(
+        source_frontier_id=FRONTIER,
+        seed_key=fixture["seed_key"],
+        title=fixture["title"] + " amended",
+        source_ref=fixture["source_ref"],
+    )
     assert first == second
+    assert changed_title["record_id"] != first["record_id"]
+    assert changed_title["payload"]["seed_id"] != first["payload"]["seed_id"]
     _assert_record(first, "THEORY_SEED")
     payload = first["payload"]
     assert payload["source_ref"]["scientific_payload_copied"] is False
@@ -100,9 +108,11 @@ def test_intake_triage_reuses_exact_dmrp_mapping_without_silent_coercion(design:
     assert record["payload"]["candidate_effect"] == "NONE"
 
 
-def test_intake_rejects_unknown_disposition_and_decision_bearing_fields() -> None:
+def test_intake_rejects_unknown_disposition_reason_code_and_decision_bearing_fields() -> None:
     with pytest.raises(IntakeValidationError):
         build_intake_triage(source_frontier_id=FRONTIER, seed_or_theory_ref="x", design_disposition="FORMALISE_BEST", reason_codes=[])
+    with pytest.raises(IntakeValidationError, match="unknown reason codes"):
+        build_intake_triage(source_frontier_id=FRONTIER, seed_or_theory_ref="x", design_disposition="DEFER", reason_codes=["CONVENIENT_UNREGISTERED_REASON"])
     source = _fixture()["source_ref"]
     with pytest.raises(IntakeValidationError):
         build_theory_seed(source_frontier_id=FRONTIER, seed_key="x", title="x", source_ref={**source, "risk_score": 1})
