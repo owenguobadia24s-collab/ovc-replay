@@ -1,0 +1,41 @@
+{
+  "schema": "ovc-cers-persistent-supervisor-authority/v1",
+  "registry_id": "OVC-CERS-PERSISTENT-SUPERVISOR-AUTHORITY-v0.1",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "plan_id": "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED",
+  "gate_id": "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
+  "approved": true,
+  "effective_on_repository_materialisation": true,
+  "source_decision": "records/development/skills/CERS_G_PERSISTENT_SUPERVISOR_ACTIVATION_OPERATOR_PASS_20260819T165600+0100.json",
+  "authority_kind": "PERSISTENT_CERS_SUPERVISION_EXACT_ADMITTED_SCOPE",
+  "authority_effect": "PERSISTENT_LIVENESS_AND_UNATTENDED_INVOCATION_ONLY_FOR_EXACT_ADMITTED_SCOPE_AND_EXISTING_OWNER_AUTHORITY",
+  "persistent_run": "ACTIVE",
+  "programme_admission_registry": "registries/development/skills/cers/CERS_PERSISTENT_PROGRAMME_ADMISSION_REGISTRY_v0_3.json",
+  "supervisor_policy": "registries/development/skills/cers/CERS_PERSISTENT_SUPERVISOR_POLICY_v0_2.json",
+  "executor_binding": "registries/development/skills/cers/CERS_PERSISTENT_EXECUTOR_BINDING_v0_2.json",
+  "quiescence_state": "registries/development/skills/cers/CERS_PERSISTENT_QUIESCENCE_STATE_v0_2.json",
+  "scope": {
+    "programme_allowlist": ["OVC-DSAI3V-CERS-CONFORMANCE-v0.1"],
+    "eligible_authority_classes": ["AUTO_EXECUTABLE", "AUTO_RATIFIABLE"],
+    "eligible_packet_classes": ["LOW_RISK_IMPLEMENTATION"],
+    "allowed_side_effect_classes": ["READ_ONLY", "BRANCH_REVERSIBLE"],
+    "worker_concurrency": 1,
+    "max_speculative_depth": 1,
+    "visible_train_cap": 8,
+    "future_programme_auto_admission": false
+  },
+  "integration": {
+    "controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
+    "gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+    "direct_main_mutation": false,
+    "merge_capability": "NONE",
+    "parallel_physical_merge": false,
+    "force_push": false,
+    "history_rewrite": false
+  },
+  "reserved_authority_unchanged": true,
+  "validation": "DENIED",
+  "scientific_semantic_selector_model_family_candidate_theory_promotion": "NONE",
+  "publication_probability_risk_exposure_trading_market_execution": "NONE",
+  "rollback": "Set durable DISABLE_NEW_DISPATCH and preserve all evidence/history."
+}
