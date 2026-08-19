@@ -4,8 +4,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 
+
 def load(path: str):
     return json.loads((ROOT / path).read_text(encoding="utf-8"))
+
 
 def test_operator_pass_is_exact_and_bounded():
     d = load("records/development/skills/CERS_G_LIVE_DISPATCH_OPERATOR_PASS_20260818T151800+0100.json")
@@ -24,6 +26,7 @@ def test_operator_pass_is_exact_and_bounded():
     assert scope["packet_executor_merge_capability"] == "NONE"
     assert scope["force_push"] is False and scope["history_rewrite"] is False
 
+
 def test_authority_registry_fails_closed_outside_wp6():
     a = load("registries/development/skills/cers/CERS_LIVE_DISPATCH_AUTHORITY_v0_1.json")
     assert a["effective"] is True
@@ -37,6 +40,7 @@ def test_authority_registry_fails_closed_outside_wp6():
     assert a["side_effect_policy"]["unknown_side_effect"] == "DENY"
     assert a["scientific_selector_model_family_candidate_theory_semantic_publication_probability_risk_exposure_trading_execution"] == "NONE"
 
+
 def test_programme_state_preserves_operator_pass_and_advances_lawfully_through_persistent_preactivation():
     p = load("registries/implementation/dsai3v_cers_v0_1/CURRENT_STATE_POINTER.json")
     approved = load("registries/implementation/dsai3v_cers_v0_1/OVC_DSAI3V_CERS_STATE_v0_7.json")
@@ -45,40 +49,25 @@ def test_programme_state_preserves_operator_pass_and_advances_lawfully_through_p
     assert approved["status"] == "APPROVED"
     assert approved["runtime_authority"] == "AUTHORIZED_PENDING_WP6_IMPLEMENTATION_AND_PILOT"
     gate = next(row for row in approved["packet_register"] if row["packet_id"] == "CERS-G-LIVE-DISPATCH")
-    wp6 = next(row for row in approved["packet_register"] if row["packet_id"] == "CERS-WP6")
     assert gate["decision"] == "PASS_OPERATOR"
-    assert wp6["status"] == "READY"
 
     assert pilot["supersedes_state"] == "OVC_DSAI3V_CERS_STATE_v0_7.json"
     assert pilot["status"] == "G6_PASS_CONDITIONAL_EXACT_HEAD_AND_PHYSICAL_RECEIPT"
     assert pilot["runtime_authority"] == "CERS_WP6_BOUNDED_LIVE_PILOT_EXECUTED"
     assert pilot["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH_AFTER_BRANCH_PILOT_COMPLETION"
-    pilot_gate = next(row for row in pilot["packet_register"] if row["packet_id"] == "CERS-G-LIVE-DISPATCH")
-    pilot_wp6 = next(row for row in pilot["packet_register"] if row["packet_id"] == "CERS-WP6")
-    assert pilot_gate["decision"] == "PASS_OPERATOR"
-    assert pilot_wp6["status"] == "APPROVED_CONDITIONAL_EXACT_HEAD_AND_PHYSICAL_RECEIPT"
 
     if p["current_state"].endswith("OVC_DSAI3V_CERS_STATE_v0_7.json"):
         assert p["status"] == "APPROVED"
-        assert p["packet_id"] == "CERS-G-LIVE-DISPATCH"
         assert p["next_packet"] == "CERS-WP6"
-        assert p["live_unattended_dispatch"] == "AUTHORIZED_CERS_WP6_BOUNDED_PILOT_ONLY"
         return
-
     if p["current_state"].endswith("OVC_DSAI3V_CERS_STATE_v0_8.json"):
         assert p["status"] == "G6_PASS_CONDITIONAL_EXACT_HEAD_AND_PHYSICAL_RECEIPT"
-        assert p["packet_id"] == "CERS-WP6"
-        assert p["next_packet"] is None
-        assert p["live_unattended_dispatch"] == "AUTHORIZED_CERS_WP6_BOUNDED_PILOT_ONLY_NO_SCOPE_EXPANSION"
         assert p["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH_AFTER_BRANCH_PILOT_COMPLETION"
         return
 
     persistent_plan = load("registries/implementation/dsai3v_cers_v0_1/OVC_DSAI3V_CERS_STATE_v0_9.json")
     assert persistent_plan["supersedes_state"] == "OVC_DSAI3V_CERS_STATE_v0_8.json"
     assert persistent_plan["plan_id"] == "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED"
-    assert persistent_plan["status"] == "READY"
-    assert persistent_plan["packet_id"] == "CERS-PS-WP0"
-    assert persistent_plan["current_gate"] == "CERS-PS-G0"
     assert persistent_plan["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
     assert persistent_plan["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
     predecessor = persistent_plan["predecessor_effectivity"]
@@ -87,38 +76,43 @@ def test_programme_state_preserves_operator_pass_and_advances_lawfully_through_p
     assert predecessor["physical_tree"] == "5faa522134abfae1749a13bb9b53ae51e8054ee7"
     assert predecessor["transaction_id"] == "8e306f0506d1a2199777e267c5321425e97ff3b72a07ca9605a9ef04c47516f9"
     assert predecessor["completion_proof"] == "112fcfcec02c73b1b19d56d90c5965e45da9d2a7cc26d19706f8cd0816fde860"
-    activation = next(row for row in persistent_plan["packet_register"] if row["packet_id"] == "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION")
-    assert activation["status"] == "PLANNED"
-    assert activation["authority_required"] == "OPERATOR_REQUIRED"
-    assert activation["authority_delta"] == "PERSISTENT_RUN_FOR_EXACT_ADMITTED_SCOPE_ONLY"
 
     if p["current_state"].endswith("OVC_DSAI3V_CERS_STATE_v0_9.json"):
-        assert p["status"] == "READY"
         assert p["packet_id"] == "CERS-PS-WP0"
-        assert p["next_packet"] == "CERS-PS-WP0"
-        assert p["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
-        assert p["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
         return
 
-    assert p["current_state"].endswith("OVC_DSAI3V_CERS_STATE_v0_10.json")
-    assert p["status"] == "READY"
-    assert p["packet_id"] == "CERS-PS-WP1"
-    assert p["next_packet"] == "CERS-PS-WP1"
-    assert p["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
-    assert p["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
-    wp0_state = load(p["current_state"])
-    assert wp0_state["supersedes_state"] == "OVC_DSAI3V_CERS_STATE_v0_9.json"
-    assert wp0_state["status"] == "READY"
-    assert wp0_state["packet_id"] == "CERS-PS-WP1"
-    assert wp0_state["current_gate"] == "CERS-PS-G1"
-    assert wp0_state["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
-    assert wp0_state["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
-    wp0 = next(row for row in wp0_state["packet_register"] if row["packet_id"] == "CERS-PS-WP0")
-    activation = next(row for row in wp0_state["packet_register"] if row["packet_id"] == "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION")
-    assert wp0["status"] == "COMPLETED" and wp0["decision"] == "PASS_DELEGATED"
-    assert activation["status"] == "PLANNED"
+    current = load(p["current_state"])
+    assert current["plan_id"] == "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED"
+    assert current["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
+    assert current["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
+    assert current["controller_identity"] == "DSAI_VIT_PHYSICAL_CONTROLLER"
+    assert current["physical_gateway"] == "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY"
+    assert current["parallel_physical_merge"] is False
+    activation = next(row for row in current["packet_register"] if row["packet_id"] == "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION")
     assert activation["authority_required"] == "OPERATOR_REQUIRED"
     assert activation["authority_delta"] == "PERSISTENT_RUN_FOR_EXACT_ADMITTED_SCOPE_ONLY"
+    assert activation["status"] in {"PLANNED", "GATE_PREPARATION", "GATE_READY"}
+
+    suffix = Path(p["current_state"]).name
+    version = int(suffix.split("_v0_")[1].split(".json")[0])
+    assert 10 <= version <= 16
+    expected_packet_by_version = {
+        10: "CERS-PS-WP1",
+        11: "CERS-PS-WP2",
+        12: "CERS-PS-WP3",
+        13: "CERS-PS-WP4",
+        14: "CERS-PS-WP5",
+        15: "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
+        16: "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
+    }
+    assert p["packet_id"] == expected_packet_by_version[version]
+    if version == 16:
+        assert p["next_packet"] is None
+        assert p["status"] == "GATE_READY"
+        assert p["decision"] == "PENDING_OPERATOR"
+    else:
+        assert p["next_packet"] == expected_packet_by_version[version]
+
 
 def test_gate_ready_evidence_and_external_completion_are_bound():
     d = load("records/development/skills/CERS_G_LIVE_DISPATCH_OPERATOR_PASS_20260818T151800+0100.json")

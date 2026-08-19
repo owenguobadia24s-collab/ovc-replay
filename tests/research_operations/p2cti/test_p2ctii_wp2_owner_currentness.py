@@ -301,6 +301,7 @@ def test_fresh_review_pass_is_materialised_without_rewriting_prior_block() -> No
         "P2CTII-G4-ALG",
         "P2CTII-WP4-REMEDIATION-1",
         "P2CTII-G4-ALG-FRESH-INDEPENDENT-REVIEW-AFTER-WP4-REMEDIATION-1",
+        "P2CTII-WP4-REMEDIATION-2",
     }
     assert state["status"] in {
         "COMPLETED",
@@ -318,6 +319,7 @@ def test_fresh_review_pass_is_materialised_without_rewriting_prior_block() -> No
         "P2CTII-WP4-REMEDIATION-1-QA-DECISION",
         "P2CTII-G4-ALG-FRESH-INDEPENDENT-REVIEW-AFTER-WP4-REMEDIATION-1",
         "P2CTII-WP4-REMEDIATION-2",
+        "P2CTII-G4-ALG-FRESH-INDEPENDENT-REVIEW-AFTER-WP4-REMEDIATION-2",
     }
     if state["packet_id"] in {"P2CTII-WP3", "P2CTII-G4-ALG"}:
         assert any(
@@ -355,6 +357,10 @@ def test_fresh_review_pass_is_materialised_without_rewriting_prior_block() -> No
     elif state["packet_id"] == "P2CTII-WP4-REMEDIATION-1":
         assert state["blockers"] == [
             "P2CTII_G4_ALG_FRESH_INDEPENDENT_REVIEW_REQUIRED",
+        ]
+    elif state["packet_id"] == "P2CTII-WP4-REMEDIATION-2":
+        assert state["blockers"] == [
+            "P2CTII_G4_ALG_FRESH_INDEPENDENT_REVIEW_AFTER_REMEDIATION_2_REQUIRED",
         ]
     else:
         assert state["blockers"] == []

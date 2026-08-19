@@ -46,9 +46,23 @@ def test_checkpoint_restart_and_two_run_logical_equality() -> None:
     assert proof["logical_equal"] is True
 
 
-def test_wp5_prebuild_does_not_claim_g3_without_exact_external_source() -> None:
-    state = _json("records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_7_WP5_PREBUILD.json")
-    assert state["status"] == "IMPLEMENTED"
-    assert state["gate_status"] == "NOT_EVALUATED"
-    assert "EXACT_BOUND_SOURCE_ARTIFACT_REQUIRED_FOR_G3" in state["blockers"]
+def test_wp5_blocked_state_preserves_g3_and_downstream_boundaries() -> None:
+    state = _json("records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_7_WP5_BLOCKED.json")
+    qa = _json("docs/programmes/asocs-v0-1/implementation/wp5/ASOCSI_WP5_QA_PACKET_v0_1.json")
+    decision = _json("docs/programmes/asocs-v0-1/implementation/wp5/ASOCSI_G3_BLOCK_DECISION_v0_1.json")
+    assert state["status"] == "BLOCKED"
+    assert state["gate_status"] == "BLOCKED"
+    assert state["g3_census_frozen"] is False
     assert state["review_sampling_started"] is False
+    assert state["next_packet"] == "ASOCSI-WP5_RESUME_AFTER_EXACT_SOURCE_RECOVERY"
+    assert state["blockers"] == [
+        "EXACT_BOUND_SOURCE_ARTIFACT_REQUIRED_FOR_G3",
+        "FULL_CENSUS_ARTIFACT_NOT_MATERIALISED",
+        "TWO_INDEPENDENT_CLEAN_EXECUTIONS_NOT_YET_RUN",
+    ]
+    assert qa["qa_recommendation"] == "BLOCK"
+    assert qa["authority_delta"] == "NONE"
+    assert decision["decision"] == "BLOCK"
+    assert decision["operator_decision_required"] is False
+    assert decision["wp6_admission"] is False
+    assert decision["wp7_human_review_admission"] is False

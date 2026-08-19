@@ -1,0 +1,50 @@
+{
+  "schema": "ovc-cers-persistent-operational-limits/v1",
+  "limits_id": "OVC-CERS-PERSISTENT-OPERATIONAL-LIMITS-v0.1",
+  "status": "FROZEN_QUALIFIED_INACTIVE_PREACTIVATION",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "plan_id": "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED",
+  "qualification_evidence": "docs/releases/development-skills-v0-3/cers-persistent-supervisor/wp5/CERS_PS_WP5_OBSERVED_QUALIFICATION_v0_1.json",
+  "qualification_evidence_sha256": "7a553875fa347120b5db26b2d8731709c7b0d78c6c18a1ef19478819b91bbfb7",
+  "measurement_source_head": "81a563eddb81082527c5cb734c3853799df9cafa",
+  "measurement_source_tree": "0be3625137a443e81d77893b99c600fb7427d8fa",
+  "capacity": {
+    "worker_concurrency": 1,
+    "max_speculative_depth": 1,
+    "visible_train_cap": 8,
+    "source": "docs/releases/development-skills-v0-3/cers-conformance/wp6/CERS_WP6_LIVE_PILOT_RUN_v0_1.json",
+    "no_increase_over_proven_pilot": true
+  },
+  "timing": {
+    "sweep_cadence_seconds": 1,
+    "heartbeat_cadence_seconds": 59,
+    "liveness_threshold_seconds": 117,
+    "reclaim_after_seconds": 176,
+    "provider_backoff_seconds": [1, 59, 117],
+    "source": "OBSERVED_WP5_QUALIFICATION_AND_COMPLETED_WP6_LIVE_PILOT"
+  },
+  "fencing": {
+    "monotonic_generation_required": true,
+    "stale_fence": "DENY",
+    "start_ack_required": true,
+    "unknown_start": "RECONCILE_BEFORE_REDISPATCH",
+    "duplicate_authoritative_start": "DENY",
+    "worker_reclaim": "ONLY_AFTER_QUALIFIED_LIVENESS_EXPIRY"
+  },
+  "physical_integration": {
+    "controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
+    "gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+    "parallel_physical_merge": false
+  },
+  "repository_rules": {
+    "direct_main_mutation": false,
+    "merge_capability": "NONE",
+    "force_push": false,
+    "history_rewrite": false,
+    "write_domain_rule": "PACKET_DECLARED_WRITE_DOMAIN_AND_SEMANTIC_OWNER_ONLY"
+  },
+  "persistent_general_dispatch": "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
+  "post_pilot_dispatch_state": "DISABLE_NEW_DISPATCH",
+  "activation_gate": "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
+  "authority_effect": "NONE"
+}
