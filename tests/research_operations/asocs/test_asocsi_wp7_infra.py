@@ -48,3 +48,20 @@ def test_wp7_infra_stops_before_human_review_and_g5():
     assert boundary['human_review_may_be_inferred_or_automated'] is False
     assert start['prerequisite_g4']['presentation_count']==370 and start['prerequisite_g4']['hidden_repeat_count']==18
     assert start['primary_surface']['renderer_id']=='ASOCS.SOURCE_NATIVE.SVG.CANDLE.v0.1'
+
+def test_wp7_infra_closeout_passes_without_starting_human_review():
+    qa=_json('docs/programmes/asocs-v0-1/implementation/wp7/ASOCSI_WP7_INFRA_QA_PACKET_v0_2.json')
+    state=_json('records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_13_WP7_INFRA_COMPLETED.json')
+    pointer=_json('registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json')
+    assert qa['qa_recommendation']=='PASS' and qa['blocking_findings']==[]
+    assert qa['repository_assurance']['repository_tests']=='PASS'
+    assert qa['repository_assurance']['vit_routing']=='PASS'
+    assert qa['repository_assurance']['siq_ready']=='PASS'
+    assert qa['repository_assurance']['merge_readiness']=='PASS'
+    assert qa['human_review_started'] is False and qa['g5_status']=='NOT_STARTED'
+    assert state['status']=='COMPLETED' and state['infra_completed'] is True
+    assert state['human_review_started'] is False and state['g5_status']=='NOT_STARTED'
+    assert state['next_packet']=='ASOCSI-WP7-HUMAN-REVIEW_REQUIRES_HUMAN_INPUT'
+    assert pointer['current_state'].endswith('ASOCSI_PROGRAMME_STATE_v0_13_WP7_INFRA_COMPLETED.json')
+    assert pointer['status']=='COMPLETED'
+    assert pointer['next_packet']=='ASOCSI-WP7-HUMAN-REVIEW_REQUIRES_HUMAN_INPUT'
