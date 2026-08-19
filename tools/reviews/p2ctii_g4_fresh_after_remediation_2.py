@@ -15,6 +15,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from ovc.research_operations.canonical import canonical_sha256
 
+# Permanent review integration uses VIT late-binding transport; no physical-base identity is embedded here.
 REMEDIATION_2_TEST = ROOT / "tests/research_operations/p2cti/test_p2ctii_wp4_remediation_2.py"
 REGRESSION_MODULES = (
     "tests/research_operations/p2cti/test_p2ctii_wp4_relations_demand_query.py",
