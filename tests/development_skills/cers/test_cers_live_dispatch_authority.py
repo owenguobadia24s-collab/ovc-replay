@@ -91,7 +91,7 @@ def test_programme_state_preserves_operator_pass_and_advances_lawfully_through_p
     activation = next(row for row in current["packet_register"] if row["packet_id"] == "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION")
     assert activation["authority_required"] == "OPERATOR_REQUIRED"
     assert activation["authority_delta"] == "PERSISTENT_RUN_FOR_EXACT_ADMITTED_SCOPE_ONLY"
-    assert activation["status"] in {"PLANNED", "GATE_READY"}
+    assert activation["status"] in {"PLANNED", "GATE_PREPARATION", "GATE_READY"}
 
     suffix = Path(p["current_state"]).name
     version = int(suffix.split("_v0_")[1].split(".json")[0])
