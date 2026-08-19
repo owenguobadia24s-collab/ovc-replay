@@ -26,6 +26,11 @@ from .persistent import (
     reconcile_persistent_requests,
     route_failure_to_owner,
 )
+from .persistent_service import (
+    DurableSupervisorState,
+    PersistentSupervisorService,
+    PersistentTimingPolicy,
+)
 from .reconcile import ReferenceReconciler, ReconciliationResult
 from .runtime import DispatchCoordinator, EventLedger, FixtureExecutor, LeaseManager
 
@@ -34,6 +39,7 @@ __all__ = [
     "DispatchCoordinator",
     "DispatchIdentity",
     "DispatchTransaction",
+    "DurableSupervisorState",
     "EventLedger",
     "ExecutorCapabilityRecord",
     "FixtureExecutor",
@@ -41,6 +47,8 @@ __all__ = [
     "PersistentAuthorityView",
     "PersistentDispatchProposal",
     "PersistentReconciliationResult",
+    "PersistentSupervisorService",
+    "PersistentTimingPolicy",
     "PersistentWorkRequest",
     "QuiescenceControl",
     "ReconciliationResult",
