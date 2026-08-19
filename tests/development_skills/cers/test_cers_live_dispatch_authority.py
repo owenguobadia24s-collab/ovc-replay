@@ -91,11 +91,11 @@ def test_programme_state_preserves_operator_pass_and_advances_lawfully_through_p
     activation = next(row for row in current["packet_register"] if row["packet_id"] == "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION")
     assert activation["authority_required"] == "OPERATOR_REQUIRED"
     assert activation["authority_delta"] == "PERSISTENT_RUN_FOR_EXACT_ADMITTED_SCOPE_ONLY"
-    assert activation["status"] in {"PLANNED", "GATE_READY"}
+    assert activation["status"] in {"PLANNED", "GATE_PREPARATION", "GATE_READY"}
 
     suffix = Path(p["current_state"]).name
     version = int(suffix.split("_v0_")[1].split(".json")[0])
-    assert 10 <= version <= 15
+    assert 10 <= version <= 16
     expected_packet_by_version = {
         10: "CERS-PS-WP1",
         11: "CERS-PS-WP2",
@@ -103,9 +103,15 @@ def test_programme_state_preserves_operator_pass_and_advances_lawfully_through_p
         13: "CERS-PS-WP4",
         14: "CERS-PS-WP5",
         15: "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
+        16: "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
     }
     assert p["packet_id"] == expected_packet_by_version[version]
-    assert p["next_packet"] == expected_packet_by_version[version]
+    if version == 16:
+        assert p["next_packet"] is None
+        assert p["status"] == "GATE_READY"
+        assert p["decision"] == "PENDING_OPERATOR"
+    else:
+        assert p["next_packet"] == expected_packet_by_version[version]
 
 
 def test_gate_ready_evidence_and_external_completion_are_bound():

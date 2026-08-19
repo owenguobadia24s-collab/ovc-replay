@@ -144,6 +144,7 @@ def test_g2_preregistration_is_frozen_before_census_and_preserves_authority() ->
     pointer = _json(
         "registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json"
     )
+    current_state = _json(pointer["current_state"])
     assert freeze["frozen_before_s3_census_inspection"] is True
     assert freeze["census_inspection_started"] is False
     assert freeze["review_sampling_started"] is False
@@ -152,8 +153,9 @@ def test_g2_preregistration_is_frozen_before_census_and_preserves_authority() ->
     assert state["status"] == "COMPLETED"
     assert state["structural_computation_started"] is False
     assert state["next_packet"] == "ASOCSI-WP4"
-    assert pointer["packet_id"] == "ASOCSI-WP3"
-    assert pointer["next_packet"] == "ASOCSI-WP4"
+    assert current_state["status"] == "COMPLETED"
+    assert pointer["packet_id"] == current_state["packet_id"]
+    assert pointer["next_packet"] == current_state["next_packet"]
     assert "VALIDATION_CONSUMPTION" in freeze["retained_denials"]
 
 
