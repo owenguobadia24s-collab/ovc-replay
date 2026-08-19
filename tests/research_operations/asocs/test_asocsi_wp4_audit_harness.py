@@ -89,11 +89,14 @@ def test_wp4_qa_and_state_preserve_authority_and_route_to_wp5() -> None:
     )
     state = _json("records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_6_WP4.json")
     pointer = _json("registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json")
+    current_state = _json(pointer["current_state"])
     assert qa["qa_recommendation"] == "PASS"
     assert qa["blocking_findings"] == []
     assert qa["authority_delta"] == "NONE"
     assert decision["decision"] == "PASS_DELEGATED"
     assert state["status"] == "COMPLETED"
     assert state["next_packet"] == "ASOCSI-WP5"
-    assert pointer["packet_id"] == "ASOCSI-WP4"
-    assert pointer["next_packet"] == "ASOCSI-WP5"
+    assert pointer["programme_id"] == "OVC-ASOCS-6M-v0.1"
+    assert current_state["status"] == "COMPLETED"
+    assert pointer["packet_id"] == current_state["packet_id"]
+    assert pointer["next_packet"] == current_state["next_packet"]
