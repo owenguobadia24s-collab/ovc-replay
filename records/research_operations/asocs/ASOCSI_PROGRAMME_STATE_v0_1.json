@@ -1,52 +1,47 @@
 {
   "schema": "ovc-programme-state/v1",
   "programme_id": "OVC-ASOCS-6M-v0.1",
-  "packet_id": "ASOCSI-G0-READINESS",
+  "packet_id": "ASOCSI-G0",
   "plan_id": "OVC-ASOCS-CONFORMANCE-SCIENTIFIC-PREREGISTRATION-IMPLEMENTATION-PLAN-0.1-R1",
   "plan_version": "0.1_REVISED_1",
-  "status": "GATE_READY",
+  "status": "APPROVED",
   "prerequisites": [
     "ASOCS_DESIGN_RATIFIED_MAIN_BAA1492F972446B45E94CD5E3A1A9DB6874FD3ED",
-    "ASOCSI_PLAN_CREATED_SHA256_E37D7E7E26EC633D743831395DB39F92736C5AA9D4540D1E67BB2F47335EE5A1",
-    "ASOCSI_FRESH_PRESSURE_TEST_PASS_WITH_REQUIRED_AMENDMENTS_SHA256_F1BBDEB76F287D0DCF9F084F936CA0913EF9A1C0D0FC4428DD5629034A60C138",
-    "ASOCSI_REVISED_1_IPT_01_THROUGH_IPT_08_CLOSED_SHA256_5AE8943EF61EF596C3F9990B717A08D9406532B774E761FF30324B2A77AD4A4E",
-    "ASOCSI_G0_QA_PASS_RECOMMENDATION"
+    "ASOCSI_PLAN_REVISED_1_SHA256_5AE8943EF61EF596C3F9990B717A08D9406532B774E761FF30324B2A77AD4A4E",
+    "ASOCSI_G0_QA_PASS_RECOMMENDATION",
+    "OPERATOR_PASS_2026_08_19T10_21_PLUS_01"
   ],
-  "authority_required": "OPERATOR_REQUIRED_ASOCSI_G0",
-  "authority_delta": "PENDING_OPERATOR_DECISION_EXACT_G0_DELTA_ONLY",
+  "authority_required": "OPERATOR_REQUIRED_SATISFIED_ASOCSI_G0",
+  "authority_delta": "EXACT_ASOCSI_G0_APPROVED_DELTA_ONLY",
   "baseline_commit": "baa1492f972446b45e94cd5e3a1a9db6874fd3ed",
   "branch": "plan/asocsi-g0-ready-20260819",
-  "candidate_commit": "RESOLVE_AT_PR_HEAD",
+  "candidate_commit": "RESOLVE_AT_FINAL_PR_HEAD",
   "tests": [
-    {
-      "scope": "implementation plan original DOCX render and page-by-page visual QA",
-      "result": "PASS",
-      "pages": 10
-    },
-    {
-      "scope": "fresh independent-style adversarial pressure test",
-      "result": "PASS_WITH_REQUIRED_AMENDMENTS"
-    },
-    {
-      "scope": "implementation plan REVISED 1 DOCX render and page-by-page visual QA",
-      "result": "PASS",
-      "pages": 11
-    },
-    {
-      "scope": "repository PR exact-head VIT/GRT/SIQ/profile assurance",
-      "result": "PENDING_PR_CREATION_AND_CI"
-    }
+    {"scope": "implementation plan Revised 1 document QA and amendment closure", "result": "PASS"},
+    {"scope": "repository-wide suite on predecision gate-ready head", "result": "PASS"},
+    {"scope": "pytest/unittest parity on predecision gate-ready head", "result": "PASS"},
+    {"scope": "runner parity on predecision gate-ready head", "result": "PASS"},
+    {"scope": "VIT routing, FINAL_HEAD, SIQ READY and merge readiness on predecision gate-ready head", "result": "PASS"},
+    {"scope": "exact-final postdecision assurance", "result": "PENDING_NEW_HEAD_CI"}
   ],
   "qa_packet": "docs/programmes/asocs-v0-1/implementation/ASOCSI_G0_QA_PACKET_v0_1.json",
-  "decision_record": null,
+  "decision_record": "docs/programmes/asocs-v0-1/implementation/ASOCSI_G0_OPERATOR_DECISION_v0_1.json",
   "gate_packet": "docs/programmes/asocs-v0-1/implementation/ASOCSI_G0_GATE_PACKET_v0_1.json",
   "merge_commit": null,
   "blockers": [],
-  "next_packet": "ASOCSI-G0",
-  "next_packet_if_pass": "ASOCSI-WP0",
-  "current_authority": "DESIGN_RATIFIED_IMPLEMENTATION_PLANNING_ONLY",
-  "implementation_authority": "DENIED_PENDING_ASOCSI_G0",
-  "audit_source_authority": "DENIED_PENDING_ASOCSI_G0",
+  "next_packet": "ASOCSI-WP0",
+  "current_authority": "ASOCSI_G0_APPROVED_BOUNDED_IMPLEMENTATION_AND_EXACT_HASH_AUDIT_SOURCE_USE",
   "final_scientific_gate": "ASOCSI-G7_OPERATOR_REQUIRED",
-  "rollback": "Preserve all plan, pressure-test, gate-ready and design evidence. No implementation or audit-source execution exists before ASOCSI-G0 PASS."
+  "retained_denials": [
+    "ACTIVE_DARWINEX_PROVIDER_INTAKE",
+    "OPT_A_RELEASE_OR_SELECTOR_MUTATION",
+    "DISCOVERY_DEVELOPMENT_VALIDATION_ROLE_ADMISSION_OF_H1_2026",
+    "C2_C2E_MEANING_BEARING_CHANGE",
+    "EC1_LAUNCH_OR_EVIDENTIARY_AUTHORITY",
+    "VALIDATION_CONSUMPTION",
+    "DEFERRED_LAYER_ACTIVATION",
+    "CANONICAL_R2_PUBLICATION",
+    "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_AGENT_WRITE"
+  ],
+  "rollback": "Forward-supersede G0 authority if required; preserve all plan, review, decision and evidence history."
 }
