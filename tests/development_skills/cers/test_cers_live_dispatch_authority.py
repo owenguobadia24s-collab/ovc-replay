@@ -83,18 +83,38 @@ def test_programme_state_preserves_operator_pass_and_advances_lawfully_through_p
 
     current = load(p["current_state"])
     assert current["plan_id"] == "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED"
-    assert current["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
-    assert current["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
     assert current["controller_identity"] == "DSAI_VIT_PHYSICAL_CONTROLLER"
     assert current["physical_gateway"] == "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY"
     assert current["parallel_physical_merge"] is False
+
+    suffix = Path(p["current_state"]).name
+    version = int(suffix.split("_v0_")[1].split(".json")[0])
+    if version == 17:
+        assert current["supersedes_state"] == "OVC_DSAI3V_CERS_STATE_v0_16.json"
+        assert current["status"] == "COMPLETED"
+        assert current["decision"] == "PASS"
+        assert current["authority_required"] == "OPERATOR_REQUIRED_SATISFIED"
+        assert current["persistent_general_dispatch"] == "ACTIVE_EXACT_ADMITTED_SCOPE_ONLY"
+        assert current["post_pilot_dispatch_state"] == "RUN"
+        assert current["persistent_run"] == "ACTIVE"
+        assert current["activation_gate"]["status"] == "COMPLETED"
+        assert current["activation_gate"]["decision"] == "PASS"
+        assert current["activation_gate"]["admitted_programme_count"] == 1
+        assert current["future_programme_auto_admission"] is False
+        assert current["main_write_capability"] == "NONE"
+        assert current["merge_capability"] == "NONE"
+        assert current["reserved_authority_unchanged"] is True
+        assert p["packet_id"] == "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
+        assert p["next_packet"] is None
+        return
+
+    assert current["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
+    assert current["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
     activation = next(row for row in current["packet_register"] if row["packet_id"] == "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION")
     assert activation["authority_required"] == "OPERATOR_REQUIRED"
     assert activation["authority_delta"] == "PERSISTENT_RUN_FOR_EXACT_ADMITTED_SCOPE_ONLY"
     assert activation["status"] in {"PLANNED", "GATE_PREPARATION", "GATE_READY"}
 
-    suffix = Path(p["current_state"]).name
-    version = int(suffix.split("_v0_")[1].split(".json")[0])
     assert 10 <= version <= 16
     expected_packet_by_version = {
         10: "CERS-PS-WP1",
