@@ -95,11 +95,15 @@ class CersPersistentSupervisorWp5Tests(unittest.TestCase):
             },
         )
 
-    def test_wp5_advances_only_to_operator_gate_preparation(self):
+    def test_wp5_advances_only_to_operator_gate_preparation_or_ready(self):
         pointer = load("registries/implementation/dsai3v_cers_v0_1/CURRENT_STATE_POINTER.json")
         state = load(pointer["current_state"])
-        self.assertEqual(pointer["status"], "GATE_PREPARATION")
-        self.assertEqual(pointer["next_packet"], "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION")
+        self.assertIn(pointer["status"], {"GATE_PREPARATION", "GATE_READY"})
+        if pointer["status"] == "GATE_PREPARATION":
+            self.assertEqual(pointer["next_packet"], "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION")
+        else:
+            self.assertIsNone(pointer["next_packet"])
+            self.assertEqual(pointer["decision"], "PENDING_OPERATOR")
         self.assertEqual(state["authority_required"], "OPERATOR_REQUIRED")
         self.assertEqual(state["wp5"]["status"], "COMPLETED")
         self.assertEqual(
