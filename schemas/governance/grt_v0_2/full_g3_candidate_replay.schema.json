@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/governance/grt_v0_2/full_g3_candidate_replay.schema.json",
+  "title": "GRT Full-G3 Candidate Shadow Replay",
+  "type": "object",
+  "required": [
+    "schema", "predecessor_commit", "predecessor_tree", "candidate_commit", "candidate_tree",
+    "required_rule_families", "family_coverage", "new_or_expanded_debt_count", "not_evaluable_count",
+    "status", "reason_codes", "performance", "authority_effect", "active_enforcement",
+    "debt_floor_generation", "canonical_hash"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-grt2-full-g3-candidate-replay/v1"},
+    "predecessor_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "predecessor_tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "candidate_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "candidate_tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "changed_paths": {"type": "array", "items": {"type": "object"}},
+    "impact_path_count": {"type": "integer", "minimum": 0},
+    "required_rule_families": {"type": "array", "minItems": 10, "uniqueItems": true, "items": {"type": "string"}},
+    "family_coverage": {"type": "object", "additionalProperties": {"enum": ["PASS", "NOT_EVALUABLE"]}},
+    "predecessor_finding_count": {"type": "integer", "minimum": 0},
+    "candidate_finding_count": {"type": "integer", "minimum": 0},
+    "transition_count": {"type": "integer", "minimum": 0},
+    "new_or_expanded_debt_count": {"type": "integer", "minimum": 0},
+    "not_evaluable_count": {"type": "integer", "minimum": 0},
+    "blocking_transitions": {"type": "array", "items": {"type": "object"}},
+    "transitions": {"type": "array", "items": {"type": "object"}},
+    "adapter_errors": {"type": "array", "items": {"type": "string"}},
+    "status": {"enum": ["PASS", "FAIL", "NOT_EVALUABLE"]},
+    "reason_codes": {"type": "array", "items": {"type": "string"}},
+    "performance": {
+      "type": "object",
+      "required": ["surface", "duration_ms", "peak_memory_bytes", "status"],
+      "properties": {
+        "surface": {"const": "GRT_EXACT"},
+        "duration_ms": {"type": "integer", "minimum": 1},
+        "peak_memory_bytes": {"type": "integer", "minimum": 0},
+        "status": {"const": "MEASURED_NOT_YET_COMPARED_TO_FROZEN_BUDGET"}
+      },
+      "additionalProperties": false
+    },
+    "authority_effect": {"const": "NONE_FULL_G3_SHADOW_REPLAY_ONLY"},
+    "active_enforcement": {"const": "UNCHANGED_LIMITED_G2_5_ONLY"},
+    "debt_floor_generation": {"type": "null"},
+    "canonical_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": true
+}
