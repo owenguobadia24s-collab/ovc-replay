@@ -95,22 +95,34 @@ class CersPersistentSupervisorWp5Tests(unittest.TestCase):
             },
         )
 
-    def test_wp5_advances_only_to_operator_gate_preparation_or_ready(self):
+    def test_wp5_advances_only_to_operator_gate_or_completed_activation(self):
         pointer = load("registries/implementation/dsai3v_cers_v0_1/CURRENT_STATE_POINTER.json")
         state = load(pointer["current_state"])
-        self.assertIn(pointer["status"], {"GATE_PREPARATION", "GATE_READY"})
-        if pointer["status"] == "GATE_PREPARATION":
-            self.assertEqual(pointer["next_packet"], "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION")
-        else:
+        self.assertEqual(state["plan_id"], "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED")
+
+        if pointer["status"] == "COMPLETED":
             self.assertIsNone(pointer["next_packet"])
-            self.assertEqual(pointer["decision"], "PENDING_OPERATOR")
-        self.assertEqual(state["authority_required"], "OPERATOR_REQUIRED")
-        self.assertEqual(state["wp5"]["status"], "COMPLETED")
-        self.assertEqual(
-            state["persistent_general_dispatch"],
-            "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
-        )
-        self.assertEqual(state["post_pilot_dispatch_state"], "DISABLE_NEW_DISPATCH")
+            self.assertEqual(pointer["decision"], "PASS")
+            self.assertEqual(pointer["persistent_run"], "ACTIVATED")
+            self.assertEqual(pointer["persistent_general_dispatch"], "ALLOWED_EXACT_ADMITTED_SCOPE_ONLY")
+            self.assertEqual(pointer["post_pilot_dispatch_state"], "RUN")
+            self.assertEqual(state["decision_authority"], "OPERATOR")
+            self.assertEqual(state["authority_delta"], "PERSISTENT_RUN_FOR_EXACT_ADMITTED_SCOPE_ONLY")
+            self.assertTrue(state["reserved_authority_unchanged"])
+        else:
+            self.assertIn(pointer["status"], {"GATE_PREPARATION", "GATE_READY"})
+            if pointer["status"] == "GATE_PREPARATION":
+                self.assertEqual(pointer["next_packet"], "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION")
+            else:
+                self.assertIsNone(pointer["next_packet"])
+                self.assertEqual(pointer["decision"], "PENDING_OPERATOR")
+            self.assertEqual(state["authority_required"], "OPERATOR_REQUIRED")
+            self.assertEqual(
+                state["persistent_general_dispatch"],
+                "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
+            )
+            self.assertEqual(state["post_pilot_dispatch_state"], "DISABLE_NEW_DISPATCH")
+
         self.assertEqual(self.limits["repository_rules"]["merge_capability"], "NONE")
 
 

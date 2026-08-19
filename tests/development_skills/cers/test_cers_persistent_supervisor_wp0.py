@@ -48,10 +48,21 @@ def test_cers_ps_wp0_remains_preserved_as_preactivation_state_advances():
     assert activation["authority_required"] == "OPERATOR_REQUIRED"
 
     pointer = load("registries/implementation/dsai3v_cers_v0_1/CURRENT_STATE_POINTER.json")
-    assert pointer["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
-    assert pointer["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
     current = load(pointer["current_state"])
     assert current["plan_id"] == "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED"
+
+    if pointer["current_state"].endswith("OVC_DSAI3V_CERS_STATE_v0_17.json"):
+        assert pointer["status"] == "COMPLETED"
+        assert pointer["persistent_run"] == "ACTIVATED"
+        assert pointer["persistent_general_dispatch"] == "ALLOWED_EXACT_ADMITTED_SCOPE_ONLY"
+        assert pointer["post_pilot_dispatch_state"] == "RUN"
+        assert current["decision"] == "PASS"
+        assert current["decision_authority"] == "OPERATOR"
+        assert current["reserved_authority_unchanged"] is True
+        return
+
+    assert pointer["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
+    assert pointer["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
     assert current["persistent_general_dispatch"] == "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION"
     assert current["post_pilot_dispatch_state"] == "DISABLE_NEW_DISPATCH"
     assert current["packet_id"] in {
