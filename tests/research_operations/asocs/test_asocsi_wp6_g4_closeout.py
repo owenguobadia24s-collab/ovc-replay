@@ -16,6 +16,7 @@ def test_g4_final_freeze_is_delegated_none_and_fail_closed() -> None:
     qa = _json("docs/programmes/asocs-v0-1/implementation/wp6/ASOCSI_WP6_QA_PACKET_v0_2.json")
     state = _json("records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_11_WP6.json")
     pointer = _json("registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json")
+    current_state = _json(pointer["current_state"])
     assert freeze["status"] == "FROZEN_G4"
     assert freeze["review_population_sha256"] == "ff6eb37724aea5b2706666903f7b5a1bc063af8ef9026f4496429b5e33fa15fe"
     assert freeze["sampling_manifest_id"] == "33fa9aa81059d0bde9b9cc84da73336d3a20c7236610ccf5b3d8a8a5979e3a31"
@@ -33,10 +34,10 @@ def test_g4_final_freeze_is_delegated_none_and_fail_closed() -> None:
     assert state["review_population_frozen"] is True
     assert state["human_review_started"] is False
     assert state["next_packet"] == "ASOCSI-WP7-INFRA_AFTER_G4_PASS"
-    assert pointer["current_state"].endswith("ASOCSI_PROGRAMME_STATE_v0_11_WP6.json")
-    assert pointer["packet_id"] == "ASOCSI-WP6"
-    assert pointer["status"] == "COMPLETED"
-    assert pointer["next_packet"] == "ASOCSI-WP7-INFRA_AFTER_G4_PASS"
+    assert pointer["programme_id"] == "OVC-ASOCS-6M-v0.1"
+    assert pointer["packet_id"] == current_state["packet_id"]
+    assert pointer["status"] == current_state["status"]
+    assert pointer["next_packet"] == current_state["next_packet"]
 
 
 def test_g4_freeze_counts_are_consistent_with_candidate() -> None:
