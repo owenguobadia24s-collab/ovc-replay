@@ -36,7 +36,10 @@ def main():
  assert FULL not in tiered and FROZEN_PYTHON in tiered and 'OVC merge readiness' in tiered and 'OVC tiered test selection shadow' in tiered
  assert all(name in resolver for name in REQUIRED_PYTHON_CHECKS) and 'PROFILE_JOB_NAME = "OVC profile assurance"' in resolver, 'PRVITR resolver must retain exact-head legacy and PYT-WP1 parity checks'
  for command in ('ready','acquire','finalize'): assert f'prvitr_live_admission.py {command}' in tiered, f'missing PRVITR live admission command: {command}'
- assert 'OVC_RECONCILE_REQUIRED' in resolver and 'OVC_BASE_MOVED_DURING_READINESS' in resolver and 'OVC_SIQ_READY_ADMITTED' in resolver
+ assert 'OVC_VIT_QUALIFIED_PAYLOAD_READY' in resolver and 'OVC_SIQ_BASE_SENSITIVE_LEASE_ACQUIRED' in resolver
+ assert 'OVC_BASE_MOVED_DURING_READINESS' in resolver and 'PRVITR_LATE_BINDING_PLACEMENT_MISMATCH' in resolver
+ assert 'OVC_INTEGRATION_ADMISSION_RECEIPT' in resolver and 'OVC_FINAL_INTEGRATION_WINDOW_PASS' in resolver
+ assert 'merge-tree", "--write-tree"' in resolver and 'resolve_vit_train_predecessor' not in resolver
  for path in r['push_manual_preserved_workflows']:
   text=actual[path].read_text(); assert 'pull_request:' not in text and 'push:' in text and 'workflow_dispatch:' in text and 'concurrency:' in text and 'cancel-in-progress: true' in text, path
  assert d['decision']=='PASS'

@@ -10,7 +10,10 @@ from typing import Any, Mapping, Sequence
 
 from ovc.development.skills.vit_apply import REFERENCE_APPLY_PROFILE
 from ovc.development.skills.vit_completion_policy import validate_non_churning_completion_transition
-from ovc.development.skills.vit_routing import build_vit_lineage_record
+from ovc.development.skills.vit_routing import (
+    build_vit_lineage_record,
+    build_vit_payload_lineage_record,
+)
 
 SHA64 = re.compile(r"^[0-9a-f]{64}$")
 
@@ -48,13 +51,13 @@ def build_logical_changes(repo: Path, base: str, head: str) -> list[dict[str, st
         if before is None and after is None:
             raise RuntimeError(f"changed path absent from both trees: {path}")
         if after is None:
-            changes.append({"op":"DELETE","path":path})
+            changes.append({"op": "DELETE", "path": path})
             continue
         mode, object_type, object_sha = after
         if object_type not in {"blob", "commit"}:
             raise RuntimeError(f"unsupported Git object type {object_type!r} for {path}")
         op = "ADD" if before is None else "MODIFY"
-        changes.append({"op":op,"path":path,"blob_sha":object_sha,"mode":mode})
+        changes.append({"op": op, "path": path, "blob_sha": object_sha, "mode": mode})
     if not changes:
         raise RuntimeError("PIP logical changes must not be empty")
     return changes
@@ -74,9 +77,10 @@ def build_record(
     packet_id: str,
     authority_manifest_id: str,
     dependency_frontier_id: str,
-    train_generation_id: str,
-    ordinal: int,
     completion_transition: Mapping[str, Any],
+    legacy_placement: bool = False,
+    train_generation_id: str = "LEGACY",
+    ordinal: int = 0,
 ) -> dict[str, Any]:
     if not SHA64.fullmatch(authority_manifest_id) or not SHA64.fullmatch(dependency_frontier_id):
         raise RuntimeError("authority/dependency identities must be lowercase SHA-256 values")
@@ -84,17 +88,24 @@ def build_record(
         packet_id=packet_id,
         completion_transition=completion_transition,
     )
+    pip = {
+        "schema_version": "packet-integration-payload/v0.1",
+        "programme_id": programme_id,
+        "packet_id": packet_id,
+        "logical_changes": build_logical_changes(repo, base, head),
+        "authority_manifest_id": authority_manifest_id,
+        "dependency_frontier_id": dependency_frontier_id,
+        "completion_transition": dict(completion_transition),
+    }
+    if not legacy_placement:
+        return build_vit_payload_lineage_record(
+            programme_id=programme_id,
+            packet_id=packet_id,
+            pip_identity_payload=pip,
+        )
+
     base_tree = _git(repo, ["rev-parse", f"{base}^{{tree}}"])
     head_tree = _git(repo, ["rev-parse", f"{head}^{{tree}}"])
-    pip = {
-        "schema_version":"packet-integration-payload/v0.1",
-        "programme_id":programme_id,
-        "packet_id":packet_id,
-        "logical_changes":build_logical_changes(repo, base, head),
-        "authority_manifest_id":authority_manifest_id,
-        "dependency_frontier_id":dependency_frontier_id,
-        "completion_transition":dict(completion_transition),
-    }
     return build_vit_lineage_record(
         programme_id=programme_id,
         packet_id=packet_id,
@@ -108,17 +119,18 @@ def build_record(
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Build canonical inline VIT lineage for a permanent PR candidate.")
+    parser = argparse.ArgumentParser(description="Build canonical payload-only VIT lineage for a permanent PR candidate.")
     parser.add_argument("--repo", default=".")
-    parser.add_argument("--base", required=True)
+    parser.add_argument("--base", required=True, help="Diff origin only; not a physical-main placement binding.")
     parser.add_argument("--head", required=True)
     parser.add_argument("--programme-id", required=True)
     parser.add_argument("--packet-id", required=True)
     parser.add_argument("--authority-manifest-id", required=True)
     parser.add_argument("--dependency-frontier-id", required=True)
-    parser.add_argument("--train-generation-id", required=True)
-    parser.add_argument("--ordinal", type=int, required=True)
     parser.add_argument("--completion-transition-json", default='{"status":"COMPLETED"}')
+    parser.add_argument("--legacy-placement", action="store_true", help="Historical v1 early-placement output only.")
+    parser.add_argument("--train-generation-id", default="LEGACY")
+    parser.add_argument("--ordinal", type=int, default=0)
     args = parser.parse_args()
     transition = json.loads(args.completion_transition_json)
     if not isinstance(transition, Mapping):
@@ -131,9 +143,10 @@ def main() -> int:
         packet_id=args.packet_id,
         authority_manifest_id=args.authority_manifest_id,
         dependency_frontier_id=args.dependency_frontier_id,
+        completion_transition=transition,
+        legacy_placement=args.legacy_placement,
         train_generation_id=args.train_generation_id,
         ordinal=args.ordinal,
-        completion_transition=transition,
     )
     print(json.dumps(record, sort_keys=True, separators=(",", ":"), ensure_ascii=False))
     print(f"VIT-Lineage-B64: {encode_lineage(record)}")
