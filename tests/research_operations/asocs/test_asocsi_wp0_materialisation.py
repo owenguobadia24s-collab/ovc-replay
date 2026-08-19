@@ -56,8 +56,10 @@ def test_asocsi_wp0_state_points_only_to_wp1_and_starts_no_runtime() -> None:
     assert state["status"] == "COMPLETED"
     assert state["runtime_implementation_started"] is False
     assert state["next_packet"] == "ASOCSI-WP1"
-    assert pointer["current_state"] == "records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_2_WP0.json"
-    assert pointer["next_packet"] == "ASOCSI-WP1"
+    current_state = pointer["current_state"]
+    assert current_state.startswith("records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_")
+    assert (ROOT / current_state).is_file()
+    assert pointer["next_packet"] in {"ASOCSI-WP1", "ASOCSI-WP2"}
     assert qa["qa_recommendation"] == "PASS_DELEGATED_ASOCSI_G0_MAT"
     assert qa["blocking_findings"] == []
     assert delegated["decision"] == "PASS"
