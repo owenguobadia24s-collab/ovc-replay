@@ -1,0 +1,98 @@
+{
+  "schema": "ovc-cers-persistent-programme-admission-registry/v2",
+  "registry_id": "OVC-CERS-PERSISTENT-PROGRAMME-ADMISSION-REGISTRY-v0.2",
+  "supersedes": "OVC-CERS-PERSISTENT-PROGRAMME-ADMISSION-REGISTRY-v0.1",
+  "status": "INACTIVE_PREACTIVATION",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "plan_id": "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED",
+  "source_root_registry": "registries/development/skills/cers/CERS_PROGRAMME_ROOT_REGISTRY_v0_1.json",
+  "source_baseline_commit": "74eb330911adb951e667b5a932715a407295afa2",
+  "source_baseline_tree": "643ddbc7876194b5aa8749d2798229f27cb5f0be",
+  "admission_criteria": "EXACT_CURRENT_OWNER_AUTHORITY_PACKET_PREREQUISITES_OPERATOR_BOUNDARY_WRITE_DOMAIN_AND_NEXT_PACKET",
+  "unknown_or_absent_programme": "DENY",
+  "future_programme_auto_admission": false,
+  "entries": [
+    {
+      "schema": "ovc-cers-persistent-programme-admission/v1",
+      "admission_id": "OVC-CERS-PERSISTENT-ADMISSION-CERS-v0.1",
+      "status": "INACTIVE_PREACTIVATION",
+      "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+      "current_state_root": "registries/implementation/dsai3v_cers_v0_1/CURRENT_STATE_POINTER.json",
+      "governing_plan_id": "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED",
+      "governing_plan_version": "0.1 RATIFIED",
+      "owner_authority_source": "docs/plans/development-skills-v0-3/cers/OVC_DSAI3V_CERS_Persistent_Supervisor_Activation_Plan_v0_1_RATIFIED.md",
+      "eligible_authority_classes": ["AUTO_EXECUTABLE", "AUTO_RATIFIABLE"],
+      "eligible_packet_classes": ["LOW_RISK_IMPLEMENTATION"],
+      "allowed_side_effect_classes": ["BRANCH_REVERSIBLE"],
+      "executor_binding_id": "OVC-CERS-PERSISTENT-EXECUTOR-BINDING-v0.1",
+      "write_domain_rule": "PACKET_DECLARED_WRITE_DOMAIN_AND_SEMANTIC_OWNER_ONLY",
+      "semantic_owner_rule": "EXACT_PACKET_SEMANTIC_OWNER_ONLY",
+      "operator_boundary_policy": "PARK",
+      "explicit_prohibitions": [
+        "DIRECT_MAIN_MUTATION",
+        "MERGE",
+        "PARALLEL_PHYSICAL_MERGE",
+        "FORCE_PUSH",
+        "HISTORY_REWRITE",
+        "IRREVERSIBLE_EXTERNAL_SIDE_EFFECT",
+        "ACTIVE_DISCOVERY",
+        "ACTIVE_DEVELOPMENT",
+        "ACTIVE_VALIDATION",
+        "SCIENTIFIC_OR_SEMANTIC_PROMOTION",
+        "CANONICAL_OR_R2_PUBLICATION",
+        "PROBABILITY_RISK_EXPOSURE_TRADING_OR_MARKET_EXECUTION"
+      ],
+      "admission_authority_source": "CERS-PS-WP4 under OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED",
+      "revocation_behavior": "DISABLE_NEW_DISPATCH",
+      "authority_effect": "NONE"
+    }
+  ],
+  "entry_hashes": [
+    {
+      "admission_id": "OVC-CERS-PERSISTENT-ADMISSION-CERS-v0.1",
+      "canonical_sha256": "48c43fed5c6c5a5797701f401c73025acbd7930961bf281b296473436ba92287"
+    }
+  ],
+  "exclusions": [
+    {
+      "root_id": "DSAI3V_VIT",
+      "programme_id": "OVC-DSAI-VIT-v0.3",
+      "current_state_root": "registries/implementation/dsai_vit_v0_3/CURRENT_STATE_POINTER.json",
+      "reason_codes": ["PROGRAMME_TERMINAL_NO_NEXT_PACKET"],
+      "evidence": "status=COMPLETED; next_packet=null"
+    },
+    {
+      "root_id": "DSAI3V_ASYNC_ASSURANCE",
+      "programme_id": "OVC-DSAI3V-ASYNC-ASSURANCE-CONFORMANCE-v0.1",
+      "current_state_root": "registries/implementation/dsai3v_async_assurance_v0_1/CURRENT_STATE_POINTER.json",
+      "reason_codes": ["PROGRAMME_TERMINAL_NO_NEXT_PACKET"],
+      "evidence": "status=COMPLETED; next_packet=null"
+    },
+    {
+      "root_id": "DSAI2_ORCH345",
+      "programme_id": "OVC-DSAI-v0.2",
+      "current_state_root": "registries/implementation/dsai_v0_2/CURRENT_STATE_POINTER.json",
+      "reason_codes": ["PROGRAMME_TERMINAL_NO_NEXT_PACKET"],
+      "evidence": "status=COMPLETED; next_packet=null"
+    },
+    {
+      "root_id": "GRT_V0_2",
+      "programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
+      "current_state_root": "registries/implementation/grt_v0_2/CURRENT_STATE_POINTER.json",
+      "reason_codes": ["AUTHORITY_NOT_AUTO_EXECUTABLE", "OPERATOR_REQUIRED_BOUNDARY", "PREREQUISITE_UNSATISFIED", "WRITE_DOMAIN_UNKNOWN_OR_DENIED"],
+      "evidence": "GRT2-G3 is NOT_AUTHORISED with readiness evidence incomplete; no exact packet write domain is present in the current state"
+    },
+    {
+      "root_id": "PRVITR",
+      "programme_id": "OVC-PRVIT-LIVE-REMEDIATION-CONFORMANCE-v0.1",
+      "current_state_root": "records/development/prvitr/PRVITR_PROGRAMME_STATE_v0_1.json",
+      "reason_codes": ["PROGRAMME_TERMINAL_NO_NEXT_PACKET"],
+      "evidence": "status=COMPLETED; next_packet=null"
+    }
+  ],
+  "reason_code_registry": "registries/development/skills/cers/CERS_PERSISTENT_REASON_CODE_REGISTRY_v0_2.json",
+  "activation_gate": "CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
+  "persistent_general_dispatch": "DENIED_PENDING_CERS-G-PERSISTENT-SUPERVISOR-ACTIVATION",
+  "post_pilot_dispatch_state": "DISABLE_NEW_DISPATCH",
+  "authority_effect": "NONE"
+}
