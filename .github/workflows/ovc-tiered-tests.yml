@@ -103,8 +103,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 24
     outputs:
-      base_sha: ${{ steps.ready.outputs.base_sha }}
       head_sha: ${{ steps.ready.outputs.head_sha }}
+      pip_id: ${{ steps.ready.outputs.pip_id }}
       assurance_generation_id: ${{ steps.ready.outputs.assurance_generation_id }}
       tests_run_id: ${{ steps.ready.outputs.tests_run_id }}
       profile_run_id: ${{ steps.ready.outputs.profile_run_id }}
@@ -114,27 +114,25 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
           show-progress: false
-      - name: Bind exact immutable assurance generation and pin live current main
+      - name: Bind stable payload assurance without physical-main placement
         id: ready
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PYTHONPATH: src:.
         run: python3 tools/ci/prvitr_live_admission.py ready
-      - name: Prove READY candidate contains pinned main with local Git
+      - name: Prove READY identity is payload-bound rather than main-bound
         shell: bash
         env:
-          OVC_READY_BASE_SHA: ${{ steps.ready.outputs.base_sha }}
           OVC_READY_HEAD_SHA: ${{ steps.ready.outputs.head_sha }}
+          OVC_READY_PIP_ID: ${{ steps.ready.outputs.pip_id }}
         run: |
           set -euo pipefail
-          test -n "${OVC_READY_BASE_SHA}"
           test -n "${OVC_READY_HEAD_SHA}"
-          git cat-file -e "${OVC_READY_BASE_SHA}^{commit}"
+          test -n "${OVC_READY_PIP_ID}"
+          test "${#OVC_READY_HEAD_SHA}" -eq 40
+          test "${#OVC_READY_PIP_ID}" -eq 64
           git cat-file -e "${OVC_READY_HEAD_SHA}^{commit}"
-          if ! git merge-base --is-ancestor "${OVC_READY_BASE_SHA}" "${OVC_READY_HEAD_SHA}"; then
-            echo "::error title=SIQ READY candidate not reconciled::OVC_CANDIDATE_NOT_RECONCILED_TO_CURRENT_MAIN: ${OVC_READY_HEAD_SHA} does not contain pinned main ${OVC_READY_BASE_SHA}."
-            exit 1
-          fi
+          echo "OVC_READY_PHYSICAL_BASE_BINDING=NONE"
 
   merge-readiness:
     name: OVC merge readiness
@@ -153,46 +151,45 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
           show-progress: false
-      - name: Acquire SIQ BASE_SENSITIVE final-integration lease from exact workflow evidence
+      - name: Acquire one-writer lease and late-bind current physical main
         id: acquire
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PYTHONPATH: src:.
-          OVC_READY_BASE_SHA: ${{ needs.siq-ready-admission.outputs.base_sha }}
           OVC_READY_HEAD_SHA: ${{ needs.siq-ready-admission.outputs.head_sha }}
+          OVC_READY_PIP_ID: ${{ needs.siq-ready-admission.outputs.pip_id }}
         run: python3 tools/ci/prvitr_live_admission.py acquire
-      - name: Prove candidate contains acquired current main
+      - name: Materialize ephemeral prospective tree for exact-final assurance
         shell: bash
         env:
-          OVC_WINDOW_BASE_SHA: ${{ steps.acquire.outputs.base_sha }}
-          OVC_WINDOW_HEAD_SHA: ${{ steps.acquire.outputs.head_sha }}
+          OVC_PLACEMENT_COMMIT_SHA: ${{ steps.acquire.outputs.placement_commit_sha }}
+          OVC_PLACEMENT_TREE_SHA: ${{ steps.acquire.outputs.placement_tree_sha }}
         run: |
           set -euo pipefail
-          test -n "${OVC_WINDOW_BASE_SHA}"
-          test -n "${OVC_WINDOW_HEAD_SHA}"
-          git cat-file -e "${OVC_WINDOW_BASE_SHA}^{commit}"
-          git cat-file -e "${OVC_WINDOW_HEAD_SHA}^{commit}"
-          if ! git merge-base --is-ancestor "${OVC_WINDOW_BASE_SHA}" "${OVC_WINDOW_HEAD_SHA}"; then
-            echo "::error title=Candidate not reconciled::OVC_CANDIDATE_NOT_RECONCILED_TO_CURRENT_MAIN: ${OVC_WINDOW_HEAD_SHA} does not contain acquired main ${OVC_WINDOW_BASE_SHA}."
-            exit 1
-          fi
+          test -n "${OVC_PLACEMENT_COMMIT_SHA}"
+          test -n "${OVC_PLACEMENT_TREE_SHA}"
+          git cat-file -e "${OVC_PLACEMENT_COMMIT_SHA}^{commit}"
+          test "$(git rev-parse "${OVC_PLACEMENT_COMMIT_SHA}^{tree}")" = "${OVC_PLACEMENT_TREE_SHA}"
+          git checkout --detach "${OVC_PLACEMENT_COMMIT_SHA}"
       - name: Run mandatory SIQ/PDC exact-final assurance inside lease
         shell: bash
         env:
           OVC_LEASE_REQUIRED: true
           OVC_LEASE_BASE_SHA: ${{ steps.acquire.outputs.base_sha }}
-          OVC_LEASE_HEAD_SHA: ${{ steps.acquire.outputs.head_sha }}
+          OVC_LEASE_HEAD_SHA: ${{ steps.acquire.outputs.placement_commit_sha }}
           OVC_LEASE_BRANCH: main
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           PYTHONPATH=src python3 tools/ci/ovc_run_with_main_lease.py -- \
-            bash -lc "PYTHONPATH=src python -m unittest tests.development.test_siq_queue tests.development.test_siq_controls tests.development.test_siq_reconciliation tests.development.test_siq_receipts tests.development.test_siq_pdc_contract -v"
-      - name: Bind exact IntegrationAdmissionReceipt and release stable-main lease
+            bash -lc "PYTHONPATH=src python -m unittest tests.development.test_siq_queue tests.development.test_siq_controls tests.development.test_siq_reconciliation tests.development.test_siq_receipts tests.development.test_siq_pdc_contract tests.development.test_prvitr_late_binding_integration -v"
+      - name: Bind exact late-placement IntegrationAdmissionReceipt
         id: finalize
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PYTHONPATH: src:.
           OVC_WINDOW_BASE_SHA: ${{ steps.acquire.outputs.base_sha }}
-          OVC_WINDOW_HEAD_SHA: ${{ steps.acquire.outputs.head_sha }}
+          OVC_CANDIDATE_HEAD_SHA: ${{ steps.acquire.outputs.candidate_head_sha }}
+          OVC_PLACEMENT_TREE_SHA: ${{ steps.acquire.outputs.placement_tree_sha }}
+          OVC_PLACEMENT_ID: ${{ steps.acquire.outputs.placement_id }}
           OVC_ASSURANCE_GENERATION_ID: ${{ needs.siq-ready-admission.outputs.assurance_generation_id }}
         run: python3 tools/ci/prvitr_live_admission.py finalize
