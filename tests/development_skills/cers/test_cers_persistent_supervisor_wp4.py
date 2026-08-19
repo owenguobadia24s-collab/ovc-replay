@@ -124,9 +124,11 @@ class CersPersistentSupervisorWp4Tests(unittest.TestCase):
         self.assertEqual(state["g3_status"], "NOT_AUTHORISED_READINESS_EVIDENCE_INCOMPLETE")
 
     def test_wp4_state_advances_only_to_shadow_qualification(self):
-        pointer = load("registries/implementation/dsai3v_cers_v0_1/CURRENT_STATE_POINTER.json")
-        state = load(pointer["current_state"])
-        self.assertEqual(pointer["next_packet"], "CERS-PS-WP5")
+        state = load(
+            "registries/implementation/dsai3v_cers_v0_1/"
+            "OVC_DSAI3V_CERS_STATE_v0_14.json"
+        )
+        self.assertEqual(state["next_packet"], "CERS-PS-WP5")
         self.assertEqual(state["wp4"]["status"], "COMPLETED")
         self.assertEqual(state["wp4"]["registry_status"], "INACTIVE_PREACTIVATION")
         self.assertEqual(
