@@ -26,6 +26,7 @@ def _observation(**overrides):
         "currentness_state": "CURRENT",
         "reference_optimized_equivalent": True,
         "protected_source_leak_count": 0,
+        "index_integrity_ok": True,
         "warnings": [],
     }
     kwargs.update(overrides)
@@ -37,6 +38,7 @@ def test_clean_live_shadow_is_stable_but_never_activates_itself() -> None:
     evaluation = evaluate_incidents(observation)
     assert observation["read_only_shadow"] is True
     assert observation["operational_reliance"] is False
+    assert observation["index_integrity_ok"] is True
     assert evaluation["status"] == "PASS_SHADOW_STABLE"
     assert evaluation["incident_classes"] == []
     assert evaluation["automatic_activation"] is False
@@ -50,6 +52,7 @@ def test_clean_live_shadow_is_stable_but_never_activates_itself() -> None:
         ({"currentness_state": "UNRESOLVED"}, "SOURCE_FRONTIER_UNRESOLVED"),
         ({"reference_optimized_equivalent": False}, "REFERENCE_OPTIMIZED_DIVERGENCE"),
         ({"protected_source_leak_count": 1}, "PROTECTED_SOURCE_LEAK"),
+        ({"index_integrity_ok": False}, "INDEX_CORRUPTION"),
     ],
 )
 def test_incident_triggers_require_requalification(overrides: dict, incident: str) -> None:
@@ -77,3 +80,10 @@ def test_mutated_observation_is_rejected() -> None:
     mutated["protected_source_leak_count"] = 2
     with pytest.raises(StabilizationError, match="integrity"):
         build_stabilization_ledger([mutated])
+
+
+def test_shadow_identity_and_warning_validation_fail_closed() -> None:
+    with pytest.raises(StabilizationError, match="git SHA"):
+        _observation(repository_commit="C" * 40)
+    with pytest.raises(StabilizationError, match="warnings"):
+        _observation(warnings=["DUP", "DUP"])
