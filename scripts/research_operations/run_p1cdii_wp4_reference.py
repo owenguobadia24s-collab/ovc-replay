@@ -42,6 +42,7 @@ def rebuild() -> bytes:
         predecessor_generation_id=first["generation"]["generation_id"],
         source_explicit_successor_ref="fixture:source:successor",
     )
+
     def plane_evidence(planes: dict, left: str, right: str) -> list[dict]:
         return [
             build_correspondence_plane_evidence(
@@ -56,6 +57,7 @@ def rebuild() -> bytes:
             )
             for plane in ("core_relation", "occurrence_relation", "envelope_relation", "lineage_relation")
         ]
+
     exact = stage_correspondence(
         left_projection=first["projection"],
         right_projection=rediscovered["projection"],
@@ -83,6 +85,10 @@ def rebuild() -> bytes:
             "authority_effect": "NONE",
         }],
     )
+    successor_identity_history = [
+        {key: first[key] for key in ("series", "generation", "projection")},
+        {key: successor[key] for key in ("series", "generation", "projection")},
+    ]
     non_exact = stage_correspondence(
         left_projection=first["projection"],
         right_projection=successor["projection"],
@@ -110,6 +116,8 @@ def rebuild() -> bytes:
             "independence_state": "AFFIRMATIVELY_DEPENDENT",
             "authority_effect": "NONE",
         }],
+        left_identity_history=successor_identity_history,
+        right_identity_history=successor_identity_history,
     )
     evidence = assemble_evidence_reference(
         generation_id="fixture:generation:1",
