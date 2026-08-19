@@ -1,0 +1,121 @@
+{
+  "schema": "ovc-p2ctii-g4-alg-fresh-independent-review/v0.1",
+  "programme_id": "OVC-P2CTI-CONFORMANCE-v0.1",
+  "packet_id": "P2CTII-G4-ALG-FRESH-INDEPENDENT-REVIEW-AFTER-WP4-REMEDIATION-2",
+  "gate_id": "P2CTII-G4-ALG",
+  "status": "REVIEW_COMPLETE_PASS",
+  "review_time_utc": "2026-08-19T14:32:47Z",
+  "reviewer_binding": {
+    "status": "BOUND_FOR_THIS_PACKET",
+    "reviewer_identity": "CODEX-FRESH-CONFLICT-FREE-P2CTII-G4-ALG-REVIEWER-20260819-B",
+    "role": "EXCLUSIVE_P2CTII_G4_ALG_INDEPENDENT_REVIEWER",
+    "review_branch": "review/p2ctii-g4-alg-fresh-independent-after-remediation-2-20260819",
+    "review_pr": 1235,
+    "review_head": "bafbabb46e60a2cc3055290b218785910a60654c",
+    "authority_envelope": "INDEPENDENT_REPRODUCTION_AND_DISPOSITION_ONLY_NO_IMPLEMENTATION_REPAIR_NO_WP5_START_NO_AUTHORITY_GRANT"
+  },
+  "reviewer_independence": {
+    "status": "DECLARED_CONFLICT_FREE",
+    "declaration": "Fresh review lane is distinct from WP4, remediation-1, remediation-2 and prior G4 review lanes; it started from the exact merged remediation-2 state, inherited no implementation conclusion, changed only review harness/regression files, and performed no implementation repair or programme-state materialisation.",
+    "conflict_free_from": [
+      "P2CTII-WP4_IMPLEMENTATION_AUTHOR",
+      "P2CTII-WP4-REMEDIATION-1_AUTHOR",
+      "P2CTII-WP4-REMEDIATION-2_AUTHOR",
+      "PRIOR_P2CTII-G4-ALG_REVIEWERS"
+    ],
+    "independence_controls": [
+      "EXACT_MERGED_REMEDIATION_2_SUBJECT",
+      "SEPARATE_REVIEW_BRANCH",
+      "REVIEW_ONLY_FILE_FOOTPRINT",
+      "NO_IMPLEMENTATION_REPAIR_DURING_REVIEW",
+      "COMPLETE_138_CASE_MATRIX_RECONSTRUCTION",
+      "TWO_CLEAN_PYTHON_PROCESSES_WITH_DISTINCT_HASH_SEEDS",
+      "REPOSITORY_COURT_RECORD_CONTROLS"
+    ],
+    "independence_conflicts": []
+  },
+  "reviewed_lawful_main": {
+    "commit": "b97151f8cd3f64ba6c6e7ea1e63f2bf1ae78d1a7",
+    "tree": "95647029ef03f7868635d22723ace647b72cf1be",
+    "subject": "P2CTII-WP4-REMEDIATION-2 merged exact state",
+    "remediation_2_logical_pip": "20cdaf5426eb1dbb8cb0489b9d108abb0ce2b6a9f12bfaa3ded3fc06d6b89267",
+    "remediation_2_deterministic_output_sha256": "8f6e279e6dff77eac32369c8aedc6e54de63e64c9f4c6de1b0363b16f9fe0db1"
+  },
+  "review_execution": {
+    "review_pr": 1235,
+    "review_head": "bafbabb46e60a2cc3055290b218785910a60654c",
+    "review_pip": "882eae93c1e8b48351484bfc3cc35a93c5884fd2d5ba70b2f8bed8864b605358",
+    "repository_tests_workflow": {
+      "run_id": 32264685495,
+      "status": "PASS",
+      "pytest": "4452_PASSED_1_SKIPPED_687_SUBTESTS",
+      "research_console": "99_PASSED"
+    },
+    "profile_vit_siq_workflow": {
+      "run_id": 32264683220,
+      "status": "PASS",
+      "profile": "FINAL_HEAD",
+      "vit_routing": "PASS",
+      "siq_ready": "PASS",
+      "merge_readiness": "PASS"
+    },
+    "review_matrix": {
+      "total": 138,
+      "pass": 138,
+      "block": 0,
+      "sections": {
+        "DECLARED": "PASS_21_OF_21",
+        "ORIGINAL_ADVERSARIAL": "PASS_41_OF_41",
+        "OLD_BLOCKERS": "PASS_15_OF_15",
+        "REMEDIATION_NEIGHBORS": "PASS_16_OF_16",
+        "FRESH_OWNER_GENERATION": "PASS_7_OF_7",
+        "FRESH_RESEARCH_DEMAND": "PASS_5_OF_5",
+        "FRESH_QUERY_COHERENCE": "PASS_7_OF_7",
+        "FRESH_VISIBILITY_FIREWALL": "PASS_6_OF_6",
+        "FRESH_CROSS_MODE": "PASS_6_OF_6",
+        "FRESH_RESULT_IMMUTABILITY": "PASS_6_OF_6",
+        "NON_TRANSITIVITY": "PASS_8_OF_8"
+      }
+    },
+    "remediation_2_adversarial_reexecution": {
+      "cases": "PASS_26_OF_26",
+      "prior_fresh_blockers": "PASS_11_OF_11",
+      "conflict_permutations": "PASS_6_OF_6",
+      "query_permutations": "PASS_6_OF_6",
+      "two_process_equivalence": "PASS"
+    }
+  },
+  "gate_evaluation": {
+    "acceptance_conditions": "PASS",
+    "qa": "PASS",
+    "blocking_warnings": [],
+    "unresolved_issues": [],
+    "authority_delta": "NONE",
+    "decision": "PASS",
+    "rationale": "All frozen G4 algorithmic/adversarial cases and the five remediation-1 blocker classes reproduce as PASS under a fresh conflict-free review lane. No scientific, semantic, operational or write authority changes."
+  },
+  "authority": {
+    "current": "BOUNDED_IMPLEMENTATION_READ_ONLY_SHADOW_ONLY",
+    "granted_by_this_decision": "NONE",
+    "wp5": "AUTO_EXECUTABLE_AFTER_LAWFUL_PASS_MATERIALISATION",
+    "observability": "DENIED_UNTIL_P2CTII-G-OBSERVABILITY-ACTIVATE",
+    "continuous_intake_writes": "DENIED_UNTIL_P2CTII-G-CONTINUOUS-INTAKE",
+    "explicit_non_grants": [
+      "THEORY_SEMANTIC_FREEZE",
+      "P2_6_CANDIDATE_FORMATION",
+      "RESEARCH_CANDIDATE_GENERATION_FREEZE",
+      "OPT_C_ADMISSION",
+      "CAPABILITY_ACTIVATION",
+      "VALIDATION",
+      "PUBLICATION",
+      "PROBABILITY",
+      "RISK",
+      "EXPOSURE",
+      "TRADING",
+      "EXECUTION",
+      "AGENT_WRITE"
+    ]
+  },
+  "next_packet": "P2CTII-WP5",
+  "rollback": "Preserve this immutable PASS, all prior BLOCKs and remediation evidence. Any correction is forward-superseding only; no history rewrite."
+}
