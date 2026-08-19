@@ -1,0 +1,63 @@
+{
+  "schema": "ovc-operator-gate-packet/v1",
+  "gate_id": "P2CTII-G-OBSERVABILITY-ACTIVATE",
+  "title": "P2CTI operational read-only current projection activation",
+  "programme_id": "OVC-P2CTI-CONFORMANCE-v0.1",
+  "plan_id": "OVC-P2CTI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1-R1",
+  "plan_version": "0.1_REVISED_1",
+  "baseline_commit": "c9683bec103ad3e007920b8f2cf7e0b63e795278",
+  "baseline_tree": "8adc7f4351747dde0d698328d93261543e8d4747",
+  "candidate_commit": "9595acb4ad6283ee79fc42fa8d684c68d88d20f2",
+  "completed_packets": ["P2CTII-WP0","P2CTII-WP1","P2CTII-WP2","P2CTII-WP2-REMEDIATION-1","P2CTII-G2-ALG-FRESH-INDEPENDENT-REVIEW","P2CTII-WP3","P2CTII-WP4","P2CTII-WP4-REMEDIATION-1","P2CTII-WP4-REMEDIATION-2","P2CTII-G4-ALG-FRESH-INDEPENDENT-REVIEW-AFTER-WP4-REMEDIATION-2","P2CTII-WP5","P2CTII-WP6","P2CTII-WP7","P2CTII-WP8","P2CTII-WP9"],
+  "current_authority": "READ_ONLY_SHADOW_ONLY_NO_OPERATIONAL_RELIANCE",
+  "proposed_authority_delta": "ACTIVATE_OPERATIONAL_READ_ONLY_P2CTI_CURRENT_PROJECTION_ONLY",
+  "acceptance_conditions": [
+    "exact 30-entry bootstrap remains reproducible/source-bound",
+    "owner/currentness resolver independent review PASS",
+    "relation/demand/query independent review PASS after remediation",
+    "zero Path-1 restricted leaks and Validation negative reachability",
+    "reference/optimized equivalence and deterministic rebuild",
+    "read-only projections preserve currentness, warnings and non-authority",
+    "live current-repository shadow PASS with zero incidents",
+    "false-currentness/leak/divergence/index corruption route to requalification",
+    "no write controls or durable intake writes",
+    "Research Console consumer admission remains separate"
+  ],
+  "tests": {
+    "repository_workflow": 32296828566,
+    "profile_siq_merge_readiness_workflow": 32296828382,
+    "result": "PASS_ON_QUALIFIED_WP9_IMPLEMENTATION_HEAD",
+    "protected_final_closeout_assurance": "REQUIRED_AND_ENFORCED_BEFORE_SQUASH_MERGE"
+  },
+  "qa": {
+    "packet": "docs/programmes/p2cti-v0-1/wp9/P2CTII_WP9_QA_PACKET_v0_1.json",
+    "recommendation": "PASS_TO_OPERATOR_OBSERVABILITY_GATE"
+  },
+  "warnings": [
+    "RESEARCH_CONSOLE_CONSUMER_ADMISSION_NOT_GRANTED_BY_THIS_GATE",
+    "CONTINUOUS_INTAKE_WRITES_REMAIN_SEPARATELY_OPERATOR_REQUIRED",
+    "THEORY_CANDIDATE_VALIDATION_PUBLICATION_AND_EH_AUTHORITY_REMAIN_OUTSIDE_P2CTI"
+  ],
+  "unresolved_issues": [],
+  "changed_files": [
+    "docs/programmes/p2cti-v0-1/wp9/P2CTII_WP9_IMPLEMENTATION_PACKET_v0_1.json",
+    "src/ovc/research_operations/p2cti/stabilization.py",
+    "tests/research_operations/p2cti/test_p2ctii_wp9_stabilization.py",
+    "docs/programmes/p2cti-v0-1/wp9/P2CTII_WP9_LIVE_SHADOW_OBSERVATION_v0_1.json",
+    "docs/programmes/p2cti-v0-1/wp9/P2CTII_WP9_STABILIZATION_LEDGER_v0_1.json",
+    "docs/programmes/p2cti-v0-1/wp9/P2CTII_WP9_QA_PACKET_v0_1.json",
+    "records/research_operations/p2cti/P2CTII_PROGRAMME_STATE_v0_1.json"
+  ],
+  "external_artifact_hashes": [],
+  "rollback": "Forward-only: disable operational reliance, restore read-only shadow/currentness projection to non-operational status, preserve all generations/frontiers/observations/receipts and requalify before any reactivation.",
+  "recommended_decision": "PASS",
+  "allowed_decisions": ["PASS","DEFER","BLOCK","QUARANTINE","SUPERSEDE"],
+  "exact_work_after_approval": [
+    "materialise operator PASS and activation receipt",
+    "set P2CTI operational reliance true only for read-only current projection",
+    "keep Research Console consumer source admission unchanged unless separately granted",
+    "execute P2CTII-WP10 post-activation monitoring and synthetic isolated write rehearsal",
+    "stop at P2CTII-G-CONTINUOUS-INTAKE before any durable intake write"
+  ],
+  "explicit_non_grants": ["RESEARCH_CONSOLE_SOURCE_PRESENTATION_AUTHORITY","P2CTI_CONTINUOUS_INTAKE_WRITES","THEORY_SEMANTIC_FREEZE","P2_6_CANDIDATE_FORMATION","RESEARCH_CANDIDATE_GENERATION_FREEZE","OPT_C_ADMISSION","VALIDATION","PUBLICATION","PROBABILITY","RISK","EXPOSURE","TRADING","EXECUTION","AGENT_WRITE"]
+}
