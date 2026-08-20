@@ -61,12 +61,13 @@ def test_fresh_review_4_block_is_exact_immutable_and_routes_only_remediation_5()
     assert review["authority_delta"] == "NONE"
     assert review["blockers"] == BLOCKERS
     assert review["next_packet"] == "P1CDII-WP4-REMEDIATION-5"
-    assert remediation["status"] == "READY"
+    assert remediation["status"] == "COMPLETED"
     assert remediation["authority_required"] == "AUTO_EXECUTABLE"
     assert remediation["authority_delta"] == "NONE"
     assert remediation["next_packet"] == "P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-5"
-    assert state["blockers"] == BLOCKERS
-    assert state["next_packet"] == "P1CDII-WP4-REMEDIATION-5"
+    assert state["blockers"] == []
+    assert state["packets"]["P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-5"]["status"] == "READY"
+    assert state["next_packet"] == "P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-5"
     assert state["authority"]["operational_read_only"] == "DENIED"
     assert state["authority"]["continuous_intake"] == "DENIED"
 
