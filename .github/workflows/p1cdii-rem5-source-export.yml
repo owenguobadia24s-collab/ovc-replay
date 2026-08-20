@@ -1,0 +1,27 @@
+name: P1CDII remediation-5 source export
+
+on:
+  push:
+    branches:
+      - tool/p1cdii-rem5-source-export-20260820
+
+permissions:
+  contents: read
+
+jobs:
+  export-source:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out exact source frontier
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Create tracked repository archive
+        run: git archive --format=tar.gz --output="${RUNNER_TEMP}/ovc-replay-source.tgz" HEAD
+      - name: Upload source archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: p1cdii-rem5-source
+          path: ${{ runner.temp }}/ovc-replay-source.tgz
+          retention-days: 1
+          if-no-files-found: error
