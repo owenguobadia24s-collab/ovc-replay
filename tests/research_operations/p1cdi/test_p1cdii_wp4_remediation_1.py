@@ -249,6 +249,8 @@ def test_no_dmrp_record_never_supports_affirmative_independence() -> None:
         left_projection=left, right_projection=right, planes=unknown_planes,
         left_generation_record=first["generation"], right_generation_record=first["generation"],
         admission_basis="EXACT_CANONICAL_BYTES",
+        left_identity_history=[existing(first)],
+        right_identity_history=[existing(first)],
     )
     assert accepted["record"] is None
     assert accepted["semantic_identity"] == "EXACT"
@@ -261,6 +263,8 @@ def test_no_dmrp_record_never_supports_affirmative_independence() -> None:
             left_projection=left, right_projection=right, planes=affirmative,
             left_generation_record=first["generation"], right_generation_record=first["generation"],
             admission_basis="EXACT_CANONICAL_BYTES",
+            left_identity_history=[existing(first)],
+            right_identity_history=[existing(first)],
         )
 
 
@@ -275,6 +279,8 @@ def test_exact_current_dmrp_owner_evidence_supports_only_its_explicit_state(stat
         admission_basis="EXACT_CANONICAL_BYTES",
         plane_evidence_records=plane_evidence(planes, left["generation_id"], right["generation_id"]),
         independence_evidence=[dmrp(left["generation_id"], right["generation_id"], state)],
+        left_identity_history=[existing(first)],
+        right_identity_history=[existing(first)],
     )
     assert result["record"]["executability"] == "AUTO_ADMITTED"
     assert result["independence_reason"] == "EXPLICIT_CURRENT_DMRP_EVIDENCE"
@@ -349,6 +355,8 @@ def test_similarity_or_replication_cannot_substitute_for_dmrp_independence() -> 
             left_generation_record=first["generation"], right_generation_record=changed["generation"],
             planes=planes, admission_basis="SOURCE_EXPLICIT_DETERMINISTIC_RELATION",
             source_relation_ref="fixture:similarity-only",
+            left_identity_history=[existing(first)],
+            right_identity_history=[existing(changed)],
         )
     evidence = assemble(vector_inputs())
     assert evidence["vector"]["dependence"] == "DEPENDENT"

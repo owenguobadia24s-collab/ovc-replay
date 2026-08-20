@@ -129,6 +129,8 @@ def test_correspondence_exact_auto_admission_and_non_exact_review_only() -> None
                 first["projection"]["generation_id"], same["generation_id"], "INDEPENDENCE_UNKNOWN"
             )
         ],
+        left_identity_history=[existing(first)],
+        right_identity_history=[existing(first)],
     )
     assert exact["record"]["executability"] == "AUTO_ADMITTED"
     changed_bundle = bundle(FIXTURE["identity_b"])
@@ -153,6 +155,8 @@ def test_correspondence_exact_auto_admission_and_non_exact_review_only() -> None
                 changed["generation_id"],
             )
         ],
+        left_identity_history=[existing(first)],
+        right_identity_history=[existing(changed_bundle)],
     )
     assert staged["record"]["executability"] == "REVIEW_REQUIRED"
     validate_contract(

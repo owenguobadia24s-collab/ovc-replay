@@ -101,6 +101,8 @@ def complete_exact(first: dict, right: dict | None = None) -> dict:
         admission_basis="EXACT_CANONICAL_BYTES",
         plane_evidence_records=plane_records(FIXTURE["exact_planes"], left_id, right_id),
         independence_evidence=[dmrp(left_id, right_id)],
+        left_identity_history=[existing(first)],
+        right_identity_history=[existing(right)],
     )
 
 
@@ -141,6 +143,8 @@ def test_exact_semantic_identity_without_plane_evidence_resolves_only_identity()
         right_generation_record=first["generation"],
         planes=FIXTURE["exact_planes"],
         admission_basis="EXACT_CANONICAL_BYTES",
+        left_identity_history=[existing(first)],
+        right_identity_history=[existing(first)],
     )
     assert result["semantic_identity"] == "EXACT"
     assert result["record"] is None
@@ -163,6 +167,8 @@ def test_one_proved_plane_resolves_only_that_plane() -> None:
         plane_evidence_records=plane_records(
             FIXTURE["exact_planes"], generation_id, generation_id, ("core_relation",)
         ),
+        left_identity_history=[existing(first)],
+        right_identity_history=[existing(first)],
     )
     assert result["record"] is None
     assert result["plane_admission"]["core_relation"]["status"] == "RESOLVED"
@@ -189,6 +195,8 @@ def test_identical_bytes_cannot_imply_independence_lineage_or_replication() -> N
             right_generation_record=first["generation"],
             planes=planes,
             admission_basis="EXACT_CANONICAL_BYTES",
+            left_identity_history=[existing(first)],
+            right_identity_history=[existing(first)],
         )
     partial = stage_correspondence(
         left_projection=first["projection"],
@@ -197,6 +205,8 @@ def test_identical_bytes_cannot_imply_independence_lineage_or_replication() -> N
         right_generation_record=first["generation"],
         planes=FIXTURE["exact_planes"],
         admission_basis="EXACT_CANONICAL_BYTES",
+        left_identity_history=[existing(first)],
+        right_identity_history=[existing(first)],
     )
     assert partial["plane_admission"]["lineage_relation"]["value"] is None
     assert "replication" not in partial["plane_admission"]
@@ -228,6 +238,8 @@ def test_malformed_or_unregistered_plane_evidence_fails_closed(mutation: str) ->
             planes=FIXTURE["exact_planes"],
             admission_basis="EXACT_CANONICAL_BYTES",
             plane_evidence_records=[evidence],
+            left_identity_history=[existing(first)],
+            right_identity_history=[existing(first)],
         )
 
 
@@ -247,6 +259,8 @@ def test_contradictory_plane_evidence_fails_closed_under_both_orders() -> None:
                 planes=FIXTURE["exact_planes"],
                 admission_basis="EXACT_CANONICAL_BYTES",
                 plane_evidence_records=records,
+                left_identity_history=[existing(first)],
+                right_identity_history=[existing(first)],
             )
 
 
@@ -265,6 +279,8 @@ def test_stale_plane_evidence_remains_unresolved() -> None:
         planes=FIXTURE["exact_planes"],
         admission_basis="EXACT_CANONICAL_BYTES",
         plane_evidence_records=[record],
+        left_identity_history=[existing(first)],
+        right_identity_history=[existing(first)],
     )
     assert result["plane_admission"]["core_relation"]["status"] == "UNRESOLVED"
 
@@ -295,6 +311,8 @@ def test_noncanonical_projection_wrappers_never_enter_admission(mutation: str) -
             right_generation_record=first["generation"],
             planes=FIXTURE["exact_planes"],
             admission_basis="EXACT_CANONICAL_BYTES",
+            left_identity_history=[existing(first)],
+            right_identity_history=[existing(first)],
         )
 
 
@@ -314,6 +332,8 @@ def test_stale_generation_wrapper_fails_before_complete_auto_admission() -> None
             admission_basis="EXACT_CANONICAL_BYTES",
             plane_evidence_records=plane_records(FIXTURE["exact_planes"], left_id, right_id),
             independence_evidence=[dmrp(left_id, right_id)],
+            left_identity_history=[existing(first)],
+            right_identity_history=[existing(first)],
         )
 
 
@@ -377,6 +397,8 @@ def test_same_plane_record_id_with_different_declared_hash_conflicts_under_both_
                 planes=FIXTURE["exact_planes"],
                 admission_basis="EXACT_CANONICAL_BYTES",
                 plane_evidence_records=rows,
+                left_identity_history=[existing(first)],
+                right_identity_history=[existing(first)],
             )
 
 
@@ -394,6 +416,8 @@ def test_identical_plane_and_dmrp_source_duplicates_are_idempotent() -> None:
         admission_basis="EXACT_CANONICAL_BYTES",
         plane_evidence_records=[*planes, copy.deepcopy(planes[0])],
         independence_evidence=[independence, copy.deepcopy(independence)],
+        left_identity_history=[existing(first)],
+        right_identity_history=[existing(first)],
     )
     assert result == complete_exact(first)
 
@@ -414,6 +438,8 @@ def test_same_dmrp_record_id_with_conflicting_state_fails_closed() -> None:
                 planes=FIXTURE["exact_planes"],
                 admission_basis="EXACT_CANONICAL_BYTES",
                 independence_evidence=rows,
+                left_identity_history=[existing(first)],
+                right_identity_history=[existing(first)],
             )
 
 

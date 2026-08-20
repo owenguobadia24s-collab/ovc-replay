@@ -5,6 +5,7 @@ from datetime import datetime
 import hashlib
 import json
 from pathlib import Path
+import sys
 from typing import Any
 
 from ovc.research_operations.canonical import canonical_json_bytes, canonical_sha256
@@ -15,6 +16,7 @@ from .identity import (
     exact_semantic_equal,
     projection_bytes,
 )
+from .series_root_guard import validate_correspondence_series_root
 
 
 _RULE_PROFILE_PATH = (
@@ -729,8 +731,24 @@ def stage_correspondence(
     plane_evidence_records: Sequence[Mapping[str, Any]] = (),
     independence_evidence: Sequence[Mapping[str, Any]] = (),
     as_of_time: str | None = None,
+    left_identity_history: Sequence[Mapping[str, Any]] = (),
+    right_identity_history: Sequence[Mapping[str, Any]] = (),
 ) -> dict[str, Any]:
     """Stage plane-local correspondence without transferring truth across planes."""
+
+    reference_module = sys.modules[__name__]
+    validate_correspondence_series_root(
+        reference_module,
+        projection=left_projection,
+        generation=left_generation_record,
+        identity_history=left_identity_history,
+    )
+    validate_correspondence_series_root(
+        reference_module,
+        projection=right_projection,
+        generation=right_generation_record,
+        identity_history=right_identity_history,
+    )
 
     if not isinstance(planes, Mapping) or set(planes) != _CORRESPONDENCE_PLANES:
         raise ReferenceEngineError("correspondence must supply every exact relation plane")
