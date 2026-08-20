@@ -1,0 +1,63 @@
+name: P1CDII WP4 remediation-5 closeout apply
+
+on:
+  push:
+    branches:
+      - build/p1cdii-wp4-remediation-5-20260820
+
+permissions:
+  contents: write
+
+jobs:
+  apply-test-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out exact remediation branch
+        uses: actions/checkout@v4
+        with:
+          ref: build/p1cdii-wp4-remediation-5-20260820
+          fetch-depth: 0
+          show-progress: false
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11.15'
+          check-latest: false
+      - name: Apply exact bounded closeout patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/remaining.patch.gz.b64" <<'OVC_PATCH'
+          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
+          OVC_PATCH
+          tr -d '[:space:]' < "${RUNNER_TEMP}/remaining.patch.gz.b64" | base64 -d | gzip -d > "${RUNNER_TEMP}/remaining.patch"
+          test "$(sha256sum "${RUNNER_TEMP}/remaining.patch" | cut -d' ' -f1)" = "72af5d6cda0cea213d65a8f0500e31f1bd7fc636e2763ec07489ca933ed5b72a"
+          git apply --check "${RUNNER_TEMP}/remaining.patch"
+          git apply --index "${RUNNER_TEMP}/remaining.patch"
+      - name: Install test dependencies
+        run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
+      - name: Run complete P1CDII namespace
+        env:
+          PYTHONPATH: src:.
+        run: python3 -m pytest tests/research_operations/p1cdi -q --tb=short
+      - name: Prove deterministic reference runner
+        env:
+          PYTHONPATH: src:.
+        run: |
+          set -euo pipefail
+          python3 scripts/research_operations/run_p1cdii_wp4_reference.py > "${RUNNER_TEMP}/p1cdii-rem5-one.json"
+          python3 scripts/research_operations/run_p1cdii_wp4_reference.py > "${RUNNER_TEMP}/p1cdii-rem5-two.json"
+          cmp "${RUNNER_TEMP}/p1cdii-rem5-one.json" "${RUNNER_TEMP}/p1cdii-rem5-two.json"
+          test "$(sha256sum "${RUNNER_TEMP}/p1cdii-rem5-one.json" | cut -d' ' -f1)" = "4ff86f58bfe5e5f64ebbc403cbcf579eb4a166cdc3c93d1ed01c169a1e410106"
+          test "$(wc -c < "${RUNNER_TEMP}/p1cdii-rem5-one.json")" = "15215"
+      - name: Remove one-shot closeout workflow
+        run: rm -f .github/workflows/p1cdii-rem5-closeout.yml
+      - name: Commit and push bounded closeout
+        run: |
+          set -euo pipefail
+          git config user.name "OVC P1CDII WP4 Remediation 5"
+          git config user.email "p1cdii-wp4-remediation-5@invalid.local"
+          git add -A
+          git diff --cached --check
+          git commit -m "P1CDII-WP4 remediation-5: close PASS_REMEDIATION and ready review-5"
+          git push origin HEAD:build/p1cdii-wp4-remediation-5-20260820
