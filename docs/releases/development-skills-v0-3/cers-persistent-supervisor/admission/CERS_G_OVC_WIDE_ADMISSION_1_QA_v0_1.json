@@ -1,0 +1,42 @@
+{
+  "schema": "ovc-cers-ovc-wide-admission-qa/v1",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "packet_id": "CERS-G-OVC-WIDE-ADMISSION-1",
+  "gate_id": "CERS-G-OVC-WIDE-ADMISSION-1",
+  "status": "PASS_RECOMMENDED_PENDING_EXACT_FINAL_ASSURANCE",
+  "qa_recommendation": "PASS",
+  "baseline_commit": "ca9dedaebb9222a409de0b24ff5f87aa5df3c85a",
+  "baseline_tree": "5949d5b62f17e113ad11b960635d71239b6af2e2",
+  "evidence_basis": [
+    "CERS activation and persistent supervisor qualifications already PASS on main",
+    "P2CTI owner frontier is operator-required observability activation and therefore parks",
+    "ASOCSI owner frontier is human-input review and therefore parks",
+    "GRT2 current readiness evidence is auto-executable but GRT2-G3 activation remains operator-required",
+    "Shared Systems SHSI-G0A is PASS and SHSI-AE-v0.2-R1 delegates only bounded inactive/shadow/synthetic/historical-read-only implementation work until reserved stops",
+    "All new admissions use existing Packet Executor, branch-reversible side effects, exact packet write domains and PARK policy"
+  ],
+  "checks": {
+    "operator_decision_exactly_bound": "PASS",
+    "shared_systems_g0a_and_authority_envelope_bound": "PASS",
+    "operator_boundary_parking": "PASS",
+    "future_programme_auto_admission_false": "PASS",
+    "reserved_authority_unchanged": "PASS",
+    "entry_hashes_canonical": "PASS",
+    "targeted_cers_admission_regressions": "REQUIRED_ON_PR_HEAD",
+    "cers_neighbouring_suite": "REQUIRED_ON_PR_HEAD",
+    "repository_suite": "REQUIRED_ON_PR_HEAD",
+    "runner_parity": "REQUIRED_ON_PR_HEAD",
+    "pytest_unittest_parity": "REQUIRED_ON_PR_HEAD",
+    "vit_routing_preflight": "REQUIRED_ON_PR_HEAD",
+    "final_head_profile": "REQUIRED_ON_PR_HEAD",
+    "siq_ready_payload_binding": "REQUIRED_ON_PR_HEAD",
+    "late_physical_placement": "REQUIRED_ON_PR_HEAD",
+    "grt_and_pdc_exact_final_inside_lease": "REQUIRED_ON_PR_HEAD",
+    "merge_readiness": "REQUIRED_ON_PR_HEAD"
+  },
+  "blocking_findings": [],
+  "warnings": ["EXACT_FINAL_ASSURANCE_MUST_PASS_ON_THE_FINAL_LOGICAL_PAYLOAD_BEFORE_SQUASH_MERGE"],
+  "authority_delta": "PERSISTENT_UNATTENDED_INVOCATION_ADMISSION_EXPANSION_FOR_EXACT_P2CTI_ASOCSI_GRT2_SHARED_SYSTEMS_SCOPE_ONLY",
+  "final_head_assurance": "REQUIRED_BEFORE_SQUASH_MERGE",
+  "rollback": "Set and retain durable DISABLE_NEW_DISPATCH; prevent new starts; reconcile owned workers and unknown starts; revoke/supersede the v0.4 admission registry without deleting evidence; preserve leases, dispatch identities, outcomes, checkpoints, DEVOBS, receipts and Git history."
+}
