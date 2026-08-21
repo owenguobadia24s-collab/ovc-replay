@@ -1,0 +1,71 @@
+{
+  "schema": "ovc-packet-integration-payload-binding/v2",
+  "logical_id": "c5fb71fe198c4f85fe345f460d4ed024759007e9a262b8b4580cc44512122120",
+  "payload": {
+    "schema_version": "packet-integration-payload/v0.1",
+    "programme_id": "OVC-SHARED-SYSTEMS-v0.1",
+    "packet_id": "SHSI-WP0",
+    "authority_manifest_id": "8cad67ea94b6e0ed47cdfb09f53917292108197b9646eae740db03016ac35529",
+    "dependency_frontier_id": "ffc5585177890fd3efe7be87eea23608b1ab9302c9b1f40566bf876cf399453d",
+    "logical_changes": [
+      {
+        "op": "ADD",
+        "path": "contracts/shared_systems/OVC_SHARED_SYSTEMS_STAGE0_CONTRACT_v0_1.md",
+        "blob_sha": "c2817b7e838d1a82b4bdbbc26e2817dc8762fb04",
+        "mode": "100644"
+      },
+      {
+        "op": "ADD",
+        "path": "src/ovc/shared_systems/__init__.py",
+        "blob_sha": "1898ce47aa01e8ef96275e903874f266e4bb786f",
+        "mode": "100644"
+      },
+      {
+        "op": "ADD",
+        "path": "src/ovc/shared_systems/stage0.py",
+        "blob_sha": "128697545a619f7fdfd24b22aa86d8a6b81a15ad",
+        "mode": "100644"
+      },
+      {
+        "op": "MODIFY",
+        "path": "tests/authority/test_active_namespace_allowlist.py",
+        "blob_sha": "569822acc89828747742a1469adb2a6d15bd37e8",
+        "mode": "100644"
+      },
+      {
+        "op": "ADD",
+        "path": "tests/shared_systems/test_stage0.py",
+        "blob_sha": "c1d0e204fa86432c4c00645b2a7fe61f8babb50f",
+        "mode": "100644"
+      },
+      {
+        "op": "MODIFY",
+        "path": "docs/programmes/shared-systems-v0-1/programme_state/SHSI_PROGRAMME_STATE_v0_2_R1.json",
+        "blob_sha": "aa26616275e2de3575ba363fffc01d1eb21198a7",
+        "mode": "100644"
+      },
+      {
+        "op": "ADD",
+        "path": "registries/implementation/shared_systems_v0_1/SHSI_PROGRAMME_STATE_v0_2_R1.json",
+        "blob_sha": "54426e38b29931575a7fd599e98cd116b0f00e1e",
+        "mode": "100644"
+      },
+      {
+        "op": "ADD",
+        "path": "registries/implementation/shared_systems_v0_1/CURRENT_STATE_POINTER.json",
+        "blob_sha": "18e4c11161a6b87af71f839988973c74c3e3d83c",
+        "mode": "100644"
+      }
+    ],
+    "completion_transition": {
+      "status": "QA_REVIEW",
+      "next_packet": "SHSI-WP1"
+    }
+  },
+  "binding_policy": "LATE_PHYSICAL_PLACEMENT",
+  "physical_main_binding": "NONE_UNTIL_FINAL_INTEGRATION_LEASE",
+  "route_class": "VIT_MANDATORY",
+  "controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
+  "physical_gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+  "status": "IMPLEMENTED_PENDING_ASSURANCE"
+}
