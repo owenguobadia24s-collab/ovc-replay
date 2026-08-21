@@ -21,6 +21,10 @@ from ovc.research_operations.p1cdi.reference import (
 FIXTURE_PATH = ROOT / "fixtures/research_operations/p1cdi/P1CDII_WP4_REFERENCE_FIXTURES_v0_1.json"
 
 
+def identity_bundle(result: dict) -> dict:
+    return {key: result[key] for key in ("series", "generation", "projection")}
+
+
 def rebuild() -> bytes:
     fixture = json.loads(FIXTURE_PATH.read_text(encoding="utf-8"))
     first = assign_series_generation(
@@ -84,6 +88,8 @@ def rebuild() -> bytes:
             "independence_state": "INDEPENDENCE_UNKNOWN",
             "authority_effect": "NONE",
         }],
+        left_identity_history=[identity_bundle(first)],
+        right_identity_history=[identity_bundle(first)],
     )
     successor_identity_history = [
         {key: first[key] for key in ("series", "generation", "projection")},

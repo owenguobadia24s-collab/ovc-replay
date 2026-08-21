@@ -80,6 +80,8 @@ def stage_exact(first: dict, *, planes: list[dict] | None = None, independence: 
         admission_basis="EXACT_CANONICAL_BYTES",
         plane_evidence_records=plane_records(generation_id) if planes is None else planes,
         independence_evidence=[dmrp(generation_id)] if independence is None else independence,
+        left_identity_history=[existing(first)],
+        right_identity_history=[existing(first)],
     )
 
 
@@ -119,6 +121,8 @@ def test_partial_admission_rejects_stale_generation_wrapper_before_any_plane_res
             right_generation_record=first["generation"],
             planes=FIXTURE["exact_planes"],
             admission_basis="EXACT_CANONICAL_BYTES",
+            left_identity_history=[existing(first)],
+            right_identity_history=[existing(first)],
         )
 
 
@@ -134,6 +138,8 @@ def test_right_hand_stale_wrapper_is_equally_rejected_on_partial_path() -> None:
             right_generation_record=first["generation"],
             planes=FIXTURE["exact_planes"],
             admission_basis="EXACT_CANONICAL_BYTES",
+            left_identity_history=[existing(first)],
+            right_identity_history=[existing(first)],
         )
 
 
@@ -157,6 +163,8 @@ def test_lawfully_bound_partial_admission_remains_plane_local() -> None:
         right_generation_record=first["generation"],
         planes=FIXTURE["exact_planes"],
         admission_basis="EXACT_CANONICAL_BYTES",
+        left_identity_history=[existing(first)],
+        right_identity_history=[existing(first)],
     )
     assert result["semantic_identity"] == "EXACT"
     assert result["record"] is None

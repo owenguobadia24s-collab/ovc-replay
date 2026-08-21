@@ -105,9 +105,12 @@ def test_forged_orphan_series_record_does_not_self_authorise_root_identity() -> 
         )
 
 
-def test_direct_deterministic_first_generation_remains_valid_without_history_reconstruction() -> None:
+def test_direct_deterministic_first_generation_requires_and_accepts_canonical_root_history() -> None:
     first = new_bundle()
-    result = stage_partial(first)
+    with pytest.raises(ReferenceEngineError, match="canonical series/root identity history"):
+        stage_partial(first)
+    history = [existing(first)]
+    result = stage_partial(first, left_history=history, right_history=history)
     assert result["semantic_identity"] == "EXACT"
     assert result["record"] is None
     assert result["executability"] == "BLOCKED_UNRESOLVED_PLANES"
