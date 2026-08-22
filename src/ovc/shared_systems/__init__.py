@@ -1,6 +1,6 @@
 """OVC Shared Systems v0.1 inactive/reference implementation only.
 
-This package exposes Stage-0 bootstrap and WP1 identity/profile reference machinery. It does not activate a Shared Systems runtime,
+This package exposes Stage-0 bootstrap, WP1 identity/profile, and WP2 owner-neutral envelope reference machinery. It does not activate a Shared Systems runtime,
 replace or restrict any current consumer path, create a new source/provider/research role, grant scientific or semantic
 promotion, consume Validation, publish canon/R2, or grant probability, risk, exposure, execution, or agent-write authority.
 Missing authority fails closed.
@@ -32,6 +32,20 @@ from .identity import (
     logical_identity,
     storage_bytes,
 )
+from .envelopes import (
+    AdapterDescriptor,
+    CompatibilityContract,
+    DependencyDescriptor,
+    EvidenceEntry,
+    EvidenceFrontier,
+    InterfaceBinding,
+    LineageEdgeEnvelope,
+    OwnerExtensionRegistry,
+    SharedEnvelopeError,
+    StatePlaneValue,
+    StateVector,
+    research_operations_legacy_state,
+)
 
 __all__ = [
     "BOOTSTRAP_NODES",
@@ -56,4 +70,16 @@ __all__ = [
     "load_registry",
     "logical_identity",
     "storage_bytes",
+    "AdapterDescriptor",
+    "CompatibilityContract",
+    "DependencyDescriptor",
+    "EvidenceEntry",
+    "EvidenceFrontier",
+    "InterfaceBinding",
+    "LineageEdgeEnvelope",
+    "OwnerExtensionRegistry",
+    "SharedEnvelopeError",
+    "StatePlaneValue",
+    "StateVector",
+    "research_operations_legacy_state",
 ]

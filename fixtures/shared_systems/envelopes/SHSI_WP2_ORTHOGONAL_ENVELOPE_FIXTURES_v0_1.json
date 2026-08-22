@@ -1,0 +1,15 @@
+{
+  "schema": "ovc-shsi-wp2-envelope-fixtures/v0.1",
+  "authority_effect": "NONE",
+  "orthogonal_state": [
+    {"plane_family":"LIFECYCLE","owner_namespace":"RESEARCH_OPERATIONS","owner_state":"FROZEN","authority_effect":"NONE"},
+    {"plane_family":"AUTHORITY","owner_namespace":"RESEARCH_OPERATIONS","owner_state":"UNKNOWN","owning_rule_ref":null,"authority_effect":"NONE"},
+    {"plane_family":"AVAILABILITY","owner_namespace":"RESEARCH_OPERATIONS","owner_state":"PARTIALLY_AVAILABLE","authority_effect":"NONE"}
+  ],
+  "evidence_frontier": {
+    "frontier_id":"SHSI.FIXTURE.FRONTIER.1","schema_version":"0.1","owner_namespace":"ESL","evaluation_cutoff":"2026-08-01T12:00:00Z","dependency_manifest_ref":"ESL.DEPENDENCIES.v0.1","evidence_entries":[{"evidence_id":"E1","dependency_ref":"D.REQUIRED","first_valid_time":"2026-08-01T11:00:00Z","source_generation":"ESL.GEN.1"}],"missing_entries":["D.OPTIONAL"],"latest_required_first_valid_time":"2026-08-01T11:00:00Z","source_generations":["ESL.GEN.1"],"reason_codes":["OPTIONAL_EVIDENCE_MISSING"]
+  },
+  "dependency": {"source_requirement":"D.OPTIONAL","requiredness":"OPTIONAL","consumption_policy":"ALLOWED","purpose":"fixture","owner_role":"EVALUATOR","failure_disposition":"OPTIONAL_EVIDENCE_MISSING","source_owner":"ESL","dependent_surfaces":["detail_panel"]},
+  "conflict": {"present_evidence_id":"D.CONFLICT","missing_evidence_id":"D.CONFLICT"},
+  "lineage": {"edge_id":"EDGE.1","lineage_plane":"GENEALOGY","predicate_owner":"ESL","predicate":"EPISODE_SPLIT_FROM","source_ref":"EPISODE.OLD","target_ref":"EPISODE.NEW","semantic_scope":"ESL.EPISODE.v0.1","extension_type":"LINEAGE_PREDICATE"}
+}
