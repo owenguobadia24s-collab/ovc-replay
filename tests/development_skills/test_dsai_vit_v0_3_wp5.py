@@ -51,7 +51,12 @@ class DsaiVitV03Wp5Tests(unittest.TestCase):
             path = store.put(completion,completion.receipt_id)
             self.assertEqual(store.put(completion,completion.receipt_id),path)
             index = store.rebuild_index()
-            self.assertEqual(index["packet_id:WP5"],path.name)
+            completion_key = store.packet_completion_generation_index_key(
+                programme_id=completion.programme_id,
+                packet_id=completion.packet_id,
+                vit_generation_id=completion.vit_generation_id,
+            )
+            self.assertEqual(index[completion_key],path.name)
             path.write_text("{}",encoding="utf-8")
             with self.assertRaises(VitContractError):
                 store.put(completion,completion.receipt_id)
