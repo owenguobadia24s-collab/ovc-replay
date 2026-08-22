@@ -48,3 +48,21 @@ def test_combined_schema_is_closed_and_covers_all_required_artifacts() -> None:
     assert required <= set(schema["$defs"])
     for name in required:
         assert schema["$defs"][name]["additionalProperties"] is False
+
+
+def test_wp2_vit_payload_and_frontiers_are_content_addressed() -> None:
+    from ovc.development.identity import canonical_sha256
+
+    vit = PROGRAMME / "vit"
+    authority = load(vit / "SHSI_WP2_AUTHORITY_MANIFEST_v0_1.json")
+    frontier = load(vit / "SHSI_WP2_DEPENDENCY_FRONTIER_v0_1.json")
+    pip = load(vit / "SHSI_WP2_PIP_v0_1.json")
+    assert authority["logical_id"] == canonical_sha256(authority["payload"])
+    assert frontier["logical_id"] == canonical_sha256(frontier["payload"])
+    assert pip["logical_id"] == canonical_sha256(pip["payload"])
+    assert pip["payload"]["authority_manifest_id"] == authority["logical_id"]
+    assert pip["payload"]["dependency_frontier_id"] == frontier["logical_id"]
+    assert pip["payload"]["completion_transition"] == {"status":"COMPLETED", "next_packet":"SHSI-WP3"}
+    for change in pip["payload"]["logical_changes"]:
+        observed = subprocess.run(["git", "hash-object", "--", change["path"]], cwd=ROOT, check=True, capture_output=True, text=True).stdout.strip()
+        assert observed == change["blob_sha"], change["path"]
