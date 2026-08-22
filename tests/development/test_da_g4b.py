@@ -90,18 +90,24 @@ class DevelopmentAccelerationG4BTests(unittest.TestCase):
         self.assertNotIn("DELETE", self.runner)
         self.assertNotIn("force = $true", self.runner)
 
-    def test_active_transport_requires_vit_before_pr_creation(self) -> None:
+    def test_active_transport_publishes_detached_exact_head_qualification_before_pr_creation(self) -> None:
         for token in (
             "build_vit_planned_lineage.py",
+            "build_vit_pr_lineage.py",
             "VIT_LINEAGE_BUILD_FAILED",
             "VIT_RESULT_TREE_MISMATCH",
-            "VIT-Lineage-B64:",
+            "--publish-detached",
+            "VIT-Qualification-ID:",
             "vit_route = \"VIT_MANDATORY\"",
-            "vit_lineage_attached_to_pr = $true",
+            "vit_qualification_source = \"DETACHED_QUALIFICATION_LEDGER\"",
+            "vit_physical_placement_binding = \"LATE_BOUND\"",
+            "vit_lineage_attached_to_pr = $false",
         ):
             self.assertIn(token, self.runner)
-        self.assertLess(self.runner.index("build_vit_planned_lineage.py"), self.runner.index("/pulls?state=open"))
-        self.assertLess(self.runner.index("VIT_RESULT_TREE_MISMATCH"), self.runner.index("/pulls?state=open"))
+        self.assertNotIn("VIT-Lineage-B64:", self.runner)
+        self.assertLess(self.runner.index("--publish-detached"), self.runner.index("/pulls?state=open"))
+        self.assertLess(self.runner.index("VIT_RESULT_TREE_MISMATCH"), self.runner.index("--publish-detached"))
+        self.assertLess(self.runner.index("--publish-detached"), self.runner.index("$prBody ="))
 
     def test_no_credentials_are_committed(self) -> None:
         bodies = "\n".join(path.read_text() for path in (GATE, REQUEST, DECISION, EVALUATION, STATE, ACTIVE))
