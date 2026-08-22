@@ -1,0 +1,10 @@
+{
+  "schema":"ovc-shsi-wp4-assurance-impact-fixtures/v0.1","authority_effect":"NONE",
+  "qualification":{"qualification_id":"Q1","target_ref":"SERVICE.1","release_ref":"RELEASE.1","generation_ref":"GEN.1","capability":"REFERENCE","role":"REFERENCE","environment_ref":"ENV.1","source_ref":"SOURCE.1","semantic_scope":"SCOPE.1","evidence_refs":["E1"],"status":"QUALIFIED","authority_effect":"NONE"},
+  "drift_cases":[{"current_release":"RELEASE.1","current_generation":"GEN.1","current_environment":"ENV.1","current_source":"SOURCE.1","expected":"CURRENT"},{"current_release":"RELEASE.2","current_generation":"GEN.2","current_environment":"ENV.1","current_source":"SOURCE.2","expected":"STALE"}],
+  "impact_edges":[{"source_ref":"A","dependent_ref":"B","obligation":"RETEST"},{"source_ref":"B","dependent_ref":"C","obligation":"REPLAY"},{"source_ref":"X","dependent_ref":"Y","obligation":"RETEST"}],
+  "selective_expected":{"invalidated":["A","B","C"],"unaffected":["X","Y"]},"ambiguous_expected":{"invalidated":["A","B","C","X","Y"],"conservative_fallback":true},
+  "authority_laundering":{"attempted_effect":"SCIENTIFIC_AUTHORITY","expected":"FAIL_CLOSED"},
+  "implementation_equivalence":{"change_id":"CH-EQ","proof_refs":["EQUIVALENCE_PROOF.1"],"expected_invalidated":["A"]},
+  "incident":{"incident_id":"I1","subject_ref":"RESULT.1","evidence_refs":["E1","E2"],"impact_assessment_ref":"IMPACT.1","rollback_ref":"ROLLBACK.1","quarantine_deleted":false}
+}

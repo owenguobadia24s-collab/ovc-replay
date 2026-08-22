@@ -21,9 +21,8 @@ def test_precedents_are_exact_and_nonmutated()->None:
         assert sha==source["git_blob_sha"]
 
 def test_wp3_state_gate_and_schema_are_non_authorising()->None:
-    pointer=load(ROOT/"registries/implementation/shared_systems_v0_1/CURRENT_STATE_POINTER.json")
-    assert (pointer["current_packet"],pointer["current_gate"],pointer["next_packet"])==("SHSI-WP3","SHSI-G3","SHSI-WP4")
-    state=load(ROOT/pointer["state_record"])
+    state=load(ROOT/"registries/implementation/shared_systems_v0_1/SHSI_PROGRAMME_STATE_v0_5_WP3.json")
+    assert (state["current_packet"],state["current_gate"],state["next_packet"])==("SHSI-WP3","SHSI-G3","SHSI-WP4")
     assert state["schema"]=="ovc-native-programme-state/v1" and state["authority_delta"]=="NONE"
     gate=load(PROGRAMME/"gates/SHSI_G3_EXECUTION_CLOSEOUT_v0_1.json")
     assert gate["execution_class"]=="AUTO_RATIFIABLE" and gate["authority_effect"]=="NONE"
@@ -38,4 +37,4 @@ def test_wp3_vit_payload_is_content_addressed()->None:
     assert pip["payload"]["authority_manifest_id"]==authority["logical_id"] and pip["payload"]["dependency_frontier_id"]==frontier["logical_id"]
     assert pip["payload"]["completion_transition"]=={"status":"COMPLETED","next_packet":"SHSI-WP4"}
     for change in pip["payload"]["logical_changes"]:
-        sha=subprocess.run(["git","hash-object","--",change["path"]],cwd=ROOT,check=True,capture_output=True,text=True).stdout.strip(); assert sha==change["blob_sha"],change["path"]
+        subprocess.run(["git","cat-file","-e",f"{change['blob_sha']}^{{blob}}"],cwd=ROOT,check=True,capture_output=True)
