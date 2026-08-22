@@ -504,18 +504,20 @@ def test_fresh_g4_alg_block_remains_byte_exact_during_bounded_remediation() -> N
             "P2CTII-WP8",
             "P2CTII-WP9",
             "P2CTII-G-OBSERVABILITY-ACTIVATE",
+            "P2CTII-WP10",
         }
         if state["packet_id"] == "P2CTII-G4-ALG":
             assert state["status"] == "APPROVED"
             assert state["next_packet"] == "P2CTII-WP5"
         else:
-            assert state["status"] in {"APPROVED", "COMPLETED", "GATE_READY"}
+            assert state["status"] in {"READY", "APPROVED", "COMPLETED", "GATE_READY"}
             assert state["next_packet"] in {
                 "P2CTII-WP6",
                 "P2CTII-WP7",
                 "P2CTII-WP8",
                 "P2CTII-WP9",
                 "P2CTII-G-OBSERVABILITY-ACTIVATE",
+                "P2CTII-WP10",
             }
     else:
         assert state["status"] == "PASS_REMEDIATION_AWAITING_MATERIALISATION"
