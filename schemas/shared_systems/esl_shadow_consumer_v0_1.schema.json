@@ -1,0 +1,11 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema","$id":"ovc://shared-systems/esl-shadow-consumer/v0.1","title":"Shared Systems ESL shadow objects",
+  "$defs":{
+    "ESLSharedSystemsConsumptionManifest":{"type":"object","required":["manifest_id","consumer_programme_id","surfaces","c3_activation_state","status"]},
+    "ESLShadowSurfaceBinding":{"type":"object","required":["binding_id","surface","source_ref","field_mapping","declared_loss_fields"]},
+    "ESLEvidenceFrontierMapping":{"type":"object","required":["mapping_id","shared_frontier","dependency_roles","status"]},
+    "ESLReferenceComparison":{"type":"object","required":["comparison_id","reference_logical_sha256","shadow_logical_sha256","status"]},
+    "ESLAdapterComplexityLedger":{"type":"object","required":["ledger_id","binding_refs","status","exceeded_dimensions"]}
+  },
+  "oneOf":[{"$ref":"#/$defs/ESLSharedSystemsConsumptionManifest"},{"$ref":"#/$defs/ESLShadowSurfaceBinding"},{"$ref":"#/$defs/ESLEvidenceFrontierMapping"},{"$ref":"#/$defs/ESLReferenceComparison"},{"$ref":"#/$defs/ESLAdapterComplexityLedger"}]
+}

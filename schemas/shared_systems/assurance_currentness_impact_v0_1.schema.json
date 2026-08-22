@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://shared-systems/assurance-currentness-impact/v0.1",
+  "title": "Shared Systems WP4 object union",
+  "oneOf": [
+    {"$ref": "#/$defs/AssuranceAssertionSpec"},
+    {"$ref": "#/$defs/AssuranceAssertionResult"},
+    {"$ref": "#/$defs/AssuranceSuite"},
+    {"$ref": "#/$defs/AssurancePacket"},
+    {"$ref": "#/$defs/QualificationRecord"},
+    {"$ref": "#/$defs/QualificationCurrentness"},
+    {"$ref": "#/$defs/ChangeAssessment"},
+    {"$ref": "#/$defs/ImpactDependencyEdge"},
+    {"$ref": "#/$defs/InvalidationPlan"},
+    {"$ref": "#/$defs/ReplayObligation"},
+    {"$ref": "#/$defs/IncidentRecord"},
+    {"$ref": "#/$defs/QuarantineRecord"}
+  ],
+  "$defs": {
+    "NonEmptyString": {"type": "string", "minLength": 1},
+    "RefArray": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/NonEmptyString"}
+    },
+    "OptionalRefArray": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/NonEmptyString"}
+    },
+    "AssuranceAssertionSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assertion_id", "version", "owner", "assurance_class", "subject_contract", "claim", "applicability", "prerequisites", "evidence_requirements", "evaluation_method", "blocking_policy", "failure_disposition", "authority_effect"],
+      "properties": {
+        "assertion_id": {"$ref": "#/$defs/NonEmptyString"},
+        "version": {"$ref": "#/$defs/NonEmptyString"},
+        "owner": {"$ref": "#/$defs/NonEmptyString"},
+        "assurance_class": {"enum": ["CONTRACT_CONFORMANCE", "SEMANTIC_FIDELITY", "DETERMINISM_REPLAY", "DEPENDENCY_INTEGRITY", "EVIDENCE_INTEGRITY", "OPERATIONAL_RELIABILITY", "SECURITY_INTEGRITY", "AUTHORITY_INTEGRITY", "SCIENTIFIC_QUALIFICATION", "NON_TRANSITIVITY"]},
+        "subject_contract": {"$ref": "#/$defs/NonEmptyString"},
+        "claim": {"$ref": "#/$defs/NonEmptyString"},
+        "applicability": {"$ref": "#/$defs/NonEmptyString"},
+        "prerequisites": {"$ref": "#/$defs/OptionalRefArray"},
+        "evidence_requirements": {"$ref": "#/$defs/RefArray"},
+        "evaluation_method": {"$ref": "#/$defs/NonEmptyString"},
+        "blocking_policy": {"$ref": "#/$defs/NonEmptyString"},
+        "failure_disposition": {"$ref": "#/$defs/NonEmptyString"},
+        "authority_effect": {"const": "NONE"}
+      }
+    },
+    "AssuranceAssertionResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assertion_id", "subject_ref", "status", "evidence_refs", "reason_codes", "authority_effect"],
+      "properties": {
+        "assertion_id": {"$ref": "#/$defs/NonEmptyString"},
+        "subject_ref": {"$ref": "#/$defs/NonEmptyString"},
+        "status": {"enum": ["PASS", "FAIL", "NOT_EVALUABLE"]},
+        "evidence_refs": {"$ref": "#/$defs/OptionalRefArray"},
+        "reason_codes": {"$ref": "#/$defs/OptionalRefArray"},
+        "authority_effect": {"const": "NONE"}
+      }
+    },
+    "AssuranceSuite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["suite_id", "assertion_specs"],
+      "properties": {
+        "suite_id": {"$ref": "#/$defs/NonEmptyString"},
+        "assertion_specs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/AssuranceAssertionSpec"}}
+      }
+    },
+    "AssurancePacket": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["packet_id", "suite_id", "subject_ref", "results", "disposition", "authority_effect"],
+      "properties": {
+        "packet_id": {"$ref": "#/$defs/NonEmptyString"},
+        "suite_id": {"$ref": "#/$defs/NonEmptyString"},
+        "subject_ref": {"$ref": "#/$defs/NonEmptyString"},
+        "results": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/AssuranceAssertionResult"}},
+        "disposition": {"enum": ["PASS", "BLOCKED", "NOT_EVALUABLE"]},
+        "authority_effect": {"const": "NONE"}
+      }
+    },
+    "QualificationRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["qualification_id", "target_ref", "release_ref", "generation_ref", "capability", "role", "environment_ref", "source_ref", "semantic_scope", "evidence_refs", "status", "authority_effect"],
+      "properties": {
+        "qualification_id": {"$ref": "#/$defs/NonEmptyString"},
+        "target_ref": {"$ref": "#/$defs/NonEmptyString"},
+        "release_ref": {"$ref": "#/$defs/NonEmptyString"},
+        "generation_ref": {"$ref": "#/$defs/NonEmptyString"},
+        "capability": {"$ref": "#/$defs/NonEmptyString"},
+        "role": {"$ref": "#/$defs/NonEmptyString"},
+        "environment_ref": {"type": ["string", "null"], "minLength": 1},
+        "source_ref": {"type": ["string", "null"], "minLength": 1},
+        "semantic_scope": {"$ref": "#/$defs/NonEmptyString"},
+        "evidence_refs": {"$ref": "#/$defs/RefArray"},
+        "status": {"enum": ["QUALIFIED", "NOT_QUALIFIED", "NOT_EVALUABLE"]},
+        "authority_effect": {"const": "NONE"}
+      }
+    },
+    "QualificationCurrentness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["qualification_id", "status", "reason_codes"],
+      "properties": {
+        "qualification_id": {"$ref": "#/$defs/NonEmptyString"},
+        "status": {"enum": ["CURRENT", "STALE", "REVOKED", "QUARANTINED", "SUPERSEDED", "UNKNOWN"]},
+        "reason_codes": {"$ref": "#/$defs/OptionalRefArray"}
+      }
+    },
+    "ChangeAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["change_id", "changed_refs", "classification", "reason_codes", "equivalence_evidence_refs"],
+      "properties": {
+        "change_id": {"$ref": "#/$defs/NonEmptyString"},
+        "changed_refs": {"$ref": "#/$defs/RefArray"},
+        "classification": {"enum": ["SEMANTIC", "IMPLEMENTATION_EQUIVALENT", "AMBIGUOUS"]},
+        "reason_codes": {"$ref": "#/$defs/RefArray"},
+        "equivalence_evidence_refs": {"$ref": "#/$defs/OptionalRefArray"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"classification": {"const": "IMPLEMENTATION_EQUIVALENT"}}},
+          "then": {"properties": {"equivalence_evidence_refs": {"minItems": 1}}}
+        }
+      ]
+    },
+    "ImpactDependencyEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_ref", "dependent_ref", "obligation"],
+      "properties": {
+        "source_ref": {"$ref": "#/$defs/NonEmptyString"},
+        "dependent_ref": {"$ref": "#/$defs/NonEmptyString"},
+        "obligation": {"enum": ["REPLAY", "REBUILD", "RETEST", "STALE_QUALIFICATION", "QUARANTINE"]}
+      }
+    },
+    "ReplayObligation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subject_ref", "reason", "status"],
+      "properties": {
+        "subject_ref": {"$ref": "#/$defs/NonEmptyString"},
+        "reason": {"$ref": "#/$defs/NonEmptyString"},
+        "status": {"const": "REQUIRED"}
+      }
+    },
+    "InvalidationPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["change_id", "invalidated_refs", "unaffected_refs", "replay_obligations", "conservative_fallback", "unaffected_proof", "unresolved_impacts"],
+      "properties": {
+        "change_id": {"$ref": "#/$defs/NonEmptyString"},
+        "invalidated_refs": {"$ref": "#/$defs/RefArray"},
+        "unaffected_refs": {"$ref": "#/$defs/OptionalRefArray"},
+        "replay_obligations": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/ReplayObligation"}},
+        "conservative_fallback": {"type": "boolean"},
+        "unaffected_proof": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "unresolved_impacts": {"$ref": "#/$defs/OptionalRefArray"}
+      }
+    },
+    "IncidentRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["incident_id", "subject_ref", "evidence_refs", "description", "impact_assessment_ref", "rollback_ref", "authority_effect"],
+      "properties": {
+        "incident_id": {"$ref": "#/$defs/NonEmptyString"},
+        "subject_ref": {"$ref": "#/$defs/NonEmptyString"},
+        "evidence_refs": {"$ref": "#/$defs/RefArray"},
+        "description": {"$ref": "#/$defs/NonEmptyString"},
+        "impact_assessment_ref": {"$ref": "#/$defs/NonEmptyString"},
+        "rollback_ref": {"$ref": "#/$defs/NonEmptyString"},
+        "authority_effect": {"const": "NONE"}
+      }
+    },
+    "QuarantineRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["quarantine_id", "incident_id", "subject_ref", "evidence_refs", "rollback_ref", "release_condition_ref", "deleted"],
+      "properties": {
+        "quarantine_id": {"$ref": "#/$defs/NonEmptyString"},
+        "incident_id": {"$ref": "#/$defs/NonEmptyString"},
+        "subject_ref": {"$ref": "#/$defs/NonEmptyString"},
+        "evidence_refs": {"$ref": "#/$defs/RefArray"},
+        "rollback_ref": {"$ref": "#/$defs/NonEmptyString"},
+        "release_condition_ref": {"$ref": "#/$defs/NonEmptyString"},
+        "deleted": {"const": false}
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "schema": "ovc-shared-systems-reuse-census/v0.1",
+  "programme_id": "OVC-SHARED-SYSTEMS-v0.1",
+  "packet_id": "SHSI-WP1",
+  "baseline_main": "18827c2c1eff4bedcba7717c2c1a7ecf935cde45",
+  "entries": [
+    {
+      "surface": "development canonical JSON and SHA-256 primitives",
+      "path": "src/ovc/development/identity.py",
+      "disposition": "REUSE_BEHAVIOUR_AND_EQUIVALENCE_BASELINE_NO_BOOTSTRAP_IMPORT",
+      "reason": "Existing utility is deterministic for its declared subset but has no explicit profile/projection/legacy registry semantics."
+    },
+    {
+      "surface": "development artifact profiles",
+      "path": "src/ovc/development/profiles.py",
+      "disposition": "DO_NOT_CONFLATE",
+      "reason": "ArtifactProfile is packet-input and authority configuration, not SerializationProfile."
+    },
+    {
+      "surface": "Research Operations canonical identity utilities",
+      "path": "src/ovc/research_operations/canonical.py",
+      "disposition": "CENSUS_ONLY_OWNER_LOCAL_CURRENT_PATH_UNCHANGED",
+      "reason": "Consumer implementation remains controlling until a later shadow adapter; no reverse dependency is introduced."
+    },
+    {
+      "surface": "ESL canonical JSON profile",
+      "path": "contracts/opt_b/esl/CANONICAL_JSON_V1_CONTRACT.md",
+      "disposition": "EXPLICIT_INCOMPATIBILITY_REQUIRES_LATER_ADAPTER",
+      "reason": "Its numeric and negative-zero rules cannot be selected from the hash-algorithm label and are not silently merged."
+    },
+    {
+      "surface": "independent identity comparator",
+      "path": "src/ovc/shared_systems/identity_comparator.py",
+      "disposition": "INTENTIONAL_INDEPENDENT_ASSURANCE_IMPLEMENTATION",
+      "reason": "Identity-critical golden vectors require a separately coded comparator rather than self-comparison."
+    }
+  ],
+  "duplicate_authority_store_created": false,
+  "current_consumer_path_changed": false,
+  "authority_effect": "NONE"
+}

@@ -124,22 +124,38 @@ class ReceiptStore:
             "attachment_id": attachment.attachment_id,
         }
 
+    @staticmethod
+    def packet_completion_generation_index_key(
+        *, programme_id: str, packet_id: str, vit_generation_id: str
+    ) -> str:
+        """Return the unambiguous generation-qualified completion lookup key."""
+        identity = json.dumps(
+            [programme_id, packet_id, vit_generation_id],
+            ensure_ascii=False,
+            separators=(",", ":"),
+        )
+        return f"packet_completion_generation:{identity}"
+
     def rebuild_index(self) -> Mapping[str, str]:
         index: dict[str, str] = {}
         for path in sorted(self.root.glob("*.json")):
             raw = json.loads(path.read_text(encoding="utf-8"))
-            fields: list[str] = []
+            keys: list[str] = []
             if raw.get("transaction_id"):
-                fields.append("transaction_id")
+                keys.append(f"transaction_id:{raw['transaction_id']}")
             if raw.get("gate_decision_ref") and raw.get("payload_id") and raw.get("packet_id"):
-                fields.append("packet_id")
+                keys.append(
+                    self.packet_completion_generation_index_key(
+                        programme_id=str(raw.get("programme_id", "")),
+                        packet_id=str(raw["packet_id"]),
+                        vit_generation_id=str(raw.get("vit_generation_id", "")),
+                    )
+                )
             if raw.get("schema") == "ovc-dsai3v-completion-observability-attachment/v1":
                 for field in ("completion_receipt_id", "development_latency_receipt_id"):
                     if raw.get(field):
-                        fields.append(field)
-            for field in fields:
-                value = raw[field]
-                key = f"{field}:{value}"
+                        keys.append(f"{field}:{raw[field]}")
+            for key in keys:
                 if key in index and index[key] != path.name:
                     raise VitContractError("VIT_LEDGER_INTEGRITY_FAIL")
                 index[key] = path.name
