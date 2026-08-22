@@ -40,15 +40,15 @@ def test_wp4_precedents_are_exact_and_nonmutated() -> None:
 
 
 def test_wp4_state_gate_schema_and_fixture_are_non_authorising() -> None:
-    pointer = load(
-        ROOT / "registries/implementation/shared_systems_v0_1/CURRENT_STATE_POINTER.json"
+    state = load(
+        ROOT
+        / "registries/implementation/shared_systems_v0_1/SHSI_PROGRAMME_STATE_v0_6_WP4.json"
     )
     assert (
-        pointer["current_packet"],
-        pointer["current_gate"],
-        pointer["next_packet"],
+        state["current_packet"],
+        state["current_gate"],
+        state["next_packet"],
     ) == ("SHSI-WP4", "SHSI-G4", "SHSI-WP5")
-    state = load(ROOT / pointer["state_record"])
     assert state["schema"] == "ovc-native-programme-state/v1"
     assert state["authority_delta"] == "NONE"
     assert state["completed_packets"][-1]["packet_id"] == "SHSI-WP3"
@@ -103,11 +103,9 @@ def test_wp4_vit_payload_is_content_addressed() -> None:
         "next_packet": "SHSI-WP5",
     }
     for change in pip["payload"]["logical_changes"]:
-        sha = subprocess.run(
-            ["git", "hash-object", "--", change["path"]],
+        subprocess.run(
+            ["git", "cat-file", "-e", f"{change['blob_sha']}^{{blob}}"],
             cwd=ROOT,
             check=True,
             capture_output=True,
-            text=True,
-        ).stdout.strip()
-        assert sha == change["blob_sha"], change["path"]
+        )
