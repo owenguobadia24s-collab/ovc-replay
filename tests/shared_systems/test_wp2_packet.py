@@ -33,10 +33,10 @@ def test_exact_owner_source_census_is_immutable_and_non_mutating() -> None:
 
 
 def test_wp2_state_and_gate_remain_non_authorising() -> None:
-    pointer = load(IMPLEMENTATION / "CURRENT_STATE_POINTER.json")
-    assert pointer["current_packet"] == "SHSI-WP2"
-    assert pointer["current_gate"] == "SHSI-G2"
-    assert pointer["next_packet"] == "SHSI-WP3"
+    state = load(IMPLEMENTATION / "SHSI_PROGRAMME_STATE_v0_4_WP2.json")
+    assert state["current_packet"] == "SHSI-WP2"
+    assert state["current_gate"] == "SHSI-G2"
+    assert state["next_packet"] == "SHSI-WP3"
     gate = load(PROGRAMME / "gates/SHSI_G2_ENVELOPE_CLOSEOUT_v0_1.json")
     assert gate["execution_class"] == "AUTO_RATIFIABLE"
     assert gate["proposed_delta"] == gate["authority_effect"] == "NONE"
