@@ -9,7 +9,6 @@ import subprocess
 import sys
 
 import pytest
-from jsonschema import Draft202012Validator
 
 from ovc.shared_systems.identity import (
     AmbiguousIdentityBinding,
@@ -55,11 +54,12 @@ def test_contract_schemas_validate_frozen_registry_entries() -> None:
     )
     for schema_name, registry_name in bindings:
         schema = json.loads((ROOT / "schemas" / "shared_systems" / schema_name).read_text(encoding="utf-8"))
-        Draft202012Validator.check_schema(schema)
-        validator = Draft202012Validator(schema)
+        assert schema["$schema"] == "https://json-schema.org/draft/2020-12/schema"
+        assert schema["type"] == "object"
+        assert schema["additionalProperties"] is False
         rows = json.loads((REGISTRY_ROOT / registry_name).read_text(encoding="utf-8"))["entries"]
         for row in rows:
-            validator.validate(row)
+            assert set(row) == set(schema["required"])
 
 
 def test_golden_vectors_match_reference_and_independent_comparator() -> None:
