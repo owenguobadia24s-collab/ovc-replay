@@ -43,11 +43,12 @@ def test_wp7_census_pins_exact_dsai_sources_and_keeps_authority() -> None:
 
 
 def test_wp7_current_state_and_gate_are_shadow_only_non_authorising() -> None:
-    pointer = load(ROOT / "registries/implementation/shared_systems_v0_1/CURRENT_STATE_POINTER.json")
-    assert (pointer["current_packet"], pointer["current_gate"], pointer["next_packet"]) == (
+    state = load(
+        ROOT / "registries/implementation/shared_systems_v0_1/SHSI_PROGRAMME_STATE_v0_9_WP7.json"
+    )
+    assert (state["current_packet"], state["current_gate"], state["next_packet"]) == (
         "SHSI-WP7", "SHSI-G7", "SHSI-WP8"
     )
-    state = load(ROOT / pointer["state_record"])
     assert state["completed_packets"][-1]["packet_id"] == "SHSI-WP6"
     assert state["authority_delta"] == "NONE"
     assert state["authority_effect"] == "NONE_SHADOW_ONLY"
