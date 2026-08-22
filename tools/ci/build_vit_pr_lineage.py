@@ -161,7 +161,7 @@ def main() -> int:
     if args.publish_detached:
         if args.legacy_placement:
             raise RuntimeError("detached qualification publication requires payload-only late-binding lineage")
-        envelope = build_qualification_envelope(repo=repo, root=repo, head_sha=args.head, lineage_record=record) if False else build_qualification_envelope(root=repo, head_sha=args.head, lineage_record=record)
+        envelope = build_qualification_envelope(root=repo, head_sha=args.head, lineage_record=record)
         qualification_id = publish_qualification_envelope(
             envelope,
             replace_head_binding=args.replace_head_qualification,
