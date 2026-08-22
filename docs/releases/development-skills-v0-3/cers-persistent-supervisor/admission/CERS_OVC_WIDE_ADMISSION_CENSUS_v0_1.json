@@ -1,0 +1,47 @@
+{
+  "schema": "ovc-cers-ovc-wide-admission-census/v1",
+  "census_id": "CERS-OVC-WIDE-ADMISSION-CENSUS-20260821",
+  "programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1",
+  "gate_id": "CERS-G-OVC-WIDE-ADMISSION-1",
+  "baseline_commit": "ca9dedaebb9222a409de0b24ff5f87aa5df3c85a",
+  "baseline_tree": "5949d5b62f17e113ad11b960635d71239b6af2e2",
+  "decision_time": "2026-08-21T17:21:00+01:00",
+  "disposition": "PASS_APPROVED_MAXIMAL_LAWFUL_ADMISSION_SET_WITH_SHARED_SYSTEMS",
+  "admitted": [
+    {"programme_id": "OVC-DSAI3V-CERS-CONFORMANCE-v0.1", "root": "registries/implementation/dsai3v_cers_v0_1/CURRENT_STATE_POINTER.json", "status": "PRESERVED_ACTIVE"},
+    {"programme_id": "OVC-P2CTI-CONFORMANCE-v0.1", "root": "records/research_operations/p2cti/P2CTII_PROGRAMME_STATE_v0_1.json", "current_frontier": "P2CTII-G-OBSERVABILITY-ACTIVATE", "boundary": "PARK_AT_P2CTII-G-OBSERVABILITY-ACTIVATE_OR_ANY_OPERATOR_REQUIRED_GATE"},
+    {"programme_id": "OVC-ASOCS-6M-v0.1", "root": "registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json", "current_frontier": "ASOCSI-WP7-HUMAN-REVIEW_REQUIRES_HUMAN_INPUT", "boundary": "PARK_AT_HUMAN_INPUT_OR_OPERATOR_REQUIRED_GATE"},
+    {"programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE", "root": "registries/implementation/grt_v0_2/CURRENT_STATE_POINTER.json", "current_frontier": "GRT2-G3-READINESS-EVIDENCE", "boundary": "PARK_AT_GRT2-G3"},
+    {"programme_id": "OVC-SHARED-SYSTEMS-v0.1", "root": "docs/programmes/shared-systems-v0-1/programme_state/SHSI_PROGRAMME_STATE_v0_2_R1.json", "current_frontier": "SHSI-WP0 / SHSI-G0B", "boundary": "CONTINUE_ONLY_WITHIN_SHSI_AE_v0.2_R1_AND_PARK_AT_ANY_RESERVED_STOP"}
+  ],
+  "terminal_exclusions": [
+    "OVC-DSAI-VIT-v0.3",
+    "OVC-DSAI3V-ASYNC-ASSURANCE-CONFORMANCE-v0.1",
+    "OVC-DSAI-v0.2",
+    "OVC-PRVIT-LIVE-REMEDIATION-CONFORMANCE-v0.1"
+  ],
+  "deferred_or_not_admitted": [
+    {"programme_id": "OVC-P1CDI-CONFORMANCE-v0.1", "reason": "CURRENT_REMEDIATION_REVIEW_FRONTIER_REQUIRES_SEPARATE_CERS_ADMISSION_RECONCILIATION_AFTER_CURRENT_STATE_SETTLES"},
+    {"programme_id": "OVC-SFF-CONFORMANCE-PREREG-v0.1", "reason": "STALE_OR_INCOMPLETE_MACHINE_STATE_FOR_PERSISTENT_ADMISSION"},
+    {"programme_id": "OVC-EC1-PRSC-CONFORMANCE-v0.1", "reason": "CURRENT_OWNER_FRONTIER_PARKED_AT_RESERVED_REAL_SOURCE_SCIENTIFIC_CHALLENGE"},
+    {"programme_id": "OVC-EC1-DMRP-PATH1-CONFORMANCE-v0.1", "reason": "F0_A_HOLD_AND_RESERVED_SCIENTIFIC_AUTHORITY"},
+    {"programme_id": "OVC-C2P2-RS0", "reason": "RUN_SPECIFIC_EMPIRICAL_AUTHORITY_NOT_GENERIC_LOW_RISK_ADMISSION"},
+    {"programme_id": "OVC-SYSTEM-ATLAS-v0.1", "reason": "TERMINAL_SHADOW_IMPLEMENTATION_PARKED_AT_OPERATOR_RESERVED_OBSERVABILITY_ACTIVATION"}
+  ],
+  "work_reconciliation": [
+    {"programme_id": "OVC-P2CTI-CONFORMANCE-v0.1", "pr": 1247, "status": "MERGED", "rule": "RECONCILE_DURABLE_STATE_NO_DUPLICATE_START"},
+    {"programme_id": "OVC-ASOCS-6M-v0.1", "pr": 1253, "status": "MERGED", "rule": "RECONCILE_DURABLE_STATE_NO_DUPLICATE_START"},
+    {"programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE", "pr": 1252, "status": "OPEN", "rule": "REUSE_OR_REPLACE_PHYSICAL_PLACEMENT_ONLY_NO_DUPLICATE_START"},
+    {"programme_id": "OVC-SHARED-SYSTEMS-v0.1", "pr": 978, "status": "OPEN_STALE_PLACEMENT", "rule": "REUSE_LOGICAL_PAYLOAD_OR_REPLACE_PHYSICAL_PLACEMENT_ONLY_NO_DUPLICATE_START"}
+  ],
+  "shared_systems_authority": {
+    "plan_id": "OVC-SHARED-SYSTEMS-CONFORMANCE-IMPLEMENTATION-PLAN-0.2-R1",
+    "authority_envelope": "SHSI-AE-v0.2-R1",
+    "g0a_decision": "PASS",
+    "current_authority_required": "AUTO_EXECUTABLE_WITHIN_SHSI_AE_v0.2_R1",
+    "authority_delta": "NONE_UNTIL_RESERVED_FRONTIER",
+    "reserved_boundary_policy": "PARK"
+  },
+  "future_programme_auto_admission": false,
+  "authority_effect": "UNATTENDED_INVOCATION_ONLY_PROGRAMME_AUTHORITY_UNCHANGED"
+}

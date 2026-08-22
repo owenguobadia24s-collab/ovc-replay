@@ -51,7 +51,10 @@ def test_cers_ps_wp0_remains_preserved_as_preactivation_state_advances():
     current = load(pointer["current_state"])
     assert current["plan_id"] == "OVC-DSAI3V-CERS-PERSISTENT-SUPERVISOR-ACTIVATION-PLAN-0.1-RATIFIED"
 
-    if pointer["current_state"].endswith("OVC_DSAI3V_CERS_STATE_v0_17.json"):
+    if Path(pointer["current_state"]).name in {
+        "OVC_DSAI3V_CERS_STATE_v0_17.json",
+        "OVC_DSAI3V_CERS_STATE_v0_18.json",
+    }:
         assert pointer["status"] == "COMPLETED"
         assert pointer["persistent_run"] == "ACTIVATED"
         assert pointer["persistent_general_dispatch"] == "ALLOWED_EXACT_ADMITTED_SCOPE_ONLY"

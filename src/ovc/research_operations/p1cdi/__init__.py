@@ -14,11 +14,6 @@ from .bootstrap import (
 from .currentness import evaluate_two_point_currentness, require_g2_alg_for_pointer
 from .identity import build_semantic_projection, exact_semantic_equal, projection_bytes
 from .intake import build_intake_envelope, classify_exact_intake
-from . import reference as _reference
-from .series_root_guard import install_reference_series_root_guard
-
-install_reference_series_root_guard(_reference)
-
 from .reference import (
     CONFORMANCE_SEPARATION_PRINCIPLE,
     assemble_evidence_reference,

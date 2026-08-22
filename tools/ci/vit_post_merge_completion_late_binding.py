@@ -29,7 +29,7 @@ from ovc.development.skills.vit_routing import (
 )
 from ovc_evidence_store.external_root import resolve_external_root
 from tools.ci import vit_post_merge_completion as legacy
-from tools.ci.vit_lineage_source import resolve_lineage_source
+from tools.ci.vit_lineage_source import resolve_candidate_lineage
 
 
 LATE_PLACEMENT_MARKER = "OVC_VIT_LATE_BINDING_PLACEMENT_ACQUIRED="
@@ -59,6 +59,7 @@ def _marker_payloads(text: str, marker: str) -> tuple[Mapping[str, Any], ...]:
 
 def _late_binding_freeze_from_merge_readiness_logs(
     *,
+    repo_root: Path,
     repository: str,
     head_sha: str,
     pr_number: int,
@@ -67,12 +68,9 @@ def _late_binding_freeze_from_merge_readiness_logs(
 ) -> Mapping[str, Any] | None:
     """Recover the deterministic PMT from exact pre-write late-binding evidence.
 
-    Late-binding v2 intentionally has no physical placement during VIT routing
-    preflight. The authoritative pre-write evidence therefore lives in the serialized
-    ``OVC merge readiness`` job after the physical base has been acquired. This
-    function does not infer a different placement after the write: it reconstructs the
-    transaction solely from the placement/admission records emitted before merge and
-    then re-validates every identity.
+    Forward generations resolve their payload identity from the detached exact-head
+    qualification ledger. Historical PR-body lineage is available only when the
+    explicit recovery flag is set.
     """
     owner, repo = repository.split("/", 1)
     query = urlencode(
@@ -147,14 +145,21 @@ def _late_binding_freeze_from_merge_readiness_logs(
         if admission.disposition != "SHADOW_READY":
             raise legacy.PostMergeCompletionError("late-binding admission was not ready")
 
-        lineage_source = resolve_lineage_source(pr_body, require=True)
+        allow_legacy_body = os.environ.get("OVC_VIT_ALLOW_LEGACY_PR_BODY_LINEAGE", "").lower() == "true"
+        lineage_source = resolve_candidate_lineage(
+            root=repo_root,
+            head_sha=head_sha,
+            body=pr_body,
+            require=True,
+            allow_legacy_pr_body=allow_legacy_body,
+        )
         assert lineage_source is not None
         lineage_record = lineage_source.record
         lineage = validate_vit_lineage_record(lineage_record)
         if not lineage.late_binding:
             return None
         if lineage.pip_id != admission.pip_id:
-            raise legacy.PostMergeCompletionError("late-binding lineage/admission PIP mismatch")
+            raise legacy.PostMergeCompletionError("late-binding qualification/admission PIP mismatch")
         pip = lineage_record.get("pip")
         if not isinstance(pip, Mapping):
             raise legacy.PostMergeCompletionError("late-binding PIP missing")
@@ -227,6 +232,8 @@ def _late_binding_freeze_from_merge_readiness_logs(
                 "workflow_job_id": str(job_id),
                 "run_attempt": str(run.get("run_attempt", "")),
                 "source": "OVC_MERGE_READINESS_EXACT_FINAL_PREWRITE_EVIDENCE",
+                "qualification_source": lineage_source.source,
+                "qualification_ref": lineage_source.immutable_ref,
                 "evidence_rule": "OBSERVED_IDENTITIES_ONLY_NO_POSTWRITE_PLACEMENT_INFERENCE",
             },
             "binding_policy": "LATE_PHYSICAL_PLACEMENT",
@@ -243,9 +250,10 @@ def _late_binding_freeze_from_merge_readiness_logs(
 
 
 def _freeze_for_pr(
-    *, repository: str, head_sha: str, pr_number: int, pr_body: str, token: str
+    *, repo_root: Path, repository: str, head_sha: str, pr_number: int, pr_body: str, token: str
 ) -> Mapping[str, Any]:
     late = _late_binding_freeze_from_merge_readiness_logs(
+        repo_root=repo_root,
         repository=repository,
         head_sha=head_sha,
         pr_number=pr_number,
@@ -306,7 +314,13 @@ def _recover_one(
     merged_at = str(pr.get("merged_at") or "")
     if not merged_at:
         raise legacy.PostMergeCompletionError("associated PR merged_at is required")
+    if head_sha:
+        try:
+            legacy._git(repo_root, "cat-file", "-e", f"{head_sha}^{{commit}}")
+        except Exception:
+            legacy._git(repo_root, "fetch", "--no-tags", "origin", head_sha)
     freeze = _freeze_for_pr(
+        repo_root=repo_root,
         repository=repository,
         head_sha=head_sha,
         pr_number=pr_number,
@@ -363,14 +377,8 @@ def _recover_one(
         observed_tree=observed_tree,
         receipt_store=receipt_store,
         siq_receipts=legacy._siq_observations(repository, head_sha, token),
-        trace_summary=(
-            trace_bundle.get("trace_summary") if trace_bundle is not None else None
-        ),
-        async_assurance_metrics=(
-            trace_bundle.get("async_assurance_metrics")
-            if trace_bundle is not None
-            else None
-        ),
+        trace_summary=(trace_bundle.get("trace_summary") if trace_bundle is not None else None),
+        async_assurance_metrics=(trace_bundle.get("async_assurance_metrics") if trace_bundle is not None else None),
     )
     safe = {
         "schema": proof["schema"],
@@ -379,18 +387,13 @@ def _recover_one(
         "observed_commit": proof["observed_commit"],
         "observed_tree": proof["observed_tree"],
         "exact_tree_equal": proof["exact_tree_equal"],
-        "four_content_addressed_receipts_present": proof[
-            "four_content_addressed_receipts_present"
-        ],
+        "four_content_addressed_receipts_present": proof["four_content_addressed_receipts_present"],
         "receipt_ids": proof["receipt_ids"],
         "authority_effect": proof["authority_effect"],
     }
     if proof.get("trace_summary_id"):
         safe["trace_summary_id"] = proof["trace_summary_id"]
-    print(
-        "OVC_VIT_POST_MERGE_COMPLETION_PROOF " + json.dumps(safe, sort_keys=True),
-        flush=True,
-    )
+    print("OVC_VIT_POST_MERGE_COMPLETION_PROOF " + json.dumps(safe, sort_keys=True), flush=True)
     return safe
 
 
@@ -434,22 +437,17 @@ def main() -> int:
             create=False,
         )
         receipt_store = ReceiptStore(external_root / "receipts")
-        recovery_path = (
-            Path(args.recovery_manifest).resolve() if args.recovery_manifest else None
-        )
+        recovery_path = Path(args.recovery_manifest).resolve() if args.recovery_manifest else None
         requested = [args.merge_sha, *_manifest_requests(recovery_path)]
         seen: set[str] = set()
         queue = [sha for sha in requested if not (sha in seen or seen.add(sha))]
         for merge_sha in queue:
-            _recover_one(
-                repo_root=repo_root,
-                merge_sha=merge_sha,
-                receipt_store=receipt_store,
-            )
+            _recover_one(repo_root=repo_root, merge_sha=merge_sha, receipt_store=receipt_store)
         return 0
     except (
         legacy.PostMergeCompletionError,
         VitContractError,
+        RuntimeError,
         ValueError,
         KeyError,
         OSError,
