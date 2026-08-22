@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://shared-systems/schema/ro-dmrp-shadow-consumer/v0.1",
+  "title": "Shared Systems RO/DMRP shadow consumer objects v0.1",
+  "$defs": {
+    "RODMRPSharedSystemsConsumptionManifest": {"type": "object", "required": ["manifest_id", "access_mode", "status", "authority_effect"]},
+    "RODMRPStatePlaneCrosswalk": {"type": "object", "required": ["crosswalk_id", "owner_lifecycle_state", "shared_lifecycle_state", "shared_authority_state"]},
+    "RODMRPEvidenceEvaluation": {"type": "object", "required": ["evaluation_id", "frontier", "status", "reason_codes"]},
+    "RODMRPReadOnlyArtifactBinding": {"type": "object", "required": ["binding_id", "repository_path", "descriptor"]},
+    "RODMRPShadowAdapterBinding": {"type": "object", "required": ["binding_id", "source_schema", "target_contract_ref", "field_mapping"]},
+    "RODMRPDualRunComparison": {"type": "object", "required": ["comparison_id", "reference_logical_sha256", "shadow_logical_sha256", "status"]},
+    "RODMRPAdapterComplexityLedger": {"type": "object", "required": ["ledger_id", "binding_ref", "status", "exceeded_dimensions"]}
+  },
+  "oneOf": [
+    {"$ref": "#/$defs/RODMRPSharedSystemsConsumptionManifest"},
+    {"$ref": "#/$defs/RODMRPStatePlaneCrosswalk"},
+    {"$ref": "#/$defs/RODMRPEvidenceEvaluation"},
+    {"$ref": "#/$defs/RODMRPReadOnlyArtifactBinding"},
+    {"$ref": "#/$defs/RODMRPShadowAdapterBinding"},
+    {"$ref": "#/$defs/RODMRPDualRunComparison"},
+    {"$ref": "#/$defs/RODMRPAdapterComplexityLedger"}
+  ]
+}
