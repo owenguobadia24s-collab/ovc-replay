@@ -110,6 +110,20 @@ from .foundation import (
     inspect_reachability,
     reveal_protected_metadata,
 )
+from .dsai_shadow import (
+    DSAIAdapterComplexityLedger,
+    DSAIDualRunComparison,
+    DSAIShadowError,
+    DSAIShadowExecutionContext,
+    DSAISharedSystemsConsumptionManifest,
+    DSAISecurityRefusalParity,
+    DSAISurfaceAdapterBinding,
+    adapt_dsai_surface,
+    compare_dsai_dual_run,
+    compare_security_refusal,
+    evaluate_adapter_complexity,
+    unwrap_dsai_surface,
+)
 
 __all__ = [
     "BOOTSTRAP_NODES",
@@ -178,4 +192,9 @@ __all__ = [
     "SecurityRequest", "ServiceHealthSnapshot", "ServiceLevelObjective",
     "SharedFoundationError", "TelemetryRecord", "build_evidence_commit_manifest",
     "decide_security", "inspect_reachability", "reveal_protected_metadata",
+    "DSAIAdapterComplexityLedger", "DSAIDualRunComparison", "DSAIShadowError",
+    "DSAIShadowExecutionContext", "DSAISharedSystemsConsumptionManifest",
+    "DSAISecurityRefusalParity", "DSAISurfaceAdapterBinding", "adapt_dsai_surface",
+    "compare_dsai_dual_run", "compare_security_refusal", "evaluate_adapter_complexity",
+    "unwrap_dsai_surface",
 ]
