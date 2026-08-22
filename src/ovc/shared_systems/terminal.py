@@ -265,7 +265,7 @@ class TerminalProgrammeRecord:
     def __post_init__(self) -> None:
         for field in ("record_id", "matrix_ref", "budget_result_ref"):
             _text(getattr(self, field), field)
-        if len(self.adoption_decision_refs) != 3:
+        if len(self.adoption_decision_refs) != 3 or len(set(self.adoption_decision_refs)) != 3:
             raise SharedTerminalError("TERMINAL_ADOPTION_DECISION_SET_INCOMPLETE")
         blockers = (
             self.unresolved_incidents or self.unresolved_owner_conflicts
