@@ -79,10 +79,17 @@ class NativeGenesisPortfolioWP2Tests(unittest.TestCase):
 
     def test_existing_native_and_current_pgn_programmes_are_not_conversion_targets(self) -> None:
         targets = {item["programme_id"] for item in self.static["adoption_targets"]}
+        generated_native = {item["programme_id"]: item for item in self.census["existing_native_programmes"]}
+        materialised_native = {item["programme_id"]: item for item in self.static["existing_native_programmes"]}
         self.assertNotIn("OVC-PG-v0.2", targets)
         self.assertNotIn("OVC-PG-NATIVE-PORTFOLIO-v0.2", targets)
+        self.assertNotIn("OVC-SHARED-SYSTEMS-v0.1", targets)
         self.assertEqual("ALREADY_NATIVE_EXCLUDED_FROM_CONVERSION", self.static["existing_native_programmes"][0]["disposition"])
         self.assertEqual("CURRENT_RATIFIED_PROGRAMME_NOT_A_LEGACY_CONVERSION_TARGET", self.static["current_governance_programmes"][0]["disposition"])
+        self.assertIn("OVC-SHARED-SYSTEMS-v0.1", generated_native)
+        self.assertIn("OVC-SHARED-SYSTEMS-v0.1", materialised_native)
+        self.assertEqual("NATIVE_PROGRAMME_STATE", generated_native["OVC-SHARED-SYSTEMS-v0.1"]["classification"])
+        self.assertEqual("ALREADY_NATIVE_EXCLUDED_FROM_CONVERSION", materialised_native["OVC-SHARED-SYSTEMS-v0.1"]["disposition"])
 
     def test_census_has_no_candidate_or_adoption_authority(self) -> None:
         self.assertEqual("NONE", self.static["authority_effect"])

@@ -1,0 +1,52 @@
+{
+  "schema": "ovc-qa-packet/v1",
+  "qa_id": "SHSI-WP0-QA-v0.1",
+  "programme_id": "OVC-SHARED-SYSTEMS-v0.1",
+  "packet_id": "SHSI-WP0",
+  "gate_id": "SHSI-G0B",
+  "baseline_commit": "bf0d28812ab2466340ee7af059470bf57c085b87",
+  "baseline_tree": "f7451a63468154e96d5cb7e91968b9c4d3947641",
+  "checks": {
+    "design_identity": "PASS_EXACT_SHA256",
+    "plan_identity": "PASS_EXACT_SHA256",
+    "g0a_decision": "PASS_BOUND_SHSI_AE_v0.2_R1",
+    "owner_currentness": "PASS_EXACT_SINGLE_OWNER",
+    "binding_canonical_hash": "PASS_RECOMPUTED",
+    "bootstrap_acyclicity": "PASS_ZERO_CYCLES",
+    "bootstrap_forbidden_edges": "PASS_ZERO",
+    "cold_roundtrip": "PASS_100_PERCENT",
+    "stage1_machine_barrier": "PASS",
+    "targeted_local_tests": "PASS_10_TESTS",
+    "inactive_reference_authority_literal": "PASS_EXACT_CONTIGUOUS_DENIAL_WITH_TEST_UNCHANGED",
+    "pgn_wp2_native_programme_partition": "PASS_SHARED_SYSTEMS_EXCLUDED_FROM_LEGACY_TARGETS",
+    "pgn_wp2_legacy_adoption_population": "PASS_EXACT_SEVEN_PRESERVED",
+    "pgn_wp2_current_builder_identity": "PASS_fb2f2f9319a70044c9c1ea4895ddd7ca728f68284bb448386a7427e59668b4a8",
+    "pgn_wp2_historical_receipt_identity": "PRESERVED_7f26a513c7696bf065f4b30b5337d44677adc1f2fb48e7864593f6f708f704ad",
+    "pgn_authority_boundaries": "PASS_UNCHANGED_G2A_G3_G5_DENIALS",
+    "failed_pip_generation": "SUPERSEDED_c5fb71fe198c4f85fe345f460d4ed024759007e9a262b8b4580cc44512122120",
+    "stale_census_pip_generation": "SUPERSEDED_4182008eabdf2646e4fa11c22de8700e6c15aa01ff1607c59cce8982af5bedb2",
+    "current_pip_generation": "8579c71c82bd47cc5a86dfe50826def96e0229874346b1290b9d51b3291725fd",
+    "current_main_reconciliation": "PASS_CLEAN_CURRENT_MAIN_REQUEUE_LATE_BINDING",
+    "repository_wide_pr_assurance": "PENDING_FRESH_SYNCHRONIZE_AFTER_PIP_SUPERSESSION"
+  },
+  "invalidation_radius": [
+    "src/ovc/shared_systems/__init__.py",
+    "scripts/governance/build_pgn_wp2_census.py",
+    "tests/governance/test_pgn_wp2.py",
+    "registries/governance/programme_genesis/pgn_census/PGN_PORTFOLIO_CENSUS_v0_1.json",
+    "docs/programmes/shared-systems-v0-1/vit/SHSI_WP0_PIP_v0_1.json"
+  ],
+  "invalidation_exclusions": [
+    "shared_systems_stage0_algorithm",
+    "grt_shared_service_binding",
+    "authority_manifest",
+    "dependency_frontier",
+    "consumer_paths",
+    "runtime_activation",
+    "semantic_contracts"
+  ],
+  "warnings": [],
+  "blockers": [],
+  "qa_recommendation": "PASS_PENDING_EXACT_PR_ASSURANCE",
+  "authority_effect": "NONE"
+}

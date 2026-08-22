@@ -13,6 +13,7 @@ EXCLUDED = {
     "registries/governance/programme_genesis/OVC_PG_PROGRAMME_STATE_v0_2.json",
     "registries/implementation/system_atlas_v0_1/ATLAS_PROGRAMME_STATE_v0_1.json",
 }
+NATIVE_STATE_SCHEMAS = {"ovc-native-programme-state/v1"}
 EXPECTED_TARGETS = {
     "OVC-C2.5-BOUNDED-EVENT-CONTRACT-v0.1": "MARKET_TRANSLATION",
     "OVC-C2E-NEUTRAL-EPISODE-v0.1": "MARKET_TRANSLATION",
@@ -52,10 +53,19 @@ GROUPS = [
 ]
 
 
+def _is_native_programme_state(record: dict[str, Any]) -> bool:
+    return record["source"].get("schema") in NATIVE_STATE_SCHEMAS
+
+
 def build_census(root: Path = ROOT) -> dict[str, Any]:
     paths = discover_programme_state_paths(root, exclude_paths=EXCLUDED)
     records = [build_migration_record(root, path) for path in paths]
-    by_id = {record["programme_id"]: record for record in records}
+    native_records = sorted(
+        (record for record in records if _is_native_programme_state(record)),
+        key=lambda record: (record["programme_id"], record["source"]["path"]),
+    )
+    legacy_records = [record for record in records if not _is_native_programme_state(record)]
+    by_id = {record["programme_id"]: record for record in legacy_records}
     discovered_ids = set(by_id)
     if discovered_ids != set(EXPECTED_TARGETS):
         missing = sorted(set(EXPECTED_TARGETS) - discovered_ids)
@@ -96,7 +106,15 @@ def build_census(root: Path = ROOT) -> dict[str, Any]:
                 "programme_id": "OVC-PG-v0.2",
                 "classification": "CONSTITUTIONAL_GOVERNANCE",
                 "disposition": "ALREADY_NATIVE_EXCLUDED_FROM_CONVERSION",
-            }
+            },
+            *[
+                {
+                    "programme_id": record["programme_id"],
+                    "classification": "NATIVE_PROGRAMME_STATE",
+                    "disposition": "ALREADY_NATIVE_EXCLUDED_FROM_CONVERSION",
+                }
+                for record in native_records
+            ],
         ],
         "current_governance_programmes": [
             {

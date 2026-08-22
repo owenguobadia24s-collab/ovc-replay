@@ -42,6 +42,7 @@ EXPECTED_OVC_PACKAGES = {
     "ovc.research_operations.mta",
     "ovc.research_operations.mcarb",
     "ovc.research_orchestration",
+    "ovc.shared_systems",
     "ovc.system_atlas",
 }
 
@@ -65,6 +66,22 @@ class ActiveNamespaceAllowlistTests(unittest.TestCase):
         self.assertIn("scientific semantics", init_text)
         self.assertIn("publication", init_text)
         self.assertIn("execution authority", init_text)
+        self.assertIn("fails closed", init_text)
+
+    def test_shared_systems_namespace_is_inactive_reference_only(self) -> None:
+        init_text = (SRC / "ovc" / "shared_systems" / "__init__.py").read_text(encoding="utf-8").lower()
+        self.assertIn("inactive/reference implementation only", init_text)
+        self.assertIn("does not activate a shared systems runtime", init_text)
+        self.assertIn("replace or restrict any current consumer", init_text)
+        self.assertIn("new source/provider/research role", init_text)
+        self.assertIn("scientific or semantic", init_text)
+        self.assertIn("validation", init_text)
+        self.assertIn("publish canon/r2", init_text)
+        self.assertIn("probability", init_text)
+        self.assertIn("risk", init_text)
+        self.assertIn("exposure", init_text)
+        self.assertIn("execution", init_text)
+        self.assertIn("agent-write authority", init_text)
         self.assertIn("fails closed", init_text)
 
     def test_ovc_package_names_match_foundation_allowlist(self) -> None:
