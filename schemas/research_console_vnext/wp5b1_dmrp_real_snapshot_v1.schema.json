@@ -1,0 +1,30 @@
+{
+  "$id": "ovc-rcn-rn-wp5b1-dmrp-real-snapshot/v1",
+  "title": "RCN-RN-WP5B1 source-bound real DMRP snapshot",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "packet_id", "mode", "data_classification", "evidence_status", "authority_effect",
+    "source_preflight", "path1", "path2", "candidate_generation", "cross_mode", "cross_mode_state",
+    "negative_divergent_evidence", "negative_evidence_state", "owner_object_types", "source_refs", "presentation_guardrails"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-rcn-rn-wp5b1-dmrp-real-snapshot/v1"},
+    "packet_id": {"const": "RCN-RN-WP5B1"},
+    "mode": {"const": "REAL_SOURCE_READ_ONLY"},
+    "data_classification": {"const": "DMRP_OWNER_COURT_RECORD"},
+    "evidence_status": {"const": "OWNER_SOURCE_BOUND"},
+    "authority_effect": {"const": "NONE"},
+    "source_preflight": {"type": "object"},
+    "path1": {"type": "object"},
+    "path2": {"type": "object"},
+    "candidate_generation": {"type": "object"},
+    "cross_mode": {"type": "array"},
+    "cross_mode_state": {"type": "object"},
+    "negative_divergent_evidence": {"type": "array"},
+    "negative_evidence_state": {"type": "string"},
+    "owner_object_types": {"type": "array", "items": {"type": "string"}},
+    "source_refs": {"type": "object"},
+    "presentation_guardrails": {"type": "object"}
+  }
+}
