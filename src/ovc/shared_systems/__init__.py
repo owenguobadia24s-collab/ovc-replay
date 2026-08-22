@@ -124,6 +124,25 @@ from .dsai_shadow import (
     evaluate_adapter_complexity,
     unwrap_dsai_surface,
 )
+from .ro_dmrp_shadow import (
+    REQUIRED_RECORD_TYPES,
+    RODMRPAdapterComplexityLedger,
+    RODMRPDualRunComparison,
+    RODMRPEvidenceEvaluation,
+    RODMRPReadOnlyArtifactBinding,
+    RODMRPShadowAdapterBinding,
+    RODMRPShadowError,
+    RODMRPSharedSystemsConsumptionManifest,
+    RODMRPStatePlaneCrosswalk,
+    adapt_ro_record,
+    build_read_only_artifact_binding,
+    build_ro_evidence_frontier,
+    compare_ro_dual_run,
+    crosswalk_ro_state,
+    evaluate_ro_adapter_complexity,
+    inspect_read_only_artifacts,
+    unwrap_ro_record,
+)
 
 __all__ = [
     "BOOTSTRAP_NODES",
@@ -197,4 +216,13 @@ __all__ = [
     "DSAISecurityRefusalParity", "DSAISurfaceAdapterBinding", "adapt_dsai_surface",
     "compare_dsai_dual_run", "compare_security_refusal", "evaluate_adapter_complexity",
     "unwrap_dsai_surface",
+    "REQUIRED_RECORD_TYPES", "RODMRPAdapterComplexityLedger",
+    "RODMRPDualRunComparison", "RODMRPEvidenceEvaluation",
+    "RODMRPReadOnlyArtifactBinding", "RODMRPShadowAdapterBinding",
+    "RODMRPShadowError", "RODMRPSharedSystemsConsumptionManifest",
+    "RODMRPStatePlaneCrosswalk", "adapt_ro_record",
+    "build_read_only_artifact_binding", "build_ro_evidence_frontier",
+    "compare_ro_dual_run", "crosswalk_ro_state",
+    "evaluate_ro_adapter_complexity", "inspect_read_only_artifacts",
+    "unwrap_ro_record",
 ]
