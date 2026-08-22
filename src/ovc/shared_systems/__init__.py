@@ -46,6 +46,20 @@ from .envelopes import (
     StateVector,
     research_operations_legacy_state,
 )
+from .execution import (
+    CapacityReceipt,
+    CheckpointReceipt,
+    ExecutionEnvironmentManifest,
+    LogicalResultIdentity,
+    ReplayResultManifest,
+    RunExecutionManifest,
+    RunSpecification,
+    SemanticGenerationRef,
+    SharedExecutionError,
+    deterministic_partitions,
+    reconcile_exact,
+    run_reference,
+)
 
 __all__ = [
     "BOOTSTRAP_NODES",
@@ -82,4 +96,16 @@ __all__ = [
     "StatePlaneValue",
     "StateVector",
     "research_operations_legacy_state",
+    "CapacityReceipt",
+    "CheckpointReceipt",
+    "ExecutionEnvironmentManifest",
+    "LogicalResultIdentity",
+    "ReplayResultManifest",
+    "RunExecutionManifest",
+    "RunSpecification",
+    "SemanticGenerationRef",
+    "SharedExecutionError",
+    "deterministic_partitions",
+    "reconcile_exact",
+    "run_reference",
 ]

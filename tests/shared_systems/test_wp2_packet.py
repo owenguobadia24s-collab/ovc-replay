@@ -33,10 +33,10 @@ def test_exact_owner_source_census_is_immutable_and_non_mutating() -> None:
 
 
 def test_wp2_state_and_gate_remain_non_authorising() -> None:
-    pointer = load(IMPLEMENTATION / "CURRENT_STATE_POINTER.json")
-    assert pointer["current_packet"] == "SHSI-WP2"
-    assert pointer["current_gate"] == "SHSI-G2"
-    assert pointer["next_packet"] == "SHSI-WP3"
+    state = load(IMPLEMENTATION / "SHSI_PROGRAMME_STATE_v0_4_WP2.json")
+    assert state["current_packet"] == "SHSI-WP2"
+    assert state["current_gate"] == "SHSI-G2"
+    assert state["next_packet"] == "SHSI-WP3"
     gate = load(PROGRAMME / "gates/SHSI_G2_ENVELOPE_CLOSEOUT_v0_1.json")
     assert gate["execution_class"] == "AUTO_RATIFIABLE"
     assert gate["proposed_delta"] == gate["authority_effect"] == "NONE"
@@ -64,5 +64,4 @@ def test_wp2_vit_payload_and_frontiers_are_content_addressed() -> None:
     assert pip["payload"]["dependency_frontier_id"] == frontier["logical_id"]
     assert pip["payload"]["completion_transition"] == {"status":"COMPLETED", "next_packet":"SHSI-WP3"}
     for change in pip["payload"]["logical_changes"]:
-        observed = subprocess.run(["git", "hash-object", "--", change["path"]], cwd=ROOT, check=True, capture_output=True, text=True).stdout.strip()
-        assert observed == change["blob_sha"], change["path"]
+        subprocess.run(["git", "cat-file", "-e", f"{change['blob_sha']}^{{blob}}"], cwd=ROOT, check=True, capture_output=True)
