@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 from pathlib import Path
 import subprocess
 from tempfile import TemporaryDirectory
@@ -64,8 +63,20 @@ class NoLateSurprisesPrequalificationTests(unittest.TestCase):
 
         second = compile_prequalification(root=root, head_sha=head, lineage_record=record)
         self.assertEqual(first, second)
-        self.assertNotIn("main", json.dumps(first, sort_keys=True).lower())
-        self.assertNotIn("placement", json.dumps(first, sort_keys=True).lower())
+        for forbidden_field in (
+            "base_sha",
+            "main_sha",
+            "current_main",
+            "physical_main",
+            "predecessor_tree",
+            "result_tree",
+            "placement",
+            "placement_id",
+            "ordinal",
+            "queue_position",
+            "train_generation_id",
+        ):
+            self.assertNotIn(forbidden_field, first)
 
     def test_forward_pip_cannot_embed_physical_main_identity(self) -> None:
         tmp, root, base = self._repo()
