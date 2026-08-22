@@ -297,7 +297,7 @@ try {
     if (-not $exactJsonLine -or -not $qualificationLine) { throw "VIT_QUALIFICATION_PUBLISH_FAILED: incomplete exact-head output." }
     $exactLineage = ([string]$exactJsonLine) | ConvertFrom-Json -Depth 50
     $qualificationId = ([regex]::Match([string]$qualificationLine, '[0-9a-f]{64}')).Value
-    if (-not $qualificationId -or $exactLineage.pip_id -ne $exactLineage.pip.pip_id -and $false) { throw "VIT_QUALIFICATION_PUBLISH_FAILED: invalid qualification identity." }
+    if (-not $qualificationId -or -not $exactLineage.pip_id) { throw "VIT_QUALIFICATION_PUBLISH_FAILED: invalid qualification identity." }
 
     $owner = $Repository.Split('/')[0]
     $headQuery = [Uri]::EscapeDataString("$owner`:$($packet.branch)")
