@@ -1,0 +1,14 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema","$id":"ovc://shared-systems/terminal-shadow-conformance/v0.1","title":"Shared Systems terminal shadow conformance objects",
+  "$defs":{
+    "PilotConsumerBinding":{"type":"object","required":["consumer_programme_id","resolution_manifest","execution_context","status"]},
+    "IntegratedPilotMatrix":{"type":"object","required":["matrix_id","bindings","status"]},
+    "GovernedCorpusEquivalence":{"type":"object","required":["equivalence_id","consumer_programme_id","corpus_class","status"]},
+    "IntegratedReplayRecord":{"type":"object","required":["replay_id","reference_logical_sha256","optimized_logical_sha256","status"]},
+    "PilotAcceptanceResult":{"type":"object","required":["result_id","observed_dimensions","hard_floor_observations","disposition"]},
+    "OperationalBurdenEntry":{"type":"object","required":["consumer_programme_id","adapter_count","operator_time_seconds","maintenance_time_seconds"]},
+    "ConsumerAdoptionDecision":{"type":"object","required":["decision_id","consumer_programme_id","disposition","operator_review_required"]},
+    "TerminalProgrammeRecord":{"type":"object","required":["record_id","terminal_state","status","current_consumer_bindings_changed"]}
+  },
+  "oneOf":[{"$ref":"#/$defs/PilotConsumerBinding"},{"$ref":"#/$defs/IntegratedPilotMatrix"},{"$ref":"#/$defs/GovernedCorpusEquivalence"},{"$ref":"#/$defs/IntegratedReplayRecord"},{"$ref":"#/$defs/PilotAcceptanceResult"},{"$ref":"#/$defs/OperationalBurdenEntry"},{"$ref":"#/$defs/ConsumerAdoptionDecision"},{"$ref":"#/$defs/TerminalProgrammeRecord"}]
+}

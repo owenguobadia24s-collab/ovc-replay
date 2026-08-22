@@ -157,6 +157,23 @@ from .esl_shadow import (
     map_esl_evidence_frontier,
     unwrap_esl_surface,
 )
+from .terminal import (
+    CONSUMERS,
+    TERMINAL_STATE,
+    ConsumerAdoptionDecision,
+    GovernedCorpusEquivalence,
+    IntegratedPilotMatrix,
+    IntegratedReplayRecord,
+    OperationalBurdenEntry,
+    PilotAcceptanceResult,
+    PilotConsumerBinding,
+    SharedTerminalError,
+    TerminalProgrammeRecord,
+    build_adoption_decision,
+    build_integrated_pilot_matrix,
+    build_terminal_read_model,
+    evaluate_terminal_budget,
+)
 
 __all__ = [
     "BOOTSTRAP_NODES",
@@ -245,4 +262,11 @@ __all__ = [
     "adapt_esl_surface", "compare_esl_reference",
     "evaluate_esl_adapter_complexity", "map_esl_evidence_frontier",
     "unwrap_esl_surface",
+    "CONSUMERS", "TERMINAL_STATE", "ConsumerAdoptionDecision",
+    "GovernedCorpusEquivalence", "IntegratedPilotMatrix",
+    "IntegratedReplayRecord", "OperationalBurdenEntry",
+    "PilotAcceptanceResult", "PilotConsumerBinding", "SharedTerminalError",
+    "TerminalProgrammeRecord", "build_adoption_decision",
+    "build_integrated_pilot_matrix", "build_terminal_read_model",
+    "evaluate_terminal_budget",
 ]
