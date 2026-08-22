@@ -5,10 +5,13 @@ import base64
 import hashlib
 import json
 import os
+from pathlib import Path
 import re
 from typing import Any, Mapping
 import urllib.error
 import urllib.request
+
+from tools.ci.vit_qualification_store import resolve_qualification_envelope
 
 LINEAGE_BLOB_MARKER = re.compile(r"(?im)^VIT-Lineage-Blob:\s*([0-9a-f]{40})\s*$")
 LINEAGE_B64_MARKER = re.compile(r"(?im)^VIT-Lineage-B64:\s*([A-Za-z0-9_\-=]+)\s*$")
@@ -96,6 +99,12 @@ def resolve_lineage_source(
     require: bool = True,
     fetch_blob: callable | None = None,
 ) -> ResolvedLineageSource | None:
+    """Historical PR-body lineage resolver.
+
+    This remains available only for explicit recovery/migration callers. Normal
+    permanent-candidate admission resolves the detached qualification ledger via
+    ``resolve_candidate_lineage`` below.
+    """
     blob_match = LINEAGE_BLOB_MARKER.search(body)
     b64_match = LINEAGE_B64_MARKER.search(body)
     if blob_match and b64_match:
@@ -103,8 +112,8 @@ def resolve_lineage_source(
     if not blob_match and not b64_match:
         if require:
             raise RuntimeError(
-                "VIT_LINEAGE_REQUIRED: add `VIT-Lineage-Blob: <git-blob-sha>` "
-                "or legacy `VIT-Lineage-B64: <urlsafe-base64-canonical-lineage-json>` to the PR body"
+                "VIT_LINEAGE_REQUIRED: historical recovery requires `VIT-Lineage-Blob: <git-blob-sha>` "
+                "or legacy `VIT-Lineage-B64: <urlsafe-base64-canonical-lineage-json>`"
             )
         return None
 
@@ -130,3 +139,42 @@ def resolve_lineage_source(
         immutable_ref=hashlib.sha256(raw).hexdigest(),
         content_sha256=hashlib.sha256(raw).hexdigest(),
     )
+
+
+def resolve_candidate_lineage(
+    *,
+    root: Path,
+    head_sha: str,
+    body: str = "",
+    require: bool = True,
+    allow_legacy_pr_body: bool = False,
+    fetch_blob: callable | None = None,
+    fetch_qualification_file: callable | None = None,
+) -> ResolvedLineageSource | None:
+    """Resolve decision-bearing lineage for one exact candidate head.
+
+    The detached qualification ledger is authoritative. PR-body lineage is never
+    consulted unless an explicit historical-recovery caller opts in.
+    """
+    qualification = resolve_qualification_envelope(
+        root=root,
+        head_sha=head_sha,
+        fetch_file=fetch_qualification_file,
+    )
+    if qualification is not None:
+        lineage_raw = _canonical_json_bytes(qualification.record)
+        return ResolvedLineageSource(
+            record=qualification.record,
+            source="DETACHED_QUALIFICATION_LEDGER",
+            immutable_ref=qualification.qualification_id,
+            content_sha256=hashlib.sha256(lineage_raw).hexdigest(),
+        )
+
+    if allow_legacy_pr_body:
+        return resolve_lineage_source(body, require=require, fetch_blob=fetch_blob)
+    if require:
+        raise RuntimeError(
+            "VIT_QUALIFICATION_REQUIRED: publish a detached exact-head qualification envelope "
+            "before permanent PR assurance; PR-body VIT lineage is non-authoritative"
+        )
+    return None
