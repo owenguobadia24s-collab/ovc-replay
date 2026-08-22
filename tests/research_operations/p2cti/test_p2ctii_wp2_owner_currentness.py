@@ -308,8 +308,10 @@ def test_fresh_review_pass_is_materialised_without_rewriting_prior_block() -> No
         "P2CTII-WP8",
         "P2CTII-WP9",
         "P2CTII-G-OBSERVABILITY-ACTIVATE",
+        "P2CTII-WP10",
     }
     assert state["status"] in {
+        "READY",
         "COMPLETED",
         "APPROVED",
         "GATE_READY",
@@ -334,8 +336,19 @@ def test_fresh_review_pass_is_materialised_without_rewriting_prior_block() -> No
         "P2CTII-WP8",
         "P2CTII-WP9",
         "P2CTII-G-OBSERVABILITY-ACTIVATE",
+        "P2CTII-WP10",
     }
-    if state["packet_id"] in {"P2CTII-WP3", "P2CTII-G4-ALG", "P2CTII-WP5", "P2CTII-WP6", "P2CTII-WP7", "P2CTII-WP8", "P2CTII-WP9", "P2CTII-G-OBSERVABILITY-ACTIVATE"}:
+    if state["packet_id"] in {
+        "P2CTII-WP3",
+        "P2CTII-G4-ALG",
+        "P2CTII-WP5",
+        "P2CTII-WP6",
+        "P2CTII-WP7",
+        "P2CTII-WP8",
+        "P2CTII-WP9",
+        "P2CTII-G-OBSERVABILITY-ACTIVATE",
+        "P2CTII-WP10",
+    }:
         assert any(
             packet["packet_id"] == "P2CTII-WP3"
             and packet["decision"] == "P2CTII-G3_DELEGATED_PASS"
@@ -343,10 +356,19 @@ def test_fresh_review_pass_is_materialised_without_rewriting_prior_block() -> No
         )
     assert state["p2ctii_g2_alg_status"] == "PASS"
     assert state["currentness_resolver_status"] == "MECHANICALLY_QUALIFIED_G2_ALG_PASS"
-    assert state["decision_bearing_currentness_eligibility"] == (
-        "MECHANICALLY_QUALIFIED_NOT_OPERATIONALLY_PUBLISHED"
-    )
-    assert state["operational_current_pointer_publication"] == "DENIED_SEPARATELY_GOVERNED"
+    if state.get("p2ctii_observability_gate_status") == "PASS_ACTIVE":
+        assert state["decision_bearing_currentness_eligibility"] == (
+            "OPERATIONAL_READ_ONLY_CURRENT_PROJECTION_ACTIVE"
+        )
+        assert state["operational_current_pointer_publication"] == (
+            "ALLOWED_P2CTI_OPERATIONAL_READ_ONLY_ONLY"
+        )
+        assert state["operational_reliance"] is True
+    else:
+        assert state["decision_bearing_currentness_eligibility"] == (
+            "MECHANICALLY_QUALIFIED_NOT_OPERATIONALLY_PUBLISHED"
+        )
+        assert state["operational_current_pointer_publication"] == "DENIED_SEPARATELY_GOVERNED"
     assert state["remediation_author_may_grant_g2_alg_pass"] is False
     assert state["wp3_authorised"] is True
     if state["packet_id"] == (
