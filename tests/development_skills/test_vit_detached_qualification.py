@@ -153,7 +153,7 @@ class DetachedQualificationTests(unittest.TestCase):
         tmp, root, head, record, first, files = self._fixture()
         self.addCleanup(tmp.cleanup)
         modified = json.loads(json.dumps(record))
-        modified["pip"]["completion_transition"] = {"status": "QA_REVIEW"}
+        modified["pip"]["authority_manifest_id"] = "6" * 64
         modified = build_vit_payload_lineage_record(
             programme_id="PROGRAMME",
             packet_id="PACKET",
