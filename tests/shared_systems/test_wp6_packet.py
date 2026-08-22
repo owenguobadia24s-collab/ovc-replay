@@ -46,15 +46,13 @@ def test_wp6_reuses_exact_dsai_and_ro_contracts_without_parallel_stores() -> Non
 
 
 def test_wp6_state_gate_and_budget_are_complete_non_authorising() -> None:
-    pointer = load(
-        ROOT / "registries/implementation/shared_systems_v0_1/CURRENT_STATE_POINTER.json"
+    state = load(
+        ROOT
+        / "registries/implementation/shared_systems_v0_1/SHSI_PROGRAMME_STATE_v0_8_WP6.json"
     )
-    assert (pointer["current_packet"], pointer["current_gate"], pointer["next_packet"]) == (
-        "SHSI-WP6",
-        "SHSI-G6",
-        "SHSI-WP7",
+    assert (state["current_packet"], state["current_gate"], state["next_packet"]) == (
+        "SHSI-WP6", "SHSI-G6", "SHSI-WP7"
     )
-    state = load(ROOT / pointer["state_record"])
     assert state["completed_packets"][-1]["packet_id"] == "SHSI-WP5"
     assert state["authority_delta"] == "NONE"
     gate = load(PROGRAMME / "gates/SHSI_G6_FOUNDATION_BUDGET_CLOSEOUT_v0_1.json")
