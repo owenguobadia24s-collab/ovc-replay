@@ -166,6 +166,10 @@ class ProgrammeGenesisWP4Tests(unittest.TestCase):
         self.assertEqual("PASS", first["status"])
         self.assertEqual(0, first["blocking_conflict_count"])
         self.assertNotIn("OVC-PG-v0.2", {record["programme_id"] for record in first["records"]})
+        self.assertFalse(
+            set(registry["discovery"]["native_programmes_excluded"])
+            & {record["programme_id"] for record in first["records"]}
+        )
         self.assertIn(PG_STATE_PATH, first["excluded_paths"])
         for record in first["records"]:
             source_path = ROOT / record["source"]["path"]

@@ -264,6 +264,7 @@ def build_migration_snapshot(
     *,
     include_roots: Sequence[str] = ("registries",),
     exclude_paths: Iterable[str] = (),
+    exclude_programme_ids: Iterable[str] = (),
     minimum_records: int = 1,
 ) -> dict[str, Any]:
     repository_root = Path(root)
@@ -272,7 +273,12 @@ def build_migration_snapshot(
         include_roots=include_roots,
         exclude_paths=exclude_paths,
     )
-    records = [build_migration_record(repository_root, path) for path in paths]
+    native_programmes = set(exclude_programme_ids)
+    records = [
+        record
+        for record in (build_migration_record(repository_root, path) for path in paths)
+        if record["programme_id"] not in native_programmes
+    ]
     if len(records) < minimum_records:
         raise MigrationError(f"discovered {len(records)} migration records; minimum is {minimum_records}")
 
@@ -318,6 +324,7 @@ def build_snapshot_from_registry(root: Path | str, registry: Mapping[str, Any]) 
         root,
         include_roots=tuple(discovery.get("include_roots", ("registries",))),
         exclude_paths=tuple(discovery.get("exclude_paths", ())),
+        exclude_programme_ids=tuple(discovery.get("native_programmes_excluded", ())),
         minimum_records=int(discovery.get("minimum_records", 1)),
     )
 

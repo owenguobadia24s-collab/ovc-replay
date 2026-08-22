@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://shared-systems/identity-projection/v0.1",
+  "title": "IdentityProjection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["projection_id", "owner_namespace", "included_fields", "excluded_fields", "conditional_fields", "self_id_fields", "descriptive_only_fields", "projection_version"],
+  "properties": {
+    "projection_id": {"type": "string", "minLength": 1},
+    "owner_namespace": {"type": "string", "minLength": 1},
+    "included_fields": {"$ref": "#/$defs/uniqueStrings"},
+    "excluded_fields": {"$ref": "#/$defs/uniqueStrings"},
+    "conditional_fields": {"$ref": "#/$defs/uniqueStrings"},
+    "self_id_fields": {"$ref": "#/$defs/uniqueStrings"},
+    "descriptive_only_fields": {"$ref": "#/$defs/uniqueStrings"},
+    "projection_version": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "uniqueStrings": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+  }
+}

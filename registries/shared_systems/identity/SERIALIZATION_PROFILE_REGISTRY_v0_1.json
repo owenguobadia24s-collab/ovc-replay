@@ -1,0 +1,43 @@
+{
+  "schema": "ovc-shared-systems-serialization-profile-registry/v0.1",
+  "registry_id": "SHSI.SERIALIZATION_PROFILES.v0.1",
+  "entries": [
+    {
+      "serialization_profile_id": "OVC.DEVELOPMENT.CANONICAL_JSON.v1",
+      "profile_version": "1",
+      "character_encoding": "UTF-8",
+      "unicode_policy": "PRESERVE",
+      "object_key_order": "LEXICOGRAPHIC_CODEPOINT",
+      "numeric_policy": "JSON_NUMBER",
+      "negative_zero_policy": "REJECT",
+      "collection_policy": "ORDERED_SEQUENCE",
+      "null_policy": "EXPLICIT_ALLOW",
+      "timestamp_policy": "OWNER_TYPED_STRING",
+      "string_policy": "JSON_STRING",
+      "identity_projection_ref": "SHSI.IDENTITY.FIXTURE.v1",
+      "self_identity_exclusion_policy": "EXCLUDE_DECLARED_SELF_ID_FIELDS",
+      "storage_framing_policy": "NONE",
+      "hash_algorithm_ref": "SHA-256",
+      "conformance_vector_set_ref": "SHSI.IDENTITY.GOLDEN_VECTORS.v0.1"
+    },
+    {
+      "serialization_profile_id": "SHSI.SERIALIZATION.CANONICAL_JSON_NFC.v1",
+      "profile_version": "1",
+      "character_encoding": "UTF-8",
+      "unicode_policy": "REQUIRE_NFC",
+      "object_key_order": "LEXICOGRAPHIC_CODEPOINT",
+      "numeric_policy": "JSON_NUMBER",
+      "negative_zero_policy": "REJECT",
+      "collection_policy": "ORDERED_SEQUENCE",
+      "null_policy": "EXPLICIT_ALLOW",
+      "timestamp_policy": "OWNER_TYPED_STRING",
+      "string_policy": "JSON_STRING",
+      "identity_projection_ref": "SHSI.IDENTITY.FIXTURE.v1",
+      "self_identity_exclusion_policy": "EXCLUDE_DECLARED_SELF_ID_FIELDS",
+      "storage_framing_policy": "TRAILING_LF",
+      "hash_algorithm_ref": "SHA-256",
+      "conformance_vector_set_ref": "SHSI.IDENTITY.GOLDEN_VECTORS.v0.1"
+    }
+  ],
+  "authority_effect": "NONE_INACTIVE_REFERENCE"
+}
