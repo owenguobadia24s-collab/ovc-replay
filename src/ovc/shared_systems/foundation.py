@@ -593,6 +593,9 @@ class PilotBaselineMeasurement:
             for value in self.sample_values
         ):
             raise SharedFoundationError("PILOT_BASELINE_SAMPLES_INVALID")
+        expected_unit = PILOT_NUMERIC_CAP_DIMENSIONS.get(self.dimension)
+        if expected_unit is None or self.unit != expected_unit:
+            raise SharedFoundationError("PILOT_BASELINE_DIMENSION_OR_UNIT_INVALID")
         _refs(self.evidence_refs, "evidence_refs")
         if self.authority_effect != "NONE":
             raise SharedFoundationError("PILOT_BASELINE_AUTHORITY_EFFECT_FORBIDDEN")
@@ -613,6 +616,28 @@ PILOT_HARD_FLOOR_DIMENSIONS = frozenset(
 )
 
 
+PILOT_NUMERIC_CAP_DIMENSIONS = {
+    "RESOLVER_P50_LATENCY_US": "us",
+    "RESOLVER_P95_LATENCY_US": "us",
+    "CANONICALIZATION_P50_LATENCY_US": "us",
+    "CANONICALIZATION_P95_LATENCY_US": "us",
+    "PEAK_MEMORY_DELTA_BYTES": "bytes",
+    "ARTIFACT_BYTE_DELTA_BYTES": "bytes",
+    "CHECKPOINT_RESTART_OVERHEAD_US": "us",
+    "EVIDENCE_REACHABILITY_LATENCY_US": "us",
+    "CI_QUEUE_TIME_SECONDS": "seconds",
+    "WASTED_ASSURANCE_TIME_SECONDS": "seconds",
+    "OPERATOR_TIME_SECONDS": "seconds",
+    "MAINTENANCE_TIME_SECONDS": "seconds",
+    "ACTIVE_ADAPTER_COUNT": "count",
+    "ADAPTER_CODE_SURFACE_LINES": "lines",
+    "ADAPTER_MAPPING_COUNT": "count",
+    "ADAPTER_INCIDENT_CONTRIBUTION_COUNT": "count",
+    "DEPENDENCY_FAN_OUT_COUNT": "count",
+    "INVALIDATION_VOLUME_COUNT": "count",
+}
+
+
 @dataclass(frozen=True)
 class PilotAcceptanceBudget:
     budget_id: str
@@ -623,6 +648,38 @@ class PilotAcceptanceBudget:
     frozen: bool
     relaxable_within_pilot: bool = False
     authority_effect: str = "NONE"
+
+    @classmethod
+    def freeze_from_baselines(
+        cls,
+        budget_id: str,
+        baselines: Iterable[PilotBaselineMeasurement],
+        *,
+        derivation_procedure_ref: str,
+    ) -> "PilotAcceptanceBudget":
+        """Freeze no-slack caps from the exact maximum of every pinned baseline."""
+        rows = tuple(baselines)
+        by_dimension = {item.dimension: item for item in rows}
+        if len(by_dimension) != len(rows):
+            raise SharedFoundationError("PILOT_BASELINE_DIMENSION_AMBIGUOUS")
+        if set(by_dimension) != set(PILOT_NUMERIC_CAP_DIMENSIONS):
+            raise SharedFoundationError("PILOT_BASELINE_DIMENSION_SET_INCOMPLETE")
+        caps = tuple(
+            (
+                dimension,
+                max(by_dimension[dimension].sample_values),
+                PILOT_NUMERIC_CAP_DIMENSIONS[dimension],
+            )
+            for dimension in sorted(PILOT_NUMERIC_CAP_DIMENSIONS)
+        )
+        return cls(
+            budget_id,
+            tuple(by_dimension[dimension].measurement_id for dimension in sorted(by_dimension)),
+            caps,
+            tuple((dimension, 0) for dimension in sorted(PILOT_HARD_FLOOR_DIMENSIONS)),
+            derivation_procedure_ref,
+            True,
+        )
 
     def __post_init__(self) -> None:
         _text(self.budget_id, "budget_id")
@@ -642,6 +699,11 @@ class PilotAcceptanceBudget:
             raise SharedFoundationError("PILOT_NUMERIC_CAP_INVALID")
         if len({dimension for dimension, _, _ in self.numeric_caps}) != len(self.numeric_caps):
             raise SharedFoundationError("PILOT_NUMERIC_CAP_DUPLICATE")
+        cap_units = {dimension: unit for dimension, _, unit in self.numeric_caps}
+        if cap_units != PILOT_NUMERIC_CAP_DIMENSIONS:
+            raise SharedFoundationError("PILOT_NUMERIC_CAP_DIMENSION_SET_INCOMPLETE")
+        if len(self.baseline_measurement_refs) != len(PILOT_NUMERIC_CAP_DIMENSIONS):
+            raise SharedFoundationError("PILOT_BASELINE_REFERENCE_SET_INCOMPLETE")
         floor_dimensions = {dimension for dimension, _ in self.zero_tolerance_floor}
         if (
             floor_dimensions != PILOT_HARD_FLOOR_DIMENSIONS

@@ -14,6 +14,7 @@ from ovc.shared_systems.foundation import (
     HealthAssertion,
     InformationExposureRecord,
     PILOT_HARD_FLOOR_DIMENSIONS,
+    PILOT_NUMERIC_CAP_DIMENSIONS,
     PilotAcceptanceBudget,
     PilotBaselineMeasurement,
     SECURITY_FACTORS,
@@ -81,6 +82,23 @@ def factors(**changes: bool) -> dict[str, bool]:
 
 def hard_floor() -> tuple[tuple[str, int], ...]:
     return tuple((dimension, 0) for dimension in sorted(PILOT_HARD_FLOOR_DIMENSIONS))
+
+
+def baselines() -> tuple[PilotBaselineMeasurement, ...]:
+    return tuple(
+        PilotBaselineMeasurement(
+            f"BASELINE.{index}",
+            dimension,
+            unit,
+            "ENV.1",
+            "PROCEDURE.1",
+            (float(index),),
+            (f"EVIDENCE.{index}",),
+        )
+        for index, (dimension, unit) in enumerate(
+            sorted(PILOT_NUMERIC_CAP_DIMENSIONS.items()), start=1
+        )
+    )
 
 
 def test_evidence_commit_seals_only_exact_verified_receipts() -> None:
@@ -252,23 +270,12 @@ def test_slo_is_unbound_until_measured_derivation_exists() -> None:
 
 
 def test_budget_freeze_requires_pinned_baselines_caps_and_exact_zero_floor() -> None:
-    baseline = PilotBaselineMeasurement(
-        "BASELINE.1",
-        "RESOLVER_P95_OVERHEAD_MS",
-        "ms",
-        "ENV.1",
-        "PROCEDURE.1",
-        (1.0, 1.2, 1.1),
-        ("EVIDENCE.1",),
+    rows = baselines()
+    budget = PilotAcceptanceBudget.freeze_from_baselines(
+        "BUDGET.1", rows, derivation_procedure_ref="DERIVATION.PROCEDURE.1"
     )
-    budget = PilotAcceptanceBudget(
-        "BUDGET.1",
-        (baseline.measurement_id,),
-        ((baseline.dimension, 1.5, baseline.unit),),
-        hard_floor(),
-        "DERIVATION.PROCEDURE.1",
-        True,
-    )
+    expected = {row.dimension: max(row.sample_values) for row in rows}
+    assert {dimension: cap for dimension, cap, _ in budget.numeric_caps} == expected
     assert budget.logical_id == replace(budget).logical_id
     assert not budget.relaxable_within_pilot and budget.authority_effect == "NONE"
     with pytest.raises(SharedFoundationError, match="HARD_FLOOR"):
@@ -278,6 +285,10 @@ def test_budget_freeze_requires_pinned_baselines_caps_and_exact_zero_floor() -> 
         )
     with pytest.raises(SharedFoundationError, match="FREEZE_REQUIRED"):
         replace(budget, relaxable_within_pilot=True)
+    with pytest.raises(SharedFoundationError, match="DIMENSION_SET_INCOMPLETE"):
+        PilotAcceptanceBudget.freeze_from_baselines(
+            "BUDGET.BAD", rows[:-1], derivation_procedure_ref="DERIVATION.PROCEDURE.1"
+        )
 
 
 def test_wp6_schema_and_negative_fixture_cover_every_protected_boundary() -> None:
