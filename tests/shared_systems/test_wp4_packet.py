@@ -103,11 +103,9 @@ def test_wp4_vit_payload_is_content_addressed() -> None:
         "next_packet": "SHSI-WP5",
     }
     for change in pip["payload"]["logical_changes"]:
-        sha = subprocess.run(
-            ["git", "hash-object", "--", change["path"]],
+        subprocess.run(
+            ["git", "cat-file", "-e", f"{change['blob_sha']}^{{blob}}"],
             cwd=ROOT,
             check=True,
             capture_output=True,
-            text=True,
-        ).stdout.strip()
-        assert sha == change["blob_sha"], change["path"]
+        )

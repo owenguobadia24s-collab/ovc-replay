@@ -1,0 +1,17 @@
+{
+  "schema":"ovc-shsi-wp5-synthetic-resolution-fixtures/v0.1","authority_effect":"NONE","consumer_changes":[],
+  "stage0_owner_bindings":{"SVC.1":"OWNER.1"},
+  "directory_entry":{"service_id":"SVC.1","owner_programme_id":"OWNER.1","registry_id":"REGISTRY.1","stage0_binding_id":"STAGE0.1"},
+  "descriptor":{"service_id":"SVC.1","release_id":"SVC.1.RELEASE.1","owner_programme_id":"OWNER.1","registry_id":"REGISTRY.1","capability_ids":["CAP.1"],"contract_refs":["CONTRACT.PRODUCER.1"],"qualification_ref":"QUAL.1","lifecycle":"CURRENT","materialized":true,"authority_effect":"NONE"},
+  "request":{"request_id":"REQUEST.1","requester_programme_id":"CONSUMER.1","requester_generation":"CONSUMER.1.GEN.1","service_id":"SVC.1","capability_id":"CAP.1","required_release_id":"SVC.1.RELEASE.1","required_contract_ref":"CONTRACT.CONSUMER.1","semantic_scope":"SCOPE.1","authority_ref":"AUTH.1","environment_ref":"ENV.1","cutoff_ref":"CUTOFF.1"},
+  "golden":{"status":"RESOLVED","release_id":"SVC.1.RELEASE.1","adapter_chain":["ADAPTER.1"],"qualification_ref":"QUAL.1"},
+  "failure_envelopes":[
+    {"mutation":"REMOVE_DIRECTORY_ENTRY","status":"MISSING","reason_code":"DIRECTORY_ENTRY_MISSING"},
+    {"mutation":"DUPLICATE_RELEASE","status":"AMBIGUOUS","reason_code":"EXACT_RELEASE_AMBIGUOUS"},
+    {"mutation":"STALE_QUALIFICATION","status":"STALE_QUALIFICATION","reason_code":"QUALIFICATION_NOT_CURRENT"},
+    {"mutation":"REMOVE_CONSUMPTION_BINDING","status":"UNAUTHORIZED","reason_code":"CONSUMPTION_BINDING_MISSING"},
+    {"mutation":"REMOVE_ADAPTER","status":"INCOMPATIBLE","reason_code":"REQUIRED_ADAPTER_MISSING"},
+    {"mutation":"OWNER_DISAGREEMENT","status":"OWNER_CONFLICT","reason_code":"OWNER_REGISTRY_DISAGREEMENT"}
+  ],
+  "non_migration":{"decision_id":"NMD.1","trigger_refs":["CONTRACT.CHANGE","QUALIFICATION.STALE"],"expected_trigger":"NMD.1","migration_effect":"NONE"}
+}

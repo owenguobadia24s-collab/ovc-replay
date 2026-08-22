@@ -68,6 +68,23 @@ from .assurance import (
     SharedAssuranceError, build_invalidation_plan, deterministic_read_model,
     qualification_currentness,
 )
+from .resolution import (
+    AdapterRegistry,
+    CompatibilityRegistry,
+    MigrationInventory,
+    NonMigrationDecision,
+    NonMigrationDecisionRegistry,
+    RegistryDirectory,
+    RegistryDirectoryEntry,
+    ResolutionManifest,
+    ResolutionRequest,
+    ServiceConsumptionBinding,
+    ServiceCurrentBinding,
+    SharedExecutionContext,
+    SharedResolutionError,
+    SharedServiceDescriptor,
+    resolve_exact,
+)
 
 __all__ = [
     "BOOTSTRAP_NODES",
@@ -121,4 +138,9 @@ __all__ = [
     "InvalidationPlan", "QualificationCurrentness", "QualificationRecord",
     "QuarantineRecord", "ReplayObligation", "SharedAssuranceError",
     "build_invalidation_plan", "deterministic_read_model", "qualification_currentness",
+    "AdapterRegistry", "CompatibilityRegistry", "MigrationInventory",
+    "NonMigrationDecision", "NonMigrationDecisionRegistry", "RegistryDirectory",
+    "RegistryDirectoryEntry", "ResolutionManifest", "ResolutionRequest",
+    "ServiceConsumptionBinding", "ServiceCurrentBinding", "SharedExecutionContext",
+    "SharedResolutionError", "SharedServiceDescriptor", "resolve_exact",
 ]
