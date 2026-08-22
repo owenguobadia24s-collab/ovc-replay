@@ -14,6 +14,10 @@ from ovc.development.skills.vit_routing import (
     build_vit_lineage_record,
     build_vit_payload_lineage_record,
 )
+from tools.ci.vit_qualification_store import (
+    build_qualification_envelope,
+    validate_qualification_envelope,
+)
 from tools.ci.vit_routing_preflight import check_pull_request_event
 
 
@@ -86,18 +90,29 @@ class Dsai3vVitLiveBasePreflightTests(unittest.TestCase):
                 packet_id="PACKET",
                 pip_identity_payload=pip(blob_sha),
             )
+            qualification = validate_qualification_envelope(
+                build_qualification_envelope(root=root, head_sha=head_sha, lineage_record=record),
+                expected_head_sha=head_sha,
+            )
             event = {
                 "number": 1,
                 "pull_request": {
-                    "body": f"VIT-Lineage-B64: {b64_lineage(record)}",
+                    "body": "Human-only PR description; decision-bearing qualification is detached.",
                     "head": {"sha": head_sha, "ref": "feature"},
                     "base": {"sha": event_base_sha, "ref": "main"},
                 },
             }
-            with patch.dict(os.environ, {"GITHUB_ACTIONS": "false"}, clear=False):
+            with (
+                patch(
+                    "tools.ci.vit_lineage_source.resolve_qualification_envelope",
+                    return_value=qualification,
+                ),
+                patch.dict(os.environ, {"GITHUB_ACTIONS": "false"}, clear=False),
+            ):
                 result = check_pull_request_event(root=root, event=event)
             self.assertIn("VIT_MANDATORY_LATE_BINDING", result)
             self.assertIn("NO_PHYSICAL_BASE_BINDING", result)
+            self.assertIn("DETACHED_QUALIFICATION_LEDGER", result)
 
     def test_legacy_stale_placement_is_provenance_not_blocking_order(self) -> None:
         td, root, event_base_sha, event_base_tree, head_sha, head_tree, blob_sha = self._repo()
@@ -120,10 +135,21 @@ class Dsai3vVitLiveBasePreflightTests(unittest.TestCase):
                     "base": {"sha": event_base_sha, "ref": "main"},
                 },
             }
-            with patch.dict(os.environ, {"GITHUB_ACTIONS": "false"}, clear=False):
+            with (
+                patch("tools.ci.vit_lineage_source.resolve_qualification_envelope", return_value=None),
+                patch.dict(
+                    os.environ,
+                    {
+                        "GITHUB_ACTIONS": "false",
+                        "OVC_VIT_ALLOW_LEGACY_PR_BODY_LINEAGE": "true",
+                    },
+                    clear=False,
+                ),
+            ):
                 result = check_pull_request_event(root=root, event=event)
             self.assertIn("VIT_MANDATORY_LEGACY_PAYLOAD_ACCEPTED", result)
             self.assertIn("PLACEMENT_NON_AUTHORITATIVE", result)
+            self.assertIn("LEGACY_INLINE_B64", result)
 
 
 if __name__ == "__main__":
