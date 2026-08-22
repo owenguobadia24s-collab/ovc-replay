@@ -21,7 +21,7 @@ from ovc.development.skills.vit_routing import (
     classify_main_movement,
     validate_vit_lineage_record,
 )
-from tools.ci.vit_lineage_source import resolve_lineage_source
+from tools.ci.vit_lineage_source import ResolvedLineageSource, resolve_lineage_source
 from tools.ci.vit_routing_preflight import check_pull_request_event
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -148,7 +148,7 @@ class Dsai3vUniversalRoutingTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "MULTIPLE_SOURCES"):
             resolve_lineage_source(body, fetch_blob=lambda _: canonical_bytes(record))
 
-    def test_pr_preflight_accepts_payload_without_requiring_live_main_placement(self) -> None:
+    def test_pr_preflight_accepts_detached_payload_without_live_main_placement_or_pr_metadata(self) -> None:
         with TemporaryDirectory() as tmp:
             root=Path(tmp); git(root,"init","-q"); git(root,"config","user.email","vit@example.invalid"); git(root,"config","user.name","VIT Test")
             (root/"base.txt").write_text("base\n",encoding="utf-8"); git(root,"add","base.txt"); git(root,"commit","-qm","base")
@@ -157,14 +157,15 @@ class Dsai3vUniversalRoutingTests(unittest.TestCase):
             head_sha=git(root,"rev-parse","HEAD"); blob=git(root,"rev-parse","HEAD:payload.txt")
             register_path=root/"registries/development/skills/VIT_ROUTING_COVERAGE_REGISTER_v0_1.json"; register_path.parent.mkdir(parents=True); register_path.write_text(json.dumps({"unregistered_bypass_policy":"FAIL_CLOSED","registered_pr_exceptions":[]}),encoding="utf-8")
             record=build_vit_payload_lineage_record(programme_id="PROGRAMME",packet_id="PACKET",pip_identity_payload=pip_payload(changes=[{"op":"ADD","path":"payload.txt","blob_sha":blob,"mode":"100644"}]))
-            body=f"VIT-Lineage-B64: {b64_lineage(record)}"
-            event={"number":1,"pull_request":{"body":body,"head":{"sha":head_sha,"ref":"feature"},"base":{"sha":base_sha,"ref":"main"}}}
-            missing={"number":2,"pull_request":{"body":"","head":{"sha":head_sha,"ref":"feature2"},"base":{"sha":base_sha,"ref":"main"}}}
+            source=ResolvedLineageSource(record=record,source="DETACHED_QUALIFICATION_LEDGER",immutable_ref="4"*64,content_sha256="5"*64)
+            event={"number":1,"pull_request":{"body":"Human review only","head":{"sha":head_sha,"ref":"feature"},"base":{"sha":base_sha,"ref":"main"}}}
             with patch.dict(os.environ, {"GITHUB_ACTIONS": "false"}, clear=False):
-                result=check_pull_request_event(root=root,event=event)
-                self.assertTrue(result.startswith("VIT_MANDATORY_LATE_BINDING:PACKET:"))
-                with self.assertRaises(RuntimeError):
-                    check_pull_request_event(root=root,event=missing)
+                with patch("tools.ci.vit_routing_preflight.resolve_candidate_lineage", return_value=source):
+                    result=check_pull_request_event(root=root,event=event)
+                    self.assertTrue(result.startswith("VIT_MANDATORY_LATE_BINDING:PACKET:"))
+                with patch("tools.ci.vit_routing_preflight.resolve_candidate_lineage", side_effect=RuntimeError("VIT_QUALIFICATION_REQUIRED")):
+                    with self.assertRaisesRegex(RuntimeError, "VIT_QUALIFICATION_REQUIRED"):
+                        check_pull_request_event(root=root,event=event)
 
 
 if __name__ == "__main__":
