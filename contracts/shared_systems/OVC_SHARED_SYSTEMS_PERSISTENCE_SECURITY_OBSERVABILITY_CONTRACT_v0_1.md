@@ -25,10 +25,12 @@ authoritative health score exists. Wall-clock observation does not redefine FVT 
 effective chronology. Unmeasured SLOs remain `UNBOUND`.
 
 `PilotBaselineMeasurement` and `PilotAcceptanceBudget` retain independent dimensions.
-All numeric caps must derive mechanically from pinned evidence through the documented
-WP6 procedure. The complete constitutional hard floor is exactly zero and caps cannot
-be relaxed during the pilot to obtain PASS. Budget evidence grants no activation,
-scientific or operator authority.
+All 18 numeric dimensions must be present. Their caps derive mechanically as the
+no-slack maximum of pinned baseline samples through the content-addressed WP6
+procedure; a partial dimension set, unit substitution or discretionary multiplier is
+invalid. The complete nine-dimension constitutional hard floor is exactly zero and
+caps cannot be relaxed during the pilot to obtain PASS. Budget evidence grants no
+activation, scientific or operator authority.
 
 Nothing here accesses a protected resource, creates a second security/artifact store,
 changes a consumer binding, runs science, consumes Validation, publishes canon/R2, or

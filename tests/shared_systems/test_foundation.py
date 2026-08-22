@@ -4,6 +4,7 @@ from dataclasses import replace
 import hashlib
 import json
 from pathlib import Path
+import subprocess
 
 import pytest
 
@@ -321,3 +322,62 @@ def test_wp6_schema_and_negative_fixture_cover_every_protected_boundary() -> Non
     assert set(fixture["hard_floor"]) == PILOT_HARD_FLOOR_DIMENSIONS
     assert fixture["hard_floor_allowed_count"] == 0
     assert not fixture["budget_relaxable_within_pilot"]
+
+
+def test_materialized_budget_is_exact_complete_no_slack_and_source_pinned() -> None:
+    from ovc.development.identity import canonical_sha256, sha256_file
+
+    root = Path(__file__).resolve().parents[2]
+    artifact = json.loads(
+        (
+            root
+            / "registries/implementation/shared_systems_v0_1/SHSI_PILOT_ACCEPTANCE_BUDGET_v0_1.json"
+        ).read_text(encoding="utf-8")
+    )
+    logical_payload = {key: value for key, value in artifact.items() if key != "logical_id"}
+    assert artifact["logical_id"] == canonical_sha256(logical_payload)
+    assert artifact["measurement_source_tree"] == subprocess.run(
+        ["git", "show", "-s", "--format=%T", artifact["measurement_source_commit"]],
+        cwd=root,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    assert artifact["procedure"]["sha256"] == sha256_file(
+        root / artifact["procedure"]["path"]
+    )
+    assert artifact["input_evidence"]["sha256"] == sha256_file(
+        root / artifact["input_evidence"]["path"]
+    )
+    rows = tuple(
+        PilotBaselineMeasurement(
+            item["measurement_id"],
+            item["dimension"],
+            item["unit"],
+            item["environment_ref"],
+            item["procedure_ref"],
+            tuple(item["sample_values"]),
+            tuple(item["evidence_refs"]),
+            item["authority_effect"],
+        )
+        for item in artifact["baseline_measurements"]
+    )
+    budget = artifact["pilot_acceptance_budget"]
+    rebuilt = PilotAcceptanceBudget(
+        budget["budget_id"],
+        tuple(budget["baseline_measurement_refs"]),
+        tuple(tuple(item) for item in budget["numeric_caps"]),
+        tuple(tuple(item) for item in budget["zero_tolerance_floor"]),
+        budget["derivation_procedure_ref"],
+        budget["frozen"],
+        budget["relaxable_within_pilot"],
+        budget["authority_effect"],
+    )
+    assert rebuilt.logical_id == budget["logical_id"]
+    assert set(item.dimension for item in rows) == set(PILOT_NUMERIC_CAP_DIMENSIONS)
+    assert {
+        dimension: cap for dimension, cap, _ in rebuilt.numeric_caps
+    } == {item.dimension: max(item.sample_values) for item in rows}
+    assert artifact["hard_floor_observed_values"] == {
+        dimension: 0 for dimension in PILOT_HARD_FLOOR_DIMENSIONS
+    }
