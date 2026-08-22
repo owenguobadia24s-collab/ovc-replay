@@ -105,6 +105,7 @@ jobs:
     outputs:
       head_sha: ${{ steps.ready.outputs.head_sha }}
       pip_id: ${{ steps.ready.outputs.pip_id }}
+      qualification_id: ${{ steps.ready.outputs.qualification_id }}
       assurance_generation_id: ${{ steps.ready.outputs.assurance_generation_id }}
       tests_run_id: ${{ steps.ready.outputs.tests_run_id }}
       profile_run_id: ${{ steps.ready.outputs.profile_run_id }}
@@ -125,12 +126,15 @@ jobs:
         env:
           OVC_READY_HEAD_SHA: ${{ steps.ready.outputs.head_sha }}
           OVC_READY_PIP_ID: ${{ steps.ready.outputs.pip_id }}
+          OVC_READY_QUALIFICATION_ID: ${{ steps.ready.outputs.qualification_id }}
         run: |
           set -euo pipefail
           test -n "${OVC_READY_HEAD_SHA}"
           test -n "${OVC_READY_PIP_ID}"
+          test -n "${OVC_READY_QUALIFICATION_ID}"
           test "${#OVC_READY_HEAD_SHA}" -eq 40
           test "${#OVC_READY_PIP_ID}" -eq 64
+          test "${#OVC_READY_QUALIFICATION_ID}" -eq 64
           git cat-file -e "${OVC_READY_HEAD_SHA}^{commit}"
           echo "OVC_READY_PHYSICAL_BASE_BINDING=NONE"
 
@@ -158,6 +162,7 @@ jobs:
           PYTHONPATH: src:.
           OVC_READY_HEAD_SHA: ${{ needs.siq-ready-admission.outputs.head_sha }}
           OVC_READY_PIP_ID: ${{ needs.siq-ready-admission.outputs.pip_id }}
+          OVC_READY_QUALIFICATION_ID: ${{ needs.siq-ready-admission.outputs.qualification_id }}
         run: python3 tools/ci/prvitr_live_admission.py acquire
       - name: Materialize ephemeral prospective tree for exact-final assurance
         shell: bash
@@ -191,5 +196,6 @@ jobs:
           OVC_CANDIDATE_HEAD_SHA: ${{ steps.acquire.outputs.candidate_head_sha }}
           OVC_PLACEMENT_TREE_SHA: ${{ steps.acquire.outputs.placement_tree_sha }}
           OVC_PLACEMENT_ID: ${{ steps.acquire.outputs.placement_id }}
+          OVC_QUALIFICATION_ID: ${{ needs.siq-ready-admission.outputs.qualification_id }}
           OVC_ASSURANCE_GENERATION_ID: ${{ needs.siq-ready-admission.outputs.assurance_generation_id }}
         run: python3 tools/ci/prvitr_live_admission.py finalize

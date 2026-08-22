@@ -19,9 +19,9 @@ from ovc.development.skills.vit_late_binding import (
     LateBindingPlacement,
 )
 from ovc.development.skills.vit_routing import validate_vit_lineage_record
-from tools.ci.vit_lineage_source import resolve_lineage_source
+from tools.ci.vit_lineage_source import resolve_candidate_lineage
 
-POLICY_ID = "PRVITR-LATE-BINDING-ADMISSION-POLICY-v0.1"
+POLICY_ID = "PRVITR-LATE-BINDING-ADMISSION-POLICY-v0.2"
 TESTS_WORKFLOW = "tests.yml"
 TIERED_WORKFLOW = "ovc-tiered-tests.yml"
 TEST_JOB_NAMES = ("VIT routing preflight", "tests", "pytest-unittest-parity", "runner-parity")
@@ -44,7 +44,7 @@ def _api(path: str, *, timeout: float = 15.0) -> Any:
     headers = {
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
-        "User-Agent": "ovc-prvitr-late-binding-admission/1",
+        "User-Agent": "ovc-prvitr-late-binding-admission/2",
     }
     token = _token()
     if token:
@@ -209,22 +209,34 @@ def _wait_exact_assurance(pr_number: int, head_sha: str) -> tuple[Mapping[str, A
     raise RuntimeError("SIQ_READY_ADMISSION_TIMEOUT: exact required assurance did not complete")
 
 
-def _lineage_from_pr(pr: Mapping[str, Any]) -> tuple[Mapping[str, Any], Any]:
-    source = resolve_lineage_source(str(pr.get("body") or ""), require=True)
+def _lineage_from_pr(pr: Mapping[str, Any]) -> tuple[Mapping[str, Any], Any, str]:
+    head_sha = str((pr.get("head") or {}).get("sha", "")).strip()
+    if len(head_sha) != 40:
+        raise RuntimeError("PRVITR_HEAD_SHA_INVALID")
+    root = Path(os.environ.get("GITHUB_WORKSPACE", ".")).resolve()
+    allow_legacy_body = os.environ.get("OVC_VIT_ALLOW_LEGACY_PR_BODY_LINEAGE", "").lower() == "true"
+    source = resolve_candidate_lineage(
+        root=root,
+        head_sha=head_sha,
+        body=str(pr.get("body") or ""),
+        require=True,
+        allow_legacy_pr_body=allow_legacy_body,
+    )
     assert source is not None
-    return source.record, validate_vit_lineage_record(source.record)
+    qualification_id = source.immutable_ref if source.source == "DETACHED_QUALIFICATION_LEDGER" else source.content_sha256
+    return source.record, validate_vit_lineage_record(source.record), qualification_id
 
 
-def _payload_context(pr: Mapping[str, Any]) -> tuple[Mapping[str, Any], Any, str, str]:
-    record, lineage = _lineage_from_pr(pr)
+def _payload_context(pr: Mapping[str, Any]) -> tuple[Mapping[str, Any], Any, str, str, str]:
+    record, lineage, qualification_id = _lineage_from_pr(pr)
     pip = record.get("pip")
     if not isinstance(pip, Mapping):
         raise RuntimeError("PRVITR_PIP_INVALID")
     authority = str(pip.get("authority_manifest_id", ""))
     frontier = str(pip.get("dependency_frontier_id", ""))
-    if len(authority) != 64 or len(frontier) != 64:
-        raise RuntimeError("PRVITR_PIP_FRONTIER_INVALID")
-    return record, lineage, authority, frontier
+    if len(authority) != 64 or len(frontier) != 64 or len(qualification_id) != 64:
+        raise RuntimeError("PRVITR_QUALIFICATION_FRONTIER_INVALID")
+    return record, lineage, authority, frontier, qualification_id
 
 
 def _compose_late_binding(base_sha: str, head_sha: str, *, pip_id: str, authority: str, frontier: str) -> tuple[LateBindingPlacement, str]:
@@ -285,8 +297,22 @@ def command_ready() -> int:
     if str(live.get("state", "")) != "open":
         raise RuntimeError(f"OVC_SIQ_PR_NOT_OPEN:{pr_number}")
 
-    record, lineage, authority, frontier = _payload_context(live)
+    record, lineage, authority, frontier, qualification_id = _payload_context(live)
     tests_run, test_jobs, tiered_run, profile_job = _wait_exact_assurance(pr_number, live_head)
+
+    # Qualification is immutable for one assurance generation. A same-head pointer
+    # replacement is lawful, but it requires a new assurance generation rather than
+    # mutating the identity beneath an already-running READY decision.
+    refreshed = _live_pr(pr_number)
+    refreshed_head = str((refreshed.get("head") or {}).get("sha", ""))
+    if refreshed_head != live_head:
+        raise RuntimeError(f"OVC_SIQ_SUPERSEDED_EVENT_HEAD:qualified {live_head}, live {refreshed_head}")
+    _, refreshed_lineage, refreshed_authority, refreshed_frontier, refreshed_qualification_id = _payload_context(refreshed)
+    if refreshed_qualification_id != qualification_id:
+        raise RuntimeError("VIT_QUALIFICATION_CHANGED_DURING_ASSURANCE")
+    if refreshed_lineage.pip_id != lineage.pip_id or refreshed_authority != authority or refreshed_frontier != frontier:
+        raise RuntimeError("VIT_QUALIFICATION_CONTENT_CHANGED_DURING_ASSURANCE")
+
     run_ids = tuple(
         [f"github-actions-run:{tests_run['id']}:job:{job.get('id')}" for job in test_jobs]
         + [f"github-actions-run:{tiered_run['id']}:job:{profile_job.get('id')}"]
@@ -303,12 +329,13 @@ def command_ready() -> int:
     print("OVC_BASE_INDEPENDENT_ASSURANCE_GENERATION=" + json.dumps(asdict(generation), sort_keys=True, separators=(",", ":")))
     _write_output("head_sha", live_head)
     _write_output("pip_id", lineage.pip_id)
+    _write_output("qualification_id", qualification_id)
     _write_output("assurance_generation_id", generation.generation_id)
     _write_output("tests_run_id", str(tests_run["id"]))
     _write_output("profile_run_id", str(tiered_run["id"]))
     binding = "LATE" if lineage.late_binding else "LEGACY_RECORD_TREATED_AS_PAYLOAD_ONLY"
     print(
-        f"OVC_VIT_QUALIFIED_PAYLOAD_READY: pip={lineage.pip_id} head={live_head} "
+        f"OVC_VIT_QUALIFIED_PAYLOAD_READY: qualification={qualification_id} pip={lineage.pip_id} head={live_head} "
         f"binding={binding}; no physical-main predecessor is acquired during qualification."
     )
     return 0
@@ -320,11 +347,14 @@ def command_acquire() -> int:
     pr_number = int(event.get("number", event_pr.get("number", -1)))
     expected_head = os.environ.get("OVC_READY_HEAD_SHA", "").strip() or str((event_pr.get("head") or {}).get("sha", ""))
     expected_pip = os.environ.get("OVC_READY_PIP_ID", "").strip()
+    expected_qualification = os.environ.get("OVC_READY_QUALIFICATION_ID", "").strip()
     live = _live_pr(pr_number)
     live_head = str((live.get("head") or {}).get("sha", ""))
     if live_head != expected_head:
         raise RuntimeError(f"OVC_SIQ_SUPERSEDED_EVENT_HEAD:READY {expected_head}, live {live_head}")
-    record, lineage, authority, frontier = _payload_context(live)
+    record, lineage, authority, frontier, qualification_id = _payload_context(live)
+    if expected_qualification and qualification_id != expected_qualification:
+        raise RuntimeError("VIT_QUALIFICATION_CHANGED_AFTER_ASSURANCE")
     if expected_pip and lineage.pip_id != expected_pip:
         raise RuntimeError("VIT_LATE_BINDING_PIP_CHANGED_AFTER_QUALIFICATION")
     base_ref = str((live.get("base") or {}).get("ref", "main"))
@@ -338,6 +368,7 @@ def command_acquire() -> int:
     )
     _write_output("base_sha", current_main)
     _write_output("candidate_head_sha", expected_head)
+    _write_output("qualification_id", qualification_id)
     _write_output("placement_commit_sha", synthetic_commit)
     _write_output("placement_tree_sha", placement.prospective_tree_sha)
     _write_output("placement_id", placement.placement_id)
@@ -347,7 +378,7 @@ def command_acquire() -> int:
     )
     print(
         f"OVC_SIQ_BASE_SENSITIVE_LEASE_ACQUIRED: {base_ref}@{current_main}; "
-        f"pip={lineage.pip_id} placement={placement.placement_id}."
+        f"qualification={qualification_id} pip={lineage.pip_id} placement={placement.placement_id}."
     )
     return 0
 
@@ -361,8 +392,10 @@ def command_finalize() -> int:
     placement_tree = os.environ.get("OVC_PLACEMENT_TREE_SHA", "").strip()
     placement_id = os.environ.get("OVC_PLACEMENT_ID", "").strip()
     assurance_generation_id = os.environ.get("OVC_ASSURANCE_GENERATION_ID", "").strip()
+    expected_qualification = os.environ.get("OVC_QUALIFICATION_ID", "").strip()
     if any(len(value) != length for value, length in (
-        (candidate_head, 40), (base_sha, 40), (placement_tree, 40), (placement_id, 64), (assurance_generation_id, 64)
+        (candidate_head, 40), (base_sha, 40), (placement_tree, 40), (placement_id, 64),
+        (assurance_generation_id, 64), (expected_qualification, 64)
     )):
         raise RuntimeError("PRVITR_FINALIZE_INPUT_INVALID")
     live = _live_pr(pr_number)
@@ -376,7 +409,9 @@ def command_finalize() -> int:
             f"OVC_BASE_MOVED_DURING_READINESS: {base_ref} moved from {base_sha} to {final_main}; "
             "discard the ephemeral placement and retry the same qualified payload."
         )
-    record, lineage, authority, frontier = _payload_context(live)
+    record, lineage, authority, frontier, qualification_id = _payload_context(live)
+    if qualification_id != expected_qualification:
+        raise RuntimeError("VIT_QUALIFICATION_CHANGED_DURING_FINAL_INTEGRATION")
     recomposed, _ = _compose_late_binding(base_sha, candidate_head, pip_id=lineage.pip_id, authority=authority, frontier=frontier)
     if recomposed.prospective_tree_sha != placement_tree or recomposed.placement_id != placement_id:
         raise RuntimeError("PRVITR_LATE_BINDING_PLACEMENT_MISMATCH")
@@ -393,13 +428,13 @@ def command_finalize() -> int:
         result_tree=placement_tree,
         grt_proof_binding_id=grt.proof_binding_id,
         disposition="SHADOW_READY",
-        reason_codes=("EXACT_ASSURANCE_BOUND", "LATE_BINDING_PLACEMENT", "BASE_STABLE"),
+        reason_codes=("EXACT_ASSURANCE_BOUND", "DETACHED_QUALIFICATION_BOUND", "LATE_BINDING_PLACEMENT", "BASE_STABLE"),
     )
     print("OVC_INTEGRATION_ADMISSION_RECEIPT=" + json.dumps(asdict(receipt), sort_keys=True, separators=(",", ":")))
     _write_output("admission_receipt_id", receipt.receipt_id)
     _write_output("grt_proof_binding_id", grt.proof_binding_id)
     print(
-        f"OVC_FINAL_INTEGRATION_WINDOW_PASS: qualified pip {lineage.pip_id} was late-bound "
+        f"OVC_FINAL_INTEGRATION_WINDOW_PASS: qualification {qualification_id} / pip {lineage.pip_id} was late-bound "
         f"to {base_ref}@{base_sha} as placement {placement_id}; exact prospective tree {placement_tree}."
     )
     return 0

@@ -98,6 +98,7 @@ $activeProfilePath = Join-Path $repoRoot "registries/development/OVC_DEVELOPMENT
 $decisionPath = Join-Path $repoRoot "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_OPERATOR_DECISION.json"
 $evaluationPath = Join-Path $repoRoot "docs/releases/development-acceleration-v0-1/da-wp4b/DA_G4B_ACTIVATION_EVALUATION.json"
 $vitBuilderPath = Join-Path $repoRoot "tools/ci/build_vit_planned_lineage.py"
+$vitExactBuilderPath = Join-Path $repoRoot "tools/ci/build_vit_pr_lineage.py"
 
 if (-not $OutputDirectory) {
     if (-not $env:OVC_EXTERNAL_ARTIFACT_ROOT) { throw "Set OVC_EXTERNAL_ARTIFACT_ROOT or provide -OutputDirectory." }
@@ -170,6 +171,7 @@ $pythonCommand = Get-Command python -ErrorAction SilentlyContinue
 if ($null -eq $pythonCommand) { $pythonCommand = Get-Command python3 -ErrorAction SilentlyContinue }
 if ($null -eq $pythonCommand) { throw "Python is required for canonical VIT lineage construction." }
 if (-not (Test-Path -LiteralPath $vitBuilderPath -PathType Leaf)) { throw "Canonical VIT planned-lineage builder is missing." }
+if (-not (Test-Path -LiteralPath $vitExactBuilderPath -PathType Leaf)) { throw "Canonical VIT exact-head qualification builder is missing." }
 $targetRows = [array]@($targets | ForEach-Object { @{ path = $_.path; content_sha256 = $_.content_sha256 } })
 $targetsJson = ConvertTo-Json -InputObject $targetRows -Compress -Depth 10
 $authoritySources = [array]@(
@@ -203,8 +205,9 @@ $lineageArgs = @(
 $lineageRaw = @(& $pythonCommand.Source @lineageArgs 2>&1)
 if ($LASTEXITCODE -ne 0) { throw "VIT_LINEAGE_BUILD_FAILED: $($lineageRaw -join ' ')" }
 $lineagePlan = ($lineageRaw -join "`n") | ConvertFrom-Json -Depth 50
-if (-not $lineagePlan.vit_lineage_b64 -or -not $lineagePlan.expected_result_tree) { throw "VIT_LINEAGE_BUILD_FAILED: incomplete output." }
-$vitLineageB64 = [string]$lineagePlan.vit_lineage_b64
+if (-not $lineagePlan.authority_manifest_id -or -not $lineagePlan.dependency_frontier_id -or -not $lineagePlan.expected_result_tree) {
+    throw "VIT_LINEAGE_BUILD_FAILED: incomplete planned output."
+}
 $expectedResultTree = [string]$lineagePlan.expected_result_tree
 
 $appId = [int64]$env:OVC_RECEIPT_BOT_APP_ID
@@ -258,14 +261,49 @@ try {
     $branchRef = Invoke-GitHubApi -Method GET -Uri "$api/repos/$Repository/git/ref/heads/$($packet.branch)" -Headers $headers -Body $null
     $branchCommit = Invoke-GitHubApi -Method GET -Uri "$api/repos/$Repository/git/commits/$($branchRef.object.sha)" -Headers $headers -Body $null
     if ($branchCommit.tree.sha -ne $expectedResultTree) {
-        throw "VIT_RESULT_TREE_MISMATCH: receipt-bot branch does not equal the canonical PIP prospective result tree."
+        throw "VIT_RESULT_TREE_MISMATCH: receipt-bot branch does not equal the planned construction tree."
     }
+
+    # The branch is now final. Build the decision-bearing PIP from that exact Git
+    # head and publish its detached qualification before the PR becomes CI-visible.
+    & git -C $repoRoot fetch --no-tags origin $branchRef.object.sha 2>&1 | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw "VIT_EXACT_HEAD_FETCH_FAILED: unable to inspect final receipt-bot head." }
+    $exactArgs = @(
+        $vitExactBuilderPath,
+        "--repo", $repoRoot,
+        "--base", $packet.source_main_sha,
+        "--head", $branchRef.object.sha,
+        "--programme-id", "OVC-DEV-ACCEL-v0.1",
+        "--packet-id", $packet.packet_id,
+        "--authority-manifest-id", ([string]$lineagePlan.authority_manifest_id),
+        "--dependency-frontier-id", ([string]$lineagePlan.dependency_frontier_id),
+        "--completion-transition-json", '{"status":"PROPOSAL_CANDIDATE_READY"}',
+        "--publish-detached"
+    )
+    $priorGitHubToken = $env:GITHUB_TOKEN
+    $priorGitHubRepository = $env:GITHUB_REPOSITORY
+    try {
+        $env:GITHUB_TOKEN = $installationToken
+        $env:GITHUB_REPOSITORY = $Repository
+        $exactRaw = @(& $pythonCommand.Source @exactArgs 2>&1)
+    }
+    finally {
+        $env:GITHUB_TOKEN = $priorGitHubToken
+        $env:GITHUB_REPOSITORY = $priorGitHubRepository
+    }
+    if ($LASTEXITCODE -ne 0) { throw "VIT_QUALIFICATION_PUBLISH_FAILED: $($exactRaw -join ' ')" }
+    $exactJsonLine = @($exactRaw | Where-Object { [string]$_ -match '^\{' }) | Select-Object -First 1
+    $qualificationLine = @($exactRaw | Where-Object { [string]$_ -match '^VIT-Qualification-ID:\s*[0-9a-f]{64}$' }) | Select-Object -First 1
+    if (-not $exactJsonLine -or -not $qualificationLine) { throw "VIT_QUALIFICATION_PUBLISH_FAILED: incomplete exact-head output." }
+    $exactLineage = ([string]$exactJsonLine) | ConvertFrom-Json -Depth 50
+    $qualificationId = ([regex]::Match([string]$qualificationLine, '[0-9a-f]{64}')).Value
+    if (-not $qualificationId -or -not $exactLineage.pip_id) { throw "VIT_QUALIFICATION_PUBLISH_FAILED: invalid qualification identity." }
 
     $owner = $Repository.Split('/')[0]
     $headQuery = [Uri]::EscapeDataString("$owner`:$($packet.branch)")
     $prs = @(Invoke-GitHubApi -Method GET -Uri "$api/repos/$Repository/pulls?state=open&head=$headQuery&base=main" -Headers $headers -Body $null)
     if ($prs.Count -gt 1) { throw "More than one open PR exists for the bounded bot branch." }
-    $prBody = "Bounded Development Acceleration receipt proposal. Bot merge and approval authority are permanently denied.`n`nVIT-Lineage-B64: $vitLineageB64"
+    $prBody = "Bounded Development Acceleration receipt proposal. Bot merge and approval authority are permanently denied. Qualification identity is resolved from the exact Git head by VIT; PR text is non-authoritative."
     if ($prs.Count -eq 0) {
         $pr = Invoke-GitHubApi -Method POST -Uri "$api/repos/$Repository/pulls" -Headers $headers -Body @{ title = $packet.pull_request_title; head = $packet.branch; base = "main"; body = $prBody; draft = $false }
     }
@@ -291,12 +329,13 @@ try {
         credential_persisted = $false
         files = $written
         vit_route = "VIT_MANDATORY"
-        vit_pip_id = $lineagePlan.lineage.pip_id
-        vit_generation_id = $lineagePlan.lineage.generation_id
-        vit_placement_id = $lineagePlan.lineage.placement_id
-        vit_expected_result_tree = $expectedResultTree
-        vit_observed_result_tree = $branchCommit.tree.sha
-        vit_lineage_attached_to_pr = $true
+        vit_pip_id = $exactLineage.pip_id
+        vit_qualification_id = $qualificationId
+        vit_qualification_source = "DETACHED_QUALIFICATION_LEDGER"
+        vit_physical_placement_binding = "LATE_BOUND"
+        vit_planned_result_tree = $expectedResultTree
+        vit_observed_payload_tree = $branchCommit.tree.sha
+        vit_lineage_attached_to_pr = $false
         authority_active = $true
         merge_performed = $false
         approval_performed = $false

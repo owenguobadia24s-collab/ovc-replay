@@ -11,7 +11,7 @@ import urllib.request
 
 from ovc.development.skills.vit_core import VitContractError
 from ovc.development.skills.vit_routing import validate_vit_lineage_record
-from tools.ci.vit_lineage_source import resolve_lineage_source
+from tools.ci.vit_lineage_source import resolve_candidate_lineage
 
 REGISTER_PATH = Path("registries/development/skills/VIT_ROUTING_COVERAGE_REGISTER_v0_1.json")
 SAFE_REF = re.compile(r"[A-Za-z0-9._/-]+")
@@ -49,7 +49,7 @@ def _live_pr_payload(root: Path, event: Mapping[str, Any]) -> Mapping[str, Any]:
     headers = {
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
-        "User-Agent": "ovc-vit-payload-preflight/2",
+        "User-Agent": "ovc-vit-payload-preflight/3",
     }
     token = os.environ.get("GITHUB_TOKEN", "").strip()
     if token:
@@ -152,7 +152,14 @@ def check_pull_request_event(*, root: Path, event: Mapping[str, Any]) -> str:
                 raise RuntimeError("registered VIT exception cannot grant SIQ bypass authority")
             return f"REGISTERED_EXCEPTION:{exception.get('exception_class', 'UNKNOWN')}"
 
-    source = resolve_lineage_source(body, require=True)
+    allow_legacy_body = os.environ.get("OVC_VIT_ALLOW_LEGACY_PR_BODY_LINEAGE", "").lower() == "true"
+    source = resolve_candidate_lineage(
+        root=root,
+        head_sha=head_sha,
+        body=body,
+        require=True,
+        allow_legacy_pr_body=allow_legacy_body,
+    )
     assert source is not None
     record = source.record
     try:
@@ -169,9 +176,6 @@ def check_pull_request_event(*, root: Path, event: Mapping[str, Any]) -> str:
             f"NO_PHYSICAL_BASE_BINDING:{source.source}:{source.immutable_ref}"
         )
 
-    # v1 placement-bearing records remain readable during migration, but their
-    # predecessor/tree/ordinal fields are provenance only.  They cannot block
-    # qualification, create queue precedence, or require a re-anchor.
     return (
         f"VIT_MANDATORY_LEGACY_PAYLOAD_ACCEPTED:{lineage.packet_id}:{lineage.pip_id}:"
         f"PLACEMENT_NON_AUTHORITATIVE:{source.source}:{source.immutable_ref}"

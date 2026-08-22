@@ -130,7 +130,12 @@ class DsaiVitV03Wp9Tests(unittest.TestCase):
         self.assertEqual(crashed.materialisation_receipt_id, recovered.materialisation_receipt_id)
         self.assertIsNotNone(recovered.completion_receipt_id)
         index = self.receipts.rebuild_index()
-        self.assertIn(f"packet_id:{self.payload.packet_id}", index)
+        completion_key = self.receipts.packet_completion_generation_index_key(
+            programme_id=self.payload.programme_id,
+            packet_id=self.payload.packet_id,
+            vit_generation_id=str(recovered.vit_generation_id),
+        )
+        self.assertIn(completion_key, index)
 
     def test_closeout_uses_receipt_path_without_second_branch_churn(self) -> None:
         result = run_isolated_rehearsal(self.repo, self.base, self.payload, self.receipts)
