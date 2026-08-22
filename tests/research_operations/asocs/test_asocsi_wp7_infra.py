@@ -78,10 +78,9 @@ def test_wp7_infra_stops_before_human_review_and_g5():
     assert start['prerequisite_g4']['presentation_count']==370 and start['prerequisite_g4']['hidden_repeat_count']==18
     assert start['primary_surface']['renderer_id']=='ASOCS.SOURCE_NATIVE.SVG.CANDLE.v0.1'
 
-def test_wp7_infra_closeout_passes_without_starting_human_review():
+def test_original_wp7_infra_closeout_remains_immutable_after_remediation():
     qa=_json('docs/programmes/asocs-v0-1/implementation/wp7/ASOCSI_WP7_INFRA_QA_PACKET_v0_2.json')
     state=_json('records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_13_WP7_INFRA_COMPLETED.json')
-    pointer=_json('registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json')
     assert qa['qa_recommendation']=='PASS' and qa['blocking_findings']==[]
     assert qa['repository_assurance']['repository_tests']=='PASS'
     assert qa['repository_assurance']['vit_routing']=='PASS'
@@ -91,6 +90,21 @@ def test_wp7_infra_closeout_passes_without_starting_human_review():
     assert state['status']=='COMPLETED' and state['infra_completed'] is True
     assert state['human_review_started'] is False and state['g5_status']=='NOT_STARTED'
     assert state['next_packet']=='ASOCSI-WP7-HUMAN-REVIEW_REQUIRES_HUMAN_INPUT'
-    assert pointer['current_state'].endswith('ASOCSI_PROGRAMME_STATE_v0_13_WP7_INFRA_COMPLETED.json')
+
+def test_visible_anchor_remediation_closeout_preserves_human_input_boundary():
+    qa=_json('docs/programmes/asocs-v0-1/implementation/wp7/ASOCSI_WP7_VISIBLE_ANCHOR_QA_PACKET_v0_1.json')
+    decision=_json('docs/programmes/asocs-v0-1/implementation/wp7/ASOCSI_WP7_VISIBLE_ANCHOR_DELEGATED_DECISION_v0_1.json')
+    remediation=_json('docs/programmes/asocs-v0-1/implementation/wp7/ASOCSI_WP7_VISIBLE_ANCHOR_REMEDIATION_v0_1.json')
+    state=_json('records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_14_WP7_VISIBLE_ANCHOR_REMEDIATION.json')
+    pointer=_json('registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json')
+    assert qa['status']=='PASS' and qa['qa_recommendation']=='PASS_REPOSITORY_REMEDIATION'
+    assert qa['g4_population']=={'hidden_repeat_count':18,'presentation_count':370,'review_population_sha256':'ff6eb37724aea5b2706666903f7b5a1bc063af8ef9026f4496429b5e33fa15fe','unique_review_unit_count':352}
+    assert decision['decision']=='PASS' and decision['authority_delta']=='NONE'
+    assert remediation['status']=='COMPLETED_REPOSITORY_REMEDIATION'
+    assert remediation['external_session_regeneration_status']=='REQUIRED_NOT_YET_MATERIALISED'
+    assert state['status']=='COMPLETED' and state['human_review_started'] is False and state['g5_status']=='NOT_STARTED'
+    assert state['pre_human_requirements']
+    assert pointer['current_state'].endswith('ASOCSI_PROGRAMME_STATE_v0_14_WP7_VISIBLE_ANCHOR_REMEDIATION.json')
+    assert pointer['packet_id']=='ASOCSI-WP7-PRESENTATION-REMEDIATION'
     assert pointer['status']=='COMPLETED'
     assert pointer['next_packet']=='ASOCSI-WP7-HUMAN-REVIEW_REQUIRES_HUMAN_INPUT'
