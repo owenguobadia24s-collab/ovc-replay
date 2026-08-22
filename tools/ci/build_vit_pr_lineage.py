@@ -14,6 +14,10 @@ from ovc.development.skills.vit_routing import (
     build_vit_lineage_record,
     build_vit_payload_lineage_record,
 )
+from tools.ci.vit_qualification_store import (
+    build_qualification_envelope,
+    publish_qualification_envelope,
+)
 
 SHA64 = re.compile(r"^[0-9a-f]{64}$")
 
@@ -119,7 +123,7 @@ def build_record(
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Build canonical payload-only VIT lineage for a permanent PR candidate.")
+    parser = argparse.ArgumentParser(description="Build canonical payload-only VIT qualification for a permanent PR candidate.")
     parser.add_argument("--repo", default=".")
     parser.add_argument("--base", required=True, help="Diff origin only; not a physical-main placement binding.")
     parser.add_argument("--head", required=True)
@@ -128,6 +132,9 @@ def main() -> int:
     parser.add_argument("--authority-manifest-id", required=True)
     parser.add_argument("--dependency-frontier-id", required=True)
     parser.add_argument("--completion-transition-json", default='{"status":"COMPLETED"}')
+    parser.add_argument("--publish-detached", action="store_true", help="Publish the immutable qualification envelope and exact-head pointer to the detached VIT ledger.")
+    parser.add_argument("--replace-head-qualification", action="store_true", help="Lawfully supersede the pointer for the same Git head while preserving the prior immutable envelope.")
+    parser.add_argument("--emit-legacy-pr-marker", action="store_true", help="Migration/recovery only: also print the legacy VIT-Lineage-B64 PR-body marker.")
     parser.add_argument("--legacy-placement", action="store_true", help="Historical v1 early-placement output only.")
     parser.add_argument("--train-generation-id", default="LEGACY")
     parser.add_argument("--ordinal", type=int, default=0)
@@ -135,8 +142,9 @@ def main() -> int:
     transition = json.loads(args.completion_transition_json)
     if not isinstance(transition, Mapping):
         raise SystemExit("completion transition must be a JSON object")
+    repo = Path(args.repo).resolve()
     record = build_record(
-        repo=Path(args.repo).resolve(),
+        repo=repo,
         base=args.base,
         head=args.head,
         programme_id=args.programme_id,
@@ -149,7 +157,19 @@ def main() -> int:
         ordinal=args.ordinal,
     )
     print(json.dumps(record, sort_keys=True, separators=(",", ":"), ensure_ascii=False))
-    print(f"VIT-Lineage-B64: {encode_lineage(record)}")
+
+    if args.publish_detached:
+        if args.legacy_placement:
+            raise RuntimeError("detached qualification publication requires payload-only late-binding lineage")
+        envelope = build_qualification_envelope(repo=repo, root=repo, head_sha=args.head, lineage_record=record) if False else build_qualification_envelope(root=repo, head_sha=args.head, lineage_record=record)
+        qualification_id = publish_qualification_envelope(
+            envelope,
+            replace_head_binding=args.replace_head_qualification,
+        )
+        print(f"VIT-Qualification-ID: {qualification_id}")
+
+    if args.emit_legacy_pr_marker:
+        print(f"VIT-Lineage-B64: {encode_lineage(record)}")
     return 0
 
 
