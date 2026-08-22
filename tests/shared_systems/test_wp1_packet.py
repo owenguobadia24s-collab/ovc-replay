@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-import hashlib
+import subprocess
 from pathlib import Path
 
 
@@ -24,13 +24,8 @@ def test_g0b_exact_main_completion_unlocks_wp1() -> None:
     assert binding["authority_effect"] == "NONE"
 
 
-def test_current_state_is_wp1_qa_review_with_wp0_completed() -> None:
-    pointer = load(IMPLEMENTATION / "CURRENT_STATE_POINTER.json")
-    assert pointer["state_record"].endswith("SHSI_PROGRAMME_STATE_v0_3_WP1.json")
-    assert pointer["current_packet"] == "SHSI-WP1"
-    assert pointer["current_gate"] == "SHSI-G1"
-    assert pointer["next_packet"] == "SHSI-WP2"
-    state = load(ROOT / pointer["state_record"])
+def test_wp1_historical_state_records_its_qa_review_and_wp0_completion() -> None:
+    state = load(IMPLEMENTATION / "SHSI_PROGRAMME_STATE_v0_3_WP1.json")
     assert state["status"] == "QA_REVIEW"
     assert state["completed_packets"] == [{
         "packet_id": "SHSI-WP0",
@@ -63,6 +58,11 @@ def test_wp1_vit_payload_and_frontiers_are_content_addressed() -> None:
     assert pip["payload"]["dependency_frontier_id"] == frontier["logical_id"]
     assert pip["payload"]["completion_transition"] == {"status": "COMPLETED", "next_packet": "SHSI-WP2"}
     for change in pip["payload"]["logical_changes"]:
-        raw = (ROOT / change["path"]).read_bytes()
-        observed = hashlib.sha1(f"blob {len(raw)}\0".encode("ascii") + raw).hexdigest()
-        assert observed == change["blob_sha"], change["path"]
+        # A completed packet binds immutable Git blobs, not the mutable current path.
+        # Successor packets may lawfully create later generations of the same file.
+        subprocess.run(
+            ["git", "cat-file", "-e", f"{change['blob_sha']}^{{blob}}"],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+        )
