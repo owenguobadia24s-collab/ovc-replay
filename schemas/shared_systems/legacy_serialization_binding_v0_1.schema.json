@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://shared-systems/legacy-serialization-binding/v0.1",
+  "title": "LegacySerializationBinding",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["binding_id", "legacy_identifier", "owner_namespace", "pack_id", "generation_id", "serialization_profile_id", "identity_projection_id", "hash_algorithm_id", "historical_digest", "status"],
+  "properties": {
+    "binding_id": {"type": "string", "minLength": 1},
+    "legacy_identifier": {"type": "string", "minLength": 1},
+    "owner_namespace": {"type": "string", "minLength": 1},
+    "pack_id": {"type": "string", "minLength": 1},
+    "generation_id": {"type": "string", "minLength": 1},
+    "serialization_profile_id": {"type": "string", "minLength": 1},
+    "identity_projection_id": {"type": "string", "minLength": 1},
+    "hash_algorithm_id": {"type": "string", "minLength": 1},
+    "historical_digest": {"type": "string", "pattern": "^[0-9a-f]+$", "minLength": 32},
+    "status": {"const": "HISTORICAL_IMMUTABLE_READ_ONLY"}
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "schema": "ovc-shared-systems-identity-golden-vectors/v0.1",
+  "vector_set_id": "SHSI.IDENTITY.GOLDEN_VECTORS.v0.1",
+  "serialization_profile_id": "SHSI.SERIALIZATION.CANONICAL_JSON_NFC.v1",
+  "identity_projection_id": "SHSI.IDENTITY.FIXTURE.v1",
+  "vectors": [
+    {
+      "vector_id": "KEY_ORDER_AND_PROJECTION",
+      "input": {"payload": {"z": 2, "a": 1}, "kind": "fixture", "version": 1, "id": "excluded-self", "description": "excluded-description", "hostname": "excluded-host"},
+      "expected_utf8": "{\"kind\":\"fixture\",\"payload\":{\"a\":1,\"z\":2},\"version\":1}",
+      "expected_sha256": "0b1cf56502f17c4025b2ca7fe527d867dc24dbd1c7662ab2010777d707f2ddd9"
+    },
+    {
+      "vector_id": "NESTED_UNICODE_AND_NULL",
+      "input": {"kind": "café", "payload": {"items": [true, null, "Ω"], "decimal": 12.5}},
+      "expected_utf8": "{\"kind\":\"café\",\"payload\":{\"decimal\":12.5,\"items\":[true,null,\"Ω\"]}}",
+      "expected_sha256": "b4893380e80eb6ee0038b6e311c9e0075f6816a4525814f1885f1168f7d02288"
+    }
+  ],
+  "authority_effect": "NONE_SYNTHETIC_FIXTURE"
+}

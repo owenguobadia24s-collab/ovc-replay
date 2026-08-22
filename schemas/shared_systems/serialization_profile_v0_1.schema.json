@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://shared-systems/serialization-profile/v0.1",
+  "title": "SerializationProfile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["serialization_profile_id", "profile_version", "character_encoding", "unicode_policy", "object_key_order", "numeric_policy", "negative_zero_policy", "collection_policy", "null_policy", "timestamp_policy", "string_policy", "identity_projection_ref", "self_identity_exclusion_policy", "storage_framing_policy", "hash_algorithm_ref", "conformance_vector_set_ref"],
+  "properties": {
+    "serialization_profile_id": {"type": "string", "minLength": 1},
+    "profile_version": {"type": "string", "minLength": 1},
+    "character_encoding": {"const": "UTF-8"},
+    "unicode_policy": {"enum": ["PRESERVE", "REQUIRE_NFC"]},
+    "object_key_order": {"const": "LEXICOGRAPHIC_CODEPOINT"},
+    "numeric_policy": {"enum": ["JSON_NUMBER", "CANONICAL_DECIMAL_STRING", "PRECISION_PRESERVING_DECIMAL_STRING"]},
+    "negative_zero_policy": {"enum": ["REJECT", "NORMALIZE_TO_ZERO", "PRESERVE"]},
+    "collection_policy": {"enum": ["ORDERED_SEQUENCE", "SEMANTIC_SET", "OWNER_DECLARED_ORDER"]},
+    "null_policy": {"enum": ["EXPLICIT_ALLOW", "REJECT"]},
+    "timestamp_policy": {"enum": ["OWNER_TYPED_STRING", "RFC3339_UTC_REQUIRE_Z"]},
+    "string_policy": {"const": "JSON_STRING"},
+    "identity_projection_ref": {"type": "string", "minLength": 1},
+    "self_identity_exclusion_policy": {"const": "EXCLUDE_DECLARED_SELF_ID_FIELDS"},
+    "storage_framing_policy": {"enum": ["NONE", "TRAILING_LF"]},
+    "hash_algorithm_ref": {"type": "string", "minLength": 1},
+    "conformance_vector_set_ref": {"type": "string", "minLength": 1}
+  }
+}
