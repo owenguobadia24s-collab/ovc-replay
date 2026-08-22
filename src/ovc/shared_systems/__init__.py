@@ -143,6 +143,20 @@ from .ro_dmrp_shadow import (
     inspect_read_only_artifacts,
     unwrap_ro_record,
 )
+from .esl_shadow import (
+    ESLAdapterComplexityLedger,
+    ESLEvidenceFrontierMapping,
+    ESLReferenceComparison,
+    ESLShadowError,
+    ESLShadowSurfaceBinding,
+    ESLSharedSystemsConsumptionManifest,
+    ESL_SURFACES,
+    adapt_esl_surface,
+    compare_esl_reference,
+    evaluate_esl_adapter_complexity,
+    map_esl_evidence_frontier,
+    unwrap_esl_surface,
+)
 
 __all__ = [
     "BOOTSTRAP_NODES",
@@ -225,4 +239,10 @@ __all__ = [
     "compare_ro_dual_run", "crosswalk_ro_state",
     "evaluate_ro_adapter_complexity", "inspect_read_only_artifacts",
     "unwrap_ro_record",
+    "ESLAdapterComplexityLedger", "ESLEvidenceFrontierMapping",
+    "ESLReferenceComparison", "ESLShadowError", "ESLShadowSurfaceBinding",
+    "ESLSharedSystemsConsumptionManifest", "ESL_SURFACES",
+    "adapt_esl_surface", "compare_esl_reference",
+    "evaluate_esl_adapter_complexity", "map_esl_evidence_frontier",
+    "unwrap_esl_surface",
 ]

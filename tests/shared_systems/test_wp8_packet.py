@@ -43,11 +43,12 @@ def test_wp8_census_is_synthetic_metadata_only_and_exact() -> None:
 
 
 def test_wp8_current_state_and_gate_are_read_only_non_authorising() -> None:
-    pointer = load(ROOT / "registries/implementation/shared_systems_v0_1/CURRENT_STATE_POINTER.json")
-    assert (pointer["current_packet"], pointer["current_gate"], pointer["next_packet"]) == (
+    state = load(
+        ROOT / "registries/implementation/shared_systems_v0_1/SHSI_PROGRAMME_STATE_v0_10_WP8.json"
+    )
+    assert (state["current_packet"], state["current_gate"], state["next_packet"]) == (
         "SHSI-WP8", "SHSI-G8", "SHSI-WP9"
     )
-    state = load(ROOT / pointer["state_record"])
     assert state["completed_packets"][-1]["packet_id"] == "SHSI-WP7"
     assert state["authority_delta"] == "NONE"
     assert state["authority_effect"] == "NONE_READ_ONLY_SHADOW_ONLY"
