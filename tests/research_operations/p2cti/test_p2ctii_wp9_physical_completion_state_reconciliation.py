@@ -35,7 +35,6 @@ PHYSICAL_COMPLETION = {
 
 STATE_NON_GRANTS = [
     "RESEARCH_CONSOLE_SOURCE_PRESENTATION_AUTHORITY",
-    "P2CTI_OBSERVABILITY",
     "P2CTI_CONTINUOUS_INTAKE_WRITES",
     "THEORY_SEMANTIC_FREEZE",
     "P2_6_CANDIDATE_FORMATION",
@@ -81,27 +80,32 @@ def test_programme_state_records_exact_wp9_physical_completion() -> None:
     assert {key: wp9[key] for key in PHYSICAL_COMPLETION} == PHYSICAL_COMPLETION
     assert wp9["decision"] == "PASS_SHADOW_STABLE"
     assert wp9["authority_delta"] == "NONE"
-    assert state["merge_commit"] == PHYSICAL_COMPLETION["merge_commit"]
-    assert state["wp9_status"] == "COMPLETED"
     assert "EFFECTIVE_ON_VIT_POST_MERGE_PACKET_COMPLETION_RECEIPT" not in STATE_PATH.read_text(
         encoding="utf-8"
     )
 
 
-def test_programme_remains_stopped_at_unactivated_observability_gate() -> None:
+def test_programme_records_observability_pass_without_write_or_consumer_grants() -> None:
     state = _load(STATE_PATH)
+    gate = next(
+        row for row in state["completed_packets"]
+        if row["packet_id"] == "P2CTII-G-OBSERVABILITY-ACTIVATE"
+    )
 
-    assert state["packet_id"] == "P2CTII-G-OBSERVABILITY-ACTIVATE"
-    assert state["status"] == "GATE_READY"
+    assert gate["status"] == "COMPLETED"
+    assert gate["decision"] == "PASS"
+    assert gate["authority_delta"] == "OPERATIONAL_READ_ONLY_P2CTI_CURRENT_PROJECTION"
+    assert state["packet_id"] == "P2CTII-WP10"
+    assert state["status"] == "READY"
     assert state["authority_delta"] == "NONE"
-    assert state["operational_current_pointer_publication"] == "DENIED_SEPARATELY_GOVERNED"
-    assert state["operational_reliance"] is False
-    assert state["p2ctii_observability_gate_status"] == "GATE_READY_PENDING_OPERATOR"
-    assert state["authority_required"] == "OPERATOR_REQUIRED_P2CTII_G_OBSERVABILITY_ACTIVATE"
+    assert state["operational_current_pointer_publication"] == "ALLOWED_P2CTI_OPERATIONAL_READ_ONLY_ONLY"
+    assert state["operational_reliance"] is True
+    assert state["p2ctii_observability_gate_status"] == "PASS_ACTIVE"
+    assert state["authority_required"] == "AUTO_EXECUTABLE"
     assert state["explicit_non_grants"] == STATE_NON_GRANTS
 
 
-def test_consolidated_operator_packet_is_refreshed_without_authority_activation() -> None:
+def test_consolidated_operator_packet_remains_exact_approved_subject() -> None:
     gate = _load(GATE_PATH)
     expected_gate_completion = {**PHYSICAL_COMPLETION, "authority_effect": "NONE"}
     expected_hashes = {
