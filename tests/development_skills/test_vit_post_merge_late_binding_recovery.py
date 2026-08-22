@@ -107,19 +107,20 @@ class VitPostMergeLateBindingRecoveryTests(unittest.TestCase):
             + json.dumps(asdict(admission), sort_keys=True, separators=(",", ":"))
             + "\n"
         ).encode("utf-8")
-        with TemporaryDirectory() as tmp, (
-            patch.object(TOOL.legacy, "_json", side_effect=fake_json),
-            patch.object(TOOL.legacy, "_request_job_log", return_value=log),
-            patch.object(TOOL, "resolve_candidate_lineage", return_value=_detached_source()),
-        ):
-            freeze = TOOL._late_binding_freeze_from_merge_readiness_logs(
-                repo_root=Path(tmp),
-                repository="o/r",
-                head_sha="1" * 40,
-                pr_number=42,
-                pr_body="Human review text only",
-                token="token",
-            )
+        with TemporaryDirectory() as tmp:
+            with (
+                patch.object(TOOL.legacy, "_json", side_effect=fake_json),
+                patch.object(TOOL.legacy, "_request_job_log", return_value=log),
+                patch.object(TOOL, "resolve_candidate_lineage", return_value=_detached_source()),
+            ):
+                freeze = TOOL._late_binding_freeze_from_merge_readiness_logs(
+                    repo_root=Path(tmp),
+                    repository="o/r",
+                    head_sha="1" * 40,
+                    pr_number=42,
+                    pr_body="Human review text only",
+                    token="token",
+                )
 
         self.assertIsNotNone(freeze)
         assert freeze is not None
@@ -139,19 +140,20 @@ class VitPostMergeLateBindingRecoveryTests(unittest.TestCase):
                 return {"workflow_runs": [{"id": 9002, "name": "OVC tiered test selection shadow", "conclusion": "success"}]}
             return {"jobs": [{"id": 8002, "name": "OVC merge readiness", "conclusion": "success"}]}
 
-        with TemporaryDirectory() as tmp, (
-            patch.object(TOOL.legacy, "_json", side_effect=fake_json),
-            patch.object(TOOL.legacy, "_request_job_log", return_value=b"no markers\n"),
-        ):
-            with self.assertRaises(TOOL.legacy.PostMergeCompletionError):
-                TOOL._late_binding_freeze_from_merge_readiness_logs(
-                    repo_root=Path(tmp),
-                    repository="o/r",
-                    head_sha="1" * 40,
-                    pr_number=42,
-                    pr_body=_body(),
-                    token="token",
-                )
+        with TemporaryDirectory() as tmp:
+            with (
+                patch.object(TOOL.legacy, "_json", side_effect=fake_json),
+                patch.object(TOOL.legacy, "_request_job_log", return_value=b"no markers\n"),
+            ):
+                with self.assertRaises(TOOL.legacy.PostMergeCompletionError):
+                    TOOL._late_binding_freeze_from_merge_readiness_logs(
+                        repo_root=Path(tmp),
+                        repository="o/r",
+                        head_sha="1" * 40,
+                        pr_number=42,
+                        pr_body=_body(),
+                        token="token",
+                    )
 
     def test_post_merge_workflow_uses_late_binding_recovery_route(self) -> None:
         text = WORKFLOW.read_text(encoding="utf-8")
