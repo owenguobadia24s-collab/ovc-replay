@@ -45,13 +45,28 @@ def test_programme_state_preserves_g4_pass_without_reserved_authority() -> None:
     assert completed["P2CTII-G4-ALG-FRESH-INDEPENDENT-REVIEW-AFTER-WP4-REMEDIATION-2"]["packet_sha256"] == EXPECTED_PACKET_SHA256
     assert state["blockers"] == []
     assert state["fresh_review_packet_sha256"] == EXPECTED_PACKET_SHA256
-    assert state["operational_current_pointer_publication"] == "DENIED_SEPARATELY_GOVERNED"
-    assert "P2CTI_OBSERVABILITY" in state["explicit_non_grants"]
-    assert "P2CTI_CONTINUOUS_INTAKE_WRITES" in state["explicit_non_grants"]
-    assert state["reserved_later_gates"] == [
-        "P2CTII-G-OBSERVABILITY-ACTIVATE",
-        "P2CTII-G-CONTINUOUS-INTAKE",
-    ]
+
+    # G4 itself never granted observability. A later explicit operator PASS may
+    # lawfully consume only that reserved non-grant while preserving all later
+    # authority boundaries.
+    if state.get("p2ctii_observability_gate_status") == "PASS_ACTIVE":
+        observability = completed["P2CTII-G-OBSERVABILITY-ACTIVATE"]
+        assert observability["decision"] == "PASS"
+        assert observability["authority_delta"] == "OPERATIONAL_READ_ONLY_P2CTI_CURRENT_PROJECTION"
+        assert state["operational_current_pointer_publication"] == "ALLOWED_P2CTI_OPERATIONAL_READ_ONLY_ONLY"
+        assert state["operational_reliance"] is True
+        assert "P2CTI_OBSERVABILITY" not in state["explicit_non_grants"]
+        assert "P2CTI_CONTINUOUS_INTAKE_WRITES" in state["explicit_non_grants"]
+        assert state["reserved_later_gates"] == ["P2CTII-G-CONTINUOUS-INTAKE"]
+    else:
+        assert state["operational_current_pointer_publication"] == "DENIED_SEPARATELY_GOVERNED"
+        assert "P2CTI_OBSERVABILITY" in state["explicit_non_grants"]
+        assert "P2CTI_CONTINUOUS_INTAKE_WRITES" in state["explicit_non_grants"]
+        assert state["reserved_later_gates"] == [
+            "P2CTII-G-OBSERVABILITY-ACTIVATE",
+            "P2CTII-G-CONTINUOUS-INTAKE",
+        ]
+
     if state["packet_id"] == "P2CTII-G4-ALG":
         assert state["status"] == "APPROVED"
         assert state["next_packet"] == "P2CTII-WP5"
@@ -63,4 +78,5 @@ def test_programme_state_preserves_g4_pass_without_reserved_authority() -> None:
             "P2CTII-WP8",
             "P2CTII-WP9",
             "P2CTII-G-OBSERVABILITY-ACTIVATE",
+            "P2CTII-WP10",
         }
