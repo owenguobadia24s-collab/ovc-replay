@@ -14,7 +14,7 @@ from ovc.development.skills.vit_assurance_decoupling import validate_aa0_reuse_a
 from ovc.development.skills.vit_local_completion_executor import build_live_transaction_freeze, encode_freeze_marker
 from ovc.development.skills.vit_routing import validate_vit_lineage_record
 from ovc.development.skills.vit_core import VitContractError
-from tools.ci.vit_lineage_source import resolve_lineage_source
+from tools.ci.vit_lineage_source import resolve_candidate_lineage
 
 REUSE = re.compile(r"(?im)^VIT-AA0-Reuse-B64:\s*([A-Za-z0-9_\-=]+)\s*$")
 
@@ -87,7 +87,7 @@ def _live_pr_payload(event: Mapping[str, Any]) -> Mapping[str, Any]:
     headers = {
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
-        "User-Agent": "ovc-vit-assurance-preflight/2",
+        "User-Agent": "ovc-vit-assurance-preflight/3",
     }
     token = os.environ.get("GITHUB_TOKEN", "").strip()
     if token:
@@ -106,7 +106,7 @@ def _live_pr_payload(event: Mapping[str, Any]) -> Mapping[str, Any]:
 def main() -> int:
     if os.environ.get("GITHUB_EVENT_NAME", "") != "pull_request":
         sha = os.environ.get("GITHUB_SHA", "NON_PR")
-        for name in ("aa0_identity", "generation_id", "pip_id", "lineage_ref"):
+        for name in ("aa0_identity", "generation_id", "pip_id", "lineage_ref", "qualification_id"):
             _write_output(name, sha)
         _write_output("lineage_source", "NON_PR")
         _write_output("aa0_reuse_authorized", "false")
@@ -124,25 +124,34 @@ def main() -> int:
             f"VIT_ASSURANCE_SUPERSEDED_EVENT_HEAD:event {event_head_sha}, live {head_sha}; obsolete generation may not acquire assurance identity"
         )
 
-    lineage_source = resolve_lineage_source(body, require=False)
+    root = Path(os.environ.get("GITHUB_WORKSPACE", ".")).resolve()
+    allow_legacy_body = os.environ.get("OVC_VIT_ALLOW_LEGACY_PR_BODY_LINEAGE", "").lower() == "true"
+    lineage_source = resolve_candidate_lineage(
+        root=root,
+        head_sha=head_sha,
+        body=body,
+        require=False,
+        allow_legacy_pr_body=allow_legacy_body,
+    )
     reuse_record = _decode(REUSE, body, "VIT_AA0_REUSE")
     if lineage_source is None:
         if reuse_record is not None:
-            raise RuntimeError("AA0_REUSE_WITHOUT_VIT_LINEAGE")
-        for name in ("aa0_identity", "generation_id", "pip_id", "lineage_ref"):
+            raise RuntimeError("AA0_REUSE_WITHOUT_VIT_QUALIFICATION")
+        for name in ("aa0_identity", "generation_id", "pip_id", "lineage_ref", "qualification_id"):
             _write_output(name, head_sha)
-        _write_output("lineage_source", "REGISTERED_EXCEPTION_OR_NO_LINEAGE")
+        _write_output("lineage_source", "REGISTERED_EXCEPTION_OR_NO_QUALIFICATION")
         _write_output("aa0_reuse_authorized", "false")
-        _write_output("aa0_reuse_reason", "REGISTERED_EXCEPTION_OR_NO_LINEAGE")
+        _write_output("aa0_reuse_reason", "REGISTERED_EXCEPTION_OR_NO_QUALIFICATION")
         return 0
 
     lineage_record = lineage_source.record
     lineage = validate_vit_lineage_record(lineage_record)
     _write_output("aa0_identity", lineage.pip_id)
-    _write_output("generation_id", lineage.generation_id or lineage.pip_id)
+    _write_output("generation_id", lineage_source.immutable_ref)
     _write_output("pip_id", lineage.pip_id)
     _write_output("lineage_source", lineage_source.source)
     _write_output("lineage_ref", lineage_source.immutable_ref)
+    _write_output("qualification_id", lineage_source.immutable_ref)
 
     if lineage.late_binding:
         print("OVC_VIT_PREWRITE_FREEZE_DEFERRED=LATE_BINDING_NO_PHYSICAL_PLACEMENT")
