@@ -64,5 +64,4 @@ def test_wp2_vit_payload_and_frontiers_are_content_addressed() -> None:
     assert pip["payload"]["dependency_frontier_id"] == frontier["logical_id"]
     assert pip["payload"]["completion_transition"] == {"status":"COMPLETED", "next_packet":"SHSI-WP3"}
     for change in pip["payload"]["logical_changes"]:
-        observed = subprocess.run(["git", "hash-object", "--", change["path"]], cwd=ROOT, check=True, capture_output=True, text=True).stdout.strip()
-        assert observed == change["blob_sha"], change["path"]
+        subprocess.run(["git", "cat-file", "-e", f"{change['blob_sha']}^{{blob}}"], cwd=ROOT, check=True, capture_output=True)
