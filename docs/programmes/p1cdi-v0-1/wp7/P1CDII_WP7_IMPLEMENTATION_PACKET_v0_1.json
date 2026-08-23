@@ -1,0 +1,58 @@
+{
+  "schema": "p1cdii-wp7-implementation-packet/v0.1",
+  "programme_id": "OVC-P1CDI-CONFORMANCE-v0.1",
+  "plan_id": "OVC-P1CDI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "eeb3cfef77c8a61ce2fb825f8f0f649ac35281f30d43ba24651fc329a11a0b9a",
+  "packet_id": "P1CDII-WP7",
+  "gate_id": "P1CDII-G7",
+  "status": "IMPLEMENTED_PENDING_QA",
+  "baseline_commit": "4890bdab207923b1da86cd2c280a12be473a7832",
+  "prerequisites": [
+    "P1CDII-WP6_COMPLETED_PHYSICAL_MAIN@4890bdab207923b1da86cd2c280a12be473a7832",
+    "P1CDII-G0_BOUNDED_IMPLEMENTATION_AUTHORITY"
+  ],
+  "purpose": "Make visibility classification a blocking pre-index property; enforce PATH1_SAFE/cross-mode/protected-source firewalls; prove Validation negative reachability and zero restricted-information leak survivors without activating operational read authority.",
+  "implementation": {
+    "module": "src/ovc/research_operations/p1cdi/visibility.py",
+    "package_export": "src/ovc/research_operations/p1cdi/__init__.py",
+    "fixture": "fixtures/research_operations/p1cdi/P1CDII_WP7_VISIBILITY_LEAK_FIXTURE_v0_1.json",
+    "tests": "tests/research_operations/p1cdi/test_p1cdii_wp7_visibility_firewall.py",
+    "frozen_contracts_reused": [
+      "contracts/research_operations/p1cdi/P1CDI_VISIBILITY_AND_PROTECTED_SOURCE_CONTRACT_v0_1.md",
+      "schemas/research_operations/p1cdi/p1cdi_visibility_v0_1.schema.json",
+      "registries/research_operations/p1cdi/visibility_registry.json"
+    ]
+  },
+  "acceptance_conditions": [
+    "every visibility decision is classified before indexing; incomplete/unknown visibility fails closed to PROTECTED",
+    "PATH1_FULL denies without exact eligible permission intersection",
+    "PATH1_SAFE excludes pre-freeze Path-2 candidate predicates, examples, falsifiers, parameter boundaries and restricted neighbourhoods",
+    "CROSS_MODE_POST_FREEZE denies unless exact DMRP freeze and caller visibility permission are both present",
+    "OPERATOR_RESTRICTED and PROTECTED deny every frozen leak surface",
+    "restricted data cannot leak through fields, titles, IDs, counts, aggregates, graph neighbours, demand text, candidate counts, search suggestions, cache metadata, errors or paths",
+    "Validation access fails before sensitive resolver invocation",
+    "absence of exposure evidence remains INDEPENDENCE_UNKNOWN unless stronger owner evidence is explicitly referenced",
+    "visibility/index records carry authority_effect NONE and expose no scientific/candidate/Validation/operational/intake actuation",
+    "targeted, complete P1CDII, adversarial, repository-wide, parity/profile, VIT, SIQ, GRT exact-tree and exact-final merge-readiness assurance passes"
+  ],
+  "authority_required": "AUTO_EXECUTABLE",
+  "authority_delta": "NONE",
+  "preserved_denials": [
+    "OPERATIONAL_READ_ONLY",
+    "CONTINUOUS_INTAKE",
+    "CANDIDATE_OR_FREEZE_AUTHORITY",
+    "SCIENTIFIC_DISPOSITION_WRITE",
+    "VALIDATION",
+    "PUBLICATION",
+    "PROBABILITY",
+    "RISK",
+    "EXPOSURE",
+    "TRADING",
+    "EXECUTION",
+    "AGENT_WRITE"
+  ],
+  "qa_packet": "docs/programmes/p1cdi-v0-1/wp7/P1CDII_WP7_QA_PACKET_v0_1.json",
+  "decision_record": "docs/programmes/p1cdi-v0-1/wp7/P1CDII_G7_DELEGATED_DECISION_v0_1.json",
+  "rollback": "Forward-revert only the bounded WP7 visibility implementation, fixture, tests and closeout artifacts; preserve WP6/G6 and all prior immutable evidence; no history rewrite.",
+  "next_packet_after_pass": "P1CDII-WP8"
+}
