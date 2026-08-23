@@ -97,6 +97,7 @@ def test_visible_anchor_remediation_closeout_preserves_human_input_boundary():
     remediation=_json('docs/programmes/asocs-v0-1/implementation/wp7/ASOCSI_WP7_VISIBLE_ANCHOR_REMEDIATION_v0_1.json')
     state=_json('records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_14_WP7_VISIBLE_ANCHOR_REMEDIATION.json')
     pointer=_json('registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json')
+    current_state=_json(pointer['current_state'])
     assert qa['status']=='PASS' and qa['qa_recommendation']=='PASS_REPOSITORY_REMEDIATION'
     assert qa['g4_population']=={'hidden_repeat_count':18,'presentation_count':370,'review_population_sha256':'ff6eb37724aea5b2706666903f7b5a1bc063af8ef9026f4496429b5e33fa15fe','unique_review_unit_count':352}
     assert decision['decision']=='PASS' and decision['authority_delta']=='NONE'
@@ -104,7 +105,7 @@ def test_visible_anchor_remediation_closeout_preserves_human_input_boundary():
     assert remediation['external_session_regeneration_status']=='REQUIRED_NOT_YET_MATERIALISED'
     assert state['status']=='COMPLETED' and state['human_review_started'] is False and state['g5_status']=='NOT_STARTED'
     assert state['pre_human_requirements']
-    assert pointer['current_state'].endswith('ASOCSI_PROGRAMME_STATE_v0_14_WP7_VISIBLE_ANCHOR_REMEDIATION.json')
-    assert pointer['packet_id']=='ASOCSI-WP7-PRESENTATION-REMEDIATION'
-    assert pointer['status']=='COMPLETED'
-    assert pointer['next_packet']=='ASOCSI-WP7-HUMAN-REVIEW_REQUIRES_HUMAN_INPUT'
+    assert current_state['human_review_started'] is True
+    assert pointer['packet_id']=='ASOCSI-WP7-AMENDED-SESSION-3-PLUS-HTML-REGENERATION'
+    assert pointer['status']==current_state['status']
+    assert pointer['next_packet']==current_state['next_packet']
