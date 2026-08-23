@@ -4,6 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 
+from tests.research_operations.p1cdi._court_state import assert_post_review5_current_state
 from tests.research_operations.p1cdi.test_p1cdii_wp1_schemas import validate_contract
 
 
@@ -19,7 +20,7 @@ BLOCKERS = [
 ]
 
 
-def test_fresh_review_4_block_is_exact_immutable_and_routes_only_remediation_5() -> None:
+def test_fresh_review_4_block_is_exact_immutable_and_historical_route_is_preserved() -> None:
     packet_bytes = PACKET.read_bytes()
     actual_sha256 = hashlib.sha256(packet_bytes).hexdigest()
     packet = json.loads(packet_bytes)
@@ -56,7 +57,6 @@ def test_fresh_review_4_block_is_exact_immutable_and_routes_only_remediation_5()
 
     review = state["packets"]["P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-4"]
     remediation = state["packets"]["P1CDII-WP4-REMEDIATION-5"]
-    assert state["status"] == "GATE_READY"
     assert review["status"] == "BLOCKED"
     assert review["authority_delta"] == "NONE"
     assert review["blockers"] == BLOCKERS
@@ -65,11 +65,7 @@ def test_fresh_review_4_block_is_exact_immutable_and_routes_only_remediation_5()
     assert remediation["authority_required"] == "AUTO_EXECUTABLE"
     assert remediation["authority_delta"] == "NONE"
     assert remediation["next_packet"] == "P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-5"
-    assert state["blockers"] == []
-    assert state["packets"]["P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-5"]["status"] == "READY"
-    assert state["next_packet"] == "P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-5"
-    assert state["authority"]["operational_read_only"] == "DENIED"
-    assert state["authority"]["continuous_intake"] == "DENIED"
+    assert_post_review5_current_state(state)
 
     validate_contract(
         json.loads(

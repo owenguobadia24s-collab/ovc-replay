@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from tests.research_operations.p1cdi._court_state import assert_post_review5_current_state
 from tests.research_operations.p1cdi.test_p1cdii_wp1_schemas import validate_contract
 
 
@@ -12,7 +13,7 @@ STATE = ROOT / "records/research_operations/p1cdi/P1CDII_PROGRAMME_STATE_v0_1.js
 BLOCKER = "P1CDII_G4_ALG_FRESH_REVIEW_3_BLOCK_001_ORPHAN_GENERATION_SERIES_ROOT_NOT_PROVEN"
 
 
-def test_fresh_review_3_block_is_materialised_without_pass_or_authority_gain() -> None:
+def test_fresh_review_3_block_is_materialised_and_history_survives_review5_pass() -> None:
     packet = json.loads(PACKET.read_text(encoding="utf-8"))
     state = json.loads(STATE.read_text(encoding="utf-8"))
 
@@ -32,7 +33,6 @@ def test_fresh_review_3_block_is_materialised_without_pass_or_authority_gain() -
 
     review = state["packets"]["P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-3"]
     remediation = state["packets"]["P1CDII-WP4-REMEDIATION-4"]
-    assert state["status"] == "GATE_READY"
     assert review["status"] == "BLOCKED"
     assert review["authority_delta"] == "NONE"
     assert review["blockers"] == [BLOCKER]
@@ -42,10 +42,7 @@ def test_fresh_review_3_block_is_materialised_without_pass_or_authority_gain() -
     assert remediation["authority_delta"] == "NONE"
     assert state["packets"]["P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-4"]["status"] == "BLOCKED"
     assert state["packets"]["P1CDII-WP4-REMEDIATION-5"]["status"] == "COMPLETED"
-    assert state["packets"]["P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-5"]["status"] == "READY"
-    assert state["next_packet"] == "P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-5"
-    assert state["authority"]["operational_read_only"] == "DENIED"
-    assert state["authority"]["continuous_intake"] == "DENIED"
+    assert_post_review5_current_state(state)
 
     validate_contract(
         json.loads(

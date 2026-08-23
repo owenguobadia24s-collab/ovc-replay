@@ -4,13 +4,14 @@ import hashlib
 import json
 from pathlib import Path
 
+from tests.research_operations.p1cdi._court_state import assert_post_review5_current_state
 from tests.research_operations.p1cdi.test_p1cdii_wp1_schemas import validate_contract
 
 
 ROOT = Path(__file__).resolve().parents[3]
 
 
-def test_remediation_3_court_record_grants_no_g4_pass_or_successor_authority() -> None:
+def test_remediation_3_court_record_grants_no_g4_pass_or_successor_authority_at_its_generation() -> None:
     base = ROOT / "docs/programmes/p1cdi-v0-1/wp4"
     block_hashes = {
         "P1CDII_G4_ALG_INDEPENDENT_REVIEW_PACKET_v0_1.json": "cb86d810309346eeaf8dc4e0ae7c8356ebd9b2592799462aa4975b1b7ea56e35",
@@ -43,8 +44,6 @@ def test_remediation_3_court_record_grants_no_g4_pass_or_successor_authority() -
     assert review_3["gate_decision"] == "BLOCK"
     assert review_3["authority_delta"] == "NONE"
     assert review_3["successor_beyond_wp4_authorised"] is False
-    assert state["status"] == "GATE_READY"
-    assert state["packets"]["P1CDII-G4-ALG"]["status"] == "BLOCKED"
     assert state["packets"]["P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW"]["status"] == "BLOCKED"
     assert state["packets"]["P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-2"]["status"] == "BLOCKED"
     assert state["packets"]["P1CDII-WP4-REMEDIATION-3"]["status"] == "COMPLETED"
@@ -52,10 +51,7 @@ def test_remediation_3_court_record_grants_no_g4_pass_or_successor_authority() -
     assert state["packets"]["P1CDII-WP4-REMEDIATION-4"]["status"] == "COMPLETED"
     assert state["packets"]["P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-4"]["status"] == "BLOCKED"
     assert state["packets"]["P1CDII-WP4-REMEDIATION-5"]["status"] == "COMPLETED"
-    assert state["packets"]["P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-5"]["status"] == "READY"
-    assert state["next_packet"] == "P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-5"
-    assert state["authority"]["operational_read_only"] == "DENIED"
-    assert state["authority"]["continuous_intake"] == "DENIED"
+    assert_post_review5_current_state(state)
     validate_contract(
         json.loads((ROOT / "schemas/research_operations/p1cdi/p1cdii_programme_state_v0_1.schema.json").read_text()),
         state,
