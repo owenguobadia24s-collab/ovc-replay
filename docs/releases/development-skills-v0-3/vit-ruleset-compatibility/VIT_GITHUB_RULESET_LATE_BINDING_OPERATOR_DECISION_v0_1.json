@@ -1,0 +1,49 @@
+{
+  "schema": "ovc-vit-github-ruleset-late-binding-operator-decision/v1",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "packet_id": "DSAI3V-VIT-RULESET-COMPAT-WP0",
+  "gate_id": "DSAI3V-VIT-G-RULESET-COMPAT-1",
+  "decision": "PASS",
+  "operator_instruction": "OVC APPROVE",
+  "decided_at": "2026-08-23T18:33:00+01:00",
+  "baseline_main_sha": "4890bdab207923b1da86cd2c280a12be473a7832",
+  "triggering_blocker": {
+    "pull_request": 1284,
+    "head_sha": "b85d0bfe06d8208d4976a512bfcfcd7f8f9b36d5",
+    "required_check": "OVC merge readiness",
+    "required_check_result": "PASS",
+    "github_merge_result": "BLOCKED_REQUIRED_STATUS_CHECK_EXPECTED",
+    "classification": "NATIVE_STRICT_CURRENTNESS_CONFLICTS_WITH_RATIFIED_LATE_PHYSICAL_PLACEMENT"
+  },
+  "approved_delta": {
+    "ruleset_id": 20229411,
+    "field": "required_status_checks.strict_required_status_checks_policy",
+    "from": true,
+    "to": false
+  },
+  "preserved_exactly": {
+    "required_status_check": "OVC merge readiness",
+    "required_check_provider_integration_id": 15368,
+    "pull_request_required": true,
+    "allowed_merge_methods": ["squash"],
+    "non_fast_forward_prohibited": true,
+    "deletion_prohibited": true,
+    "bypass_actors": [],
+    "exclusive_writer_identity": "DSAI_VIT_PHYSICAL_CONTROLLER",
+    "physical_gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY"
+  },
+  "rationale": "Current-main composition and exact-final base-sensitive assurance are already performed inside the serialized OVC merge readiness lease. Native strict branch-up-to-date enforcement duplicates physical placement outside VIT and forces placement-only branch commits after unrelated main movement, contradicting the ratified late-binding constitution.",
+  "non_grants": [
+    "NO_SCIENTIFIC_AUTHORITY",
+    "NO_PROGRAMME_AUTHORITY_CHANGE",
+    "NO_PARALLEL_PHYSICAL_WRITER",
+    "NO_DIRECT_MAIN_WRITE",
+    "NO_RULESET_BYPASS",
+    "NO_REQUIRED_CHECK_REMOVAL",
+    "NO_FORCE_PUSH",
+    "NO_HISTORY_REWRITE"
+  ],
+  "live_ruleset_application": "REQUIRED_EXTERNAL_REPOSITORY_ADMINISTRATION_ACTION",
+  "authority_effect": "NONE_SAFETY_CONFORMANCE_CORRECTION",
+  "rollback": "Forward-restore native strict currentness only through a superseding VIT integration design that preserves stable PIP identity and does not reintroduce placement-only branch churn."
+}
