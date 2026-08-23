@@ -28,6 +28,7 @@ class GRT2G2ReadinessStateTests(unittest.TestCase):
         blocker_state = json.loads((STATE / "OVC_GRT2_STATE_v0_12.json").read_text(encoding="utf-8"))
         correction_running_state = json.loads((STATE / "OVC_GRT2_STATE_v0_13.json").read_text(encoding="utf-8"))
         current_state = json.loads((STATE / "OVC_GRT2_STATE_v0_14.json").read_text(encoding="utf-8"))
+        gate_ready_state = json.loads((STATE / "OVC_GRT2_STATE_v0_15.json").read_text(encoding="utf-8"))
         pointer = json.loads((STATE / "CURRENT_STATE_POINTER.json").read_text(encoding="utf-8"))
         self.assertEqual(state["status"], "BLOCKED")
         self.assertEqual(state["g2_status"], "BLOCKED_MISSING_REQUIRED_EVIDENCE")
@@ -48,16 +49,19 @@ class GRT2G2ReadinessStateTests(unittest.TestCase):
         self.assertEqual(correction_running_state["active_enforcement"], "LIMITED_NEW_ARTIFACT_ENFORCEMENT")
         self.assertIsNone(correction_running_state["debt_floor_generation"])
 
-        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_14.json")
-        self.assertEqual(pointer["status"], "APPROVED")
-        self.assertEqual(pointer["gate_id"], "GRT2-G2-SUPERSEDING-QUALIFICATION")
-        self.assertEqual(pointer["next_packet"], "GRT2-G3-READINESS-EVIDENCE")
+        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_15.json")
+        self.assertEqual(pointer["status"], "GATE_READY_OPERATOR_REQUIRED")
+        self.assertEqual(pointer["gate_id"], "GRT2-G3")
+        self.assertEqual(pointer["next_packet"], "GRT2-G3-OPERATOR-DECISION")
         self.assertEqual(current_state["status"], "APPROVED")
         self.assertEqual(current_state["g2_status"], "APPROVED_DELEGATED_PASS_SUPERSEDING_IMPLEMENTATION_QUALIFICATION")
         self.assertEqual(current_state["g3_status"], "NOT_AUTHORISED_READINESS_EVIDENCE_NEXT")
         self.assertEqual(current_state["active_enforcement"], "LIMITED_NEW_ARTIFACT_ENFORCEMENT")
         self.assertIsNone(current_state["debt_floor_generation"])
         self.assertEqual(current_state["authority_delta"], "NONE_CORRECTIVE_IMPLEMENTATION_ONLY")
+        self.assertEqual(gate_ready_state["status"], "GATE_READY_OPERATOR_REQUIRED")
+        self.assertEqual(gate_ready_state["authority_effect"], "NONE_GATE_PREPARATION_ONLY")
+        self.assertTrue(gate_ready_state["operator_decision_required"])
 
 
 if __name__ == "__main__":

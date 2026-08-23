@@ -16,6 +16,7 @@ THRESHOLD_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_11.json"
 BLOCKER_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_12.json"
 CORRECTION_RUNNING_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_13.json"
 CURRENT_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_14.json"
+GATE_READY_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_15.json"
 
 
 class GRT2WP1StateTests(unittest.TestCase):
@@ -42,11 +43,12 @@ class GRT2WP1StateTests(unittest.TestCase):
         blocker = json.loads(BLOCKER_STATE.read_text(encoding="utf-8"))
         correction_running = json.loads(CORRECTION_RUNNING_STATE.read_text(encoding="utf-8"))
         current = json.loads(CURRENT_STATE.read_text(encoding="utf-8"))
+        gate_ready = json.loads(GATE_READY_STATE.read_text(encoding="utf-8"))
         constitution = json.loads((REGISTRIES / "GRT_REPOSITORY_CONSTITUTION_v0_2.json").read_text(encoding="utf-8"))
-        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_14.json")
-        self.assertEqual(pointer["status"], "APPROVED")
-        self.assertEqual(pointer["packet_id"], "GRT2-G3-FULL-ENFORCEMENT-REPLAY-SURFACE-CORRECTION")
-        self.assertEqual(pointer["next_packet"], "GRT2-G3-READINESS-EVIDENCE")
+        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_15.json")
+        self.assertEqual(pointer["status"], "GATE_READY_OPERATOR_REQUIRED")
+        self.assertEqual(pointer["packet_id"], "GRT2-G3-GATE-READY")
+        self.assertEqual(pointer["next_packet"], "GRT2-G3-OPERATOR-DECISION")
         self.assertEqual(readiness["status"], "BLOCKED")
         self.assertEqual(readiness["packet_id"], "GRT2-G2-READINESS-EVIDENCE")
         self.assertEqual(readiness["next_packet"], "GRT2-G2-QUALIFICATION-EVIDENCE")
@@ -74,6 +76,9 @@ class GRT2WP1StateTests(unittest.TestCase):
         self.assertEqual(current["active_enforcement"], "LIMITED_NEW_ARTIFACT_ENFORCEMENT")
         self.assertEqual(current["constitution_status"], "PROPOSED_UNADMITTED")
         self.assertIsNone(current["debt_floor_generation"])
+        self.assertEqual(gate_ready["status"], "GATE_READY_OPERATOR_REQUIRED")
+        self.assertEqual(gate_ready["authority_effect"], "NONE_GATE_PREPARATION_ONLY")
+        self.assertTrue(gate_ready["operator_decision_required"])
         self.assertEqual(current["authority_delta"], "NONE_CORRECTIVE_IMPLEMENTATION_ONLY")
 
         self.assertEqual(state["status"], "APPROVED")
