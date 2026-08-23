@@ -95,10 +95,10 @@ def test_activation_revalidation_and_fail_closed_rollback_are_explicit() -> None
     stabilization = load(G3 / "GRT2_POST_G3_STABILIZATION_LEDGER.json")
     for record in (revalidation, transaction, rollback, stabilization):
         assert_logical_hash(record)
-    assert revalidation["main_moved_after_gate_ready"] is True
-    assert revalidation["activation_predecessor_commit"] == "4890bdab207923b1da86cd2c280a12be473a7832"
-    assert revalidation["activation_predecessor_tree"] == "d4331e65fb0156bfe7f8a13cac5cc541922acb88"
+    assert revalidation["activation_predecessor_binding"] == "LATE_PHYSICAL_PLACEMENT_CURRENT_PROTECTED_MAIN_AT_FINAL_INTEGRATION"
+    assert revalidation["main_movement_policy"] == "ANY_POST_GATE_READY_MAIN_MOVEMENT_REQUIRES_EXACT_LATE_BOUND_GRT_REVALIDATION"
     assert revalidation["status"] == "PENDING_CI_EXACT_REVALIDATION"
+    assert transaction["activation_predecessor_binding"] == "LATE_PHYSICAL_PLACEMENT_CURRENT_PROTECTED_MAIN_AT_FINAL_INTEGRATION"
     assert transaction["required_pre_merge_proof"]["profile"] == "GRT-EXACT"
     assert transaction["required_pre_merge_proof"]["base_snapshot_must_equal_approved_floor"] is True
     assert transaction["required_pre_merge_proof"]["candidate_snapshot_must_equal_generation_0_floor"] is True
