@@ -3,11 +3,13 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from tests.research_operations.p1cdi._court_state import assert_post_review5_current_state
+
 
 ROOT = Path(__file__).resolve().parents[3]
 
 
-def test_remediation_court_record_grants_no_g4_pass_or_successor_authority() -> None:
+def test_remediation_court_record_grants_no_g4_pass_or_successor_authority_at_its_generation() -> None:
     base = ROOT / "docs/programmes/p1cdi-v0-1/wp4"
     implementation = json.loads((base / "P1CDII_WP4_REMEDIATION_1_IMPLEMENTATION_PACKET_v0_1.json").read_text())
     qa = json.loads((base / "P1CDII_WP4_REMEDIATION_1_QA_PACKET_v0_1.json").read_text())
@@ -22,8 +24,6 @@ def test_remediation_court_record_grants_no_g4_pass_or_successor_authority() -> 
     assert decision["decision"] == "PASS_REMEDIATION"
     assert decision["p1cdii_g4_alg"]["current_status"] == "UNRESOLVED"
     assert decision["successor_beyond_wp4_authorised"] is False
-    assert state["status"] == "GATE_READY"
-    assert state["packets"]["P1CDII-G4-ALG"]["status"] == "BLOCKED"
     assert state["packets"]["P1CDII-WP4-REMEDIATION-1"]["status"] == "COMPLETED"
     assert state["packets"]["P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW"]["status"] == "BLOCKED"
     assert state["packets"]["P1CDII-WP4-REMEDIATION-2"]["status"] == "COMPLETED"
@@ -33,5 +33,4 @@ def test_remediation_court_record_grants_no_g4_pass_or_successor_authority() -> 
     assert state["packets"]["P1CDII-WP4-REMEDIATION-4"]["status"] == "COMPLETED"
     assert state["packets"]["P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-4"]["status"] == "BLOCKED"
     assert state["packets"]["P1CDII-WP4-REMEDIATION-5"]["status"] == "COMPLETED"
-    assert state["packets"]["P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-5"]["status"] == "READY"
-    assert state["next_packet"] == "P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-5"
+    assert_post_review5_current_state(state)
