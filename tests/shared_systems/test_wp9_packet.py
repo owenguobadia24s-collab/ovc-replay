@@ -42,12 +42,14 @@ def test_wp9_census_pins_esl_and_all_historical_identities() -> None:
         assert blob == item["git_blob_sha"], item["path"]
 
 
-def test_wp9_current_state_and_gate_are_shadow_only() -> None:
-    pointer = load(ROOT / "registries/implementation/shared_systems_v0_1/CURRENT_STATE_POINTER.json")
-    assert (pointer["current_packet"], pointer["current_gate"], pointer["next_packet"]) == (
+def test_wp9_historical_state_and_gate_are_shadow_only() -> None:
+    state = load(
+        ROOT / "registries/implementation/shared_systems_v0_1/"
+        "SHSI_PROGRAMME_STATE_v0_11_WP9.json"
+    )
+    assert (state["current_packet"], state["current_gate"], state["next_packet"]) == (
         "SHSI-WP9", "SHSI-G9", "SHSI-WP10"
     )
-    state = load(ROOT / pointer["state_record"])
     assert state["completed_packets"][-1]["packet_id"] == "SHSI-WP8"
     assert state["authority_delta"] == "NONE"
     gate = load(PROGRAMME / "gates/SHSI_G9_ESL_SHADOW_CLOSEOUT_v0_1.json")
