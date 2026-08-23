@@ -38,6 +38,15 @@ def main() -> int:
     parser.add_argument("--readiness-artifact-id", type=int, required=True)
     parser.add_argument("--readiness-artifact-digest", required=True)
     parser.add_argument("--readiness-file-sha256", required=True)
+    parser.add_argument("--final-assurance-evidence", required=True)
+    parser.add_argument("--final-assurance-run-id", type=int, required=True)
+    parser.add_argument("--final-assurance-artifact-id", type=int, required=True)
+    parser.add_argument("--final-assurance-artifact-digest", required=True)
+    parser.add_argument("--final-assurance-file-sha256", required=True)
+    parser.add_argument("--final-assurance-base-sha", required=True)
+    parser.add_argument("--final-assurance-base-tree", required=True)
+    parser.add_argument("--final-assurance-candidate-sha", required=True)
+    parser.add_argument("--final-assurance-candidate-tree", required=True)
     parser.add_argument("--pip-id", required=True)
     parser.add_argument("--vit-qualification-id", required=True)
     parser.add_argument("--authority-manifest-id", required=True)
@@ -56,6 +65,7 @@ def main() -> int:
 
     root = Path(args.repository_root).resolve()
     evidence = json.loads(Path(args.readiness_evidence).read_text(encoding="utf-8"))
+    final_evidence = json.loads(Path(args.final_assurance_evidence).read_text(encoding="utf-8"))
     if evidence.get("status") != "GATE_READY" or evidence.get("qa_disposition") != "PASS" or evidence.get("blockers"):
         raise RuntimeError("GRT2_G3_READINESS_EVIDENCE_NOT_PASS")
     if evidence.get("b0_member_count") != 569 or evidence.get("b0_membership_sha256") != B0_HASH:
@@ -64,16 +74,24 @@ def main() -> int:
         raise RuntimeError("GRT2_G3_GOVERNING_IDENTITY_MISMATCH")
     if evidence.get("candidate_tree") != args.readiness_merge_tree:
         raise RuntimeError("GRT2_G3_PHYSICAL_TREE_MISMATCH")
+    if final_evidence.get("status") != "GATE_READY" or final_evidence.get("qa_disposition") != "PASS" or final_evidence.get("blockers"):
+        raise RuntimeError("GRT2_G3_FINAL_ASSURANCE_NOT_PASS")
+    if final_evidence.get("b0_member_count") != 569 or final_evidence.get("b0_membership_sha256") != B0_HASH:
+        raise RuntimeError("GRT2_G3_FINAL_ASSURANCE_B0_IDENTITY_MISMATCH")
+    if final_evidence.get("constitution_hash") != CONSTITUTION_HASH or final_evidence.get("performance_budget_hash") != PERFORMANCE_HASH:
+        raise RuntimeError("GRT2_G3_FINAL_ASSURANCE_GOVERNING_IDENTITY_MISMATCH")
+    if final_evidence.get("candidate_commit") != args.final_assurance_candidate_sha or final_evidence.get("candidate_tree") != args.final_assurance_candidate_tree:
+        raise RuntimeError("GRT2_G3_FINAL_ASSURANCE_CANDIDATE_MISMATCH")
 
-    floor = dict(evidence["candidate_debt_floor_generation_0"])
-    floor["predecessor_commit"] = args.readiness_merge_sha
-    floor["predecessor_tree"] = args.readiness_merge_tree
+    floor = dict(final_evidence["candidate_debt_floor_generation_0"])
+    floor["predecessor_commit"] = args.final_assurance_candidate_sha
+    floor["predecessor_tree"] = args.final_assurance_candidate_tree
     floor.pop("floor_hash", None)
     floor["floor_hash"] = canonical_sha256(floor)
     floor_path = "docs/programmes/grt-v0-2/g3/GRT2_G3_PROPOSED_DEBT_FLOOR_GENERATION_0.json"
     _write(root / floor_path, floor)
 
-    evidence_source = {
+    readiness_source = {
         "workflow_run_id": args.readiness_run_id,
         "artifact_id": args.readiness_artifact_id,
         "artifact_name": "grt2-g3-readiness-evidence",
@@ -82,6 +100,16 @@ def main() -> int:
         "semantic_evidence_hash": evidence["evidence_hash"],
         "qualified_candidate_commit": evidence["candidate_commit"],
         "qualified_candidate_tree": evidence["candidate_tree"],
+    }
+    final_assurance_source = {
+        "workflow_run_id": args.final_assurance_run_id,
+        "artifact_id": args.final_assurance_artifact_id,
+        "artifact_name": "grt2-g3-readiness-evidence",
+        "artifact_digest": args.final_assurance_artifact_digest,
+        "evidence_file_sha256": args.final_assurance_file_sha256,
+        "semantic_evidence_hash": final_evidence["evidence_hash"],
+        "qualified_candidate_commit": final_evidence["candidate_commit"],
+        "qualified_candidate_tree": final_evidence["candidate_tree"],
     }
     completion = _hashed({
         "schema": "ovc-grt2-g3-readiness-completion-receipt/v1",
@@ -94,7 +122,7 @@ def main() -> int:
         "dependency_frontier_id": args.dependency_frontier_id,
         "binding_policy": "LATE_PHYSICAL_PLACEMENT",
         "vit_qualification_id": args.vit_qualification_id,
-        "readiness_evidence": evidence_source,
+        "readiness_evidence": readiness_source,
         "physical_materialisation": {
             "merge_commit": args.readiness_merge_sha,
             "merge_tree": args.readiness_merge_tree,
@@ -157,6 +185,8 @@ def main() -> int:
             f"GRT2-G3-READINESS-EVIDENCE:{evidence['evidence_hash']}",
             f"GRT2-G3-READINESS-MERGE:{args.readiness_merge_sha}",
             f"GRT2-G3-READINESS-COMPLETION:{completion['logical_sha256']}",
+            f"GRT2-G3-FINAL-ASSURANCE:{final_evidence['evidence_hash']}",
+            f"CURRENT-PROTECTED-MAIN:{args.final_assurance_base_sha}",
             f"IMMUTABLE-B0:{B0_HASH}",
         ),
         predecessor_requirement="PHYSICAL_MATERIALISATION_REQUIRED",
@@ -213,17 +243,17 @@ def main() -> int:
         "qa_recommendation": "PASS",
         "acceptance": {
             "immutable_b0_569": "PASS",
-            "all_current_observer_conditions_source_classified": f"PASS_{evidence['transition_reconciliation']['current_condition_classification_count']}",
-            "unresolved_current_conditions": evidence["transition_reconciliation"]["unresolved_current_condition_count"],
-            "transition_new_debt": evidence["transition_reconciliation"]["transition_new_debt_count"],
+            "all_current_observer_conditions_source_classified": f"PASS_{final_evidence['transition_reconciliation']['current_condition_classification_count']}",
+            "unresolved_current_conditions": final_evidence["transition_reconciliation"]["unresolved_current_condition_count"],
+            "transition_new_debt": final_evidence["transition_reconciliation"]["transition_new_debt_count"],
             "baseline_expansion_zero": "PASS",
-            "full_current_tree_evaluable": f"PASS_{evidence['full_current_snapshot']['evaluation_count']}_EVALUATIONS",
-            "full_current_not_evaluable": evidence["full_current_snapshot"]["not_evaluable_count"],
-            "b0_to_current_v0_2_lineage": evidence["b0_lineage_reconciliation"]["status"],
-            "unresolved_lineage": evidence["b0_lineage_reconciliation"]["unresolved_lineage_count"],
+            "full_current_tree_evaluable": f"PASS_{final_evidence['full_current_snapshot']['evaluation_count']}_EVALUATIONS",
+            "full_current_not_evaluable": final_evidence["full_current_snapshot"]["not_evaluable_count"],
+            "b0_to_current_v0_2_lineage": final_evidence["b0_lineage_reconciliation"]["status"],
+            "unresolved_lineage": final_evidence["b0_lineage_reconciliation"]["unresolved_lineage_count"],
             "pilot_full_g3_shadow": "PASS_8_OF_8",
             "historical_full_g3_shadow": "PASS_10_OF_10",
-            "deterministic_replay": evidence["deterministic_repeat"]["status"],
+            "deterministic_replay": final_evidence["deterministic_repeat"]["status"],
             "candidate_floor_reproducible": "PASS",
             "targeted_repository_vit_siq_grt_parity_profile": "PASS",
             "exact_tree_equality": "PASS",
@@ -235,7 +265,7 @@ def main() -> int:
             "Full GRT-EXACT required enforcement remains inactive.",
             "GRT2-G3 activation is operator-reserved.",
         ],
-        "evidence": evidence_source,
+        "evidence": final_assurance_source,
         "completion_receipt": completion_path,
         "authority_effect": "NONE_QA_ONLY",
     })
@@ -273,20 +303,22 @@ def main() -> int:
         "gate_id": "GRT2-G3",
         "title": "Repository Constitution v0.2 / DebtFloor generation 0 / full GRT-EXACT activation",
         "status": "GATE_READY_OPERATOR_REQUIRED",
-        "current_protected_main_at_preparation": {"commit": args.readiness_merge_sha, "tree": args.readiness_merge_tree},
+        "current_protected_main_at_preparation": {"commit": args.final_assurance_base_sha, "tree": args.final_assurance_base_tree},
+        "exact_final_assurance_candidate": {"commit": args.final_assurance_candidate_sha, "tree": args.final_assurance_candidate_tree},
         "readiness_packet": {"pr": 1252, "merge_commit": args.readiness_merge_sha, "merge_tree": args.readiness_merge_tree, "completion_receipt": completion_path},
         "completed_packets": ["GRT2-WP0", "GRT2-WP1", "GRT2-WP2", "GRT2-WP3A", "GRT2-WP3B", "GRT2-WP3C", "GRT2-WP3D", "GRT2-WP3E", "GRT2-G2", "GRT2-G2.5", "GRT2-G3-READINESS-EVIDENCE"],
-        "readiness_qualification": evidence_source,
-        "deterministic_replay": {"status": evidence["deterministic_repeat"]["status"], "pilot_candidates": 8, "historical_candidates": 10},
+        "readiness_qualification": readiness_source,
+        "exact_final_assurance": final_assurance_source,
+        "deterministic_replay": {"status": final_evidence["deterministic_repeat"]["status"], "pilot_candidates": 8, "historical_candidates": 10},
         "b0_lineage_and_provenance": {
             "member_count": 569,
             "membership_sha256": B0_HASH,
-            "lineage_status": evidence["b0_lineage_reconciliation"]["status"],
-            "unresolved_lineage_count": evidence["b0_lineage_reconciliation"]["unresolved_lineage_count"],
-            "current_observer_condition_count": evidence["transition_reconciliation"]["current_observer_condition_count"],
-            "source_classified_condition_count": evidence["transition_reconciliation"]["current_condition_classification_count"],
-            "transition_new_debt_count": evidence["transition_reconciliation"]["transition_new_debt_count"],
-            "baseline_expansion_zero_proven": evidence["transition_reconciliation"]["baseline_expansion_zero_proven"],
+            "lineage_status": final_evidence["b0_lineage_reconciliation"]["status"],
+            "unresolved_lineage_count": final_evidence["b0_lineage_reconciliation"]["unresolved_lineage_count"],
+            "current_observer_condition_count": final_evidence["transition_reconciliation"]["current_observer_condition_count"],
+            "source_classified_condition_count": final_evidence["transition_reconciliation"]["current_condition_classification_count"],
+            "transition_new_debt_count": final_evidence["transition_reconciliation"]["transition_new_debt_count"],
+            "baseline_expansion_zero_proven": final_evidence["transition_reconciliation"]["baseline_expansion_zero_proven"],
         },
         "current_authority_state": {
             "constitution_status": "PROPOSED_UNADMITTED",
@@ -305,6 +337,7 @@ def main() -> int:
         "acceptance_conditions": qa["acceptance"],
         "assurance": {
             "targeted_readiness_run_id": args.readiness_run_id,
+            "exact_final_readiness_run_id": args.final_assurance_run_id,
             "repository_and_parity_run_id": args.pr_tests_run_id,
             "vit_siq_profile_merge_readiness_run_id": args.pr_tiered_run_id,
             "post_merge_main_assurance_run_id": args.main_tests_run_id,
@@ -325,7 +358,7 @@ def main() -> int:
         "warnings": qa["warnings"],
         "unresolved_issues": [],
         "changed_files": changed_files,
-        "external_artifacts": [evidence_source],
+        "external_artifacts": [readiness_source, final_assurance_source],
         "rollback": {
             "before_operator_pass": "Close or supersede this authority-inert gate packet; retain #1252, B0 and all readiness evidence.",
             "after_operator_pass": "Use an explicit operator-governed rollback/incident decision; preserve the activation decision, DebtFloor generation 0, finding history and Git history; never force-push or broaden grandfathering.",
@@ -345,7 +378,8 @@ def main() -> int:
         "schema": "ovc-grt2-g3-evidence-index/v1",
         "programme_id": PROGRAMME_ID,
         "gate_id": "GRT2-G3",
-        "readiness_evidence": evidence_source,
+        "readiness_evidence": readiness_source,
+        "exact_final_assurance": final_assurance_source,
         "completion_receipt": completion_path,
         "qa_packet": qa_path,
         "gate_packet": gate_path,
@@ -366,10 +400,13 @@ def main() -> int:
         "packet_id": "GRT2-G3-GATE-READY",
         "gate_id": "GRT2-G3",
         "status": "GATE_READY_OPERATOR_REQUIRED",
-        "baseline_commit": args.readiness_merge_sha,
-        "baseline_tree": args.readiness_merge_tree,
+        "baseline_commit": args.final_assurance_base_sha,
+        "baseline_tree": args.final_assurance_base_tree,
         "readiness_merge_commit": args.readiness_merge_sha,
         "readiness_evidence_hash": evidence["evidence_hash"],
+        "exact_final_assurance_commit": args.final_assurance_candidate_sha,
+        "exact_final_assurance_tree": args.final_assurance_candidate_tree,
+        "exact_final_assurance_evidence_hash": final_evidence["evidence_hash"],
         "gate_packet": gate_path,
         "qa_packet": qa_path,
         "completion_receipt": completion_path,
