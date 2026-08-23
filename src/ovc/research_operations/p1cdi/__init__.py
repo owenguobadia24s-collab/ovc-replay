@@ -3,9 +3,10 @@
 P1CDII-G2-ALG qualifies the exact resolver mechanics but does not grant operational
 publication. WP3 bootstrap is historical-only. WP4/G4 qualifies deterministic
 identity/evidence/correspondence. WP5 adds activity/currentness, demand, one-way RCCR
-referral and explicitly non-actuating NEXT_DISCOVERY_WORK machinery. This package
-grants no owner-scientific, candidate, Validation, operational-read, intake-write or
-actuation authority.
+referral and explicitly non-actuating NEXT_DISCOVERY_WORK machinery. WP6 adds
+candidate ancestry and mechanical-readiness projections behind a hard DMRP candidate,
+freeze and C-admission firewall. This package grants no owner-scientific, candidate,
+Validation, operational-read, intake-write or actuation authority.
 """
 
 from .bootstrap import (
@@ -13,6 +14,15 @@ from .bootstrap import (
     freeze_source_census,
     reconcile_source_census,
     scan_repository_source_subjects,
+)
+from .candidate_firewall import (
+    assert_candidate_firewall,
+    assert_no_outcome_repair,
+    bind_source_disposition,
+    build_candidate_derivation_manifest,
+    build_proposal_readiness_assessment,
+    preserve_frozen_candidate,
+    project_freeze_disposition,
 )
 from .currentness import evaluate_two_point_currentness, require_g2_alg_for_pointer
 from .demand import (
@@ -47,7 +57,11 @@ from .source_resolution import build_source_frontier, resolve_owner_predicate
 __all__ = [
     "CONFORMANCE_SEPARATION_PRINCIPLE",
     "assess_demand_eligibility",
+    "assert_candidate_firewall",
+    "assert_no_outcome_repair",
     "assert_non_actuating",
+    "bind_source_disposition",
+    "build_candidate_derivation_manifest",
     "build_discovery_demand",
     "build_discovery_work_recommendation",
     "build_gap_demand",
@@ -55,6 +69,7 @@ __all__ = [
     "build_historical_membership_events",
     "build_lifecycle_event",
     "build_non_actuation_proof",
+    "build_proposal_readiness_assessment",
     "build_rccr_referral",
     "build_semantic_projection",
     "build_source_frontier",
@@ -67,6 +82,8 @@ __all__ = [
     "exact_semantic_equal",
     "projection_bytes",
     "freeze_source_census",
+    "preserve_frozen_candidate",
+    "project_freeze_disposition",
     "project_inventory_activity",
     "reconcile_source_census",
     "replay_as_of",
