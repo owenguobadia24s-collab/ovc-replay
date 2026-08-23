@@ -1,0 +1,45 @@
+{
+  "name": "OVC main protection",
+  "target": "branch",
+  "enforcement": "active",
+  "bypass_actors": [],
+  "conditions": {
+    "ref_name": {
+      "exclude": [],
+      "include": ["refs/heads/refs", "refs/heads/heads", "refs/heads/main"]
+    }
+  },
+  "rules": [
+    {"type": "deletion"},
+    {"type": "non_fast_forward"},
+    {
+      "type": "pull_request",
+      "parameters": {
+        "required_approving_review_count": 0,
+        "dismiss_stale_reviews_on_push": false,
+        "required_reviewers": [],
+        "require_code_owner_review": false,
+        "require_last_push_approval": false,
+        "required_review_thread_resolution": true,
+        "allowed_merge_methods": ["squash"]
+      }
+    },
+    {
+      "type": "required_status_checks",
+      "parameters": {
+        "strict_required_status_checks_policy": false,
+        "do_not_enforce_on_create": false,
+        "required_status_checks": [
+          {"context": "OVC merge readiness", "integration_id": 15368}
+        ]
+      }
+    }
+  ],
+  "ovc_change_control": {
+    "ruleset_id": 20229411,
+    "packet_id": "DSAI3V-VIT-RULESET-COMPAT-WP0",
+    "only_semantic_delta": "strict_required_status_checks_policy:true->false",
+    "live_application_required": true,
+    "do_not_remove_ovc_metadata_before_application": "OVC_METADATA_IS_NOT_PART_OF_GITHUB_API_PAYLOAD; apply only name/target/enforcement/bypass_actors/conditions/rules fields"
+  }
+}
