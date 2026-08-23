@@ -1,0 +1,44 @@
+{
+  "schema": "p1cdii-g5-delegated-decision/v0.1",
+  "programme_id": "OVC-P1CDI-CONFORMANCE-v0.1",
+  "plan_id": "OVC-P1CDI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
+  "packet_id": "P1CDII-WP5",
+  "gate_id": "P1CDII-G5",
+  "decision": "PASS",
+  "authority_source": "OPERATOR_RATIFIED_PLAN_DELEGATED_AUTO_EXECUTABLE_GATES",
+  "authority_delta": "NONE",
+  "acceptance": {
+    "implementation_conforms_to_frozen_wp1_contracts": true,
+    "qa_recommendation": "PASS_CONDITIONAL_ON_EXACT_FINAL_REQUIRED_ASSURANCE",
+    "blocking_warnings": [],
+    "unresolved_conflicts": [],
+    "candidate_or_scientific_authority_change": false,
+    "operational_authority_change": false
+  },
+  "rationale": "WP5 adds only deterministic, advisory Research Operations machinery already authorised by P1CDII-G0. It preserves source-owned scientific disposition, denies candidate mutation and capability activation, and proves NEXT_DISCOVERY_WORK cannot actuate execution or programme state.",
+  "tests": [
+    "REPOSITORY_REQUIRED_CI@32647302394:PASS",
+    "FINAL_HEAD_PROFILE@32647302440:PASS",
+    "VIT_ROUTING_PREFLIGHT:PASS",
+    "PYTEST_UNITTEST_PARITY:PASS",
+    "RUNNER_PARITY:PASS",
+    "SIQ_READY:PASS",
+    "INITIAL_MERGE_READINESS:PASS"
+  ],
+  "rollback": "Forward-revert WP5 code, fixture, tests and closeout only; preserve WP4/G4 PASS and prior immutable evidence.",
+  "preserved_denials": [
+    "OPERATIONAL_READ_ONLY",
+    "CONTINUOUS_INTAKE",
+    "CANDIDATE_OR_FREEZE_AUTHORITY",
+    "SCIENTIFIC_DISPOSITION_WRITE",
+    "VALIDATION",
+    "PUBLICATION",
+    "PROBABILITY",
+    "RISK",
+    "EXPOSURE",
+    "TRADING",
+    "EXECUTION",
+    "AGENT_WRITE"
+  ],
+  "next_packet": "P1CDII-WP6"
+}

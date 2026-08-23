@@ -1,0 +1,60 @@
+{
+  "schema": "p1cdii-wp5-synthetic-demand-fixture/v0.1",
+  "packet_id": "P1CDII-WP5",
+  "cases": [
+    {
+      "condition": "REPLICATION_NOT_ATTEMPTED_OR_FAILED",
+      "expected_demand_type": "REPLICATION",
+      "forbidden_inference": "CANDIDATE_WEAKNESS_OR_REJECTION"
+    },
+    {
+      "condition": "SINGLE_REPRESENTATION_ONLY",
+      "expected_demand_type": "ALTERNATE_REPRESENTATION",
+      "forbidden_inference": "REPRESENTATION_INDEPENDENCE"
+    },
+    {
+      "condition": "DEPENDENCE_INCOMPLETE",
+      "expected_demand_type": "INDEPENDENCE_ASSESSMENT",
+      "forbidden_inference": "INDEPENDENT_SUPPORT_COUNT"
+    },
+    {
+      "condition": "DENOMINATOR_UNKNOWN",
+      "expected_demand_type": "DENOMINATOR_RESOLUTION",
+      "forbidden_inference": "INCIDENCE_OR_PREVALENCE"
+    },
+    {
+      "condition": "CAPACITY_INCOMPLETE",
+      "expected_demand_type": "CAPACITY_COMPLETION",
+      "forbidden_inference": "NO_STABLE_STRUCTURE"
+    },
+    {
+      "condition": "CURRENT_STACK_CANNOT_ANSWER",
+      "expected_demand_type": "MISSING_INFORMATION",
+      "forbidden_inference": "CAPABILITY_ACTIVATION"
+    },
+    {
+      "condition": "STACK_SUFFICIENCY_UNRESOLVED",
+      "expected_demand_type": "STACK_SUFFICIENCY_REVIEW",
+      "forbidden_inference": "CAPABILITY_ACTIVATION"
+    }
+  ],
+  "rccr_cycle": {
+    "direction": "P1CDI_TO_RCCR_TO_P1CDI",
+    "source_mutation": "DENIED",
+    "capability_activation": "DENIED"
+  },
+  "next_discovery_work": {
+    "route_class": "ADVISORY_ONLY",
+    "actuation": "DENIED",
+    "write_capability": "NONE",
+    "negative_reachability": [
+      "DMRP_EXECUTION",
+      "IROF_EXECUTION",
+      "DSAI_RUN_CONTINUE",
+      "SOURCE_REPLAY",
+      "PROGRAMME_STATE_MUTATION",
+      "TASK_CREATION"
+    ]
+  },
+  "authority_effect": "NONE"
+}
