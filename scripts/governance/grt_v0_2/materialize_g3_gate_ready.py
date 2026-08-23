@@ -254,6 +254,12 @@ def main() -> int:
         "registries/implementation/grt_v0_2/CURRENT_STATE_POINTER.json",
         "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_15.json",
         "scripts/governance/grt_v0_2/materialize_g3_gate_ready.py",
+        "tests/governance/grt_v0_2/test_grt2_g2_5_gate_ready.py",
+        "tests/governance/grt_v0_2/test_grt2_g2_5_operator_pass.py",
+        "tests/governance/grt_v0_2/test_grt2_g2_final_state.py",
+        "tests/governance/grt_v0_2/test_grt2_g2_readiness.py",
+        "tests/governance/grt_v0_2/test_grt2_stack_797_closeout.py",
+        "tests/governance/grt_v0_2/test_grt2_wp1_state.py",
         "tests/governance/grt_v0_2/test_grt2_g3_gate_ready.py",
     ]
     gate = _hashed({
