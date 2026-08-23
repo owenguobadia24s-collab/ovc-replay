@@ -9,6 +9,7 @@ import pytest
 
 from ovc.shared_systems.dsai_active import (
     DSAI_ADOPTION_AUTHORITY,
+    DSAI_ADOPTION_AUTHORITY_REF,
     DSAI_ADOPTION_SURFACES,
     DSAIActiveConsumptionBinding,
     DSAIAdoptionError,
@@ -20,7 +21,6 @@ from ovc.shared_systems.dsai_active import (
 
 
 ROOT = Path(__file__).resolve().parents[2]
-AUTHORITY_REF = "9f2cae3ac70dca4baacbd52d597ba25d7428b14f945c91c4fdedd92e3d9770ba"
 SOURCE_PATHS = {
     "CURRENTNESS": "registries/implementation/dsai/CURRENT_STATE_POINTER.json",
     "ASSURANCE": "registries/implementation/dsai/OVC_DSAI_STATE_v0_31.json",
@@ -42,17 +42,20 @@ def binding() -> DSAIActiveConsumptionBinding:
         "OVC-SHARED-SYSTEMS-v0.1",
         "SHSI-WP10-TERMINAL-v0.1",
         tuple(sorted(DSAI_ADOPTION_SURFACES)),
-        AUTHORITY_REF,
+        DSAI_ADOPTION_AUTHORITY_REF,
     )
 
 
-def test_active_candidate_is_dsai_only_and_not_current() -> None:
+def test_active_candidate_is_dsai_only_exactly_authorized_and_not_current() -> None:
     candidate = binding()
     assert candidate.status == "ACTIVE_CANDIDATE"
     assert candidate.current_binding_changed is False
     assert candidate.authority_effect == DSAI_ADOPTION_AUTHORITY
+    assert candidate.authority_ref == DSAI_ADOPTION_AUTHORITY_REF
     with pytest.raises(DSAIAdoptionError, match="NON_DSAI_CONSUMER"):
         replace(candidate, consumer_programme_id="OVC-OPTB-ESL-CONFORMANCE-v0.1")
+    with pytest.raises(DSAIAdoptionError, match="AUTHORITY_REF_MISMATCH"):
+        replace(candidate, authority_ref="stale-authority")
     with pytest.raises(DSAIAdoptionError, match="PREMATURE_DSAI_CURRENT_BINDING_SWITCH"):
         replace(candidate, current_binding_changed=True)
 
