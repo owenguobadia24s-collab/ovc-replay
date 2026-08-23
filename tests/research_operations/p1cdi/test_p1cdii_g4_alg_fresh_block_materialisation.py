@@ -4,6 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 
+from tests.research_operations.p1cdi._court_state import assert_post_review5_current_state
 from tests.research_operations.p1cdi.test_p1cdii_wp1_schemas import validate_contract
 
 
@@ -18,7 +19,7 @@ BLOCKERS = [
 ]
 
 
-def test_fresh_independent_block_packet_is_exact_and_routes_only_remediation_2() -> None:
+def test_fresh_independent_block_packet_is_exact_and_historical_route_is_preserved() -> None:
     packet_bytes = PACKET.read_bytes()
     packet = json.loads(packet_bytes)
     state = json.loads(STATE.read_text(encoding="utf-8"))
@@ -30,12 +31,10 @@ def test_fresh_independent_block_packet_is_exact_and_routes_only_remediation_2()
     assert packet["successor_beyond_wp4_authorised"] is False
     assert [item["id"] for item in packet["discrepancies"]] == BLOCKERS
     fresh = state["packets"]["P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW"]
-    assert state["status"] == "GATE_READY"
     assert fresh["status"] == "BLOCKED"
     assert fresh["authority_delta"] == "NONE"
     assert fresh["blockers"] == BLOCKERS
     assert fresh["next_packet"] == "P1CDII-WP4-REMEDIATION-2"
-    assert state["packets"]["P1CDII-G4-ALG"]["status"] == "BLOCKED"
     assert state["packets"]["P1CDII-WP4-REMEDIATION-1"]["status"] == "COMPLETED"
     assert state["packets"]["P1CDII-WP4-REMEDIATION-2"]["status"] == "COMPLETED"
     assert state["packets"]["P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-2"]["status"] == "BLOCKED"
@@ -44,10 +43,7 @@ def test_fresh_independent_block_packet_is_exact_and_routes_only_remediation_2()
     assert state["packets"]["P1CDII-WP4-REMEDIATION-4"]["status"] == "COMPLETED"
     assert state["packets"]["P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-4"]["status"] == "BLOCKED"
     assert state["packets"]["P1CDII-WP4-REMEDIATION-5"]["status"] == "COMPLETED"
-    assert state["packets"]["P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-5"]["status"] == "READY"
-    assert state["next_packet"] == "P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-5"
-    assert state["authority"]["operational_read_only"] == "DENIED"
-    assert state["authority"]["continuous_intake"] == "DENIED"
+    assert_post_review5_current_state(state)
     validate_contract(
         json.loads((ROOT / "schemas/research_operations/p1cdi/p1cdii_programme_state_v0_1.schema.json").read_text()),
         state,
