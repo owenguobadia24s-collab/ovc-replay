@@ -16,7 +16,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from ovc.programme_genesis._topology_engine import build_repository_topology
 from ovc.programme_genesis.grt_v0_2.debt import B0_MEMBER_COUNT, B0_MEMBERSHIP_SHA256, baseline_membership_sha256, validate_baseline_members
-from ovc.programme_genesis.grt_v0_2.full_enforcement import REQUIRED_FULL_G3_RULE_FAMILIES, replay_full_g3_candidate
+from ovc.programme_genesis.grt_v0_2.full_enforcement_bounded_v2 import REQUIRED_FULL_G3_RULE_FAMILIES, replay_full_g3_candidate
 from ovc.programme_genesis.grt_v0_2.g3_floor import full_g3_snapshot_at_commit, propose_candidate_floor, reconcile_b0_to_current_full_g3
 from ovc.programme_genesis.grt_v0_2.g3_readiness import baseline_topology_from_member_records, reconcile_observer_transition_candidates, summarize_g3_readiness
 from ovc.programme_genesis.grt_v0_2.serialization import canonical_sha256
@@ -123,13 +123,23 @@ def main() -> int:
         blockers.append("B0_569_MEMBER_INTEGRITY_FAIL")
     baseline_topology = baseline_topology_from_member_records(b0_rows)
     current_topology = build_repository_topology(ROOT, ref=head)
-    transition = reconcile_observer_transition_candidates(baseline_topology=baseline_topology, current_topology=current_topology)
+    full_snapshot = full_g3_snapshot_at_commit(ROOT, commit=head)
+    transition = reconcile_observer_transition_candidates(
+        baseline_topology=baseline_topology,
+        current_topology=current_topology,
+        full_snapshot=full_snapshot,
+        constitution_status=str(constitution.get("status", "")),
+    )
     transition["baseline_membership_sha256"] = b0_membership
     transition["current_topology_sha256"] = current_topology.get("topology_sha256")
     transition["evidence_hash"] = canonical_sha256(transition)
 
-    full_snapshot = full_g3_snapshot_at_commit(ROOT, commit=head)
-    lineage = reconcile_b0_to_current_full_g3(b0_rows=b0_rows, current_topology=current_topology, full_snapshot=full_snapshot)
+    lineage = reconcile_b0_to_current_full_g3(
+        b0_rows=b0_rows,
+        current_topology=current_topology,
+        full_snapshot=full_snapshot,
+        transition_reconciliation=transition,
+    )
     floor = propose_candidate_floor(
         predecessor_commit=head,
         predecessor_tree=tree,

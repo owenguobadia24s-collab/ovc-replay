@@ -15,6 +15,7 @@ from pathlib import Path, PurePosixPath
 from typing import Any, Mapping, Sequence
 
 from . import full_enforcement as fe
+from . import full_enforcement_bounded as feb
 from .debt import B0_MEMBER_COUNT, B0_MEMBERSHIP_SHA256, baseline_membership_sha256, propose_debt_floor, validate_baseline_members, validate_debt_floor
 from .g3_readiness import anomaly_subject_key, anomaly_subject_projection, baseline_topology_from_member_records
 from .serialization import canonical_sha256
@@ -50,7 +51,10 @@ def full_g3_snapshot_at_commit(repository_root: Path | str, *, commit: str) -> d
     for source_path, text in texts.items():
         for target in fe._path_refs(text, known):
             referrers.setdefault(target, set()).add(source_path)
-    current_targets, pointer_errors = fe._pointer_targets(inventory=inventory, texts=texts)
+    current_targets, status_targets, pointer_violations = feb._pointer_catalog(
+        inventory=inventory,
+        texts=texts,
+    )
     programme_status_errors: list[str] = []
     for target in current_targets:
         if target not in texts:
@@ -68,8 +72,8 @@ def full_g3_snapshot_at_commit(repository_root: Path | str, *, commit: str) -> d
         texts=texts,
         impact_paths=sorted(known),
         referrers={key: sorted(value) for key, value in referrers.items()},
-        current_targets=current_targets,
-        pointer_errors=[*pointer_errors, *programme_status_errors],
+        current_targets=current_targets | status_targets,
+        pointer_errors=programme_status_errors,
         rule_bundle=rules,
         root_registry=fe._json(root, commit_id, fe.ROOT_REGISTRY_PATH),
         pgn_state=fe._json(root, commit_id, fe.PGN_STATE_PATH),
@@ -79,6 +83,7 @@ def full_g3_snapshot_at_commit(repository_root: Path | str, *, commit: str) -> d
         exact_diff_new_writes=(),
         rule_bundle_changed=False,
     )
+    feb._apply_pointer_violations(snapshot, violations=pointer_violations, rule_bundle=rules)
     snapshot["full_tree_component_count"] = len(inventory)
     snapshot["full_tree_text_component_count"] = len(texts)
     snapshot["snapshot_hash"] = canonical_sha256(snapshot)
@@ -109,16 +114,24 @@ def _evidence_refs(row: Mapping[str, Any]) -> set[str]:
     return {_stable_ref(value) for value in row.get("evidence_refs", [])}
 
 
-def reconcile_b0_to_current_full_g3(*, b0_rows: Sequence[Mapping[str, Any]], current_topology: Mapping[str, Any], full_snapshot: Mapping[str, Any]) -> dict[str, Any]:
+def reconcile_b0_to_current_full_g3(
+    *,
+    b0_rows: Sequence[Mapping[str, Any]],
+    current_topology: Mapping[str, Any],
+    full_snapshot: Mapping[str, Any],
+    transition_reconciliation: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
     validate_baseline_members(b0_rows)
     if len(b0_rows) != B0_MEMBER_COUNT or baseline_membership_sha256(b0_rows) != B0_MEMBERSHIP_SHA256:
         raise ValueError("GRT2_G3_B0_INTEGRITY_MISMATCH")
     baseline_topology = baseline_topology_from_member_records(b0_rows)
-    current_keys = {anomaly_subject_key(row, current_topology) for row in current_topology.get("anomalies", [])}
+    current_by_key = {
+        anomaly_subject_key(row, current_topology): row
+        for row in current_topology.get("anomalies", [])
+    }
     finding_rows = list(full_snapshot.get("findings", []))
-    evaluation_rows = [row for row in full_snapshot.get("evaluations", []) if row.get("evaluation_status") != "NOT_EVALUABLE"]
-    finding_refs = [(str(row["finding_id"]), _evidence_refs(row)) for row in finding_rows]
-    evaluation_refs = [(str(row.get("rule_id", "")), str(row.get("evaluation_status", "")), _evidence_refs(row)) for row in evaluation_rows]
+    condition_rows = list((transition_reconciliation or {}).get("current_condition_classifications", []))
+    conditions_by_key = {str(row["subject_key"]): row for row in condition_rows}
     entries: list[dict[str, Any]] = []
     unresolved: list[str] = []
     mapped_findings: set[str] = set()
@@ -130,23 +143,61 @@ def reconcile_b0_to_current_full_g3(*, b0_rows: Sequence[Mapping[str, Any]], cur
             entries.append({"baseline_member_id": member_id, "status": "UNRESOLVED", "reason": "BASELINE_ANOMALY_PROJECTION_MISSING"})
             continue
         subject_key = anomaly_subject_key(baseline_anomaly, baseline_topology)
-        if subject_key not in current_keys:
+        if subject_key not in current_by_key:
             entries.append({"baseline_member_id": member_id, "status": "RESOLVED_OBSERVER_CONDITION", "mapped_finding_ids": []})
             continue
-        refs = _member_refs(row)
-        matches = sorted(fid for fid, evidence in finding_refs if refs and refs & evidence)
-        if matches:
-            mapped_findings.update(matches)
-            entries.append({"baseline_member_id": member_id, "status": "MAPPED_CURRENT_ACTIONABLE", "mapped_finding_ids": matches})
+        classification = conditions_by_key.get(subject_key)
+        if classification is None:
+            unresolved.append(member_id)
+            entries.append({"baseline_member_id": member_id, "status": "UNRESOLVED", "mapped_finding_ids": [], "reason": "CURRENT_CONDITION_CLASSIFICATION_MISSING"})
             continue
-        evaluated = sorted({rule_id for rule_id, status, evidence in evaluation_refs if refs and refs & evidence and status in {"PASS", "NOT_APPLICABLE"}})
-        if evaluated:
-            entries.append({"baseline_member_id": member_id, "status": "HISTORICAL_NON_DEBT_UNDER_CURRENT_CONSTITUTION", "mapped_finding_ids": [], "evaluated_rule_ids": evaluated})
+        status = str(classification.get("classification", ""))
+        matches = sorted(str(value) for value in classification.get("mapped_finding_ids", []))
+        if status == "B0_MAPPED_CURRENT_ACTIONABLE" and matches:
+            mapped_findings.update(matches)
+            entries.append({"baseline_member_id": member_id, "status": "MAPPED_CURRENT_ACTIONABLE", "mapped_finding_ids": matches, "evaluated_rule_ids": list(classification.get("evaluated_rule_ids", []))})
+        elif status == "B0_MAPPED_LAWFUL_NON_DEBT":
+            entries.append({"baseline_member_id": member_id, "status": "HISTORICAL_NON_DEBT_UNDER_CURRENT_CONSTITUTION", "mapped_finding_ids": [], "evaluated_rule_ids": list(classification.get("evaluated_rule_ids", [])), "constitutional_basis": classification.get("constitutional_basis")})
         else:
             unresolved.append(member_id)
-            entries.append({"baseline_member_id": member_id, "status": "UNRESOLVED", "mapped_finding_ids": [], "reason": "NO_SOURCE_BOUND_V0_2_EVALUATION"})
+            entries.append({"baseline_member_id": member_id, "status": "UNRESOLVED", "mapped_finding_ids": matches, "reason": status or "NO_SOURCE_BOUND_V0_2_EVALUATION"})
     current_finding_ids = {str(row["finding_id"]) for row in finding_rows}
     late_discovered = sorted(current_finding_ids - mapped_findings)
+    finding_by_id = {str(row["finding_id"]): row for row in finding_rows}
+    condition_by_finding: dict[str, list[Mapping[str, Any]]] = {}
+    for row in condition_rows:
+        for finding in row.get("mapped_finding_ids", []):
+            condition_by_finding.setdefault(str(finding), []).append(row)
+    path_subjects = {
+        fe._subject(str(row["path"])): str(row["path"])
+        for row in current_topology.get("components", [])
+        if row.get("path")
+    }
+    late_records: list[dict[str, Any]] = []
+    unresolved_findings: list[str] = []
+    for finding_id in late_discovered:
+        finding = finding_by_id[finding_id]
+        observer_rows = condition_by_finding.get(finding_id, [])
+        evidence = sorted(_evidence_refs(finding))
+        subject_path = path_subjects.get(str(finding.get("subject_artifact_id", "")))
+        if observer_rows:
+            basis = "SOURCE_BOUND_NON_B0_OBSERVER_TO_V0_2_FINDING"
+        elif evidence or subject_path:
+            basis = "SOURCE_BOUND_FULL_G3_FINDING_WITHOUT_V0_1_OBSERVER_EQUIVALENT"
+        else:
+            basis = "UNRESOLVED_FINDING_SOURCE_LINEAGE"
+            unresolved_findings.append(finding_id)
+        late_records.append({
+            "finding_id": finding_id,
+            "status": "LATE_DISCOVERED_PREEXISTING_CURRENT_ACTIONABLE" if basis != "UNRESOLVED_FINDING_SOURCE_LINEAGE" else "UNRESOLVED",
+            "constitutional_rule_id": finding.get("rule_id"),
+            "subject_artifact_id": finding.get("subject_artifact_id"),
+            "subject_path": subject_path,
+            "evidence_refs": evidence,
+            "observer_subject_keys": sorted(str(row["subject_key"]) for row in observer_rows),
+            "classification_basis": basis,
+        })
+    unresolved_count = len(unresolved) + len(unresolved_findings)
     return {
         "schema": "ovc-grt2-g3-b0-full-g3-lineage-reconciliation/v1",
         "b0_member_count": len(b0_rows),
@@ -154,10 +205,12 @@ def reconcile_b0_to_current_full_g3(*, b0_rows: Sequence[Mapping[str, Any]], cur
         "current_full_g3_finding_count": len(current_finding_ids),
         "mapped_current_finding_count": len(mapped_findings),
         "late_discovered_preexisting_candidate_finding_ids": late_discovered,
+        "late_discovered_preexisting_findings": late_records,
         "unresolved_baseline_member_ids": unresolved,
+        "unresolved_current_finding_ids": unresolved_findings,
         "entries": entries,
-        "unresolved_lineage_count": len(unresolved) + len(late_discovered),
-        "status": "PASS" if not unresolved and not late_discovered else "INCOMPLETE",
+        "unresolved_lineage_count": unresolved_count,
+        "status": "PASS" if unresolved_count == 0 else "INCOMPLETE",
         "authority_effect": "NONE_LINEAGE_RECONCILIATION_ONLY",
     }
 

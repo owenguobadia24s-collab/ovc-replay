@@ -41,6 +41,17 @@ def test_authoritative_state_pointer_key_is_source_bound_current_target() -> Non
     assert violations == []
 
 
+def test_state_record_pointer_key_is_source_bound_current_target() -> None:
+    pointer = "registries/implementation/example/CURRENT_STATE_POINTER.json"
+    target = "registries/implementation/example/STATE_v10.json"
+    inventory = {pointer: {}, target: {}}
+    texts = {pointer: '{"programme_id":"P1","status":"COMPLETED","state_record":"registries/implementation/example/STATE_v10.json"}'}
+    current, status_targets, violations = _pointer_catalog(inventory=inventory, texts=texts)
+    assert current == {target}
+    assert target in status_targets
+    assert violations == []
+
+
 def test_provably_missing_pointer_target_becomes_r700_debt_not_adapter_blind_spot() -> None:
     pointer = "registries/implementation/example/CURRENT_STATE_POINTER.json"
     inventory = {pointer: {"blob_hash": "a" * 40}}

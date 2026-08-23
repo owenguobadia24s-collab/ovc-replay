@@ -690,7 +690,7 @@ def build_bootstrap_manifest() -> dict[str, Any]:
     schemas = [
         {
             "schema_id": name,
-            "path": str(SCHEMA_DIR / name),
+            "path": (SCHEMA_DIR / name).as_posix(),
             "dialect": DIALECT,
             "dependencies": dependencies[name],
         }
@@ -706,37 +706,37 @@ def build_bootstrap_manifest() -> dict[str, Any]:
         "schemas": schemas,
         "registry_validations": [
             {
-                "path": str(REGISTRY_DIR / "GRT_ROOT_REGISTRY_v0_2.json"),
+                "path": (REGISTRY_DIR / "GRT_ROOT_REGISTRY_v0_2.json").as_posix(),
                 "schema_id": "repository_root_record.schema.json",
                 "collection_field": "roots",
                 "identity_field": "root_id",
             },
             {
-                "path": str(REGISTRY_DIR / "GRT_ARTIFACT_CLASS_REGISTRY_v0_2.json"),
+                "path": (REGISTRY_DIR / "GRT_ARTIFACT_CLASS_REGISTRY_v0_2.json").as_posix(),
                 "schema_id": "artifact_class.schema.json",
                 "collection_field": "artifact_classes",
                 "identity_field": "artifact_class_id",
             },
             {
-                "path": str(REGISTRY_DIR / "GRT_LIFECYCLE_REGISTRY_v0_2.json"),
+                "path": (REGISTRY_DIR / "GRT_LIFECYCLE_REGISTRY_v0_2.json").as_posix(),
                 "schema_id": "lifecycle_class.schema.json",
                 "collection_field": "lifecycle_classes",
                 "identity_field": "lifecycle_class_id",
             },
             {
-                "path": str(REGISTRY_DIR / "GRT_RELATIONSHIP_REGISTRY_v0_2.json"),
+                "path": (REGISTRY_DIR / "GRT_RELATIONSHIP_REGISTRY_v0_2.json").as_posix(),
                 "schema_id": "artifact_relationship.schema.json",
                 "collection_field": "relationship_types",
                 "identity_field": "relationship_type",
             },
             {
-                "path": str(REGISTRY_DIR / "GRT_RULE_BUNDLE_v0_2.json"),
+                "path": (REGISTRY_DIR / "GRT_RULE_BUNDLE_v0_2.json").as_posix(),
                 "schema_id": "grt_conformance_rule.schema.json",
                 "collection_field": "rules",
                 "identity_field": "rule_id",
             },
             {
-                "path": str(REGISTRY_DIR / "GRT_CURRENT_STATE_OBLIGATION_REGISTRY_v0_1.json"),
+                "path": (REGISTRY_DIR / "GRT_CURRENT_STATE_OBLIGATION_REGISTRY_v0_1.json").as_posix(),
                 "schema_id": "current_state_obligation.schema.json",
                 "collection_field": "obligations",
                 "identity_field": "obligation_id",

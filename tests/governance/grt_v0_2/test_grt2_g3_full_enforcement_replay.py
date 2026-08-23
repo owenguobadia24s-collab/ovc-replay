@@ -90,6 +90,15 @@ def test_import_only_dependency_never_becomes_hard_current_dependency() -> None:
     assert rows and all(row["evaluation_status"] == "NOT_APPLICABLE" for row in rows)
 
 
+def test_fixture_dependency_example_is_not_promoted_to_live_dependency_authority() -> None:
+    path = "fixtures/example/dependency_graph.json"
+    inv = {path: {"blob_hash": "a" * 40}}
+    texts = {path: '{"edges":[{"edge_type":"REQUIRES","from_node":"A","to_node":"B","hardness":"HARD","source_kind":"SOURCE_EXPLICIT","status":"ACCEPTED"}]}' }
+    result = snapshot(inventory=inv, texts=texts, impact=[path])
+    assert not any(row["rule_id"] in {"GRT-R500", "GRT-R600"} for row in result["evaluations"])
+    assert not result["not_evaluable"]
+
+
 def test_orphan_schema_and_unregistered_workflow_are_actionable_findings() -> None:
     inv = {"schemas/example.schema.json": {"blob_hash": "a" * 40}, ".github/workflows/unregistered.yml": {"blob_hash": "b" * 40}}
     result = snapshot(inventory=inv, texts={path: "" for path in inv}, impact=list(inv))

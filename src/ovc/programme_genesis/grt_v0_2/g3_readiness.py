@@ -32,6 +32,35 @@ _ZERO_TOLERANCE_FIELDS = (
     "scope_leakage_count",
 )
 
+# This is an observer-to-Constitution crosswalk, not a rule amendment.  Codes
+# omitted from the map have no debt-producing rule in the immutable v0.2 bundle
+# and are recorded explicitly as lawful observer-only conditions.
+_OBSERVER_RULE_CROSSWALK: dict[str, tuple[str, ...]] = {
+    "CONFLICTING_PROGRAMME_OWNERSHIP": ("GRT-R200",),
+    "DUPLICATE_COMPONENT_OWNERSHIP": ("GRT-R200",),
+    "GENESIS_TOPOLOGY_CONFLICT": ("GRT-R300",),
+    "IMPLEMENTATION_WITHOUT_GENESIS_CROSSWALK": ("GRT-R300",),
+    "IMPLEMENTATION_WITHOUT_PROGRAMME_OWNER": ("GRT-R200",),
+    "MISSING_AUTHORITY_RECORD": ("GRT-R300",),
+    "ORPHAN_SCHEMA": ("GRT-R421",),
+    "ORPHAN_WORKFLOW": ("GRT-R805",),
+    "SHADOW_ACTIVE_MISMATCH": ("GRT-R700",),
+    "STALE_DOCUMENTATION": ("GRT-R700",),
+    "STALE_PROGRAMME_STATE": ("GRT-R700",),
+    "SUPERSEDED_COMPONENT_STILL_REFERENCED": ("GRT-R600",),
+    "UNRESOLVED_DEPENDENCY": ("GRT-R500",),
+}
+
+_RULE_FAMILY = {
+    "GRT-R200": "OWNERSHIP",
+    "GRT-R300": "GENESIS_BINDINGS",
+    "GRT-R421": "COMPANIONS_AND_ORPHANS",
+    "GRT-R500": "DEPENDENCIES",
+    "GRT-R600": "SUPERSESSION",
+    "GRT-R700": "CURRENT_STATE_AND_DOCUMENTATION",
+    "GRT-R805": "WORKFLOWS_AND_TOOLING",
+}
+
 
 def _component_path_map(topology: Mapping[str, Any]) -> dict[str, str]:
     return {
@@ -83,6 +112,154 @@ def anomaly_subject_projection(anomaly: Mapping[str, Any], topology: Mapping[str
 
 def anomaly_subject_key(anomaly: Mapping[str, Any], topology: Mapping[str, Any]) -> str:
     return canonical_sha256(anomaly_subject_projection(anomaly, topology))
+
+
+def _repository_path(value: Any) -> str | None:
+    text = _stable_source_ref(value)
+    if text.startswith("git-tree:"):
+        return None
+    if text.startswith("git:"):
+        text = text[4:]
+    prefixes = (
+        ".github/", "apps/", "contracts/", "docs/", "fixtures/", "legacy/",
+        "plans/", "records/", "registries/", "schemas/", "scripts/", "src/",
+        "tests/", "tools/",
+    )
+    return text if text.startswith(prefixes) else None
+
+
+def _subject_id(path: str) -> str:
+    return "GRT.ARTIFACT.PATH." + canonical_sha256({"path": path})[:24]
+
+
+def _condition_source_paths(anomaly: Mapping[str, Any], topology: Mapping[str, Any]) -> list[str]:
+    component_paths = _component_path_map(topology)
+    paths = {
+        path
+        for value in anomaly.get("source_evidence", [])
+        if (path := _repository_path(value)) is not None
+    }
+    paths.update(
+        component_paths[str(component_id)]
+        for component_id in anomaly.get("affected_component_ids", [])
+        if str(component_id) in component_paths
+    )
+    return sorted(paths)
+
+
+def _classify_current_condition(
+    anomaly: Mapping[str, Any],
+    topology: Mapping[str, Any],
+    full_snapshot: Mapping[str, Any],
+    *,
+    b0_mapped: bool,
+    constitution_status: str,
+) -> dict[str, Any]:
+    key = anomaly_subject_key(anomaly, topology)
+    code = str(anomaly.get("anomaly_code", ""))
+    paths = _condition_source_paths(anomaly, topology)
+    subject_ids = {_subject_id(path) for path in paths}
+    stable_paths = {"git:" + path for path in paths} | set(paths)
+    rule_ids = _OBSERVER_RULE_CROSSWALK.get(code, ())
+    base = {
+        "subject_key": key,
+        "observer_anomaly_id": anomaly.get("anomaly_id"),
+        "observer_code": code,
+        "source_paths": paths,
+        "b0_lineage": "B0_MAPPED" if b0_mapped else "NON_B0",
+        "extent": anomaly_extent(anomaly),
+    }
+    if not rule_ids:
+        return {
+            **base,
+            "classification": "B0_MAPPED_LAWFUL_NON_DEBT" if b0_mapped else "LAWFUL_NON_B0_OBSERVER_ONLY",
+            "constitutional_basis": "NO_DEBT_PRODUCING_V0_2_RULE_FOR_OBSERVER_CODE",
+            "evaluated_rule_ids": [],
+            "mapped_finding_ids": [],
+        }
+
+    evaluations = []
+    for row in full_snapshot.get("evaluations", []):
+        if str(row.get("rule_id", "")) not in rule_ids:
+            continue
+        evidence = {_stable_source_ref(value) for value in row.get("evidence_refs", [])}
+        if str(row.get("subject_artifact_id", "")) in subject_ids or evidence & stable_paths:
+            evaluations.append(row)
+    findings = []
+    for row in full_snapshot.get("findings", []):
+        if str(row.get("rule_id", "")) not in rule_ids:
+            continue
+        evidence = {_stable_source_ref(value) for value in row.get("evidence_refs", [])}
+        if str(row.get("subject_artifact_id", "")) in subject_ids or evidence & stable_paths:
+            findings.append(str(row["finding_id"]))
+
+    evaluated_rule_ids = sorted({str(row["rule_id"]) for row in evaluations})
+    if any(row.get("evaluation_status") == "NOT_EVALUABLE" for row in evaluations):
+        return {
+            **base,
+            "classification": "UNRESOLVED_V0_2_EVALUATION",
+            "constitutional_basis": "SOURCE_BOUND_RULE_FACT_NOT_EVALUABLE",
+            "evaluated_rule_ids": evaluated_rule_ids,
+            "mapped_finding_ids": sorted(set(findings)),
+        }
+    if any(row.get("evaluation_status") == "VIOLATION" for row in evaluations):
+        if not findings:
+            return {
+                **base,
+                "classification": "UNRESOLVED_V0_2_FINDING_IDENTITY",
+                "constitutional_basis": "VIOLATION_WITHOUT_SOURCE_BOUND_FINDING",
+                "evaluated_rule_ids": evaluated_rule_ids,
+                "mapped_finding_ids": [],
+            }
+        if b0_mapped:
+            classification = "B0_MAPPED_CURRENT_ACTIONABLE"
+        elif constitution_status == "PROPOSED_UNADMITTED":
+            classification = "LATE_DISCOVERED_PREEXISTING_CURRENT_ACTIONABLE"
+        else:
+            classification = "TRANSITION_NEW_ACTIONABLE_DEBT"
+        return {
+            **base,
+            "classification": classification,
+            "constitutional_basis": "SOURCE_BOUND_V0_2_VIOLATION",
+            "evaluated_rule_ids": evaluated_rule_ids,
+            "mapped_finding_ids": sorted(set(findings)),
+        }
+    if evaluations:
+        return {
+            **base,
+            "classification": "B0_MAPPED_LAWFUL_NON_DEBT" if b0_mapped else "LAWFUL_NON_B0_UNDER_V0_2",
+            "constitutional_basis": "SOURCE_BOUND_V0_2_PASS_OR_NOT_APPLICABLE",
+            "evaluated_rule_ids": evaluated_rule_ids,
+            "mapped_finding_ids": [],
+        }
+
+    # The full adapter's classification pass proves the subject class.  If the
+    # relevant constitutional family is complete but emits no rule evaluation
+    # for that classified subject, the rule selector is lawfully not applicable.
+    classified_subjects = {
+        str(row.get("subject_artifact_id", ""))
+        for row in full_snapshot.get("evaluations", [])
+        if row.get("rule_id") == "GRT-R100"
+        and row.get("evaluation_status") == "PASS"
+        and str(row.get("subject_artifact_id", "")) in subject_ids
+    }
+    families = full_snapshot.get("family_coverage", {})
+    family_complete = all(families.get(_RULE_FAMILY[rule_id]) == "EVALUATED" for rule_id in rule_ids)
+    if paths and classified_subjects and family_complete:
+        return {
+            **base,
+            "classification": "B0_MAPPED_LAWFUL_NON_DEBT" if b0_mapped else "LAWFUL_NON_B0_RULE_NOT_APPLICABLE",
+            "constitutional_basis": "CLASSIFIED_SUBJECT_OUTSIDE_V0_2_RULE_SELECTOR",
+            "evaluated_rule_ids": [],
+            "mapped_finding_ids": [],
+        }
+    return {
+        **base,
+        "classification": "UNRESOLVED_V0_2_RULE_MAPPING",
+        "constitutional_basis": "NO_SOURCE_BOUND_V0_2_RULE_EVIDENCE",
+        "evaluated_rule_ids": [],
+        "mapped_finding_ids": [],
+    }
 
 
 def baseline_topology_from_member_records(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
@@ -176,7 +353,11 @@ def _condition_extent_relation(previous: Mapping[str, Any], current: Mapping[str
 
 
 def reconcile_observer_transition_candidates(
-    *, baseline_topology: Mapping[str, Any], current_topology: Mapping[str, Any]
+    *,
+    baseline_topology: Mapping[str, Any],
+    current_topology: Mapping[str, Any],
+    full_snapshot: Mapping[str, Any] | None = None,
+    constitution_status: str = "",
 ) -> dict[str, Any]:
     """Reconcile observer conditions without pretending they are v0.2 findings.
 
@@ -201,17 +382,38 @@ def reconcile_observer_transition_candidates(
 
     resolved = sorted(set(baseline_by_key) - set(current_by_key))
     novel_keys = sorted(set(current_by_key) - set(baseline_by_key))
-    novel = [
-        {
-            "subject_key": key,
-            "projection": anomaly_subject_projection(current_by_key[key], current_topology),
-            "observer_anomaly_id": current_by_key[key].get("anomaly_id"),
-            "severity": current_by_key[key].get("severity"),
-            "extent": anomaly_extent(current_by_key[key]),
-            "constitutional_status": "UNMAPPED_REQUIRES_V0_2_RULE_EVIDENCE",
-        }
-        for key in novel_keys
-    ]
+    if full_snapshot is None:
+        classifications = [
+            {
+                "subject_key": key,
+                "projection": anomaly_subject_projection(current_by_key[key], current_topology),
+                "observer_anomaly_id": current_by_key[key].get("anomaly_id"),
+                "severity": current_by_key[key].get("severity"),
+                "extent": anomaly_extent(current_by_key[key]),
+                "classification": "UNRESOLVED_V0_2_RULE_MAPPING",
+                "constitutional_basis": "FULL_CURRENT_V0_2_SNAPSHOT_REQUIRED",
+                "mapped_finding_ids": [],
+            }
+            for key in sorted(current_by_key)
+        ]
+    else:
+        classifications = [
+            _classify_current_condition(
+                current_by_key[key],
+                current_topology,
+                full_snapshot,
+                b0_mapped=key in baseline_by_key,
+                constitution_status=constitution_status,
+            )
+            for key in sorted(current_by_key)
+        ]
+    unresolved = [row for row in classifications if str(row["classification"]).startswith("UNRESOLVED_")]
+    transition_new = [row for row in classifications if row["classification"] == "TRANSITION_NEW_ACTIONABLE_DEBT"]
+    novel = [row for row in classifications if row["subject_key"] in set(novel_keys)]
+    classification_counts: dict[str, int] = {}
+    for row in classifications:
+        value = str(row["classification"])
+        classification_counts[value] = classification_counts.get(value, 0) + 1
     return {
         "schema": "ovc-grt2-g3-observer-transition-reconciliation/v1",
         "baseline_commit": baseline_topology.get("portfolio", {}).get("source_commit"),
@@ -225,7 +427,12 @@ def reconcile_observer_transition_candidates(
         "resolved_observer_condition_count": len(resolved),
         "novel_observer_condition_count": len(novel),
         "novel_observer_conditions": novel,
-        "transition_debt_zero_proven": len(novel) == 0 and not expanded and not material_changed,
+        "current_condition_classification_count": len(classifications),
+        "current_condition_classification_counts": dict(sorted(classification_counts.items())),
+        "current_condition_classifications": classifications,
+        "unresolved_current_condition_count": len(unresolved),
+        "transition_new_debt_count": len(transition_new),
+        "transition_debt_zero_proven": not unresolved and not transition_new and not expanded and not material_changed,
         "baseline_expansion_zero_proven": not expanded and not material_changed,
         "authority_effect": "NONE_OBSERVER_RECONCILIATION_ONLY",
     }

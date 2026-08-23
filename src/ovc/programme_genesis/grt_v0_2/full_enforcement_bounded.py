@@ -21,6 +21,7 @@ from .serialization import canonical_sha256
 
 _POINTER_KEYS = (
     "authoritative_state",
+    "state_record",
     "current_state_path",
     "state_path",
     "current_state",
