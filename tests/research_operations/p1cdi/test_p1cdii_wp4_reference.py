@@ -17,6 +17,7 @@ from ovc.research_operations.p1cdi.reference import (
     replay_as_of,
     stage_correspondence,
 )
+from tests.research_operations.p1cdi._court_state import assert_post_review5_current_state
 from tests.research_operations.p1cdi.test_p1cdii_wp1_schemas import validate_contract
 
 
@@ -259,7 +260,7 @@ def test_clean_process_reproduction_is_byte_identical() -> None:
     assert json.loads(one)["authority_effect"] == "NONE"
 
 
-def test_wp4_court_record_stops_at_independent_g4_alg_boundary() -> None:
+def test_historical_wp4_court_record_stopped_at_g4_and_current_state_advances_only_after_review5_pass() -> None:
     implementation = json.loads((ROOT / "docs/programmes/p1cdi-v0-1/wp4/P1CDII_WP4_IMPLEMENTATION_PACKET_v0_1.json").read_text())
     qa = json.loads((ROOT / "docs/programmes/p1cdi-v0-1/wp4/P1CDII_WP4_QA_PACKET_v0_1.json").read_text())
     completion = json.loads((ROOT / "docs/programmes/p1cdi-v0-1/wp4/P1CDII_WP4_COMPLETION_RECORD_v0_1.json").read_text())
@@ -269,8 +270,7 @@ def test_wp4_court_record_stops_at_independent_g4_alg_boundary() -> None:
     assert qa["g4_alg_decision"] == "NOT_TAKEN"
     assert completion["gate_decision"] == "NOT_TAKEN"
     assert completion["authority_delta"] == "NONE"
-    assert state["packets"]["P1CDII-WP4"]["status"] == "GATE_READY"
-    assert state["packets"]["P1CDII-WP4"]["next_packet"] == "P1CDII-G4-ALG"
+    assert_post_review5_current_state(state)
     validate_contract(
         json.loads((ROOT / "schemas/research_operations/p1cdi/p1cdii_programme_state_v0_1.schema.json").read_text()),
         state,

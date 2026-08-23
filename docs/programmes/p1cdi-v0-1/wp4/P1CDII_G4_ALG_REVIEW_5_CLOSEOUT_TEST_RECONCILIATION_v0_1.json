@@ -1,0 +1,67 @@
+{
+  "schema": "p1cdii-g4-alg-review-5-closeout-test-reconciliation/v0.1",
+  "programme_id": "OVC-P1CDI-CONFORMANCE-v0.1",
+  "packet_id": "P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-5",
+  "gate_id": "P1CDII-G4-ALG",
+  "phase": "POST_DISPOSITION_CLOSEOUT",
+  "review_disposition": "PASS_IMMUTABLE",
+  "authority_delta": "NONE",
+  "status": "IMPLEMENTED_PENDING_EXACT_FINAL_ASSURANCE",
+  "trigger": {
+    "candidate_head": "d210dc5021677fcbe8ea71005c0dc19e4be4e340",
+    "repository_workflow": 32643372199,
+    "tiered_workflow": 32643372193,
+    "repository_result": "FAIL_10_STALE_CURRENT_POINTER_ASSERTIONS",
+    "production_correctness_failure": false,
+    "review_disposition_failure": false
+  },
+  "diagnosis": {
+    "class": "HISTORICAL_COURT_REGRESSION_CURRENT_POINTER_COUPLING",
+    "description": "Ten historical G4/WP4 court tests correctly pinned immutable BLOCK/remediation artifacts but additionally required the mutable programme pointer to remain at an earlier GATE_READY/Review-5-READY state. The lawful immutable Review-5 PASS advanced the current pointer to WP5 READY, making those current-pointer assertions stale.",
+    "root_cause": "Historical evidence assertions and current programme-state assertions were coupled in the same regressions.",
+    "implementation_defect": false,
+    "frozen_contract_change_required": false,
+    "review_reopen_required": false
+  },
+  "repair": {
+    "scope": "TEST_ONLY_POST_DISPOSITION_CLOSEOUT_PLUS_REVIEW5_COURT_REGRESSION",
+    "historical_packet_hash_checks_preserved": true,
+    "historical_blocker_and_route_checks_preserved": true,
+    "historical_remediation_non_authority_checks_preserved": true,
+    "current_pointer_checks_rebound_to": "IMMUTABLE_REVIEW5_PASS_AND_WP5_READY_STATE",
+    "new_review5_pass_regression_added": true,
+    "production_code_mutated": false,
+    "fixtures_mutated": false,
+    "reviewer_pre_disposition_constraints_violated": false,
+    "test_weakening": false
+  },
+  "preserved_denials": [
+    "OPERATIONAL_READ_ONLY_ACTIVATION",
+    "CONTINUOUS_INTAKE",
+    "CANDIDATE_OR_FREEZE_AUTHORITY",
+    "SCIENTIFIC_DISPOSITION_WRITE",
+    "VALIDATION",
+    "PUBLICATION",
+    "PROBABILITY",
+    "RISK",
+    "EXPOSURE",
+    "TRADING",
+    "EXECUTION",
+    "AGENT_WRITE"
+  ],
+  "required_closeout": [
+    "P1CDII_NAMESPACE",
+    "ALL_PRIOR_G4_BLOCK_AND_REMEDIATION_REGRESSIONS",
+    "REVIEW5_PASS_COURT_REGRESSION",
+    "REPOSITORY_REQUIRED_TESTS",
+    "PYTEST_UNITTEST_PARITY",
+    "RUNNER_PARITY",
+    "FINAL_HEAD_PROFILE",
+    "VIT",
+    "SIQ_READY",
+    "GRT_EXACT_TREE",
+    "MERGE_READINESS"
+  ],
+  "operator_decision_required": false,
+  "rollback": "Forward-revert only the post-disposition test reconciliation if it proves incorrect. Preserve immutable Review-5 PASS and all earlier G4 evidence; do not rewrite history."
+}

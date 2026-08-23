@@ -4,6 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 
+from tests.research_operations.p1cdi._court_state import assert_post_review5_current_state
 from tests.research_operations.p1cdi.test_p1cdii_wp1_schemas import validate_contract
 
 
@@ -25,7 +26,7 @@ def canonical_sha256(value: object) -> str:
     ).hexdigest()
 
 
-def test_remediation_5_pass_is_bounded_and_routes_only_fresh_review_5() -> None:
+def test_remediation_5_pass_is_bounded_and_historical_route_to_review5_is_preserved() -> None:
     review = BASE / "P1CDII_G4_ALG_FRESH_INDEPENDENT_REVIEW_4_PACKET_v0_1.json"
     implementation = json.loads((BASE / "P1CDII_WP4_REMEDIATION_5_IMPLEMENTATION_PACKET_v0_1.json").read_text())
     qa = json.loads((BASE / "P1CDII_WP4_REMEDIATION_5_QA_PACKET_v0_1.json").read_text())
@@ -64,19 +65,12 @@ def test_remediation_5_pass_is_bounded_and_routes_only_fresh_review_5() -> None:
     assert decision["next_packet"] == "P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-5"
 
     remediation = state["packets"]["P1CDII-WP4-REMEDIATION-5"]
-    review5 = state["packets"]["P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-5"]
-    assert state["status"] == "GATE_READY"
     assert remediation["status"] == "COMPLETED"
     assert remediation["authority_required"] == "AUTO_EXECUTABLE"
     assert remediation["authority_delta"] == "NONE"
     assert remediation["blockers"] == []
-    assert review5["status"] == "READY"
-    assert review5["authority_required"] == "INDEPENDENT_BLOCKING"
-    assert review5["authority_delta"] == "NONE"
-    assert state["blockers"] == []
-    assert state["next_packet"] == "P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-5"
-    assert state["authority"]["operational_read_only"] == "DENIED"
-    assert state["authority"]["continuous_intake"] == "DENIED"
+    assert remediation["next_packet"] == "P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-5"
+    assert_post_review5_current_state(state)
 
     validate_contract(
         json.loads(
