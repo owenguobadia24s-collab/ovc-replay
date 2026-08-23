@@ -65,10 +65,13 @@ Every permanent PR must pass the canonical VIT routing preflight. Every physical
 - squash as the only merge method;
 - non-fast-forward updates prohibited;
 - deletion prohibited;
-- strict `OVC merge readiness` required;
+- `OVC merge readiness` required from the bound GitHub Actions provider;
+- native strict branch-up-to-date enforcement disabled because current-main composition and exact-final assurance are performed inside the serialized VIT/SIQ integration lease;
 - zero bypass actors.
 
 The required CI preflight re-reads the live GitHub ruleset on every permanent PR. A missing, inactive, ambiguous or bypassable ruleset blocks assurance before the packet can become a physical-main candidate.
+
+Native required-check strictness MUST NOT be used as an additional physical-placement mechanism. For a late-binding candidate, unrelated movement of `main` is handled by the existing `OVC merge readiness` lease: resolve current `main`, construct the ephemeral prospective tree, run exact-final SIQ/PDC assurance on that exact tree, and bind the IntegrationAdmissionReceipt. The stable payload branch is not required to absorb unrelated `main` commits merely to satisfy repository UI currentness.
 
 This contract does not add a workflow merge credential. Repository materialisation continues through the existing authorized external merge path after VIT/SIQ readiness.
 
@@ -99,4 +102,4 @@ Operator-required packets remain represented in VIT and park at their existing p
 
 ## 9. Rollback
 
-Rollback is forward-only. Disable cross-generation AA0 reuse and the additional live ruleset preflight while preserving active VIT/SIQ authority, universal routing enforcement, existing GitHub main protection, all PIPs/generations/placements, assurance evidence, DEVOBS receipts and Git history.
+Rollback is forward-only. Restore native strict branch-up-to-date enforcement only together with a versioned superseding integration design that does not reintroduce payload/head churn; otherwise disable cross-generation AA0 reuse and the additional live ruleset preflight while preserving active VIT/SIQ authority, universal routing enforcement, required `OVC merge readiness`, zero bypass, all PIPs/generations/placements, assurance evidence, DEVOBS receipts and Git history.

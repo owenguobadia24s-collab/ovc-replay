@@ -23,13 +23,32 @@
     ],
     "non_fast_forward_prohibited": true,
     "deletion_prohibited": true,
-    "strict_required_status_checks": true,
+    "strict_required_status_checks": false,
     "required_status_checks": [
       "OVC merge readiness"
-    ]
+    ],
+    "required_check_provider_integration_id": 15368,
+    "current_main_assurance_owner": "OVC_MERGE_READINESS_LATE_BINDING_LEASE",
+    "branch_up_to_date_as_physical_placement": "PROHIBITED"
   },
   "live_preflight": "DYNAMIC_GITHUB_RULESET_RECHECK_ON_EVERY_PERMANENT_PR",
-  "observed_at": "2026-08-16T13:15:00+01:00",
+  "compatibility_correction": {
+    "status": "OPERATOR_APPROVED_PENDING_LIVE_RULESET_APPLICATION",
+    "decision": "OVC APPROVE",
+    "approved_at": "2026-08-23T18:33:00+01:00",
+    "reason": "Native strict branch currentness conflicts with ratified late physical placement by requiring placement-only branch commits after unrelated main movement.",
+    "preserved_invariants": [
+      "OVC_MERGE_READINESS_REQUIRED",
+      "GITHUB_ACTIONS_PROVIDER_BOUND",
+      "PULL_REQUEST_REQUIRED",
+      "SQUASH_ONLY",
+      "NON_FAST_FORWARD_PROHIBITED",
+      "DELETION_PROHIBITED",
+      "ZERO_BYPASS_ACTORS",
+      "ONE_VIT_SIQ_PHYSICAL_WRITER"
+    ]
+  },
+  "observed_at": "2026-08-23T18:33:00+01:00",
   "authority_effect": "NONE_SAFETY_CONFORMANCE_CORRECTION",
-  "rollback": "Forward-disable only the added live exclusivity preflight while preserving the existing active GitHub ruleset, VIT/SIQ authority, universal routing enforcement and Git history."
+  "rollback": "Forward-restore native strict currentness only with a superseding design that preserves stable PIP identity and late placement; never weaken OVC merge readiness, zero bypass, VIT/SIQ exclusivity or Git history."
 }
