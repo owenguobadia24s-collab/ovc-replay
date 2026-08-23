@@ -73,11 +73,13 @@ def review_anchor_time(window:Mapping[str,Any])->datetime:
     return start+(end-start)/2
 
 def review_anchor_partition(bars:Sequence[Mapping[str,Any]],window:Mapping[str,Any])->tuple[datetime,int]:
-    """Locate the anchor between the last pre-anchor and first at/after-anchor rendered bars.
+    """Locate the temporal anchor relative to the rendered complete-bar chronology.
 
-    Source-native SVGs deliberately collapse literal source gaps rather than invent missing bars.  The
-    anchor therefore uses the rendered bar chronology, not geometric 50%, so a gap cannot move the
-    before/after scientific partition to the wrong candle.
+    Source-native SVGs deliberately collapse literal source gaps rather than invent missing bars.
+    ``split`` is therefore the count of rendered bars strictly before the exact navigation-window
+    midpoint. A split of zero or ``len(bars)`` is lawful and means that the exact temporal anchor
+    lies outside the rendered complete-bar span; callers must display that absence truthfully
+    rather than moving the anchor to a geometric or candle-aligned surrogate.
     """
     if len(bars)<2: raise ASOCSBlindFirewallError("REVIEW_ANCHOR_REQUIRES_TWO_BARS")
     anchor=review_anchor_time(window)
@@ -87,21 +89,44 @@ def review_anchor_partition(bars:Sequence[Mapping[str,Any]],window:Mapping[str,A
         starts.append(_parse_literal_time(bar["interval_start"]))
     if any(b<=a for a,b in zip(starts,starts[1:])): raise ASOCSBlindFirewallError("REVIEW_BAR_TIMES_NON_MONOTONIC")
     split=sum(t<anchor for t in starts)
-    if split<=0 or split>=len(starts): raise ASOCSBlindFirewallError("REVIEW_ANCHOR_OUTSIDE_RENDERED_BAR_SPAN")
     return anchor,split
 
 def overlay_visible_review_anchor(svg:str,bars:Sequence[Mapping[str,Any]],window:Mapping[str,Any])->str:
-    """Add a neutral visible anchor overlay without changing the frozen candle geometry or evidence identity."""
+    """Display the exact temporal review anchor without changing frozen candle geometry.
+
+    When complete rendered bars bracket the anchor, a dashed vertical line is placed between the
+    last pre-anchor and first at/after-anchor bars. If source-literal missingness leaves every
+    rendered complete bar on one side of the exact anchor, the SVG instead receives an explicit
+    edge callout stating that the anchor lies outside the rendered complete-bar span. The callout
+    is deliberately not a surrogate time coordinate.
+    """
     if 'data-asocs-review-anchor="visible-neutral-reference"' in svg: raise ASOCSBlindFirewallError("REVIEW_ANCHOR_ALREADY_PRESENT")
     if "</svg>" not in svg: raise ASOCSBlindFirewallError("REVIEW_SVG_CLOSE_TAG_MISSING")
     anchor,split=review_anchor_partition(bars,window)
     w=int(RENDERER_CONTRACT["fixed_width"]); h=int(RENDERER_CONTRACT["fixed_height"]); p=int(RENDERER_CONTRACT["padding"]); prec=int(RENDERER_CONTRACT["coordinate_precision"])
-    step=Decimal(w-2*p)/Decimal(len(bars)); x=Decimal(p)+Decimal(split)*step
+    step=Decimal(w-2*p)/Decimal(len(bars))
     label=anchor.isoformat()
-    overlay=(f'<g data-asocs-review-anchor="visible-neutral-reference" data-anchor-time="{label}">\n'
-             f'<line x1="{x:.{prec}f}" y1="{p}" x2="{x:.{prec}f}" y2="{h-p}" stroke="black" stroke-width="2" stroke-dasharray="8 6"/>\n'
-             f'<text x="{x+Decimal(4):.{prec}f}" y="{p+16}" font-size="14" font-family="system-ui,sans-serif">REVIEW ANCHOR</text>\n'
-             f'</g>\n')
+    if 0 < split < len(bars):
+        x=Decimal(p)+Decimal(split)*step
+        placement="BETWEEN_RENDERED_BARS"
+        overlay=(f'<g data-asocs-review-anchor="visible-neutral-reference" data-anchor-placement="{placement}" data-anchor-time="{label}">\n'
+                 f'<line x1="{x:.{prec}f}" y1="{p}" x2="{x:.{prec}f}" y2="{h-p}" stroke="black" stroke-width="2" stroke-dasharray="8 6"/>\n'
+                 f'<text x="{x+Decimal(4):.{prec}f}" y="{p+16}" font-size="14" font-family="system-ui,sans-serif">REVIEW ANCHOR</text>\n'
+                 f'</g>\n')
+    elif split==0:
+        placement="BEFORE_FIRST_RENDERED_COMPLETE_BAR"
+        x=Decimal(p)
+        overlay=(f'<g data-asocs-review-anchor="visible-neutral-reference" data-anchor-placement="{placement}" data-anchor-time="{label}">\n'
+                 f'<path d="M {x:.{prec}f} {p+8} L {x+Decimal(14):.{prec}f} {p+15} L {x:.{prec}f} {p+22} Z" fill="black"/>\n'
+                 f'<text x="{x+Decimal(20):.{prec}f}" y="{p+20}" font-size="14" font-family="system-ui,sans-serif">REVIEW ANCHOR {label} — BEFORE FIRST RENDERED COMPLETE 15M BAR</text>\n'
+                 f'</g>\n')
+    else:
+        placement="AFTER_LAST_RENDERED_COMPLETE_BAR"
+        x=Decimal(w-p)
+        overlay=(f'<g data-asocs-review-anchor="visible-neutral-reference" data-anchor-placement="{placement}" data-anchor-time="{label}">\n'
+                 f'<path d="M {x:.{prec}f} {p+8} L {x-Decimal(14):.{prec}f} {p+15} L {x:.{prec}f} {p+22} Z" fill="black"/>\n'
+                 f'<text x="{p+4}" y="{p+20}" font-size="14" font-family="system-ui,sans-serif">REVIEW ANCHOR {label} — AFTER LAST RENDERED COMPLETE 15M BAR</text>\n'
+                 f'</g>\n')
     return svg.replace("</svg>",overlay+"</svg>",1)
 
 def freeze_blind_record(record:Mapping[str,Any])->dict[str,Any]:
