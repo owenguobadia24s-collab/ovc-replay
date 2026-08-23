@@ -385,7 +385,10 @@ def build_source_bound_snapshot(*, commit: str, tree: str, inventory: Mapping[st
         if art_type == "WORKFLOW" and lifecycle in _LIVE_LIFECYCLES:
             evaluations.append(_eval(rules["GRT-R805"], sid, True, path not in governed_workflows, extent={"governance_record_count": 1 if path in governed_workflows else 0}, evidence=[WORKFLOW_POLICY_PATH] if path in governed_workflows else [path]))
 
-        if PurePosixPath(path).suffix.lower() == ".json" and text.lstrip().startswith(("{", "[")):
+        # Repository fixtures may contain source-explicit dependency *examples*.
+        # They are test inputs, not live dependency declarations of the fixture
+        # artifact itself, and must not be promoted into current authority.
+        if not path.startswith("fixtures/") and PurePosixPath(path).suffix.lower() == ".json" and text.lstrip().startswith(("{", "[")):
             try:
                 structured = json.loads(text)
             except json.JSONDecodeError:
