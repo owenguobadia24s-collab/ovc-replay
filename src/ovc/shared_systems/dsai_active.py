@@ -24,6 +24,9 @@ DSAI_ADOPTION_AUTHORITY = (
     "DSAI_ONLY_SHARED_SYSTEMS_CONSUMER_ADOPTION_AND_CURRENT_BINDING_CUTOVER_"
     "SUBJECT_TO_EXACT_FINAL_ASSURANCE"
 )
+DSAI_ADOPTION_AUTHORITY_REF = (
+    "9f2cae3ac70dca4baacbd52d597ba25d7428b14f945c91c4fdedd92e3d9770ba"
+)
 
 
 def _text(value: str, field: str, *, exact: bool = False) -> str:
@@ -84,6 +87,8 @@ class DSAIActiveConsumptionBinding:
             DSAI_ADOPTION_SURFACES
         ):
             raise DSAIAdoptionError("DSAI_ADOPTION_SURFACE_SET_INVALID")
+        if self.authority_ref != DSAI_ADOPTION_AUTHORITY_REF:
+            raise DSAIAdoptionError("DSAI_ADOPTION_AUTHORITY_REF_MISMATCH")
         if self.status != "ACTIVE_CANDIDATE" or self.current_binding_changed:
             raise DSAIAdoptionError("PREMATURE_DSAI_CURRENT_BINDING_SWITCH_FORBIDDEN")
         if self.authority_effect != DSAI_ADOPTION_AUTHORITY:
