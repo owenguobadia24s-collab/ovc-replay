@@ -3,6 +3,7 @@ from __future__ import annotations
 from ovc.programme_genesis.grt_v0_2.g3_readiness import (
     anomaly_extent,
     anomaly_subject_key,
+    evaluate_candidate_evidence,
     reconcile_observer_transition_candidates,
     summarize_g3_readiness,
 )
@@ -102,3 +103,19 @@ def test_g3_summary_never_converts_missing_evidence_into_gate_ready() -> None:
     )
     assert summary["status"] == "EVIDENCE_INCOMPLETE"
     assert "PRE_G3_TRANSITION_DEBT_ZERO_NOT_PROVEN" in summary["reason_codes"]
+
+
+def test_complete_shadow_may_preserve_a_constitutional_would_block() -> None:
+    record = {
+        "candidate_id": "C",
+        "full_g3_shadow_status": "PASS",
+        "full_g3_candidate_admission": "FAIL",
+        "new_or_expanded_debt_count": 2,
+        "unresolved_escape_count": 0,
+        "blocking_false_positive_count": 0,
+        "unresolved_false_negative_count": 0,
+        "scope_leakage_count": 0,
+        "performance_status": "PASS",
+        "qa_disposition": "PASS",
+    }
+    assert evaluate_candidate_evidence(record)["status"] == "PASS"

@@ -50,7 +50,11 @@ def _candidate_record(candidate_id: str, replay: Mapping[str, Any], *, budget: M
     perf = replay["performance"]
     performance_status = "PASS" if int(perf["duration_ms"]) <= max_ms and int(perf["peak_memory_bytes"]) <= memory_ceiling else "FAIL"
     family_ok = len(replay.get("family_coverage", {})) == len(REQUIRED_FULL_G3_RULE_FAMILIES) and all(value == "PASS" for value in replay.get("family_coverage", {}).values())
-    shadow_ok = replay.get("status") == "PASS" and family_ok and replay.get("new_or_expanded_debt_count") == 0 and replay.get("not_evaluable_count") == 0 and not replay.get("adapter_errors") and not replay.get("blocking_transitions")
+    # A dry-run shadow is complete when it is fully evaluable.  A constitutional
+    # would-block is a valid (and required) replay result, not an incomplete
+    # shadow: G3 is intentionally stricter than the active G2.5 limited scope.
+    # The admission outcome and every blocking transition remain preserved.
+    shadow_ok = family_ok and replay.get("status") in {"PASS", "FAIL"} and replay.get("not_evaluable_count") == 0 and not replay.get("adapter_errors")
     return {
         "candidate_id": candidate_id,
         "predecessor_commit": replay["predecessor_commit"],
@@ -58,9 +62,11 @@ def _candidate_record(candidate_id: str, replay: Mapping[str, Any], *, budget: M
         "predecessor_tree": replay["predecessor_tree"],
         "candidate_tree": replay["candidate_tree"],
         "full_g3_shadow_status": "PASS" if shadow_ok else str(replay.get("status", "INCOMPLETE")),
+        "full_g3_candidate_admission": replay.get("status"),
         "full_g3_canonical_hash": replay["canonical_hash"],
         "family_coverage": dict(replay.get("family_coverage", {})),
         "new_or_expanded_debt_count": replay.get("new_or_expanded_debt_count"),
+        "blocking_transitions": list(replay.get("blocking_transitions", [])),
         "not_evaluable_count": replay.get("not_evaluable_count"),
         "unresolved_escape_count": int(inherited.get("unresolved_escape_count", 0)),
         "blocking_false_positive_count": int(inherited.get("blocking_false_positive_count", 0)),
