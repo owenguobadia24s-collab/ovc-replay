@@ -1,0 +1,61 @@
+{
+  "schema": "p1cdii-wp5-implementation-packet/v0.1",
+  "programme_id": "OVC-P1CDI-CONFORMANCE-v0.1",
+  "plan_id": "OVC-P1CDI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "eeb3cfef77c8a61ce2fb825f8f0f649ac35281f30d43ba24651fc329a11a0b9a",
+  "packet_id": "P1CDII-WP5",
+  "gate_id": "P1CDII-G5",
+  "status": "IMPLEMENTED_AWAITING_QA",
+  "baseline_commit": "8e53e52537e9756e350b7f8d0c1551db3c581c6a",
+  "prerequisites": [
+    "P1CDII-WP4_COMPLETED",
+    "P1CDII-G4-ALG_PASS_MATERIALISED@8e53e52537e9756e350b7f8d0c1551db3c581c6a",
+    "P1CDII-G0_BOUNDED_IMPLEMENTATION_AUTHORITY"
+  ],
+  "purpose": "Implement inventory activity/currentness, typed discovery demand and eligibility, one-way RCCR referral/return references, and explicitly non-actuating NEXT_DISCOVERY_WORK projections without changing scientific or operational authority.",
+  "implementation": {
+    "modules": [
+      "src/ovc/research_operations/p1cdi/lifecycle.py",
+      "src/ovc/research_operations/p1cdi/demand.py"
+    ],
+    "package_export": "src/ovc/research_operations/p1cdi/__init__.py",
+    "fixture": "fixtures/research_operations/p1cdi/P1CDII_WP5_SYNTHETIC_DEMAND_FIXTURE_v0_1.json",
+    "tests": "tests/research_operations/p1cdi/test_p1cdii_wp5_demand_lifecycle.py",
+    "frozen_contracts_reused": [
+      "contracts/research_operations/p1cdi/P1CDI_RCCR_REFERRAL_CONTRACT_v0_1.md",
+      "schemas/research_operations/p1cdi/p1cdi_demand_rccr_v0_1.schema.json",
+      "schemas/research_operations/p1cdi/p1cdi_lifecycle_currentness_v0_1.schema.json",
+      "registries/research_operations/p1cdi/demand_registry.json",
+      "registries/research_operations/p1cdi/lifecycle_registry.json"
+    ]
+  },
+  "acceptance_conditions": [
+    "inventory activity remains orthogonal to source-owned scientific disposition",
+    "demand types/states use exact frozen closed registries and deterministic identity",
+    "declared evidence gaps route to typed research demands without scalar candidate strength or rejection inference",
+    "P1CDI to RCCR to P1CDI is one-way and RCCR results cannot rewrite source science or activate capability",
+    "NEXT_DISCOVERY_WORK remains ADVISORY_ONLY with DENIED actuation and NONE write capability",
+    "negative reachability covers DMRP/ IROF execution, DSAI RUN/CONTINUE, source replay, programme-state mutation and task creation",
+    "input-order permutations preserve logical identities",
+    "P1CDII targeted and namespace assurance passes",
+    "repository-wide, parity/profile, VIT, SIQ, GRT exact-tree and merge-readiness assurance passes"
+  ],
+  "authority_required": "AUTO_EXECUTABLE",
+  "authority_delta": "NONE",
+  "preserved_denials": [
+    "OPERATIONAL_READ_ONLY",
+    "CONTINUOUS_INTAKE",
+    "CANDIDATE_OR_FREEZE_AUTHORITY",
+    "SCIENTIFIC_DISPOSITION_WRITE",
+    "VALIDATION",
+    "PUBLICATION",
+    "PROBABILITY",
+    "RISK",
+    "EXPOSURE",
+    "TRADING",
+    "EXECUTION",
+    "AGENT_WRITE"
+  ],
+  "rollback": "Forward-revert only the bounded WP5 implementation/fixture/test/closeout changes. Preserve WP4/G4 PASS and all prior immutable evidence; no history rewrite.",
+  "next_packet_after_pass": "P1CDII-WP6"
+}
