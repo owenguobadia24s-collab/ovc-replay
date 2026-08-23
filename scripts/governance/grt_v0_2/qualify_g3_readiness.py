@@ -18,7 +18,7 @@ from ovc.programme_genesis._topology_engine import build_repository_topology
 from ovc.programme_genesis.grt_v0_2.debt import B0_MEMBER_COUNT, B0_MEMBERSHIP_SHA256, baseline_membership_sha256, validate_baseline_members
 from ovc.programme_genesis.grt_v0_2.full_enforcement_bounded_v2 import REQUIRED_FULL_G3_RULE_FAMILIES, replay_full_g3_candidate
 from ovc.programme_genesis.grt_v0_2.g3_floor import full_g3_snapshot_at_commit, propose_candidate_floor, reconcile_b0_to_current_full_g3
-from ovc.programme_genesis.grt_v0_2.g3_readiness import baseline_topology_from_member_records, reconcile_observer_transition_candidates, summarize_g3_readiness
+from ovc.programme_genesis.grt_v0_2.g3_readiness import baseline_topology_from_member_records, readiness_stage_blockers, reconcile_observer_transition_candidates, summarize_g3_readiness
 from ovc.programme_genesis.grt_v0_2.serialization import canonical_sha256
 
 OUT = Path(os.environ.get("GRT2_G3_READINESS_OUT", "artifacts/grt2-g3-readiness-evidence.json"))
@@ -29,6 +29,10 @@ B0_MEMBERS = ROOT / "registries/governance/grt_v0_2/baseline/GRT_B0_BASELINE_MEM
 CONSTITUTION = ROOT / "registries/governance/grt_v0_2/GRT_REPOSITORY_CONSTITUTION_v0_2.json"
 AUTHORITY = ROOT / "registries/authority/GRT2_ACTIVE_ENFORCEMENT_AUTHORITY_v0_1.json"
 POINTER = ROOT / "registries/implementation/grt_v0_2/CURRENT_STATE_POINTER.json"
+GATE_STATE = ROOT / "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_15.json"
+GATE_PACKET = ROOT / "docs/programmes/grt-v0-2/g3/GRT2_G3_GATE_READY_DECISION_PACKET.json"
+GATE_QA = ROOT / "docs/programmes/grt-v0-2/g3/GRT2_G3_GATE_READY_QA_PACKET.json"
+READINESS_COMPLETION = ROOT / "docs/programmes/grt-v0-2/g3/GRT2_G3_READINESS_COMPLETION_RECEIPT.json"
 
 
 def _load(path: Path) -> Any:
@@ -97,8 +101,14 @@ def main() -> int:
         blockers.append("CONSTITUTION_IDENTITY_OR_PREACTIVATION_STATE_MISMATCH")
     if authority.get("enforcement_mode") != "LIMITED_NEW_ARTIFACT_ENFORCEMENT" or authority.get("g3_status") != "NOT_AUTHORISED":
         blockers.append("G2_5_ACTIVE_AUTHORITY_FRONTIER_MISMATCH")
-    if pointer.get("next_packet") != "GRT2-G3-READINESS-EVIDENCE":
-        blockers.append("GRT2_NEXT_PACKET_NOT_G3_READINESS")
+    gate_stage = pointer.get("next_packet") == "GRT2-G3-OPERATOR-DECISION"
+    blockers.extend(readiness_stage_blockers(
+        pointer,
+        gate_state=_load(GATE_STATE) if gate_stage and GATE_STATE.is_file() else None,
+        gate_packet=_load(GATE_PACKET) if gate_stage and GATE_PACKET.is_file() else None,
+        gate_qa=_load(GATE_QA) if gate_stage and GATE_QA.is_file() else None,
+        readiness_completion=_load(READINESS_COMPLETION) if gate_stage and READINESS_COMPLETION.is_file() else None,
+    ))
     if budget.get("budget_hash") != "88fadf691be87f0c55d98c994d29f54f6112e6c6e43f8d4bbbb328dc7fdb0b58":
         blockers.append("G2_PERFORMANCE_BUDGET_IDENTITY_MISMATCH")
 

@@ -25,6 +25,67 @@ class G3ReadinessError(ValueError):
     pass
 
 
+def _logical_record_valid(record: Mapping[str, Any]) -> bool:
+    expected = record.get("logical_sha256")
+    if not isinstance(expected, str):
+        return False
+    payload = dict(record)
+    payload.pop("logical_sha256", None)
+    return expected == canonical_sha256(payload)
+
+
+def readiness_stage_blockers(
+    pointer: Mapping[str, Any],
+    *,
+    gate_state: Mapping[str, Any] | None = None,
+    gate_packet: Mapping[str, Any] | None = None,
+    gate_qa: Mapping[str, Any] | None = None,
+    readiness_completion: Mapping[str, Any] | None = None,
+) -> tuple[str, ...]:
+    """Accept pre-materialisation readiness or the exact authority-inert gate stage.
+
+    Advancing the pointer to the reserved operator decision must not make an
+    otherwise identical full readiness replay fail.  The post-materialisation
+    route is accepted only when the content-addressed gate records prove that no
+    Constitution, DebtFloor, full-enforcement, or G3 authority was activated.
+    """
+    if pointer.get("next_packet") == "GRT2-G3-READINESS-EVIDENCE":
+        return ()
+    if pointer.get("next_packet") != "GRT2-G3-OPERATOR-DECISION":
+        return ("GRT2_NEXT_PACKET_NOT_G3_READINESS_OR_OPERATOR_DECISION",)
+    records = (gate_state, gate_packet, gate_qa, readiness_completion)
+    if any(not isinstance(record, Mapping) or not _logical_record_valid(record) for record in records):
+        return ("GRT2_GATE_READY_RECORD_IDENTITY_INVALID",)
+    assert gate_state is not None and gate_packet is not None and gate_qa is not None and readiness_completion is not None
+    valid = (
+        pointer.get("current_state") == "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_15.json"
+        and pointer.get("packet_id") == "GRT2-G3-GATE-READY"
+        and pointer.get("gate_id") == "GRT2-G3"
+        and pointer.get("status") == "GATE_READY_OPERATOR_REQUIRED"
+        and pointer.get("operator_decision_required") is True
+        and pointer.get("next_action") == "STOP_FOR_OPERATOR_GRT2_G3_DECISION"
+        and gate_state.get("status") == "GATE_READY_OPERATOR_REQUIRED"
+        and gate_state.get("authority_effect") == "NONE_GATE_PREPARATION_ONLY"
+        and gate_state.get("constitution_status") == "PROPOSED_UNADMITTED"
+        and gate_state.get("active_enforcement") == "LIMITED_NEW_ARTIFACT_ENFORCEMENT"
+        and gate_state.get("debt_floor_generation") is None
+        and gate_state.get("operator_decision_required") is True
+        and gate_packet.get("status") == "GATE_READY_OPERATOR_REQUIRED"
+        and gate_packet.get("operator_decision") is None
+        and gate_packet.get("operator_decision_required") is True
+        and gate_packet.get("authority_consumed") == "NONE"
+        and gate_packet.get("stop_condition") == "STOP_FOR_OPERATOR_GRT2_G3_DECISION"
+        and gate_qa.get("qa_recommendation") == "PASS"
+        and gate_qa.get("unresolved_issues") == []
+        and readiness_completion.get("status") == "COMPLETED_PASS_MERGED"
+        and readiness_completion.get("authority_effect") == "NONE_READINESS_COMPLETION_ONLY"
+        and readiness_completion.get("constitution_status") == "PROPOSED_UNADMITTED"
+        and readiness_completion.get("debt_floor_generation") is None
+        and readiness_completion.get("g3_authority") == "NOT_CONSUMED"
+    )
+    return () if valid else ("GRT2_GATE_READY_PREACTIVATION_BOUNDARY_INVALID",)
+
+
 _ZERO_TOLERANCE_FIELDS = (
     "unresolved_escape_count",
     "blocking_false_positive_count",
