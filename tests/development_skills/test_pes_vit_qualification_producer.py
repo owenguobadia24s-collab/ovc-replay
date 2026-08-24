@@ -4,7 +4,7 @@ import hashlib
 import json
 import unittest
 
-from ovc.development.skills.pes.vit_qualification_producer import (
+from ovc.development.skills.pes_vit_qualification_producer import (
     PesVitQualificationProducerError,
     PRODUCER_TARGET_LEDGER_BRANCH,
     PRODUCER_TARGET_LEDGER_ROOT,

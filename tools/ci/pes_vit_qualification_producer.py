@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from typing import Mapping
 
-from ovc.development.skills.pes.vit_qualification_producer import (
+from ovc.development.skills.pes_vit_qualification_producer import (
     validate_qualification_publication_request,
 )
 from tools.ci.vit_qualification_store import build_qualification_envelope
