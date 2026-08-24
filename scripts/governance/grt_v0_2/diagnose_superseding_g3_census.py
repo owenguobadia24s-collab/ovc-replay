@@ -151,7 +151,13 @@ def main() -> int:
     b0_hash = baseline_membership_sha256(b0_rows)
     b0_exact = len(b0_rows) == B0_MEMBER_COUNT and b0_hash == B0_MEMBERSHIP_SHA256
 
-    former = full_g3_snapshot_at_commit(ROOT, commit=FORMER_GATE_READY_MAIN)
+    former_floor_snapshot_commit = str(old_floor.get("predecessor_commit", "")).strip()
+    if len(former_floor_snapshot_commit) != 40:
+        raise RuntimeError("FORMER_G3_FLOOR_PREDECESSOR_COMMIT_INVALID")
+    former = full_g3_snapshot_at_commit(
+        ROOT,
+        commit=former_floor_snapshot_commit,
+    )
     current = full_g3_snapshot_at_commit(ROOT, commit=current_main)
     former_rows = _rows(former)
     current_rows = _rows(current)
@@ -247,6 +253,8 @@ def main() -> int:
         "current_main_commit": current_main,
         "current_main_tree": current_tree,
         "former_gate_ready_main_commit": FORMER_GATE_READY_MAIN,
+        "former_floor_snapshot_commit": former_floor_snapshot_commit,
+        "former_floor_snapshot_tree": former.get("tree"),
         "former_floor": {
             "path": str(OLD_FLOOR.relative_to(ROOT)),
             "generation": old_floor.get("generation"),
@@ -281,6 +289,10 @@ def main() -> int:
             ),
             "changed_paths_since_former_gate_ready": _changed_paths(
                 FORMER_GATE_READY_MAIN,
+                current_main,
+            ),
+            "changed_paths_since_former_floor_snapshot": _changed_paths(
+                former_floor_snapshot_commit,
                 current_main,
             ),
         },
