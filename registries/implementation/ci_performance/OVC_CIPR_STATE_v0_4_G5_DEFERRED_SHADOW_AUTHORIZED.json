@@ -1,0 +1,37 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "COMPLETED",
+  "packet_id": "CIPR-WP5-COORDINATED-PYT-G2-CUTOVER-GATE",
+  "prerequisites": [
+    "CIPR-WP5 GATE_READY evidence at b41d6c4e653569e615af217f54f6184a55473be8",
+    "PYT programme COMPLETED with pytest canonical runner",
+    "CIPR-G4 legacy-unittest shadow evidence preserved",
+    "operator decision at 2026-08-24T13:16:00+01:00"
+  ],
+  "authority_required": "SATISFIED_OPERATOR_DEFER_AND_POST_PYT_SHADOW_GRANT",
+  "authority_delta": "BOUNDED_POST_PYT_CANONICAL_SHARD_CONSTRUCTION_AND_SHADOW_QUALIFICATION_ONLY",
+  "baseline_commit": "e2f01dcf03936247c4c8ccdd3df76257710c2461",
+  "branch": "gate/ci-performance-g5-post-pyt-20260824",
+  "candidate_commit": null,
+  "tests": [
+    "G5 gate preparation reconciliation PASS",
+    "fresh reference PR #1290 canonical tests PASS: 4827 passed, 1 skipped, 689 subtests in 335.62s",
+    "fresh reference PR #1290 tiered assurance PASS"
+  ],
+  "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp5/CIPR_G5_GATE_PACKET.json#qa",
+  "decision_record": "docs/releases/ci-performance-remediation-v0-1/cipr-wp5/CIPR_G5_DECISION.json",
+  "gate_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp5/CIPR_G5_GATE_PACKET.json",
+  "merge_commit": null,
+  "blockers": [],
+  "warnings": [
+    "The legacy-unittest G4 shard candidate remains deferred and must not be cut over.",
+    "Required-check substitution/removal and check-context retirement remain operator-reserved after new shadow qualification."
+  ],
+  "decision": "DEFER",
+  "next_packet": "CIPR-WP5R-POST-PYT-CANONICAL-CENSUS-SHADOW",
+  "next_boundary": "CONSOLIDATED_OPERATOR_DECISION_AFTER_POST_PYT_SHADOW_QUALIFICATION",
+  "rollback": "Forward-supersede the G5 decision state only if required; current CI remains unchanged until a later operator cutover."
+}
