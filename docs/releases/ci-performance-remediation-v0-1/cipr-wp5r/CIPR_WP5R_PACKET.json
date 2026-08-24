@@ -1,0 +1,65 @@
+{
+  "schema": "ovc-ci-post-pyt-shard-shadow-packet/v0.1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "packet_id": "CIPR-WP5R-POST-PYT-CANONICAL-CENSUS-SHADOW",
+  "status": "RUNNING",
+  "decision_prerequisite": {
+    "gate_id": "CIPR-G5-PYT-G2-CANONICAL-SHARD-CUTOVER",
+    "decision": "DEFER",
+    "decision_record": "docs/releases/ci-performance-remediation-v0-1/cipr-wp5/CIPR_G5_DECISION.json",
+    "operator_instruction": "DEFER the obsolete shard and authorize construction + shadow qualification of the new post-PYT shard architecture"
+  },
+  "logical_baseline": "e3a92433efcffe7320ff5cae110da00aed74a7b3",
+  "authority_class": "OPERATOR_GRANTED_BOUNDED_SHADOW_CONSTRUCTION",
+  "authority_delta": "POST_PYT_CANONICAL_PYTEST_SHARD_CANDIDATE_SHADOW_ONLY",
+  "scope": [
+    "exact canonical pytest collection census",
+    "pytest-native inclusion proof",
+    "deterministic exact-one four-way shard assignment",
+    "shadow shard execution beside current required CI",
+    "same-head manifest and outcome equivalence",
+    "performance measurement and deterministic evidence-based rebalancing"
+  ],
+  "implementation": {
+    "tool": "tools/ci/pytest_shard_shadow.py",
+    "policy": "registries/implementation/ci_performance/CIPR_POST_PYT_PYTEST_SHARD_POLICY_v0_1.json",
+    "workflow": ".github/workflows/ci-pytest-shard-shadow.yml",
+    "tests": "tests/development/test_pytest_shard_shadow.py",
+    "canonical_command": "PYTHONPATH=src:. python3 -m pytest tests -q --tb=short",
+    "shadow_listener": "push/workflow_dispatch only; never pull_request"
+  },
+  "acceptance": [
+    "canonical pytest collection deterministically enumerated twice on exact head",
+    "legacy unittest parity population is a subset of current canonical collection",
+    "at least one pytest-native canonical item is present",
+    "every canonical pytest item assigned to exactly one shard",
+    "manifest byte-identical on repeated same-head construction",
+    "all four shadow shards pass",
+    "shadow aggregate equals current canonical required tests result on the same candidate head",
+    "current required workflows remain unmodified",
+    "performance evidence records per-shard execution and separates queue/bootstrap overhead",
+    "no unresolved review or blocking warning remains"
+  ],
+  "explicit_non_grants": [
+    "NO_REQUIRED_CHECK_SUBSTITUTION",
+    "NO_CANONICAL_TEST_REMOVAL",
+    "NO_RULESET_OR_REQUIRED_CONTEXT_RETIREMENT",
+    "NO_SIQ_READY_SEMANTIC_REMOVAL",
+    "NO_MERGE_READINESS_SEMANTIC_REMOVAL",
+    "NO_VIT_SIQ_GRT_PDC_AUTHORITY_CHANGE",
+    "NO_XDIST_AUTHORITATIVE_CUTOVER",
+    "NO_SCIENTIFIC_MARKET_VALIDATION_PUBLICATION_RISK_EXPOSURE_TRADING_EXECUTION_AUTHORITY",
+    "NO_FORCE_PUSH_OR_HISTORY_REWRITE"
+  ],
+  "qa_plan": [
+    "targeted tool/policy/workflow tests",
+    "repository-wide required tests on the main-targeted grouped PR",
+    "OVC profile/SIQ READY/merge readiness on exact head",
+    "shadow manifest proof and four shard jobs",
+    "repeat comparable shadow execution before successor cutover decision"
+  ],
+  "next_boundary": "CONSOLIDATED_OPERATOR_DECISION_AFTER_POST_PYT_SHADOW_QUALIFICATION",
+  "rollback": "Forward-remove or disable only this post-PYT shadow candidate/tooling/workflow/state; preserve current required CI and all historical evidence."
+}
