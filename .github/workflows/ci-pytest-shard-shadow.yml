@@ -1,0 +1,96 @@
+name: OVC pytest deterministic shard shadow
+
+on:
+  push:
+    branches:
+      - "gate/ci-performance-g5-post-pyt-20260824"
+      - "build/ci-performance-post-pyt-shard-shadow-*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ovc-pytest-shard-shadow-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  manifest-proof:
+    name: OVC pytest shard manifest shadow
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11.15"
+      - name: Install canonical pytest dependencies
+        run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
+      - name: Prove deterministic exact-union current pytest manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          started_ns=$(date +%s%N)
+          PYTHONPATH=src:. python3 tools/ci/pytest_shard_shadow.py prove \
+            --policy registries/implementation/ci_performance/CIPR_POST_PYT_PYTEST_SHARD_POLICY_v0_1.json \
+            --head-sha "${GITHUB_SHA}" \
+            --output "${RUNNER_TEMP}/pytest-shard-manifest.json"
+          finished_ns=$(date +%s%N)
+          elapsed_ms=$(( (finished_ns - started_ns) / 1000000 ))
+          echo "OVC_CI_METRIC {\"schema\":\"ovc-ci-metric/v1\",\"metric\":\"post_pyt_pytest_shard_manifest_proof_ms\",\"value_ms\":${elapsed_ms},\"head_sha\":\"${GITHUB_SHA}\",\"authority_mode\":\"SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION\"}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pytest-shard-manifest-${{ github.sha }}
+          path: ${{ runner.temp }}/pytest-shard-manifest.json
+          if-no-files-found: error
+          retention-days: 14
+
+  shard:
+    name: OVC pytest shard shadow ${{ matrix.shard }}
+    needs: manifest-proof
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11.15"
+      - name: Install canonical pytest dependencies
+        run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
+      - name: Execute exact deterministic current pytest shard
+        shell: bash
+        run: |
+          set -euo pipefail
+          started_ns=$(date +%s%N)
+          PYTHONPATH=src:. python3 tools/ci/pytest_shard_shadow.py run \
+            --policy registries/implementation/ci_performance/CIPR_POST_PYT_PYTEST_SHARD_POLICY_v0_1.json \
+            --head-sha "${GITHUB_SHA}" \
+            --shard-index "${{ matrix.shard }}" \
+            --output "${RUNNER_TEMP}/pytest-shard-manifest-${{ matrix.shard }}.json"
+          finished_ns=$(date +%s%N)
+          elapsed_ms=$(( (finished_ns - started_ns) / 1000000 ))
+          echo "OVC_CI_METRIC {\"schema\":\"ovc-ci-metric/v1\",\"metric\":\"post_pyt_pytest_shard_job_ms\",\"value_ms\":${elapsed_ms},\"head_sha\":\"${GITHUB_SHA}\",\"shard_index\":${{ matrix.shard }},\"authority_mode\":\"SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION\"}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pytest-shard-${{ matrix.shard }}-${{ github.sha }}
+          path: ${{ runner.temp }}/pytest-shard-manifest-${{ matrix.shard }}.json
+          if-no-files-found: error
+          retention-days: 14
+
+  aggregate:
+    name: OVC pytest shard shadow aggregate
+    needs: shard
+    runs-on: ubuntu-latest
+    steps:
+      - name: Record shadow-only aggregate PASS
+        run: |
+          echo "OVC_POST_PYT_PYTEST_SHARD_SHADOW=PASS"
+          echo "OVC_REQUIRED_CHECK_SUBSTITUTION=FALSE"
