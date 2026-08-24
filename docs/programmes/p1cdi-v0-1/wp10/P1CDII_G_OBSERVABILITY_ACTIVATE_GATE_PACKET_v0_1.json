@@ -7,7 +7,7 @@
   "plan_version": "eeb3cfef77c8a61ce2fb825f8f0f649ac35281f30d43ba24651fc329a11a0b9a",
   "baseline_commit": "d25236e6550b073d3a220326b764b15441182bec",
   "baseline_tree": "9433dd3f18aedc7bdceb5de8e028541cf6032855",
-  "candidate_commit": "f0fe20d0314353cd0420ebab75d1578f5c18bbb5",
+  "candidate_commit": "2ca1ce7a7487e89267be8b4d1bb752c89f9127df",
   "completed_packets": [
     "P1CDII-WP0",
     "P1CDII-WP1",
@@ -21,6 +21,20 @@
     "P1CDII-WP9",
     "P1CDII-WP10"
   ],
+  "wp10_physical_completion": {
+    "status": "COMPLETED",
+    "pr_number": 1304,
+    "merge_commit": "adaa08d900e5df137e80efde45ddf0784083e568",
+    "result_tree": "b590223837c6c3cbdce5dc8a1feff64201a1f77c",
+    "qualified_candidate_commit": "2ca1ce7a7487e89267be8b4d1bb752c89f9127df",
+    "qualified_prospective_tree": "b590223837c6c3cbdce5dc8a1feff64201a1f77c",
+    "tree_equality": true,
+    "physical_materialisation_receipt": "docs/programmes/p1cdi-v0-1/wp10/P1CDII_WP10_PHYSICAL_MATERIALISATION_RECEIPT_v0_1.json",
+    "pip_id": "707dbb9a9f4c5b88cbc26d8915adb8e0ddac3d3eb4df18a974ff5e35ea2918f2",
+    "vit_qualification_id": "4a73af8e10ced0e8eecabc3d46c450101d35167259f2958ca186fd914b90ae08",
+    "integration_admission_receipt_id": "8b27f3246c463c23e6a832145622de325f1e691381a02e16654303f70ee359f5",
+    "authority_effect": "NONE"
+  },
   "current_authority": {
     "operational_read_only": "DENIED",
     "continuous_intake": "DENIED",
@@ -43,15 +57,17 @@
     "WP8 reference/optimized equivalence and complete-capacity semantics remain PASS",
     "WP9 read-only query/projection envelope preserves frontier/currentness/visibility/completeness/warnings and no consumer self-admission",
     "WP10 live shadow remains CURRENT with zero incidents and integrity-bound deterministic stabilization ledger",
+    "WP10 physical merge tree exactly equals the qualified prospective tree",
     "false currentness, source identity drift, owner semantic conflict, leak, candidate bypass, divergence, index corruption and capacity failure route to requalification",
     "no write controls, durable intake writes or automatic activation are present",
     "a conflict-free observability reviewer is bound before any PASS activation decision"
   ],
   "tests": {
-    "wp10_preliminary_repository_workflow": 32758157674,
-    "wp10_preliminary_profile_siq_merge_readiness_workflow": 32758157649,
-    "preliminary_result": "PASS",
-    "final_closeout_exact_head_assurance": "REQUIRED_BEFORE_WP10_PHYSICAL_INTEGRATION",
+    "repository_workflow": 32760249323,
+    "profile_siq_merge_readiness_workflow": 32760249326,
+    "result": "PASS_EXACT_FINAL",
+    "qualified_candidate_head": "2ca1ce7a7487e89267be8b4d1bb752c89f9127df",
+    "qualified_result_tree": "b590223837c6c3cbdce5dc8a1feff64201a1f77c",
     "operator_gate_fresh_independent_review": "REQUIRED_BEFORE_PASS"
   },
   "qa": {
@@ -80,6 +96,7 @@
     "docs/programmes/p1cdi-v0-1/wp10/P1CDII_WP10_LIVE_SHADOW_OBSERVATION_v0_1.json",
     "docs/programmes/p1cdi-v0-1/wp10/P1CDII_WP10_QA_PACKET_v0_1.json",
     "docs/programmes/p1cdi-v0-1/wp10/P1CDII_WP10_STABILIZATION_LEDGER_v0_1.json",
+    "docs/programmes/p1cdi-v0-1/wp10/P1CDII_WP10_PHYSICAL_MATERIALISATION_RECEIPT_v0_1.json",
     "docs/programmes/p1cdi-v0-1/wp9/P1CDII_WP9_PHYSICAL_MATERIALISATION_RECEIPT_v0_1.json",
     "fixtures/research_operations/p1cdi/P1CDII_WP10_STABILIZATION_FIXTURE_v0_1.json",
     "schemas/research_operations/p1cdi/p1cdi_stabilization_v0_1.schema.json",
@@ -96,7 +113,7 @@
   },
   "rollback": "Forward-only: disable any later operational reliance, restore the P1CDI projection to read-only shadow/non-operational status, preserve all source/frontier/observation/ledger/receipt evidence, and require requalification before reactivation.",
   "recommended_decision": "DEFER",
-  "recommendation_reason": "WP10 technical evidence recommends progression to the operator gate, but activation cannot lawfully PASS until a conflict-free observability reviewer is bound and completes the required review.",
+  "recommendation_reason": "WP10 is physically complete and technically qualified, but activation cannot lawfully PASS until a conflict-free observability reviewer is bound and completes the required review.",
   "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
   "exact_work_after_approval": [
     "materialise the exact operator decision and bounded observability authority record",
