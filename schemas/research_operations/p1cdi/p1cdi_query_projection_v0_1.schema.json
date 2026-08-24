@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/p1cdi/p1cdi_query_projection_v0_1.schema.json",
+  "title": "P1CDI WP9 read-only query and consumer projection envelopes v0.1",
+  "$defs": {
+    "stringArray": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "queryResult": {
+      "type": "object",
+      "required": ["schema", "query_family", "source_frontier_id", "assessment_profile_generation", "currentness_state", "visibility_state", "completeness_state", "warnings", "reason_trace", "result", "read_only", "silent_truncation", "write_controls_present", "operational_reliance", "authority_effect", "content_sha256"],
+      "properties": {
+        "schema": {"const": "ovc-p1cdii-query-result/v0.1"},
+        "query_family": {"enum": ["SEARCH", "GET_DISTINCTION", "WHY_HERE", "HISTORY_AS_OF", "EVIDENCE", "CORRESPONDENCE", "DEMAND", "WHY_BLOCKED", "UNBLOCK_PATH", "CANDIDATE_PROGRESSION", "PORTFOLIO_STATE", "NEXT_DISCOVERY_WORK"]},
+        "source_frontier_id": {"type": "string", "minLength": 1},
+        "assessment_profile_generation": {"type": "string", "minLength": 1},
+        "currentness_state": {"type": "string", "minLength": 1},
+        "visibility_state": {"type": "string", "minLength": 1},
+        "completeness_state": {"type": "string", "minLength": 1},
+        "warnings": {"$ref": "#/$defs/stringArray"},
+        "reason_trace": {"$ref": "#/$defs/stringArray"},
+        "result": {},
+        "read_only": {"const": true},
+        "silent_truncation": {"const": "FORBIDDEN"},
+        "write_controls_present": {"const": false},
+        "operational_reliance": {"const": false},
+        "authority_effect": {"const": "NONE"},
+        "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "consoleProjection": {
+      "type": "object",
+      "required": ["schema", "source_id", "query_family", "source_frontier_id", "assessment_profile_generation", "currentness_state", "visibility_state", "completeness_state", "warnings", "reason_trace", "result", "evidence_refs", "system_atlas_refs", "read_only", "write_controls_present", "consumer_admission_granted", "system_atlas_mutation", "operational_reliance", "authority_effect", "content_sha256"],
+      "properties": {
+        "schema": {"const": "ovc-p1cdii-console-projection/v0.1"},
+        "source_id": {"const": "P1CDI"},
+        "query_family": {"type": "string", "minLength": 1},
+        "source_frontier_id": {"type": "string", "minLength": 1},
+        "assessment_profile_generation": {"type": "string", "minLength": 1},
+        "currentness_state": {"type": "string", "minLength": 1},
+        "visibility_state": {"type": "string", "minLength": 1},
+        "completeness_state": {"type": "string", "minLength": 1},
+        "warnings": {"$ref": "#/$defs/stringArray"},
+        "reason_trace": {"$ref": "#/$defs/stringArray"},
+        "result": {},
+        "evidence_refs": {"$ref": "#/$defs/stringArray"},
+        "system_atlas_refs": {"$ref": "#/$defs/stringArray"},
+        "read_only": {"const": true},
+        "write_controls_present": {"const": false},
+        "consumer_admission_granted": {"const": false},
+        "system_atlas_mutation": {"const": "DENIED"},
+        "operational_reliance": {"const": false},
+        "authority_effect": {"const": "NONE"},
+        "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "sourceAdmissionPacket": {
+      "type": "object",
+      "required": ["schema", "producer", "source_id", "source_frontier_id", "assessment_profile_generation", "projection_evidence_sha256", "producer_authority_refs", "query_families", "system_atlas_refs", "presentation_contract", "visibility_contract", "silent_truncation", "negative_evidence_parity", "producer_recommendation", "consumer_owner", "consumer_admission", "source_presentation_authority", "system_atlas_role", "write_controls", "operational_reliance", "authority_effect", "packet_sha256"],
+      "properties": {
+        "schema": {"const": "ovc-p1cdii-research-console-source-admission-packet/v0.1"},
+        "producer": {"const": "OVC-P1CDI-CONFORMANCE-v0.1"},
+        "source_id": {"const": "P1CDI"},
+        "source_frontier_id": {"type": "string", "minLength": 1},
+        "assessment_profile_generation": {"type": "string", "minLength": 1},
+        "projection_evidence_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "producer_authority_refs": {"$ref": "#/$defs/stringArray"},
+        "query_families": {"$ref": "#/$defs/stringArray"},
+        "system_atlas_refs": {"$ref": "#/$defs/stringArray"},
+        "presentation_contract": {"const": "READ_ONLY_EVIDENCE_PRESERVING"},
+        "visibility_contract": {"const": "CLASSIFY_BEFORE_INDEX_AND_PROJECTION"},
+        "silent_truncation": {"const": "FORBIDDEN"},
+        "negative_evidence_parity": {"const": "REQUIRED"},
+        "producer_recommendation": {"const": "READY_FOR_CONSUMER_OWNER_ADMISSION_REVIEW"},
+        "consumer_owner": {"const": "RESEARCH_CONSOLE"},
+        "consumer_admission": {"const": "NOT_GRANTED_BY_P1CDI"},
+        "source_presentation_authority": {"const": "NON_TRANSITIVE"},
+        "system_atlas_role": {"const": "REFERENCE_ONLY_DEEP_LINK_OWNER"},
+        "write_controls": {"const": "ABSENT"},
+        "operational_reliance": {"const": false},
+        "authority_effect": {"const": "NONE"},
+        "packet_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "oneOf": [
+    {"$ref": "#/$defs/queryResult"},
+    {"$ref": "#/$defs/consoleProjection"},
+    {"$ref": "#/$defs/sourceAdmissionPacket"}
+  ]
+}
