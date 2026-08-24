@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import tempfile
 import time
 from typing import Sequence
 
@@ -23,6 +24,7 @@ DEFAULT_POLICY = (
     ROOT
     / "registries/implementation/ci_performance/CIPR_POST_PYT_PYTEST_SHARD_POLICY_v0_1.json"
 )
+SHARD_SELECTION_ENV = "OVC_PYTEST_SHARD_SELECTION_FILE"
 
 
 @dataclass(frozen=True)
@@ -54,7 +56,7 @@ def _git_head() -> str:
 def _pytest_env() -> dict[str, str]:
     env = dict(os.environ)
     existing = env.get("PYTHONPATH", "")
-    required = (str(ROOT / "src"), str(ROOT))
+    required = (str(ROOT / "src"), str(ROOT), str(CI_DIR))
     env["PYTHONPATH"] = (
         os.pathsep.join((*required, existing))
         if existing
@@ -305,6 +307,110 @@ def _write_manifest(path: Path | None, manifest: dict) -> None:
     print(data.decode("utf-8"), end="")
 
 
+def _selection_payload(manifest: dict, shard_index: int) -> dict:
+    shard = manifest["shards"][shard_index]
+    selected = list(shard["items"])
+    if shard["item_count"] != len(selected):
+        raise RuntimeError("pytest shard selection item_count mismatch")
+    if len(selected) != len(set(selected)):
+        raise RuntimeError("pytest shard selection contains duplicate node ids")
+    return {
+        "schema": "ovc-pytest-shard-selection/v1",
+        "authority_mode": "SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION",
+        "manifest_hash": manifest["manifest_hash"],
+        "population_hash": manifest["population_hash"],
+        "shard_index": shard_index,
+        "selected_item_count": len(selected),
+        "items": selected,
+    }
+
+
+def _read_selection_payload(path: Path) -> list[str]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if payload.get("schema") != "ovc-pytest-shard-selection/v1":
+        raise RuntimeError("unsupported pytest shard selection schema")
+    if payload.get("authority_mode") != "SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION":
+        raise RuntimeError("pytest shard selection must remain shadow-only")
+    selected = payload.get("items")
+    if not isinstance(selected, list) or not selected or not all(
+        isinstance(item, str) and item for item in selected
+    ):
+        raise RuntimeError("pytest shard selection items must be a non-empty string list")
+    if payload.get("selected_item_count") != len(selected):
+        raise RuntimeError("pytest shard selection selected_item_count mismatch")
+    counts = Counter(selected)
+    duplicates = sorted(key for key, count in counts.items() if count != 1)
+    if duplicates:
+        raise RuntimeError(
+            f"pytest shard selection contains duplicate node ids: {duplicates[:20]}"
+        )
+    return selected
+
+
+def _select_collected_items(
+    items: Sequence[object], selected: Sequence[str]
+) -> tuple[list[object], list[object]]:
+    by_nodeid: dict[str, object] = {}
+    ordered_nodeids: list[str] = []
+    for item in items:
+        nodeid = getattr(item, "nodeid", None)
+        if not isinstance(nodeid, str) or not nodeid:
+            raise RuntimeError("pytest collected item is missing a stable nodeid")
+        if nodeid in by_nodeid:
+            raise RuntimeError(f"pytest collection contains duplicate nodeid: {nodeid}")
+        by_nodeid[nodeid] = item
+        ordered_nodeids.append(nodeid)
+
+    selected_counts = Counter(selected)
+    duplicate_selected = sorted(
+        key for key, count in selected_counts.items() if count != 1
+    )
+    if duplicate_selected:
+        raise RuntimeError(
+            f"pytest shard selection contains duplicate node ids: {duplicate_selected[:20]}"
+        )
+
+    missing = [nodeid for nodeid in selected if nodeid not in by_nodeid]
+    if missing:
+        raise RuntimeError(
+            f"pytest shard selection references missing collected items: {missing[:20]}"
+        )
+
+    selected_set = set(selected)
+    retained = [by_nodeid[nodeid] for nodeid in selected]
+    deselected = [
+        by_nodeid[nodeid] for nodeid in ordered_nodeids if nodeid not in selected_set
+    ]
+    if [getattr(item, "nodeid") for item in retained] != list(selected):
+        raise RuntimeError("pytest shard retained order diverges from manifest order")
+    return retained, deselected
+
+
+def pytest_collection_modifyitems(config, items) -> None:  # pragma: no cover - shard CI
+    selection_file = os.environ.get(SHARD_SELECTION_ENV)
+    if not selection_file:
+        return
+    selected = _read_selection_payload(Path(selection_file))
+    retained, deselected = _select_collected_items(items, selected)
+    if deselected:
+        config.hook.pytest_deselected(items=deselected)
+    items[:] = retained
+
+
+def _pytest_shard_command() -> list[str]:
+    return [
+        sys.executable,
+        "-m",
+        "pytest",
+        "tests",
+        "-p",
+        "pytest_shard_shadow",
+        "-q",
+        "--tb=short",
+        "--durations=20",
+    ]
+
+
 def prove(policy_path: Path, head_sha: str, output: Path | None) -> int:
     policy = _load_policy(policy_path)
     execution_sha = _git_head()
@@ -381,23 +487,20 @@ def run_shard(
             f"shard_index must be in [0, {len(manifest['shards']) - 1}]"
         )
 
-    selected = list(manifest["shards"][shard_index]["items"])
-    started = time.perf_counter()
-    completed = subprocess.run(
-        [
-            sys.executable,
-            "-m",
-            "pytest",
-            *selected,
-            "-q",
-            "--tb=short",
-            "--durations=20",
-        ],
-        cwd=ROOT,
-        env=_pytest_env(),
-        check=False,
-    )
-    elapsed = time.perf_counter() - started
+    selection = _selection_payload(manifest, shard_index)
+    with tempfile.TemporaryDirectory(prefix="ovc-pytest-shard-") as temp_dir:
+        selection_path = Path(temp_dir) / "selection.json"
+        selection_path.write_bytes(_canonical_bytes(selection))
+        env = _pytest_env()
+        env[SHARD_SELECTION_ENV] = str(selection_path)
+        started = time.perf_counter()
+        completed = subprocess.run(
+            _pytest_shard_command(),
+            cwd=ROOT,
+            env=env,
+            check=False,
+        )
+        elapsed = time.perf_counter() - started
 
     _write_manifest(output, manifest)
     payload = {
@@ -409,10 +512,11 @@ def run_shard(
         "population_hash": manifest["population_hash"],
         "shard_index": shard_index,
         "shard_count": len(manifest["shards"]),
-        "selected_item_count": len(selected),
+        "selected_item_count": selection["selected_item_count"],
         "exit_code": completed.returncode,
         "elapsed_seconds": round(elapsed, 6),
         "authority_mode": "SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION",
+        "selection_transport": "PYTEST_COLLECTION_FILTER_FILE",
     }
     print(f"OVC_PYTEST_SHARD_RESULT {json.dumps(payload, sort_keys=True)}")
     return completed.returncode
