@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[3]
 WP8 = ROOT / "docs/programmes/asocs-v0-1/implementation/wp8"
 STATE = ROOT / "records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_21_WP8_G3_REPRODUCTION_BLOCKED.json"
 POINTER = ROOT / "registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json"
+BLOCK_PACKET = "ASOCSI-WP8-G3-REPRODUCTION-INTEGRITY-PREFLIGHT"
 
 
 def _json(path: Path) -> dict:
@@ -16,7 +17,9 @@ def _json(path: Path) -> dict:
 
 
 def _cid(value: dict) -> str:
-    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()).hexdigest()
+    return hashlib.sha256(
+        json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()
+    ).hexdigest()
 
 
 def _state_generation(path: str) -> int:
@@ -48,7 +51,11 @@ def test_wp8_source_recovers_exact_g1_but_g3_identity_blocks_reveal():
     assert repro["expected_frozen"]["census_sha256"] != repro["observed_reproduction"]["census_sha256"]
     assert repro["expected_frozen"]["ordered_trace_ids_sha256"] != repro["observed_reproduction"]["ordered_trace_ids_sha256"]
     assert repro["expected_frozen"]["observation_traces"]["sha256"] != repro["observed_reproduction"]["observation_traces"]["sha256"]
-    assert all(repro["expected_frozen"]["checkpoints"][k] != repro["observed_reproduction"]["checkpoints"][k] for k in ("4392", "8784", "13176", "17568"))
+    assert all(
+        repro["expected_frozen"]["checkpoints"][key]
+        != repro["observed_reproduction"]["checkpoints"][key]
+        for key in ("4392", "8784", "13176", "17568")
+    )
     assert repro["result"] == "FAIL_G3_CONTENT_IDENTITY_MISMATCH"
     assert repro["stage1_reveal_allowed"] is False
 
@@ -66,18 +73,36 @@ def test_wp8_source_recovers_exact_g1_but_g3_identity_blocks_reveal():
     assert state["stop_boundary"] == "ASOCSI-WP8-STAGED-REVEAL_NOT_AUTHORIZED_UNTIL_G3_REPRODUCIBLE"
 
     assert pointer["programme_id"] == current["programme_id"] == state["programme_id"]
-    assert pointer["packet_id"] == current["packet_id"] == state["packet_id"]
+    assert pointer["packet_id"] == current["packet_id"]
     assert pointer["status"] == current["status"] == "BLOCKED"
-    assert pointer["next_packet"] == current["next_packet"] == state["next_packet"]
-    assert _state_generation(pointer["current_state"]) >= _state_generation(str(STATE.relative_to(ROOT)).replace("\\", "/"))
+    assert pointer["next_packet"] == current["next_packet"]
+    assert _state_generation(pointer["current_state"]) >= _state_generation(
+        str(STATE.relative_to(ROOT)).replace("\\", "/")
+    )
     assert current["human_adjudication_started"] is False
-    assert current["stop_boundary"] == state["stop_boundary"]
-    assert current["blockers"] == state["blockers"]
-    if current_path != STATE.relative_to(ROOT):
-        assert current["repository_effective"]["repository_effective"] is True
-        assert current["frozen_g3_identity"]["census_sha256"] == repro["expected_frozen"]["census_sha256"]
-        assert current["frozen_g3_identity"]["ordered_trace_ids_sha256"] == repro["expected_frozen"]["ordered_trace_ids_sha256"]
-        assert current["frozen_g3_identity"]["observation_traces_sha256"] == repro["expected_frozen"]["observation_traces"]["sha256"]
+    assert current.get("stage1_reveal_started", False) is False
+
+    if current["packet_id"] == state["packet_id"]:
+        assert current["stop_boundary"] == state["stop_boundary"]
+        assert current["blockers"] == state["blockers"]
+        if current_path != STATE.relative_to(ROOT):
+            assert current["repository_effective"]["repository_effective"] is True
+            assert current["frozen_g3_identity"]["census_sha256"] == repro["expected_frozen"]["census_sha256"]
+            assert current["frozen_g3_identity"]["ordered_trace_ids_sha256"] == repro["expected_frozen"]["ordered_trace_ids_sha256"]
+            assert current["frozen_g3_identity"]["observation_traces_sha256"] == repro["expected_frozen"]["observation_traces"]["sha256"]
+    else:
+        prerequisites = set(current.get("prerequisites", []))
+        preserved = current.get("preserved", {})
+        assert BLOCK_PACKET in prerequisites or preserved.get("wp8_g3_reproduction_block") is True
+        assert current["evidence"]["frozen_census_sha256"] == repro["expected_frozen"]["census_sha256"]
+        assert current["evidence"]["frozen_ordered_trace_ids_sha256"] == repro["expected_frozen"]["ordered_trace_ids_sha256"]
+        assert current["evidence"]["frozen_observation_trace_sha256"] == repro["expected_frozen"]["observation_traces"]["sha256"]
+        assert current["preserved"]["g3_frozen_generation"] is True
+        assert current["preserved"]["g4_review_population"] is True
+        assert current["preserved"]["g5_human_evidence"] is True
+        assert current["stop_boundary"].startswith(
+            "ASOCSI-WP8-STAGED-REVEAL_NOT_AUTHORIZED"
+        )
 
 
 def test_wp8_block_does_not_grant_reserved_or_reveal_authority():
@@ -85,4 +110,18 @@ def test_wp8_block_does_not_grant_reserved_or_reveal_authority():
     non_grants = set(authority["non_grants"])
     assert authority["authority_delta"] == "NONE"
     assert authority["scientific_effect"] == "NONE"
-    assert {"START_STAGE1_REVEAL", "HUMAN_FIDELITY_ADJUDICATION", "REVEAL_C2_OR_C2E_OR_OCCURRENCE_CONTEXT", "ALTER_G3_G4_G5_FROZEN_EVIDENCE", "SEMANTIC_REMEDIATION", "VALIDATION_OR_EC1_AUTHORITY", "PUBLICATION", "PROBABILITY", "RISK", "EXPOSURE", "TRADING", "EXECUTION", "AGENT_WRITE"}.issubset(non_grants)
+    assert {
+        "START_STAGE1_REVEAL",
+        "HUMAN_FIDELITY_ADJUDICATION",
+        "REVEAL_C2_OR_C2E_OR_OCCURRENCE_CONTEXT",
+        "ALTER_G3_G4_G5_FROZEN_EVIDENCE",
+        "SEMANTIC_REMEDIATION",
+        "VALIDATION_OR_EC1_AUTHORITY",
+        "PUBLICATION",
+        "PROBABILITY",
+        "RISK",
+        "EXPOSURE",
+        "TRADING",
+        "EXECUTION",
+        "AGENT_WRITE",
+    }.issubset(non_grants)
