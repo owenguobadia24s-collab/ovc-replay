@@ -1,0 +1,39 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "GATE_READY",
+  "packet_id": "CIPR-WP5-COORDINATED-PYT-G2-CUTOVER-GATE",
+  "prerequisites": [
+    "CIPR-G4 operator PASS and shadow shard evidence preserved",
+    "PYT-G2 operator PASS and PYT programme COMPLETED with pytest canonical runner",
+    "current main/workflows reconciled at e2f01dcf03936247c4c8ccdd3df76257710c2461",
+    "fresh PR #1290 current-CI execution evidence inspected"
+  ],
+  "authority_required": "OPERATOR_REQUIRED",
+  "authority_delta": "MATERIAL_REQUIRED_CHECK_TOPOLOGY_CHANGE_IF_PASS",
+  "baseline_commit": "e2f01dcf03936247c4c8ccdd3df76257710c2461",
+  "branch": "gate/ci-performance-g5-post-pyt-20260824",
+  "candidate_commit": null,
+  "tests": [
+    "Read-only repository/workflow reconciliation PASS",
+    "PR #1290 tests run 32722085430 PASS: 4827 passed, 1 skipped, 689 subtests in 335.62s; repeated Research Console subtree 99 passed in 0.95s",
+    "PR #1290 tiered run 32722085424 PASS: FINAL_HEAD, SIQ READY, compatibility context, OVC merge readiness"
+  ],
+  "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp5/CIPR_G5_GATE_PACKET.json#qa",
+  "decision_record": null,
+  "gate_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp5/CIPR_G5_GATE_PACKET.json",
+  "merge_commit": null,
+  "blockers": [
+    "Legacy-unittest G4 shard candidate does not cover the current canonical pytest-native surface."
+  ],
+  "warnings": [
+    "Fresh full-suite timing is one exact current run rather than a repeated post-PYT distribution.",
+    "SIQ READY and OVC merge readiness semantics remain preserved; no required-check change has been made."
+  ],
+  "next_packet": "CIPR-WP5R-POST-PYT-CANONICAL-CENSUS-IF_OPERATOR_DEFER",
+  "operator_stop_gate": "CIPR-G5-PYT-G2-CANONICAL-SHARD-CUTOVER",
+  "recommended_decision": "DEFER",
+  "rollback": "Close or supersede this gate-preparation branch/PR; current CI remains unchanged."
+}
