@@ -6,9 +6,11 @@ identity/evidence/correspondence. WP5 adds activity/currentness, demand, one-way
 referral and explicitly non-actuating NEXT_DISCOVERY_WORK machinery. WP6 adds
 candidate ancestry and mechanical-readiness projections behind a hard DMRP candidate,
 freeze and C-admission firewall. WP7 adds pre-index visibility classification,
-cross-mode/protected-source filtering and Validation negative reachability. This
-package grants no owner-scientific, candidate, Validation, operational-read,
-intake-write or actuation authority.
+cross-mode/protected-source filtering and Validation negative reachability. WP8 adds
+rebuildable optimized indexes with reference equivalence and measured capacity. WP9
+adds typed read-only query/consumer projections without consumer admission or
+operational reliance. This package grants no owner-scientific, candidate, Validation,
+operational-read, intake-write or actuation authority.
 """
 
 from .bootstrap import (
@@ -45,6 +47,12 @@ from .lifecycle import (
     project_inventory_activity,
     validate_lifecycle_event,
 )
+from .projections import (
+    P1CDIProjectionError,
+    build_console_projection,
+    build_source_admission_packet,
+)
+from .query import P1CDIQueryError, P1CDIReadOnlyQueryService, QUERY_FAMILIES
 from .reference import (
     CONFORMANCE_SEPARATION_PRINCIPLE,
     assemble_evidence_reference,
@@ -70,7 +78,11 @@ from .visibility import (
 __all__ = [
     "CONFORMANCE_SEPARATION_PRINCIPLE",
     "LEAK_SURFACES",
+    "P1CDIProjectionError",
+    "P1CDIQueryError",
+    "P1CDIReadOnlyQueryService",
     "PATH1_SAFE_REDACTED_FIELDS",
+    "QUERY_FAMILIES",
     "VISIBILITY_CLASSES",
     "assess_demand_eligibility",
     "assert_candidate_firewall",
@@ -78,6 +90,7 @@ __all__ = [
     "assert_non_actuating",
     "bind_source_disposition",
     "build_candidate_derivation_manifest",
+    "build_console_projection",
     "build_discovery_demand",
     "build_discovery_work_recommendation",
     "build_gap_demand",
@@ -88,6 +101,7 @@ __all__ = [
     "build_proposal_readiness_assessment",
     "build_rccr_referral",
     "build_semantic_projection",
+    "build_source_admission_packet",
     "build_source_frontier",
     "build_stack_sufficiency_binding",
     "build_visibility_decision",
