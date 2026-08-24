@@ -8,7 +8,8 @@ BASE = ROOT / "docs/programmes/p1cdi-v0-1/wp10"
 DECISION_PATH = BASE / "P1CDII_G_OBSERVABILITY_ACTIVATE_OPERATOR_DECISION_v0_1.json"
 RECEIPT_PATH = BASE / "P1CDII_G_OBSERVABILITY_ACTIVATE_ACTIVATION_RECEIPT_v0_1.json"
 STATE_PATH = ROOT / "records/research_operations/p1cdi/P1CDII_PROGRAMME_STATE_v0_2_OBSERVABILITY_ACTIVE.json"
-WP11_STATE_PATH = ROOT / "records/research_operations/p1cdi/P1CDII_PROGRAMME_STATE_v0_3_WP11_GATE_READY.json"
+WP11_PRE_PHYSICAL_STATE_PATH = ROOT / "records/research_operations/p1cdi/P1CDII_PROGRAMME_STATE_v0_3_WP11_GATE_READY.json"
+WP11_STATE_PATH = ROOT / "records/research_operations/p1cdi/P1CDII_PROGRAMME_STATE_v0_4_WP11_PHYSICALLY_COMPLETE_GATE_READY.json"
 POINTER_PATH = ROOT / "registries/research_operations/p1cdi/CURRENT_P1CDII_STATE_POINTER.json"
 PREDECESSOR_STATE_PATH = ROOT / "records/research_operations/p1cdi/P1CDII_PROGRAMME_STATE_v0_1.json"
 
@@ -71,7 +72,7 @@ def test_activation_receipt_grants_read_only_reliance_and_nothing_more() -> None
     assert receipt["authority_effect"] == "ACTIVATE_OPERATIONAL_READ_ONLY_P1CDI_CURRENT_PROJECTION_ONLY"
 
 
-def test_current_state_pointer_preserves_observability_activation_through_wp11_succession() -> None:
+def test_current_state_pointer_preserves_observability_activation_through_wp11_physical_completion() -> None:
     predecessor = _load(PREDECESSOR_STATE_PATH)
     assert predecessor["authority"]["operational_read_only"] == "DENIED"
     assert predecessor["packets"]["P1CDII-G-OBSERVABILITY-ACTIVATE"]["status"] == "GATE_READY"
@@ -94,19 +95,32 @@ def test_current_state_pointer_preserves_observability_activation_through_wp11_s
     assert activation_state["explicit_non_grants"] == NON_GRANTS
     assert activation_state["blockers"] == []
 
+    pre_physical = _load(WP11_PRE_PHYSICAL_STATE_PATH)
+    assert pre_physical["wp11"]["status"] == "COMPLETED_DELEGATED_PASS_PENDING_PHYSICAL_INTEGRATION"
+    assert pre_physical["authority"]["continuous_intake"] == "DENIED"
+
     pointer = _load(POINTER_PATH)
     wp11_state = _load(WP11_STATE_PATH)
-    assert pointer["current_state"].endswith("P1CDII_PROGRAMME_STATE_v0_3_WP11_GATE_READY.json")
-    assert pointer["supersedes_state"].endswith("P1CDII_PROGRAMME_STATE_v0_2_OBSERVABILITY_ACTIVE.json")
-    assert pointer["packet_id"] == "P1CDII-WP11"
+    assert pointer["current_state"].endswith("P1CDII_PROGRAMME_STATE_v0_4_WP11_PHYSICALLY_COMPLETE_GATE_READY.json")
+    assert pointer["supersedes_state"].endswith("P1CDII_PROGRAMME_STATE_v0_3_WP11_GATE_READY.json")
+    assert pointer["packet_id"] == "P1CDII-G-CONTINUOUS-INTAKE"
     assert pointer["status"] == "GATE_READY"
     assert pointer["required_return_gate"] == "P1CDII-G-CONTINUOUS-INTAKE"
     assert pointer["operational_read_only"] == "ACTIVE_EXACT_QUALIFIED_SOURCE_SCOPE_ONLY"
     assert pointer["continuous_intake"] == "DENIED"
-    assert wp11_state["supersedes"].endswith("P1CDII_PROGRAMME_STATE_v0_2_OBSERVABILITY_ACTIVE.json")
+    assert wp11_state["supersedes"].endswith("P1CDII_PROGRAMME_STATE_v0_3_WP11_GATE_READY.json@blob:b7396d178e90b736df76e6cce2f1c70b8cdaade0")
+    assert wp11_state["current_packet"] == "P1CDII-G-CONTINUOUS-INTAKE"
+    assert wp11_state["status"] == "GATE_READY"
+    assert wp11_state["wp11"]["status"] == "COMPLETED_PHYSICALLY_MATERIALISED"
+    assert wp11_state["wp11"]["merge_commit"] == "66db8351f0b7d4f1ba5233ea48c0f78bbde61542"
+    assert wp11_state["wp11"]["merge_tree"] == "8caf1001eaaf9c472d9ec18de0b2c171eae563e4"
+    assert wp11_state["wp11"]["qualified_prospective_tree"] == "8caf1001eaaf9c472d9ec18de0b2c171eae563e4"
+    assert wp11_state["wp11"]["tree_equality"] == "PASS"
     assert wp11_state["authority"]["operational_read_only"] == "ACTIVE_EXACT_QUALIFIED_SOURCE_SCOPE_ONLY"
     assert wp11_state["authority"]["continuous_intake"] == "DENIED"
     assert wp11_state["required_return_gate"] == "P1CDII-G-CONTINUOUS-INTAKE"
+    assert wp11_state["continuous_intake_gate"]["status"] == "GATE_READY"
+    assert wp11_state["continuous_intake_gate"]["recommended_decision"] == "PASS"
 
 
 def test_continuous_intake_and_consumer_admission_remain_separate_reserved_boundaries() -> None:
@@ -115,3 +129,8 @@ def test_continuous_intake_and_consumer_admission_remain_separate_reserved_bound
     assert state["operational_current_pointer_publication"] == "ALLOWED_P1CDI_OPERATIONAL_READ_ONLY_EXACT_SCOPE_ONLY"
     assert state["required_return_gate"] == "P1CDII-G-CONTINUOUS-INTAKE"
     assert "P1CDI_CONTINUOUS_INTAKE_WRITES" in state["explicit_non_grants"]
+
+    final_state = _load(WP11_STATE_PATH)
+    assert final_state["research_console_source_admission"] == "PRODUCER_READY_CONSUMER_ADMISSION_NOT_GRANTED"
+    assert final_state["authority"]["continuous_intake"] == "DENIED"
+    assert "P1CDI_CONTINUOUS_INTAKE_WRITES" in final_state["explicit_non_grants"]
