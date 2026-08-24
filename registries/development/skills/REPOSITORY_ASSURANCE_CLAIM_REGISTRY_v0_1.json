@@ -1,0 +1,122 @@
+{
+  "blocking_path_eligible": false,
+  "claims": [
+    {
+      "claim_class": "INTEGRATION_CONFORMANCE",
+      "claim_id": "DSAI::VIT_ROUTING_LINEAGE",
+      "claim_spec_id": "08455ba11ddc10a83950cfa8daed2be7dc5e938bb2fb59e2d62c7b6a971d4290",
+      "dependencies": [
+        "authority:global:default-substrate",
+        "path:src/ovc/development/skills/vit_routing.py",
+        "path:tools/ci/vit_routing_preflight.py",
+        "vit:core:routing"
+      ],
+      "execution_profile": "DELTA_EXECUTOR",
+      "harness_id": "OVC-PYTEST-CANONICAL-RUNNER-v1",
+      "reference_only": false,
+      "schema": "ovc-assurance-claim-spec/v1",
+      "unbounded": false,
+      "wide_rerun": false
+    },
+    {
+      "claim_class": "PAYLOAD_ASSURANCE",
+      "claim_id": "DSAI::PIP_IDENTITY_AND_AA0",
+      "claim_spec_id": "c1b4f01b7d0d69e5d0928b45d12c4bb628bd20508183271e7d07039b44eb1f93",
+      "dependencies": [
+        "harness:aa0",
+        "path:src/ovc/development/skills/vit_assurance_decoupling.py",
+        "path:tools/ci/vit_assurance_preflight.py",
+        "vit:core:assurance"
+      ],
+      "execution_profile": "DELTA_EXECUTOR",
+      "harness_id": "OVC-PYTEST-CANONICAL-RUNNER-v1",
+      "reference_only": false,
+      "schema": "ovc-assurance-claim-spec/v1",
+      "unbounded": false,
+      "wide_rerun": false
+    },
+    {
+      "claim_class": "ORCHESTRATION_CONFORMANCE",
+      "claim_id": "DSAI::PROFILE_AND_ORCHESTRATION",
+      "claim_spec_id": "7be9f0d1b00499c4d1819860311238e9ceb9096fffead5b3ee529792d3a8903d",
+      "dependencies": [
+        "owner:DSAI",
+        "path:scripts/development/**",
+        "path:tests/development/**"
+      ],
+      "execution_profile": "WIDE_EXECUTOR",
+      "harness_id": "OVC-PYTEST-CANONICAL-RUNNER-v1",
+      "reference_only": false,
+      "schema": "ovc-assurance-claim-spec/v1",
+      "unbounded": false,
+      "wide_rerun": true
+    },
+    {
+      "claim_class": "MATERIALISATION_EDGE",
+      "claim_id": "SIQ::EXACT_FINAL",
+      "claim_spec_id": "bbe81128d60ffc32fe565d7ea75278a9a6731055d706c2d2b267af8622f2224b",
+      "dependencies": [
+        "path:src/ovc/development/siq*",
+        "path:tests/development/test_siq*",
+        "siq:interface:exact-final"
+      ],
+      "execution_profile": "WIDE_EXECUTOR",
+      "harness_id": "OVC-PYTEST-CANONICAL-RUNNER-v1",
+      "reference_only": false,
+      "schema": "ovc-assurance-claim-spec/v1",
+      "unbounded": false,
+      "wide_rerun": true
+    },
+    {
+      "claim_class": "REPOSITORY_LAW",
+      "claim_id": "GRT::EXACT_INTEGRATION_TREE",
+      "claim_spec_id": "8389fbd21592a00bce49a2c81e5780f95d2fc559b1d5c4b16caf7a73d1d90dde",
+      "dependencies": [
+        "grt:interface:exact-final",
+        "path:src/ovc/programme_genesis/grt_v0_2/**",
+        "path:tests/programme_genesis/test_grt_v0_2*"
+      ],
+      "execution_profile": "WIDE_EXECUTOR",
+      "harness_id": "OVC-PYTEST-CANONICAL-RUNNER-v1",
+      "reference_only": false,
+      "schema": "ovc-assurance-claim-spec/v1",
+      "unbounded": false,
+      "wide_rerun": true
+    },
+    {
+      "claim_class": "REFERENCE_EXECUTOR_CONFORMANCE",
+      "claim_id": "CIPR::REFERENCE_SHARD_EQUIVALENCE",
+      "claim_spec_id": "294c48d65ba4e76aff56331fda2e24ccbfbf7224091d2fa1a50be18200a21c75",
+      "dependencies": [
+        "cipr:reference-executor",
+        "path:.github/workflows/ci-pytest-shard-shadow.yml"
+      ],
+      "execution_profile": "REFERENCE_EXECUTOR",
+      "harness_id": "OVC-PYTEST-CANONICAL-RUNNER-v1",
+      "reference_only": false,
+      "schema": "ovc-assurance-claim-spec/v1",
+      "unbounded": false,
+      "wide_rerun": true
+    },
+    {
+      "claim_class": "COVERAGE_SENTINEL",
+      "claim_id": "REPOSITORY::UNMAPPED_ASSURANCE_UNIVERSE",
+      "claim_spec_id": "38ade5517df138e0ba2ed2c426d830b5472e1b6fe6ecbf6ead7ad010fcd636bb",
+      "dependencies": [
+        "repository:*"
+      ],
+      "execution_profile": "REFERENCE_EXECUTOR",
+      "harness_id": "OVC-PYTEST-CANONICAL-RUNNER-v1",
+      "reference_only": true,
+      "schema": "ovc-assurance-claim-spec/v1",
+      "unbounded": true,
+      "wide_rerun": false
+    }
+  ],
+  "completeness": "COARSE_CLAIM_FAMILIES_ONLY",
+  "graph_id": "9bc84700ed692e27daabf90d751c17227dc98af1792a45119f03770081b47feb",
+  "programme_id": "OVC-DSAI3V-CIPR-REPOSITORY-ASSURANCE-CONTINUITY-AMENDMENT-0.1",
+  "registry_id": "RAC-CLAIMS-v0.1",
+  "schema": "ovc-assurance-claim-registry/v1",
+  "status": "SHADOW_ONLY_COARSE_CLAIM_FAMILIES"
+}
