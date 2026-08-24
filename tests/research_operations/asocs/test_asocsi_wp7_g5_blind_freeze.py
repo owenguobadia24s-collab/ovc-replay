@@ -51,11 +51,14 @@ class TestASOCSIWP7G5BlindFreeze(unittest.TestCase):
         self.assertEqual(dec["decision"],"PASS"); self.assertEqual(dec["authority_delta"],"NONE")
 
     def test_state_stops_at_wp8_human_boundary(self):
-        s=load(STATE); p=load(POINTER)
+        s=load(STATE); p=load(POINTER); current=load(ROOT/p["current_state"])
         self.assertEqual(s["status"],"COMPLETED")
         self.assertEqual(s["next_packet"],"ASOCSI-WP8-STAGED-REVEAL-AND-ADJUDICATION")
         self.assertEqual(s["stop_boundary"],"ASOCSI-WP8-STAGED-REVEAL-HUMAN_ADJUDICATION_REQUIRED")
-        self.assertEqual(p["current_state"],str(STATE.relative_to(ROOT)).replace("\\","/"))
-        self.assertEqual(p["next_packet"],s["next_packet"])
+        self.assertEqual(current["next_packet"],s["next_packet"])
+        self.assertEqual(current["stop_boundary"],s["stop_boundary"])
+        self.assertEqual(p["packet_id"],current["packet_id"])
+        self.assertEqual(p["status"],current["status"])
+        self.assertEqual(p["next_packet"],current["next_packet"])
 
 if __name__ == "__main__": unittest.main()
