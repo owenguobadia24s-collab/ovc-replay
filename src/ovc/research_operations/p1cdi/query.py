@@ -18,8 +18,11 @@ QUERY_FAMILIES = (
     "SEARCH",
     "GET_DISTINCTION",
     "WHY_HERE",
-    "HISTORY_AS_OF",
+    "HISTORY",
+    "AS_OF",
     "EVIDENCE",
+    "CONTRADICTIONS",
+    "NULLS",
     "CORRESPONDENCE",
     "DEMAND",
     "WHY_BLOCKED",
@@ -218,7 +221,12 @@ class P1CDIReadOnlyQueryService:
         return self._envelope("SEARCH", result, reason_trace=("VISIBILITY_FILTERED_BEFORE_SEARCH",))
 
     def get_distinction(self, target: str) -> dict[str, Any]:
-        records = self._matching_records(target)
+        identity_types = {
+            "P1EmpiricalDistinctionSeries",
+            "P1EmpiricalDistinctionGeneration",
+            "P1DistinctionSemanticProjection",
+        }
+        records = [record for record in self._matching_records(target) if record.get("record_type") in identity_types]
         return self._envelope("GET_DISTINCTION", records, reason_trace=("EXACT_VISIBLE_IDENTITY_MATCH",))
 
     def why_here(self, target: str) -> dict[str, Any]:
@@ -236,30 +244,44 @@ class P1CDIReadOnlyQueryService:
             "resolution_state",
             "first_valid_time",
             "source_first_valid_time",
+            "cycle_id",
+            "source_object_ref",
+            "intake_resolution_id",
+            "profile_generation",
         )
         result = [{key: deepcopy(record[key]) for key in allowed if key in record} for record in records]
         return self._envelope("WHY_HERE", result, reason_trace=("SOURCE_AND_PROFILE_REFERENCES_ONLY",))
 
-    def history_as_of(self, target: str, as_of: str) -> dict[str, Any]:
+    def history(self, target: str) -> dict[str, Any]:
+        result = [record for record in self._matching_records(target) if _first_valid(record) is not None or record.get("correction_of") is not None]
+        return self._envelope("HISTORY", result, reason_trace=("APPEND_ONLY_VISIBLE_LINEAGE",))
+
+    def as_of(self, target: str, as_of: str) -> dict[str, Any]:
         cutoff = _parse_cutoff(as_of)
         result = []
-        for record in self._matching_records(target):
+        for record in self.history(target)["result"]:
             first_valid = _first_valid(record)
-            if first_valid is None or first_valid <= cutoff:
+            if first_valid is not None and first_valid <= cutoff:
                 result.append(record)
-        return self._envelope("HISTORY_AS_OF", result, reason_trace=("FIRST_VALID_CUTOFF_ENFORCED",))
+        return self._envelope("AS_OF", result, reason_trace=("FIRST_VALID_CUTOFF_ENFORCED",))
 
     def evidence(self, target: str) -> dict[str, Any]:
         types = {
             "P1DistinctionEvidenceStateVector",
             "P1DistinctionEvidenceAssessment",
             "P1ReplicationOutcomeRecord",
-            "P1NullEvidenceBinding",
-            "P1DistinctionContradictionRecord",
             "P1MethodChallengeResult",
         }
         result = [record for record in self._matching_records(target) if record.get("record_type") in types]
         return self._envelope("EVIDENCE", result, reason_trace=("FULL_VISIBLE_VECTOR_NO_SCALAR_SCORE",))
+
+    def contradictions(self, target: str) -> dict[str, Any]:
+        result = [record for record in self._matching_records(target) if record.get("record_type") == "P1DistinctionContradictionRecord"]
+        return self._envelope("CONTRADICTIONS", result, reason_trace=("NEGATIVE_EVIDENCE_PRESERVED",))
+
+    def nulls(self, target: str) -> dict[str, Any]:
+        result = [record for record in self._matching_records(target) if record.get("record_type") == "P1NullEvidenceBinding"]
+        return self._envelope("NULLS", result, reason_trace=("NULL_RESIDUAL_CENSORING_PRESERVED",))
 
     def correspondence(self, target: str) -> dict[str, Any]:
         result = [
@@ -351,15 +373,18 @@ class P1CDIReadOnlyQueryService:
         dispatch = {
             "GET_DISTINCTION": self.get_distinction,
             "WHY_HERE": self.why_here,
+            "HISTORY": self.history,
             "EVIDENCE": self.evidence,
+            "CONTRADICTIONS": self.contradictions,
+            "NULLS": self.nulls,
             "CORRESPONDENCE": self.correspondence,
             "DEMAND": self.demand,
             "WHY_BLOCKED": self.why_blocked,
             "UNBLOCK_PATH": self.unblock_path,
             "CANDIDATE_PROGRESSION": self.candidate_progression,
         }
-        if query_family == "HISTORY_AS_OF":
-            return self.history_as_of(wanted, _exact_string(as_of, "as_of"))
+        if query_family == "AS_OF":
+            return self.as_of(wanted, _exact_string(as_of, "as_of"))
         handler = dispatch.get(query_family)
         if handler is None:
             raise P1CDIQueryError("query_family is outside the frozen WP9 registry")
