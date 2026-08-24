@@ -1,0 +1,119 @@
+{
+  "schema": "ovc-operator-gate-packet/v1",
+  "gate_id": "P1CDII-G-CONTINUOUS-INTAKE",
+  "title": "P1CDI minimal durable continuous-intake activation",
+  "programme_id": "OVC-P1CDI-CONFORMANCE-v0.1",
+  "plan_id": "OVC-P1CDI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "eeb3cfef77c8a61ce2fb825f8f0f649ac35281f30d43ba24651fc329a11a0b9a",
+  "gate_class": "OPERATOR_REQUIRED",
+  "baseline_commit": "4aac7376e60525b0c86b9f4577ce32790b0d98de",
+  "baseline_tree": "f887aa0d709b723aa7b92abbc8a2e6ba0930cdf3",
+  "completed_packets": [
+    "P1CDII-WP0",
+    "P1CDII-WP1",
+    "P1CDII-WP2",
+    "P1CDII-WP3",
+    "P1CDII-WP4",
+    "P1CDII-WP5",
+    "P1CDII-WP6",
+    "P1CDII-WP7",
+    "P1CDII-WP8",
+    "P1CDII-WP9",
+    "P1CDII-WP10",
+    "P1CDII-WP11"
+  ],
+  "current_authority": {
+    "operational_read_only": "ACTIVE_EXACT_QUALIFIED_SOURCE_SCOPE_ONLY",
+    "continuous_intake": "DENIED",
+    "research_console_consumer_admission": "NOT_GRANTED"
+  },
+  "proposed_authority_delta": "ACTIVATE_MINIMAL_DURABLE_P1CDI_CONTINUOUS_INTAKE_CONTROL_SURFACE_ONLY",
+  "proposed_durable_operation_allowlist": [
+    "SOURCE_EXPLICIT_EXACT_INTAKE",
+    "EXACT_DUPLICATE",
+    "SAME_GENERATION_EVIDENCE_ATTACHMENT"
+  ],
+  "acceptance_conditions": [
+    "P1CDII-G-OBSERVABILITY-ACTIVATE is physically materialised PASS and operational read-only reliance is active",
+    "WP11 post-activation observation remains CURRENT on the exact qualified zero-member source scope",
+    "WP11 monitoring ledger is stable with zero incidents",
+    "all ten P1CDI incident classes fail closed to disable-reliance-and-requalify",
+    "reference and optimized read paths remain equivalent",
+    "protected-source and Validation leak counts remain zero",
+    "candidate-authority survivor count remains zero",
+    "source identity and owner-semantic conflict checks remain clean",
+    "index integrity and complete-capacity semantics remain PASS",
+    "synthetic minimal exact-intake rehearsal is deterministic and ephemeral only",
+    "any durable target is rejected before this operator gate",
+    "the durable operation allowlist is exactly source-explicit exact intake, exact duplicate and same-generation evidence attachment",
+    "new real-source scope expansion, semantic promotion, candidate/freeze, scientific disposition, Validation, publication and E-H authority remain outside this gate",
+    "exact-head repository/VIT/SIQ/GRT/merge-readiness assurance passes and WP11 is physically reproducible"
+  ],
+  "acceptance_results": {
+    "observability_activation_active": "PASS",
+    "wp11_operational_currentness": "PASS",
+    "wp11_monitoring_stability": "PASS",
+    "ten_incident_fail_closed_drills": "PASS",
+    "reference_optimized_equivalence": "PASS",
+    "protected_and_validation_leaks": "PASS_ZERO",
+    "candidate_authority_survivors": "PASS_ZERO",
+    "source_and_owner_integrity": "PASS",
+    "index_and_capacity": "PASS",
+    "synthetic_minimal_intake_rehearsal": "PASS",
+    "durable_target_pre_gate_rejection": "PASS",
+    "durable_operation_allowlist_exact": "PASS",
+    "reserved_non_grants_preserved": "PASS",
+    "exact_final_assurance": "PENDING_PHYSICAL_WP11_INTEGRATION"
+  },
+  "evidence": {
+    "wp11_observation_sha256": "00c5c05313997d6e413711aca0b029fea340eb75006b6c933f1bb8481cbf2249",
+    "wp11_evaluation_sha256": "f43d5f0357c5ceb4dce09dfb86e2d68f156bfaf54cb4fe7e65ccca140ff79321",
+    "wp11_monitoring_ledger_sha256": "4d5b80409477a65b9faf4ec2d42690f508bfd3ff61fa9eac706e8b3e12897d47",
+    "wp11_rehearsal_sha256": "a94abe469eace433a9fcfb9c4b2d6337c368bb517cf072c5cd5400ea49987d25"
+  },
+  "tests": {
+    "wp11_targeted": "PENDING_EXACT_HEAD",
+    "p1cdii_namespace": "PENDING_EXACT_HEAD",
+    "repository_wide": "PENDING_EXACT_HEAD",
+    "pytest_unittest_parity": "PENDING_EXACT_HEAD",
+    "runner_parity": "PENDING_EXACT_HEAD",
+    "vit_siq_grt_merge_readiness": "PENDING_EXACT_HEAD"
+  },
+  "qa": {
+    "packet": "docs/programmes/p1cdi-v0-1/wp11/P1CDII_WP11_QA_PACKET_v0_1.json",
+    "recommendation": "PASS_TO_OPERATOR_CONTINUOUS_INTAKE_GATE_CONDITIONAL_EXACT_FINAL"
+  },
+  "warnings": [
+    "CURRENT_OPERATIONAL_P1CDI_SOURCE_SCOPE_HAS_ZERO_SUBJECTS",
+    "THIS_GATE_DOES_NOT_ITSELF_ADMIT_ANY_NEW_REAL_SOURCE",
+    "RESEARCH_CONSOLE_CONSUMER_ADMISSION_REMAINS_SEPARATE",
+    "SEMANTIC_CANDIDATE_SCIENTIFIC_VALIDATION_PUBLICATION_AND_EH_AUTHORITY_REMAIN_OUTSIDE_THIS_GATE"
+  ],
+  "unresolved_issues": [],
+  "rollback": "Forward-only: disable P1CDI durable intake writes, preserve append-only intake/control evidence, restore read-only operational projection, and require requalification before any reactivation.",
+  "recommended_decision": "PASS",
+  "recommendation_reason": "WP11 demonstrates stable read-only operation and fail-closed behavior, and reproduces only the ratified minimal intake control surface ephemerally. A PASS would activate only that exact minimal durable control surface; all scientific, source-scope expansion, consumer and execution authorities remain separate.",
+  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "exact_work_after_approval": [
+    "materialise the operator decision and bounded continuous-intake authority record",
+    "enable durable writes only for SOURCE_EXPLICIT_EXACT_INTAKE, EXACT_DUPLICATE and SAME_GENERATION_EVIDENCE_ATTACHMENT",
+    "preserve exact dedupe and same-generation constraints",
+    "do not admit new real-source scope without separate authority",
+    "keep Research Console consumer admission and all semantic/scientific/candidate/Validation/publication/E-H authorities unchanged",
+    "continue only to the plan-authorised WP12 and stop at any later reserved boundary"
+  ],
+  "explicit_non_grants": [
+    "RESEARCH_CONSOLE_SOURCE_PRESENTATION_AUTHORITY",
+    "NEW_PATH1_REAL_SOURCE_INTAKE",
+    "CANDIDATE_OR_FREEZE_AUTHORITY",
+    "SCIENTIFIC_DISPOSITION_WRITE",
+    "VALIDATION",
+    "PUBLICATION",
+    "PROBABILITY",
+    "RISK",
+    "EXPOSURE",
+    "TRADING",
+    "EXECUTION",
+    "AGENT_WRITE"
+  ]
+}

@@ -8,6 +8,7 @@ BASE = ROOT / "docs/programmes/p1cdi-v0-1/wp10"
 DECISION_PATH = BASE / "P1CDII_G_OBSERVABILITY_ACTIVATE_OPERATOR_DECISION_v0_1.json"
 RECEIPT_PATH = BASE / "P1CDII_G_OBSERVABILITY_ACTIVATE_ACTIVATION_RECEIPT_v0_1.json"
 STATE_PATH = ROOT / "records/research_operations/p1cdi/P1CDII_PROGRAMME_STATE_v0_2_OBSERVABILITY_ACTIVE.json"
+WP11_STATE_PATH = ROOT / "records/research_operations/p1cdi/P1CDII_PROGRAMME_STATE_v0_3_WP11_GATE_READY.json"
 POINTER_PATH = ROOT / "registries/research_operations/p1cdi/CURRENT_P1CDII_STATE_POINTER.json"
 PREDECESSOR_STATE_PATH = ROOT / "records/research_operations/p1cdi/P1CDII_PROGRAMME_STATE_v0_1.json"
 
@@ -70,29 +71,42 @@ def test_activation_receipt_grants_read_only_reliance_and_nothing_more() -> None
     assert receipt["authority_effect"] == "ACTIVATE_OPERATIONAL_READ_ONLY_P1CDI_CURRENT_PROJECTION_ONLY"
 
 
-def test_current_state_pointer_supersedes_stale_gate_ready_projection() -> None:
+def test_current_state_pointer_preserves_observability_activation_through_wp11_succession() -> None:
     predecessor = _load(PREDECESSOR_STATE_PATH)
     assert predecessor["authority"]["operational_read_only"] == "DENIED"
     assert predecessor["packets"]["P1CDII-G-OBSERVABILITY-ACTIVATE"]["status"] == "GATE_READY"
 
+    activation_state = _load(STATE_PATH)
+    assert activation_state["supersedes"].endswith(
+        "P1CDII_PROGRAMME_STATE_v0_1.json@blob:44ec479ae2f905ab30a8db000408a6ff97f7cf39"
+    )
+    assert activation_state["current_packet"] == "P1CDII-WP11"
+    assert activation_state["status"] == "READY"
+    assert activation_state["authority_required"] == "AUTO_EXECUTABLE"
+    assert activation_state["authority_delta"] == "NONE"
+    assert activation_state["authority"]["operational_read_only"] == "ACTIVE_EXACT_QUALIFIED_SOURCE_SCOPE_ONLY"
+    assert activation_state["authority"]["continuous_intake"] == "DENIED"
+    assert activation_state["observability_activation"]["status"] == "COMPLETED"
+    assert activation_state["observability_activation"]["decision"] == "PASS"
+    assert activation_state["observability_activation"]["operational_reliance"] is True
+    assert activation_state["required_return_gate"] == "P1CDII-G-CONTINUOUS-INTAKE"
+    assert activation_state["reserved_later_gates"] == ["P1CDII-G-CONTINUOUS-INTAKE"]
+    assert activation_state["explicit_non_grants"] == NON_GRANTS
+    assert activation_state["blockers"] == []
+
     pointer = _load(POINTER_PATH)
-    state = _load(STATE_PATH)
-    assert pointer["current_state"].endswith("P1CDII_PROGRAMME_STATE_v0_2_OBSERVABILITY_ACTIVE.json")
-    assert pointer["supersedes_state"].endswith("P1CDII_PROGRAMME_STATE_v0_1.json")
-    assert state["supersedes"].endswith("P1CDII_PROGRAMME_STATE_v0_1.json@blob:44ec479ae2f905ab30a8db000408a6ff97f7cf39")
-    assert state["current_packet"] == "P1CDII-WP11"
-    assert state["status"] == "READY"
-    assert state["authority_required"] == "AUTO_EXECUTABLE"
-    assert state["authority_delta"] == "NONE"
-    assert state["authority"]["operational_read_only"] == "ACTIVE_EXACT_QUALIFIED_SOURCE_SCOPE_ONLY"
-    assert state["authority"]["continuous_intake"] == "DENIED"
-    assert state["observability_activation"]["status"] == "COMPLETED"
-    assert state["observability_activation"]["decision"] == "PASS"
-    assert state["observability_activation"]["operational_reliance"] is True
-    assert state["required_return_gate"] == "P1CDII-G-CONTINUOUS-INTAKE"
-    assert state["reserved_later_gates"] == ["P1CDII-G-CONTINUOUS-INTAKE"]
-    assert state["explicit_non_grants"] == NON_GRANTS
-    assert state["blockers"] == []
+    wp11_state = _load(WP11_STATE_PATH)
+    assert pointer["current_state"].endswith("P1CDII_PROGRAMME_STATE_v0_3_WP11_GATE_READY.json")
+    assert pointer["supersedes_state"].endswith("P1CDII_PROGRAMME_STATE_v0_2_OBSERVABILITY_ACTIVE.json")
+    assert pointer["packet_id"] == "P1CDII-WP11"
+    assert pointer["status"] == "GATE_READY"
+    assert pointer["required_return_gate"] == "P1CDII-G-CONTINUOUS-INTAKE"
+    assert pointer["operational_read_only"] == "ACTIVE_EXACT_QUALIFIED_SOURCE_SCOPE_ONLY"
+    assert pointer["continuous_intake"] == "DENIED"
+    assert wp11_state["supersedes"].endswith("P1CDII_PROGRAMME_STATE_v0_2_OBSERVABILITY_ACTIVE.json")
+    assert wp11_state["authority"]["operational_read_only"] == "ACTIVE_EXACT_QUALIFIED_SOURCE_SCOPE_ONLY"
+    assert wp11_state["authority"]["continuous_intake"] == "DENIED"
+    assert wp11_state["required_return_gate"] == "P1CDII-G-CONTINUOUS-INTAKE"
 
 
 def test_continuous_intake_and_consumer_admission_remain_separate_reserved_boundaries() -> None:
@@ -101,4 +115,3 @@ def test_continuous_intake_and_consumer_admission_remain_separate_reserved_bound
     assert state["operational_current_pointer_publication"] == "ALLOWED_P1CDI_OPERATIONAL_READ_ONLY_EXACT_SCOPE_ONLY"
     assert state["required_return_gate"] == "P1CDII-G-CONTINUOUS-INTAKE"
     assert "P1CDI_CONTINUOUS_INTAKE_WRITES" in state["explicit_non_grants"]
-

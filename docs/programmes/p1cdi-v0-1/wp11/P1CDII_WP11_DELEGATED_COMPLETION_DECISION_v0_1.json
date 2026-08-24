@@ -1,0 +1,38 @@
+{
+  "schema": "ovc-delegated-decision/v1",
+  "programme_id": "OVC-P1CDI-CONFORMANCE-v0.1",
+  "packet_id": "P1CDII-WP11",
+  "decision": "PASS_CONDITIONAL_EXACT_FINAL_ASSURANCE",
+  "decision_authority": "DELEGATED_BY_OPERATOR_APPROVED_PLAN",
+  "authority_required": "AUTO_EXECUTABLE",
+  "authority_delta": "NONE",
+  "acceptance": {
+    "post_activation_monitoring_stable": "PASS",
+    "all_incident_classes_fail_closed": "PASS",
+    "synthetic_minimal_exact_intake_rehearsal": "PASS",
+    "durable_write_attempted": false,
+    "current_operational_read_only_scope_preserved": "PASS",
+    "continuous_intake_authority": "DENIED"
+  },
+  "qa_packet": "docs/programmes/p1cdi-v0-1/wp11/P1CDII_WP11_QA_PACKET_v0_1.json",
+  "qa_recommendation": "PASS_TO_OPERATOR_CONTINUOUS_INTAKE_GATE_CONDITIONAL_EXACT_FINAL",
+  "exact_final_assurance": "REQUIRED_BEFORE_PHYSICAL_INTEGRATION",
+  "next_packet": "P1CDII-G-CONTINUOUS-INTAKE",
+  "next_authority_required": "OPERATOR_REQUIRED",
+  "explicit_non_grants": [
+    "RESEARCH_CONSOLE_SOURCE_PRESENTATION_AUTHORITY",
+    "P1CDI_CONTINUOUS_INTAKE_WRITES",
+    "NEW_PATH1_REAL_SOURCE_INTAKE",
+    "CANDIDATE_OR_FREEZE_AUTHORITY",
+    "SCIENTIFIC_DISPOSITION_WRITE",
+    "VALIDATION",
+    "PUBLICATION",
+    "PROBABILITY",
+    "RISK",
+    "EXPOSURE",
+    "TRADING",
+    "EXECUTION",
+    "AGENT_WRITE"
+  ],
+  "rollback": "Forward-revert WP11 implementation/evidence only; preserve observability activation and all immutable programme history."
+}
