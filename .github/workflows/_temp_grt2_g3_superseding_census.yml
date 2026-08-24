@@ -6,10 +6,11 @@ on:
     paths:
       - ".github/workflows/_temp_grt2_g3_superseding_census.yml"
       - "scripts/governance/grt_v0_2/diagnose_superseding_g3_census.py"
+      - "scripts/governance/grt_v0_2/materialize_superseding_g3_reconciliation.py"
       - "docs/programmes/grt-v0-2/g3/superseding/diagnostic/**"
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: temp-grt2-g3-superseding-census-${{ github.event.pull_request.number }}
@@ -44,5 +45,89 @@ jobs:
         with:
           name: grt2-g3-superseding-census
           path: artifacts/grt2-g3-superseding-census.json
+          if-no-files-found: error
+          retention-days: 14
+      - name: Resolve exact artifact identity
+        id: artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          url="https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts"
+          row=""
+          for _ in $(seq 1 20); do
+            row=$(curl -fsSL \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "$url" | jq -c '.artifacts[] | select(.name == "grt2-g3-superseding-census")' | head -n1)
+            [[ -n "$row" ]] && break
+            sleep 2
+          done
+          [[ -n "$row" ]]
+          echo "artifact_id=$(jq -r .id <<<"$row")" >> "$GITHUB_OUTPUT"
+          echo "artifact_digest=$(jq -r .digest <<<"$row")" >> "$GITHUB_OUTPUT"
+          echo "evidence_file_sha256=$(sha256sum artifacts/grt2-g3-superseding-census.json | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+      - name: Materialise and publish exact qualified reconciliation branch
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PYTHONPATH: src:.
+          DIAGNOSTIC_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          ARTIFACT_ID: ${{ steps.artifact.outputs.artifact_id }}
+          ARTIFACT_DIGEST: ${{ steps.artifact.outputs.artifact_digest }}
+          TARGET_BRANCH: grt2/g3-superseding-readiness-reconciliation-final-20260824
+        shell: bash
+        run: |
+          set -euo pipefail
+          bundle=/tmp/grt2-g3-reconciliation-bundle
+          rm -rf "$bundle"
+          mkdir -p "$bundle"
+          python3 scripts/governance/grt_v0_2/materialize_superseding_g3_reconciliation.py \
+            --census artifacts/grt2-g3-superseding-census.json \
+            --output-root "$bundle" \
+            --workflow-run-id "$GITHUB_RUN_ID" \
+            --artifact-id "$ARTIFACT_ID" \
+            --artifact-digest "$ARTIFACT_DIGEST" \
+            --diagnostic-head-sha "$DIAGNOSTIC_HEAD_SHA"
+
+          base_sha=$(jq -r .base_commit "$bundle/materialisation-meta.json")
+          authority_id=$(jq -r .authority_manifest_id "$bundle/materialisation-meta.json")
+          frontier_id=$(jq -r .dependency_frontier_id "$bundle/materialisation-meta.json")
+          test "$(git rev-parse origin/main)" = "$base_sha"
+
+          git config user.name "OVC GRT2 Superseding Reconciliation"
+          git config user.email "ovc-grt2-superseding-reconciliation@invalid.local"
+          git checkout -B "$TARGET_BRANCH" origin/main
+          while IFS= read -r path; do
+            mkdir -p "$(dirname "$path")"
+            cp "$bundle/$path" "$path"
+            git add "$path"
+          done < <(jq -r '.changed_files[]' "$bundle/materialisation-meta.json")
+          git commit -m "GRT2-G3: reconcile superseding readiness on exact current main"
+
+          head_sha=$(git rev-parse HEAD)
+          transition='{"authority_effect":"NONE_SUPERSEDING_READINESS_RECONCILIATION_ONLY","next_packet":"GRT2-G3-SUPERSEDING-GATE-READY-MATERIALISATION","status":"COMPLETED"}'
+          python3 tools/ci/build_vit_pr_lineage.py \
+            --repo . \
+            --base "$base_sha" \
+            --head "$head_sha" \
+            --programme-id OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE \
+            --packet-id GRT2-G3-SUPERSEDING-READINESS-RECONCILIATION \
+            --authority-manifest-id "$authority_id" \
+            --dependency-frontier-id "$frontier_id" \
+            --completion-transition-json "$transition" \
+            --publish-detached | tee /tmp/grt2-g3-reconciliation-vit.txt
+          git push origin "HEAD:refs/heads/${TARGET_BRANCH}"
+          cp "$bundle/materialisation-meta.json" /tmp/grt2-g3-reconciliation-materialisation-meta.json
+          printf '%s\n' "$head_sha" > /tmp/grt2-g3-reconciliation-head.txt
+      - name: Upload reconciliation transport receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: grt2-g3-superseding-reconciliation-transport
+          path: |
+            /tmp/grt2-g3-reconciliation-materialisation-meta.json
+            /tmp/grt2-g3-reconciliation-vit.txt
+            /tmp/grt2-g3-reconciliation-head.txt
           if-no-files-found: error
           retention-days: 14
