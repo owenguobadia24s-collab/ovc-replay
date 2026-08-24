@@ -1,0 +1,123 @@
+{
+  "schema": "ovc-operator-gate-packet/v1",
+  "gate_id": "P1CDII-G-OBSERVABILITY-ACTIVATE",
+  "title": "P1CDI operational read-only current projection activation",
+  "programme_id": "OVC-P1CDI-CONFORMANCE-v0.1",
+  "plan_id": "OVC-P1CDI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "eeb3cfef77c8a61ce2fb825f8f0f649ac35281f30d43ba24651fc329a11a0b9a",
+  "baseline_commit": "d25236e6550b073d3a220326b764b15441182bec",
+  "baseline_tree": "9433dd3f18aedc7bdceb5de8e028541cf6032855",
+  "candidate_commit": "f0fe20d0314353cd0420ebab75d1578f5c18bbb5",
+  "completed_packets": [
+    "P1CDII-WP0",
+    "P1CDII-WP1",
+    "P1CDII-WP2",
+    "P1CDII-WP3",
+    "P1CDII-WP4",
+    "P1CDII-WP5",
+    "P1CDII-WP6",
+    "P1CDII-WP7",
+    "P1CDII-WP8",
+    "P1CDII-WP9",
+    "P1CDII-WP10"
+  ],
+  "current_authority": {
+    "operational_read_only": "DENIED",
+    "continuous_intake": "DENIED",
+    "shadow_state": "READ_ONLY_SHADOW_ONLY_NO_OPERATIONAL_RELIANCE"
+  },
+  "proposed_authority_delta": "ACTIVATE_OPERATIONAL_READ_ONLY_P1CDI_CURRENT_PROJECTION_ONLY",
+  "exact_source_scope": {
+    "source_census_id": "P1CDI-G0-SOURCE-CENSUS:lawful-main-35d3dc73:v0.2",
+    "source_census_sha256": "daea12a31cbfbd255f0ae5115a3298aabc39b4ead8380c117b83f1ac9a25d439",
+    "source_completeness_manifest_id": "P1CDI-G0-SOURCE-COMPLETENESS:lawful-main-35d3dc73:v0.1",
+    "source_completeness_sha256": "24198edc0f846cc8ba463c8467e025dd2a90125952e21c7c92f3bcc4a4abdc9c",
+    "expected_subject_count": 0,
+    "reconciled_subject_count": 0,
+    "inference_or_reconstruction": "FORBIDDEN"
+  },
+  "acceptance_conditions": [
+    "exact current-source census and completeness identities remain bound with zero inferred or reconstructed subjects",
+    "owner/currentness and semantic/reference independent-review gates remain PASS",
+    "WP7 visibility firewall preserves zero protected-source and Validation leaks",
+    "WP8 reference/optimized equivalence and complete-capacity semantics remain PASS",
+    "WP9 read-only query/projection envelope preserves frontier/currentness/visibility/completeness/warnings and no consumer self-admission",
+    "WP10 live shadow remains CURRENT with zero incidents and integrity-bound deterministic stabilization ledger",
+    "false currentness, source identity drift, owner semantic conflict, leak, candidate bypass, divergence, index corruption and capacity failure route to requalification",
+    "no write controls, durable intake writes or automatic activation are present",
+    "a conflict-free observability reviewer is bound before any PASS activation decision"
+  ],
+  "tests": {
+    "wp10_preliminary_repository_workflow": 32758157674,
+    "wp10_preliminary_profile_siq_merge_readiness_workflow": 32758157649,
+    "preliminary_result": "PASS",
+    "final_closeout_exact_head_assurance": "REQUIRED_BEFORE_WP10_PHYSICAL_INTEGRATION",
+    "operator_gate_fresh_independent_review": "REQUIRED_BEFORE_PASS"
+  },
+  "qa": {
+    "packet": "docs/programmes/p1cdi-v0-1/wp10/P1CDII_WP10_QA_PACKET_v0_1.json",
+    "recommendation": "PASS_TO_OPERATOR_OBSERVABILITY_GATE"
+  },
+  "warnings": [
+    "RESEARCH_CONSOLE_CONSUMER_SOURCE_ADMISSION_NOT_GRANTED_BY_THIS_GATE",
+    "CONTINUOUS_INTAKE_WRITES_REMAIN_SEPARATELY_OPERATOR_REQUIRED",
+    "NEW_PATH1_REAL_SOURCE_INTAKE_REMAINS_UNGRANTED",
+    "CANDIDATE_SCIENTIFIC_VALIDATION_PUBLICATION_AND_EH_AUTHORITY_REMAIN_OUTSIDE_THIS_GATE"
+  ],
+  "unresolved_issues": [
+    "P1CDII-G-OBSERVABILITY-ACTIVATE reviewer binding is currently UNBOUND; repository law says UNBOUND blocks activation"
+  ],
+  "reviewer_binding": {
+    "record": "records/research_operations/p1cdi/P1CDI_REVIEWER_BINDINGS_v0_1.json",
+    "status": "UNBOUND",
+    "required_independence": "independent of sole implementation authorship",
+    "activation_effect": "BLOCKS_PASS_UNTIL_BOUND_AND_REVIEW_COMPLETE"
+  },
+  "changed_files": [
+    "contracts/research_operations/p1cdi/P1CDI_LIVE_SHADOW_STABILIZATION_CONTRACT_v0_1.md",
+    "docs/programmes/p1cdi-v0-1/wp10/P1CDII_WP10_DELEGATED_COMPLETION_DECISION_v0_1.json",
+    "docs/programmes/p1cdi-v0-1/wp10/P1CDII_WP10_IMPLEMENTATION_PACKET_v0_1.json",
+    "docs/programmes/p1cdi-v0-1/wp10/P1CDII_WP10_LIVE_SHADOW_OBSERVATION_v0_1.json",
+    "docs/programmes/p1cdi-v0-1/wp10/P1CDII_WP10_QA_PACKET_v0_1.json",
+    "docs/programmes/p1cdi-v0-1/wp10/P1CDII_WP10_STABILIZATION_LEDGER_v0_1.json",
+    "docs/programmes/p1cdi-v0-1/wp9/P1CDII_WP9_PHYSICAL_MATERIALISATION_RECEIPT_v0_1.json",
+    "fixtures/research_operations/p1cdi/P1CDII_WP10_STABILIZATION_FIXTURE_v0_1.json",
+    "schemas/research_operations/p1cdi/p1cdi_stabilization_v0_1.schema.json",
+    "src/ovc/research_operations/p1cdi/stabilization.py",
+    "tests/research_operations/p1cdi/test_p1cdii_wp10_stabilization.py",
+    "tests/research_operations/p1cdi/test_p1cdii_wp1_contracts.py",
+    "tests/research_operations/p1cdi/test_p1cdii_wp1_schemas.py",
+    "records/research_operations/p1cdi/P1CDII_PROGRAMME_STATE_v0_1.json"
+  ],
+  "external_artifact_hashes": {},
+  "internal_evidence_hashes": {
+    "shadow_observation_sha256": "a776834007d2bce833329798f51f88e3698016acb6281d81a8b523a1ba662c53",
+    "stabilization_ledger_sha256": "a8bd509d52a8a72cacde2f2f12aafba8af19061be1dd813b1d2f98f86b8fa081"
+  },
+  "rollback": "Forward-only: disable any later operational reliance, restore the P1CDI projection to read-only shadow/non-operational status, preserve all source/frontier/observation/ledger/receipt evidence, and require requalification before reactivation.",
+  "recommended_decision": "DEFER",
+  "recommendation_reason": "WP10 technical evidence recommends progression to the operator gate, but activation cannot lawfully PASS until a conflict-free observability reviewer is bound and completes the required review.",
+  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "exact_work_after_approval": [
+    "materialise the exact operator decision and bounded observability authority record",
+    "if and only if PASS after the required independent review, permit operational reliance on the exact source-scoped read-only P1CDI current projection",
+    "keep Research Console consumer source admission unchanged unless separately granted",
+    "keep continuous-intake writes, new real-source intake, candidate/scientific/Validation/publication/E-H and agent-write authority denied",
+    "continue only to the next plan-authorised packet and stop again at any reserved authority boundary"
+  ],
+  "explicit_non_grants": [
+    "RESEARCH_CONSOLE_SOURCE_PRESENTATION_AUTHORITY",
+    "P1CDI_CONTINUOUS_INTAKE_WRITES",
+    "NEW_PATH1_REAL_SOURCE_INTAKE",
+    "CANDIDATE_OR_FREEZE_AUTHORITY",
+    "SCIENTIFIC_DISPOSITION_WRITE",
+    "VALIDATION",
+    "PUBLICATION",
+    "PROBABILITY",
+    "RISK",
+    "EXPOSURE",
+    "TRADING",
+    "EXECUTION",
+    "AGENT_WRITE"
+  ]
+}
