@@ -87,18 +87,13 @@ def test_historical_g3_g4_g5_frozen_evidence_is_unchanged_and_reveal_denied() ->
     assert evidence["stage1_reveal_allowed"] is False
 
 
-def test_programme_state_advances_only_to_narrowed_block() -> None:
-    pointer = load(POINTER)
-    expected = "records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_23_WP8_G3_CENSUS_IDENTITY_BLOCKED.json"
-    assert pointer["current_state"] == expected
-    assert pointer["packet_id"] == "ASOCSI-WP8-G3-REPRODUCTION-INTEGRITY-RESOLUTION"
-    assert pointer["status"] == "BLOCKED"
-    assert pointer["next_packet"] == "ASOCSI-WP8-G3-CENSUS-IDENTITY-RESOLUTION"
-
-    state = load(ROOT / expected)
+def test_narrowed_block_historical_state_remains_immutable_after_successor_execution() -> None:
+    expected = STATE / "ASOCSI_PROGRAMME_STATE_v0_23_WP8_G3_CENSUS_IDENTITY_BLOCKED.json"
+    state = load(expected)
     assert state["status"] == "BLOCKED"
     assert state["authority_delta"] == "NONE"
     assert state["blockers"] == ["G3_FROZEN_CENSUS_IDENTITY_AND_COMPACT_MANIFEST_CONSTRUCTION_NOT_REPRODUCIBLE"]
+    assert state["next_packet"] == "ASOCSI-WP8-G3-CENSUS-IDENTITY-RESOLUTION"
     assert state["preserved"] == {
         "g3_frozen_generation": True,
         "g4_review_population": True,
