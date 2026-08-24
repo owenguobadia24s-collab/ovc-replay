@@ -1,0 +1,36 @@
+{
+  "schema": "ovc-p1cdii-wp10-stabilization-fixture/v0.1",
+  "stable": {
+    "repository_commit": "cccccccccccccccccccccccccccccccccccccccc",
+    "repository_tree": "dddddddddddddddddddddddddddddddddddddddd",
+    "source_census_id": "P1CDI-G0-SOURCE-CENSUS:fixture:v0.2",
+    "source_census_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "source_completeness_manifest_id": "P1CDI-G0-SOURCE-COMPLETENESS:fixture:v0.1",
+    "source_completeness_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "expected_subject_count": 0,
+    "reconciled_subject_count": 0,
+    "currentness_state": "CURRENT",
+    "reference_optimized_equivalent": true,
+    "protected_source_leak_count": 0,
+    "validation_leak_count": 0,
+    "candidate_authority_survivor_count": 0,
+    "source_identity_drift": false,
+    "owner_semantic_conflict": false,
+    "index_integrity_ok": true,
+    "capacity_complete": true,
+    "warnings": []
+  },
+  "incident_cases": [
+    {"case_id":"STALE_CURRENTNESS","changes":{"currentness_state":"STALE"},"incident":"FALSE_CURRENTNESS"},
+    {"case_id":"UNRESOLVED_FRONTIER","changes":{"currentness_state":"UNRESOLVED"},"incident":"SOURCE_FRONTIER_UNRESOLVED"},
+    {"case_id":"COUNT_MISMATCH","changes":{"expected_subject_count":1,"reconciled_subject_count":0},"incident":"SOURCE_FRONTIER_UNRESOLVED"},
+    {"case_id":"SOURCE_IDENTITY_DRIFT","changes":{"source_identity_drift":true},"incident":"SOURCE_IDENTITY_DRIFT"},
+    {"case_id":"OWNER_SEMANTIC_CONFLICT","changes":{"owner_semantic_conflict":true},"incident":"OWNER_SEMANTIC_CONFLICT"},
+    {"case_id":"REFERENCE_DIVERGENCE","changes":{"reference_optimized_equivalent":false},"incident":"REFERENCE_OPTIMIZED_DIVERGENCE"},
+    {"case_id":"PROTECTED_SOURCE_LEAK","changes":{"protected_source_leak_count":1},"incident":"MODE_LEAK"},
+    {"case_id":"VALIDATION_LEAK","changes":{"validation_leak_count":1},"incident":"VALIDATION_LEAK"},
+    {"case_id":"CANDIDATE_SURVIVOR","changes":{"candidate_authority_survivor_count":1},"incident":"CANDIDATE_AUTHORITY_BYPASS"},
+    {"case_id":"INDEX_CORRUPTION","changes":{"index_integrity_ok":false},"incident":"INDEX_CORRUPTION"},
+    {"case_id":"CAPACITY_EXCEEDED","changes":{"capacity_complete":false},"incident":"CAPACITY_EXCEEDED"}
+  ]
+}

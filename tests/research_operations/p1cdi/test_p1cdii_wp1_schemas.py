@@ -136,7 +136,7 @@ class P1CDIIWP1SchemaTests(unittest.TestCase):
     def test_all_wp1_schemas_declare_draft_2020_12_and_resolve_references(self) -> None:
         schema_dir = ROOT / "schemas/research_operations/p1cdi"
         schemas = sorted(schema_dir.glob("*.schema.json"))
-        self.assertEqual(len(schemas), 12)
+        self.assertEqual(len(schemas), 13)
         for path in schemas:
             schema = json.loads(path.read_text(encoding="utf-8"))
             self.assertEqual(schema["$schema"], "https://json-schema.org/draft/2020-12/schema")

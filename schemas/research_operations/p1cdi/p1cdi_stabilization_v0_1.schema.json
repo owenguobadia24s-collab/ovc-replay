@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/p1cdi/p1cdi_stabilization_v0_1.schema.json",
+  "title": "P1CDI live read-only shadow and stabilization v0.1",
+  "oneOf": [
+    {"$ref": "#/$defs/observation"},
+    {"$ref": "#/$defs/evaluation"},
+    {"$ref": "#/$defs/ledger"}
+  ],
+  "$defs": {
+    "git_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "observation": {
+      "type": "object",
+      "required": ["schema","repository_commit","repository_tree","source_census_id","source_census_sha256","source_completeness_manifest_id","source_completeness_sha256","expected_subject_count","reconciled_subject_count","currentness_state","reference_optimized_equivalent","protected_source_leak_count","validation_leak_count","candidate_authority_survivor_count","source_identity_drift","owner_semantic_conflict","index_integrity_ok","capacity_complete","warnings","read_only_shadow","operational_reliance","automatic_activation","authority_effect","observation_sha256"],
+      "properties": {
+        "schema": {"const": "ovc-p1cdii-live-shadow-observation/v0.1"},
+        "repository_commit": {"$ref": "#/$defs/git_sha"},
+        "repository_tree": {"$ref": "#/$defs/git_sha"},
+        "source_census_id": {"type":"string","pattern":"^P1CDI-G0-SOURCE-CENSUS:"},
+        "source_census_sha256": {"$ref":"#/$defs/sha256"},
+        "source_completeness_manifest_id": {"type":"string","pattern":"^P1CDI-G0-SOURCE-COMPLETENESS:"},
+        "source_completeness_sha256": {"$ref":"#/$defs/sha256"},
+        "expected_subject_count": {"type":"integer","minimum":0},
+        "reconciled_subject_count": {"type":"integer","minimum":0},
+        "currentness_state": {"enum":["CURRENT","STALE","UNRESOLVED"]},
+        "reference_optimized_equivalent": {"type":"boolean"},
+        "protected_source_leak_count": {"type":"integer","minimum":0},
+        "validation_leak_count": {"type":"integer","minimum":0},
+        "candidate_authority_survivor_count": {"type":"integer","minimum":0},
+        "source_identity_drift": {"type":"boolean"},
+        "owner_semantic_conflict": {"type":"boolean"},
+        "index_integrity_ok": {"type":"boolean"},
+        "capacity_complete": {"type":"boolean"},
+        "warnings": {"type":"array","items":{"type":"string","minLength":1},"uniqueItems":true},
+        "read_only_shadow": {"const":true},
+        "operational_reliance": {"const":false},
+        "automatic_activation": {"const":false},
+        "authority_effect": {"const":"NONE"},
+        "observation_sha256": {"$ref":"#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "evaluation": {
+      "type":"object",
+      "required":["schema","observation_sha256","incident_classes","status","operational_reliance","automatic_activation","authority_effect","evaluation_sha256"],
+      "properties": {
+        "schema":{"const":"ovc-p1cdii-stabilization-evaluation/v0.1"},
+        "observation_sha256":{"$ref":"#/$defs/sha256"},
+        "incident_classes":{"type":"array","items":{"enum":["CANDIDATE_AUTHORITY_BYPASS","CAPACITY_EXCEEDED","FALSE_CURRENTNESS","INDEX_CORRUPTION","MODE_LEAK","OWNER_SEMANTIC_CONFLICT","REFERENCE_OPTIMIZED_DIVERGENCE","SOURCE_FRONTIER_UNRESOLVED","SOURCE_IDENTITY_DRIFT","VALIDATION_LEAK"]},"uniqueItems":true},
+        "status":{"enum":["PASS_SHADOW_STABLE","REQUALIFICATION_REQUIRED"]},
+        "operational_reliance":{"const":false},
+        "automatic_activation":{"const":false},
+        "authority_effect":{"const":"NONE"},
+        "evaluation_sha256":{"$ref":"#/$defs/sha256"}
+      },
+      "additionalProperties":false
+    },
+    "ledger": {
+      "type":"object",
+      "required":["schema","rows","all_stable","read_only_shadow","operational_reliance","activation_gate","automatic_activation","authority_effect","ledger_sha256"],
+      "properties": {
+        "schema":{"const":"ovc-p1cdii-stabilization-ledger/v0.1"},
+        "rows":{"type":"array","minItems":1,"items":{"type":"object","required":["observation_sha256","repository_commit","repository_tree","source_census_id","evaluation"],"properties":{"observation_sha256":{"$ref":"#/$defs/sha256"},"repository_commit":{"$ref":"#/$defs/git_sha"},"repository_tree":{"$ref":"#/$defs/git_sha"},"source_census_id":{"type":"string","pattern":"^P1CDI-G0-SOURCE-CENSUS:"},"evaluation":{"$ref":"#/$defs/evaluation"}},"additionalProperties":false}},
+        "all_stable":{"type":"boolean"},
+        "read_only_shadow":{"const":true},
+        "operational_reliance":{"const":false},
+        "activation_gate":{"const":"P1CDII-G-OBSERVABILITY-ACTIVATE"},
+        "automatic_activation":{"const":false},
+        "authority_effect":{"const":"NONE"},
+        "ledger_sha256":{"$ref":"#/$defs/sha256"}
+      },
+      "additionalProperties":false
+    }
+  }
+}
