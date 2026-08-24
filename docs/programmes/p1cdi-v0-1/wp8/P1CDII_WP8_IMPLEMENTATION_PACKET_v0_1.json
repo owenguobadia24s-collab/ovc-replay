@@ -1,0 +1,42 @@
+{
+  "schema": "ovc-p1cdii-wp8-implementation-packet/v0.1",
+  "programme_id": "OVC-P1CDI-CONFORMANCE-v0.1",
+  "plan_id": "OVC-P1CDI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "eeb3cfef77c8a61ce2fb825f8f0f649ac35281f30d43ba24651fc329a11a0b9a",
+  "packet_id": "P1CDII-WP8",
+  "gate_id": "P1CDII-G8",
+  "status": "COMPLETED_DELEGATED_PASS_PENDING_PHYSICAL_INTEGRATION",
+  "scope": "Visibility-safe rebuildable optimized indexes, exact reference equivalence, deterministic scale qualification and authority-inert operational/review budget evidence",
+  "prerequisite": "P1CDII-WP7_PHYSICAL_INTEGRATION@d3d11c1b2a89d1496090f9cd68fac0293ae0551f",
+  "artifacts": [
+    "docs/programmes/p1cdi-v0-1/wp7/P1CDII_WP7_PHYSICAL_MATERIALISATION_RECEIPT_v0_1.json",
+    "docs/programmes/p1cdi-v0-1/wp8/P1CDII_WP8_SCALE_PARAMETER_v0_1.json",
+    "docs/programmes/p1cdi-v0-1/wp8/P1CDII_WP8_OPERATIONAL_MEASUREMENT_EVIDENCE_v0_1.json",
+    "docs/programmes/p1cdi-v0-1/wp8/P1CDII_WP8_QUERY_EQUIVALENCE_RECEIPT_v0_1.json",
+    "docs/programmes/p1cdi-v0-1/wp8/P1CDII_WP8_OPERATIONAL_BUDGET_v0_1.json",
+    "src/ovc/research_operations/p1cdi/indexes.py",
+    "tests/research_operations/p1cdi/test_p1cdii_wp8_indexes_scale.py"
+  ],
+  "capacity_populations": [0, 300, 3000],
+  "acceptance": [
+    "optimized search exactly equals reference search",
+    "clean rebuild is deterministic and order independent",
+    "visibility is enforced before indexing",
+    "corrupt or over-capacity index fails closed",
+    "sampling and silent truncation remain forbidden",
+    "Generation-0 plus two larger synthetic tiers are complete without changing semantics",
+    "index footprint and reviewer queue load are measured without inventing scientific or operational thresholds"
+  ],
+  "precloseout_assurance": {
+    "qualified_head": "5f784320a49737ca1405276dd308b9e7788ae0f8",
+    "qualified_tree": "5079209993f4d9a54263144df624eb96878a193d",
+    "repository_workflow": 32724634320,
+    "tiered_workflow": 32724634650,
+    "result": "PASS"
+  },
+  "authority_required": "AUTO_EXECUTABLE",
+  "authority_delta": "NONE",
+  "operational_reliance": false,
+  "rollback": "Forward-revert WP8 only; preserve WP7 physical integration and prior immutable evidence.",
+  "next_packet_after_pass": "P1CDII-WP9"
+}
