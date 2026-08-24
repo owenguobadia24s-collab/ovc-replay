@@ -1,0 +1,40 @@
+{
+  "schema": "ovc-pytest-shard-policy/v1",
+  "policy_id": "CIPR.PYTEST.POST_PYT.SHADOW.SHARDS.v0.1",
+  "policy_version": "0.1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "packet_id": "CIPR-WP5R-POST-PYT-CANONICAL-CENSUS-SHADOW",
+  "authority_mode": "SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION",
+  "canonical_command": "PYTHONPATH=src:. python3 -m pytest tests -q --tb=short",
+  "canonical_collection_command": "PYTHONPATH=src:. python3 -m pytest tests --collect-only -q",
+  "shard_count": 4,
+  "assignment_algorithm": "CURRENT_PYTEST_COLLECTION_ORDER_HEAVY_PATH_ISOLATION_THEN_ROUND_ROBIN",
+  "heavy_path_to_shard": {
+    "tests/governance/test_genesis_repository_topology.py": 0,
+    "tests/governance/test_grt_wp9_conformance.py": 1,
+    "tests/test_zzzz_srfdi_g8r_wp6_capacity_profile.py": 2,
+    "tests/test_zzzzzz_golden2_weekly_output.py": 3
+  },
+  "require_pytest_native_items": true,
+  "required_check_substitution_active": false,
+  "runner_cutover_active": false,
+  "invariants": [
+    "exact current canonical pytest-collected item population only",
+    "pytest-native canonical items included",
+    "every canonical item identity assigned exactly once",
+    "configured historical heavyweight source paths isolated to distinct seed shards",
+    "remaining items assigned in canonical pytest collection order by deterministic round robin",
+    "item execution order within each shard preserves canonical collection order",
+    "same-head collection and manifest generation must be deterministic",
+    "no skip, marker, benchmark freshness, assertion or test-content mutation",
+    "no required-check substitution, ruleset mutation or runner cutover",
+    "SIQ READY and OVC merge readiness semantics remain unchanged"
+  ],
+  "qualification_plan": {
+    "phase_1": "exact collection census and initial four-way shadow",
+    "phase_2": "inspect per-shard durations and rebalance only through versioned deterministic policy evidence if needed",
+    "phase_3": "repeat same-head or same-tree comparable shadow runs and compare against canonical required tests",
+    "stop_boundary": "consolidated operator decision before any required-check substitution/removal or visible context retirement"
+  },
+  "rollback": "Remove or supersede only the post-PYT shadow policy/workflow/tooling/state. Preserve current required tests and all historical evidence."
+}

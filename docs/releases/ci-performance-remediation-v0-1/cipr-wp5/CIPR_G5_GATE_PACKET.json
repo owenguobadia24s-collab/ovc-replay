@@ -1,0 +1,171 @@
+{
+  "schema": "ovc-operator-gate-packet/v1",
+  "gate_id": "CIPR-G5-PYT-G2-CANONICAL-SHARD-CUTOVER",
+  "gate_title": "Post-PYT canonical shard cutover and CI rationalisation boundary",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "GATE_READY",
+  "prepared_at": "2026-08-24T13:03:00+01:00",
+  "baseline_commit": "e2f01dcf03936247c4c8ccdd3df76257710c2461",
+  "baseline_tree": "3e3edab745e8ec74616c74238cf7886af259d268",
+  "candidate_commit": "NO_RUNTIME_CANDIDATE_GATE_PREPARATION_ONLY",
+  "operator_instruction": "OVC RUN",
+  "operator_instruction_effect": "Resume the first incomplete eligible CIPR packet through gate preparation only; it does not grant the operator-reserved G5 cutover.",
+  "completed_packets": [
+    {
+      "packet_id": "CIPR-WP0-WP2-GROUPED",
+      "status": "COMPLETED"
+    },
+    {
+      "packet_id": "CIPR-WP3",
+      "status": "COMPLETED"
+    },
+    {
+      "packet_id": "CIPR-WP4-SHADOW-SHARD-CANDIDATE",
+      "status": "APPROVED_SHADOW",
+      "decision": "CIPR-G4 PASS"
+    }
+  ],
+  "current_authority": {
+    "canonical_complete_suite": "PYTHONPATH=src:. python3 -m pytest tests -q --tb=short via required job name tests",
+    "python_runner_state": "PYT COMPLETED / PYTEST canonical full-suite runner",
+    "legacy_unittest": "rollback/parity surface, not current canonical complete-suite authority",
+    "cipr_shard_candidate": "shadow-only exact legacy-unittest population",
+    "profile_selection": "FAST/PACKET/FINAL_HEAD advisory early assurance; final assurance remains mandatory",
+    "siq_ready": "payload-bound qualification stage",
+    "merge_readiness": "late-bound exact-final integration admission; preserve",
+    "required_check_substitution": "DENIED",
+    "scientific_market_authority": "NONE"
+  },
+  "post_pyt_reconciliation": {
+    "prior_g4_candidate": {
+      "qualified_population": "legacy unittest-discovered population",
+      "population_count": 1160,
+      "authority_mode": "SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION",
+      "measured_shadow_critical_path_seconds": 52,
+      "historical_same_head_canonical_seconds": "156-159"
+    },
+    "current_tests_workflow": {
+      "first_command": "PYTHONPATH=src:. python3 -m pytest tests -q --tb=short",
+      "second_command": "PYTHONPATH=src:. python3 -m pytest tests/research_console_vnext -q --tb=short",
+      "second_command_assessment": "Redundant with normal recursive pytest collection unless explicitly excluded elsewhere; the current workflow provides no such exclusion.",
+      "aa0_pip_bound_reuse": true
+    },
+    "current_tiered_workflow": {
+      "profile_selector": "FAST/PACKET/FINAL_HEAD; final assurance still mandatory",
+      "legacy_required_context": "OVC tiered test selection shadow is an echo-only compatibility context after profile assurance",
+      "siq_ready_admission": "Meaningful payload-bound qualification/receipt stage",
+      "merge_readiness": "Meaningful late-bound exact-final integration stage and explicitly required by current main ruleset verification"
+    }
+  },
+  "fresh_execution_evidence": {
+    "reference_pr": 1290,
+    "head_sha": "43279323d0eae6f0e93c5313605555b230d27fb0",
+    "tests_workflow_run": 32722085430,
+    "tests_job_id": 97415581132,
+    "aa0_disposition": "RUN_AA0",
+    "full_pytest_result": "4827 passed, 1 skipped, 689 subtests passed in 335.62s",
+    "research_console_repeat_result": "99 passed in 0.95s",
+    "tiered_workflow_run": 32722085424,
+    "profile_assurance": "PASS_FINAL_HEAD",
+    "siq_ready_admission": "PASS",
+    "legacy_required_context": "PASS_ECHO_ONLY",
+    "merge_readiness": "PASS"
+  },
+  "findings": [
+    {
+      "id": "CIPR-WP5-F1",
+      "severity": "BLOCKING_FOR_G5_PASS",
+      "finding": "The G4 deterministic shard candidate proves exact union only for the legacy unittest population. PYT-G2 subsequently changed canonical complete-suite authority to pytest tests and admitted pytest-native tests. The old shard proof therefore cannot substitute for the current canonical tests surface."
+    },
+    {
+      "id": "CIPR-WP5-F2",
+      "severity": "LATENCY",
+      "finding": "Fresh full-suite execution is 335.62 seconds on the inspected PR head, materially above the pre-PYT canonical baseline used by G4 shadow evidence."
+    },
+    {
+      "id": "CIPR-WP5-F3",
+      "severity": "DUPLICATION_LOW_COST",
+      "finding": "tests.yml reruns tests/research_console_vnext after running pytest tests. The repeated subtree was 99 tests in 0.95 seconds, so removing it is correct rationalisation but not the primary 5+ minute latency remedy."
+    },
+    {
+      "id": "CIPR-WP5-F4",
+      "severity": "DUPLICATION_CONTEXT",
+      "finding": "The visible OVC tiered test selection shadow compatibility job performs only an echo after OVC profile assurance. Retirement or context migration still requires exact ruleset/consumer verification before change."
+    },
+    {
+      "id": "CIPR-WP5-F5",
+      "severity": "PRESERVE",
+      "finding": "SIQ READY and OVC merge readiness carry distinct payload qualification and exact-final late-placement semantics. Their semantics must not be removed merely to reduce visible check count."
+    }
+  ],
+  "proposed_authority_delta": {
+    "decision_scope": "Whether to activate the previously shadow-qualified legacy-unittest deterministic shard candidate as a substitute within the post-PYT canonical assurance path.",
+    "delta_if_pass": "MATERIAL_REQUIRED_CHECK_TOPOLOGY_CHANGE",
+    "not_included": [
+      "scientific, semantic, selector, family, Validation, publication, probability, risk, exposure, trading or execution authority",
+      "force-push, history rewrite or destructive deletion",
+      "automatic removal of SIQ READY or OVC merge readiness semantics",
+      "automatic removal of PYT parity jobs",
+      "any shard mapping that omits pytest-native canonical tests"
+    ]
+  },
+  "acceptance_conditions": [
+    "candidate population identity equals the current canonical pytest collection, not merely the legacy unittest subset",
+    "zero omission, duplication or nondeterministic assignment across the current canonical population",
+    "same-head shadow aggregate equals canonical complete-suite outcome",
+    "current pytest-native tests are included",
+    "PYT parity/rollback guarantees remain satisfied or are explicitly superseded by operator authority",
+    "OVC merge readiness exact-final semantics remain intact",
+    "ruleset/required-context changes are proven before context retirement",
+    "measured current critical-path improvement is material without weakening assurance",
+    "rollback restores current required CI without history rewrite"
+  ],
+  "qa": {
+    "status": "PASS_FOR_GATE_PREPARATION",
+    "recommendation": "DEFER",
+    "operator_decision_required": true,
+    "authority_boundary_preserved": true,
+    "workflow_mutations": 0,
+    "test_weakening": false,
+    "blocking_warnings": [
+      "G4 shard proof does not cover the current post-PYT canonical pytest surface."
+    ],
+    "unresolved_review_threads": "NOT_APPLICABLE_GATE_PREPARATION"
+  },
+  "warnings": [
+    "A PASS on the old shard candidate would weaken current canonical coverage because pytest-native tests are outside its proven population.",
+    "Removing the duplicate Research Console rerun is safe to investigate but only saves about one second in the inspected run.",
+    "The echo-only tiered compatibility context is a consolidation candidate, but exact required-context consumers must be verified before retirement.",
+    "SIQ READY may be a UI/check-surface consolidation candidate only if its qualification/receipt semantics remain preserved inside the integration path."
+  ],
+  "unresolved_issues": [
+    "No current canonical pytest deterministic shard union has yet been built and shadow-qualified."
+  ],
+  "changed_files": [
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp5/CIPR_G5_GATE_PACKET.json",
+    "registries/implementation/ci_performance/OVC_CIPR_STATE_v0_3_G5_GATE_READY.json",
+    "registries/implementation/ci_performance/CURRENT_STATE_POINTER.json"
+  ],
+  "external_artifact_hashes": [],
+  "rollback": "DEFER/BLOCK leaves current CI exactly unchanged. Preserve the G4 shadow evidence and this G5 reconciliation. Do not activate the old shard candidate, delete tests, change required checks or rewrite history.",
+  "recommended_decision": "DEFER",
+  "decision_options": [
+    "PASS",
+    "DEFER",
+    "BLOCK",
+    "QUARANTINE",
+    "SUPERSEDE"
+  ],
+  "exact_work_after_defer": [
+    "prepare a bounded post-PYT canonical collection census and current heavy-test inventory from then-current main",
+    "build a current-canonical pytest shard candidate in shadow only if deterministic sharding remains preferred",
+    "prove exact union including pytest-native tests and repeat same-head equivalence",
+    "measure current critical path over repeated comparable runs",
+    "prepare one consolidated successor decision packet covering any required-check substitution/removal and any PR-check context consolidation"
+  ],
+  "exact_work_after_pass": [
+    "NOT_RECOMMENDED: do not execute PASS on the legacy shard candidate without first satisfying all acceptance conditions above; a bare PASS would be treated as insufficient/ambiguous authority and must stop."
+  ]
+}

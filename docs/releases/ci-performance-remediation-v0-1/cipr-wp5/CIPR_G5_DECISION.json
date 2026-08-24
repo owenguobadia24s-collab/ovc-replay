@@ -1,0 +1,59 @@
+{
+  "schema": "ovc-operator-decision/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "gate_id": "CIPR-G5-PYT-G2-CANONICAL-SHARD-CUTOVER",
+  "gate_title": "Post-PYT canonical shard cutover and CI rationalisation boundary",
+  "decision": "DEFER",
+  "selected_option": "DEFER_OBSOLETE_LEGACY_SHARD_AND_AUTHORIZE_POST_PYT_SHADOW_REBUILD",
+  "decision_authority": "OPERATOR",
+  "operator_instruction": "DEFER the obsolete shard and authorize construction + shadow qualification of the new post-PYT shard architecture",
+  "decision_time_local": "2026-08-24T13:16:00+01:00",
+  "baseline_main": "e2f01dcf03936247c4c8ccdd3df76257710c2461",
+  "gate_ready_commit": "b41d6c4e653569e615af217f54f6184a55473be8",
+  "pr": 1294,
+  "decision_effect": {
+    "obsolete_g4_legacy_unittest_shard_cutover": "DEFERRED_NOT_AUTHORISED_FOR_REQUIRED_CHECK_SUBSTITUTION",
+    "post_pyt_shadow_construction": "AUTHORISED",
+    "post_pyt_shadow_qualification": "AUTHORISED",
+    "required_check_cutover": "NOT_AUTHORISED",
+    "ruleset_or_required_context_retirement": "NOT_AUTHORISED"
+  },
+  "authority_granted": [
+    "inventory the exact current canonical pytest collection, including pytest-native tests",
+    "materialise a deterministic content-addressed canonical pytest collection census and heavy-test inventory",
+    "construct a bounded deterministic multi-shard candidate whose exact union equals the current canonical pytest item population",
+    "run the post-PYT shard candidate in shadow beside all current required checks",
+    "prove zero omission, zero duplication, deterministic repeatability and same-head outcome equivalence",
+    "measure shard critical path, runner overhead and current canonical baseline over repeated comparable runs",
+    "rebalance the shadow shard mapping using versioned measured-duration evidence without weakening any test",
+    "prepare one consolidated successor operator decision packet for any required-check substitution/removal or visible check-context consolidation"
+  ],
+  "authority_not_granted": [
+    "activate any shard as a substitute for the canonical tests required check",
+    "remove, skip, demote or weaken the current canonical pytest complete-suite assurance",
+    "retire pytest-unittest-parity or runner-parity",
+    "retire or change any ruleset/required status context",
+    "remove SIQ READY semantics or OVC merge readiness semantics",
+    "change VIT, SIQ, GRT, PDC or physical-main authority",
+    "enable unordered pytest-xdist execution as an authoritative runner",
+    "change scientific evidence semantics, benchmark assertions, selector semantics, Validation, publication, probability, risk, exposure, trading or execution authority",
+    "force-push, rewrite history or destructively delete historical evidence"
+  ],
+  "acceptance_for_shadow_qualification": [
+    "current canonical pytest collection is deterministically enumerated and content-addressed",
+    "pytest-native items are included",
+    "every canonical collected item belongs to exactly one shard",
+    "the shard union equals the canonical collection with zero omissions and zero duplicates",
+    "same-head repeated manifest generation is byte-identical",
+    "all shards fail closed and are independently reproducible",
+    "same-head aggregate shadow outcome equals the canonical complete-suite outcome",
+    "current required checks remain unchanged throughout shadow qualification",
+    "performance evidence separates execution critical path from runner queue/bootstrap overhead",
+    "rollback removes or disables only the post-PYT shadow candidate while preserving current CI and evidence"
+  ],
+  "rollback": "Forward-disable or supersede only the post-PYT shadow shard candidate/tooling/workflow/state. Preserve current required CI, the obsolete G4 evidence, PYT evidence, SIQ/VIT/GRT semantics and Git history.",
+  "next_packet": "CIPR-WP5R-POST-PYT-CANONICAL-CENSUS-SHADOW",
+  "continuation": "AUTO_CONTINUE_THROUGH_SHADOW_QUALIFICATION_THEN_STOP_AT_CONSOLIDATED_CUTOVER_DECISION"
+}
