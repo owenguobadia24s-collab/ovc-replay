@@ -1,0 +1,20 @@
+{
+  "record_type": "P1CDIQueryEquivalenceReceipt",
+  "schema_version": "0.1",
+  "receipt_id": "P1CDII-WP8-QUERY-EQUIVALENCE-v0.1",
+  "packet_id": "P1CDII-WP8",
+  "assertions": [
+    {"assertion_id": "REFERENCE_OPTIMIZED_EXACT_EQUIVALENCE", "result": "PASS", "reason_codes": ["EXACT_RESULT_SET_EQUALITY"]},
+    {"assertion_id": "CLEAN_REBUILD_ORDER_INDEPENDENT", "result": "PASS", "reason_codes": ["DETERMINISTIC_REBUILD"]},
+    {"assertion_id": "VISIBILITY_BEFORE_INDEXING", "result": "PASS", "reason_codes": ["FAIL_CLOSED_PREINDEX_VISIBILITY"]},
+    {"assertion_id": "CORRUPT_INDEX_FAILS_CLOSED", "result": "PASS", "reason_codes": ["INDEX_CONTENT_HASH_BOUND"]},
+    {"assertion_id": "NO_SAMPLING_OR_SILENT_TRUNCATION", "result": "PASS", "reason_codes": ["COMPLETE_POPULATION_ONLY"]}
+  ],
+  "result": "PASS",
+  "authority_effect": "NONE",
+  "source_evidence_refs": [
+    "tests/research_operations/p1cdi/test_p1cdii_wp8_indexes_scale.py",
+    "docs/programmes/p1cdi-v0-1/wp8/P1CDII_WP8_OPERATIONAL_MEASUREMENT_EVIDENCE_v0_1.json",
+    "github-actions:32724634320"
+  ]
+}
