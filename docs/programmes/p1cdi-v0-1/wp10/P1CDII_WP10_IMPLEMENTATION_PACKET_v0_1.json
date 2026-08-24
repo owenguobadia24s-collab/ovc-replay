@@ -4,7 +4,7 @@
   "plan_id": "OVC-P1CDI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "eeb3cfef77c8a61ce2fb825f8f0f649ac35281f30d43ba24651fc329a11a0b9a",
   "packet_id": "P1CDII-WP10",
-  "status": "IMPLEMENTED_AWAITING_QA",
+  "status": "COMPLETED_DELEGATED_PASS_PENDING_PHYSICAL_INTEGRATION",
   "baseline_commit": "d25236e6550b073d3a220326b764b15441182bec",
   "baseline_tree": "9433dd3f18aedc7bdceb5de8e028541cf6032855",
   "scope": "Exact current-source live read-only P1CDI shadow, stabilization ledger, fail-closed incident routing and observability-activation evidence preparation",
@@ -23,7 +23,9 @@
     "src/ovc/research_operations/p1cdi/stabilization.py",
     "tests/research_operations/p1cdi/test_p1cdii_wp10_stabilization.py",
     "docs/programmes/p1cdi-v0-1/wp10/P1CDII_WP10_LIVE_SHADOW_OBSERVATION_v0_1.json",
-    "docs/programmes/p1cdi-v0-1/wp10/P1CDII_WP10_STABILIZATION_LEDGER_v0_1.json"
+    "docs/programmes/p1cdi-v0-1/wp10/P1CDII_WP10_STABILIZATION_LEDGER_v0_1.json",
+    "docs/programmes/p1cdi-v0-1/wp10/P1CDII_WP10_QA_PACKET_v0_1.json",
+    "docs/programmes/p1cdi-v0-1/wp10/P1CDII_WP10_DELEGATED_COMPLETION_DECISION_v0_1.json"
   ],
   "incident_triggers": [
     "CANDIDATE_AUTHORITY_BYPASS",
@@ -49,6 +51,19 @@
     "every incident routes to requalification rather than silent fallback",
     "shadow cannot auto-activate or create operational reliance"
   ],
+  "assurance": {
+    "initial_repository_workflow": 32755473674,
+    "initial_result": "CORRECTABLE_CONTRACT_CENSUS_REGRESSION_ONLY",
+    "repair_commit": "5205e02323c872c04b783fb205969549bd6088a8",
+    "qualified_repository_workflow": 32758157674,
+    "qualified_profile_siq_merge_readiness_workflow": 32758157649,
+    "qualified_result": "PASS",
+    "repository_suite": "4908_PASS_1_SKIP_689_SUBTESTS_PASS",
+    "research_console_suite": "99_PASS",
+    "final_closeout_exact_head": "REQUIRED_BEFORE_MERGE"
+  },
+  "qa_packet": "docs/programmes/p1cdi-v0-1/wp10/P1CDII_WP10_QA_PACKET_v0_1.json",
+  "decision_record": "docs/programmes/p1cdi-v0-1/wp10/P1CDII_WP10_DELEGATED_COMPLETION_DECISION_v0_1.json",
   "authority_required": "AUTO_EXECUTABLE",
   "authority_delta": "NONE",
   "read_only_shadow": true,
