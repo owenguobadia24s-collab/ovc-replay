@@ -1,0 +1,49 @@
+name: Temp GRT2 G3 superseding census artifact
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/_temp_grt2_g3_superseding_census.yml"
+      - "scripts/governance/grt_v0_2/diagnose_superseding_g3_census.py"
+      - "docs/programmes/grt-v0-2/g3/superseding/diagnostic/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: temp-grt2-g3-superseding-census-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  census:
+    name: GRT2 G3 exact superseding census artifact
+    if: github.head_ref == 'grt2/g3-superseding-census-artifact-20260824'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          show-progress: false
+      - name: Fetch exact protected main history
+        run: git fetch --no-tags origin main:refs/remotes/origin/main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11.15"
+      - name: Install deterministic repository test dependencies
+        run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
+      - name: Build exact source-bound superseding census
+        env:
+          GRT2_G3_CURRENT_MAIN: ${{ github.event.pull_request.base.sha }}
+          GRT2_G3_SUPERSEDING_CENSUS_OUT: artifacts/grt2-g3-superseding-census.json
+          PYTHONPATH: src:.
+        run: python3 scripts/governance/grt_v0_2/diagnose_superseding_g3_census.py
+      - name: Upload immutable diagnostic census evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: grt2-g3-superseding-census
+          path: artifacts/grt2-g3-superseding-census.json
+          if-no-files-found: error
+          retention-days: 14
