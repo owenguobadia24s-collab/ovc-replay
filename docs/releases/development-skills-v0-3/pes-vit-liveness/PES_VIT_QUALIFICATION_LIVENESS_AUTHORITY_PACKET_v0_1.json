@@ -1,0 +1,67 @@
+{
+  "schema": "ovc-pes-vit-qualification-liveness-authority-packet/v0.1",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "packet_id": "DSAI3V-PES-VIT-LIVENESS-WP0",
+  "gate_id": "DSAI3V-PES-VIT-G-LIVENESS-1",
+  "decision_baseline_main": "02fe8e2bf78d98b32d7240979add9b5603eba0f1",
+  "operator_authorization": {
+    "instructions": [
+      "IMPLEMENT",
+      "OVC CONTINUE"
+    ],
+    "decision": "PASS_BOUNDED_IMPLEMENTATION_AND_CONTINUATION",
+    "scope": "Correct the detached exact-head qualification liveness gap without weakening or replacing VIT authority.",
+    "authority_effect": "NONE_SAFETY_CONFORMANCE_CORRECTION"
+  },
+  "authority_manifest": {
+    "plan_id": "PES-VIT-QUALIFICATION-LIVENESS-v0.1",
+    "packet_id": "DSAI3V-PES-VIT-LIVENESS-WP0",
+    "gate_id": "DSAI3V-PES-VIT-G-LIVENESS-1",
+    "authority_class": "AUTO_EXECUTABLE",
+    "authority_delta": "NONE",
+    "authority_sources": [
+      "OPERATOR_CONTINUATION:OVC CONTINUE",
+      "OPERATOR_INSTRUCTION:IMPLEMENT",
+      "contracts/development/skills/pes/PES_PERSISTENT_EXECUTION_SERVICE_CONTRACT_v0_1.md",
+      "contracts/development/v0_5/OVC_VIT_DETACHED_QUALIFICATION_CONFORMANCE_CONTRACT_v0_1.md"
+    ],
+    "reserved_boundaries": [
+      "NO_AUTHORITY_MANUFACTURE",
+      "VIT_DECIDES_QUALIFICATION_VALIDITY",
+      "SIQ_SERIALIZED_PHYSICAL_INTEGRATION_ONLY",
+      "NO_DIRECT_MAIN_WRITE"
+    ],
+    "security_envelope_id": null
+  },
+  "dependency_frontier": {
+    "dependencies": [
+      "MAIN_BASE:02fe8e2bf78d98b32d7240979add9b5603eba0f1",
+      "PR1287:MERGED_VIT_LATE_BINDING_RULESET_COMPATIBILITY",
+      "VIT_DETACHED_QUALIFICATION_CONFORMANCE:ACTIVE",
+      "VIT_LEDGER_REF:ovc/vit-qualification-ledger-v1"
+    ],
+    "predecessor_requirement": "PHYSICAL_MATERIALISATION_REQUIRED",
+    "owner_bindings": [
+      "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+      "DSAI_VIT_PHYSICAL_CONTROLLER"
+    ]
+  },
+  "completion_transition": {
+    "status": "COMPLETED",
+    "next_packet": null
+  },
+  "explicit_non_grants": [
+    "NO_PROGRAMME_AUTHORITY_CHANGE",
+    "NO_SCIENTIFIC_OR_MARKET_AUTHORITY",
+    "NO_EXECUTION_OR_EXPOSURE_AUTHORITY",
+    "NO_MERGE_AUTHORITY",
+    "NO_PARALLEL_PHYSICAL_WRITER",
+    "NO_DIRECT_MAIN_WRITE",
+    "NO_RULESET_BYPASS",
+    "NO_REQUIRED_CHECK_REMOVAL",
+    "NO_FORCE_PUSH",
+    "NO_HISTORY_REWRITE"
+  ],
+  "qualification_policy": "Publish only an exact-head/tree detached qualification envelope after this payload freezes; do not derive authority from PR text and do not create a renewal commit.",
+  "rollback": "Remove the PES reconciliation adapter in a forward correction while preserving all detached qualification envelopes, receipts and Git history."
+}
