@@ -1,15 +1,15 @@
 {
-  "schema": "ovc-programme-state/v1",
-  "programme_id": "OVC-P1CDI-CONFORMANCE-v0.1",
-  "plan_id": "OVC-P1CDI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
-  "plan_version": "eeb3cfef77c8a61ce2fb825f8f0f649ac35281f30d43ba24651fc329a11a0b9a",
-  "current_packet": "P1CDII-WP7",
-  "status": "READY",
-  "baseline_commit": "8e53e52537e9756e350b7f8d0c1551db3c581c6a",
-  "baseline_tree": "3a384633ccf0feb184c10f052b81dd4459c475ac",
-  "authority": {"P1CDII-G0":"OPERATOR_PASS_MATERIALISED","operational_read_only":"DENIED","continuous_intake":"DENIED"},
-  "completed_packets": [{"packet_id":"P1CDII-WP0","status":"COMPLETED","merge_commit":"cd2385ef7ec3d16bcbb0357f71cbe9c09d8deded","decision":"OPERATOR_PASS"},{"packet_id":"P1CDII-WP1","status":"COMPLETED","merge_commit":"a11d29569321e4fe608f09dd51c04349c3f1c13f","decision":"PASS"},{"packet_id":"P1CDII-WP2","status":"COMPLETED","merge_commit":"1741e3f221bfdbbed75d1c0980e6ccc95869b4ad","decision":"PASS"},{"packet_id":"P1CDII-WP3","status":"COMPLETED","merge_commit":"34d436ec2479928dd9c1169f71a693e73b197504","decision":"PASS"}],
-  "packets": {
+  "schema":"ovc-programme-state/v1",
+  "programme_id":"OVC-P1CDI-CONFORMANCE-v0.1",
+  "plan_id":"OVC-P1CDI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
+  "plan_version":"eeb3cfef77c8a61ce2fb825f8f0f649ac35281f30d43ba24651fc329a11a0b9a",
+  "current_packet":"P1CDII-WP8",
+  "status":"READY",
+  "baseline_commit":"8e53e52537e9756e350b7f8d0c1551db3c581c6a",
+  "baseline_tree":"3a384633ccf0feb184c10f052b81dd4459c475ac",
+  "authority":{"P1CDII-G0":"OPERATOR_PASS_MATERIALISED","operational_read_only":"DENIED","continuous_intake":"DENIED"},
+  "completed_packets":[{"packet_id":"P1CDII-WP0","status":"COMPLETED","merge_commit":"cd2385ef7ec3d16bcbb0357f71cbe9c09d8deded","decision":"OPERATOR_PASS"},{"packet_id":"P1CDII-WP1","status":"COMPLETED","merge_commit":"a11d29569321e4fe608f09dd51c04349c3f1c13f","decision":"PASS"},{"packet_id":"P1CDII-WP2","status":"COMPLETED","merge_commit":"1741e3f221bfdbbed75d1c0980e6ccc95869b4ad","decision":"PASS"},{"packet_id":"P1CDII-WP3","status":"COMPLETED","merge_commit":"34d436ec2479928dd9c1169f71a693e73b197504","decision":"PASS"}],
+  "packets":{
     "P1CDII-WP0":{"status":"COMPLETED","prerequisites":["P1CDI-DG8:PRESENT_ON_MAIN"],"authority_required":"OPERATOR_REQUIRED","authority_delta":"BOUNDED_MECHANICAL_IMPLEMENTATION","tests":["PR1130_REQUIRED_CI_PASS","PR1130_VIT_GRT_SIQ_PASS"],"blockers":[],"next_packet":"P1CDII-WP1"},
     "P1CDII-WP1":{"status":"COMPLETED","prerequisites":["P1CDII-WP0_COMPLETED@cd2385ef7ec3d16bcbb0357f71cbe9c09d8deded"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"NONE","tests":["tests/research_operations/p1cdi/test_p1cdii_wp1_contracts.py:PASS","tests/research_operations/p1cdi/test_p1cdii_wp1_schemas.py:PASS","REPOSITORY_REQUIRED_CI@32122534305:PASS","VIT_GRT_SIQ@32122533974:PASS"],"blockers":[],"next_packet":"P1CDII-WP2"},
     "P1CDII-WP2":{"status":"COMPLETED","prerequisites":["P1CDII-WP1_DELEGATED_PASS@a11d29569321e4fe608f09dd51c04349c3f1c13f"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"NONE","tests":["tests/research_operations/p1cdi:PASS_52_OF_52","P1CDII-G2-ALG_INDEPENDENT_REVIEW@98a1a7c557270fcf62b29057d47df4dcf71f4abe:BLOCK","P1CDII-WP2-REMEDIATION@ca8561705f90d5f0f2a777a1c4d7ac22bcb8f55e:PASS","P1CDII-G2-ALG-FRESH-INDEPENDENT-REVIEW@f24fba3e5cd39a6a4e9ad3b4f1364da221e32143:BLOCK","P1CDII-WP2-REMEDIATION-2@fceb68163603573928cce2da94d046e0dbfaf905:PASS","P1CDII-G2-ALG-FRESH-INDEPENDENT-REVIEW-2@1741e3f221bfdbbed75d1c0980e6ccc95869b4ad:PASS","P1CDII-G2-ALG-FRESH-INDEPENDENT-REVIEW-2:SHA256:cd597d7b5f768ad35e08765559b94c5e710c81617da7e98dcd85aceecdd03976"],"blockers":[],"next_packet":"P1CDII-WP3"},
@@ -31,8 +31,9 @@
     "P1CDII-G4-ALG-FRESH-INDEPENDENT-REVIEW-5":{"status":"COMPLETED","prerequisites":["P1CDII-WP4-REMEDIATION-5_COMPLETED_EXACT_FINAL"],"authority_required":"INDEPENDENT_BLOCKING","authority_delta":"NONE","tests":["REVIEW5:PASS","REVIEW5_WITNESS_MAP_SHA256:32a991d762a6c3eb304a52ea20a47276959559d1ee1ad0d1d92d6022616a1247","REPOSITORY_REQUIRED_CI@32642701799:PASS","TIERED_FINAL_ASSURANCE@32642701809:PASS","VIT_QUALIFICATION:731303b7c7f47d6e13095b20a77e464e8927d97053086d48e97c8d2cdc13bed1:PASS"],"blockers":[],"next_packet":"P1CDII-WP5"},
     "P1CDII-WP5":{"status":"COMPLETED","prerequisites":["P1CDII-G4-ALG_PASS_MATERIALISED@8e53e52537e9756e350b7f8d0c1551db3c581c6a"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"NONE","tests":["P1CDII-WP5-DEMAND-LIFECYCLE:PASS_IN_REPOSITORY_SUITE","REPOSITORY_REQUIRED_CI@32647302394:PASS","PYTEST_UNITTEST_PARITY:PASS","RUNNER_PARITY:PASS","FINAL_HEAD_PROFILE@32647302440:PASS","SIQ_READY:PASS","GRT_EXACT_TREE:EXACT_FINAL_INTEGRATION_CONDITION","EXACT_FINAL_MERGE_READINESS:EXACT_FINAL_INTEGRATION_CONDITION"],"blockers":[],"next_packet":"P1CDII-WP6"},
     "P1CDII-WP6":{"status":"COMPLETED","prerequisites":["P1CDII-WP5_PHYSICAL_INTEGRATION@1b7ee314e7d1886e127a2d13a2a93a287b328196"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"NONE","tests":["P1CDII-WP6-CANDIDATE-FIREWALL:EXACT_FINAL_REQUIRED","P1CDII_NAMESPACE_SUITE:EXACT_FINAL_REQUIRED","REPOSITORY_REQUIRED_CI:EXACT_FINAL_INTEGRATION_CONDITION","VIT_GRT_SIQ:EXACT_FINAL_INTEGRATION_CONDITION"],"blockers":[],"next_packet":"P1CDII-WP7"},
-    "P1CDII-WP7":{"status":"READY","prerequisites":["P1CDII-WP6_DELEGATED_PASS_PENDING_PHYSICAL_INTEGRATION"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"NONE","tests":[],"blockers":[],"next_packet":"P1CDII-WP8"}
+    "P1CDII-WP7":{"status":"COMPLETED","prerequisites":["P1CDII-WP6_PHYSICAL_INTEGRATION@4890bdab207923b1da86cd2c280a12be473a7832"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"NONE","tests":["P1CDII-WP7-TARGETED:PASS_IN_REPOSITORY_SUITE","P1CDII_NAMESPACE:PASS_IN_REPOSITORY_SUITE","REPOSITORY_REQUIRED_CI@32654405616:PASS","PYTEST_UNITTEST_PARITY@32654405616:PASS","RUNNER_PARITY@32654405616:PASS","FINAL_HEAD_PROFILE@32654405704:PASS","VIT_QUALIFICATION:ff21b24ff7a03a0d526261c79c8691e849c15a647dc572d82f0f1a27a111cde5:PASS","SIQ_READY@32654405704:PASS","GRT_EXACT_TREE@32654405704:PASS","EXACT_FINAL_MERGE_READINESS@32654405704:PASS"],"blockers":[],"next_packet":"P1CDII-WP8"},
+    "P1CDII-WP8":{"status":"READY","prerequisites":["P1CDII-WP7_DELEGATED_PASS_PENDING_PHYSICAL_INTEGRATION"],"authority_required":"AUTO_EXECUTABLE","authority_delta":"NONE","tests":[],"blockers":[],"next_packet":"P1CDII-WP9"}
   },
-  "blockers": [],
-  "next_packet": "P1CDII-WP7"
+  "blockers":[],
+  "next_packet":"P1CDII-WP8"
 }

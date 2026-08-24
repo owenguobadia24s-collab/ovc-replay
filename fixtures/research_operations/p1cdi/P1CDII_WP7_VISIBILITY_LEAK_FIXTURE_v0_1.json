@@ -1,0 +1,72 @@
+{
+  "schema": "p1cdii-wp7-visibility-leak-fixture/v0.1",
+  "classification_cases": [
+    {
+      "case_id": "INCOMPLETE_DEFAULTS_PROTECTED",
+      "source_ref": "source:incomplete",
+      "classification": "PATH1_FULL",
+      "classification_complete": false,
+      "permission_refs": ["perm:path1:eligible"],
+      "expected": "PROTECTED"
+    },
+    {
+      "case_id": "PATH1_FULL_REQUIRES_PERMISSION",
+      "source_ref": "source:full-without-permission",
+      "classification": "PATH1_FULL",
+      "classification_complete": true,
+      "permission_refs": [],
+      "expected": "PROTECTED"
+    },
+    {
+      "case_id": "CROSS_MODE_REQUIRES_FREEZE",
+      "source_ref": "source:cross-mode-without-freeze",
+      "classification": "CROSS_MODE_POST_FREEZE",
+      "classification_complete": true,
+      "permission_refs": ["perm:cross-mode"],
+      "expected": "PROTECTED"
+    },
+    {
+      "case_id": "CROSS_MODE_EXACT_FREEZE",
+      "source_ref": "source:cross-mode-frozen",
+      "classification": "CROSS_MODE_POST_FREEZE",
+      "classification_complete": true,
+      "permission_refs": ["perm:cross-mode"],
+      "cross_mode_freeze_ref": "dmrp:freeze:exact-1",
+      "expected": "CROSS_MODE_POST_FREEZE"
+    }
+  ],
+  "leak_cases": [
+    {"surface": "FIELDS", "field": "payload", "secret": "WP7_SECRET_FIELDS_01"},
+    {"surface": "TITLES", "field": "title", "secret": "WP7_SECRET_TITLES_02"},
+    {"surface": "IDS", "field": "source_id", "secret": "WP7_SECRET_IDS_03"},
+    {"surface": "COUNTS", "field": "count", "secret": "WP7_SECRET_COUNTS_04"},
+    {"surface": "AGGREGATES", "field": "aggregate", "secret": "WP7_SECRET_AGGREGATES_05"},
+    {"surface": "GRAPH_NEIGHBOURS", "field": "neighbours", "secret": "WP7_SECRET_NEIGHBOURS_06"},
+    {"surface": "DEMAND_TEXT", "field": "demand_text", "secret": "WP7_SECRET_DEMAND_07"},
+    {"surface": "CANDIDATE_COUNTS", "field": "candidate_count", "secret": "WP7_SECRET_CANDIDATE_COUNT_08"},
+    {"surface": "SEARCH_SUGGESTIONS", "field": "suggestion", "secret": "WP7_SECRET_SEARCH_09"},
+    {"surface": "CACHE_METADATA", "field": "cache_metadata", "secret": "WP7_SECRET_CACHE_10"},
+    {"surface": "ERRORS", "field": "error", "secret": "WP7_SECRET_ERROR_11"},
+    {"surface": "PATHS", "field": "path", "secret": "WP7_SECRET_PATH_12"}
+  ],
+  "path1_safe_record": {
+    "safe_summary": "lawful-path1-summary",
+    "path2_candidate_predicate": "SECRET_PATH2_PREDICATE",
+    "path2_candidate_example": "SECRET_PATH2_EXAMPLE",
+    "path2_candidate_falsifier": "SECRET_PATH2_FALSIFIER",
+    "path2_parameter_boundary": "SECRET_PATH2_PARAMETER",
+    "restricted_neighbourhood": "SECRET_PATH2_NEIGHBOURHOOD"
+  },
+  "independence_cases": [
+    {
+      "case_id": "NO_EXPOSURE_IS_UNKNOWN",
+      "exposure_refs": [],
+      "expected": "INDEPENDENCE_UNKNOWN"
+    },
+    {
+      "case_id": "EXPOSURE_WITHOUT_OWNER_ASSESSMENT_IS_UNKNOWN",
+      "exposure_refs": ["exposure:1"],
+      "expected": "INDEPENDENCE_UNKNOWN"
+    }
+  ]
+}
