@@ -1,0 +1,218 @@
+name: CIPR WP5R shadow observer diagnostic
+
+on:
+  pull_request:
+    branches:
+      - "diagnostic/cipr-wp5r-shadow-observer-base-20260824"
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  observe:
+    name: Observe exact-head post-PYT shard shadow
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TARGET_SHA: 76d3ca0c5bd37f8dafacbf8e8bb85b29c88bee66
+      SHADOW_WORKFLOW_PATH: .github/workflows/ci-pytest-shard-shadow.yml
+    steps:
+      - name: Query exact push-only shard runs and prove repeated evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          repo="${GITHUB_REPOSITORY}"
+          work="${RUNNER_TEMP}/cipr-shadow-observer"
+          mkdir -p "${work}"
+
+          gh api "/repos/${repo}/actions/runs?head_sha=${TARGET_SHA}&event=push&per_page=100" > "${work}/runs.json"
+
+          python3 - "${work}" "${TARGET_SHA}" "${SHADOW_WORKFLOW_PATH}" <<'PY'
+          from __future__ import annotations
+          import json, pathlib, sys
+          work = pathlib.Path(sys.argv[1])
+          target = sys.argv[2]
+          workflow_path = sys.argv[3]
+          payload = json.loads((work / "runs.json").read_text())
+          matches = [
+              run for run in payload.get("workflow_runs", [])
+              if run.get("head_sha") == target
+              and run.get("event") == "push"
+              and run.get("path") == workflow_path
+          ]
+          matches.sort(key=lambda run: (run.get("created_at") or "", int(run.get("id", 0))))
+          for run in matches:
+              print("OVC_SHADOW_RUN_MATCH " + json.dumps({
+                  "id": run.get("id"),
+                  "head_branch": run.get("head_branch"),
+                  "head_sha": run.get("head_sha"),
+                  "status": run.get("status"),
+                  "conclusion": run.get("conclusion"),
+                  "run_number": run.get("run_number"),
+                  "created_at": run.get("created_at"),
+                  "updated_at": run.get("updated_at"),
+                  "event": run.get("event"),
+                  "path": run.get("path"),
+              }, sort_keys=True))
+          completed = [run for run in matches if run.get("status") == "completed"]
+          successful = [run for run in completed if run.get("conclusion") == "success"]
+          (work / "all_ids.txt").write_text("".join(f"{run['id']}\n" for run in completed))
+          (work / "success_ids.txt").write_text("".join(f"{run['id']}\n" for run in successful))
+          print(f"OVC_SHADOW_COMPLETED_MATCH_COUNT={len(completed)}")
+          print(f"OVC_SHADOW_SUCCESSFUL_MATCH_COUNT={len(successful)}")
+          PY
+
+          while IFS= read -r run_id; do
+            [ -n "${run_id}" ] || continue
+            gh api "/repos/${repo}/actions/runs/${run_id}" > "${work}/run-${run_id}.json"
+            gh api "/repos/${repo}/actions/runs/${run_id}/jobs?per_page=100" > "${work}/jobs-${run_id}.json"
+            gh run view "${run_id}" --repo "${repo}" --log > "${work}/log-${run_id}.txt" || true
+            echo "OVC_SHADOW_LOG_EXTRACT run_id=${run_id}"
+            grep -E 'BYTE_IDENTICAL_EXACT_ONE_CURRENT_PYTEST_UNION|OVC_PYTEST_SHARD_RESULT|OVC_CI_METRIC|OVC_POST_PYT_PYTEST_SHARD_SHADOW|OVC_REQUIRED_CHECK_SUBSTITUTION|[0-9]+ passed|[0-9]+ skipped|[0-9]+ deselected' "${work}/log-${run_id}.txt" || true
+          done < "${work}/all_ids.txt"
+
+          while IFS= read -r run_id; do
+            [ -n "${run_id}" ] || continue
+            mkdir -p "${work}/artifacts-${run_id}"
+            gh run download "${run_id}" --repo "${repo}" --dir "${work}/artifacts-${run_id}"
+          done < "${work}/success_ids.txt"
+
+          python3 - "${work}" "${TARGET_SHA}" <<'PY'
+          from __future__ import annotations
+          from datetime import datetime
+          import json, pathlib, re, sys
+
+          work = pathlib.Path(sys.argv[1])
+          target = sys.argv[2]
+          success_ids = [line.strip() for line in (work / "success_ids.txt").read_text().splitlines() if line.strip()]
+          evidence = []
+
+          def stamp(value: str):
+              return datetime.fromisoformat(value.replace("Z", "+00:00"))
+
+          for run_id in success_ids:
+              run = json.loads((work / f"run-{run_id}.json").read_text())
+              jobs = json.loads((work / f"jobs-{run_id}.json").read_text()).get("jobs", [])
+              log = (work / f"log-{run_id}.txt").read_text(errors="replace")
+
+              manifests = []
+              for path in sorted((work / f"artifacts-{run_id}").rglob("*.json")):
+                  try:
+                      value = json.loads(path.read_text())
+                  except Exception:
+                      continue
+                  if value.get("schema") == "ovc-pytest-shard-manifest/v1":
+                      manifests.append(value)
+              if len(manifests) < 5:
+                  raise SystemExit(f"run {run_id}: expected manifest proof + four shard manifests, found {len(manifests)}")
+              canonical_manifest = manifests[0]
+              if any(value != canonical_manifest for value in manifests[1:]):
+                  raise SystemExit(f"run {run_id}: manifest artifacts are not logically identical")
+
+              result_payloads = []
+              for match in re.finditer(r"OVC_PYTEST_SHARD_RESULT\s+(\{.*?\})(?:\r?\n|$)", log):
+                  try:
+                      result_payloads.append(json.loads(match.group(1)))
+                  except json.JSONDecodeError:
+                      pass
+              unique_results = {}
+              for result in result_payloads:
+                  if result.get("head_sha") == target:
+                      unique_results[int(result["shard_index"])] = result
+              if sorted(unique_results) != [0, 1, 2, 3]:
+                  raise SystemExit(f"run {run_id}: missing shard result payloads {sorted(unique_results)}")
+
+              shard_counts = [int(shard["item_count"]) for shard in canonical_manifest["shards"]]
+              for index, result in unique_results.items():
+                  if result.get("status") != "PASS" or int(result.get("exit_code", -1)) != 0:
+                      raise SystemExit(f"run {run_id}: shard {index} did not PASS")
+                  if int(result.get("selected_item_count", -1)) != shard_counts[index]:
+                      raise SystemExit(f"run {run_id}: shard {index} selected count mismatch")
+                  if result.get("manifest_hash") != canonical_manifest.get("manifest_hash"):
+                      raise SystemExit(f"run {run_id}: shard {index} manifest hash mismatch")
+                  if result.get("population_hash") != canonical_manifest.get("population_hash"):
+                      raise SystemExit(f"run {run_id}: shard {index} population hash mismatch")
+                  if result.get("authority_mode") != "SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION":
+                      raise SystemExit(f"run {run_id}: shard {index} authority mode drift")
+                  if result.get("selection_transport") != "PYTEST_COLLECTION_FILTER_FILE":
+                      raise SystemExit(f"run {run_id}: shard {index} transport drift")
+
+              if sum(shard_counts) != int(canonical_manifest["population_count"]):
+                  raise SystemExit(f"run {run_id}: shard count union cardinality mismatch")
+              flattened = [item for shard in canonical_manifest["shards"] for item in shard["items"]]
+              if len(flattened) != len(set(flattened)) or len(flattened) != int(canonical_manifest["population_count"]):
+                  raise SystemExit(f"run {run_id}: manifest exact-one proof failed")
+              if "OVC_POST_PYT_PYTEST_SHARD_SHADOW=PASS" not in log:
+                  raise SystemExit(f"run {run_id}: aggregate PASS token missing")
+              if "OVC_REQUIRED_CHECK_SUBSTITUTION=FALSE" not in log:
+                  raise SystemExit(f"run {run_id}: required-check preservation token missing")
+
+              shard_jobs = {}
+              for job in jobs:
+                  name = str(job.get("name", ""))
+                  match = re.fullmatch(r"OVC pytest shard shadow ([0-3])", name)
+                  if match:
+                      idx = int(match.group(1))
+                      if job.get("conclusion") != "success":
+                          raise SystemExit(f"run {run_id}: workflow shard job {idx} not successful")
+                      shard_jobs[idx] = {
+                          "job_id": job.get("id"),
+                          "started_at": job.get("started_at"),
+                          "completed_at": job.get("completed_at"),
+                          "wall_seconds": round((stamp(job["completed_at"]) - stamp(job["started_at"])).total_seconds(), 3),
+                      }
+              if sorted(shard_jobs) != [0, 1, 2, 3]:
+                  raise SystemExit(f"run {run_id}: missing successful shard jobs")
+
+              summaries = []
+              for line in log.splitlines():
+                  if re.search(r"\b\d+ passed\b", line) and ("deselected" in line or "subtests" in line or "skipped" in line):
+                      summaries.append(line[-500:])
+
+              start = run.get("run_started_at") or run.get("created_at")
+              end = run.get("updated_at")
+              result = {
+                  "run_id": int(run_id),
+                  "run_number": run.get("run_number"),
+                  "head_branch": run.get("head_branch"),
+                  "head_sha": run.get("head_sha"),
+                  "event": run.get("event"),
+                  "workflow_path": run.get("path"),
+                  "conclusion": run.get("conclusion"),
+                  "workflow_wall_seconds": round((stamp(end) - stamp(start)).total_seconds(), 3),
+                  "population_count": canonical_manifest.get("population_count"),
+                  "population_hash": canonical_manifest.get("population_hash"),
+                  "legacy_unittest_item_count": canonical_manifest.get("legacy_unittest_item_count"),
+                  "pytest_native_item_count": canonical_manifest.get("pytest_native_item_count"),
+                  "pytest_native_population_hash": canonical_manifest.get("pytest_native_population_hash"),
+                  "policy_hash": canonical_manifest.get("policy_hash"),
+                  "manifest_hash": canonical_manifest.get("manifest_hash"),
+                  "shard_item_counts": shard_counts,
+                  "shard_results": [unique_results[i] for i in range(4)],
+                  "shard_jobs": [shard_jobs[i] for i in range(4)],
+                  "pytest_summary_lines": summaries,
+                  "authority_mode": canonical_manifest.get("authority_mode"),
+              }
+              result["critical_shard_wrapper_seconds"] = max(float(x["elapsed_seconds"]) for x in result["shard_results"])
+              result["aggregate_shard_wrapper_seconds"] = round(sum(float(x["elapsed_seconds"]) for x in result["shard_results"]), 6)
+              evidence.append(result)
+
+          print("OVC_SHADOW_OBSERVER_EVIDENCE " + json.dumps(evidence, sort_keys=True))
+          if len(evidence) < 2:
+              raise SystemExit(f"need >=2 successful exact-head push repetitions; found {len(evidence)}")
+          first = evidence[0]
+          stable_fields = [
+              "population_count", "population_hash", "legacy_unittest_item_count",
+              "pytest_native_item_count", "pytest_native_population_hash", "policy_hash",
+              "manifest_hash", "shard_item_counts", "authority_mode",
+          ]
+          for other in evidence[1:]:
+              for field in stable_fields:
+                  if other[field] != first[field]:
+                      raise SystemExit(f"repetition identity mismatch in {field}")
+          print("OVC_SHADOW_REPETITION_PROOF=PASS")
+          print("OVC_SHADOW_EXACT_ONE_UNION=PASS")
+          print("OVC_SHADOW_ALL_FOUR_SHARDS=PASS")
+          print("OVC_REQUIRED_CHECK_SUBSTITUTION=FALSE")
+          PY
