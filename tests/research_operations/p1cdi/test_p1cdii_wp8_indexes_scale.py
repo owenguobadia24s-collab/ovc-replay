@@ -6,6 +6,7 @@ import time
 
 import pytest
 
+from ovc.research_operations.canonical import canonical_json_bytes
 from ovc.research_operations.p1cdi.indexes import (
     P1CDICapacityExceeded,
     P1CDIIndexError,
@@ -19,6 +20,37 @@ from ovc.research_operations.p1cdi.visibility import (
     build_visibility_decision,
     build_visibility_safe_index_entry,
 )
+
+
+_EXPECTED_TIER_EVIDENCE = {
+    0: {
+        "index_sha256": "ab08f1f00e89678516ff9d0d22f6d3c36616b57815978ac8d76b12badc196d0f",
+        "index_canonical_bytes": 406,
+        "review_required_count": 0,
+        "unresolved_count": 0,
+        "reopened_count": 0,
+        "queue_age_units": 0,
+        "reviewer_effort_units": 0,
+    },
+    300: {
+        "index_sha256": "528e9f71027e007d4557913cc34548e0d518aa6124990dcd168a0e9f5de3d11b",
+        "index_canonical_bytes": 4773576,
+        "review_required_count": 100,
+        "unresolved_count": 28,
+        "reopened_count": 18,
+        "queue_age_units": 897,
+        "reviewer_effort_units": 600,
+    },
+    3000: {
+        "index_sha256": "4a514a82d7058716762d3b2340194cd8df3d553e0dacda01d6f9d14f635ccbaa",
+        "index_canonical_bytes": 47704133,
+        "review_required_count": 1000,
+        "unresolved_count": 273,
+        "reopened_count": 177,
+        "queue_age_units": 8994,
+        "reviewer_effort_units": 6000,
+    },
+}
 
 
 def _population(size: int) -> list[dict]:
@@ -50,7 +82,7 @@ def _population(size: int) -> list[dict]:
 
 
 @pytest.mark.parametrize("size", [0, 300, 3000])
-def test_reference_optimized_equivalence_clean_rebuild_and_scale(size: int, capsys) -> None:
+def test_reference_optimized_equivalence_clean_rebuild_and_scale(size: int) -> None:
     entries = _population(size)
     started = time.perf_counter()
     evidence = assert_reference_equivalence(
@@ -70,17 +102,38 @@ def test_reference_optimized_equivalence_clean_rebuild_and_scale(size: int, caps
     assert first["rebuildable"] is True
     assert first["authority_effect"] == "NONE"
 
+    expected = _EXPECTED_TIER_EVIDENCE[size]
+    assert first["index_sha256"] == expected["index_sha256"]
+    assert len(canonical_json_bytes(first, trailing_newline=False)) == expected["index_canonical_bytes"]
+
+    review = measure_review_queue(entries)
+    assert review["measured_records"] == size
+    for field in (
+        "review_required_count",
+        "unresolved_count",
+        "reopened_count",
+        "queue_age_units",
+        "reviewer_effort_units",
+    ):
+        assert review[field] == expected[field]
+    assert review["threshold_effect"] == "NONE"
+    assert review["authority_effect"] == "NONE"
+
     measurement = {
         "packet_id": "P1CDII-WP8",
         "tier_size": size,
         "elapsed_ms_informational": elapsed_ms,
         "index_sha256": first["index_sha256"],
+        "index_canonical_bytes": expected["index_canonical_bytes"],
         "equivalence_evidence_sha256": evidence["evidence_sha256"],
+        "review_required_count": review["review_required_count"],
+        "unresolved_count": review["unresolved_count"],
+        "reopened_count": review["reopened_count"],
+        "queue_age_units": review["queue_age_units"],
+        "reviewer_effort_units": review["reviewer_effort_units"],
         "threshold_effect": "NONE",
     }
     print("P1CDII_WP8_MEASUREMENT " + json.dumps(measurement, sort_keys=True))
-    captured = capsys.readouterr().out
-    assert "P1CDII_WP8_MEASUREMENT" in captured
 
 
 def test_search_semantics_match_reference_for_casefold_infix_short_and_missing() -> None:
@@ -130,9 +183,9 @@ def test_review_load_is_measured_without_creating_a_threshold() -> None:
     measurement = measure_review_queue(_population(300))
     assert measurement["measured_records"] == 300
     assert measurement["review_required_count"] == 100
-    assert measurement["unresolved_count"] > 0
-    assert measurement["reopened_count"] > 0
-    assert measurement["queue_age_units"] > 0
-    assert measurement["reviewer_effort_units"] > 0
+    assert measurement["unresolved_count"] == 28
+    assert measurement["reopened_count"] == 18
+    assert measurement["queue_age_units"] == 897
+    assert measurement["reviewer_effort_units"] == 600
     assert measurement["threshold_effect"] == "NONE"
     assert measurement["authority_effect"] == "NONE"
