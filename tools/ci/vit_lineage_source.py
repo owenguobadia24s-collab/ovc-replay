@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 import re
+import time
 from typing import Any, Mapping
 import urllib.error
 import urllib.request
@@ -50,6 +51,25 @@ def _repo_from_env() -> str:
     if not repo or "/" not in repo:
         raise RuntimeError("VIT_LINEAGE_REPOSITORY_CONTEXT_MISSING")
     return repo
+
+
+def _qualification_reconcile_window_seconds() -> float:
+    """Return the bounded PES liveness window for detached qualification visibility.
+
+    Permanent GitHub Actions admission may race the independent qualification
+    publisher. In that environment we reconcile for a short bounded window
+    instead of manufacturing a failed first attempt. Local/recovery callers stay
+    fail-fast unless they explicitly opt into a window.
+    """
+    default = "180" if os.environ.get("GITHUB_ACTIONS", "").strip().lower() == "true" else "0"
+    raw = os.environ.get("OVC_PES_VIT_QUALIFICATION_WAIT_SECONDS", default).strip()
+    try:
+        value = float(raw)
+    except ValueError as exc:
+        raise RuntimeError("PES_VIT_QUALIFICATION_WAIT_INVALID") from exc
+    if value < 0 or value > 600:
+        raise RuntimeError("PES_VIT_QUALIFICATION_WAIT_OUT_OF_RANGE")
+    return value
 
 
 def _fetch_git_blob(blob_sha: str) -> bytes:
@@ -155,12 +175,27 @@ def resolve_candidate_lineage(
 
     The detached qualification ledger is authoritative. PR-body lineage is never
     consulted unless an explicit historical-recovery caller opts in.
+
+    Under GitHub Actions, a real detached-ledger read receives a bounded PES
+    reconciliation window so permanent admission can survive publication/visibility
+    races without weakening exact-head qualification law or requiring a rerun.
     """
-    qualification = resolve_qualification_envelope(
-        root=root,
-        head_sha=head_sha,
-        fetch_file=fetch_qualification_file,
-    )
+    wait_seconds = 0.0 if fetch_qualification_file is not None else _qualification_reconcile_window_seconds()
+    deadline = time.monotonic() + wait_seconds
+    qualification = None
+    while True:
+        qualification = resolve_qualification_envelope(
+            root=root,
+            head_sha=head_sha,
+            fetch_file=fetch_qualification_file,
+        )
+        if qualification is not None:
+            break
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            break
+        time.sleep(min(5.0, remaining))
+
     if qualification is not None:
         lineage_raw = _canonical_json_bytes(qualification.record)
         return ResolvedLineageSource(
