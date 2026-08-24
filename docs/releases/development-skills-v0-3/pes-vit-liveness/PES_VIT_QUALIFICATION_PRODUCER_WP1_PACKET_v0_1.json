@@ -1,0 +1,87 @@
+{
+  "schema": "ovc-pes-vit-qualification-producer-wp1-packet/v0.1",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "packet_id": "DSAI3V-PES-VIT-PRODUCER-WP1",
+  "gate_id": "DSAI3V-PES-VIT-G-PRODUCER-IMPLEMENTATION-1",
+  "decision_baseline_main": "568eeb3f9254a060c8efe063563e517f0ca9fab0",
+  "status": "GATE_READY",
+  "operator_continuation": "OVC CONTINUE",
+  "authority_effect": "NONE_SAFETY_CONFORMANCE_CORRECTION",
+  "purpose": "Construct the missing authoritative-producer half of detached exact-head VIT qualification as a programme-agnostic PES shadow capability without activating ledger writes or persistent producer dispatch.",
+  "authority_manifest": {
+    "plan_id": "PES-VIT-QUALIFICATION-PRODUCER-v0.1",
+    "packet_id": "DSAI3V-PES-VIT-PRODUCER-WP1",
+    "gate_id": "DSAI3V-PES-VIT-G-PRODUCER-IMPLEMENTATION-1",
+    "authority_class": "AUTO_EXECUTABLE",
+    "authority_delta": "NONE",
+    "authority_sources": [
+      "OPERATOR_CONTINUATION:OVC CONTINUE",
+      "PR1290:MERGED_PES_VIT_QUALIFICATION_LIVENESS",
+      "contracts/development/skills/pes/PES_PERSISTENT_EXECUTION_SERVICE_CONTRACT_v0_1.md",
+      "contracts/development/skills/pes/PES_VIT_QUALIFICATION_PRODUCER_CONTRACT_v0_1.md",
+      "contracts/development/v0_5/OVC_VIT_DETACHED_QUALIFICATION_CONFORMANCE_CONTRACT_v0_1.md",
+      "registries/authority/DSAI3V_VIT_GENERAL_AUTHORITY_v0_1.json"
+    ],
+    "reserved_boundaries": [
+      "NO_AUTHORITY_MANUFACTURE",
+      "NO_LEDGER_WRITE_IN_WP1",
+      "NO_PERSISTENT_PRODUCER_DISPATCH_IN_WP1",
+      "NO_VIT_PROGRAMME_RESURRECTION",
+      "NO_DIRECT_MAIN_WRITE",
+      "NO_MERGE_CAPABILITY"
+    ],
+    "security_envelope_id": null
+  },
+  "dependency_frontier": {
+    "dependencies": [
+      "MAIN_BASE:568eeb3f9254a060c8efe063563e517f0ca9fab0",
+      "PR1290:MERGED",
+      "PES_VIT_LIVENESS_RECONCILIATION:ACTIVE",
+      "VIT_DETACHED_QUALIFICATION_CONFORMANCE:ACTIVE",
+      "VIT_QUALIFICATION_STORE:tools/ci/vit_qualification_store.py",
+      "VIT_LEDGER_REF:ovc/vit-qualification-ledger-v1"
+    ],
+    "predecessor_requirement": "PHYSICAL_MATERIALISATION_REQUIRED",
+    "owner_bindings": [
+      "DSAI_VIT_PHYSICAL_CONTROLLER",
+      "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY"
+    ]
+  },
+  "implemented_surface": [
+    "CANONICAL_OWNER_ISSUED_PUBLICATION_REQUEST",
+    "EXACT_HEAD_BINDING",
+    "PIP_AUTHORITY_FRONTIER_CROSS_CHECK",
+    "TRUSTED_ISSUER_MATCH",
+    "FIXED_LEDGER_TARGET",
+    "SHADOW_ENVELOPE_PREPARATION",
+    "FAIL_CLOSED_TARGET_AND_IDENTITY_DRIFT"
+  ],
+  "explicit_non_grants": [
+    "NO_LEDGER_WRITE_AUTHORITY",
+    "NO_PERSISTENT_UNATTENDED_PRODUCER_AUTHORITY",
+    "NO_EVENT_SUBSCRIPTION_OR_POLLING_AUTHORITY",
+    "NO_GENERIC_PROGRAMME_AUTO_ADMISSION",
+    "NO_PROGRAMME_AUTHORITY_CHANGE",
+    "NO_VIT_AUTHORITY_CHANGE",
+    "NO_SIQ_OR_GRT_AUTHORITY_CHANGE",
+    "NO_SCIENTIFIC_OR_MARKET_AUTHORITY",
+    "NO_EXECUTION_OR_EXPOSURE_AUTHORITY",
+    "NO_DIRECT_MAIN_WRITE",
+    "NO_MERGE",
+    "NO_FORCE_PUSH",
+    "NO_HISTORY_REWRITE"
+  ],
+  "completion_transition": {
+    "status": "GATE_READY",
+    "next_packet": "DSAI3V-PES-VIT-G-PRODUCER-ACTIVATION"
+  },
+  "activation_boundary": {
+    "gate_id": "DSAI3V-PES-VIT-G-PRODUCER-ACTIVATION",
+    "decision": "PENDING_OPERATOR",
+    "authority_required": "OPERATOR_REQUIRED",
+    "required_operator_phrase": "OVC APPROVE PES-VIT-QUALIFICATION-PRODUCER ACTIVATION PASS",
+    "minimum_activation_scope": "Trusted owner-issued request -> exact VIT envelope -> ledger-ref-only publication under PES liveness; no programme semantics and no physical-main write.",
+    "current_effect": "DENY_LEDGER_WRITE_AND_PERSISTENT_PRODUCER_DISPATCH"
+  },
+  "rollback": "Forward-remove or disable the shadow producer core while preserving PR1290 liveness behavior, detached qualification evidence, VIT/SIQ authority, and Git history."
+}
