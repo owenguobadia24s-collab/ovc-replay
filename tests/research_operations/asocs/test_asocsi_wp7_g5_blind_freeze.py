@@ -3,16 +3,38 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+import re
 import unittest
 
 ROOT = Path(__file__).resolve().parents[3]
 WP7 = ROOT / "docs/programmes/asocs-v0-1/implementation/wp7"
 REC = ROOT / "records/research_operations/asocs/wp7"
 STATE = ROOT / "records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_19_WP7_G5_BLIND_EVIDENCE_FROZEN.json"
+G5_REPOSITORY_EFFECTIVE_STATE = ROOT / "records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_20_WP7_G5_REPOSITORY_EFFECTIVE.json"
 POINTER = ROOT / "registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json"
+G5_PACKET_ID = "ASOCSI-WP7-G5-BLIND-EVIDENCE-FREEZE"
+G5_GATE_ID = "ASOCSI-G5"
 
 def load(p): return json.loads(p.read_text(encoding="utf-8"))
 def csha(v): return hashlib.sha256(json.dumps(v,sort_keys=True,separators=(",",":"),ensure_ascii=False).encode()).hexdigest()
+def state_generation(path):
+    match=re.search(r"ASOCSI_PROGRAMME_STATE_v0_(\d+)_",str(path))
+    if match is None: raise AssertionError(path)
+    return int(match.group(1))
+
+def assert_current_descends_from_g5(testcase,current_path,current,g5):
+    testcase.assertEqual(current["programme_id"],g5["programme_id"])
+    testcase.assertGreaterEqual(state_generation(current_path),state_generation(G5_REPOSITORY_EFFECTIVE_STATE))
+    if Path(current_path)==G5_REPOSITORY_EFFECTIVE_STATE.relative_to(ROOT):
+        testcase.assertEqual(current["packet_id"],G5_PACKET_ID)
+        return
+    prerequisites=set(current.get("prerequisites",[])); preserved=current.get("preserved",{})
+    testcase.assertTrue(
+        G5_GATE_ID in prerequisites
+        or G5_PACKET_ID in prerequisites
+        or preserved.get("g5_blind_evidence") is True
+    )
+    testcase.assertTrue(current.get("human_review_started"))
 
 class TestASOCSIWP7G5BlindFreeze(unittest.TestCase):
     def test_locked_prefix_and_session3plus(self):
@@ -51,14 +73,17 @@ class TestASOCSIWP7G5BlindFreeze(unittest.TestCase):
         self.assertEqual(dec["decision"],"PASS"); self.assertEqual(dec["authority_delta"],"NONE")
 
     def test_state_stops_at_wp8_human_boundary(self):
-        s=load(STATE); p=load(POINTER); current=load(ROOT/p["current_state"])
+        s=load(STATE); g5=load(G5_REPOSITORY_EFFECTIVE_STATE); p=load(POINTER); current_path=Path(p["current_state"]); current=load(ROOT/current_path)
         self.assertEqual(s["status"],"COMPLETED")
         self.assertEqual(s["next_packet"],"ASOCSI-WP8-STAGED-REVEAL-AND-ADJUDICATION")
         self.assertEqual(s["stop_boundary"],"ASOCSI-WP8-STAGED-REVEAL-HUMAN_ADJUDICATION_REQUIRED")
-        self.assertEqual(current["next_packet"],s["next_packet"])
-        self.assertEqual(current["stop_boundary"],s["stop_boundary"])
+        self.assertEqual(g5["packet_id"],G5_PACKET_ID)
+        self.assertEqual(g5["status"],"COMPLETED_REPOSITORY_EFFECTIVE")
+        self.assertEqual(g5["next_packet"],s["next_packet"])
+        self.assertEqual(g5["stop_boundary"],s["stop_boundary"])
         self.assertEqual(p["packet_id"],current["packet_id"])
         self.assertEqual(p["status"],current["status"])
         self.assertEqual(p["next_packet"],current["next_packet"])
+        assert_current_descends_from_g5(self,current_path,current,g5)
 
 if __name__ == "__main__": unittest.main()
