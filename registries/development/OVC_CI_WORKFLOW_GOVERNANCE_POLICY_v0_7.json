@@ -1,0 +1,144 @@
+{
+  "schema": "ovc-ci-workflow-governance-policy/v1",
+  "policy_id": "OVC.CIPR.WORKFLOW_GOVERNANCE.v0.7",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "packet_id": "CIPR-WP5R-POST-PYT-CANONICAL-CENSUS-SHADOW",
+  "supersedes_for_current_inventory": "OVC.CIPR.WORKFLOW_GOVERNANCE.v0.6",
+  "historical_policy_preserved": "registries/development/OVC_CI_WORKFLOW_GOVERNANCE_POLICY_v0_6.json",
+  "baseline_main_sha": "10b5283404e986773e67d77725b82d8a580243af",
+  "snapshot": {
+    "github_actions_registered_total_count": 191,
+    "github_actions_captured_at": "2026-08-14T11:45:00+01:00",
+    "github_actions_source": "PRIOR_V0_6_GITHUB_ACTIONS_WORKFLOWS_API_SNAPSHOT_NOT_REMEASURED_BY_THIS_PACKET",
+    "expected_repository_workflow_definition_count": 137,
+    "registration_count_excess": 54,
+    "registration_count_excess_interpretation": "DRIFT_INDICATOR_REQUIRES_PATH_CROSSWALK_NOT_AUTHORITY"
+  },
+  "inventory_layers": {
+    "REPOSITORY_DEFINITIONS": "Authoritative exact-head scan of .github/workflows definitions present in the repository tree.",
+    "GITHUB_ACTIONS_REGISTRY": "Prior external Actions workflow-registration snapshot retained as diagnostic provenance; this packet does not infer a refreshed external registration count."
+  },
+  "approved_pull_request_workflows": [
+    ".github/workflows/tests.yml",
+    ".github/workflows/ovc-tiered-tests.yml"
+  ],
+  "categories": [
+    "CURRENT_PR_CI",
+    "TEMPORARY",
+    "HISTORICAL_MANUAL_VERIFICATION",
+    "ACTIVE_MANUAL_OPERATION"
+  ],
+  "classification_precedence": [
+    "CURRENT_PR_CI",
+    "TEMPORARY",
+    "HISTORICAL_MANUAL_VERIFICATION",
+    "ACTIVE_MANUAL_OPERATION"
+  ],
+  "rules": {
+    "CURRENT_PR_CI": {
+      "condition": "workflow has pull_request trigger and path is in approved_pull_request_workflows",
+      "unexpected_pull_request_listener": "FAIL_CLOSED"
+    },
+    "TEMPORARY": {
+      "path_basename_prefixes": ["_temp_"],
+      "workflow_name_prefixes_case_insensitive": ["temp ", "temp-"],
+      "repository_presence_required_for_local_count": true
+    },
+    "HISTORICAL_MANUAL_VERIFICATION": {
+      "content_markers_case_insensitive": [
+        "historical manual verification",
+        "historical packet verification"
+      ]
+    },
+    "ACTIVE_MANUAL_OPERATION": {
+      "condition": "all remaining workflow definitions after higher-precedence rules"
+    }
+  },
+  "required_trigger_inventory": [
+    "pull_request",
+    "push",
+    "workflow_dispatch",
+    "schedule",
+    "workflow_call",
+    "workflow_run"
+  ],
+  "admitted_new_workflow": {
+    "path": ".github/workflows/ci-pytest-shard-shadow.yml",
+    "classification": "ACTIVE_MANUAL_OPERATION",
+    "triggers": ["push", "workflow_dispatch"],
+    "pull_request_listener": false,
+    "authority_mode": "POST_PYT_CANONICAL_PYTEST_SHARD_SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION_NO_RUNNER_CUTOVER",
+    "admission_basis": "CIPR-G5 operator DEFER of obsolete legacy shard plus explicit authorization for construction and shadow qualification of a new post-PYT shard architecture"
+  },
+  "additional_non_pr_diagnostic_workflows": [
+    {
+      "path": ".github/workflows/c2p2-rs0-current-source-materialisation.yml",
+      "classification": "ACTIVE_MANUAL_OPERATION",
+      "pull_request_listener": false,
+      "authority_mode": "BOUNDED_READ_ONLY_CURRENT_SOURCE_MATERIALISATION_INACTIVE_NONCANONICAL_NO_REQUIRED_CHECK_SUBSTITUTION_NO_GRUN_CONSUMPTION",
+      "admission_basis": "Preserved from OVC.CIPR.WORKFLOW_GOVERNANCE.v0.6"
+    },
+    {
+      "path": ".github/workflows/vit-post-merge-completion.yml",
+      "classification": "ACTIVE_MANUAL_OPERATION",
+      "pull_request_listener": false,
+      "authority_mode": "POST_WRITE_COMPLETION_OBSERVABILITY_ONLY_READ_GITHUB_WRITE_EXISTING_LOCAL_RECEIPTSTORE_NO_MERGE_AUTHORITY",
+      "admission_basis": "DSAI3V #986 bounded authority-delta-NONE completion-observability conformance correction"
+    },
+    {
+      "path": ".github/workflows/ci-unittest-shard-shadow.yml",
+      "classification": "ACTIVE_MANUAL_OPERATION",
+      "pull_request_listener": false,
+      "authority_mode": "SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION",
+      "admission_basis": "Historical CIPR-G4 operator PASS B_DETERMINISTIC_REQUIRED_SHARD_UNION_SHADOW; obsolete candidate remains deferred and non-authoritative"
+    },
+    {
+      "path": ".github/workflows/pyt-wp2-step5-unified.yml",
+      "classification": "ACTIVE_MANUAL_OPERATION",
+      "pull_request_listener": false,
+      "authority_mode": "DIAGNOSTIC_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION",
+      "admission_basis": "PYT-WP2 native pytest conformance diagnostic"
+    },
+    {
+      "path": ".github/workflows/grt2-g2-qualification.yml",
+      "classification": "ACTIVE_MANUAL_OPERATION",
+      "pull_request_listener": false,
+      "authority_mode": "QUALIFICATION_EVIDENCE_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION",
+      "admission_basis": "GRT2-G2 qualification evidence; workflow_dispatch only"
+    },
+    {
+      "path": ".github/workflows/grt2-g2-performance.yml",
+      "classification": "ACTIVE_MANUAL_OPERATION",
+      "pull_request_listener": false,
+      "authority_mode": "MEASUREMENT_EVIDENCE_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION",
+      "admission_basis": "GRT2-G2 measured performance evidence; workflow_dispatch only"
+    },
+    {
+      "path": ".github/workflows/dsai3v-async-assurance-shadow.yml",
+      "classification": "ACTIVE_MANUAL_OPERATION",
+      "pull_request_listener": false,
+      "authority_mode": "ASYNC_ASSURANCE_QUALIFICATION_SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION_NO_WRITE",
+      "admission_basis": "DSAI3V-AA-WP5 qualified inactive/shadow implementation; workflow_dispatch only"
+    }
+  ],
+  "governance": {
+    "classification_only": true,
+    "workflow_deletion": "PROHIBITED",
+    "workflow_disablement": "PROHIBITED_BY_THIS_PACKET",
+    "trigger_mutation": "PROHIBITED_EXCEPT_REMOVAL_OF_UNAUTHORISED_NEW_PR_LISTENERS_FROM_CURRENT_CANDIDATE",
+    "required_check_mutation": "PROHIBITED_BY_THIS_PACKET",
+    "historical_evidence_preservation": "REQUIRED",
+    "temporary_workflow_retirement": "REQUIRES_SEPARATE_AUTHORITY",
+    "registry_repository_count_mismatch": "OBSERVE_AND_RECORD_ONLY"
+  },
+  "action_dependency_hygiene": {
+    "classification": "NON_BLOCKING_REVIEW_ITEM",
+    "known_runner_warning_families": [
+      "actions/checkout@v4 Node target warning",
+      "actions/setup-python@v5 Node target warning"
+    ],
+    "automatic_version_bump": false
+  },
+  "authority_delta": "NONE_CLASSIFICATION_AND_POST_PYT_SHARD_SHADOW_WORKFLOW_ADMISSION_ONLY",
+  "rollback": "Supersede v0.7 current-inventory snapshot and disable/remove only the post-PYT shadow workflow in a forward correction if required. Preserve v0.1-v0.6 historical policies, current required CI and all workflow history; do not mutate required checks or rewrite history."
+}
