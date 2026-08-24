@@ -1,0 +1,77 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-P1CDI-CONFORMANCE-v0.1",
+  "plan_id": "OVC-P1CDI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "eeb3cfef77c8a61ce2fb825f8f0f649ac35281f30d43ba24651fc329a11a0b9a",
+  "state_id": "P1CDII-PROGRAMME-STATE-v0.2-OBSERVABILITY-ACTIVE",
+  "supersedes": "records/research_operations/p1cdi/P1CDII_PROGRAMME_STATE_v0_1.json@blob:44ec479ae2f905ab30a8db000408a6ff97f7cf39",
+  "current_packet": "P1CDII-WP11",
+  "packet_id": "P1CDII-WP11",
+  "status": "READY",
+  "baseline_commit": "f982af3834009c58ffa93c37bde62a95fecc39c7",
+  "baseline_tree": "8ed6ba1c811900b580289b035b81203665429ef5",
+  "prerequisites": [
+    "P1CDII-WP10_PHYSICAL_INTEGRATION@adaa08d900e5df137e80efde45ddf0784083e568",
+    "P1CDII-G-OBSERVABILITY-FRESH-INDEPENDENT-REVIEW-1:PASS",
+    "P1CDII-G-OBSERVABILITY-ACTIVATE:OPERATOR_PASS@2026-08-24T20:56:00+01:00"
+  ],
+  "authority_required": "AUTO_EXECUTABLE",
+  "authority_delta": "NONE",
+  "authority": {
+    "P1CDII-G0": "OPERATOR_PASS_MATERIALISED",
+    "operational_read_only": "ACTIVE_EXACT_QUALIFIED_SOURCE_SCOPE_ONLY",
+    "continuous_intake": "DENIED"
+  },
+  "observability_activation": {
+    "gate_id": "P1CDII-G-OBSERVABILITY-ACTIVATE",
+    "status": "COMPLETED",
+    "decision": "PASS",
+    "decision_authority": "OPERATOR",
+    "authority_delta": "ACTIVATE_OPERATIONAL_READ_ONLY_P1CDI_CURRENT_PROJECTION_ONLY",
+    "operational_reliance": true,
+    "decision_record": "docs/programmes/p1cdi-v0-1/wp10/P1CDII_G_OBSERVABILITY_ACTIVATE_OPERATOR_DECISION_v0_1.json",
+    "activation_receipt": "docs/programmes/p1cdi-v0-1/wp10/P1CDII_G_OBSERVABILITY_ACTIVATE_ACTIVATION_RECEIPT_v0_1.json",
+    "authority_manifest": "docs/programmes/p1cdi-v0-1/wp10/P1CDII_G_OBSERVABILITY_ACTIVATE_AUTHORITY_MANIFEST_v0_1.json",
+    "dependency_frontier": "docs/programmes/p1cdi-v0-1/wp10/P1CDII_G_OBSERVABILITY_ACTIVATE_DEPENDENCY_FRONTIER_v0_1.json"
+  },
+  "exact_source_scope": {
+    "source_census_id": "P1CDI-G0-SOURCE-CENSUS:lawful-main-35d3dc73:v0.2",
+    "source_completeness_manifest_id": "P1CDI-G0-SOURCE-COMPLETENESS:lawful-main-35d3dc73:v0.1",
+    "expected_subject_count": 0,
+    "reconciled_subject_count": 0,
+    "operational_current_subject_count": 0,
+    "scope_expansion": "SEPARATELY_GOVERNED"
+  },
+  "decision_bearing_currentness_eligibility": "OPERATIONAL_READ_ONLY_CURRENT_PROJECTION_ACTIVE_EXACT_SCOPE_ONLY",
+  "operational_current_pointer_publication": "ALLOWED_P1CDI_OPERATIONAL_READ_ONLY_EXACT_SCOPE_ONLY",
+  "operational_reliance": true,
+  "research_console_source_admission": "PRODUCER_READY_CONSUMER_ADMISSION_NOT_GRANTED",
+  "required_return_gate": "P1CDII-G-CONTINUOUS-INTAKE",
+  "reserved_later_gates": [
+    "P1CDII-G-CONTINUOUS-INTAKE"
+  ],
+  "explicit_non_grants": [
+    "RESEARCH_CONSOLE_SOURCE_PRESENTATION_AUTHORITY",
+    "P1CDI_CONTINUOUS_INTAKE_WRITES",
+    "NEW_PATH1_REAL_SOURCE_INTAKE",
+    "CANDIDATE_OR_FREEZE_AUTHORITY",
+    "SCIENTIFIC_DISPOSITION_WRITE",
+    "VALIDATION",
+    "PUBLICATION",
+    "PROBABILITY",
+    "RISK",
+    "EXPOSURE",
+    "TRADING",
+    "EXECUTION",
+    "AGENT_WRITE"
+  ],
+  "tests": [
+    "P1CDII-G-OBSERVABILITY-ACTIVATE_OPERATOR_PASS_MATERIALISATION:REQUIRED_EXACT_HEAD_ASSURANCE"
+  ],
+  "qa_packet": "docs/programmes/p1cdi-v0-1/wp10/P1CDII_G_OBSERVABILITY_ACTIVATE_GATE_PACKET_v0_1.json",
+  "decision_record": "docs/programmes/p1cdi-v0-1/wp10/P1CDII_G_OBSERVABILITY_ACTIVATE_OPERATOR_DECISION_v0_1.json",
+  "merge_commit": null,
+  "blockers": [],
+  "next_packet": "P1CDII-WP11",
+  "rollback": "Forward-only: disable operational reliance, restore non-operational read-only shadow state, preserve all source/frontier/review/decision history, and require requalification before reactivation."
+}
