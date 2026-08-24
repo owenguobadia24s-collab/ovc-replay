@@ -24,6 +24,7 @@ class P1CDIIWP1ContractTests(unittest.TestCase):
             "P1CDI_DMRP_CANDIDATE_FIREWALL_CONTRACT_v0_1.md",
             "P1CDI_VISIBILITY_AND_PROTECTED_SOURCE_CONTRACT_v0_1.md",
             "P1CDI_QUERY_AND_NON_ACTUATION_CONTRACT_v0_1.md",
+            "P1CDI_LIVE_SHADOW_STABILIZATION_CONTRACT_v0_1.md",
         }
         self.assertEqual(expected, {path.name for path in contract_dir.glob("*.md")})
 
@@ -44,6 +45,8 @@ class P1CDIIWP1ContractTests(unittest.TestCase):
         self.assertIn("before indexing", text_by_name["P1CDI_VISIBILITY_AND_PROTECTED_SOURCE_CONTRACT_v0_1.md"])
         self.assertIn("negative-reachability", text_by_name["P1CDI_VISIBILITY_AND_PROTECTED_SOURCE_CONTRACT_v0_1.md"])
         self.assertIn("non-actuation", text_by_name["P1CDI_QUERY_AND_NON_ACTUATION_CONTRACT_v0_1.md"])
+        self.assertIn("operational_reliance", text_by_name["P1CDI_LIVE_SHADOW_STABILIZATION_CONTRACT_v0_1.md"])
+        self.assertIn("automatic_activation", text_by_name["P1CDI_LIVE_SHADOW_STABILIZATION_CONTRACT_v0_1.md"])
 
     def test_closed_registries_encode_design_vocabularies(self) -> None:
         lifecycle = load_json("registries/research_operations/p1cdi/lifecycle_registry.json")
