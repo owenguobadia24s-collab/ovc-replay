@@ -1,0 +1,277 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/development/skills/repository_assurance_continuity_v0_1.schema.json",
+  "title": "OVC Repository Assurance Continuity v0.1",
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "gitTreeSha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "claimDisposition": {
+      "enum": [
+        "INHERIT_VALID",
+        "RERUN_REQUIRED",
+        "WIDE_RERUN_REQUIRED",
+        "FULL_REFERENCE_REQUIRED",
+        "NOT_EVALUABLE",
+        "QUARANTINED"
+      ]
+    },
+    "AssuranceClaimSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "claim_id",
+        "claim_class",
+        "dependencies",
+        "harness_id",
+        "execution_profile",
+        "wide_rerun",
+        "unbounded",
+        "reference_only",
+        "claim_spec_id"
+      ],
+      "properties": {
+        "schema": {"const": "ovc-assurance-claim-spec/v1"},
+        "claim_id": {"type": "string", "minLength": 1},
+        "claim_class": {"type": "string", "minLength": 1},
+        "dependencies": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "harness_id": {"type": "string", "minLength": 1},
+        "execution_profile": {
+          "enum": ["DELTA_EXECUTOR", "WIDE_EXECUTOR", "REFERENCE_EXECUTOR"]
+        },
+        "wide_rerun": {"type": "boolean"},
+        "unbounded": {"type": "boolean"},
+        "reference_only": {"type": "boolean"},
+        "claim_spec_id": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "AssuranceDependencyGraph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "claims", "reverse_dependencies", "graph_id"],
+      "properties": {
+        "schema": {"const": "ovc-assurance-dependency-graph/v1"},
+        "claims": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/AssuranceClaimSpec"}
+        },
+        "reverse_dependencies": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          }
+        },
+        "graph_id": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "RepositoryAssuranceGeneration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "repository_tree_sha",
+        "graph_id",
+        "policy_id",
+        "harness_generation_id",
+        "passed_claim_ids",
+        "not_evaluable_claim_ids",
+        "quarantined_claim_ids",
+        "reference_reconciliation_id",
+        "completeness",
+        "generation_id"
+      ],
+      "properties": {
+        "schema": {"const": "ovc-repository-assurance-generation/v1"},
+        "repository_tree_sha": {"$ref": "#/$defs/gitTreeSha"},
+        "graph_id": {"$ref": "#/$defs/sha256"},
+        "policy_id": {"type": "string", "minLength": 1},
+        "harness_generation_id": {"type": "string", "minLength": 1},
+        "passed_claim_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "not_evaluable_claim_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "quarantined_claim_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "reference_reconciliation_id": {
+          "oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]
+        },
+        "completeness": {"type": "string", "minLength": 1},
+        "generation_id": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "MutationImpactManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "programme_id",
+        "packet_id",
+        "payload_id",
+        "changed_tokens",
+        "classified_tokens",
+        "unclassified_tokens",
+        "impact_manifest_id"
+      ],
+      "properties": {
+        "schema": {"const": "ovc-mutation-impact-manifest/v1"},
+        "programme_id": {"type": "string", "minLength": 1},
+        "packet_id": {"type": "string", "minLength": 1},
+        "payload_id": {"$ref": "#/$defs/sha256"},
+        "changed_tokens": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "classified_tokens": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "unclassified_tokens": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "impact_manifest_id": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "DeltaAssurancePlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "base_generation_id",
+        "graph_id",
+        "impact_manifest_id",
+        "payload_id",
+        "policy_id",
+        "claim_dispositions",
+        "reference_required",
+        "reference_reasons",
+        "payload_rebuild_required",
+        "summary",
+        "plan_id"
+      ],
+      "properties": {
+        "schema": {"const": "ovc-delta-assurance-plan/v1"},
+        "base_generation_id": {"$ref": "#/$defs/sha256"},
+        "graph_id": {"$ref": "#/$defs/sha256"},
+        "impact_manifest_id": {"$ref": "#/$defs/sha256"},
+        "payload_id": {"$ref": "#/$defs/sha256"},
+        "policy_id": {"type": "string", "minLength": 1},
+        "claim_dispositions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["claim_id", "disposition", "intersections", "reasons"],
+            "properties": {
+              "claim_id": {"type": "string", "minLength": 1},
+              "disposition": {"$ref": "#/$defs/claimDisposition"},
+              "intersections": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {"type": "string", "minLength": 1}
+              },
+              "reasons": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1}
+              }
+            }
+          }
+        },
+        "reference_required": {"type": "boolean"},
+        "reference_reasons": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "payload_rebuild_required": {"const": false},
+        "summary": {"type": "object"},
+        "plan_id": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "CandidateAssuranceCertificate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "plan_id",
+        "payload_id",
+        "inherited_claim_ids",
+        "executed_claim_ids",
+        "executed_results",
+        "reference_result",
+        "status",
+        "authority_effect",
+        "certificate_id"
+      ],
+      "properties": {
+        "schema": {"const": "ovc-candidate-assurance-certificate/v1"},
+        "plan_id": {"$ref": "#/$defs/sha256"},
+        "payload_id": {"$ref": "#/$defs/sha256"},
+        "inherited_claim_ids": {"type": "array", "uniqueItems": true},
+        "executed_claim_ids": {"type": "array", "uniqueItems": true},
+        "executed_results": {"type": "object"},
+        "reference_result": {
+          "oneOf": [{"type": "null"}, {"const": "PASS"}]
+        },
+        "status": {"const": "PASS"},
+        "authority_effect": {"const": "NONE"},
+        "certificate_id": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "ReferenceReconciliationReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "certificate_id",
+        "expected_claim_ids",
+        "missing_claim_ids",
+        "failing_claim_ids",
+        "status",
+        "reconciliation_id"
+      ],
+      "properties": {
+        "schema": {"const": "ovc-reference-reconciliation-receipt/v1"},
+        "certificate_id": {"$ref": "#/$defs/sha256"},
+        "expected_claim_ids": {"type": "array", "uniqueItems": true},
+        "missing_claim_ids": {"type": "array", "uniqueItems": true},
+        "failing_claim_ids": {"type": "array", "uniqueItems": true},
+        "status": {"enum": ["PASS", "ASSURANCE_MODEL_DIVERGENCE"]},
+        "reconciliation_id": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  },
+  "oneOf": [
+    {"$ref": "#/$defs/AssuranceClaimSpec"},
+    {"$ref": "#/$defs/AssuranceDependencyGraph"},
+    {"$ref": "#/$defs/RepositoryAssuranceGeneration"},
+    {"$ref": "#/$defs/MutationImpactManifest"},
+    {"$ref": "#/$defs/DeltaAssurancePlan"},
+    {"$ref": "#/$defs/CandidateAssuranceCertificate"},
+    {"$ref": "#/$defs/ReferenceReconciliationReceipt"}
+  ]
+}
