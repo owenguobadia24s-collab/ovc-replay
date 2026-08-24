@@ -5,7 +5,7 @@
   "plan_version": "eeb3cfef77c8a61ce2fb825f8f0f649ac35281f30d43ba24651fc329a11a0b9a",
   "packet_id": "P1CDII-WP9",
   "gate_id": "P1CDII-G9",
-  "status": "IMPLEMENTED_AWAITING_QA",
+  "status": "COMPLETED_DELEGATED_PASS_PENDING_PHYSICAL_INTEGRATION",
   "baseline_commit": "c5b2eb4182f9018e3eee761bd05f702d7fb31144",
   "scope": "Typed read-only P1CDI query API/CLI, evidence-preserving Research Console producer projections/source-admission evidence, and System Atlas reference-only deep-link bindings",
   "artifacts": [
@@ -14,7 +14,10 @@
     "fixtures/research_operations/p1cdi/P1CDII_WP9_QUERY_PROJECTION_FIXTURE_v0_1.json",
     "src/ovc/research_operations/p1cdi/query.py",
     "src/ovc/research_operations/p1cdi/projections.py",
-    "tests/research_operations/p1cdi/test_p1cdii_wp9_query_projections.py"
+    "tests/research_operations/p1cdi/test_p1cdii_wp9_query_projections.py",
+    "tests/research_operations/p1cdi/test_p1cdii_wp1_schemas.py",
+    "docs/programmes/p1cdi-v0-1/wp9/P1CDII_WP9_QA_PACKET_v0_1.json",
+    "docs/programmes/p1cdi-v0-1/wp9/P1CDII_G9_DELEGATED_DECISION_v0_1.json"
   ],
   "query_families": [
     "SEARCH",
@@ -63,6 +66,14 @@
   ],
   "consumer_admission": "NOT_GRANTED_BY_P1CDI",
   "operational_reliance": false,
+  "precloseout_assurance": {
+    "qualified_head": "24c46b9e64b3d207dfae3115c645a997383c7cba",
+    "qualified_tree": "7a0fc8ece32c9a968d6d7ebdf4113d9dfb362ba2",
+    "repository_workflow": 32735269334,
+    "profile_siq_merge_readiness_workflow": 32735269294,
+    "vit_qualification": "c6809ba328e74d32025d021f5115b42fa71df61d6d87b5ff9ff6f1f65c655f05",
+    "result": "PASS"
+  },
   "rollback": "Forward-revert WP9 only; preserve WP8 physical materialisation and all prior immutable evidence.",
   "next_packet_after_pass": "P1CDII-WP10"
 }
