@@ -4,14 +4,16 @@
   "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
   "plan_version": "0.1",
   "packet_id": "CIPR-WP5R-POST-PYT-CANONICAL-CENSUS-SHADOW",
-  "status": "RUNNING",
+  "status": "APPROVED_CONSTRUCTION_PENDING_INTEGRATION",
   "decision_prerequisite": {
     "gate_id": "CIPR-G5-PYT-G2-CANONICAL-SHARD-CUTOVER",
     "decision": "DEFER",
     "decision_record": "docs/releases/ci-performance-remediation-v0-1/cipr-wp5/CIPR_G5_DECISION.json",
     "operator_instruction": "DEFER the obsolete shard and authorize construction + shadow qualification of the new post-PYT shard architecture"
   },
-  "logical_baseline": "e3a92433efcffe7320ff5cae110da00aed74a7b3",
+  "logical_baseline": "e2f01dcf03936247c4c8ccdd3df76257710c2461",
+  "construction_candidate_head": "09cee1c5d607d0e98ecedded603f44c255265711",
+  "construction_candidate_tree": "d44aa1211432da715253234c9b38cc757c2dc381",
   "authority_class": "OPERATOR_GRANTED_BOUNDED_SHADOW_CONSTRUCTION",
   "authority_delta": "POST_PYT_CANONICAL_PYTEST_SHARD_CANDIDATE_SHADOW_ONLY",
   "scope": [
@@ -30,7 +32,15 @@
     "canonical_command": "PYTHONPATH=src:. python3 -m pytest tests -q --tb=short",
     "shadow_listener": "push/workflow_dispatch only; never pull_request"
   },
-  "acceptance": [
+  "construction_assurance": {
+    "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp5r/CIPR_WP5R_CONSTRUCTION_QA_PACKET.json",
+    "decision_record": "docs/releases/ci-performance-remediation-v0-1/cipr-wp5r/CIPR_WP5R_CONSTRUCTION_DECISION.json",
+    "tests_workflow_run": 32728713663,
+    "tiered_workflow_run": 32728713547,
+    "result": "PASS",
+    "unresolved_review_threads": 0
+  },
+  "shadow_qualification_acceptance": [
     "canonical pytest collection deterministically enumerated twice on exact head",
     "legacy unittest parity population is a subset of current canonical collection",
     "at least one pytest-native canonical item is present",
@@ -53,13 +63,7 @@
     "NO_SCIENTIFIC_MARKET_VALIDATION_PUBLICATION_RISK_EXPOSURE_TRADING_EXECUTION_AUTHORITY",
     "NO_FORCE_PUSH_OR_HISTORY_REWRITE"
   ],
-  "qa_plan": [
-    "targeted tool/policy/workflow tests",
-    "repository-wide required tests on the main-targeted grouped PR",
-    "OVC profile/SIQ READY/merge readiness on exact head",
-    "shadow manifest proof and four shard jobs",
-    "repeat comparable shadow execution before successor cutover decision"
-  ],
+  "next_packet": "CIPR-WP5R-SHADOW-QUALIFICATION",
   "next_boundary": "CONSOLIDATED_OPERATOR_DECISION_AFTER_POST_PYT_SHADOW_QUALIFICATION",
   "rollback": "Forward-remove or disable only this post-PYT shadow candidate/tooling/workflow/state; preserve current required CI and all historical evidence."
 }
