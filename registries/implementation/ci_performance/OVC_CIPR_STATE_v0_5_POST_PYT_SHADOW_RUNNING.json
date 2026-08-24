@@ -1,0 +1,35 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "RUNNING",
+  "packet_id": "CIPR-WP5R-POST-PYT-CANONICAL-CENSUS-SHADOW",
+  "prerequisites": [
+    "CIPR-G5 operator DEFER of obsolete legacy-unittest shard candidate",
+    "operator grant for post-PYT shard construction and shadow qualification",
+    "PYT programme COMPLETED with pytest canonical runner",
+    "current canonical required checks unchanged"
+  ],
+  "authority_required": "SATISFIED_OPERATOR_BOUNDED_SHADOW_GRANT",
+  "authority_delta": "POST_PYT_CANONICAL_PYTEST_SHARD_CANDIDATE_SHADOW_ONLY",
+  "baseline_commit": "e3a92433efcffe7320ff5cae110da00aed74a7b3",
+  "branch": "gate/ci-performance-g5-post-pyt-20260824",
+  "candidate_commit": null,
+  "tests": [],
+  "qa_packet": null,
+  "decision_record": "docs/releases/ci-performance-remediation-v0-1/cipr-wp5/CIPR_G5_DECISION.json",
+  "packet_record": "docs/releases/ci-performance-remediation-v0-1/cipr-wp5r/CIPR_WP5R_PACKET.json",
+  "merge_commit": null,
+  "blockers": [],
+  "warnings": [
+    "Historical G4 heavy-path placements are seed assignments only until current post-PYT duration evidence is measured.",
+    "Required-check substitution and context retirement remain denied."
+  ],
+  "required_check_substitution_active": false,
+  "runner_cutover_active": false,
+  "scientific_authority_delta": false,
+  "next_packet": "CIPR-WP5R-SHADOW-QUALIFICATION",
+  "operator_stop_gate": "CONSOLIDATED_OPERATOR_DECISION_AFTER_POST_PYT_SHADOW_QUALIFICATION",
+  "rollback": "Disable or supersede only the post-PYT shadow candidate; current required CI remains authoritative."
+}
