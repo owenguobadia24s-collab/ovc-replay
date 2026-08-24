@@ -106,6 +106,6 @@ def test_visible_anchor_remediation_closeout_preserves_human_input_boundary():
     assert state['status']=='COMPLETED' and state['human_review_started'] is False and state['g5_status']=='NOT_STARTED'
     assert state['pre_human_requirements']
     assert current_state['human_review_started'] is True
-    assert pointer['packet_id']=='ASOCSI-WP7-AMENDED-SESSION-3-PLUS-HTML-REGENERATION'
+    assert pointer['packet_id']==current_state['packet_id']
     assert pointer['status']==current_state['status']
     assert pointer['next_packet']==current_state['next_packet']
