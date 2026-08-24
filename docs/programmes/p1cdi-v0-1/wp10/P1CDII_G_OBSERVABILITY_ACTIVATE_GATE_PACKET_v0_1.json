@@ -60,34 +60,65 @@
     "WP10 physical merge tree exactly equals the qualified prospective tree",
     "false currentness, source identity drift, owner semantic conflict, leak, candidate bypass, divergence, index corruption and capacity failure route to requalification",
     "no write controls, durable intake writes or automatic activation are present",
-    "a conflict-free observability reviewer is bound before any PASS activation decision"
+    "a conflict-free observability reviewer is bound and completes PASS review before any PASS activation decision"
   ],
+  "acceptance_results": {
+    "source_scope_exact_no_inference": "PASS",
+    "g2_and_g4_independent_review": "PASS",
+    "wp7_visibility_firewall": "PASS",
+    "wp8_reference_optimized_capacity": "PASS",
+    "wp9_read_only_projection_envelope": "PASS",
+    "wp10_live_shadow_stability": "PASS",
+    "wp10_physical_tree_equality": "PASS",
+    "fail_closed_requalification_routes": "PASS",
+    "no_write_or_automatic_activation": "PASS",
+    "conflict_free_observability_reviewer": "PASS"
+  },
   "tests": {
     "repository_workflow": 32760249323,
     "profile_siq_merge_readiness_workflow": 32760249326,
-    "result": "PASS_EXACT_FINAL",
+    "decision_bearing_exact_final_result": "PASS_EXACT_FINAL",
     "qualified_candidate_head": "2ca1ce7a7487e89267be8b4d1bb752c89f9127df",
     "qualified_result_tree": "b590223837c6c3cbdce5dc8a1feff64201a1f77c",
-    "operator_gate_fresh_independent_review": "REQUIRED_BEFORE_PASS"
+    "fresh_review_repository_attempt": {
+      "tests_job": "97560568552:PASS_EXACT_AA0_PIP_BOUND_CACHE_REUSE",
+      "runner_parity_job": "97560569767:PASS",
+      "pytest_unittest_parity_job": "97560570458:PASS",
+      "vit_routing_preflight_job": "97560620143:PASS"
+    },
+    "fresh_review_final_head_profile": "97560595140:PASS",
+    "fresh_post_merge_siq_rerun": "97560720607:EXPECTED_POST_MERGE_PREMERGE_ADMISSION_NON_APPLICABILITY:OVC_SIQ_PR_NOT_OPEN:1304",
+    "operator_gate_fresh_independent_review": "PASS"
   },
   "qa": {
     "packet": "docs/programmes/p1cdi-v0-1/wp10/P1CDII_WP10_QA_PACKET_v0_1.json",
     "recommendation": "PASS_TO_OPERATOR_OBSERVABILITY_GATE"
   },
+  "independent_review": {
+    "packet": "docs/programmes/p1cdi-v0-1/wp10/P1CDII_G_OBSERVABILITY_FRESH_INDEPENDENT_REVIEW_PACKET_v0_1.json",
+    "binding_packet": "docs/programmes/p1cdi-v0-1/wp10/P1CDII_G_OBSERVABILITY_FRESH_INDEPENDENT_REVIEW_BINDING_v0_1.json",
+    "reviewer_identity": "GPT-5.6-SOL-P1CDII-G-OBSERVABILITY-FRESH-INDEPENDENT-REVIEWER-1-20260824",
+    "independence": "PASS",
+    "disposition": "PASS",
+    "authority_effect": "NONE"
+  },
   "warnings": [
+    "CURRENT_SOURCE_SCOPE_HAS_ZERO_SUBJECTS_SO_OPERATIONAL_READ_ONLY_RELIANCE_HAS_ZERO_CURRENT_SUBJECTS_UNTIL_A_SEPARATELY_GOVERNED_SOURCE_CHANGE",
     "RESEARCH_CONSOLE_CONSUMER_SOURCE_ADMISSION_NOT_GRANTED_BY_THIS_GATE",
     "CONTINUOUS_INTAKE_WRITES_REMAIN_SEPARATELY_OPERATOR_REQUIRED",
     "NEW_PATH1_REAL_SOURCE_INTAKE_REMAINS_UNGRANTED",
-    "CANDIDATE_SCIENTIFIC_VALIDATION_PUBLICATION_AND_EH_AUTHORITY_REMAIN_OUTSIDE_THIS_GATE"
+    "CANDIDATE_SCIENTIFIC_VALIDATION_PUBLICATION_AND_EH_AUTHORITY_REMAIN_OUTSIDE_THIS_GATE",
+    "POST_MERGE_SIQ_READY_RERUN_IS_NOT_APPLICABLE_AFTER_PR_1304_MERGE; ORIGINAL_EXACT_FINAL_PRE_MERGE_PASS_REMAINS_DECISION_BEARING"
   ],
-  "unresolved_issues": [
-    "P1CDII-G-OBSERVABILITY-ACTIVATE reviewer binding is currently UNBOUND; repository law says UNBOUND blocks activation"
-  ],
+  "unresolved_issues": [],
   "reviewer_binding": {
     "record": "records/research_operations/p1cdi/P1CDI_REVIEWER_BINDINGS_v0_1.json",
-    "status": "UNBOUND",
+    "status": "REVIEW_COMPLETE_PASS",
+    "reviewer_identity": "GPT-5.6-SOL-P1CDII-G-OBSERVABILITY-FRESH-INDEPENDENT-REVIEWER-1-20260824",
     "required_independence": "independent of sole implementation authorship",
-    "activation_effect": "BLOCKS_PASS_UNTIL_BOUND_AND_REVIEW_COMPLETE"
+    "independence_result": "PASS",
+    "review_packet": "docs/programmes/p1cdi-v0-1/wp10/P1CDII_G_OBSERVABILITY_FRESH_INDEPENDENT_REVIEW_PACKET_v0_1.json",
+    "activation_effect": "PREREQUISITE_SATISFIED_OPERATOR_PASS_STILL_REQUIRED"
   },
   "changed_files": [
     "contracts/research_operations/p1cdi/P1CDI_LIVE_SHADOW_STABILIZATION_CONTRACT_v0_1.md",
@@ -104,22 +135,26 @@
     "tests/research_operations/p1cdi/test_p1cdii_wp10_stabilization.py",
     "tests/research_operations/p1cdi/test_p1cdii_wp1_contracts.py",
     "tests/research_operations/p1cdi/test_p1cdii_wp1_schemas.py",
-    "records/research_operations/p1cdi/P1CDII_PROGRAMME_STATE_v0_1.json"
+    "records/research_operations/p1cdi/P1CDII_PROGRAMME_STATE_v0_1.json",
+    "records/research_operations/p1cdi/P1CDI_REVIEWER_BINDINGS_v0_1.json",
+    "docs/programmes/p1cdi-v0-1/wp10/P1CDII_G_OBSERVABILITY_FRESH_INDEPENDENT_REVIEW_BINDING_v0_1.json",
+    "docs/programmes/p1cdi-v0-1/wp10/P1CDII_G_OBSERVABILITY_FRESH_INDEPENDENT_REVIEW_PACKET_v0_1.json"
   ],
   "external_artifact_hashes": {},
   "internal_evidence_hashes": {
     "shadow_observation_sha256": "a776834007d2bce833329798f51f88e3698016acb6281d81a8b523a1ba662c53",
     "stabilization_ledger_sha256": "a8bd509d52a8a72cacde2f2f12aafba8af19061be1dd813b1d2f98f86b8fa081"
   },
-  "rollback": "Forward-only: disable any later operational reliance, restore the P1CDI projection to read-only shadow/non-operational status, preserve all source/frontier/observation/ledger/receipt evidence, and require requalification before reactivation.",
-  "recommended_decision": "DEFER",
-  "recommendation_reason": "WP10 is physically complete and technically qualified, but activation cannot lawfully PASS until a conflict-free observability reviewer is bound and completes the required review.",
+  "rollback": "Forward-only: disable any later operational reliance, restore the P1CDI projection to read-only shadow/non-operational status, preserve all source/frontier/observation/ledger/receipt/review evidence, and require requalification before reactivation.",
+  "recommended_decision": "PASS",
+  "recommendation_reason": "WP10 is physically complete and technically qualified, the conflict-free fresh observability review is complete PASS, all activation prerequisites are satisfied, and the proposed delta remains limited to exact source-scoped operational read-only reliance. Activation itself remains operator-reserved.",
   "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
   "exact_work_after_approval": [
-    "materialise the exact operator decision and bounded observability authority record",
-    "if and only if PASS after the required independent review, permit operational reliance on the exact source-scoped read-only P1CDI current projection",
+    "materialise the exact operator PASS decision and bounded observability authority record",
+    "permit operational reliance only on the exact source-scoped read-only P1CDI current projection",
     "keep Research Console consumer source admission unchanged unless separately granted",
     "keep continuous-intake writes, new real-source intake, candidate/scientific/Validation/publication/E-H and agent-write authority denied",
+    "begin the plan-defined post-activation stabilization/currentness monitoring without broadening source scope or authority",
     "continue only to the next plan-authorised packet and stop again at any reserved authority boundary"
   ],
   "explicit_non_grants": [
