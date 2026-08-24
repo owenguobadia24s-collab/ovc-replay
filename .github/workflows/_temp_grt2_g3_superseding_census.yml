@@ -36,7 +36,6 @@ jobs:
         run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
       - name: Build exact source-bound superseding census
         env:
-          GRT2_G3_CURRENT_MAIN: ${{ github.event.pull_request.base.sha }}
           GRT2_G3_SUPERSEDING_CENSUS_OUT: artifacts/grt2-g3-superseding-census.json
           PYTHONPATH: src:.
         run: python3 scripts/governance/grt_v0_2/diagnose_superseding_g3_census.py
