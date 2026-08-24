@@ -1,127 +1,137 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
-from ovc.programme_genesis._topology_engine import build_repository_topology
-from ovc.programme_genesis.grt_v0_2.debt import (
-    B0_MEMBER_COUNT,
-    B0_MEMBERSHIP_SHA256,
-    baseline_membership_sha256,
-    compare_debt_extent,
-    validate_baseline_members,
-)
-from ovc.programme_genesis.grt_v0_2.g3_floor import (
-    full_g3_snapshot_at_commit,
-    propose_candidate_floor,
-    reconcile_b0_to_current_full_g3,
-)
-from ovc.programme_genesis.grt_v0_2.g3_readiness import (
-    baseline_topology_from_member_records,
-    reconcile_observer_transition_candidates,
-)
-
 ROOT = Path(__file__).resolve().parents[3]
-CURRENT_MAIN = "d25236e6550b073d3a220326b764b15441182bec"
-FORMER_GATE_READY_MAIN = "8e53e52537e9756e350b7f8d0c1551db3c581c6a"
-OLD_FLOOR_PATH = ROOT / "docs/programmes/grt-v0-2/g3/GRT2_G3_PROPOSED_DEBT_FLOOR_GENERATION_0.json"
-B0_MEMBERS_PATH = ROOT / "registries/governance/grt_v0_2/baseline/GRT_B0_BASELINE_MEMBERS_v0_1.jsonl"
-CONSTITUTION_PATH = ROOT / "registries/governance/grt_v0_2/GRT_REPOSITORY_CONSTITUTION_v0_2.json"
+PACKET_ROOT = ROOT / "docs/programmes/grt-v0-2/g3/superseding"
+STATE_ROOT = ROOT / "registries/implementation/grt_v0_2"
 
 
-def _rows(snapshot):
-    return {str(row["finding_id"]): row for row in snapshot.get("findings", [])}
+def _load(path: Path):
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
-def test_emit_exact_superseding_g3_reconciliation_probe() -> None:
-    old_floor = json.loads(OLD_FLOOR_PATH.read_text(encoding="utf-8"))
-    constitution = json.loads(CONSTITUTION_PATH.read_text(encoding="utf-8"))
-    b0_rows = [
-        json.loads(line)
-        for line in B0_MEMBERS_PATH.read_text(encoding="utf-8").splitlines()
-        if line.strip()
-    ]
-    validate_baseline_members(b0_rows)
-    b0_membership = baseline_membership_sha256(b0_rows)
+def _logical_sha(payload: dict) -> str:
+    body = {key: value for key, value in payload.items() if key != "logical_sha256"}
+    raw = json.dumps(body, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False)
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
-    former = full_g3_snapshot_at_commit(ROOT, commit=FORMER_GATE_READY_MAIN)
-    current = full_g3_snapshot_at_commit(ROOT, commit=CURRENT_MAIN)
-    former_rows = _rows(former)
-    current_rows = _rows(current)
-    old_ids = set(str(x) for x in old_floor["open_grandfathered_findings"])
-    current_ids = set(current_rows)
 
-    resolved = sorted(old_ids - current_ids)
-    added = sorted(current_ids - old_ids)
-    common = sorted(old_ids & current_ids)
+def _canonical_sha(payload: dict) -> str:
+    raw = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False)
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
-    extent = {"UNCHANGED": 0, "REDUCED": 0, "EXPANDED": 0, "MATERIAL_CHANGED": 0}
-    expanded = []
-    material_changed = []
-    for finding_id in common:
-        prior = former_rows.get(finding_id, {}).get("debt_extent")
-        now = current_rows.get(finding_id, {}).get("debt_extent")
-        if isinstance(prior, dict) and isinstance(now, dict):
-            disposition = compare_debt_extent(prior, now)
-            extent[disposition] += 1
-            if disposition == "EXPANDED":
-                expanded.append(finding_id)
-            elif disposition == "MATERIAL_CHANGED":
-                material_changed.append(finding_id)
 
-    baseline_topology = baseline_topology_from_member_records(b0_rows)
-    current_topology = build_repository_topology(ROOT, ref=CURRENT_MAIN)
-    transition = reconcile_observer_transition_candidates(
-        baseline_topology=baseline_topology,
-        current_topology=current_topology,
-        full_snapshot=current,
-        constitution_status=str(constitution.get("status", "")),
-    )
-    lineage = reconcile_b0_to_current_full_g3(
-        b0_rows=b0_rows,
-        current_topology=current_topology,
-        full_snapshot=current,
-        transition_reconciliation=transition,
-    )
-    floor = propose_candidate_floor(
-        predecessor_commit=CURRENT_MAIN,
-        predecessor_tree=str(current["tree"]),
-        constitution_hash=str(constitution["canonical_hash"]),
-        full_snapshot=current,
-        lineage_reconciliation=lineage,
-        transition_zero=transition.get("transition_debt_zero_proven") is True,
-        baseline_expansion_zero=transition.get("baseline_expansion_zero_proven") is True,
-    )
+def test_grt2_g3_superseding_readiness_reconciliation_is_exact_and_authority_inert() -> None:
+    manifest = _load(PACKET_ROOT / "GRT2_G3_SUPERSEDING_READINESS_AUTHORITY_MANIFEST.json")
+    frontier = _load(PACKET_ROOT / "GRT2_G3_SUPERSEDING_READINESS_DEPENDENCY_FRONTIER.json")
+    evidence = _load(PACKET_ROOT / "GRT2_G3_SUPERSEDING_READINESS_RECONCILIATION_EVIDENCE.json")
+    qa = _load(PACKET_ROOT / "GRT2_G3_SUPERSEDING_READINESS_QA_PACKET.json")
+    decision = _load(PACKET_ROOT / "GRT2_G3_SUPERSEDING_READINESS_DELEGATED_DECISION.json")
+    receipt = _load(PACKET_ROOT / "GRT2_G3_SUPERSEDING_READINESS_COMPLETION_RECEIPT.json")
+    state = _load(STATE_ROOT / "OVC_GRT2_STATE_v0_16_SUPERSEDING_READINESS_RECONCILIATION_COMPLETED.json")
+    pointer = _load(STATE_ROOT / "CURRENT_STATE_POINTER.json")
+    old_floor = _load(ROOT / "docs/programmes/grt-v0-2/g3/GRT2_G3_PROPOSED_DEBT_FLOOR_GENERATION_0.json")
+    constitution = _load(ROOT / "registries/governance/grt_v0_2/GRT_REPOSITORY_CONSTITUTION_v0_2.json")
+    authority = _load(ROOT / "registries/authority/GRT2_ACTIVE_ENFORCEMENT_AUTHORITY_v0_1.json")
+    pgn = _load(ROOT / "registries/governance/programme_genesis/OVC_PGN_PORTFOLIO_LEDGER_v0_2.json")
 
-    payload = {
-        "schema": "ovc-grt2-g3-superseding-readiness-probe/v1",
-        "current_main": CURRENT_MAIN,
-        "current_tree": current.get("tree"),
-        "former_gate_ready_main": FORMER_GATE_READY_MAIN,
-        "former_floor_hash": old_floor.get("floor_hash"),
-        "former_floor_count": len(old_ids),
-        "current_finding_count": len(current_ids),
-        "resolved_ids": resolved,
-        "added_ids": added,
-        "resolved_rows": [former_rows.get(x) for x in resolved],
-        "added_rows": [current_rows[x] for x in added],
-        "extent_dispositions": extent,
-        "expanded_ids": expanded,
-        "material_changed_ids": material_changed,
-        "b0_member_count": len(b0_rows),
-        "b0_membership_sha256": b0_membership,
-        "b0_exact": len(b0_rows) == B0_MEMBER_COUNT and b0_membership == B0_MEMBERSHIP_SHA256,
-        "current_snapshot_hash": current.get("snapshot_hash"),
-        "current_evaluation_count": current.get("evaluation_count"),
-        "current_not_evaluable": current.get("not_evaluable", []),
-        "current_adapter_errors": current.get("adapter_errors", []),
-        "current_family_coverage": current.get("family_coverage", {}),
-        "transition": transition,
-        "lineage_status": lineage.get("status"),
-        "unresolved_lineage_count": lineage.get("unresolved_lineage_count"),
-        "candidate_floor": floor,
+    assert _canonical_sha(manifest) == "b8d884e9fa40aafd7db280d1acb35525419d09141295b7b527a44591f1b2b9d2"
+    assert _canonical_sha(frontier) == "7ff6eeaa524ad9a49b661ee9fd3582bdd590df9b6397c125db350e1d3e4549b4"
+    for packet in (evidence, qa, decision, receipt, state):
+        assert packet["logical_sha256"] == _logical_sha(packet)
+
+    assert evidence["logical_sha256"] == "54e58cdfc87f6969930d1cbe1ee13acfc2f2e037091f02aaf39f8ca5ae724551"
+    assert qa["logical_sha256"] == "63a110b48978be2dcb166700be7fca90865ea6f5bac9ef08a8369b37d0ba5a7a"
+    assert decision["logical_sha256"] == "83037480e7e51f73e17f3856d345dd3ea76588df37247c9f4c0fdc1a64bc71e0"
+    assert receipt["logical_sha256"] == "1d533382862b7f68c46926fa76d602088fdd7a9bbab4b4c9e7f6c10758e56428"
+    assert state["logical_sha256"] == "365514ffce4bdf8ba209ccfb4f79a08c1b4e60222c6bd6892d253ca67f0f1f5b"
+
+    assert old_floor["floor_hash"] == "f008cbad6bbb891b18f615aa91f9981fbf71ec874972630d8c6eb38ae1642ba9"
+    assert len(old_floor["open_grandfathered_findings"]) == 1628
+    assert evidence["previous_g3"]["operator_decision"] == "PASS_RECEIVED_UNCONSUMED"
+    assert evidence["previous_g3"]["authority_consumed"] == "NONE"
+
+    current = evidence["exact_current_baseline"]
+    assert current["commit"] == "4aac7376e60525b0c86b9f4577ce32790b0d98de"
+    assert current["tree"] == "f887aa0d709b723aa7b92abbc8a2e6ba0930cdf3"
+    assert current["full_tree_component_count"] == 7571
+    assert current["evaluation_count"] == 12362
+    assert current["finding_count"] == 1638
+    assert current["snapshot_hash"] == "907ff285e2a27678893b80670aef67d427f829884ad15d96a74766e30efbb842"
+    assert current["not_evaluable_count"] == 0
+    assert current["adapter_error_count"] == 0
+    assert len(current["rule_family_coverage"]) == 10
+    assert set(current["rule_family_coverage"].values()) == {"EVALUATED"}
+
+    b0 = evidence["b0_integrity"]
+    assert b0 == {
+        "exact": True,
+        "lineage_status": "PASS",
+        "member_count": 569,
+        "membership_sha256": "3587c224c07360751923e5718c5bedb432ce4a5c8cccd4061f73dd53ef07de5d",
+        "unresolved_lineage_count": 0,
     }
-    raise AssertionError(
-        "GRT2_G3_SUPERSEDING_RECONCILIATION_PROBE="
-        + json.dumps(payload, sort_keys=True, separators=(",", ":"))
-    )
+    observer = evidence["observer_transition"]
+    assert observer["current_observer_condition_count"] == 2163
+    assert observer["source_classified_condition_count"] == 2163
+    assert observer["unresolved_current_condition_count"] == 0
+    assert observer["transition_new_debt_count"] == 0
+    assert observer["stable_expanded_count"] == 0
+    assert observer["stable_material_changed_count"] == 0
+
+    reconciliation = evidence["old_to_current_finding_reconciliation"]
+    assert reconciliation["former_count"] == 1628
+    assert reconciliation["current_count"] == 1638
+    assert reconciliation["unchanged_count"] == 1625
+    assert reconciliation["resolved_count"] == 3
+    assert reconciliation["added_count"] == 13
+    assert reconciliation["net_change"] == 10
+    assert reconciliation["extent_dispositions"] == {
+        "EXPANDED": 0,
+        "MATERIAL_CHANGED": 0,
+        "NOT_COMPARABLE": 0,
+        "REDUCED": 0,
+        "UNCHANGED": 1625,
+    }
+    assert reconciliation["identity_replacements"] == 1
+    assert reconciliation["genuinely_new_actionable_findings_relative_to_former_floor"] == 12
+    assert reconciliation["forbidden_new_or_recurrent_debt"] == 0
+    assert reconciliation["unlawful_baseline_expansion"] == 0
+
+    floor = evidence["provisional_replacement_floor_on_exact_baseline"]
+    assert floor["generation"] == 0
+    assert floor["count"] == 1638
+    assert floor["floor_hash"] == "3aac9f9128345aa53776f7cbf9e28fe060e5ab27ea143959490f7ebf80ff3cbb"
+    assert floor["status"] == "CANDIDATE_ONLY_REQUIRES_POST_INTEGRATION_EXACT_REBUILD"
+    assert floor["old_floor_mutated"] is False
+
+    artifact = evidence["external_artifact"]
+    assert artifact["workflow_run_id"] == 32774766087
+    assert artifact["artifact_id"] == 9537555078
+    assert artifact["artifact_digest"] == "sha256:c705efda7d5afe76e40afc3056fa9b54db52e60477fd7f2b6e7cc2a2f487e3a3"
+    assert artifact["evidence_logical_sha256"] == "4ee0147f6733dcc7b034b6e72be7d31036438b7e214075ccf978688d54030b1e"
+
+    assert qa["disposition"] == "PASS"
+    assert qa["warnings"] == []
+    assert qa["unresolved_issues"] == []
+    assert decision["decision"] == "PASS"
+    assert decision["authority_effect"] == "NONE"
+    assert receipt["status"] == "COMPLETED_PENDING_PHYSICAL_MATERIALISATION"
+
+    assert constitution["canonical_hash"] == "cac9fc5f0e31db08c4c37153c92a214fcc482414421f34d74c594faec65a71b0"
+    assert constitution["status"] == "PROPOSED_UNADMITTED"
+    assert authority["enforcement_mode"] == "LIMITED_NEW_ARTIFACT_ENFORCEMENT"
+    assert authority["g3_status"] == "NOT_AUTHORISED"
+    assert pgn["authority"]["native_genesis_adoption"] == "DENIED_PENDING_PGN_G3"
+
+    assert state["status"] == "READY"
+    assert state["g3_status"] == "SUPERSEDING_READINESS_RECONCILIATION_COMPLETED_NOT_AUTHORISED"
+    assert state["operator_decision_required"] is False
+    assert state["next_packet"] == "GRT2-G3-SUPERSEDING-GATE-READY"
+    assert pointer["current_state"].endswith("OVC_GRT2_STATE_v0_16_SUPERSEDING_READINESS_RECONCILIATION_COMPLETED.json")
+    assert pointer["status"] == "READY"
+    assert pointer["next_packet"] == "GRT2-G3-SUPERSEDING-GATE-READY"
+    assert pointer["operator_decision_required"] is False
