@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+import re
 
 ROOT = Path(__file__).resolve().parents[3]
 WP8 = ROOT / "docs/programmes/asocs-v0-1/implementation/wp8"
@@ -18,6 +19,12 @@ def _cid(value: dict) -> str:
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()).hexdigest()
 
 
+def _state_generation(path: str) -> int:
+    match = re.search(r"ASOCSI_PROGRAMME_STATE_v0_(\d+)_", path)
+    assert match is not None, path
+    return int(match.group(1))
+
+
 def test_wp8_source_recovers_exact_g1_but_g3_identity_blocks_reveal():
     source = _json(WP8 / "ASOCSI_WP8_SOURCE_REPRODUCTION_RECEIPT_v0_1.json")
     repro = _json(WP8 / "ASOCSI_WP8_G3_REPRODUCTION_INTEGRITY_v0_1.json")
@@ -28,6 +35,8 @@ def test_wp8_source_recovers_exact_g1_but_g3_identity_blocks_reveal():
     decision = _json(WP8 / "ASOCSI_G6_G3_REPRODUCTION_BLOCK_DECISION_v0_1.json")
     state = _json(STATE)
     pointer = _json(POINTER)
+    current_path = Path(pointer["current_state"])
+    current = _json(ROOT / current_path)
 
     assert source["source"]["sha256"] == "210233ec5761bf82998172832bb554ddf10dfeb3099f6bc6488d5bb0f6bec4f2"
     assert source["verification"]["g1_audit_15m"]["result"] == "PASS"
@@ -55,9 +64,20 @@ def test_wp8_source_recovers_exact_g1_but_g3_identity_blocks_reveal():
     assert state["authority_delta"] == "NONE"
     assert state["human_adjudication_started"] is False
     assert state["stop_boundary"] == "ASOCSI-WP8-STAGED-REVEAL_NOT_AUTHORIZED_UNTIL_G3_REPRODUCIBLE"
-    assert pointer["current_state"] == str(STATE.relative_to(ROOT)).replace("\\", "/")
-    assert pointer["status"] == "BLOCKED"
-    assert pointer["next_packet"] == state["next_packet"]
+
+    assert pointer["programme_id"] == current["programme_id"] == state["programme_id"]
+    assert pointer["packet_id"] == current["packet_id"] == state["packet_id"]
+    assert pointer["status"] == current["status"] == "BLOCKED"
+    assert pointer["next_packet"] == current["next_packet"] == state["next_packet"]
+    assert _state_generation(pointer["current_state"]) >= _state_generation(str(STATE.relative_to(ROOT)).replace("\\", "/"))
+    assert current["human_adjudication_started"] is False
+    assert current["stop_boundary"] == state["stop_boundary"]
+    assert current["blockers"] == state["blockers"]
+    if current_path != STATE.relative_to(ROOT):
+        assert current["repository_effective"]["repository_effective"] is True
+        assert current["frozen_g3_identity"]["census_sha256"] == repro["expected_frozen"]["census_sha256"]
+        assert current["frozen_g3_identity"]["ordered_trace_ids_sha256"] == repro["expected_frozen"]["ordered_trace_ids_sha256"]
+        assert current["frozen_g3_identity"]["observation_traces_sha256"] == repro["expected_frozen"]["observation_traces"]["sha256"]
 
 
 def test_wp8_block_does_not_grant_reserved_or_reveal_authority():
