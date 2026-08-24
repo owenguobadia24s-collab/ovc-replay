@@ -156,8 +156,11 @@ def test_all_wp9_query_families_are_read_only_complete_and_non_operational() -> 
         service.search("visible-001"),
         service.get_distinction(GEN),
         service.why_here(GEN),
-        service.history_as_of(GEN, "2026-02-01T00:00:00Z"),
+        service.history(GEN),
+        service.as_of(GEN, "2026-02-01T00:00:00Z"),
         service.evidence(GEN),
+        service.contradictions(GEN),
+        service.nulls(GEN),
         service.correspondence(GEN),
         service.demand(GEN),
         service.why_blocked(GEN),
@@ -183,18 +186,20 @@ def test_all_wp9_query_families_are_read_only_complete_and_non_operational() -> 
 
 
 def test_as_of_excludes_future_visible_evidence_without_hindsight_rewrite() -> None:
-    result = _service().history_as_of(GEN, "2026-02-01T00:00:00Z")
+    result = _service().as_of(GEN, "2026-02-01T00:00:00Z")
     ids = {record.get("record_id") for record in result["result"]}
     assert "p1:history:1" in ids
     assert "p1:history:2" not in ids
 
 
-def test_evidence_preserves_negative_and_null_records_without_scalar_score() -> None:
-    result = _service().evidence(GEN)
-    types = {record["record_type"] for record in result["result"]}
-    assert "P1DistinctionContradictionRecord" in types
-    assert "P1NullEvidenceBinding" in types
-    assert all("score" not in record for record in result["result"])
+def test_evidence_contradictions_and_nulls_remain_distinct_without_scalar_score() -> None:
+    evidence = _service().evidence(GEN)
+    contradictions = _service().contradictions(GEN)
+    nulls = _service().nulls(GEN)
+    assert {record["record_type"] for record in evidence["result"]} == {"P1DistinctionEvidenceStateVector"}
+    assert {record["record_type"] for record in contradictions["result"]} == {"P1DistinctionContradictionRecord"}
+    assert {record["record_type"] for record in nulls["result"]} == {"P1NullEvidenceBinding"}
+    assert all("score" not in record for result in (evidence, contradictions, nulls) for record in result["result"])
 
 
 def test_next_discovery_work_remains_advisory_and_has_no_actuation_fields() -> None:
