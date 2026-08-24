@@ -1,9 +1,9 @@
 # PES VIT Qualification Producer Contract v0.1
 
 **Service:** Persistent Execution Service (PES)  
-**Scope:** detached exact-head VIT qualification publication preparation  
-**Status:** SHADOW_ONLY_PENDING_SEPARATE_ACTIVATION  
-**Authority effect:** NONE
+**Scope:** detached exact-head VIT qualification publication  
+**Status:** ACTIVE_BOUNDED_WHEN_ACTIVATION_RECORD_IS_ON_CURRENT_MAIN  
+**Authority effect:** BOUNDED_INFRASTRUCTURE_ACTIVATION_ONLY
 
 ## 1. Purpose
 
@@ -28,7 +28,7 @@ The producer accepts only one canonical `ovc-pes-vit-qualification-publication-r
 
 The request identity is the canonical SHA-256 of every request field except `request_id`. Any mutation after issuance invalidates the request.
 
-## 3. Producer limitations
+## 3. Permanent limitations
 
 The producer MUST NOT:
 
@@ -41,47 +41,64 @@ The producer MUST NOT:
 7. create a payload or renewal commit;
 8. write to `main`;
 9. merge a pull request;
-10. write anywhere except the dedicated detached qualification ledger after a separate activation grant.
+10. force-push or rewrite history;
+11. subscribe to repository events or poll for work under this activation; or
+12. write anywhere except the dedicated detached qualification ledger.
 
 ## 4. Fixed publication target
 
-The only prospective publication target is:
+The only active publication target is:
 
 - branch/ref: `ovc/vit-qualification-ledger-v1`;
 - root: `.ovc/vit-qualifications`;
 - write scope: `ENVELOPE_AND_EXACT_HEAD_POINTER_ONLY`.
 
-Envelope immutability, content addressing, exact-head/tree validation, head-pointer supersession, and collision behavior remain owned by the existing VIT qualification store.
+Envelope immutability, content addressing, exact-head/tree validation, head-pointer collision behavior, and idempotent replay remain owned by the existing VIT qualification store.
 
 ## 5. WP1 shadow boundary
 
-WP1 implements request validation and exact envelope preparation only.
+WP1 implemented request validation and exact envelope preparation only. It intentionally did not activate detached-ledger writes or persistent producer dispatch.
 
-WP1 does **not** activate:
+That historical shadow boundary remains valid evidence for the implementation stage; it is superseded prospectively only by the exact activation record described below.
 
-- detached-ledger writes;
-- persistent unattended producer dispatch;
-- event subscriptions or polling;
-- generic programme admission;
-- VIT programme resurrection; or
-- any new physical-main capability.
+## 6. Operator activation
 
-The WP1 command MUST terminate with `PES_VIT_QUALIFICATION_PRODUCER=SHADOW_READY_NO_LEDGER_WRITE` after preparing a valid exact-head envelope.
+The bounded activation gate is `DSAI3V-PES-VIT-G-PRODUCER-ACTIVATION`.
 
-## 6. Activation preconditions
+The only accepted operator grant is:
 
-Any future activation MUST be a separate bounded gate and MUST bind, at minimum:
+`OVC APPROVE PES-VIT-QUALIFICATION-PRODUCER ACTIVATION PASS`
 
-1. a trusted issuer/executor identity already intersected with current owner authority;
-2. a durable request transport independent of PR metadata;
-3. ledger-ref-only write authority with fast-forward/content-addressed semantics;
-4. fail-closed behavior for unknown programmes, invalid owner authority, stale heads, malformed requests, or target drift;
-5. idempotent replay and restartability under PES fencing/liveness semantics;
-6. no direct-main, merge, force-push, history-rewrite, or parallel-writer capability; and
-7. an explicit rollback that disables new producer dispatch while preserving all ledger evidence.
+The grant activates exactly:
 
-Until that activation gate passes, the producer remains shadow-only.
+1. publication of an already-validated exact VIT qualification envelope to the fixed detached ledger;
+2. creation/update of the exact-head pointer through the existing content-addressed VIT qualification store; and
+3. execution from a durable PES dispatch bound to the exact request, activation ID, trusted executor identity, fixed write domain, semantic owner, and current positive fencing generation.
 
-## 7. CERS lineage
+The activation does **not** grant event subscription, polling, generic programme admission, programme semantics, VIT decision authority, SIQ/GRT authority, direct-main write, merge, force-push, history rewrite, scientific authority, market authority, execution authority, or exposure authority.
 
-Historical CERS persistent-supervisor runtime evidence may be reused as implementation lineage for restartability, fencing, and trusted packet-executor mechanics. This does not make PES programme-specific and does not revive a completed VIT programme as a CERS-admitted programme. PES producer activation must be represented as a new bounded infrastructure capability with its own exact write domain.
+The durable activation record is:
+
+`docs/releases/development-skills-v0-3/pes-vit-liveness/PES_VIT_QUALIFICATION_PRODUCER_ACTIVATION_PACKET_v0_1.json`
+
+Activation is effective only when that record and its implementation are on current `main`.
+
+## 7. Persistent execution semantics
+
+A producer dispatch MUST be content-addressed and MUST bind:
+
+- the exact canonical owner-issued request ID;
+- the exact activation ID;
+- the request's trusted issuer/executor identity;
+- action `PUBLISH_DETACHED_VIT_QUALIFICATION`;
+- write domain `ovc/vit-qualification-ledger-v1:.ovc/vit-qualifications`;
+- semantic owner `DSAI_VIT_PHYSICAL_CONTROLLER`; and
+- the current positive PES fencing generation.
+
+A stale or mismatched fence MUST fail before the ledger actuator is reached. Replaying the same authorised dispatch is safe because the VIT store is content-addressed and idempotent for the same exact envelope/head binding.
+
+PES may reuse historical CERS fencing, restartability, checkpoint, and durable-dispatch mechanics as implementation lineage. That reuse transfers no CERS programme semantics or programme-specific authority.
+
+## 8. Rollback
+
+Rollback disables new producer publish-mode dispatch while preserving already-published detached qualification evidence and Git history. Rollback MUST NOT delete valid qualification evidence, mutate `main` directly, weaken VIT validation, or rewrite history.
