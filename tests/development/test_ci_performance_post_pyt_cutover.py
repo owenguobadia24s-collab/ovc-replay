@@ -21,6 +21,10 @@ MATERIALISATION_ROOT = ROOT / (
     "docs/releases/ci-performance-remediation-v0-1/"
     "cipr-wp5c-physical-materialisation"
 )
+MERGE_RECEIPT = ROOT / (
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp5c/"
+    "CIPR_WP5C_MERGE_RECEIPT.json"
+)
 
 
 def _synthetic_policy() -> dict:
@@ -167,10 +171,7 @@ def test_required_workflow_context_is_aggregate_and_no_new_listener_is_added() -
 def test_physical_materialisation_state_is_repository_effective_and_consistent() -> None:
     pointer = json.loads(CURRENT_STATE_POINTER.read_text(encoding="utf-8"))
     state = json.loads(MATERIALISED_STATE.read_text(encoding="utf-8"))
-    receipt = json.loads(
-        (MATERIALISATION_ROOT / "CIPR_WP5C_PHYSICAL_MATERIALISATION_RECEIPT.json")
-        .read_text(encoding="utf-8")
-    )
+    receipt = json.loads(MERGE_RECEIPT.read_text(encoding="utf-8"))
     qa = json.loads(
         (MATERIALISATION_ROOT / "CIPR_WP5C_PHYSICAL_MATERIALISATION_QA_PACKET.json")
         .read_text(encoding="utf-8")
@@ -186,16 +187,17 @@ def test_physical_materialisation_state_is_repository_effective_and_consistent()
     assert pointer["next_packet"] == state["next_packet"] == "CIPR-WP5C-TERMINAL-COMPLETION-RECEIPT"
     assert pointer["physical_cutover_complete"] is state["physical_cutover_complete"] is True
     assert pointer["runner_cutover_repository_effective"] is state["runner_cutover_repository_effective"] is True
-    assert state["merge_commit"] == receipt["implementation"]["squash_merge_commit"]
-    assert state["merge_tree"] == receipt["implementation"]["squash_merge_tree"]
+    assert state["merge_commit"] == receipt["squash_merge_commit"]
+    assert state["merge_tree"] == receipt["squash_merge_tree"]
     assert state["merge_commit"]
-    assert state["required_check_context_identity"] == receipt["topology"]["required_external_context"] == "tests"
-    assert state["canonical_shard_count"] == receipt["topology"]["shard_count"] == 4
-    assert state["pytest_sessions_per_shard"] == receipt["topology"]["pytest_sessions_per_shard"] == 1
-    assert state["aggregate_fail_closed"] is receipt["topology"]["aggregate_fail_closed"] is True
-    assert state["xdist_active"] is receipt["topology"]["xdist_active"] is False
-    assert state["ruleset_context_mutation_active"] is receipt["topology"]["ruleset_context_mutation_active"] is False
-    assert state["required_check_substitution_active"] is receipt["topology"]["required_check_substitution_active"] is False
+    invariants = receipt["terminal_invariants"]
+    assert state["required_check_context_identity"] == invariants["required_check_context_identity"] == "tests"
+    assert state["canonical_shard_count"] == invariants["canonical_shard_count"] == 4
+    assert state["pytest_sessions_per_shard"] == invariants["pytest_sessions_per_shard"] == 1
+    assert state["aggregate_fail_closed"] is invariants["aggregate_fail_closed"] is True
+    assert state["xdist_active"] is invariants["xdist_active"] is False
+    assert state["ruleset_context_mutation_active"] is invariants["ruleset_context_mutation_active"] is False
+    assert state["required_check_substitution_active"] is invariants["required_check_substitution_active"] is False
     assert state["blockers"] == receipt["blockers"] == qa["blockers"] == decision["blockers"] == []
     assert qa["qa_status"] == qa["qa_recommendation"] == decision["qa"] == decision["decision"] == "PASS"
     assert decision["authority_delta"] == "NONE_ADMINISTRATIVE_MATERIALISATION_AND_CLOSEOUT_ONLY"
