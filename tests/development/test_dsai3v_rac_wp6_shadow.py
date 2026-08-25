@@ -112,7 +112,16 @@ def test_wp6_g3_pass_is_shadow_only_and_pilot_remains_operator_reserved() -> Non
 
     assert g3["gate_class"] == "AUTO_RATIFIABLE"
     assert g3["decision"] == "PASS_SAFE_CONSERVATIVE_SHADOW"
-    assert all(g3["criteria"].values())
+    assert g3["criteria"] == {
+        "all_frozen_candidates_final_reference_outcome": True,
+        "blocking_path_eligibility_changed": False,
+        "bootstrap_main_reference_pass": True,
+        "required_check_substitution_active": False,
+        "ruleset_mutation": False,
+        "runner_cutover_active": False,
+        "zero_unexplained_semantic_mismatch": True,
+        "zero_unsafe_omission_false_negative": True,
+    }
     assert g3["authority_effect"] == "NONE_AUTO_SHADOW_QUALIFICATION_ONLY"
 
     assert pilot["gate_id"] == "DSAI3V-RAC-G-DELTA-ASSURANCE-PILOT"
