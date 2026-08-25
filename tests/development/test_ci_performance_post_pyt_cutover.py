@@ -185,6 +185,9 @@ def test_physical_materialisation_state_is_repository_effective_and_consistent()
     assert pointer["status"] == state["status"] == "PHYSICALLY_MATERIALISED"
     assert pointer["packet_id"] == state["packet_id"] == "CIPR-WP5C-PHYSICAL-MATERIALISATION"
     assert pointer["next_packet"] == state["next_packet"] == "CIPR-WP5C-TERMINAL-COMPLETION-RECEIPT"
+    assert pointer["operator_stop_gate"] == state["operator_stop_gate"] == "CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER"
+    assert pointer["operator_stop_gate_decision"] == state["operator_stop_gate_decision"] == "PASS"
+    assert pointer["outstanding_operator_gate"] is state["outstanding_operator_gate"] is None
     assert pointer["physical_cutover_complete"] is state["physical_cutover_complete"] is True
     assert pointer["runner_cutover_repository_effective"] is state["runner_cutover_repository_effective"] is True
     assert state["merge_commit"] == receipt["squash_merge_commit"]
