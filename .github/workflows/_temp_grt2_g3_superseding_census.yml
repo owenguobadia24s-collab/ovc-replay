@@ -6,10 +6,13 @@ on:
     paths:
       - ".github/workflows/_temp_grt2_g3_superseding_census.yml"
       - "scripts/governance/grt_v0_2/diagnose_superseding_g3_census.py"
+      - "scripts/governance/grt_v0_2/materialize_superseding_g3_activation.py"
       - "docs/programmes/grt-v0-2/g3/superseding/diagnostic/**"
 
 permissions:
-  contents: read
+  contents: write
+  checks: read
+  pull-requests: read
 
 concurrency:
   group: temp-grt2-g3-superseding-census-${{ github.event.pull_request.number }}
@@ -27,8 +30,10 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
           show-progress: false
-      - name: Fetch exact protected main history
-        run: git fetch --no-tags origin main:refs/remotes/origin/main
+      - name: Fetch exact protected main and activation-runtime history
+        run: |
+          git fetch --no-tags origin main:refs/remotes/origin/main
+          git fetch --no-tags origin grt2/g3-activation-materialisation-20260823-final:refs/remotes/origin/grt2/g3-activation-materialisation-20260823-final
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11.15"
@@ -52,29 +57,54 @@ jobs:
           approved=json.loads(Path('/tmp/approved-floor.json').read_text())
           current=set(census['candidate_replacement_debt_floor_generation_0']['open_grandfathered_findings'])
           frozen=set(approved['open_grandfathered_findings'])
-          result={
-              'protected_main': census['current_main_commit'],
-              'protected_tree': census['current_main_tree'],
-              'approved_floor_hash': approved['floor_hash'],
-              'approved_floor_count': len(frozen),
-              'current_finding_count': len(current),
-              'sets_equal': current == frozen,
-              'approved_missing_from_current': sorted(frozen-current),
-              'current_not_in_approved': sorted(current-frozen),
-              'b0_exact': census['b0_integrity']['exact'],
-              'unresolved_lineage_count': census['b0_to_current_lineage']['unresolved_lineage_count'],
-              'mechanically_eligible': census['mechanically_eligible_for_superseding_gate_preparation'],
-          }
+          result={'protected_main':census['current_main_commit'],'protected_tree':census['current_main_tree'],'approved_floor_hash':approved['floor_hash'],'approved_floor_count':len(frozen),'current_finding_count':len(current),'sets_equal':current==frozen,'approved_missing_from_current':sorted(frozen-current),'current_not_in_approved':sorted(current-frozen),'b0_exact':census['b0_integrity']['exact'],'unresolved_lineage_count':census['b0_to_current_lineage']['unresolved_lineage_count'],'mechanically_eligible':census['mechanically_eligible_for_superseding_gate_preparation']}
           print('GRT2_G3_APPROVED_SET_REVALIDATION='+json.dumps(result,sort_keys=True,separators=(',',':')))
-          if not result['sets_equal']:
-              raise SystemExit('APPROVED_SUPERSEDING_G0_FINDING_SET_STALE')
-          if not result['b0_exact'] or result['unresolved_lineage_count'] != 0 or not result['mechanically_eligible']:
-              raise SystemExit('GRT2_G3_SUPERSEDING_READINESS_NO_LONGER_VALID')
+          if not result['sets_equal']: raise SystemExit('APPROVED_SUPERSEDING_G0_FINDING_SET_STALE')
+          if not result['b0_exact'] or result['unresolved_lineage_count'] != 0 or not result['mechanically_eligible']: raise SystemExit('GRT2_G3_SUPERSEDING_READINESS_NO_LONGER_VALID')
           PY
       - name: Upload immutable current-main census evidence
+        id: census-artifact
         uses: actions/upload-artifact@v4
         with:
           name: grt2-g3-superseding-census
           path: artifacts/grt2-g3-superseding-census.json
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 30
+      - name: Materialise bounded superseding activation candidate on exact protected main
+        id: activation
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          TARGET_BRANCH: grt2/g3-superseding-activation-20260825-r1
+          ARTIFACT_ID: ${{ steps.census-artifact.outputs.artifact-id }}
+          ARTIFACT_DIGEST: ${{ steps.census-artifact.outputs.artifact-digest }}
+          PYTHONPATH: src:.
+        run: |
+          set -euo pipefail
+          cp scripts/governance/grt_v0_2/materialize_superseding_g3_activation.py /tmp/materialize_superseding_g3_activation.py
+          evidence_sha=$(sha256sum artifacts/grt2-g3-superseding-census.json | awk '{print $1}')
+          base_sha=$(git rev-parse origin/main)
+          git checkout -B "$TARGET_BRANCH" origin/main
+          python3 /tmp/materialize_superseding_g3_activation.py \
+            --root . \
+            --revalidation-run-id "$GITHUB_RUN_ID" \
+            --revalidation-artifact-id "$ARTIFACT_ID" \
+            --revalidation-artifact-digest "$ARTIFACT_DIGEST" \
+            --revalidation-evidence-sha256 "$evidence_sha"
+          PYTHONPATH=src python3 -m pytest tests/governance/grt_v0_2/test_grt2_g3_operator_pass.py -q
+          git diff --check
+          git config user.name "OVC GRT2 Superseding Activation"
+          git config user.email "ovc-grt2-superseding-activation@invalid.local"
+          git add .github/workflows/ovc-tiered-tests.yml docs/programmes/grt-v0-2/g3 registries/authority/GRT2_ACTIVE_ENFORCEMENT_AUTHORITY_v0_2.json registries/governance/grt_v0_2/GRT_DEBT_FLOOR_CURRENT.json registries/governance/grt_v0_2/debt_floors/GRT_DEBT_FLOOR_G0.json registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_17_SUPERSEDING_ACTIVATION.json scripts/governance/grt_v0_2/grt_exact.py scripts/governance/grt_v0_2/grt_integration_readiness.py scripts/governance/grt_v0_2/prepare_next_debt_floor.py tests/governance/grt_v0_2/test_grt2_g3_operator_pass.py
+          git commit -m "GRT2-G3: materialise exact superseding operator PASS activation"
+          head_sha=$(git rev-parse HEAD)
+          authority_id=$(python3 -c "import json; print(json.load(open('docs/programmes/grt-v0-2/g3/GRT2_G3_ACTIVATION_AUTHORITY_MANIFEST.json'))['authority_manifest_id'])")
+          frontier_id=$(python3 -c "import json; print(json.load(open('docs/programmes/grt-v0-2/g3/GRT2_G3_ACTIVATION_DEPENDENCY_FRONTIER.json'))['dependency_frontier_id'])")
+          transition='{"authority_effect":"OPERATOR_APPROVED_G3_ACTIVATION_IMPLEMENTATION","next_packet":"GRT2-WP4","status":"APPROVED_PENDING_MAIN_MATERIALISATION"}'
+          python3 tools/ci/build_vit_pr_lineage.py --repo . --base "$base_sha" --head "$head_sha" --programme-id OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE --packet-id GRT2-G3-SUPERSEDING-ACTIVATION-MATERIALISATION --authority-manifest-id "$authority_id" --dependency-frontier-id "$frontier_id" --completion-transition-json "$transition" --publish-detached | tee /tmp/grt2-g3-activation-vit.txt
+          git push origin "HEAD:refs/heads/${TARGET_BRANCH}"
+          echo "base_sha=$base_sha" >> "$GITHUB_OUTPUT"
+          echo "head_sha=$head_sha" >> "$GITHUB_OUTPUT"
+          echo "authority_id=$authority_id" >> "$GITHUB_OUTPUT"
+          echo "frontier_id=$frontier_id" >> "$GITHUB_OUTPUT"
+          cat /tmp/grt2-g3-activation-vit.txt
