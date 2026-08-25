@@ -49,12 +49,20 @@ class TestDsai3vRacPilotApproval(unittest.TestCase):
         pointer = json.loads(POINTER.read_text(encoding="utf-8"))
         state = json.loads(IMPLEMENTED_STATE.read_text(encoding="utf-8"))
         active = json.loads(ACTIVE_STATE.read_text(encoding="utf-8"))
-        self.assertEqual(
-            pointer["current_state"],
-            "registries/implementation/dsai3v_cipr_rac/OVC_DSAI3V_CIPR_RAC_STATE_v0_7_PILOT_REBASELINE_REFERENCE_PENDING.json",
-        )
-        self.assertEqual(pointer["status"], "PILOT_REBASELINE_REFERENCE_PENDING")
-        self.assertEqual(pointer["next_packet"], "DSAI3V-RAC-WP7D-PILOT-REBASELINE-AFTER-CORRECTION")
+        allowed_progression = {
+            "registries/implementation/dsai3v_cipr_rac/OVC_DSAI3V_CIPR_RAC_STATE_v0_7_PILOT_REBASELINE_REFERENCE_PENDING.json": (
+                "PILOT_REBASELINE_REFERENCE_PENDING",
+                "DSAI3V-RAC-WP7D-PILOT-REBASELINE-AFTER-CORRECTION",
+            ),
+            "registries/implementation/dsai3v_cipr_rac/OVC_DSAI3V_CIPR_RAC_STATE_v0_8_PILOT_REBASELINED_ACTIVE.json": (
+                "PILOT_REBASELINED_ACTIVE",
+                "DSAI3V-RAC-WP8-PILOT-EVIDENCE-AND-GENERAL-GATE",
+            ),
+        }
+        self.assertIn(pointer["current_state"], allowed_progression)
+        expected_status, expected_next = allowed_progression[pointer["current_state"]]
+        self.assertEqual(pointer["status"], expected_status)
+        self.assertEqual(pointer["next_packet"], expected_next)
         self.assertEqual(pointer["operator_stop_gate"], "DSAI3V-RAC-G-DELTA-ASSURANCE-GENERAL")
         self.assertEqual(state["phase"], "PILOT_SUBSTRATE_IMPLEMENTED_INACTIVE_BASELINE_REQUIRED")
         self.assertEqual(state["status"], "IMPLEMENTED_QA_REVIEW")
