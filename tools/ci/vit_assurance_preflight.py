@@ -15,6 +15,7 @@ from ovc.development.skills.vit_local_completion_executor import build_live_tran
 from ovc.development.skills.vit_routing import validate_vit_lineage_record
 from ovc.development.skills.vit_core import VitContractError
 from tools.ci.vit_lineage_source import resolve_candidate_lineage
+from tools.ci.vit_no_late_surprises import compile_prequalification
 
 REUSE = re.compile(r"(?im)^VIT-AA0-Reuse-B64:\s*([A-Za-z0-9_\-=]+)\s*$")
 
@@ -114,7 +115,8 @@ def main() -> int:
         return 0
 
     event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text(encoding="utf-8"))
-    event_pr = event.get("pull_request") or {}
+    event_pr = event.get("pull_request")
+    event_pr = event_pr if isinstance(event_pr, Mapping) else {}
     event_head_sha = str((event_pr.get("head") or {}).get("sha") or "")
     pr = _live_pr_payload(event)
     body = str(pr.get("body") or "")
@@ -146,6 +148,15 @@ def main() -> int:
 
     lineage_record = lineage_source.record
     lineage = validate_vit_lineage_record(lineage_record)
+    if lineage.late_binding:
+        prequalification = compile_prequalification(
+            root=root,
+            head_sha=head_sha,
+            lineage_record=lineage_record,
+        )
+        print(f"OVC_NO_LATE_SURPRISES_PREFLIGHT=PASS {prequalification['receipt_id']}")
+    else:
+        print("OVC_NO_LATE_SURPRISES_PREFLIGHT=LEGACY_PLACEMENT_REPLAY_ONLY")
     _write_output("aa0_identity", lineage.pip_id)
     _write_output("generation_id", lineage_source.immutable_ref)
     _write_output("pip_id", lineage.pip_id)
