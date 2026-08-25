@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import re
 
 ROOT = Path(__file__).resolve().parents[3]
 WP5 = ROOT / "docs/programmes/asocs-v0-1/implementation/wp5"
@@ -15,6 +16,8 @@ FROZEN_CENSUS = "c49f34e7af19f0110d24377a54ab8f0bd3fb183e83e924de07bf39cd586de2c
 FROZEN_ORDERED = "bcd571f567068035592bb0d868747cfe85e8aaa01155b1fa8c798f488f6ef0d7"
 FROZEN_TRACES = "22c856efdd24083d5339d2082ad9714597e326a6f40655bfb82b0afa9899f7dc"
 FROZEN_G4 = "ff6eb37724aea5b2706666903f7b5a1bc063af8ef9026f4496429b5e33fa15fe"
+NARROWED_STATE = "records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_23_WP8_G3_CENSUS_IDENTITY_BLOCKED.json"
+RESOLUTION_EFFECTIVE = "ASOCSI-WP8-G3-REPRODUCTION-INTEGRITY-RESOLUTION_REPOSITORY_EFFECTIVE"
 CHECKPOINTS = {
     "4392": "91004c82e3a4134a32b1afe4e41559652b978589b8043e9abe9f7e818ccf0709",
     "8784": "d005f3225ea5a268fc9a223995f5cadfbb6611f374002eca02df266407b781ee",
@@ -25,6 +28,12 @@ CHECKPOINTS = {
 
 def load(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def state_generation(path: str) -> int:
+    match = re.search(r"ASOCSI_PROGRAMME_STATE_v0_(\d+)_", path)
+    assert match is not None, path
+    return int(match.group(1))
 
 
 def test_resolution_evidence_reproduces_every_resolved_frozen_identity() -> None:
@@ -87,22 +96,46 @@ def test_historical_g3_g4_g5_frozen_evidence_is_unchanged_and_reveal_denied() ->
     assert evidence["stage1_reveal_allowed"] is False
 
 
-def test_programme_state_advances_only_to_narrowed_block() -> None:
-    pointer = load(POINTER)
-    expected = "records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_23_WP8_G3_CENSUS_IDENTITY_BLOCKED.json"
-    assert pointer["current_state"] == expected
-    assert pointer["packet_id"] == "ASOCSI-WP8-G3-REPRODUCTION-INTEGRITY-RESOLUTION"
-    assert pointer["status"] == "BLOCKED"
-    assert pointer["next_packet"] == "ASOCSI-WP8-G3-CENSUS-IDENTITY-RESOLUTION"
-
-    state = load(ROOT / expected)
-    assert state["status"] == "BLOCKED"
-    assert state["authority_delta"] == "NONE"
-    assert state["blockers"] == ["G3_FROZEN_CENSUS_IDENTITY_AND_COMPACT_MANIFEST_CONSTRUCTION_NOT_REPRODUCIBLE"]
-    assert state["preserved"] == {
+def test_programme_state_preserves_narrowed_block_across_lawful_successors() -> None:
+    # v0.23 is immutable historical evidence: the exact census/manifest identity
+    # construction remained unresolved and Stage-1 reveal was denied.
+    narrowed = load(ROOT / NARROWED_STATE)
+    assert narrowed["status"] == "BLOCKED"
+    assert narrowed["authority_delta"] == "NONE"
+    assert narrowed["blockers"] == [
+        "G3_FROZEN_CENSUS_IDENTITY_AND_COMPACT_MANIFEST_CONSTRUCTION_NOT_REPRODUCIBLE"
+    ]
+    assert narrowed["preserved"] == {
         "g3_frozen_generation": True,
         "g4_review_population": True,
         "g5_human_evidence": True,
     }
-    assert state["human_adjudication_started"] is False
-    assert state["stage1_reveal_started"] is False
+    assert narrowed["human_adjudication_started"] is False
+    assert narrowed["stage1_reveal_started"] is False
+
+    pointer = load(POINTER)
+    current = load(ROOT / pointer["current_state"])
+    assert pointer["programme_id"] == current["programme_id"] == narrowed["programme_id"]
+    assert pointer["packet_id"] == current["packet_id"]
+    assert pointer["status"] == current["status"]
+    assert pointer["next_packet"] == current["next_packet"]
+    assert state_generation(pointer["current_state"]) >= state_generation(NARROWED_STATE)
+    assert current.get("stage1_reveal_started", False) is False
+    assert current.get("human_adjudication_started", False) is False
+
+    if pointer["current_state"] == NARROWED_STATE:
+        assert pointer["packet_id"] == "ASOCSI-WP8-G3-REPRODUCTION-INTEGRITY-RESOLUTION"
+        assert pointer["status"] == "BLOCKED"
+        assert pointer["next_packet"] == "ASOCSI-WP8-G3-CENSUS-IDENTITY-RESOLUTION"
+    else:
+        prerequisites = set(current.get("prerequisites", []))
+        assert RESOLUTION_EFFECTIVE in prerequisites
+        assert current["preserved"]["g3_frozen_generation"] is True
+        assert current["preserved"]["g4_review_population"] is True
+        assert current["preserved"]["g5_human_evidence"] is True
+        assert current["evidence"]["frozen_census_sha256"] == FROZEN_CENSUS
+        assert current["evidence"]["frozen_ordered_trace_ids_sha256"] == FROZEN_ORDERED
+        assert current["evidence"]["frozen_observation_trace_sha256"] == FROZEN_TRACES
+        assert current["status"] == "GATE_READY"
+        assert current["authority_required"] == "OPERATOR_REQUIRED"
+        assert current["stop_boundary"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION-OPERATOR-DECISION"

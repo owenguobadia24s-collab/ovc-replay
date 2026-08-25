@@ -67,22 +67,27 @@ def test_wp8_source_recovers_exact_g1_but_g3_identity_blocks_reveal():
     assert decision["stage1_reveal_authorized"] is False
     assert decision["human_adjudication_started"] is False
 
+    # The immutable reproduction-preflight court record remains a BLOCK forever.
     assert state["status"] == "BLOCKED"
     assert state["authority_delta"] == "NONE"
     assert state["human_adjudication_started"] is False
     assert state["stop_boundary"] == "ASOCSI-WP8-STAGED-REVEAL_NOT_AUTHORIZED_UNTIL_G3_REPRODUCIBLE"
 
+    # The mutable pointer may lawfully advance to a later, stricter no-reveal
+    # disposition/gate state, but it may never erase the historical BLOCK lineage.
     assert pointer["programme_id"] == current["programme_id"] == state["programme_id"]
     assert pointer["packet_id"] == current["packet_id"]
-    assert pointer["status"] == current["status"] == "BLOCKED"
+    assert pointer["status"] == current["status"]
+    assert current["status"] in {"BLOCKED", "GATE_READY"}
     assert pointer["next_packet"] == current["next_packet"]
     assert _state_generation(pointer["current_state"]) >= _state_generation(
         str(STATE.relative_to(ROOT)).replace("\\", "/")
     )
-    assert current["human_adjudication_started"] is False
+    assert current.get("human_adjudication_started", False) is False
     assert current.get("stage1_reveal_started", False) is False
 
     if current["packet_id"] == state["packet_id"]:
+        assert current["status"] == "BLOCKED"
         assert current["stop_boundary"] == state["stop_boundary"]
         assert current["blockers"] == state["blockers"]
         if current_path != STATE.relative_to(ROOT):
@@ -100,9 +105,13 @@ def test_wp8_source_recovers_exact_g1_but_g3_identity_blocks_reveal():
         assert current["preserved"]["g3_frozen_generation"] is True
         assert current["preserved"]["g4_review_population"] is True
         assert current["preserved"]["g5_human_evidence"] is True
-        assert current["stop_boundary"].startswith(
-            "ASOCSI-WP8-STAGED-REVEAL_NOT_AUTHORIZED"
-        )
+        if current["status"] == "GATE_READY":
+            assert current["authority_required"] == "OPERATOR_REQUIRED"
+            assert current["stop_boundary"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION-OPERATOR-DECISION"
+        else:
+            assert current["stop_boundary"].startswith(
+                "ASOCSI-WP8-STAGED-REVEAL_NOT_AUTHORIZED"
+            )
 
 
 def test_wp8_block_does_not_grant_reserved_or_reveal_authority():
