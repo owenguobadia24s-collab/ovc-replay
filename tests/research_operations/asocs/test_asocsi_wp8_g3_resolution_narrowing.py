@@ -97,8 +97,6 @@ def test_historical_g3_g4_g5_frozen_evidence_is_unchanged_and_reveal_denied() ->
 
 
 def test_programme_state_preserves_narrowed_block_across_lawful_successors() -> None:
-    # v0.23 is immutable historical evidence: the exact census/manifest identity
-    # construction remained unresolved and Stage-1 reveal was denied at that point.
     narrowed = load(ROOT / NARROWED_STATE)
     assert narrowed["status"] == "BLOCKED"
     assert narrowed["authority_delta"] == "NONE"
@@ -150,13 +148,22 @@ def test_programme_state_preserves_narrowed_block_across_lawful_successors() -> 
             assert operator["decision"] == "PASS" and operator["authority"] == "OPERATOR"
             assert current["preserved"]["unrecoverable_provenance_warning"] is True
         elif current["status"] == "COMPLETED":
-            assert current["packet_id"] == "ASOCSI-WP8-S01-STAGE1-HUMAN-REVIEW-INTERFACE"
+            assert current["packet_id"] in {
+                "ASOCSI-WP8-S01-STAGE1-HUMAN-REVIEW-INTERFACE",
+                "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-FIDELITY-SUPERSESSION",
+            }
             assert current["authority_delta"] == "NONE"
             assert current["stage1_reveal_started"] is True
             assert current["human_scientific_input_boundary"] is True
             assert current["construct_survival_decision"] == "PROHIBITED_DURING_CASE_REVIEW"
             assert current["preserved"]["wp8_g3_reproduction_block"] is True
             assert current["preserved"]["unrecoverable_provenance_warning"] is True
-            assert current["next_packet"] == "ASOCSI-WP8-STAGE1-HUMAN-FIDELITY-ADJUDICATION"
+            expected_next = (
+                "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-HUMAN-ADJUDICATION"
+                if current["packet_id"]
+                == "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-FIDELITY-SUPERSESSION"
+                else "ASOCSI-WP8-STAGE1-HUMAN-FIDELITY-ADJUDICATION"
+            )
+            assert current["next_packet"] == expected_next
         else:
             raise AssertionError(f"unexpected successor status: {current['status']}")

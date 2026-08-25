@@ -211,4 +211,10 @@ def test_qa_schemas_and_pointer_preserve_the_single_human_boundary() -> None:
     state = _j(ROOT / pointer["current_state"])
     assert state["gate_id"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION"
     assert state["authority_required"] == "SATISFIED_OPERATOR_PASS"
-    assert pointer["next_packet"] == "ASOCSI-WP8-STAGE1-HUMAN-FIDELITY-ADJUDICATION"
+    expected_next = (
+        "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-HUMAN-ADJUDICATION"
+        if state["packet_id"]
+        == "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-FIDELITY-SUPERSESSION"
+        else "ASOCSI-WP8-STAGE1-HUMAN-FIDELITY-ADJUDICATION"
+    )
+    assert pointer["next_packet"] == state["next_packet"] == expected_next
