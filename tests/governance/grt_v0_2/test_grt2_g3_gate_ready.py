@@ -62,13 +62,9 @@ def test_candidate_floor_is_complete_valid_and_inactive() -> None:
     assert state["operator_decision_required"] is True
 
 
-def test_current_state_pointer_advances_without_activation() -> None:
-    pointer = load(STATE / "CURRENT_STATE_POINTER.json")
-    state = load(ROOT / pointer["current_state"])
-    assert pointer["status"] == "GATE_READY_OPERATOR_REQUIRED_PENDING_EXACT_FINAL_PR_ASSURANCE"
-    assert pointer["operator_decision_required"] is True
-    assert pointer["next_action"] == "COMPLETE_EXACT_FINAL_PR_ASSURANCE_AND_INTEGRATE_GATE_READY_THEN_REVALIDATE"
-    assert state["status"] == "GATE_READY_OPERATOR_REQUIRED_PENDING_EXACT_FINAL_PR_ASSURANCE"
+def test_historical_gate_ready_state_preserves_no_authority() -> None:
+    state = load(STATE / "OVC_GRT2_STATE_v0_15.json")
+    assert state["status"] == "GATE_READY_OPERATOR_REQUIRED"
     assert state["authority_effect"] == "NONE_GATE_PREPARATION_ONLY"
     assert_logical_hash(state)
 

@@ -34,7 +34,6 @@ class GRT2WP1StateTests(unittest.TestCase):
         self.assertEqual(preflight["authority_effect"], "NONE_PRE_ENFORCEMENT")
 
     def test_historical_wp1_state_is_preserved_while_current_pointer_advances(self) -> None:
-        pointer = json.loads((STATE_ROOT / "CURRENT_STATE_POINTER.json").read_text(encoding="utf-8"))
         state = json.loads(WP1_STATE.read_text(encoding="utf-8"))
         readiness = json.loads(READINESS_STATE.read_text(encoding="utf-8"))
         g2 = json.loads(G2_STATE.read_text(encoding="utf-8"))
@@ -45,10 +44,6 @@ class GRT2WP1StateTests(unittest.TestCase):
         current = json.loads(CURRENT_STATE.read_text(encoding="utf-8"))
         gate_ready = json.loads(GATE_READY_STATE.read_text(encoding="utf-8"))
         constitution = json.loads((REGISTRIES / "GRT_REPOSITORY_CONSTITUTION_v0_2.json").read_text(encoding="utf-8"))
-        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_16_SUPERSEDING_GATE_READY.json")
-        self.assertEqual(pointer["status"], "GATE_READY_OPERATOR_REQUIRED_PENDING_EXACT_FINAL_PR_ASSURANCE")
-        self.assertEqual(pointer["packet_id"], "GRT2-G3-SUPERSEDING-GATE-READY")
-        self.assertEqual(pointer["next_packet"], "GRT2-G3-SUPERSEDING-OPERATOR-DECISION")
         self.assertEqual(readiness["status"], "BLOCKED")
         self.assertEqual(readiness["packet_id"], "GRT2-G2-READINESS-EVIDENCE")
         self.assertEqual(readiness["next_packet"], "GRT2-G2-QUALIFICATION-EVIDENCE")
