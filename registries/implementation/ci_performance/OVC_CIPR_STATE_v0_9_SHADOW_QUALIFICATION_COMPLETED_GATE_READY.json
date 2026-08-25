@@ -1,0 +1,47 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "GATE_READY",
+  "packet_id": "CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER",
+  "phase": "POST_PYT_CONSOLIDATED_CUTOVER_OPERATOR_DECISION",
+  "prerequisites": [
+    "CIPR-WP5R-SHADOW-QUALIFICATION delegated PASS",
+    "PR #1300 squash-merged at 15c7531c3635e96681dc87b906455969fe21b6f3",
+    "post-PYT current pytest shard exact union PASS on 4882 collected node IDs",
+    "two independent same-head four-shard repetitions PASS",
+    "exact-final tests, parity, VIT, SIQ READY and merge-readiness PASS"
+  ],
+  "authority_required": "OPERATOR_REQUIRED",
+  "authority_delta": "PROPOSED_MATERIAL_REQUIRED_TEST_TOPOLOGY_ACTIVATION",
+  "baseline_commit": "15c7531c3635e96681dc87b906455969fe21b6f3",
+  "branch": "gate/ci-performance-post-pyt-consolidated-cutover-20260824",
+  "candidate_commit": null,
+  "tests": [
+    "canonical tests workflow 32758479508 PASS on qualified executable head",
+    "tiered workflow 32758479559 PASS on qualified executable head",
+    "shadow run 32766504076 PASS all four shards and aggregate",
+    "shadow run 32767614761 PASS all four shards and aggregate",
+    "exact-final closeout tests workflow 32774078020 PASS",
+    "exact-final closeout tiered workflow 32774077910 PASS"
+  ],
+  "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp5r-qualification/CIPR_WP5R_SHADOW_QUALIFICATION_QA_PACKET.json",
+  "decision_record": null,
+  "merge_commit": "15c7531c3635e96681dc87b906455969fe21b6f3",
+  "blockers": [],
+  "warnings": [
+    "Current authority remains SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION until operator decision.",
+    "Required-context name/ruleset mutation is not proposed; if preserving the existing required tests context proves impossible, stop for a new operator decision rather than widening authority.",
+    "The shadow execution critical path is about 147-149 seconds but end-to-end workflow wall was 236-265 seconds because of runner/bootstrap/install/collection/artifact overhead.",
+    "Diagnostic PR #1310 is read-only/non-authoritative and must not merge."
+  ],
+  "current_authority": "SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION",
+  "required_check_substitution_active": false,
+  "runner_cutover_active": false,
+  "ruleset_context_mutation_active": false,
+  "scientific_authority_delta": false,
+  "next_packet": null,
+  "operator_stop_gate": "CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER",
+  "rollback": "PASS implementation must be forward-reversible to the current serial canonical pytest execution while preserving all evidence and Git history; DEFER/BLOCK changes nothing."
+}
