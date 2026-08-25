@@ -1,0 +1,81 @@
+{
+  "schema": "ovc-rac-shadow-evidence-budget/v1",
+  "programme_id": "OVC-DSAI3V-CIPR-REPOSITORY-ASSURANCE-CONTINUITY-AMENDMENT-0.1",
+  "packet_id": "DSAI3V-RAC-WP6-MEASURED-MULTI-LANE-SHADOW",
+  "gate_id": "DSAI3V-RAC-G3-SHADOW-QUALIFICATION",
+  "authority_effect": "NONE_SHADOW_ONLY",
+  "bootstrap_main": {
+    "commit_sha": "36701ddbdc4004ab98052d80b78b512d873fb293",
+    "tree_sha": "0a8cbb0891f49073f933e7fa8b711b33a56782d6",
+    "reference_tests_run_id": 32813475679,
+    "reference_tests_status_at_freeze": "IN_PROGRESS",
+    "post_merge_completion_run_id": 32813475623,
+    "post_merge_completion_status_at_freeze": "PENDING"
+  },
+  "selection": {
+    "mode": "BOUNDED_NAMED_MULTI_LANE_CORPUS",
+    "representativeness_claim": "NONE",
+    "purpose": "Initial safety and conservatism characterization only; insufficient by itself for live substitution authority.",
+    "minimum_candidate_count": 3,
+    "minimum_distinct_programmes": 3,
+    "requires_exact_detached_vit_qualification": true,
+    "requires_permanent_non_diagnostic_pr": true,
+    "reference_outcome_may_be_pass_or_fail": true,
+    "frozen_before_unresolved_live_reference_completion": true
+  },
+  "metric_definitions": {
+    "unsafe_omission_false_negative": "A claim or reference obligation predicted reusable/omittable by RAC while the canonical reference route establishes that the omitted obligation was required or failing.",
+    "blocking_false_positive": "A claim obligation classified for rerun/full-reference where independent claim-level evidence proves inheritance remained valid. Canonical full-suite PASS alone does not establish claim-level unnecessary work and therefore does not count as a false positive.",
+    "unexplained_semantic_mismatch": "RAC obligation prediction and canonical reference outcome disagree in a way not explained by declared fail-closed conservatism, unavailable claim-level observability, or repository-law currentness.",
+    "invalidation_radius": "Number of claims not inherited as INHERIT_VALID divided by total registered claims.",
+    "reference_latency_seconds": "Observed wall time from GitHub Actions run_started_at to updated_at for the canonical tests workflow; diagnostic only and not pure pytest execution time."
+  },
+  "frozen_candidates": [
+    {
+      "lane": "RESEARCH_OPERATIONS_P1CDII",
+      "programme_id": "OVC-P1CDI-CONFORMANCE-v0.1",
+      "packet_id": "P1CDII-WP11-PHYSICAL-CLOSEOUT",
+      "pr_number": 1314,
+      "candidate_head_sha": "377642f6d1b623340fb92606b1efee9994d49276",
+      "qualification_id": "2a01b16e77a39eec45390442e578a47710a6d5b66722ca9178d4c2233fa06505",
+      "tests_run_id": 32777679281,
+      "reference_status_at_freeze": "COMPLETED_SUCCESS_HISTORICAL_CALIBRATION"
+    },
+    {
+      "lane": "REPOSITORY_GOVERNANCE_GRT",
+      "programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
+      "packet_id": "GRT2-G3-SUPERSEDING-READINESS-RECONCILIATION",
+      "pr_number": 1318,
+      "candidate_head_sha": "74154874280cae528adb8f4a3b0fdd29c746b1d6",
+      "qualification_id": "0fb2b32a5517ea101477c0d401d5544f5f20a582a9fa84d898263d29ff229bfb",
+      "tests_run_id": 32813614850,
+      "reference_status_at_freeze": "IN_PROGRESS_LIVE"
+    },
+    {
+      "lane": "RESEARCH_OPERATIONS_ASOCSI",
+      "programme_id": "OVC-ASOCS-6M-v0.1",
+      "packet_id": "ASOCSI-WP8-G3-UNRECOVERABLE-PROVENANCE-DISPOSITION",
+      "pr_number": 1317,
+      "candidate_head_sha": "3633d75066200b5473fcbea9072c755875573460",
+      "qualification_id": "a602d91d44f5b58ff34293637d8c9c8e9fa25f18b6e576e85c80b3f1ee3f92c1",
+      "tests_run_id": 32813702808,
+      "reference_status_at_freeze": "IN_PROGRESS_LIVE"
+    }
+  ],
+  "qualification_rule": {
+    "g3_auto_pass_requires": [
+      "BOOTSTRAP_MAIN_REFERENCE_PASS",
+      "ALL_FROZEN_CANDIDATES_HAVE_FINAL_CANONICAL_REFERENCE_OUTCOME",
+      "ZERO_UNEXPLAINED_SEMANTIC_MISMATCH",
+      "ZERO_UNSAFE_OMISSION_FALSE_NEGATIVE",
+      "NO_REQUIRED_CHECK_SUBSTITUTION",
+      "NO_RUNNER_CUTOVER",
+      "NO_RULESET_MUTATION",
+      "NO_BLOCKING_PATH_ELIGIBILITY_CHANGE"
+    ],
+    "pilot_readiness_is_separate": true,
+    "pilot_gate": "DSAI3V-RAC-G-DELTA-ASSURANCE-PILOT",
+    "pilot_gate_class": "OPERATOR_REQUIRED"
+  },
+  "rollback": "Forward-supersede the bounded WP6 shadow budget/evidence only. Preserve canonical CI, VIT/SIQ/GRT, physical-main history and all source programme evidence."
+}
