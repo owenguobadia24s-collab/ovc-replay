@@ -1,0 +1,34 @@
+name: ASOCSI temporary GRT DebtFloor reanchor
+
+on:
+  push:
+    branches:
+      - asocsi-wp8-s01-stage1-c1-case-narrative-fidelity-supersession
+
+permissions:
+  contents: write
+
+jobs:
+  prepare-next-floor:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact packet branch
+        uses: actions/checkout@v4
+        with:
+          ref: asocsi-wp8-s01-stage1-c1-case-narrative-fidelity-supersession
+          fetch-depth: 0
+      - name: Fetch current physical main
+        run: git fetch --no-tags origin main
+      - name: Prepare exact next GRT DebtFloor
+        env:
+          PYTHONPATH: src
+        run: python scripts/governance/grt_v0_2/prepare_next_debt_floor.py --base origin/main --head HEAD
+      - name: Commit generated floor and remove temporary workflow
+        run: |
+          rm .github/workflows/asocsi-grt-floor-reanchor-temp.yml
+          git add registries/governance/grt_v0_2/GRT_DEBT_FLOOR_CURRENT.json registries/governance/grt_v0_2/debt_floors .github/workflows/asocsi-grt-floor-reanchor-temp.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "ASOCSI-WP8: reanchor active GRT DebtFloor to current main"
+          git push origin HEAD:asocsi-wp8-s01-stage1-c1-case-narrative-fidelity-supersession
