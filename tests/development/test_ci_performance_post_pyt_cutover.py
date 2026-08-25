@@ -3,8 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 import tempfile
-
-import pytest
+import unittest
 
 from tools.ci import pytest_shard_canonical as canonical
 from tools.ci import pytest_shard_shadow as shadow
@@ -34,7 +33,7 @@ def test_canonical_policy_is_exact_operator_approved_g5_surface() -> None:
 
 
 def test_shadow_policy_cannot_be_loaded_as_canonical_authority() -> None:
-    with pytest.raises(RuntimeError, match="authority mismatch"):
+    with unittest.TestCase().assertRaisesRegex(RuntimeError, "authority mismatch"):
         canonical._load_policy(shadow.DEFAULT_POLICY)
 
 
@@ -81,7 +80,9 @@ def test_selection_fails_closed_on_authority_mismatch() -> None:
     with tempfile.TemporaryDirectory() as directory:
         path = Path(directory) / "selection.json"
         path.write_text(json.dumps(payload), encoding="utf-8")
-        with pytest.raises(RuntimeError, match="operator-approved authority"):
+        with unittest.TestCase().assertRaisesRegex(
+            RuntimeError, "operator-approved authority"
+        ):
             canonical._read_selection_payload(path)
 
 
