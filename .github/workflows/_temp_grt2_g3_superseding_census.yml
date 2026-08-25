@@ -76,7 +76,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PYTHONPATH: src:.
-          TARGET_BRANCH: grt2/g3-superseding-gate-ready-r3-20260825
+          TARGET_BRANCH: grt2/g3-superseding-gate-ready-r4-20260825
           ARTIFACT_ID: ${{ steps.artifact.outputs.artifact_id }}
           ARTIFACT_DIGEST: ${{ steps.artifact.outputs.artifact_digest }}
           EVIDENCE_FILE_SHA256: ${{ steps.artifact.outputs.evidence_file_sha256 }}
@@ -97,7 +97,7 @@ jobs:
           python3 /tmp/patch_superseding_gate_ready_currentness.py
           jq -r '.changed_files[]' /tmp/grt2-g3-superseding-gate-ready-meta.json | xargs git add --
           jq -r '.changed_files[]' /tmp/grt2-g3-superseding-currentness-files.json | xargs -r git add --
-          git commit -m "GRT2-G3: materialise superseding operator gate-ready packet r3"
+          git commit -m "GRT2-G3: materialise superseding operator gate-ready packet r4"
           head_sha=$(git rev-parse HEAD)
           authority_id=$(jq -r .authority_manifest_id /tmp/grt2-g3-superseding-gate-ready-meta.json)
           frontier_id=$(jq -r .dependency_frontier_id /tmp/grt2-g3-superseding-gate-ready-meta.json)
