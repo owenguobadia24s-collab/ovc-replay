@@ -71,11 +71,11 @@ def test_g2_5_gate_preparation_remains_historical_after_operator_pass() -> None:
     assert correction_running_state["constitution_status"] == "PROPOSED_UNADMITTED"
     assert correction_running_state["debt_floor_generation"] is None
 
-    assert pointer["current_state"].endswith("OVC_GRT2_STATE_v0_15.json")
-    assert pointer["status"] == "GATE_READY_OPERATOR_REQUIRED"
-    assert pointer["packet_id"] == "GRT2-G3-GATE-READY"
+    assert pointer["current_state"].endswith("OVC_GRT2_STATE_v0_16_SUPERSEDING_GATE_READY.json")
+    assert pointer["status"] == "GATE_READY_OPERATOR_REQUIRED_PENDING_EXACT_FINAL_PR_ASSURANCE"
+    assert pointer["packet_id"] == "GRT2-G3-SUPERSEDING-GATE-READY"
     assert pointer["gate_id"] == "GRT2-G3"
-    assert pointer["next_packet"] == "GRT2-G3-OPERATOR-DECISION"
+    assert pointer["next_packet"] == "GRT2-G3-SUPERSEDING-OPERATOR-DECISION"
     assert current_state["status"] == "APPROVED"
     assert current_state["g2_status"] == "APPROVED_DELEGATED_PASS_SUPERSEDING_IMPLEMENTATION_QUALIFICATION"
     assert current_state["g3_status"] == "NOT_AUTHORISED_READINESS_EVIDENCE_NEXT"

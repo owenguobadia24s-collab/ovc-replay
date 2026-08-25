@@ -14,6 +14,7 @@ from ovc.development.skills.vit_routing import (
     build_vit_lineage_record,
     build_vit_payload_lineage_record,
 )
+from tools.ci.vit_no_late_surprises import compile_prequalification
 from tools.ci.vit_qualification_store import (
     build_qualification_envelope,
     publish_qualification_envelope,
@@ -156,6 +157,15 @@ def main() -> int:
         train_generation_id=args.train_generation_id,
         ordinal=args.ordinal,
     )
+
+    if not args.legacy_placement:
+        receipt = compile_prequalification(
+            root=repo,
+            head_sha=args.head,
+            lineage_record=record,
+        )
+        print(f"OVC-No-Late-Surprises-ID: {receipt['receipt_id']}")
+
     print(json.dumps(record, sort_keys=True, separators=(",", ":"), ensure_ascii=False))
 
     if args.publish_detached:
