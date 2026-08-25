@@ -10,7 +10,10 @@ import json
 import re
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[3]
+# This helper is copied to /tmp before execution by the bounded diagnostic
+# workflow, so __file__ is not a stable repository locator.  The workflow runs
+# it from the checked-out repository root; bind to that exact working tree.
+ROOT = Path.cwd().resolve()
 TEST_ROOT = ROOT / "tests/governance/grt_v0_2"
 OUT = Path("/tmp/grt2-g3-superseding-currentness-files.json")
 
