@@ -7,6 +7,7 @@ on:
       - ".github/workflows/_temp_grt2_g3_superseding_census.yml"
       - "scripts/governance/grt_v0_2/diagnose_superseding_g3_census.py"
       - "scripts/governance/grt_v0_2/materialize_superseding_g3_gate_ready.py"
+      - "scripts/governance/grt_v0_2/patch_superseding_gate_ready_currentness.py"
       - "docs/programmes/grt-v0-2/g3/superseding/diagnostic/**"
 
 permissions:
@@ -35,8 +36,10 @@ jobs:
           python-version: "3.11.15"
       - name: Install deterministic repository test dependencies
         run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
-      - name: Preserve gate materializer
-        run: cp scripts/governance/grt_v0_2/materialize_superseding_g3_gate_ready.py /tmp/materialize_superseding_g3_gate_ready.py
+      - name: Preserve bounded construction helpers
+        run: |
+          cp scripts/governance/grt_v0_2/materialize_superseding_g3_gate_ready.py /tmp/materialize_superseding_g3_gate_ready.py
+          cp scripts/governance/grt_v0_2/patch_superseding_gate_ready_currentness.py /tmp/patch_superseding_gate_ready_currentness.py
       - name: Build exact source-bound superseding census
         env:
           GRT2_G3_SUPERSEDING_CENSUS_OUT: artifacts/grt2-g3-superseding-census.json
@@ -73,7 +76,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PYTHONPATH: src:.
-          TARGET_BRANCH: grt2/g3-superseding-gate-ready-r2-20260825
+          TARGET_BRANCH: grt2/g3-superseding-gate-ready-r3-20260825
           ARTIFACT_ID: ${{ steps.artifact.outputs.artifact_id }}
           ARTIFACT_DIGEST: ${{ steps.artifact.outputs.artifact_digest }}
           EVIDENCE_FILE_SHA256: ${{ steps.artifact.outputs.evidence_file_sha256 }}
@@ -91,8 +94,10 @@ jobs:
             --artifact-id "$ARTIFACT_ID" \
             --artifact-digest "$ARTIFACT_DIGEST" \
             --evidence-file-sha256 "$EVIDENCE_FILE_SHA256"
+          python3 /tmp/patch_superseding_gate_ready_currentness.py
           jq -r '.changed_files[]' /tmp/grt2-g3-superseding-gate-ready-meta.json | xargs git add --
-          git commit -m "GRT2-G3: materialise superseding operator gate-ready packet"
+          jq -r '.changed_files[]' /tmp/grt2-g3-superseding-currentness-files.json | xargs -r git add --
+          git commit -m "GRT2-G3: materialise superseding operator gate-ready packet r3"
           head_sha=$(git rev-parse HEAD)
           authority_id=$(jq -r .authority_manifest_id /tmp/grt2-g3-superseding-gate-ready-meta.json)
           frontier_id=$(jq -r .dependency_frontier_id /tmp/grt2-g3-superseding-gate-ready-meta.json)
@@ -115,5 +120,6 @@ jobs:
             /tmp/grt2-g3-superseding-gate-ready-meta.json
             /tmp/grt2-g3-superseding-gate-ready-vit.txt
             /tmp/grt2-g3-superseding-gate-ready-head.txt
+            /tmp/grt2-g3-superseding-currentness-files.json
           if-no-files-found: error
           retention-days: 14
