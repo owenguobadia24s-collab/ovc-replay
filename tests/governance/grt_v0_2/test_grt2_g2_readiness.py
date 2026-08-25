@@ -49,10 +49,10 @@ class GRT2G2ReadinessStateTests(unittest.TestCase):
         self.assertEqual(correction_running_state["active_enforcement"], "LIMITED_NEW_ARTIFACT_ENFORCEMENT")
         self.assertIsNone(correction_running_state["debt_floor_generation"])
 
-        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_15.json")
-        self.assertEqual(pointer["status"], "GATE_READY_OPERATOR_REQUIRED")
+        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_16_SUPERSEDING_GATE_READY.json")
+        self.assertEqual(pointer["status"], "GATE_READY_OPERATOR_REQUIRED_PENDING_EXACT_FINAL_PR_ASSURANCE")
         self.assertEqual(pointer["gate_id"], "GRT2-G3")
-        self.assertEqual(pointer["next_packet"], "GRT2-G3-OPERATOR-DECISION")
+        self.assertEqual(pointer["next_packet"], "GRT2-G3-SUPERSEDING-OPERATOR-DECISION")
         self.assertEqual(current_state["status"], "APPROVED")
         self.assertEqual(current_state["g2_status"], "APPROVED_DELEGATED_PASS_SUPERSEDING_IMPLEMENTATION_QUALIFICATION")
         self.assertEqual(current_state["g3_status"], "NOT_AUTHORISED_READINESS_EVIDENCE_NEXT")
