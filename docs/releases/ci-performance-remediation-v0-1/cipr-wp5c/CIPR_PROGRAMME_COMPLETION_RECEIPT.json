@@ -1,0 +1,53 @@
+{
+  "schema": "ovc-cipr-programme-completion/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "COMPLETED",
+  "terminal_packet": "CIPR-WP5C-POST-PYT-CANONICAL-SHARD-CUTOVER",
+  "terminal_gate": "CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER",
+  "terminal_cutover_merge": "1ce79e9333c6e6e6e5a5fcf7bb2716c2f95942e3",
+  "terminal_cutover_tree": "add32c25315add2fba4e8284e289d1b38bff1714",
+  "completed_sequence": [
+    {"gate": "CIPR-G1", "status": "PASS"},
+    {"gate": "CIPR-G2", "status": "PASS"},
+    {"gate": "CIPR-G3", "status": "PASS"},
+    {"gate": "CIPR-G4-SUITE-TOPOLOGY", "status": "PASS"},
+    {"gate": "CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER", "status": "PASS", "merge_commit": "1ce79e9333c6e6e6e5a5fcf7bb2716c2f95942e3"}
+  ],
+  "final_assurance": {
+    "tests": "PASS:32848979961/97815144596",
+    "pytest_unittest_parity": "PASS:32848979961/97814135618",
+    "runner_parity": "PASS:32848979961/97814135785",
+    "final_head_profile": "PASS:32848979870/97814096116",
+    "siq_ready": "PASS:32848979870/97814094929",
+    "merge_readiness": "PASS:32848979870/97815336329"
+  },
+  "canonical_pytest_population": {
+    "count": 4974,
+    "population_hash": "72ff819ee0b5c761b8b97da57f9a1fb1e67b28054d390cdaf3028482e81eae7d",
+    "manifest_hash": "84900ec52ceccbf9bc7ab49e5622bd50593b5d4f3c00be787f743f7e2da1a9fc",
+    "legacy_unittest_items": 1572,
+    "pytest_native_items": 3402,
+    "shard_counts": [1246, 1244, 1242, 1242]
+  },
+  "final_runtime": {
+    "required_check_context_identity": "tests",
+    "canonical_pytest_topology": "DETERMINISTIC_FOUR_SHARD_EXACT_UNION",
+    "required_check_substitution_active": false,
+    "ruleset_context_mutation_active": false,
+    "xdist_active": false,
+    "pytest_unittest_parity": "PRESERVED",
+    "runner_parity": "PRESERVED",
+    "profile_assurance": "PRESERVED",
+    "siq_vit_grt_pdc_merge_readiness": "PRESERVED"
+  },
+  "blockers": [],
+  "reserved_authority_actions": [],
+  "authority_effect": "CIPR_G5_ALREADY_CONSUMED_NO_NEW_DELTA",
+  "next_packet": null,
+  "next_gate": null,
+  "next_action": "NONE_PROGRAMME_COMPLETE",
+  "merge_receipt": "docs/releases/ci-performance-remediation-v0-1/cipr-wp5c/CIPR_WP5C_MERGE_RECEIPT.json",
+  "rollback": "Forward-restore the serial canonical pytest path behind the existing tests context if needed while preserving all CIPR/PYT qualification evidence, parity and Git history."
+}
