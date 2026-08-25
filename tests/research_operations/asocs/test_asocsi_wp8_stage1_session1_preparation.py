@@ -7,6 +7,7 @@ ROOT = Path(__file__).resolve().parents[3]
 WP8 = ROOT / "docs/programmes/asocs-v0-1/implementation/wp8"
 SCHEMAS = ROOT / "schemas/research_operations/asocs"
 POINTER = ROOT / "registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json"
+G6_STATE = ROOT / "records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_25_G6_PROVENANCE_SUPERSESSION_APPROVED.json"
 
 LOCKED_SESSION1 = "9aaa80991365cf290122caef513f0e8d706a7b1283475fa041d01d8e5f9f1a0e"
 NON_ADMITTED_CORRECTION = "4f0f06c8f6ba061e56079b04a6400013d12a0a6a578f653fc7abf553744c42ef"
@@ -62,15 +63,24 @@ def _j(path: Path) -> dict:
 def _cid(value: dict) -> str:
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()).hexdigest()
 
-def test_preparation_does_not_reclassify_current_g6_operator_pass() -> None:
+def test_preparation_preserves_current_g6_operator_pass_across_later_stage1_interface() -> None:
+    g6 = _j(G6_STATE)
+    assert g6["status"] == "APPROVED"
+    assert g6["gate_id"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION"
+    assert g6["authority_required"] == "SATISFIED_OPERATOR_PASS"
+    assert g6["preserved"]["wp8_g3_reproduction_block"] is True
+    assert g6["preserved"]["unrecoverable_provenance_warning"] is True
+
     pointer = _j(POINTER)
     state = _j(ROOT / pointer["current_state"])
-    assert pointer["status"] == state["status"] == "APPROVED"
+    assert pointer["status"] == state["status"]
     assert state["gate_id"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION"
     assert state["authority_required"] == "SATISFIED_OPERATOR_PASS"
     assert pointer["next_packet"] == "ASOCSI-WP8-STAGE1-HUMAN-FIDELITY-ADJUDICATION"
     assert state["preserved"]["wp8_g3_reproduction_block"] is True
     assert state["preserved"]["unrecoverable_provenance_warning"] is True
+    assert state.get("human_adjudication_started", False) is False
+    assert state.get("stage2_reveal_started", False) is False
 
 def test_session1_pack_is_exact_locked_prefix_and_stage1_only() -> None:
     pack = _j(WP8 / "ASOCSI_WP8_STAGE1_SESSION_01_REVEAL_PACK_v0_1.json")
