@@ -168,7 +168,9 @@ def test_default_substrate_binds_assurance_decoupling_and_physical_exclusivity()
 
 def test_ci_uses_pip_bound_aa0_cache_and_live_ruleset_preflight() -> None:
     text = WORKFLOW.read_text(encoding="utf-8")
-    assert text.count("actions/cache/restore@v4") == 3
+    # G5 PASS adds one read-only assurance-planning restore; the three established
+    # AA0 execution surfaces remain the only cache writers.
+    assert text.count("actions/cache/restore@v4") == 4
     assert text.count("actions/cache/save@v4") == 3
     assert "VIT-AA0-Reuse-B64" not in text  # marker parsing belongs to the Python preflight
     assert "vit_assurance_preflight.py" in text
