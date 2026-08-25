@@ -65,10 +65,10 @@ def test_candidate_floor_is_complete_valid_and_inactive() -> None:
 def test_current_state_pointer_advances_without_activation() -> None:
     pointer = load(STATE / "CURRENT_STATE_POINTER.json")
     state = load(ROOT / pointer["current_state"])
-    assert pointer["status"] == "GATE_READY_OPERATOR_REQUIRED"
+    assert pointer["status"] == "GATE_READY_OPERATOR_REQUIRED_PENDING_EXACT_FINAL_PR_ASSURANCE"
     assert pointer["operator_decision_required"] is True
-    assert pointer["next_action"] == "STOP_FOR_OPERATOR_GRT2_G3_DECISION"
-    assert state["status"] == "GATE_READY_OPERATOR_REQUIRED"
+    assert pointer["next_action"] == "COMPLETE_EXACT_FINAL_PR_ASSURANCE_AND_INTEGRATE_GATE_READY_THEN_REVALIDATE"
+    assert state["status"] == "GATE_READY_OPERATOR_REQUIRED_PENDING_EXACT_FINAL_PR_ASSURANCE"
     assert state["authority_effect"] == "NONE_GATE_PREPARATION_ONLY"
     assert_logical_hash(state)
 
