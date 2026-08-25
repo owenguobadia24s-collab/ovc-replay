@@ -21,11 +21,11 @@ from ovc.programme_genesis.grt_v0_2.g3_floor import full_g3_snapshot_at_commit
 from ovc.programme_genesis.grt_v0_2.serialization import canonical_sha256
 
 ROOT = Path(__file__).resolve().parents[3]
-APPROVED_FLOOR_PATH = "docs/programmes/grt-v0-2/g3/superseding/GRT2_G3_SUPERSEDING_PROPOSED_DEBT_FLOOR_GENERATION_0.json"
+APPROVED_FLOOR_PATH = "docs/programmes/grt-v0-2/g3/GRT2_G3_TERMINAL_SUPERSESSION_DECISION.json"
 FLOOR_POINTER_PATH = "registries/governance/grt_v0_2/GRT_DEBT_FLOOR_CURRENT.json"
 FLOOR_DIR = "registries/governance/grt_v0_2/debt_floors"
 ACTIVE_AUTHORITY_PATH = "registries/authority/GRT2_ACTIVE_ENFORCEMENT_AUTHORITY_v0_2.json"
-EXPECTED_FLOOR_HASH = "c99fd885b27861c920aea3bec1b849ed928be771c4ce5c51dbff4ef2da0e8fa5"
+EXPECTED_FLOOR_HASH = "2c2152397e1ac5ace98b3363ca39c84f5d5a5dadbc6243e73cbd1fba15413c8b"
 EXPECTED_CONSTITUTION_HASH = "cac9fc5f0e31db08c4c37153c92a214fcc482414421f34d74c594faec65a71b0"
 
 
@@ -160,7 +160,10 @@ def _floor_state(commit: str) -> Mapping[str, Any]:
 
 
 def _activation_floor(candidate: str) -> Mapping[str, Any]:
-    approved = _json_at(candidate, APPROVED_FLOOR_PATH)
+    decision = _json_at(candidate, APPROVED_FLOOR_PATH)
+    approved = dict(decision.get("proposed_replacement_generation_0_floor", {}))
+    approved.pop("member_count", None)
+    approved.pop("status", None)
     validate_debt_floor(approved)
     if approved.get("floor_hash") != EXPECTED_FLOOR_HASH:
         raise ValueError("GRT_EXACT_APPROVED_FLOOR_HASH_MISMATCH")
