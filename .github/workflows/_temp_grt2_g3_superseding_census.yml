@@ -72,11 +72,11 @@ jobs:
           echo "artifact_id=$(jq -r .id <<<"$row")" >> "$GITHUB_OUTPUT"
           echo "artifact_digest=$(jq -r .digest <<<"$row")" >> "$GITHUB_OUTPUT"
           echo "evidence_file_sha256=$(sha256sum /tmp/grt2-g3-superseding-census.json | awk '{print $1}')" >> "$GITHUB_OUTPUT"
-      - name: Materialise VIT-NLS-qualified fresh GATE_READY candidate
+      - name: Materialise VIT-NLS-qualified fresh postmerge GATE_READY candidate
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PYTHONPATH: src:.
-          TARGET_BRANCH: grt2/g3-superseding-gate-ready-r7-20260825
+          TARGET_BRANCH: grt2/g3-superseding-postmerge-gate-ready-r7-20260825
           ARTIFACT_ID: ${{ steps.artifact.outputs.artifact_id }}
           ARTIFACT_DIGEST: ${{ steps.artifact.outputs.artifact_digest }}
           EVIDENCE_FILE_SHA256: ${{ steps.artifact.outputs.evidence_file_sha256 }}
@@ -101,7 +101,7 @@ jobs:
           jq -r '.changed_files[]' /tmp/grt2-g3-superseding-gate-ready-meta.json | xargs git add --
           git add "${gate_dir}/GRT2_G3_SUPERSEDING_GATE_READY_DECISION_PACKET.json" \
                   registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_16_SUPERSEDING_GATE_READY.json
-          git commit -m "GRT2-G3: materialise VIT-NLS-qualified superseding gate-ready packet r7"
+          git commit -m "GRT2-G3: materialise exact postmerge superseding gate-ready packet r7"
           head_sha=$(git rev-parse HEAD)
           authority_id=$(jq -r .authority_manifest_id /tmp/grt2-g3-superseding-gate-ready-meta.json)
           frontier_id=$(jq -r .dependency_frontier_id /tmp/grt2-g3-superseding-gate-ready-meta.json)
@@ -116,10 +116,10 @@ jobs:
             --publish-detached | tee /tmp/grt2-g3-superseding-gate-ready-vit.txt
           git push origin "HEAD:refs/heads/${TARGET_BRANCH}"
           printf '%s\n' "$head_sha" > /tmp/grt2-g3-superseding-gate-ready-head.txt
-      - name: Upload fresh GATE_READY transport receipt
+      - name: Upload fresh postmerge GATE_READY transport receipt
         uses: actions/upload-artifact@v4
         with:
-          name: grt2-g3-superseding-gate-ready-r7-transport
+          name: grt2-g3-superseding-postmerge-gate-ready-r7-transport
           path: |
             /tmp/grt2-g3-superseding-gate-ready-meta.json
             /tmp/grt2-g3-superseding-gate-ready-vit.txt
