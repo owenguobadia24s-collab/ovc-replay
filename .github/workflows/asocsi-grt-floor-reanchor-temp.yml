@@ -23,7 +23,11 @@ jobs:
       - name: Prepare exact next GRT DebtFloor
         env:
           PYTHONPATH: src
-        run: python scripts/governance/grt_v0_2/prepare_next_debt_floor.py --base origin/main --head HEAD
+        run: |
+          mkdir -p scripts/governance/grt_v0_2
+          git show origin/main:scripts/governance/grt_v0_2/prepare_next_debt_floor.py > scripts/governance/grt_v0_2/prepare_next_debt_floor.py
+          python scripts/governance/grt_v0_2/prepare_next_debt_floor.py --base origin/main --head HEAD
+          rm scripts/governance/grt_v0_2/prepare_next_debt_floor.py
       - name: Commit generated floor and remove temporary workflow
         run: |
           rm .github/workflows/asocsi-grt-floor-reanchor-temp.yml
