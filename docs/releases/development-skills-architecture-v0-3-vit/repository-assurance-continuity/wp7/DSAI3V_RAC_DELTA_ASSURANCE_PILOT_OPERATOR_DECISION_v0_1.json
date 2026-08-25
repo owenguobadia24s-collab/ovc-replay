@@ -1,0 +1,34 @@
+{
+  "authority_effect": "AUTHORISE_BOUNDED_DELTA_ASSURANCE_PILOT_IMPLEMENTATION_ONLY",
+  "baseline_commit": "52eb0b63a8d029bde2579a77fa5c2f06f1645cf6",
+  "baseline_tree": "5dbfe91f39d684dc2340721c478436cf838f7ee4",
+  "basis_evidence_id": "d812a65a968c5e3d58df35cc9198be5650aef978f6746647b4dc6eceea7416b5",
+  "basis_g3_decision_id": "ef0f8be74d7a409e274d4496786152dce4dbd4ce162541bf555d99ac2757d4bb",
+  "basis_gate_packet_id": "2acc0727de9eddfa5eb8a5026df6bc16b8375ebb09589ade05d82eb8d7433530",
+  "decision": "PASS",
+  "decision_id": "aad099397f329bf11b253981748d34b422f7c5e35ed768d0c7c2dd6353d2b274",
+  "gate_id": "DSAI3V-RAC-G-DELTA-ASSURANCE-PILOT",
+  "grants": [
+    "construct and integrate one separately bounded delta-assurance pilot implementation packet",
+    "activate blocking-path CandidateAssuranceCertificate substitution only for exact pilot-eligible packet classes declared by that implementation packet",
+    "run canonical full-reference reconciliation concurrently or immediately after pilot admission",
+    "fail closed to canonical full reference on unclassified, ambiguous, global, stale, divergent or uncovered assurance state"
+  ],
+  "next_packet": "DSAI3V-RAC-WP7-BOUNDED-DELTA-ASSURANCE-PILOT",
+  "next_reserved_gate": "DSAI3V-RAC-G-DELTA-ASSURANCE-GENERAL",
+  "non_grants": [
+    "general delta-assurance admission",
+    "DSAI3V-RAC-G-DELTA-ASSURANCE-GENERAL",
+    "parallel physical merge",
+    "new physical-main writer",
+    "scientific or market authority",
+    "Validation authority",
+    "publication authority",
+    "probability risk exposure trading or execution authority",
+    "force-push or history rewrite"
+  ],
+  "operator_command": "OVC APPROVE DSAI3V-RAC-G-DELTA-ASSURANCE-PILOT PASS",
+  "programme_id": "OVC-DSAI3V-CIPR-REPOSITORY-ASSURANCE-CONTINUITY-AMENDMENT-0.1",
+  "rollback": "Forward-disable pilot substitution and return every affected packet class to fresh canonical reference assurance; preserve VIT/SIQ/GRT, all evidence, decisions and Git history.",
+  "schema": "ovc-operator-decision/v1"
+}
