@@ -17,6 +17,9 @@ MATERIALISED_STATE = ROOT / (
     "registries/implementation/ci_performance/"
     "OVC_CIPR_STATE_v0_13_PHYSICAL_MATERIALISATION_COMPLETED.json"
 )
+TERMINAL_STATE = ROOT / (
+    "registries/implementation/ci_performance/OVC_CIPR_STATE_v0_14_COMPLETED.json"
+)
 MATERIALISATION_ROOT = ROOT / (
     "docs/releases/ci-performance-remediation-v0-1/"
     "cipr-wp5c-physical-materialisation"
@@ -24,6 +27,13 @@ MATERIALISATION_ROOT = ROOT / (
 MERGE_RECEIPT = ROOT / (
     "docs/releases/ci-performance-remediation-v0-1/cipr-wp5c/"
     "CIPR_WP5C_MERGE_RECEIPT.json"
+)
+PHYSICAL_MERGE_RECEIPT = MATERIALISATION_ROOT / (
+    "CIPR_WP5C_PHYSICAL_MATERIALISATION_MERGE_RECEIPT.json"
+)
+COMPLETION_RECEIPT = ROOT / (
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp5c/"
+    "CIPR_PROGRAMME_COMPLETION_RECEIPT.json"
 )
 
 
@@ -169,7 +179,6 @@ def test_required_workflow_context_is_aggregate_and_no_new_listener_is_added() -
 
 
 def test_physical_materialisation_state_is_repository_effective_and_consistent() -> None:
-    pointer = json.loads(CURRENT_STATE_POINTER.read_text(encoding="utf-8"))
     state = json.loads(MATERIALISED_STATE.read_text(encoding="utf-8"))
     receipt = json.loads(MERGE_RECEIPT.read_text(encoding="utf-8"))
     qa = json.loads(
@@ -181,15 +190,14 @@ def test_physical_materialisation_state_is_repository_effective_and_consistent()
         .read_text(encoding="utf-8")
     )
 
-    assert pointer["current_state"] == str(MATERIALISED_STATE.relative_to(ROOT)).replace("\\", "/")
-    assert pointer["status"] == state["status"] == "PHYSICALLY_MATERIALISED"
-    assert pointer["packet_id"] == state["packet_id"] == "CIPR-WP5C-PHYSICAL-MATERIALISATION"
-    assert pointer["next_packet"] == state["next_packet"] == "CIPR-WP5C-TERMINAL-COMPLETION-RECEIPT"
-    assert pointer["operator_stop_gate"] == state["operator_stop_gate"] == "CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER"
-    assert pointer["operator_stop_gate_decision"] == state["operator_stop_gate_decision"] == "PASS"
-    assert pointer["outstanding_operator_gate"] is state["outstanding_operator_gate"] is None
-    assert pointer["physical_cutover_complete"] is state["physical_cutover_complete"] is True
-    assert pointer["runner_cutover_repository_effective"] is state["runner_cutover_repository_effective"] is True
+    assert state["status"] == "PHYSICALLY_MATERIALISED"
+    assert state["packet_id"] == "CIPR-WP5C-PHYSICAL-MATERIALISATION"
+    assert state["next_packet"] == "CIPR-WP5C-TERMINAL-COMPLETION-RECEIPT"
+    assert state["operator_stop_gate"] == "CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER"
+    assert state["operator_stop_gate_decision"] == "PASS"
+    assert state["outstanding_operator_gate"] is None
+    assert state["physical_cutover_complete"] is True
+    assert state["runner_cutover_repository_effective"] is True
     assert state["merge_commit"] == receipt["squash_merge_commit"]
     assert state["merge_tree"] == receipt["squash_merge_tree"]
     assert state["merge_commit"]
@@ -206,3 +214,34 @@ def test_physical_materialisation_state_is_repository_effective_and_consistent()
     assert decision["authority_delta"] == "NONE_ADMINISTRATIVE_MATERIALISATION_AND_CLOSEOUT_ONLY"
     assert decision["authority_expansion"] == "NONE"
     assert decision["reserved_authority_actions"] == []
+
+
+def test_terminal_completion_is_successor_free_and_exactly_merge_bound() -> None:
+    pointer = json.loads(CURRENT_STATE_POINTER.read_text(encoding="utf-8"))
+    state = json.loads(TERMINAL_STATE.read_text(encoding="utf-8"))
+    physical_receipt = json.loads(PHYSICAL_MERGE_RECEIPT.read_text(encoding="utf-8"))
+    completion = json.loads(COMPLETION_RECEIPT.read_text(encoding="utf-8"))
+
+    assert pointer["current_state"] == str(TERMINAL_STATE.relative_to(ROOT)).replace("\\", "/")
+    assert pointer["status"] == state["status"] == completion["status"] == "COMPLETED"
+    assert pointer["packet_id"] == state["packet_id"] == "CIPR-WP5C-TERMINAL-COMPLETION-RECEIPT"
+    assert pointer["next_packet"] is state["next_packet"] is completion["next_packet"] is None
+    assert pointer["next_gate"] is state["next_gate"] is completion["next_gate"] is None
+    assert pointer["outstanding_operator_gate"] is state["outstanding_operator_gate"] is completion["outstanding_operator_gate"] is None
+    assert pointer["next_action"] == state["next_action"] == completion["next_action"] == "NONE_PROGRAMME_COMPLETE"
+    assert pointer["physical_cutover_complete"] is state["physical_cutover_complete"] is True
+    assert pointer["runner_cutover_repository_effective"] is state["runner_cutover_repository_effective"] is True
+    assert state["implementation_cutover_merge"] == completion["implementation_cutover_merge"] == "1ce79e9333c6e6e6e5a5fcf7bb2716c2f95942e3"
+    assert state["merge_commit"] == physical_receipt["squash_merge_commit"] == completion["physical_materialisation_merge"]
+    assert state["merge_tree"] == physical_receipt["squash_merge_tree"] == completion["terminal_basis_tree"]
+    assert state["merge_commit"] and state["merge_tree"]
+    assert state["required_check_context_identity"] == completion["final_runtime"]["required_check_context_identity"] == "tests"
+    assert state["canonical_shard_count"] == completion["final_runtime"]["canonical_shard_count"] == 4
+    assert state["pytest_sessions_per_shard"] == completion["final_runtime"]["pytest_sessions_per_shard"] == 1
+    assert state["aggregate_fail_closed"] is True
+    assert state["xdist_active"] is completion["final_runtime"]["xdist_active"] is False
+    assert state["required_check_substitution_active"] is completion["final_runtime"]["required_check_substitution_active"] is False
+    assert state["ruleset_context_mutation_active"] is completion["final_runtime"]["ruleset_context_mutation_active"] is False
+    assert state["blockers"] == completion["blockers"] == physical_receipt["blockers"] == []
+    assert state["authority_expansion"] == completion["authority_expansion"] == "NONE"
+    assert completion["reserved_authority_actions"] == physical_receipt["reserved_authority_actions"] == []
