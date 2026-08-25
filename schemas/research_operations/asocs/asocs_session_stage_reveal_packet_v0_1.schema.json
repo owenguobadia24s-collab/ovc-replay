@@ -1,0 +1,65 @@
+{
+  "$id": "ovc/asocs/session-stage-reveal-packet/v0_1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ASOCSSessionStageRevealPacket",
+  "type": "object",
+  "required": [
+    "schema",
+    "programme_id",
+    "packet_id",
+    "session",
+    "stage_index",
+    "stage",
+    "case_count",
+    "preparation_reveal_pack_sha256",
+    "permanent_warning",
+    "construct_survival_decision",
+    "later_stage_reveal_status",
+    "cases"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-asocsi-wp8-session-stage-reveal-packet/v0_1"},
+    "programme_id": {"const": "OVC-ASOCS-6M-v0.1"},
+    "session": {"type": "integer", "minimum": 1},
+    "stage_index": {"type": "integer", "minimum": 1, "maximum": 5},
+    "stage": {"const": "SOURCE_C1_FIDELITY"},
+    "case_count": {"type": "integer", "minimum": 1},
+    "preparation_reveal_pack_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "permanent_warning": {
+      "const": "UNRECOVERABLE_HISTORICAL_G3_CENSUS_IDENTITY_AND_COMPACT_MANIFEST_PROVENANCE_PERMANENT"
+    },
+    "construct_survival_decision": {"const": "PROHIBITED_DURING_CASE_REVIEW"},
+    "later_stage_reveal_status": {"const": "NOT_CONSTRUCTED_NOT_REVEALED"},
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "session_ordinal",
+          "presentation_ordinal",
+          "case_id",
+          "predecessor_blind_record_sha256",
+          "review_unit_id",
+          "relevant_frozen_lineage",
+          "revealed_evidence",
+          "human_judgement",
+          "information_gap_disposition",
+          "case_validation_status"
+        ],
+        "properties": {
+          "session_ordinal": {"type": "integer", "minimum": 1},
+          "presentation_ordinal": {"type": "integer", "minimum": 1},
+          "case_id": {"type": "string", "pattern": "^ASOCS\\.BLIND\\."},
+          "predecessor_blind_record_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "review_unit_id": {"type": "string", "minLength": 1},
+          "relevant_frozen_lineage": {"type": "object"},
+          "revealed_evidence": {"type": "object"},
+          "human_judgement": {"type": "null"},
+          "information_gap_disposition": {"type": "null"},
+          "case_validation_status": {"const": "PENDING_HUMAN_INPUT"}
+        }
+      }
+    }
+  }
+}

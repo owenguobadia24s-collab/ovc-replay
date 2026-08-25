@@ -1,0 +1,81 @@
+{
+  "schema": "ovc-asocsi-wp8-session-batch-execution-contract/v0_1",
+  "programme_id": "OVC-ASOCS-6M-v0.1",
+  "plan_id": "OVC-ASOCS-CONFORMANCE-SCIENTIFIC-PREREGISTRATION-IMPLEMENTATION-PLAN-0.1-R1",
+  "plan_version": "0.1_REVISED_1",
+  "contract_id": "ASOCSI-WP8-SESSION-BATCH-STAGED-REVEAL",
+  "scientific_evidence_unit": "INDIVIDUAL_REVIEW_CASE",
+  "operator_transport_unit": "COMPLETE_SESSION_STAGE",
+  "stage_order": [
+    "SOURCE_C1_FIDELITY",
+    "C2_PRIMITIVE_STRUCTURE",
+    "C2_COMPOSITION",
+    "C2E_TEMPORAL",
+    "OCCURRENCE_CONTEXT_FIREWALL"
+  ],
+  "required_artifact_classes_per_session_stage": [
+    "REVEAL_PACKET",
+    "HUMAN_INPUT_TEMPLATE",
+    "HUMAN_INPUT_RECEIPT",
+    "FREEZE_RECEIPT",
+    "QA"
+  ],
+  "session_packet_requirements": [
+    "ALL_FROZEN_SESSION_CASES_IN_ORIGINAL_PRESENTATION_ORDER",
+    "SESSION_AND_PRESENTATION_ORDINALS_PER_CASE",
+    "EXACT_CASE_ID_PER_CASE",
+    "EXACT_PREDECESSOR_BLIND_RECORD_SHA256_PER_CASE",
+    "EXACT_REVIEW_UNIT_ID_PER_CASE",
+    "RELEVANT_FROZEN_TRACE_AND_SOURCE_LINEAGE_PER_CASE",
+    "ONLY_CURRENT_STAGE_AUTHORISED_REVEALED_EVIDENCE",
+    "HUMAN_JUDGEMENT_PLACEHOLDER_PER_CASE",
+    "INFORMATION_GAP_DISPOSITION_PLACEHOLDER_PER_CASE",
+    "CASE_VALIDATION_STATUS_PER_CASE"
+  ],
+  "submission_validation": [
+    "EXACT_SESSION_IDENTITY_AND_CASE_COUNT",
+    "EXACT_CASE_ORDER",
+    "EXACT_FROZEN_SESSION_MEMBERSHIP",
+    "EXACT_PREDECESSOR_BLIND_SHA256",
+    "REJECT_DUPLICATES_OMISSIONS_SUBSTITUTIONS_AND_EXTRAS",
+    "GOVERNING_STAGE_SCHEMA_FOR_EVERY_HUMAN_JUDGEMENT",
+    "NO_INFERENCE_OR_SYNTHESIS_OF_OMITTED_HUMAN_ANSWERS",
+    "RAW_OPERATOR_INPUT_BYTES_FROZEN_EXACT",
+    "INDIVIDUAL_CASE_RECORDS_BOUND_TO_SESSION_HUMAN_INPUT_SHA256",
+    "ATOMIC_APPEND_ONLY_COMPLETE_SESSION_STAGE_FREEZE"
+  ],
+  "reveal_firewall": {
+    "transition_boundary": "COMPLETE_SESSION_STAGE_FREEZE",
+    "individual_case_completion_allows_next_stage": false,
+    "prebuild_later_case_evidence_for_operator": false,
+    "next_stage_packet_allowed_only_after_current_complete_session_stage_freeze": true
+  },
+  "human_scientific_boundary": {
+    "one_input_file_per_session_stage": true,
+    "agent_may_answer_for_reviewer": false,
+    "agent_may_convert_machine_conformance_to_pass_fidelity": false,
+    "agent_may_copy_prior_human_interpretation": false,
+    "construct_survival_decision": "PROHIBITED_DURING_CASE_REVIEW"
+  },
+  "failure_attribution": {
+    "contract": "schemas/research_operations/asocs/asocs_failure_attribution_v0_1.schema.json",
+    "information_gap_evaluated_first": true,
+    "source_limitation_not_coerced_to_upstream_semantic_failure": true
+  },
+  "permanent_warning": "UNRECOVERABLE_HISTORICAL_G3_CENSUS_IDENTITY_AND_COMPACT_MANIFEST_PROVENANCE_PERMANENT",
+  "retained_denials": [
+    "CONSTRUCT_SURVIVAL_PROMOTION_OR_REJECTION_DURING_CASE_REVIEW",
+    "VALIDATION",
+    "EC1",
+    "PUBLICATION",
+    "PROBABILITY",
+    "RISK",
+    "EXPOSURE",
+    "TRADING",
+    "EXECUTION",
+    "AGENT_WRITE"
+  ],
+  "physical_integration_policy": "VIT_LATE_PHYSICAL_PLACEMENT_PES_DETACHED_QUALIFICATION",
+  "permanent_packet_granularity": "ONE_COMPLETED_SESSION_STAGE_TRANSITION_NOT_ONE_CASE",
+  "rollback": "Forward-supersede session-batch transport or tooling only; preserve every frozen G3/G4/G5 artifact and every accepted human evidence generation."
+}
