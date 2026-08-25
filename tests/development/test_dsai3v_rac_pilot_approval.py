@@ -58,6 +58,14 @@ class TestDsai3vRacPilotApproval(unittest.TestCase):
                 "PILOT_REBASELINED_ACTIVE",
                 "DSAI3V-RAC-WP8-PILOT-EVIDENCE-AND-GENERAL-GATE",
             ),
+            "registries/implementation/dsai3v_cipr_rac/OVC_DSAI3V_CIPR_RAC_STATE_v0_9_PILOT_REBASELINE_RENEWAL_PENDING.json": (
+                "PILOT_REBASELINE_REFERENCE_RENEWAL_PENDING",
+                "DSAI3V-RAC-WP7D-PILOT-REBASELINE-AFTER-CORRECTION",
+            ),
+            "registries/implementation/dsai3v_cipr_rac/OVC_DSAI3V_CIPR_RAC_STATE_v0_10_PILOT_REBASELINED_ACTIVE.json": (
+                "PILOT_REBASELINED_ACTIVE",
+                "DSAI3V-RAC-WP8-PILOT-EVIDENCE-AND-GENERAL-GATE",
+            ),
         }
         self.assertIn(pointer["current_state"], allowed_progression)
         expected_status, expected_next = allowed_progression[pointer["current_state"]]

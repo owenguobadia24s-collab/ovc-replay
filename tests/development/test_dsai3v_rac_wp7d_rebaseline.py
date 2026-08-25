@@ -48,5 +48,6 @@ def test_wp7d_control_namespace_does_not_change_receipt_eligibility_scope() -> N
     assert pointer["operator_stop_gate"] == "DSAI3V-RAC-G-DELTA-ASSURANCE-GENERAL"
     assert pointer["status"] in {
         "PILOT_REBASELINE_REFERENCE_PENDING",
+        "PILOT_REBASELINE_REFERENCE_RENEWAL_PENDING",
         "PILOT_REBASELINED_ACTIVE",
     }
