@@ -120,7 +120,7 @@ def test_wp8_source_recovers_exact_g1_but_g3_identity_blocks_reveal():
             assert operator["decision"] == "PASS" and operator["authority"] == "OPERATOR"
             assert current["preserved"]["unrecoverable_provenance_warning"] is True
         elif current["status"] == "COMPLETED":
-            assert current["packet_id"] == "ASOCSI-WP8-S01-STAGE1-HUMAN-REVIEW-INTERFACE"
+            assert current["packet_id"] == "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-FIDELITY-SUPERSESSION"
             assert current["authority_delta"] == "NONE"
             assert current["stage1_reveal_started"] is True
             assert current["human_scientific_input_boundary"] is True
