@@ -10,6 +10,7 @@ QA=ROOT/'docs/releases/development-acceleration-v0-2/da2-wp1/DA2_G1_QA_PACKET.js
 DECISION=ROOT/'docs/releases/development-acceleration-v0-2/da2-wp1/DA2_G1_OPERATOR_DECISION.json'
 RULESET=ROOT/'docs/releases/development-acceleration-v0-2/da2-wp1/DA2_G1_RULESET_MIGRATION_PACKET.json'
 RESOLVER=ROOT/'tools/ci/prvitr_live_admission.py'
+READY_SELECTOR=ROOT/'tools/ci/prvitr_rac_ready.py'
 CANONICAL={'.github/workflows/tests.yml','.github/workflows/ovc-tiered-tests.yml'}
 FULL='python3 -m unittest discover -s tests -v'
 FROZEN_PYTHON='python-version: "3.11.15"'
@@ -31,11 +32,15 @@ def main():
  assert not unexpected, f'unexpected pull_request workflows ({len(unexpected)}): {unexpected}'
  assert not missing_concurrency, f'pull_request workflows missing concurrency ({len(missing_concurrency)}): {sorted(missing_concurrency)}'
  assert full=={'.github/workflows/tests.yml'}, f'complete-suite PR workflows: {sorted(full)}'
- tests=actual['.github/workflows/tests.yml'].read_text(); tiered=actual['.github/workflows/ovc-tiered-tests.yml'].read_text(); resolver=RESOLVER.read_text()
+ tests=actual['.github/workflows/tests.yml'].read_text(); tiered=actual['.github/workflows/ovc-tiered-tests.yml'].read_text(); resolver=RESOLVER.read_text(); selector=READY_SELECTOR.read_text()
  assert tests.count(FULL)==1 and FROZEN_PYTHON in tests
  assert FULL not in tiered and FROZEN_PYTHON in tiered and 'OVC merge readiness' in tiered and 'OVC tiered test selection shadow' in tiered
  assert all(name in resolver for name in REQUIRED_PYTHON_CHECKS) and 'PROFILE_JOB_NAME = "OVC profile assurance"' in resolver, 'PRVITR resolver must retain exact-head legacy and PYT-WP1 parity checks'
- for command in ('ready','acquire','finalize'): assert f'prvitr_live_admission.py {command}' in tiered, f'missing PRVITR live admission command: {command}'
+ assert 'prvitr_rac_ready.py' in tiered, 'missing bounded READY selector'
+ for command in ('acquire','finalize'): assert f'prvitr_live_admission.py {command}' in tiered, f'missing PRVITR live admission command: {command}'
+ assert 'return live.command_ready()' in selector, 'READY selector must preserve canonical fallback'
+ assert 'build_pilot_certificate' in selector, 'READY selector must bind bounded pilot certificate only when eligible'
+ assert '_branch_sha(base_ref)' not in selector, 'READY selector must not bind physical main'
  assert 'OVC_VIT_QUALIFIED_PAYLOAD_READY' in resolver and 'OVC_SIQ_BASE_SENSITIVE_LEASE_ACQUIRED' in resolver
  assert 'OVC_BASE_MOVED_DURING_READINESS' in resolver and 'PRVITR_LATE_BINDING_PLACEMENT_MISMATCH' in resolver
  assert 'OVC_INTEGRATION_ADMISSION_RECEIPT' in resolver and 'OVC_FINAL_INTEGRATION_WINDOW_PASS' in resolver

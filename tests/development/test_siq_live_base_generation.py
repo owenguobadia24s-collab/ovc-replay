@@ -7,6 +7,7 @@ ROOT = Path(__file__).resolve().parents[2]
 WORKFLOW = ROOT / ".github" / "workflows" / "ovc-tiered-tests.yml"
 ASSURANCE_PREFLIGHT = ROOT / "tools" / "ci" / "vit_assurance_preflight.py"
 ADMISSION = ROOT / "tools" / "ci" / "prvitr_live_admission.py"
+READY_SELECTOR = ROOT / "tools" / "ci" / "prvitr_rac_ready.py"
 
 
 class SIQLiveBaseGenerationTests(unittest.TestCase):
@@ -15,6 +16,7 @@ class SIQLiveBaseGenerationTests(unittest.TestCase):
         cls.text = WORKFLOW.read_text(encoding="utf-8")
         cls.assurance_text = ASSURANCE_PREFLIGHT.read_text(encoding="utf-8")
         cls.admission_text = ADMISSION.read_text(encoding="utf-8")
+        cls.ready_selector_text = READY_SELECTOR.read_text(encoding="utf-8")
 
     def test_same_pr_concurrency_is_scoped_to_exact_head_generation(self) -> None:
         self.assertIn(
@@ -23,11 +25,14 @@ class SIQLiveBaseGenerationTests(unittest.TestCase):
         )
 
     def test_event_base_is_provenance_not_final_readiness_authority(self) -> None:
-        self.assertIn("prvitr_live_admission.py ready", self.text)
+        self.assertIn("prvitr_rac_ready.py", self.text)
+        self.assertIn("import tools.ci.prvitr_live_admission as live", self.ready_selector_text)
+        self.assertIn("return live.command_ready()", self.ready_selector_text)
         self.assertIn("prvitr_live_admission.py acquire", self.text)
         ready = self.admission_text.split("def command_ready()", 1)[1].split("def command_acquire()", 1)[0]
         acquire = self.admission_text.split("def command_acquire()", 1)[1].split("def command_finalize()", 1)[0]
         self.assertNotIn("current_main = _branch_sha(base_ref)", ready)
+        self.assertNotIn("_branch_sha(base_ref)", self.ready_selector_text)
         self.assertIn("current_main = _branch_sha(base_ref)", acquire)
         self.assertIn("_compose_late_binding(", acquire)
         self.assertNotIn("compareCommits", self.text)
@@ -38,6 +43,7 @@ class SIQLiveBaseGenerationTests(unittest.TestCase):
             self.admission_text.count("OVC_SIQ_SUPERSEDED_EVENT_HEAD"), 3
         )
         self.assertIn("live = _live_pr(pr_number)", self.admission_text)
+        self.assertIn("OVC_SIQ_SUPERSEDED_EVENT_HEAD", self.ready_selector_text)
 
     def test_no_pr_number_or_train_predecessor_fifo_controls_live_admission(self) -> None:
         self.assertNotIn("resolve_vit_train_predecessor", self.admission_text)
