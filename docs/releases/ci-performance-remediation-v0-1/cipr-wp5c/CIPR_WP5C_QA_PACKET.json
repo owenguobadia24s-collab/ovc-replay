@@ -1,0 +1,114 @@
+{
+  "schema": "ovc-qa-packet/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "packet_id": "CIPR-WP5C-POST-PYT-CANONICAL-SHARD-CUTOVER",
+  "operator_gate_id": "CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER",
+  "operator_gate_decision": "PASS",
+  "baseline_commit": "c4e861d7e8f4b740db574f6b868b3fa6b9241d36",
+  "assured_head": "b7ee1647b0c8150968acdb38bab3d36bfae0ffad",
+  "assured_tree": "0355d9d9d7a78376ba516becd3b6680467d59a21",
+  "late_bound_physical_main": "903029e35cf2503e76a27418247b952307b7af77",
+  "authority_delta": "MATERIAL_REQUIRED_TEST_TOPOLOGY_ACTIVATION_WITH_EXISTING_REQUIRED_CONTEXT_IDENTITY",
+  "acceptance": {
+    "operator_pass_repository_effective": "PASS",
+    "existing_required_context_tests_preserved": "PASS",
+    "required_check_substitution_active": "PASS_FALSE",
+    "ruleset_context_mutation_active": "PASS_FALSE",
+    "xdist_active": "PASS_FALSE",
+    "canonical_pytest_population_exactly_enumerated": "PASS_4974",
+    "legacy_unittest_population_included": "PASS_1572",
+    "pytest_native_population_included": "PASS_3402",
+    "exact_one_shard_assignment": "PASS_1246_PLUS_1244_PLUS_1242_PLUS_1242_EQUALS_4974",
+    "canonical_manifest_union_proof": "PASS",
+    "canonical_shard_0": "PASS",
+    "canonical_shard_1": "PASS",
+    "canonical_shard_2": "PASS",
+    "canonical_shard_3": "PASS",
+    "aggregate_required_tests_context": "PASS",
+    "pytest_unittest_parity": "PASS",
+    "runner_parity": "PASS",
+    "profile_assurance": "PASS_FINAL_HEAD",
+    "vit_routing_preflight": "PASS",
+    "siq_ready": "PASS",
+    "pdc_exact_final": "PASS",
+    "merge_readiness": "PASS_LATE_BOUND_CURRENT_MAIN",
+    "review_threads": "PASS_ZERO",
+    "rollback_defined": "PASS"
+  },
+  "canonical_manifest": {
+    "schema": "ovc-pytest-shard-manifest/v1",
+    "execution_sha": "b7ee1647b0c8150968acdb38bab3d36bfae0ffad",
+    "policy_id": "CIPR.PYTEST.POST_PYT.CANONICAL.SHARDS.v0.1",
+    "policy_hash": "be9dc64de42d5ea0d0a62ddfe939227cd12af90104102045fd3a19a7e41e075b",
+    "population_count": 4974,
+    "population_hash": "72ff819ee0b5c761b8b97da57f9a1fb1e67b28054d390cdaf3028482e81eae7d",
+    "legacy_unittest_item_count": 1572,
+    "pytest_native_item_count": 3402,
+    "pytest_native_population_hash": "73a6a47fd89d2b61489286a19add28bf66303c99981191dd7413fee6c1afc86d",
+    "manifest_hash": "84900ec52ceccbf9bc7ab49e5622bd50593b5d4f3c00be787f743f7e2da1a9fc",
+    "shards": [
+      {"shard_index": 0, "item_count": 1246},
+      {"shard_index": 1, "item_count": 1244},
+      {"shard_index": 2, "item_count": 1242},
+      {"shard_index": 3, "item_count": 1242}
+    ]
+  },
+  "tests": {
+    "tests_workflow_run": 32846111471,
+    "result": "PASS_ALL",
+    "jobs": {
+      "VIT routing preflight": "PASS",
+      "canonical pytest shard assurance plan": "PASS",
+      "pytest-unittest-parity": "PASS",
+      "runner-parity": "PASS",
+      "canonical pytest shard manifest": "PASS",
+      "canonical pytest shard 0": "PASS",
+      "canonical pytest shard 1": "PASS",
+      "canonical pytest shard 2": "PASS",
+      "canonical pytest shard 3": "PASS",
+      "tests": "PASS"
+    },
+    "tiered_workflow_run": 32846111497,
+    "tiered_result": "PASS_ALL",
+    "tiered_jobs": {
+      "OVC profile assurance": "PASS_FINAL_HEAD",
+      "OVC tiered test selection shadow": "PASS",
+      "SIQ READY admission": "PASS",
+      "OVC merge readiness": "PASS"
+    }
+  },
+  "execution_timing_seconds": {
+    "shard_0_pytest_step": 158,
+    "shard_1_pytest_step": 75,
+    "shard_2_pytest_step": 195,
+    "shard_3_pytest_step": 88,
+    "observed_shard_execution_critical_path": 195,
+    "interpretation": "Execution remains materially below the prior approximately 335 second serial canonical pytest reference while preserving exact current collection coverage; queue/bootstrap/install overhead remains separate."
+  },
+  "workflow_artifacts": [
+    {"artifact_id": 9562655868, "name": "canonical-pytest-manifest-b7ee1647b0c8150968acdb38bab3d36bfae0ffad", "digest": "sha256:3d7049ac2b41a1d6d2960a45a600bc718ef90c984b9a156857cbb47979b89a43"},
+    {"artifact_id": 9562737191, "name": "canonical-pytest-shard-0-b7ee1647b0c8150968acdb38bab3d36bfae0ffad", "digest": "sha256:cd6ceafbaed93de29502583557504c87a250a1d27ad0f8a4ab62410d1be827bc"},
+    {"artifact_id": 9562690242, "name": "canonical-pytest-shard-1-b7ee1647b0c8150968acdb38bab3d36bfae0ffad", "digest": "sha256:ae6775687b5c1ebae520a3ebeacde3ee3b12d3e3bf5c088c154209660ab0c184"},
+    {"artifact_id": 9562757324, "name": "canonical-pytest-shard-2-b7ee1647b0c8150968acdb38bab3d36bfae0ffad", "digest": "sha256:a60c00b19137c02081c6a58ca4342dd2d8d17036d8698972e0ba32901b7fe878"},
+    {"artifact_id": 9562697330, "name": "canonical-pytest-shard-3-b7ee1647b0c8150968acdb38bab3d36bfae0ffad", "digest": "sha256:ec35c4bfb004a1ebbea056acf91ff1533c23df7c675f54278f5320c3039cdd57"}
+  ],
+  "main_movement_reconciliation": {
+    "logical_baseline": "c4e861d7e8f4b740db574f6b868b3fa6b9241d36",
+    "current_main_at_final_assurance": "903029e35cf2503e76a27418247b952307b7af77",
+    "intervening_permanent_changes": "GRT2-G3 gate-readiness evidence/state only; no overlap with the bounded WP5C changed-file surface",
+    "placement_rule": "VIT/SIQ late physical placement",
+    "result": "PASS_NO_LOGICAL_PAYLOAD_REBUILD_REQUIRED"
+  },
+  "warnings": [
+    "pytest/unittest parity remains slower than the sharded required tests path and is deliberately preserved by the operator-approved cutover boundary.",
+    "The explicit Research Console rerun remains preserved in this packet; the optional removal authority was not consumed."
+  ],
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "review_threads": 0,
+  "rollback": "Forward-restore the serial PYTHONPATH=src:. python3 -m pytest tests -q --tb=short path behind the existing tests context. Preserve all qualification evidence, pytest/unittest parity, runner parity, profile assurance, SIQ/VIT/GRT/PDC/merge-readiness and Git history.",
+  "qa_recommendation": "PASS",
+  "next": "Materialise bounded WP5C integration approval, rerun exact-head assurance on the evidence/state head, then squash-merge through the normal VIT/SIQ path if all checks remain PASS."
+}
