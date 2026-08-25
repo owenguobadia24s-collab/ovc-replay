@@ -16,7 +16,11 @@ import subprocess
 from pathlib import Path
 from typing import Any, Mapping
 
-from ovc.programme_genesis.grt_v0_2.debt import compare_debt_extent, validate_debt_floor
+from ovc.programme_genesis.grt_v0_2.debt import (
+    compare_debt_extent,
+    validate_debt_floor,
+    validate_g4_current_projection_substitution,
+)
 from ovc.programme_genesis.grt_v0_2.g3_floor import full_g3_snapshot_at_commit
 from ovc.programme_genesis.grt_v0_2.serialization import canonical_sha256
 
@@ -25,6 +29,7 @@ APPROVED_FLOOR_PATH = "docs/programmes/grt-v0-2/g3/GRT2_G3_TERMINAL_SUPERSESSION
 FLOOR_POINTER_PATH = "registries/governance/grt_v0_2/GRT_DEBT_FLOOR_CURRENT.json"
 FLOOR_DIR = "registries/governance/grt_v0_2/debt_floors"
 ACTIVE_AUTHORITY_PATH = "registries/authority/GRT2_ACTIVE_ENFORCEMENT_AUTHORITY_v0_2.json"
+G4_DECISION_PATH = "docs/programmes/grt-v0-2/g4/GRT2_G4_OPERATOR_DECISION.json"
 EXPECTED_FLOOR_HASH = "2c2152397e1ac5ace98b3363ca39c84f5d5a5dadbc6243e73cbd1fba15413c8b"
 EXPECTED_CONSTITUTION_HASH = "cac9fc5f0e31db08c4c37153c92a214fcc482414421f34d74c594faec65a71b0"
 
@@ -188,6 +193,19 @@ def evaluate(base_ref: str, head_ref: str) -> dict[str, Any]:
     base_ids = set(base_findings)
     candidate_ids = set(candidate_findings)
 
+    authorized_substitutions: dict[str, str] = {}
+    if _path_exists(candidate, G4_DECISION_PATH):
+        try:
+            authorized_substitutions = validate_g4_current_projection_substitution(
+                _json_at(candidate, G4_DECISION_PATH),
+                base_findings,
+                candidate_findings,
+            )
+        except Exception as exc:
+            errors.append(f"GRT_EXACT_G4_SUBSTITUTION_INVALID:{type(exc).__name__}:{exc}")
+    authorized_removed = set(authorized_substitutions)
+    authorized_added = set(authorized_substitutions.values())
+
     activation_mode = not _path_exists(base, ACTIVE_AUTHORITY_PATH)
     if activation_mode:
         if not _path_exists(candidate, ACTIVE_AUTHORITY_PATH):
@@ -234,7 +252,8 @@ def evaluate(base_ref: str, head_ref: str) -> dict[str, Any]:
                 errors.append("GRT_EXACT_CANDIDATE_FLOOR_PREDECESSOR_MISMATCH")
             if set(candidate_floor["open_grandfathered_findings"]) != candidate_ids:
                 errors.append("GRT_EXACT_CANDIDATE_FLOOR_DOES_NOT_EQUAL_CANDIDATE_FINDINGS")
-            if not candidate_ids.issubset(set(base_floor["open_grandfathered_findings"])):
+            allowed_floor_ids = set(base_floor["open_grandfathered_findings"]) | authorized_added
+            if not candidate_ids.issubset(allowed_floor_ids):
                 errors.append("GRT_EXACT_CANDIDATE_FLOOR_GRANDFATHERED_SET_GREW")
         except Exception as exc:
             errors.append(f"GRT_EXACT_FLOOR_CHAIN_INVALID:{type(exc).__name__}:{exc}")
@@ -242,7 +261,7 @@ def evaluate(base_ref: str, head_ref: str) -> dict[str, Any]:
             candidate_floor_generation = None
             floor_hash = None
 
-    new_or_recurrent = sorted(candidate_ids - base_ids)
+    new_or_recurrent = sorted(candidate_ids - base_ids - authorized_added)
     if new_or_recurrent:
         errors.append(
             f"GRT_EXACT_NEW_OR_RECURRENT_ACTIONABLE:count={len(new_or_recurrent)}:"
@@ -264,6 +283,16 @@ def evaluate(base_ref: str, head_ref: str) -> dict[str, Any]:
             expansion_ids.append(finding_id)
         elif disposition == "MATERIAL_CHANGED":
             material_ids.append(finding_id)
+    for predecessor_id, successor_id in sorted(authorized_substitutions.items()):
+        previous = base_findings[predecessor_id].get("debt_extent")
+        current = candidate_findings[successor_id].get("debt_extent")
+        if not isinstance(previous, Mapping) or not isinstance(current, Mapping):
+            errors.append(f"GRT_EXACT_G4_SUBSTITUTION_EXTENT_MISSING:{predecessor_id}:{successor_id}")
+            continue
+        disposition = compare_debt_extent(previous, current)
+        extent_dispositions[disposition] += 1
+        if disposition != "UNCHANGED":
+            errors.append(f"GRT_EXACT_G4_SUBSTITUTION_EXTENT_NOT_UNCHANGED:{predecessor_id}:{successor_id}")
     if expansion_ids:
         errors.append(f"GRT_EXACT_BASELINE_EXPANDED:count={len(expansion_ids)}:sample={expansion_ids[:10]}")
     if material_ids:
@@ -285,8 +314,13 @@ def evaluate(base_ref: str, head_ref: str) -> dict[str, Any]:
         "candidate_floor_generation": candidate_floor_generation,
         "base_actionable_count": len(base_ids),
         "candidate_actionable_count": len(candidate_ids),
-        "resolved_count": len(base_ids - candidate_ids),
+        "resolved_count": len(base_ids - candidate_ids - authorized_removed),
         "new_or_recurrent_count": len(new_or_recurrent),
+        "authorized_identity_substitution_count": len(authorized_substitutions),
+        "authorized_identity_substitutions": [
+            {"predecessor_finding_id": old, "successor_finding_id": new}
+            for old, new in sorted(authorized_substitutions.items())
+        ],
         "extent_dispositions": extent_dispositions,
         "base_snapshot_hash": base_snapshot.get("snapshot_hash"),
         "candidate_snapshot_hash": candidate_snapshot.get("snapshot_hash"),

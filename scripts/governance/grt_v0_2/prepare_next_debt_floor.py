@@ -14,13 +14,19 @@ import subprocess
 from pathlib import Path
 from typing import Any, Mapping
 
-from ovc.programme_genesis.grt_v0_2.debt import compare_debt_extent, propose_debt_floor, validate_debt_floor
+from ovc.programme_genesis.grt_v0_2.debt import (
+    compare_debt_extent,
+    propose_debt_floor,
+    validate_debt_floor,
+    validate_g4_current_projection_substitution,
+)
 from ovc.programme_genesis.grt_v0_2.g3_floor import full_g3_snapshot_at_commit
 from ovc.programme_genesis.grt_v0_2.serialization import canonical_sha256
 
 ROOT = Path(__file__).resolve().parents[3]
 POINTER = ROOT / "registries/governance/grt_v0_2/GRT_DEBT_FLOOR_CURRENT.json"
 FLOOR_DIR = ROOT / "registries/governance/grt_v0_2/debt_floors"
+G4_DECISION_PATH = "docs/programmes/grt-v0-2/g4/GRT2_G4_OPERATOR_DECISION.json"
 
 
 def _git(*args: str) -> str:
@@ -29,6 +35,22 @@ def _git(*args: str) -> str:
 
 def _load(path: Path) -> Mapping[str, Any]:
     value = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(value, Mapping):
+        raise ValueError(f"GRT_FLOOR_PREP_RECORD_NOT_OBJECT:{path}")
+    return value
+
+
+def _json_at(commit: str, path: str) -> Mapping[str, Any] | None:
+    proc = subprocess.run(
+        ["git", "-C", str(ROOT), "show", f"{commit}:{path}"],
+        check=False,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if proc.returncode:
+        return None
+    value = json.loads(proc.stdout)
     if not isinstance(value, Mapping):
         raise ValueError(f"GRT_FLOOR_PREP_RECORD_NOT_OBJECT:{path}")
     return value
@@ -79,7 +101,17 @@ def prepare(base_ref: str, head_ref: str) -> dict[str, Any]:
     floor_ids = set(current_floor.get("open_grandfathered_findings", []))
     if before_ids != floor_ids:
         raise ValueError("GRT_FLOOR_PREP_BASE_FINDINGS_DO_NOT_MATCH_CURRENT_FLOOR")
-    new_ids = sorted(after_ids - before_ids)
+    authorized_substitutions: dict[str, str] = {}
+    decision = _json_at(head, G4_DECISION_PATH)
+    if decision is not None:
+        authorized_substitutions = validate_g4_current_projection_substitution(
+            decision,
+            before,
+            after,
+        )
+    authorized_removed = set(authorized_substitutions)
+    authorized_added = set(authorized_substitutions.values())
+    new_ids = sorted(after_ids - before_ids - authorized_added)
     if new_ids:
         raise ValueError(f"GRT_FLOOR_PREP_NEW_OR_RECURRENT_DEBT:{new_ids[:10]}")
 
@@ -108,6 +140,7 @@ def prepare(base_ref: str, head_ref: str) -> dict[str, Any]:
         constitution_hash=str(current_floor["constitution_hash"]),
         open_grandfathered_findings=sorted(after_ids),
         previous_floor=current_floor,
+        authorized_identity_substitutions=authorized_substitutions,
     )
     validate_debt_floor(next_floor)
     FLOOR_DIR.mkdir(parents=True, exist_ok=True)
@@ -137,8 +170,9 @@ def prepare(base_ref: str, head_ref: str) -> dict[str, Any]:
         "next_generation": next_generation,
         "next_floor_hash": next_floor["floor_hash"],
         "next_floor_path": floor_rel,
-        "resolved_count": len(before_ids - after_ids),
+        "resolved_count": len(before_ids - after_ids - authorized_removed),
         "remaining_count": len(after_ids),
+        "authorized_identity_substitution_count": len(authorized_substitutions),
         "authority_effect": "NONE_PACKET_PREPARATION_ONLY",
     }
 
