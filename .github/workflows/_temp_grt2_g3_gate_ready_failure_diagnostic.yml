@@ -1,0 +1,40 @@
+name: Temp GRT2 G3 gate-ready failure diagnostic
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/_temp_grt2_g3_gate_ready_failure_diagnostic.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    if: github.head_ref == 'grt2/g3-superseding-census-artifact-20260824'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 9f6bbc2a22e07cab2b9e909d31ace441eb04205e
+          fetch-depth: 0
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11.15"
+      - name: Install deterministic repository test dependencies
+        run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
+      - name: Run exact first-failure diagnostic
+        shell: bash
+        run: |
+          set -o pipefail
+          PYTHONPATH=src:. python3 -m pytest -x -vv 2>&1 | tee /tmp/grt2-g3-gate-ready-pytest.log
+      - name: Upload exact first-failure diagnostic
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: grt2-g3-gate-ready-first-failure
+          path: /tmp/grt2-g3-gate-ready-pytest.log
+          if-no-files-found: error
+          retention-days: 7
