@@ -6,10 +6,12 @@ on:
     paths:
       - ".github/workflows/_temp_grt2_g3_superseding_census.yml"
       - "scripts/governance/grt_v0_2/diagnose_superseding_g3_census.py"
+      - "scripts/governance/grt_v0_2/materialize_superseding_g3_gate_ready.py"
+      - "scripts/governance/grt_v0_2/patch_superseding_g3_gate_ready_prior_pass.py"
       - "docs/programmes/grt-v0-2/g3/superseding/diagnostic/**"
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: temp-grt2-g3-superseding-census-${{ github.event.pull_request.number }}
@@ -34,15 +36,93 @@ jobs:
           python-version: "3.11.15"
       - name: Install deterministic repository test dependencies
         run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
+      - name: Preserve bounded construction helpers
+        run: |
+          cp scripts/governance/grt_v0_2/materialize_superseding_g3_gate_ready.py /tmp/materialize_superseding_g3_gate_ready.py
+          cp scripts/governance/grt_v0_2/patch_superseding_g3_gate_ready_prior_pass.py /tmp/patch_superseding_g3_gate_ready_prior_pass.py
       - name: Build exact source-bound superseding census
         env:
           GRT2_G3_SUPERSEDING_CENSUS_OUT: artifacts/grt2-g3-superseding-census.json
           PYTHONPATH: src:.
-        run: python3 scripts/governance/grt_v0_2/diagnose_superseding_g3_census.py
+        run: |
+          python3 scripts/governance/grt_v0_2/diagnose_superseding_g3_census.py
+          cp artifacts/grt2-g3-superseding-census.json /tmp/grt2-g3-superseding-census.json
       - name: Upload immutable post-merge revalidation census evidence
         uses: actions/upload-artifact@v4
         with:
           name: grt2-g3-superseding-census
           path: artifacts/grt2-g3-superseding-census.json
+          if-no-files-found: error
+          retention-days: 14
+      - name: Resolve exact artifact identity
+        id: artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          url="https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts"
+          row=""
+          for _ in $(seq 1 20); do
+            row=$(curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" "$url" | jq -c '.artifacts[] | select(.name == "grt2-g3-superseding-census")' | head -n1)
+            [[ -n "$row" ]] && break
+            sleep 2
+          done
+          [[ -n "$row" ]]
+          echo "artifact_id=$(jq -r .id <<<"$row")" >> "$GITHUB_OUTPUT"
+          echo "artifact_digest=$(jq -r .digest <<<"$row")" >> "$GITHUB_OUTPUT"
+          echo "evidence_file_sha256=$(sha256sum /tmp/grt2-g3-superseding-census.json | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+      - name: Materialise fresh post-r4 superseding GATE_READY candidate
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PYTHONPATH: src:.
+          TARGET_BRANCH: grt2/g3-superseding-gate-ready-r5-20260825
+          ARTIFACT_ID: ${{ steps.artifact.outputs.artifact_id }}
+          ARTIFACT_DIGEST: ${{ steps.artifact.outputs.artifact_digest }}
+          EVIDENCE_FILE_SHA256: ${{ steps.artifact.outputs.evidence_file_sha256 }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          base_sha=$(jq -r .current_main_commit /tmp/grt2-g3-superseding-census.json)
+          test "$(git rev-parse origin/main)" = "$base_sha"
+          gate_dir=docs/programmes/grt-v0-2/g3/superseding
+          git show "origin/main:${gate_dir}/GRT2_G3_SUPERSEDING_OPERATOR_INSTRUCTION_RECEIPT.json" > /tmp/r4-operator-instruction.json
+          git config user.name "OVC GRT2 Superseding Gate Ready"
+          git config user.email "ovc-grt2-superseding-gate-ready@invalid.local"
+          git checkout -B "$TARGET_BRANCH" origin/main
+          python3 /tmp/materialize_superseding_g3_gate_ready.py \
+            --census /tmp/grt2-g3-superseding-census.json \
+            --workflow-run-id "$GITHUB_RUN_ID" \
+            --artifact-id "$ARTIFACT_ID" \
+            --artifact-digest "$ARTIFACT_DIGEST" \
+            --evidence-file-sha256 "$EVIDENCE_FILE_SHA256"
+          cp /tmp/r4-operator-instruction.json "${gate_dir}/GRT2_G3_SUPERSEDING_OPERATOR_INSTRUCTION_RECEIPT.json"
+          python3 /tmp/patch_superseding_g3_gate_ready_prior_pass.py
+          jq -r '.changed_files[]' /tmp/grt2-g3-superseding-gate-ready-meta.json | xargs git add --
+          git add "${gate_dir}/GRT2_G3_SUPERSEDING_GATE_READY_DECISION_PACKET.json" \
+                  registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_16_SUPERSEDING_GATE_READY.json
+          git commit -m "GRT2-G3: materialise fresh superseding operator gate-ready packet r5"
+          head_sha=$(git rev-parse HEAD)
+          authority_id=$(jq -r .authority_manifest_id /tmp/grt2-g3-superseding-gate-ready-meta.json)
+          frontier_id=$(jq -r .dependency_frontier_id /tmp/grt2-g3-superseding-gate-ready-meta.json)
+          transition='{"authority_effect":"NONE_GATE_PREPARATION_ONLY","next_packet":"GRT2-G3-SUPERSEDING-OPERATOR-DECISION","status":"GATE_READY_OPERATOR_REQUIRED"}'
+          python3 tools/ci/build_vit_pr_lineage.py \
+            --repo . --base "$base_sha" --head "$head_sha" \
+            --programme-id OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE \
+            --packet-id GRT2-G3-SUPERSEDING-GATE-READY \
+            --authority-manifest-id "$authority_id" \
+            --dependency-frontier-id "$frontier_id" \
+            --completion-transition-json "$transition" \
+            --publish-detached | tee /tmp/grt2-g3-superseding-gate-ready-vit.txt
+          git push origin "HEAD:refs/heads/${TARGET_BRANCH}"
+          printf '%s\n' "$head_sha" > /tmp/grt2-g3-superseding-gate-ready-head.txt
+      - name: Upload fresh GATE_READY transport receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: grt2-g3-superseding-gate-ready-r5-transport
+          path: |
+            /tmp/grt2-g3-superseding-gate-ready-meta.json
+            /tmp/grt2-g3-superseding-gate-ready-vit.txt
+            /tmp/grt2-g3-superseding-gate-ready-head.txt
           if-no-files-found: error
           retention-days: 14
