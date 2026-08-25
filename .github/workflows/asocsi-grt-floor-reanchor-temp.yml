@@ -20,6 +20,12 @@ jobs:
           fetch-depth: 0
       - name: Fetch current physical main
         run: git fetch --no-tags origin main
+      - name: Remove temporary helper from candidate commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/asocsi-grt-floor-reanchor-temp.yml
+          git commit -m "ASOCSI-WP8: remove temporary GRT floor helper before exact scan"
       - name: Prepare exact next GRT DebtFloor
         run: |
           git worktree add --detach /tmp/grt-current origin/main
@@ -28,11 +34,8 @@ jobs:
           PYTHONPATH=/tmp/grt-current/src python scripts/governance/grt_v0_2/prepare_next_debt_floor.py --base origin/main --head HEAD
           rm scripts/governance/grt_v0_2/prepare_next_debt_floor.py
           git worktree remove /tmp/grt-current
-      - name: Commit generated floor and remove temporary workflow
+      - name: Commit generated floor and push
         run: |
-          rm .github/workflows/asocsi-grt-floor-reanchor-temp.yml
-          git add registries/governance/grt_v0_2/GRT_DEBT_FLOOR_CURRENT.json registries/governance/grt_v0_2/debt_floors .github/workflows/asocsi-grt-floor-reanchor-temp.yml
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add registries/governance/grt_v0_2/GRT_DEBT_FLOOR_CURRENT.json registries/governance/grt_v0_2/debt_floors
           git commit -m "ASOCSI-WP8: reanchor active GRT DebtFloor to current main"
           git push origin HEAD:asocsi-wp8-s01-stage1-c1-case-narrative-fidelity-supersession
