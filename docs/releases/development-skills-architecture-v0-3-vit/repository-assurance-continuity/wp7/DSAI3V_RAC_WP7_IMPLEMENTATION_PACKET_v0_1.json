@@ -1,0 +1,38 @@
+{
+  "authority_effect": "BOUNDED_PILOT_SUBSTRATE_IMPLEMENTATION_INACTIVE_UNTIL_BASELINE_ACTIVATION",
+  "baseline_commit": "e940fbc4c34c5c66cd3953958ff8174deb75bc97",
+  "baseline_tree": "cd814c4256e051016890a9d76fc82f87bf70e0e6",
+  "general_gate": "DSAI3V-RAC-G-DELTA-ASSURANCE-GENERAL",
+  "operator_decision_id": "aad099397f329bf11b253981748d34b422f7c5e35ed768d0c7c2dd6353d2b274",
+  "packet_id": "DSAI3V-RAC-WP7-BOUNDED-DELTA-ASSURANCE-PILOT",
+  "pilot_class": "DSAI_VIT_RECEIPT_ONLY_V0_1",
+  "pilot_semantics": {
+    "admission": "EXACT_DETACHED_VIT_QUALIFICATION_PLUS_RECEIPT_ONLY_PIP_PLUS_CERTIFIED_ASSURANCE_SURFACE_MATCH",
+    "canonical_reference": "EXISTING_TESTS_WORKFLOW_CONTINUES_CONCURRENTLY_AS_INDEPENDENT_ORACLE",
+    "failure": "PILOT_CLASSIFIER_OR_CERTIFICATE_FAILURE_BLOCKS; INELIGIBILITY_FALLS_BACK_TO_CANONICAL_REFERENCE",
+    "fresh_blocking_assurance": [
+      "VIT routing preflight",
+      "OVC profile assurance",
+      "SIQ READY",
+      "SIQ/PDC exact-final",
+      "GRT exact-final",
+      "post-write tree equality"
+    ],
+    "inherited_only_after_activation": [
+      "canonical repository suite",
+      "pytest/unittest parity",
+      "runner parity"
+    ],
+    "physical_integration": "UNCHANGED_VIT_TO_SIQ_ONE_WRITER"
+  },
+  "programme_id": "OVC-DSAI3V-CIPR-REPOSITORY-ASSURANCE-CONTINUITY-AMENDMENT-0.1",
+  "required_check_ruleset_mutation": false,
+  "rollback": "Keep pilot policy inactive or forward-disable it; canonical full reference remains the safe default and VIT/SIQ/GRT remain unchanged.",
+  "schema": "ovc-implementation-packet/v1",
+  "status": "IMPLEMENTED_PENDING_EXACT_HEAD_ASSURANCE_AND_BASELINE_ACTIVATION",
+  "workflow_changes": [
+    "add non-required RAC pilot eligibility/admission/reconciliation workflow",
+    "route SIQ READY assurance-source selection through fail-closed pilot-aware wrapper",
+    "leave acquire/finalize, one-writer lease, GRT and ruleset unchanged"
+  ]
+}
