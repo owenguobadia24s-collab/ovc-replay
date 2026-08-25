@@ -1,0 +1,44 @@
+{
+  "schema": "ovc-operator-decision/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "gate_id": "CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER",
+  "decision": "PASS",
+  "decision_authority": "OPERATOR",
+  "operator_command": "OVC APPROVE CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER PASS",
+  "decided_at": "2026-08-25T11:44:00+01:00",
+  "gate_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-g5-post-pyt-cutover/CIPR_G5_POST_PYT_CONSOLIDATED_CUTOVER_GATE_PACKET.json",
+  "gate_packet_commit": "61c656f5ce8c186fe58ed4d5449bec2d5ad56b0d",
+  "gate_packet_blob": "693ec241fc1d57118a8e1170cf66910e960e3ba4",
+  "authority_delta_approved": "MATERIAL_REQUIRED_TEST_TOPOLOGY_ACTIVATION",
+  "approved_scope": [
+    "Replace only the serial canonical pytest execution topology behind the existing required tests context with the qualified deterministic four-shard exact-current-pytest union and aggregate.",
+    "Preserve the existing required tests context identity without GitHub ruleset mutation or context rename.",
+    "Preserve one pytest session per shard, exact manifest selection after canonical collection, fail-closed missing/duplicate/order/identity checks and no xdist.",
+    "Remove the redundant explicit tests/research_console_vnext rerun only if recursive pytest tests coverage is re-proven during cutover assurance."
+  ],
+  "explicitly_not_authorized": [
+    "required-context rename, retirement or GitHub ruleset mutation",
+    "retirement of pytest/unittest parity or runner parity",
+    "removal or weakening of profile assurance, SIQ READY, VIT, GRT, PDC or OVC merge-readiness semantics",
+    "xdist or multi-process pytest semantics",
+    "scientific, semantic, selector, family, Validation, publication, probability, risk, exposure, trading, execution or agent-write authority",
+    "force-push, history rewrite, destructive deletion or branch cleanup"
+  ],
+  "qualification_basis": {
+    "qualified_executable_head": "76d3ca0c5bd37f8dafacbf8e8bb85b29c88bee66",
+    "population_count": 4882,
+    "shard_counts": [1223, 1221, 1219, 1219],
+    "repeat_shadow_runs": [32766504076, 32767614761],
+    "raw_manifest_sha256": "3e586b53f7784ef06f4f8448b89e03b2f36c4bc4bb3749ad9a877fd62d67a52e",
+    "qa": "PASS"
+  },
+  "repository_at_decision": {
+    "main_commit": "350f9279c36dbe5af94b27b04d4567e38e62f5fc",
+    "main_tree": "03edf1d54124d6b1f20544bcf2aabe650b1edd9c",
+    "movement_since_gate_preparation": "LATE_PHYSICAL_MAIN_MOVEMENT_ONLY; implementation must start from then-current lawful main and rerun exact-final assurance"
+  },
+  "next_packet": "CIPR-WP5C-POST-PYT-CANONICAL-SHARD-CUTOVER",
+  "rollback": "Forward-revert or supersede the cutover so the existing tests required context again executes the serial PYTHONPATH=src:. python3 -m pytest tests -q --tb=short path. Preserve parity, profile assurance, SIQ/VIT/GRT/PDC/merge-readiness, qualification evidence and Git history."
+}

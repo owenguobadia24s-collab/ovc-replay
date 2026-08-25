@@ -1,0 +1,177 @@
+{
+  "schema": "ovc-operator-gate-packet/v1",
+  "gate_id": "CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER",
+  "gate_title": "Post-PYT deterministic canonical pytest shard cutover",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "GATE_READY",
+  "prepared_at": "2026-08-24T21:43:00+01:00",
+  "operator_phrase": "OVC APPROVE CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER PASS",
+  "baseline_construction_merge": {
+    "commit": "a5841ad584875ece947a7fcc1ca59cf00a3bb5f5",
+    "tree": "ecf0ea292f4093af669ca6d7149e9802bca117ff"
+  },
+  "qualified_executable_candidate": {
+    "commit": "76d3ca0c5bd37f8dafacbf8e8bb85b29c88bee66",
+    "tree": "23109f636510fdd19a9cfef07b05e10e355beb5f",
+    "pip_id": "4a62106b065e093da06330e5e5ad05c3e0a8b80a69e00003783a224637c5d177",
+    "qualification_id": "a2c6635445f50b920de2dd7822fa50d74b5cb3f92f7ed3ca0deeb9e83d7bd82e"
+  },
+  "qualification_closeout_candidate": {
+    "commit": "24b70289e912aaafac742a2dd09e3225f215af09",
+    "tree": "3cf77c14d93027066251b55daa02d4be7f41cadf",
+    "pip_id": "3038a0308c4ef8f554368e9348e55d52efe6c75d6c452203b6ce2ef0b9de8efa",
+    "qualification_id": "489d3187b0ab120fe9ff293ae56557f1c872aeb57cf58e6b64a67d99e8639635"
+  },
+  "qualification_physical_merge": {
+    "pr": 1300,
+    "commit": "15c7531c3635e96681dc87b906455969fe21b6f3",
+    "tree": "2d799bf6454f50327c566c0c51fe7654d587ae85",
+    "parent_main": "4aac7376e60525b0c86b9f4577ce32790b0d98de",
+    "status": "COMPLETED"
+  },
+  "completed_packets": [
+    {"packet_id": "CIPR-WP0-WP2-GROUPED", "status": "COMPLETED"},
+    {"packet_id": "CIPR-WP3", "status": "COMPLETED"},
+    {"packet_id": "CIPR-WP4-SHADOW-SHARD-CANDIDATE", "status": "APPROVED_SHADOW"},
+    {"packet_id": "CIPR-WP5R-POST-PYT-CANONICAL-CENSUS-SHADOW", "status": "COMPLETED_CONSTRUCTION"},
+    {"packet_id": "CIPR-WP5R-SHADOW-QUALIFICATION", "status": "COMPLETED", "decision": "DELEGATED_PASS"}
+  ],
+  "current_authority": {
+    "canonical_complete_suite": "PYTHONPATH=src:. python3 -m pytest tests -q --tb=short remains the serial required canonical execution in job/context tests",
+    "post_pyt_shard_topology": "SHADOW_ONLY_NO_REQUIRED_CHECK_SUBSTITUTION",
+    "required_tests_context": "tests",
+    "required_check_substitution": "DENIED",
+    "ruleset_context_mutation": "DENIED",
+    "runner_cutover": "DENIED",
+    "xdist": "DENIED",
+    "pytest_unittest_parity": "PRESERVE",
+    "runner_parity": "PRESERVE",
+    "profile_assurance": "PRESERVE",
+    "siq_ready": "PRESERVE",
+    "vit_grt_pdc_merge_readiness": "PRESERVE",
+    "scientific_market_probability_risk_exposure_execution_authority": "NONE"
+  },
+  "proposed_authority_delta": {
+    "delta_if_pass": "MATERIAL_REQUIRED_TEST_TOPOLOGY_ACTIVATION",
+    "activate": "Replace only the serial canonical pytest execution topology behind the existing required tests context with the qualified deterministic four-shard exact-current-pytest union and aggregate.",
+    "required_context_identity": "PRESERVE_EXISTING_tests_CONTEXT",
+    "ruleset_mutation": "NOT_AUTHORIZED_OR_REQUIRED_BY_THIS_PASS",
+    "shard_semantics": "one pytest session per shard; exact manifest selection after canonical pytest collection; no xdist; fail closed on missing, duplicate, reordered or mismatched identities",
+    "duplicate_research_console_rerun": "May be removed only as the already-demonstrated redundant second explicit rerun after recursive pytest tests coverage is retained; no test identity may be omitted from the canonical union.",
+    "shadow_workflow": "May remain as non-required historical/requalification infrastructure; no deletion is authorized.",
+    "not_included": [
+      "required context rename, retirement or GitHub ruleset mutation",
+      "retirement of pytest/unittest parity or runner parity",
+      "removal or weakening of profile assurance, SIQ READY, VIT, GRT, PDC or OVC merge-readiness semantics",
+      "xdist or multi-process test semantics",
+      "scientific, semantic, selector, family, Validation, publication, probability, risk, exposure, trading, execution or agent-write authority",
+      "force-push, history rewrite, destructive deletion or branch cleanup"
+    ]
+  },
+  "acceptance_conditions": [
+    {"condition": "candidate population equals current canonical pytest collection including pytest-native tests", "status": "PASS", "evidence": "4882 collected node IDs = 1567 legacy-unittest + 3315 pytest-native"},
+    {"condition": "zero omission and zero duplication across deterministic shard union", "status": "PASS", "evidence": "1223 + 1221 + 1219 + 1219 = 4882; exact-union proof PASS"},
+    {"condition": "same-head deterministic manifest identity repeats", "status": "PASS", "evidence": "all 10 relied-on raw manifest files byte-identical; raw SHA-256 3e586b53f7784ef06f4f8448b89e03b2f36c4bc4bb3749ad9a877fd62d67a52e"},
+    {"condition": "all four shards and aggregate pass in repeated comparable runs", "status": "PASS", "evidence": "runs 32766504076 and 32767614761"},
+    {"condition": "shadow aggregate outcome equals canonical complete-suite outcome", "status": "PASS", "evidence": "canonical and both shadow repetitions PASS"},
+    {"condition": "transport repair preserves one pytest session per shard and fails closed", "status": "PASS", "evidence": "tests/development/test_pytest_shard_selection_transport.py plus full repository/profile assurance"},
+    {"condition": "required CI remains unchanged throughout qualification", "status": "PASS", "evidence": "required-check substitution false; no PR listener added; no ruleset mutation"},
+    {"condition": "exact-final qualification closeout passes VIT/SIQ/PDC/merge readiness against current physical main", "status": "PASS", "evidence": "tests run 32774078020 and tiered run 32774077910; IntegrationAdmissionReceipt 26a5b2944566b208dda48613af324466082856beda2b1cc2a49b7cd790894cb7"},
+    {"condition": "rollback restores current required CI without history rewrite", "status": "PASS", "evidence": "forward-only rollback defined"}
+  ],
+  "performance_evidence": {
+    "canonical_qualified_head_pytest_seconds": 334.68,
+    "canonical_closeout_head_pytest_seconds": 338.58,
+    "shadow_run_32766504076": {"critical_pytest_seconds": 149.10, "workflow_wall_seconds": 236.0, "critical_path_reduction_vs_334_68_pct": 55.45},
+    "shadow_run_32767614761": {"critical_pytest_seconds": 146.79, "workflow_wall_seconds": 265.0, "critical_path_reduction_vs_334_68_pct": 56.14},
+    "interpretation": "The qualified execution topology materially reduces test execution critical path. End-to-end wall reduction is smaller because shadow runs independently bootstrap runners, install dependencies, collect the full population, upload artifacts and aggregate; PASS does not authorize weakening those assurance semantics to chase latency."
+  },
+  "tests": {
+    "qualified_executable_head": {
+      "tests_workflow_run": 32758479508,
+      "vit_preflight_job": 97534982006,
+      "tests_job": 97535089533,
+      "pytest_unittest_parity_job": 97535089598,
+      "runner_parity_job": 97535089313,
+      "tiered_workflow_run": 32758479559,
+      "profile_assurance_job": 97534968189,
+      "siq_ready_job": 97534933603,
+      "merge_readiness_job": 97537084563,
+      "result": "PASS_ALL"
+    },
+    "qualification_closeout_head": {
+      "tests_workflow_run": 32774078020,
+      "vit_preflight_job": 97580965045,
+      "runner_parity_job": 97581727277,
+      "pytest_unittest_parity_job": 97581727317,
+      "tests_job": 97581727510,
+      "tiered_workflow_run": 32774077910,
+      "profile_assurance_job": 97580964555,
+      "siq_ready_job": 97581094507,
+      "merge_readiness_job": 97583673405,
+      "result": "PASS_ALL"
+    },
+    "shadow_runs": [32766504076, 32767614761]
+  },
+  "qa": {
+    "packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp5r-qualification/CIPR_WP5R_SHADOW_QUALIFICATION_QA_PACKET.json",
+    "status": "PASS",
+    "recommendation": "PASS_SHADOW_QUALIFICATION_AND_PREPARE_CONSOLIDATED_OPERATOR_CUTOVER_GATE",
+    "blocking_warnings": [],
+    "unresolved_review_threads": 0,
+    "submitted_reviews": 0
+  },
+  "warnings": [
+    "The execution critical-path gain is about 55-56%, while observed shadow workflow wall is 236-265 seconds because per-job bootstrap/install/collection/artifact overhead remains.",
+    "Heavy-path seed assignment is operational scheduling metadata only; it grants no scientific or test-selection authority.",
+    "Diagnostic PR #1310 is read-only/non-authoritative and must not merge.",
+    "Required-context name/ruleset mutation is outside this PASS. If the implementation cannot preserve the existing tests context, stop rather than widen authority.",
+    "The echo-only tiered compatibility context is not retired by this PASS; SIQ READY and merge-readiness semantics remain intact."
+  ],
+  "unresolved_issues": [],
+  "changed_files_in_qualified_packet": [
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp5r-qualification/CIPR_WP5R_CONSTRUCTION_MERGE_RECEIPT.json",
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp5r-qualification/CIPR_WP5R_SHADOW_QUALIFICATION_DECISION.json",
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp5r-qualification/CIPR_WP5R_SHADOW_QUALIFICATION_EVIDENCE.json",
+    "docs/releases/ci-performance-remediation-v0-1/cipr-wp5r-qualification/CIPR_WP5R_SHADOW_QUALIFICATION_QA_PACKET.json",
+    "registries/implementation/ci_performance/CURRENT_STATE_POINTER.json",
+    "registries/implementation/ci_performance/OVC_CIPR_STATE_v0_7_SHADOW_QUALIFICATION_RUNNING.json",
+    "registries/implementation/ci_performance/OVC_CIPR_STATE_v0_8_SHADOW_QUALIFICATION_APPROVED.json",
+    "tests/development/test_pytest_shard_selection_transport.py",
+    "tools/ci/pytest_shard_shadow.py"
+  ],
+  "external_artifact_hashes": [
+    {"artifact": "common raw manifest bytes across 10 relied-on files", "sha256": "3e586b53f7784ef06f4f8448b89e03b2f36c4bc4bb3749ad9a877fd62d67a52e"},
+    {"artifact": "run32766504076 manifest zip", "sha256": "070568dfe677bfab26c212222c9b34f8cbd27803cae71e44dd2fb9cd4bc63f17"},
+    {"artifact": "run32766504076 shard0 zip", "sha256": "e062b1d4f5c22479682605cea17ee6cae51628ab83173965935c42cd8f4e0dcf"},
+    {"artifact": "run32766504076 shard1 zip", "sha256": "0ccaf6c98668302f8a52df6f110a9eadceefb327f3ef34d81657cac689309f2e"},
+    {"artifact": "run32766504076 shard2 zip", "sha256": "6800fb8073cb74ede718c1af604a43ab3e7ad7618a3cfc139285657adc684d51"},
+    {"artifact": "run32766504076 shard3 zip", "sha256": "c6681a5fa459f6e0b4c09de50bee6b54915bb66ec22275376e1d5401e647217f"},
+    {"artifact": "run32767614761 manifest zip", "sha256": "0abefc1fe698825b8ca7bc538049d511cbb9307fb4727fa9da323fa5356b438f"},
+    {"artifact": "run32767614761 shard0 zip", "sha256": "4266a25de4d0b2547cd4f9e255df61de8057458cbb3abb92944f1164705f82d4"},
+    {"artifact": "run32767614761 shard1 zip", "sha256": "ce07f462a5a97ec16fc8f09df39562916bc6b79c7c0835ebb94e311039a8e175"},
+    {"artifact": "run32767614761 shard2 zip", "sha256": "2be2a90602e3c7aba7e9a5e96461cdbd328b6152b7b5ab45dd9b3f444ff0e989"},
+    {"artifact": "run32767614761 shard3 zip", "sha256": "3d9e63fa9da247a6a95cd4c59e46166082727b0c2ed5f1d396352f3a8d636b56"}
+  ],
+  "rollback": "If PASS implementation fails or later regresses, forward-revert/supersede the cutover so the existing tests required context again executes the current serial PYTHONPATH=src:. python3 -m pytest tests -q --tb=short path. Preserve parity, profile assurance, SIQ/VIT/GRT/PDC/merge-readiness, every qualification artifact and Git history. Do not delete evidence, force-push or rewrite history.",
+  "recommended_decision": "PASS",
+  "decision_options": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "exact_work_after_pass": [
+    "Create one bounded cutover implementation branch from then-current lawful main.",
+    "Modify the current required tests workflow so the qualified deterministic manifest and four one-session pytest shards execute the exact current pytest collection; the aggregate retains the existing required job/context identity tests.",
+    "Do not introduce xdist, multi-process pytest semantics, a new PR listener, a required-context rename or a ruleset mutation.",
+    "Remove only the explicitly redundant second tests/research_console_vnext rerun if recursive pytest tests coverage is re-proven in the cutover tests; otherwise preserve it.",
+    "Preserve pytest/unittest parity, runner parity, profile assurance, SIQ READY, VIT/GRT/PDC and OVC merge-readiness semantics unchanged.",
+    "Run targeted workflow/shard-governance tests, canonical collection/equivalence tests, repository-wide tests and exact-final VIT/SIQ/GRT/PDC/merge-readiness.",
+    "If the aggregate cannot preserve the existing tests required-context identity, or any fixture/session/order semantic diverges, stop without widening the PASS and return to the operator.",
+    "When all approved cutover acceptance conditions pass with authority confined to this delta, materialise cutover QA/state and use the normal eligible integration path."
+  ],
+  "exact_work_after_defer": [
+    "Leave current serial required CI unchanged and preserve the qualified shadow evidence; optionally collect further comparable overhead/runner data before presenting a superseding cutover decision."
+  ],
+  "exact_work_after_block_or_quarantine": [
+    "Keep the current serial canonical tests path authoritative, preserve all shadow evidence, and record the blocking disposition without deleting branches, workflows or artifacts."
+  ]
+}
