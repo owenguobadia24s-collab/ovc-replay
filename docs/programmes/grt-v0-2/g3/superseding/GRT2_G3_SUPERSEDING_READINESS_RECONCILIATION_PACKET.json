@@ -1,0 +1,53 @@
+{
+  "acceptance_conditions": {
+    "authority_delta_none": true,
+    "exact_current_main_reconciliation": true,
+    "final_gate_ready_revalidation_required_after_merge": true,
+    "no_activation": true,
+    "qa_pass": true,
+    "unresolved_issues_zero": true,
+    "warnings_zero": true
+  },
+  "authority_delta": "NONE",
+  "authority_manifest": "docs/programmes/grt-v0-2/g3/superseding/GRT2_G3_SUPERSEDING_READINESS_AUTHORITY_MANIFEST.json",
+  "authority_manifest_id": "46915cbd69f9365dd46d9ad926a727cfaf46381c96406570c8bd25eee1a9c9ac",
+  "authority_required": "AUTO_EXECUTABLE",
+  "baseline_commit": "36701ddbdc4004ab98052d80b78b512d873fb293",
+  "baseline_tree": "0a8cbb0891f49073f933e7fa8b711b33a56782d6",
+  "binding_policy": "LATE_PHYSICAL_PLACEMENT",
+  "candidate_floor_seed": "docs/programmes/grt-v0-2/g3/superseding/GRT2_G3_SUPERSEDING_CANDIDATE_DEBT_FLOOR_GENERATION_0_SEED.json",
+  "changed_files": [
+    "docs/programmes/grt-v0-2/g3/superseding/GRT2_G3_SUPERSEDING_READINESS_RECONCILIATION_EVIDENCE.json",
+    "docs/programmes/grt-v0-2/g3/superseding/GRT2_G3_SUPERSEDING_READINESS_RECONCILIATION_QA_PACKET.json",
+    "docs/programmes/grt-v0-2/g3/superseding/GRT2_G3_SUPERSEDING_CANDIDATE_DEBT_FLOOR_GENERATION_0_SEED.json",
+    "docs/programmes/grt-v0-2/g3/superseding/GRT2_G3_SUPERSEDING_READINESS_AUTHORITY_MANIFEST.json",
+    "docs/programmes/grt-v0-2/g3/superseding/GRT2_G3_SUPERSEDING_READINESS_DEPENDENCY_FRONTIER.json",
+    "docs/programmes/grt-v0-2/g3/superseding/GRT2_G3_SUPERSEDING_READINESS_RECONCILIATION_PACKET.json",
+    "tests/governance/grt_v0_2/test_grt2_g3_superseding_reconciliation.py"
+  ],
+  "dependency_frontier": "docs/programmes/grt-v0-2/g3/superseding/GRT2_G3_SUPERSEDING_READINESS_DEPENDENCY_FRONTIER.json",
+  "dependency_frontier_id": "c006a9e9ea9bba346b2f619b0dab7ec149ac9fdefa286c6c88d2e65768f32b6d",
+  "evidence": "docs/programmes/grt-v0-2/g3/superseding/GRT2_G3_SUPERSEDING_READINESS_RECONCILIATION_EVIDENCE.json",
+  "gate_id": "GRT2-G3",
+  "logical_sha256": "ee822f24b9664469fef12a9561c34d5e94cbfe075370a323fa8b89ef6bc1d416",
+  "next_packet": "GRT2-G3-SUPERSEDING-GATE-READY-MATERIALISATION",
+  "packet_id": "GRT2-G3-SUPERSEDING-READINESS-RECONCILIATION",
+  "plan_id": "OVC-GRT-V0.2-RCCC-CONFORMANCE-IMPLEMENTATION-PLAN-0.2-REVISED-RATIFIED",
+  "plan_version": "0.2_REVISED_RATIFIED",
+  "programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
+  "qa_packet": "docs/programmes/grt-v0-2/g3/superseding/GRT2_G3_SUPERSEDING_READINESS_RECONCILIATION_QA_PACKET.json",
+  "rollback": "Close or forward-supersede this authority-inert reconciliation packet; preserve the former G3 packet, unconsumed PASS, failed activation evidence, immutable B0, both floor identities, external artifacts and Git history. Never force-push or rewrite history.",
+  "schema": "ovc-grt2-g3-superseding-readiness-reconciliation-packet/v1",
+  "status": "IMPLEMENTED_QA_PASS_AWAITING_EXACT_FINAL_INTEGRATION",
+  "tests_required": [
+    "tests/governance/grt_v0_2/test_grt2_g3_superseding_reconciliation.py",
+    "tests/governance/grt_v0_2",
+    "repository-wide pytest",
+    "pytest/unittest parity",
+    "runner parity",
+    "VIT routing",
+    "SIQ READY",
+    "GRT exact-final integration readiness",
+    "merge readiness"
+  ]
+}
