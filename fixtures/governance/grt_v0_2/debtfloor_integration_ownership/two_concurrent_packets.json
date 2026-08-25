@@ -1,0 +1,31 @@
+{
+  "schema": "ovc-grt2-debtfloor-integration-ownership-concurrency-fixture/v1",
+  "programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
+  "base": {
+    "legacy_generation": 2,
+    "commit": "1111111111111111111111111111111111111111",
+    "tree": "2222222222222222222222222222222222222222"
+  },
+  "findings": [
+    "GRT.FIND.aaaaaaaaaaaaaaaaaaaaaaaa",
+    "GRT.FIND.bbbbbbbbbbbbbbbbbbbbbbbb"
+  ],
+  "packet_a": {
+    "pip_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "result_tree": "3333333333333333333333333333333333333333",
+    "physical_commit": "4444444444444444444444444444444444444444"
+  },
+  "packet_b": {
+    "pip_id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "source_payload_unchanged": true,
+    "result_tree_before_a": "5555555555555555555555555555555555555555",
+    "result_tree_after_a": "6666666666666666666666666666666666666666"
+  },
+  "expected": {
+    "packet_a_floor_generation": 3,
+    "packet_b_floor_generation_after_a": 4,
+    "packet_b_pip_rebuilt": false,
+    "packet_b_floor_registry_files_in_pip": false,
+    "main_movement_classification": "PLACEMENT_RECOMPUTE_ONLY"
+  }
+}

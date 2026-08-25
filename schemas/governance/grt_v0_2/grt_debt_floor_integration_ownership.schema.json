@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GRT v0.2 DebtFloor Integration Ownership Policy v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "policy_id",
+    "programme_id",
+    "plan_id",
+    "packet_id",
+    "status",
+    "operator_instruction",
+    "authority_effect",
+    "constitutional_semantics",
+    "floor_materialisation_mode",
+    "floor_owner",
+    "materialisation_controller",
+    "physical_gateway",
+    "legacy_anchor",
+    "generation_rule",
+    "identity_rule",
+    "ordinary_packet_contract",
+    "preserved_invariants",
+    "evidence_surfaces",
+    "amendment_authority",
+    "rollback",
+    "logical_sha256"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-grt2-debt-floor-integration-ownership/v1"},
+    "policy_id": {"const": "GRT2-VIT-DEBTFLOOR-INTEGRATION-OWNERSHIP-v0.1"},
+    "programme_id": {"const": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE"},
+    "plan_id": {"type": "string", "minLength": 1},
+    "packet_id": {"const": "GRT2-VIT-DEBTFLOOR-INTEGRATION-OWNERSHIP-REMEDIATION"},
+    "status": {"const": "ACTIVE"},
+    "operator_instruction": {"const": "OVC RUN GRT2-VIT-DEBTFLOOR-INTEGRATION-OWNERSHIP-REMEDIATION"},
+    "authority_effect": {"const": "NONE_INTEGRATION_MECHANICS_CORRECTION"},
+    "constitutional_semantics": {"const": "UNCHANGED"},
+    "floor_materialisation_mode": {"const": "VIRTUAL_EXACT_TREE_PROJECTION"},
+    "floor_owner": {"const": "OVC_GRT_V0_2"},
+    "materialisation_controller": {"const": "DSAI_VIT_PHYSICAL_CONTROLLER"},
+    "physical_gateway": {"const": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY"},
+    "legacy_anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["generation", "floor_hash", "definition", "pointer", "constitution_hash"],
+      "properties": {
+        "generation": {"const": 2},
+        "floor_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "definition": {"const": "registries/governance/grt_v0_2/debt_floors/GRT_DEBT_FLOOR_G2.json"},
+        "pointer": {"const": "registries/governance/grt_v0_2/GRT_DEBT_FLOOR_CURRENT.json"},
+        "constitution_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "generation_rule": {"type": "string", "minLength": 1},
+    "identity_rule": {"type": "string", "minLength": 1},
+    "ordinary_packet_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "floor_registry_mutation",
+        "payload_rebuild_for_floor_placement",
+        "placement_only_main_movement",
+        "pip_identity_includes_floor_pointer_or_generation_file",
+        "grt_exact_emits_candidate_floor",
+        "physical_tree_equality_required"
+      ],
+      "properties": {
+        "floor_registry_mutation": {"const": "FORBIDDEN"},
+        "payload_rebuild_for_floor_placement": {"const": "FORBIDDEN"},
+        "placement_only_main_movement": {"const": "RECOMPUTE_A1_A2_ONLY"},
+        "pip_identity_includes_floor_pointer_or_generation_file": {"const": false},
+        "grt_exact_emits_candidate_floor": {"const": true},
+        "physical_tree_equality_required": {"const": true}
+      }
+    },
+    "preserved_invariants": {
+      "type": "array",
+      "minItems": 8,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "evidence_surfaces": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract", "schema", "reference_runtime", "preparation_runtime", "projection_runtime", "assurance"],
+      "properties": {
+        "contract": {"type": "string", "minLength": 1},
+        "schema": {"type": "string", "minLength": 1},
+        "reference_runtime": {"type": "string", "minLength": 1},
+        "preparation_runtime": {"type": "string", "minLength": 1},
+        "projection_runtime": {"type": "string", "minLength": 1},
+        "assurance": {"type": "string", "minLength": 1}
+      }
+    },
+    "amendment_authority": {"const": "OPERATOR_REQUIRED_FOR_MEANING_BEARING_CHANGE"},
+    "rollback": {"type": "string", "minLength": 1},
+    "logical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

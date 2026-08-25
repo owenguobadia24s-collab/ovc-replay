@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Prepare the next immutable DebtFloor generation for an active-GRT packet.
+"""Preview the next GRT DebtFloor without mutating an ordinary packet tree.
 
-This helper is deterministic and non-authoritative. It reads the exact base and
-candidate trees, proves the candidate contains no new/recurrent/expanded debt,
-then writes the next floor generation and current-floor pointer into the working
-tree. It never commits, pushes, merges or grants authority.
+The active integration-ownership policy makes DebtFloor generation an A2
+exact-tree projection. This helper verifies the packet changed no floor control
+path and emits a preparation receipt. Final generation/hash are recomputed by
+GRT-EXACT after late physical placement.
 """
 from __future__ import annotations
 
@@ -15,29 +15,24 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from ovc.programme_genesis.grt_v0_2.debt import (
+    G4_CANDIDATE_FINDING_ID,
+    G4_GRANDFATHERED_FINDING_ID,
     compare_debt_extent,
-    propose_debt_floor,
-    validate_debt_floor,
     validate_g4_current_projection_substitution,
 )
 from ovc.programme_genesis.grt_v0_2.g3_floor import full_g3_snapshot_at_commit
-from ovc.programme_genesis.grt_v0_2.serialization import canonical_sha256
+from scripts.governance.grt_v0_2.integration_floor import (
+    POLICY_PATH,
+    assert_no_packet_floor_mutation,
+    validate_policy,
+)
 
 ROOT = Path(__file__).resolve().parents[3]
-POINTER = ROOT / "registries/governance/grt_v0_2/GRT_DEBT_FLOOR_CURRENT.json"
-FLOOR_DIR = ROOT / "registries/governance/grt_v0_2/debt_floors"
 G4_DECISION_PATH = "docs/programmes/grt-v0-2/g4/GRT2_G4_OPERATOR_DECISION.json"
 
 
 def _git(*args: str) -> str:
     return subprocess.check_output(["git", "-C", str(ROOT), *args], text=True).strip()
-
-
-def _load(path: Path) -> Mapping[str, Any]:
-    value = json.loads(path.read_text(encoding="utf-8"))
-    if not isinstance(value, Mapping):
-        raise ValueError(f"GRT_FLOOR_PREP_RECORD_NOT_OBJECT:{path}")
-    return value
 
 
 def _json_at(commit: str, path: str) -> Mapping[str, Any] | None:
@@ -57,13 +52,13 @@ def _json_at(commit: str, path: str) -> Mapping[str, Any] | None:
 
 
 def _findings(snapshot: Mapping[str, Any]) -> dict[str, Mapping[str, Any]]:
-    out: dict[str, Mapping[str, Any]] = {}
+    rows: dict[str, Mapping[str, Any]] = {}
     for row in snapshot.get("findings", []):
         finding_id = str(row.get("finding_id", ""))
-        if not finding_id or finding_id in out:
+        if not finding_id or finding_id in rows:
             raise ValueError("GRT_FLOOR_PREP_FINDING_ID_INVALID_OR_DUPLICATE")
-        out[finding_id] = row
-    return out
+        rows[finding_id] = row
+    return rows
 
 
 def _assert_evaluable(snapshot: Mapping[str, Any], label: str) -> None:
@@ -73,22 +68,23 @@ def _assert_evaluable(snapshot: Mapping[str, Any], label: str) -> None:
         raise ValueError(f"GRT_FLOOR_PREP_{label}_FAMILY_COVERAGE_GAP")
 
 
+def _exact_g4_transition(before: Mapping[str, Any], after: Mapping[str, Any]) -> bool:
+    return (
+        G4_GRANDFATHERED_FINDING_ID in before
+        and G4_GRANDFATHERED_FINDING_ID not in after
+        and G4_CANDIDATE_FINDING_ID not in before
+        and G4_CANDIDATE_FINDING_ID in after
+    )
+
+
 def prepare(base_ref: str, head_ref: str) -> dict[str, Any]:
     base = _git("rev-parse", f"{base_ref}^{{commit}}")
     head = _git("rev-parse", f"{head_ref}^{{commit}}")
-    base_tree = _git("rev-parse", f"{base}^{{tree}}")
-
-    pointer = _load(POINTER)
-    generation = int(pointer.get("generation", -1))
-    if generation < 0:
-        raise ValueError("GRT_FLOOR_PREP_CURRENT_GENERATION_INVALID")
-    current_path = ROOT / str(pointer.get("definition", ""))
-    current_floor = _load(current_path)
-    validate_debt_floor(current_floor)
-    if int(current_floor.get("generation", -1)) != generation:
-        raise ValueError("GRT_FLOOR_PREP_POINTER_GENERATION_MISMATCH")
-    if current_floor.get("floor_hash") != pointer.get("floor_hash"):
-        raise ValueError("GRT_FLOOR_PREP_POINTER_HASH_MISMATCH")
+    policy = _json_at(head, POLICY_PATH)
+    if policy is None:
+        raise ValueError("GRT_FLOOR_PREP_INTEGRATION_OWNERSHIP_POLICY_MISSING")
+    validate_policy(policy)
+    assert_no_packet_floor_mutation(_git("diff", "--name-only", base, head).splitlines())
 
     before_snapshot = full_g3_snapshot_at_commit(ROOT, commit=base)
     after_snapshot = full_g3_snapshot_at_commit(ROOT, commit=head)
@@ -96,83 +92,37 @@ def prepare(base_ref: str, head_ref: str) -> dict[str, Any]:
     _assert_evaluable(after_snapshot, "HEAD")
     before = _findings(before_snapshot)
     after = _findings(after_snapshot)
-    before_ids = set(before)
-    after_ids = set(after)
-    floor_ids = set(current_floor.get("open_grandfathered_findings", []))
-    if before_ids != floor_ids:
-        raise ValueError("GRT_FLOOR_PREP_BASE_FINDINGS_DO_NOT_MATCH_CURRENT_FLOOR")
-    authorized_substitutions: dict[str, str] = {}
-    decision = _json_at(head, G4_DECISION_PATH)
-    if decision is not None:
-        authorized_substitutions = validate_g4_current_projection_substitution(
-            decision,
-            before,
-            after,
-        )
-    authorized_removed = set(authorized_substitutions)
-    authorized_added = set(authorized_substitutions.values())
-    new_ids = sorted(after_ids - before_ids - authorized_added)
+
+    substitutions: dict[str, str] = {}
+    if _exact_g4_transition(before, after):
+        decision = _json_at(head, G4_DECISION_PATH)
+        if decision is None:
+            raise ValueError("GRT_FLOOR_PREP_G4_DECISION_MISSING")
+        substitutions = validate_g4_current_projection_substitution(decision, before, after)
+    new_ids = sorted(set(after) - set(before) - set(substitutions.values()))
     if new_ids:
         raise ValueError(f"GRT_FLOOR_PREP_NEW_OR_RECURRENT_DEBT:{new_ids[:10]}")
 
-    expanded: list[str] = []
-    material: list[str] = []
-    for finding_id in sorted(before_ids & after_ids):
+    for finding_id in sorted(set(before) & set(after)):
         previous = before[finding_id].get("debt_extent")
         current = after[finding_id].get("debt_extent")
         if not isinstance(previous, Mapping) or not isinstance(current, Mapping):
             raise ValueError(f"GRT_FLOOR_PREP_DEBT_EXTENT_MISSING:{finding_id}")
         disposition = compare_debt_extent(previous, current)
-        if disposition == "EXPANDED":
-            expanded.append(finding_id)
-        elif disposition == "MATERIAL_CHANGED":
-            material.append(finding_id)
-    if expanded:
-        raise ValueError(f"GRT_FLOOR_PREP_EXPANDED_DEBT:{expanded[:10]}")
-    if material:
-        raise ValueError(f"GRT_FLOOR_PREP_MATERIAL_CHANGED_DEBT:{material[:10]}")
+        if disposition in {"EXPANDED", "MATERIAL_CHANGED"}:
+            raise ValueError(f"GRT_FLOOR_PREP_{disposition}_DEBT:{finding_id}")
 
-    next_generation = generation + 1
-    next_floor = propose_debt_floor(
-        generation=next_generation,
-        predecessor_commit=base,
-        predecessor_tree=base_tree,
-        constitution_hash=str(current_floor["constitution_hash"]),
-        open_grandfathered_findings=sorted(after_ids),
-        previous_floor=current_floor,
-        authorized_identity_substitutions=authorized_substitutions,
-    )
-    validate_debt_floor(next_floor)
-    FLOOR_DIR.mkdir(parents=True, exist_ok=True)
-    floor_rel = f"registries/governance/grt_v0_2/debt_floors/GRT_DEBT_FLOOR_G{next_generation}.json"
-    floor_path = ROOT / floor_rel
-    floor_path.write_text(json.dumps(next_floor, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-
-    pointer_payload = {
-        "schema": "ovc-grt2-debt-floor-current-pointer/v1",
-        "programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
-        "status": "CANDIDATE_NEXT_GENERATION",
-        "generation": next_generation,
-        "floor_hash": next_floor["floor_hash"],
-        "definition": floor_rel,
-        "constitution_hash": next_floor["constitution_hash"],
-        "predecessor_generation": generation,
-        "predecessor_floor_hash": current_floor["floor_hash"],
-        "authority_effect": "NONE_PACKET_PREPARATION_ONLY",
-    }
-    pointer_payload["logical_sha256"] = canonical_sha256(pointer_payload)
-    POINTER.write_text(json.dumps(pointer_payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return {
-        "schema": "ovc-grt2-debt-floor-preparation-receipt/v1",
+        "schema": "ovc-grt2-debt-floor-preparation-receipt/v2",
         "base_commit": base,
         "head_commit": head,
-        "predecessor_generation": generation,
-        "next_generation": next_generation,
-        "next_floor_hash": next_floor["floor_hash"],
-        "next_floor_path": floor_rel,
-        "resolved_count": len(before_ids - after_ids - authorized_removed),
-        "remaining_count": len(after_ids),
-        "authorized_identity_substitution_count": len(authorized_substitutions),
+        "floor_materialisation_mode": "VIRTUAL_EXACT_TREE_PROJECTION",
+        "packet_tree_mutation": False,
+        "late_binding_final_projection_required": True,
+        "remaining_count": len(after),
+        "resolved_count": len(set(before) - set(after) - set(substitutions)),
+        "authorized_identity_substitution_count": len(substitutions),
+        "status": "NO_PACKET_MUTATION_REQUIRED",
         "authority_effect": "NONE_PACKET_PREPARATION_ONLY",
     }
 
@@ -183,8 +133,7 @@ def main() -> int:
     parser.add_argument("--head", default="HEAD")
     args = parser.parse_args()
     try:
-        receipt = prepare(args.base, args.head)
-        print(json.dumps(receipt, indent=2, sort_keys=True))
+        print(json.dumps(prepare(args.base, args.head), indent=2, sort_keys=True))
         return 0
     except Exception as exc:
         print(f"::error title=GRT DebtFloor preparation::{type(exc).__name__}:{exc}")

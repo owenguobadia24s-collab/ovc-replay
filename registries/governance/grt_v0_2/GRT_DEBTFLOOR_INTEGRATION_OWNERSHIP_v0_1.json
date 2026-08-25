@@ -1,0 +1,53 @@
+{
+  "amendment_authority": "OPERATOR_REQUIRED_FOR_MEANING_BEARING_CHANGE",
+  "authority_effect": "NONE_INTEGRATION_MECHANICS_CORRECTION",
+  "constitutional_semantics": "UNCHANGED",
+  "evidence_surfaces": {
+    "assurance": "tests/governance/grt_v0_2/test_grt2_vit_debtfloor_integration_ownership.py",
+    "contract": "contracts/governance/grt_v0_2/GRT_VIT_DEBTFLOOR_INTEGRATION_OWNERSHIP_CONTRACT_v0_1.md",
+    "preparation_runtime": "scripts/governance/grt_v0_2/prepare_next_debt_floor.py",
+    "projection_runtime": "scripts/governance/grt_v0_2/integration_floor.py",
+    "reference_runtime": "scripts/governance/grt_v0_2/grt_exact_integration_floor.py",
+    "schema": "schemas/governance/grt_v0_2/grt_debt_floor_integration_ownership.schema.json"
+  },
+  "floor_materialisation_mode": "VIRTUAL_EXACT_TREE_PROJECTION",
+  "floor_owner": "OVC_GRT_V0_2",
+  "generation_rule": "LEGACY_ANCHOR_PLUS_ONE_PER_FIRST_PARENT_PHYSICAL_MAIN_GENERATION",
+  "identity_rule": "EXACT_PREDECESSOR_COMMIT_TREE_PLUS_RESULT_TREE_PLUS_FINDING_SET_WITHOUT_SOURCE_BRANCH_OR_COMMIT_METADATA",
+  "legacy_anchor": {
+    "constitution_hash": "cac9fc5f0e31db08c4c37153c92a214fcc482414421f34d74c594faec65a71b0",
+    "definition": "registries/governance/grt_v0_2/debt_floors/GRT_DEBT_FLOOR_G2.json",
+    "floor_hash": "cc79b13935e91775165d10903126cb7909a0ec78eeb6ddd7d6692e36a7e8bedb",
+    "generation": 2,
+    "pointer": "registries/governance/grt_v0_2/GRT_DEBT_FLOOR_CURRENT.json"
+  },
+  "logical_sha256": "779b815523b11710ad62b9295a0912db701bb27cb5e6ded9e2a0be900c4de7ec",
+  "materialisation_controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
+  "operator_instruction": "OVC RUN GRT2-VIT-DEBTFLOOR-INTEGRATION-OWNERSHIP-REMEDIATION",
+  "ordinary_packet_contract": {
+    "floor_registry_mutation": "FORBIDDEN",
+    "grt_exact_emits_candidate_floor": true,
+    "payload_rebuild_for_floor_placement": "FORBIDDEN",
+    "physical_tree_equality_required": true,
+    "pip_identity_includes_floor_pointer_or_generation_file": false,
+    "placement_only_main_movement": "RECOMPUTE_A1_A2_ONLY"
+  },
+  "packet_id": "GRT2-VIT-DEBTFLOOR-INTEGRATION-OWNERSHIP-REMEDIATION",
+  "physical_gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+  "plan_id": "OVC-GRT-V0.2-RCCC-CONFORMANCE-IMPLEMENTATION-PLAN-0.2-REVISED-RATIFIED",
+  "policy_id": "GRT2-VIT-DEBTFLOOR-INTEGRATION-OWNERSHIP-v0.1",
+  "preserved_invariants": [
+    "NO_NEW_HYGIENE_DEBT_EQUALS_ZERO",
+    "ACTIONABLE_GRANDFATHERED_SET_MONOTONIC_NON_INCREASING",
+    "RESOLVED_FINDINGS_NEVER_REGAIN_GRANDFATHERING",
+    "EXACT_GRT_PROOF_BEFORE_PHYSICAL_MATERIALISATION",
+    "ONE_VIT_SIQ_PHYSICAL_WRITER",
+    "EXACT_PHYSICAL_RESULT_TREE_EQUALITY",
+    "B0_IMMUTABLE",
+    "G0_G1_G2_IMMUTABLE_HISTORICAL_ANCHORS"
+  ],
+  "programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
+  "rollback": "Forward-disable virtual projection only through an operator-governed correction that restores an exact non-churning floor owner; preserve G0, G1, G2, all exact proofs, PIPs, VIT placements, physical commits and Git history. Never reintroduce ordinary-packet ownership of the singleton floor pointer as a silent fallback.",
+  "schema": "ovc-grt2-debt-floor-integration-ownership/v1",
+  "status": "ACTIVE"
+}
