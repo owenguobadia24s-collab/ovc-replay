@@ -12,6 +12,15 @@ from tools.ci import pytest_shard_shadow as shadow
 ROOT = Path(__file__).resolve().parents[2]
 POLICY = ROOT / "registries/implementation/ci_performance/CIPR_POST_PYT_PYTEST_SHARD_CANONICAL_POLICY_v0_1.json"
 WORKFLOW = ROOT / ".github/workflows/tests.yml"
+CURRENT_STATE_POINTER = ROOT / "registries/implementation/ci_performance/CURRENT_STATE_POINTER.json"
+MATERIALISED_STATE = ROOT / (
+    "registries/implementation/ci_performance/"
+    "OVC_CIPR_STATE_v0_13_PHYSICAL_MATERIALISATION_COMPLETED.json"
+)
+MATERIALISATION_ROOT = ROOT / (
+    "docs/releases/ci-performance-remediation-v0-1/"
+    "cipr-wp5c-physical-materialisation"
+)
 
 
 def _synthetic_policy() -> dict:
@@ -142,9 +151,53 @@ def test_required_workflow_context_is_aggregate_and_no_new_listener_is_added() -
     assert "pytest-shard-manifest:" in workflow
     assert "pytest-shard:" in workflow
     assert "pytest-unified:" in workflow
+    shard_job = workflow.split("\n  pytest-shard:\n", 1)[1].split("\n  pytest-unified:\n", 1)[0]
+    assert "shard: [0, 1, 2, 3]" in shard_job
+    assert shard_job.count("pytest_shard_canonical.py run") == 1
     aggregate = workflow.split("\n  pytest-unified:\n", 1)[1].split("\n  pytest-unittest-parity:\n", 1)[0]
     assert "name: tests" in aggregate
+    assert "pytest-shard-manifest" in aggregate
+    assert "pytest-shard" in aggregate
     assert "pytest_shard_canonical.py aggregate" in aggregate
     assert "required_check_substitution_active" not in aggregate
     assert "actions/download-artifact@v4" in aggregate
     assert "xdist" not in workflow.lower()
+
+
+def test_physical_materialisation_state_is_repository_effective_and_consistent() -> None:
+    pointer = json.loads(CURRENT_STATE_POINTER.read_text(encoding="utf-8"))
+    state = json.loads(MATERIALISED_STATE.read_text(encoding="utf-8"))
+    receipt = json.loads(
+        (MATERIALISATION_ROOT / "CIPR_WP5C_PHYSICAL_MATERIALISATION_RECEIPT.json")
+        .read_text(encoding="utf-8")
+    )
+    qa = json.loads(
+        (MATERIALISATION_ROOT / "CIPR_WP5C_PHYSICAL_MATERIALISATION_QA_PACKET.json")
+        .read_text(encoding="utf-8")
+    )
+    decision = json.loads(
+        (MATERIALISATION_ROOT / "CIPR_WP5C_PHYSICAL_MATERIALISATION_DECISION.json")
+        .read_text(encoding="utf-8")
+    )
+
+    assert pointer["current_state"] == str(MATERIALISED_STATE.relative_to(ROOT)).replace("\\", "/")
+    assert pointer["status"] == state["status"] == "PHYSICALLY_MATERIALISED"
+    assert pointer["packet_id"] == state["packet_id"] == "CIPR-WP5C-PHYSICAL-MATERIALISATION"
+    assert pointer["next_packet"] == state["next_packet"] == "CIPR-WP5C-TERMINAL-COMPLETION-RECEIPT"
+    assert pointer["physical_cutover_complete"] is state["physical_cutover_complete"] is True
+    assert pointer["runner_cutover_repository_effective"] is state["runner_cutover_repository_effective"] is True
+    assert state["merge_commit"] == receipt["implementation"]["squash_merge_commit"]
+    assert state["merge_tree"] == receipt["implementation"]["squash_merge_tree"]
+    assert state["merge_commit"]
+    assert state["required_check_context_identity"] == receipt["topology"]["required_external_context"] == "tests"
+    assert state["canonical_shard_count"] == receipt["topology"]["shard_count"] == 4
+    assert state["pytest_sessions_per_shard"] == receipt["topology"]["pytest_sessions_per_shard"] == 1
+    assert state["aggregate_fail_closed"] is receipt["topology"]["aggregate_fail_closed"] is True
+    assert state["xdist_active"] is receipt["topology"]["xdist_active"] is False
+    assert state["ruleset_context_mutation_active"] is receipt["topology"]["ruleset_context_mutation_active"] is False
+    assert state["required_check_substitution_active"] is receipt["topology"]["required_check_substitution_active"] is False
+    assert state["blockers"] == receipt["blockers"] == qa["blockers"] == decision["blockers"] == []
+    assert qa["qa_status"] == qa["qa_recommendation"] == decision["qa"] == decision["decision"] == "PASS"
+    assert decision["authority_delta"] == "NONE_ADMINISTRATIVE_MATERIALISATION_AND_CLOSEOUT_ONLY"
+    assert decision["authority_expansion"] == "NONE"
+    assert decision["reserved_authority_actions"] == []
