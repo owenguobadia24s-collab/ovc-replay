@@ -1,0 +1,51 @@
+{
+  "allowed_decisions": [
+    "PASS",
+    "DEFER",
+    "BLOCK",
+    "QUARANTINE"
+  ],
+  "authority_effect_of_preparation": "NONE",
+  "baseline_commit": "953a24e268f07be27a20f47d06742ba718065441",
+  "baseline_tree": "485e08ed6011d481af8557ca40c19aded2db590f",
+  "decision_effect_if_pass": {
+    "authorize_next_packet": "GRT2-WP5",
+    "current_truth_classification": "ACCEPTED",
+    "exact_current_projection_substitution": {
+      "admit_finding_id": "GRT.FIND.f9c53308623fa597c63c5f47",
+      "remove_grandfathered_finding_id": "GRT.FIND.8995c2197e0d50326967b31f",
+      "rule_id": "GRT-R300",
+      "scope": "ONE_FOR_ONE_CURRENT_STATE_TARGET_PATH_IDENTITY_ONLY",
+      "debt_extent_change": "UNCHANGED"
+    },
+    "native_pgn_adoption": "NONE",
+    "reserved_authority_delta": "NONE",
+    "wp5_interlock": "RELEASED_ONLY_AFTER_SEPARATE_GRT2_G4_PASS_MATERIALISES"
+  },
+  "exact_operator_command": "OVC APPROVE GRT2-G4 PASS",
+  "gate_class": "OPERATOR_REQUIRED",
+  "gate_id": "GRT2-G4",
+  "logical_sha256": "028257fd9e7c19e5e03031fc09e932ec71411a08bdabc8b203ebfc25d6e62354",
+  "packet_id": "GRT2-G4-CURRENT-TRUTH-CLASSIFICATION-GATE",
+  "plan_id": "OVC-GRT-V0.2-RCCC-CONFORMANCE-IMPLEMENTATION-PLAN-0.2-REVISED-RATIFIED",
+  "programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
+  "qa_packet": "docs/programmes/grt-v0-2/wp4/GRT2_WP4_QA_PACKET.json",
+  "recommended_decision": "PASS",
+  "required_acceptance_conditions": [
+    "G3 is completed and physically materialised on protected main.",
+    "The proposed programme-state projection truthfully exposes active post-G3 state and remains unmaterialised before this decision.",
+    "WP4 advances the immutable DebtFloor chain by exactly one unchanged generation.",
+    "The proposed one-for-one GRT-R300 identity substitution has unchanged debt extent and is exactly bounded.",
+    "GRT-EXACT reports no new, recurrent, expanded or materially changed debt.",
+    "Native PGN absence is classified explicitly and no adoption or owner reassignment is inferred.",
+    "All reserved non-GRT authority firewalls remain closed.",
+    "WP5 remains stopped until a separate GRT2-G4 PASS materialises."
+  ],
+  "rollback": "DEFER, BLOCK or QUARANTINE leaves G3 activation and its immutable evidence intact, keeps WP5 interlocked, and grants no new authority. Correct forward only; do not rewrite G3 history or reduce enforcement.",
+  "schema": "ovc-grt2-g4-gate-packet/v1",
+  "status": "GATE_READY_PENDING_EXACT_FINAL_HEAD_AND_OPERATOR_IDENTITY_SUBSTITUTION_DECISION",
+  "unresolved_issues": [
+    "Native PGN adoption remains absent and explicitly deferred.",
+    "GRT2-G4 has not decided the exact one-for-one current-state finding identity substitution."
+  ]
+}
