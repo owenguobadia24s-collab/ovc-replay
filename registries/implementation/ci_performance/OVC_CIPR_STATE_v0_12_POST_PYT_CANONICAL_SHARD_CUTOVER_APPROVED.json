@@ -1,0 +1,43 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "APPROVED",
+  "packet_id": "CIPR-WP5C-POST-PYT-CANONICAL-SHARD-CUTOVER",
+  "phase": "EXACT_HEAD_QA_PASS_AWAITING_PHYSICAL_MATERIALISATION",
+  "prerequisites": [
+    "CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER operator PASS repository-effective via PR #1326",
+    "CIPR-WP5R-SHADOW-QUALIFICATION COMPLETED",
+    "CIPR-WP5C implementation exact-head QA PASS"
+  ],
+  "authority_required": "OPERATOR_APPROVED",
+  "authority_delta": "MATERIAL_REQUIRED_TEST_TOPOLOGY_ACTIVATION_WITH_EXISTING_REQUIRED_CONTEXT_IDENTITY",
+  "authority_manifest_id": "b61020089792388be5e7ce78b3a28c2db6c436ac667bb48edf451cc5b071f4b8",
+  "dependency_frontier_id": "79603faafc090ef31258427a4e2b867c137fd92ceca2f004af686f27216720b5",
+  "baseline_commit": "c4e861d7e8f4b740db574f6b868b3fa6b9241d36",
+  "branch": "build/ci-performance-post-pyt-canonical-shard-cutover-20260825",
+  "candidate_commit": "b7ee1647b0c8150968acdb38bab3d36bfae0ffad",
+  "candidate_tree": "0355d9d9d7a78376ba516becd3b6680467d59a21",
+  "late_bound_physical_main": "903029e35cf2503e76a27418247b952307b7af77",
+  "tests": [
+    {"workflow_run": 32846111471, "result": "PASS_ALL"},
+    {"workflow_run": 32846111497, "result": "PASS_ALL"}
+  ],
+  "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp5c/CIPR_WP5C_QA_PACKET.json",
+  "decision_record": "docs/releases/ci-performance-remediation-v0-1/cipr-wp5c/CIPR_WP5C_INTEGRATION_DECISION.json",
+  "merge_commit": null,
+  "blockers": [],
+  "required_check_context_identity": "tests",
+  "required_check_substitution_active": false,
+  "ruleset_context_mutation_active": false,
+  "runner_cutover_candidate_active": true,
+  "runner_cutover_repository_effective": false,
+  "xdist_active": false,
+  "scientific_authority_delta": false,
+  "operator_stop_gate": "CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER",
+  "operator_stop_gate_decision": "PASS",
+  "physical_cutover_complete": false,
+  "next_packet": "CIPR-WP5C-PHYSICAL-MATERIALISATION",
+  "rollback": "Forward-restore the serial canonical pytest command behind the existing tests context. Preserve parity, profile assurance, SIQ/VIT/GRT/PDC/merge-readiness, evidence and Git history."
+}

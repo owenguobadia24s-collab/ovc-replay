@@ -1,0 +1,53 @@
+{
+  "schema": "ovc-packet-integration-decision/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "packet_id": "CIPR-WP5C-POST-PYT-CANONICAL-SHARD-CUTOVER",
+  "operator_gate_id": "CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER",
+  "operator_gate_decision": "PASS",
+  "decision_authority": "OPERATOR_RESERVED_DELTA_ALREADY_GRANTED_PLUS_DELEGATED_IMPLEMENTATION_QA",
+  "baseline_commit": "c4e861d7e8f4b740db574f6b868b3fa6b9241d36",
+  "implementation_candidate": "b7ee1647b0c8150968acdb38bab3d36bfae0ffad",
+  "late_bound_physical_main": "903029e35cf2503e76a27418247b952307b7af77",
+  "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp5c/CIPR_WP5C_QA_PACKET.json",
+  "qa_recommendation": "PASS",
+  "authority_delta_consumed": "MATERIAL_REQUIRED_TEST_TOPOLOGY_ACTIVATION_WITH_EXISTING_REQUIRED_CONTEXT_IDENTITY",
+  "authority_delta_expansion": "NONE",
+  "implementation_effect": {
+    "required_tests_context": "PRESERVE_tests",
+    "serial_canonical_pytest_topology": "REPLACED_BY_OPERATOR_QUALIFIED_DETERMINISTIC_FOUR_SHARD_EXACT_UNION",
+    "required_check_substitution": false,
+    "ruleset_context_mutation": false,
+    "xdist": false,
+    "pytest_unittest_parity": "PRESERVE",
+    "runner_parity": "PRESERVE",
+    "profile_assurance": "PRESERVE",
+    "siq_ready": "PRESERVE",
+    "vit_grt_pdc_merge_readiness": "PRESERVE",
+    "research_console_explicit_rerun": "PRESERVE_THIS_PACKET"
+  },
+  "tests": {
+    "tests_workflow_run": 32846111471,
+    "tiered_workflow_run": 32846111497,
+    "result": "PASS_ALL",
+    "review_threads": 0
+  },
+  "canonical_population": {
+    "count": 4974,
+    "population_hash": "72ff819ee0b5c761b8b97da57f9a1fb1e67b28054d390cdaf3028482e81eae7d",
+    "manifest_hash": "84900ec52ceccbf9bc7ab49e5622bd50593b5d4f3c00be787f743f7e2da1a9fc",
+    "pytest_native_items": 3402,
+    "legacy_unittest_items": 1572,
+    "shard_counts": [1246, 1244, 1242, 1242]
+  },
+  "warnings": [
+    "This decision consumes only the already repository-effective G5 PASS; it does not grant a new authority class.",
+    "Final evidence/state commits must independently pass exact-head repository, parity, profile, VIT/SIQ/PDC and merge-readiness assurance before physical integration."
+  ],
+  "blocking_warnings": [],
+  "unresolved_issues": [],
+  "rollback": "Forward-restore the serial canonical pytest command behind the existing tests context. Preserve historical qualification, parity, VIT/SIQ/GRT/PDC/merge-readiness and Git history.",
+  "decision": "PASS_FOR_PHYSICAL_INTEGRATION_AFTER_FINAL_EXACT_HEAD_ASSURANCE",
+  "next_packet": "CIPR-WP5C-PHYSICAL-MATERIALISATION"
+}

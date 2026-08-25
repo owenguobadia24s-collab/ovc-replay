@@ -11,8 +11,11 @@ DEFAULT_PATHSPECS: tuple[str, ...] = (
     ".github/workflows/tests.yml",
     "pyproject.toml",
     "requirements-console-vnext.txt",
+    "registries/implementation/ci_performance/CIPR_POST_PYT_PYTEST_SHARD_CANONICAL_POLICY_v0_1.json",
     "tools/ci/aa0_harness_identity.py",
     "tools/ci/pytest_unittest_parity.py",
+    "tools/ci/pytest_shard_shadow.py",
+    "tools/ci/pytest_shard_canonical.py",
     "tests/**",
 )
 

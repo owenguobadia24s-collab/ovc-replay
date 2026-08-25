@@ -93,14 +93,19 @@ class ParallelIntegrationLaneTests(unittest.TestCase):
         self.assertNotIn("github.rest.pulls.merge", self.workflow)
         self.assertNotIn("enablePullRequestAutoMerge", self.workflow)
 
-    def test_research_console_surface_is_in_current_pytest_suite(self):
+    def test_research_console_surface_is_in_operator_approved_canonical_shard_suite(self):
         self.assertTrue(CONSOLE_PACKAGE.exists())
         self.assertIn('python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt', self.tests_workflow)
         exact = "PYTHONPATH=src:. python3 -m pytest tests/research_console_vnext -q --tb=short"
         self.assertEqual(self.tests_workflow.count(exact), 1)
-        full_suite = "PYTHONPATH=src:. python3 -m pytest tests -q --tb=short"
-        self.assertEqual(self.tests_workflow.count(full_suite), 1)
-        self.assertNotIn(full_suite, self.workflow)
+        serial_full_suite = "PYTHONPATH=src:. python3 -m pytest tests -q --tb=short"
+        self.assertEqual(self.tests_workflow.count(serial_full_suite), 0)
+        self.assertIn("pytest_shard_canonical.py prove", self.tests_workflow)
+        self.assertIn("pytest_shard_canonical.py run", self.tests_workflow)
+        self.assertIn("pytest_shard_canonical.py aggregate", self.tests_workflow)
+        self.assertIn("matrix:\n        shard: [0, 1, 2, 3]", self.tests_workflow)
+        aggregate = self.tests_workflow.split("\n  pytest-unified:\n", 1)[1].split("\n  pytest-unittest-parity:\n", 1)[0]
+        self.assertIn("name: tests", aggregate)
         self.assertEqual(self.tests_workflow.count("tools/ci/ovc_run_with_main_lease.py"), 0)
 
 
