@@ -4,6 +4,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 WP8 = ROOT / "docs/programmes/asocs-v0-1/implementation/wp8"
+GATE_READY_STATE = ROOT / "records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_24_WP8_G3_PROVENANCE_GATE_READY.json"
+POINTER = ROOT / "registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json"
 
 def _json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
@@ -21,16 +23,34 @@ def test_unrecoverable_provenance_gate_preserves_frozen_scientific_record() -> N
     assert gate["recommended_decision"] == "PASS"
     assert gate["proposed_delta"]["class"] == "OPERATOR_REQUIRED_ACCEPTANCE_CONDITION_SUPERSESSION"
 
-def test_gate_preparation_does_not_self_grant_reveal_or_semantic_authority() -> None:
+def test_gate_preparation_remains_immutable_and_current_state_advances_only_by_operator_pass() -> None:
     authority = _json(WP8 / "ASOCSI_WP8_G3_UNRECOVERABLE_PROVENANCE_AUTHORITY_v0_1.json")
     qa = _json(WP8 / "ASOCSI_WP8_G3_UNRECOVERABLE_PROVENANCE_QA_v0_1.json")
-    pointer = _json(ROOT / "registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json")
-    state = _json(ROOT / pointer["current_state"])
+    gate_ready = _json(GATE_READY_STATE)
+    pointer = _json(POINTER)
+    current = _json(ROOT / pointer["current_state"])
     non_grants = set(authority["non_grants"])
+
     assert authority["authority_delta"] == "NONE"
     assert {"SUPERSEDE_EXACT_MANIFEST_REPRODUCTION_REQUIREMENT","START_STAGE1_REVEAL","SEMANTIC_REMEDIATION","REPLACE_OR_REWRITE_FROZEN_G3"}.issubset(non_grants)
     assert qa["qa_recommendation"] == "PASS_TO_OPERATOR_GATE"
-    assert state["status"] == "GATE_READY"
-    assert state["authority_required"] == "OPERATOR_REQUIRED"
-    assert state["preserved"]["stage1_reveal_started"] is False
-    assert pointer["next_packet"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION-OPERATOR-DECISION"
+
+    # Historical gate preparation never self-granted the reserved decision.
+    assert gate_ready["status"] == "GATE_READY"
+    assert gate_ready["authority_required"] == "OPERATOR_REQUIRED"
+    assert gate_ready["preserved"]["stage1_reveal_started"] is False
+    assert gate_ready["next_packet"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION-OPERATOR-DECISION"
+
+    if pointer["current_state"] == str(GATE_READY_STATE.relative_to(ROOT)).replace("\\", "/"):
+        assert pointer["status"] == "GATE_READY"
+        assert pointer["next_packet"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION-OPERATOR-DECISION"
+    else:
+        decision = _json(WP8 / "ASOCSI_G6_PROVENANCE_SUPERSESSION_OPERATOR_DECISION_v0_1.json")
+        assert current["status"] == "APPROVED"
+        assert current["authority_required"] == "SATISFIED_OPERATOR_PASS"
+        assert current["gate_id"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION"
+        assert current["stage1_reveal_started"] is False
+        assert current["human_adjudication_started"] is False
+        assert current["preserved"]["unrecoverable_provenance_warning"] is True
+        assert decision["decision"] == "PASS" and decision["authority"] == "OPERATOR"
+        assert pointer["next_packet"] == "ASOCSI-WP8-STAGE1-HUMAN-FIDELITY-ADJUDICATION"
