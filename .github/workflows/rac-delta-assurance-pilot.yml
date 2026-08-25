@@ -1,0 +1,75 @@
+name: RAC delta assurance pilot
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  checks: read
+  pull-requests: read
+
+concurrency:
+  group: ovc-rac-pilot-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
+  cancel-in-progress: true
+
+jobs:
+  eligibility:
+    name: RAC pilot eligibility
+    runs-on: ubuntu-latest
+    outputs:
+      eligible: ${{ steps.classify.outputs.eligible }}
+      reason: ${{ steps.classify.outputs.reason }}
+      pilot_class: ${{ steps.classify.outputs.pilot_class }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          show-progress: false
+      - name: Classify exact PIP against active pilot baseline
+        id: classify
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PYTHONPATH: src:.
+        run: python3 tools/ci/rac_pilot_assurance.py classify
+
+  admission:
+    name: RAC pilot admission
+    needs: eligibility
+    if: needs.eligibility.outputs.eligible == 'true'
+    runs-on: ubuntu-latest
+    outputs:
+      certificate_id: ${{ steps.certify.outputs.certificate_id }}
+      pip_id: ${{ steps.certify.outputs.pip_id }}
+      assurance_surface_id: ${{ steps.certify.outputs.assurance_surface_id }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          show-progress: false
+      - name: Validate receipt objects and issue bounded CandidateAssuranceCertificate
+        id: certify
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PYTHONPATH: src:.
+        run: python3 tools/ci/rac_pilot_assurance.py certify
+
+  reference-reconciliation:
+    name: RAC pilot reference reconciliation
+    needs: [eligibility, admission]
+    if: needs.eligibility.outputs.eligible == 'true' && needs.admission.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          show-progress: false
+      - name: Reconcile pilot certificate against concurrent canonical tests workflow
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PYTHONPATH: src:.
+        run: python3 tools/ci/rac_pilot_assurance.py reconcile
