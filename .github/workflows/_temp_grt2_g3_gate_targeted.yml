@@ -1,0 +1,31 @@
+name: Temp GRT2 G3 gate targeted assurance
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/_temp_grt2_g3_gate_targeted.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  grt2-targeted:
+    if: github.head_ref == 'grt2/g3-superseding-census-artifact-20260824'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: grt2/g3-superseding-gate-ready-20260825
+          fetch-depth: 0
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11.15"
+      - name: Install deterministic repository test dependencies
+        run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
+      - name: Run complete GRT2 governance test surface
+        env:
+          PYTHONPATH: src:.
+        run: python3 -m pytest tests/governance/grt_v0_2 -q
