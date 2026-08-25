@@ -14,6 +14,7 @@ from ovc.development.skills.repository_assurance_pilot import (
     classify_candidate,
 )
 from ovc.development.skills.vit_routing import build_vit_payload_lineage_record
+import tools.ci.prvitr_rac_ready as ready
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -74,6 +75,26 @@ def _lineage(path: str, op: str = "ADD") -> dict:
 
 
 class TestRacBoundedPilot(unittest.TestCase):
+    @patch.object(ready.live, "_run_job_state")
+    @patch.object(ready.live, "_exact_run")
+    def test_pilot_waits_for_one_fresh_exact_head_job(self, exact_run, run_job_state) -> None:
+        run = {"id": 17}
+        job = {"id": 23, "name": "VIT routing preflight"}
+        exact_run.return_value = run
+        run_job_state.return_value = ("PASS", (job,))
+        self.assertEqual(
+            ready._wait_required_job("tests", 1340, "f" * 40, "VIT routing preflight"),
+            (run, job),
+        )
+        exact_run.assert_called_once_with("tests", 1340, "f" * 40)
+        run_job_state.assert_called_once_with(run, ("VIT routing preflight",))
+
+    @patch.object(ready.live, "_run_job_state", return_value=("FAIL", ({"id": 23},)))
+    @patch.object(ready.live, "_exact_run", return_value={"id": 17})
+    def test_pilot_required_fresh_job_failure_blocks(self, _exact_run, _run_job_state) -> None:
+        with self.assertRaisesRegex(RuntimeError, "RAC_PILOT_REQUIRED_JOB_FAILED"):
+            ready._wait_required_job("tests", 1340, "f" * 40, "VIT routing preflight")
+
     def test_inactive_policy_falls_back(self) -> None:
         result = classify_candidate(
             root=ROOT,

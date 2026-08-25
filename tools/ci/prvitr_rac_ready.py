@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import asdict
 import json
 from pathlib import Path
+import time
 from typing import Any, Mapping
 
 from ovc.development.skills.repository_assurance_pilot import (
@@ -19,6 +20,34 @@ PILOT_POLICY_PATH = Path(
     "registries/development/skills/REPOSITORY_ASSURANCE_PILOT_POLICY_v0_1.json"
 )
 PILOT_READY_POLICY_ID = "PRVITR-RAC-PILOT-READY-POLICY-v0.1"
+
+
+def _wait_required_job(
+    workflow: str,
+    pr_number: int,
+    head_sha: str,
+    job_name: str,
+) -> tuple[Mapping[str, Any], Mapping[str, Any]]:
+    """Wait for one exact-head prerequisite without waiting on the reference suite.
+
+    The bounded pilot inherits only the baseline-certified repository/parity claims.
+    VIT routing and FINAL_HEAD profile assurance remain fresh prerequisites.  This
+    helper deliberately composes the live admission module's current run and job
+    state primitives instead of depending on a removed private compatibility API.
+    """
+    deadline = time.time() + live.READY_TIMEOUT_SECONDS
+    while time.time() < deadline:
+        run = live._exact_run(workflow, pr_number, head_sha)
+        if run is None:
+            time.sleep(10)
+            continue
+        state, jobs = live._run_job_state(run, (job_name,))
+        if state == "FAIL":
+            raise RuntimeError(f"RAC_PILOT_REQUIRED_JOB_FAILED:{workflow}:{job_name}:{run.get('id')}")
+        if state == "PASS":
+            return run, jobs[0]
+        time.sleep(10)
+    raise RuntimeError(f"RAC_PILOT_REQUIRED_JOB_TIMEOUT:{workflow}:{job_name}")
 
 
 def _pilot_context(
@@ -116,13 +145,13 @@ def command_ready() -> int:
     )
 
     record, lineage, authority, frontier, qualification_id = live._payload_context(live_pr)
-    tests_run, vit_job = live._wait_required_job(
+    tests_run, vit_job = _wait_required_job(
         live.TESTS_WORKFLOW,
         pr_number,
         live_head,
         "VIT routing preflight",
     )
-    tiered_run, profile_job = live._wait_required_job(
+    tiered_run, profile_job = _wait_required_job(
         live.TIERED_WORKFLOW,
         pr_number,
         live_head,
