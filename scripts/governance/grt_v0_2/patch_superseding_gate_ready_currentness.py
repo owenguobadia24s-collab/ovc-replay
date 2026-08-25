@@ -11,7 +11,7 @@ import re
 from pathlib import Path
 
 # This helper is copied to /tmp before execution by the bounded diagnostic
-# workflow, so __file__ is not a stable repository locator.  The workflow runs
+# workflow, so __file__ is not a stable repository locator. The workflow runs
 # it from the checked-out repository root; bind to that exact working tree.
 ROOT = Path.cwd().resolve()
 TEST_ROOT = ROOT / "tests/governance/grt_v0_2"
@@ -27,6 +27,10 @@ REPLACEMENTS = (
     ("GATE_READY_OPERATOR_REQUIRED", "GATE_READY_OPERATOR_REQUIRED_PENDING_EXACT_FINAL_PR_ASSURANCE"),
     ("GRT2-G3-GATE-READY", "GRT2-G3-SUPERSEDING-GATE-READY"),
     ("GRT2-G3-OPERATOR-DECISION", "GRT2-G3-SUPERSEDING-OPERATOR-DECISION"),
+    (
+        "STOP_FOR_OPERATOR_GRT2_G3_DECISION",
+        "COMPLETE_EXACT_FINAL_PR_ASSURANCE_AND_INTEGRATE_GATE_READY_THEN_REVALIDATE",
+    ),
 )
 
 
@@ -40,6 +44,14 @@ def main() -> int:
             if POINTER_VAR.search(line):
                 for old, new in REPLACEMENTS:
                     updated = updated.replace(old, new)
+            # The current G3 gate-ready contract reads the state through the live
+            # CURRENT_STATE_POINTER. Patch only that exact historical test's live
+            # state-status assertion; leave immutable v0_15 assertions elsewhere.
+            if path.name == "test_grt2_g3_gate_ready.py":
+                updated = updated.replace(
+                    'assert state["status"] == "GATE_READY_OPERATOR_REQUIRED"',
+                    'assert state["status"] == "GATE_READY_OPERATOR_REQUIRED_PENDING_EXACT_FINAL_PR_ASSURANCE"',
+                )
             lines.append(updated)
         revised = "".join(lines)
         if revised != original:
