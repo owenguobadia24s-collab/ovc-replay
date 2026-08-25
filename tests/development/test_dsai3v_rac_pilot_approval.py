@@ -10,6 +10,7 @@ APPROVED_STATE = ROOT / "registries/implementation/dsai3v_cipr_rac/OVC_DSAI3V_CI
 IMPLEMENTED_STATE = ROOT / "registries/implementation/dsai3v_cipr_rac/OVC_DSAI3V_CIPR_RAC_STATE_v0_4_PILOT_SUBSTRATE_IMPLEMENTED_INACTIVE.json"
 ACTIVE_STATE = ROOT / "registries/implementation/dsai3v_cipr_rac/OVC_DSAI3V_CIPR_RAC_STATE_v0_5_PILOT_BASELINE_ACTIVE.json"
 CORRECTED_STATE = ROOT / "registries/implementation/dsai3v_cipr_rac/OVC_DSAI3V_CIPR_RAC_STATE_v0_6_PILOT_CORRECTED_REBASELINE_REQUIRED.json"
+REBASELINE_PENDING_STATE = ROOT / "registries/implementation/dsai3v_cipr_rac/OVC_DSAI3V_CIPR_RAC_STATE_v0_7_PILOT_REBASELINE_REFERENCE_PENDING.json"
 POINTER = ROOT / "registries/implementation/dsai3v_cipr_rac/CURRENT_STATE_POINTER.json"
 BASELINE = ROOT / "docs/releases/development-skills-architecture-v0-3-vit/repository-assurance-continuity/wp7/DSAI3V_RAC_PILOT_BASELINE_CERTIFICATE_v0_1.json"
 
@@ -50,9 +51,9 @@ class TestDsai3vRacPilotApproval(unittest.TestCase):
         active = json.loads(ACTIVE_STATE.read_text(encoding="utf-8"))
         self.assertEqual(
             pointer["current_state"],
-            "registries/implementation/dsai3v_cipr_rac/OVC_DSAI3V_CIPR_RAC_STATE_v0_6_PILOT_CORRECTED_REBASELINE_REQUIRED.json",
+            "registries/implementation/dsai3v_cipr_rac/OVC_DSAI3V_CIPR_RAC_STATE_v0_7_PILOT_REBASELINE_REFERENCE_PENDING.json",
         )
-        self.assertEqual(pointer["status"], "PILOT_COMPATIBILITY_CORRECTED_REBASELINE_REQUIRED")
+        self.assertEqual(pointer["status"], "PILOT_REBASELINE_REFERENCE_PENDING")
         self.assertEqual(pointer["next_packet"], "DSAI3V-RAC-WP7D-PILOT-REBASELINE-AFTER-CORRECTION")
         self.assertEqual(pointer["operator_stop_gate"], "DSAI3V-RAC-G-DELTA-ASSURANCE-GENERAL")
         self.assertEqual(state["phase"], "PILOT_SUBSTRATE_IMPLEMENTED_INACTIVE_BASELINE_REQUIRED")
@@ -70,6 +71,10 @@ class TestDsai3vRacPilotApproval(unittest.TestCase):
         corrected = json.loads(CORRECTED_STATE.read_text(encoding="utf-8"))
         self.assertEqual(corrected["pilot_eligibility"], "FAIL_CLOSED_ASSURANCE_SURFACE_DRIFT_UNTIL_REBASELINE")
         self.assertEqual(corrected["unsafe_omission_count"], 0)
+        pending = json.loads(REBASELINE_PENDING_STATE.read_text(encoding="utf-8"))
+        self.assertEqual(pending["pilot_eligibility"], "FAIL_CLOSED_UNTIL_EXACT_REFERENCE_AND_REBASELINE")
+        self.assertFalse(pending["general_delta_assurance_active"])
+        self.assertFalse(pending["required_check_substitution_active"])
 
 
 if __name__ == "__main__":
