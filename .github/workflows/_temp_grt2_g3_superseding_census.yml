@@ -91,6 +91,7 @@ jobs:
             --artifact-id "$ARTIFACT_ID" \
             --artifact-digest "$ARTIFACT_DIGEST" \
             --diagnostic-head-sha "$DIAGNOSTIC_HEAD_SHA"
+          git checkout -- scripts/governance/grt_v0_2/materialize_superseding_g3_reconciliation.py
 
           base_sha=$(jq -r .base_commit "$bundle/materialisation-meta.json")
           authority_id=$(jq -r .authority_manifest_id "$bundle/materialisation-meta.json")
