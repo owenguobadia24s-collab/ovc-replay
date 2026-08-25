@@ -187,6 +187,20 @@ def _programme_ids(text: str) -> set[str]:
     return {match.group(1).strip() for match in _PROGRAMME_RE.finditer(text) if match.group(1).strip()}
 
 
+def _confers_source_bound_ownership(text: str) -> bool:
+    """A non-authoritative decision packet cannot silently assign ownership."""
+    try:
+        payload = json.loads(text)
+    except (json.JSONDecodeError, TypeError):
+        return True
+    if not isinstance(payload, Mapping):
+        return True
+    return not (
+        payload.get("operator_decision_required") is True
+        and str(payload.get("authority_effect", "")).startswith("NONE")
+    )
+
+
 def _path_refs(text: str, known_paths: set[str]) -> set[str]:
     return {token for token in (match.group(1).rstrip(".,;:)]}'\"") for match in _PATH_RE.finditer(text)) if token in known_paths}
 
@@ -366,7 +380,10 @@ def build_source_bound_snapshot(*, commit: str, tree: str, inventory: Mapping[st
         for source_path in references:
             if _artifact_type(source_path) not in _SOURCE_BOUND_OWNER_CLASSES:
                 continue
-            pids = _programme_ids(texts.get(source_path, ""))
+            source_text = texts.get(source_path, "")
+            if not _confers_source_bound_ownership(source_text):
+                continue
+            pids = _programme_ids(source_text)
             if pids:
                 owners.update(pids)
                 owner_sources.append(source_path)

@@ -72,6 +72,23 @@ def test_conflicting_source_bound_owners_fail_closed() -> None:
     assert finding(result["findings"], "GRT-R200")["debt_extent"]["source_bound_owner_count"] == 2
 
 
+def test_non_authoritative_decision_packet_cannot_assign_source_bound_owner() -> None:
+    implementation = "src/pkg/a.py"
+    packet = "docs/programmes/example/TERMINAL_DECISION.json"
+    inv = {implementation: {"blob_hash": "a" * 40}, packet: {"blob_hash": "b" * 40}}
+    texts = {
+        implementation: "",
+        packet: json.dumps({
+            "programme_id": "P1",
+            "subject_path": implementation,
+            "operator_decision_required": True,
+            "authority_effect": "NONE_DECISION_PACKET_ONLY",
+        }),
+    }
+    result = snapshot(inventory=inv, texts=texts, impact=list(inv), referrers={implementation: [packet]})
+    assert finding(result["findings"], "GRT-R200")["debt_extent"]["source_bound_owner_count"] == 0
+
+
 def test_required_dependency_without_current_target_state_is_not_evaluable() -> None:
     path = "registries/implementation/example/STATE.json"
     inv = {path: {"blob_hash": "a" * 40}}
