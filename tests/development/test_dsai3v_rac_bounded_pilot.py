@@ -159,13 +159,11 @@ class TestRacBoundedPilot(unittest.TestCase):
                 verified_receipt_paths=[],
             )
 
-    def test_pilot_selection_uses_existing_pr_listener_and_diagnostic_is_manual_only(self) -> None:
+    def test_pilot_selection_uses_existing_pr_listener_without_new_workflow(self) -> None:
         tiered = (ROOT / ".github/workflows/ovc-tiered-tests.yml").read_text(encoding="utf-8")
-        diagnostic = (ROOT / ".github/workflows/rac-delta-assurance-pilot.yml").read_text(encoding="utf-8")
         selector = (ROOT / "tools/ci/prvitr_rac_ready.py").read_text(encoding="utf-8")
+        self.assertFalse((ROOT / ".github/workflows/rac-delta-assurance-pilot.yml").exists())
         self.assertIn("run: python3 tools/ci/prvitr_rac_ready.py", tiered)
-        self.assertIn("workflow_dispatch:", diagnostic)
-        self.assertNotIn("pull_request:", diagnostic)
         self.assertIn("return live.command_ready()", selector)
         self.assertIn("build_pilot_certificate", selector)
         self.assertNotIn("_branch_sha(base_ref)", selector)
