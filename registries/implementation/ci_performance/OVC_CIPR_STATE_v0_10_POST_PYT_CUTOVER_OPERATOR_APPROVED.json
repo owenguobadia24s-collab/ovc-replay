@@ -1,0 +1,42 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "plan_id": "OVC-CIPR-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "APPROVED",
+  "packet_id": "CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER",
+  "phase": "POST_PYT_CONSOLIDATED_CUTOVER_OPERATOR_APPROVED_PENDING_PHYSICAL_CUTOVER",
+  "prerequisites": [
+    "CIPR-WP5R-SHADOW-QUALIFICATION delegated PASS and merged via PR #1300",
+    "CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER GATE_READY packet at 61c656f5ce8c186fe58ed4d5449bec2d5ad56b0d",
+    "operator PASS command received 2026-08-25T11:44:00+01:00"
+  ],
+  "authority_required": "OPERATOR_APPROVED",
+  "authority_delta": "MATERIAL_REQUIRED_TEST_TOPOLOGY_ACTIVATION",
+  "authority_manifest_id": "b61020089792388be5e7ce78b3a28c2db6c436ac667bb48edf451cc5b071f4b8",
+  "dependency_frontier_id": "79603faafc090ef31258427a4e2b867c137fd92ceca2f004af686f27216720b5",
+  "baseline_commit": "350f9279c36dbe5af94b27b04d4567e38e62f5fc",
+  "branch": "approve/ci-performance-post-pyt-consolidated-cutover-20260825",
+  "candidate_commit": null,
+  "tests": [
+    "gate qualification evidence PASS on 4882 current canonical pytest node IDs",
+    "two same-head four-shard repetitions PASS",
+    "qualification closeout tests/parity/VIT/SIQ/PDC/merge-readiness PASS"
+  ],
+  "qa_packet": "docs/releases/ci-performance-remediation-v0-1/cipr-wp5r-qualification/CIPR_WP5R_SHADOW_QUALIFICATION_QA_PACKET.json",
+  "decision_record": "docs/releases/ci-performance-remediation-v0-1/cipr-g5-post-pyt-cutover/CIPR_G5_POST_PYT_CONSOLIDATED_CUTOVER_DECISION.json",
+  "merge_commit": null,
+  "blockers": [],
+  "current_authority": "OPERATOR_APPROVED_REQUIRED_TEST_TOPOLOGY_ACTIVATION_NOT_YET_PHYSICALLY_CUT_OVER",
+  "required_check_context_identity": "tests",
+  "required_check_context_rename_authorized": false,
+  "ruleset_context_mutation_authorized": false,
+  "runner_cutover_authorized": true,
+  "xdist_authorized": false,
+  "scientific_authority_delta": false,
+  "next_packet": "CIPR-WP5C-POST-PYT-CANONICAL-SHARD-CUTOVER",
+  "operator_stop_gate": "CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER",
+  "operator_stop_gate_decision": "PASS",
+  "physical_cutover_complete": false,
+  "rollback": "Forward-revert or supersede only the approved canonical execution topology change; preserve current check identity, parity, profile assurance, SIQ/VIT/GRT/PDC/merge-readiness and Git history."
+}
