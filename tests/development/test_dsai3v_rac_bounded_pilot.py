@@ -14,7 +14,6 @@ from ovc.development.skills.repository_assurance_pilot import (
     classify_candidate,
 )
 from ovc.development.skills.vit_routing import build_vit_payload_lineage_record
-from tools.ci.prvitr_rac_ready import pilot_job_disposition
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -160,16 +159,16 @@ class TestRacBoundedPilot(unittest.TestCase):
                 verified_receipt_paths=[],
             )
 
-    def test_ready_selector_blocks_failed_pilot_and_falls_back_only_when_skipped(self) -> None:
-        ok = {"status": "completed", "conclusion": "success"}
-        skipped = {"status": "completed", "conclusion": "skipped"}
-        failed = {"status": "completed", "conclusion": "failure"}
-        pending = {"status": "in_progress", "conclusion": None}
-        self.assertEqual(pilot_job_disposition(ok, skipped), "FALLBACK")
-        self.assertEqual(pilot_job_disposition(ok, ok), "PILOT")
-        self.assertEqual(pilot_job_disposition(ok, failed), "BLOCK")
-        self.assertEqual(pilot_job_disposition(failed, skipped), "BLOCK")
-        self.assertEqual(pilot_job_disposition(pending, None), "PENDING")
+    def test_pilot_selection_uses_existing_pr_listener_and_diagnostic_is_manual_only(self) -> None:
+        tiered = (ROOT / ".github/workflows/ovc-tiered-tests.yml").read_text(encoding="utf-8")
+        diagnostic = (ROOT / ".github/workflows/rac-delta-assurance-pilot.yml").read_text(encoding="utf-8")
+        selector = (ROOT / "tools/ci/prvitr_rac_ready.py").read_text(encoding="utf-8")
+        self.assertIn("run: python3 tools/ci/prvitr_rac_ready.py", tiered)
+        self.assertIn("workflow_dispatch:", diagnostic)
+        self.assertNotIn("pull_request:", diagnostic)
+        self.assertIn("return live.command_ready()", selector)
+        self.assertIn("build_pilot_certificate", selector)
+        self.assertNotIn("_branch_sha(base_ref)", selector)
 
     def test_live_workflow_preserves_exact_final_gateway(self) -> None:
         tiered = (ROOT / ".github/workflows/ovc-tiered-tests.yml").read_text(encoding="utf-8")
