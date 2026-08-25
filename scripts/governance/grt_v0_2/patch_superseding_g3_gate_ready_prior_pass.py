@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Keep the already-received superseding G3 PASS bound to the r4 floor only.
 
-This helper is authority-inert. It patches a freshly materialised replacement
-GATE_READY packet so the earlier operator PASS remains explicitly unconsumed
-when r4's post-merge census changed the exact generation-0 floor identity.
+This helper is authority-inert. It patches any freshly materialised replacement
+GATE_READY packet so the earlier operator PASS remains explicitly unconsumed.
+The fresh floor identity is read from the newly materialised gate and is never
+silently equated with the r4 approved object.
 """
 from __future__ import annotations
 
@@ -25,8 +26,6 @@ R4_GATE_TREE = "a7749f2a16239362d3f30d7f6a337d4cef205b28"
 R4_APPROVED_FLOOR_COUNT = 1641
 R4_APPROVED_FLOOR_HASH = "f93994585bd189e188dfde047f38bb6355554ac7c9abce61079026573d676bdb"
 R4_INSTRUCTION_ID = "034f8e1f21dbea440c3feb35fbcee066ee92f3f89d7961f090393b36e8e42f04"
-POSTMERGE_CENSUS_ID = "53718028e03ef1f00831772dcf0e9f7f4fd799afb4be364ec210a9334dbaec6f"
-POSTMERGE_REPLACEMENT_FLOOR_HASH = "49551ff2247be44b5b0ee21596a17a6e5f691010401e155f889ebbe5175235bb"
 STALE_STATUS = "RECEIVED_UNCONSUMED_APPROVED_R4_FLOOR_STALE_AFTER_GATE_READY_MERGE"
 
 
@@ -53,8 +52,16 @@ def main() -> int:
 
     gate = load(GATE)
     replacement = gate.get("proposed_debt_floor_generation_0", {})
-    if replacement.get("floor_hash") != POSTMERGE_REPLACEMENT_FLOOR_HASH:
-        raise RuntimeError("FRESH_SUPERSEDING_FLOOR_NOT_POSTMERGE_IDENTITY")
+    fresh_floor_hash = str(replacement.get("floor_hash", ""))
+    fresh_floor_count = int(replacement.get("count", -1))
+    if len(fresh_floor_hash) != 64 or fresh_floor_count < 0:
+        raise RuntimeError("FRESH_SUPERSEDING_FLOOR_IDENTITY_INVALID")
+    if fresh_floor_hash == R4_APPROVED_FLOOR_HASH:
+        raise RuntimeError("R4_APPROVED_FLOOR_REPRODUCED_USE_EXACT_R4_REVALIDATION_PATH")
+    census_id = str(gate.get("readiness_reconciliation", {}).get("exact_current_census_logical_sha256", ""))
+    if len(census_id) != 64:
+        raise RuntimeError("FRESH_SUPERSEDING_CENSUS_IDENTITY_INVALID")
+
     gate["operator_instruction_status"] = STALE_STATUS
     gate["prior_superseding_operator_pass"] = {
         "instruction_receipt_logical_sha256": R4_INSTRUCTION_ID,
@@ -64,8 +71,9 @@ def main() -> int:
         "approved_floor_generation": 0,
         "approved_floor_count": R4_APPROVED_FLOOR_COUNT,
         "approved_floor_hash": R4_APPROVED_FLOOR_HASH,
-        "postmerge_census_logical_sha256": POSTMERGE_CENSUS_ID,
-        "postmerge_replacement_floor_hash": POSTMERGE_REPLACEMENT_FLOOR_HASH,
+        "fresh_census_logical_sha256": census_id,
+        "fresh_replacement_floor_count": fresh_floor_count,
+        "fresh_replacement_floor_hash": fresh_floor_hash,
         "status": STALE_STATUS,
         "consumed": False,
         "non_transfer": "The r4 PASS does not approve this replacement floor; a fresh operator decision is required.",
@@ -79,7 +87,7 @@ def main() -> int:
     write_hashed(GATE, gate)
 
     state = load(STATE)
-    if state.get("candidate_debt_floor_hash") != POSTMERGE_REPLACEMENT_FLOOR_HASH:
+    if state.get("candidate_debt_floor_hash") != fresh_floor_hash:
         raise RuntimeError("FRESH_SUPERSEDING_STATE_FLOOR_MISMATCH")
     state["superseding_operator_pass"] = STALE_STATUS
     state["prior_superseding_gate_ready_decision_identity"] = R4_GATE_DECISION_ID
@@ -91,7 +99,9 @@ def main() -> int:
         "status": "PASS_AUTHORITY_UNCONSUMED_FRESH_DECISION_REQUIRED",
         "r4_gate_decision_identity": R4_GATE_DECISION_ID,
         "r4_approved_floor_hash": R4_APPROVED_FLOOR_HASH,
-        "fresh_floor_hash": POSTMERGE_REPLACEMENT_FLOOR_HASH,
+        "fresh_census_logical_sha256": census_id,
+        "fresh_floor_count": fresh_floor_count,
+        "fresh_floor_hash": fresh_floor_hash,
         "changed_files": [str(GATE.relative_to(ROOT)), str(STATE.relative_to(ROOT))],
     }, sort_keys=True))
     return 0
