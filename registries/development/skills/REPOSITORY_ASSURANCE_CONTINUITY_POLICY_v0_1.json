@@ -1,0 +1,71 @@
+{
+  "schema": "ovc-repository-assurance-continuity-policy/v1",
+  "policy_id": "DSAI3V-CIPR-RAC-POLICY-v0.1",
+  "programme_id": "OVC-DSAI3V-CIPR-REPOSITORY-ASSURANCE-CONTINUITY-AMENDMENT-0.1",
+  "status": "IMPLEMENTED_SHADOW_ONLY_ON_MATERIALISATION",
+  "authority_effect": "NONE",
+  "blocking_path_substitution_active": false,
+  "required_check_substitution_active": false,
+  "runner_cutover_active": false,
+  "fail_closed_on_unclassified": true,
+  "global_invalidation_patterns": [
+    "harness:*",
+    "environment:*",
+    "requirements:*",
+    "runtime:*",
+    "authority:global:*",
+    "currentness:global:*",
+    "vit:core:*",
+    "grt:interface:*",
+    "siq:interface:*",
+    "path:.github/workflows/**",
+    "path:pyproject.toml",
+    "path:requirements*.txt"
+  ],
+  "claim_dispositions": [
+    "INHERIT_VALID",
+    "RERUN_REQUIRED",
+    "WIDE_RERUN_REQUIRED",
+    "FULL_REFERENCE_REQUIRED",
+    "NOT_EVALUABLE",
+    "QUARANTINED"
+  ],
+  "assurance_layers": {
+    "A0A": "INHERITED_REPOSITORY_ASSURANCE",
+    "A0B": "PIP_LOCAL_ASSURANCE",
+    "A0C": "DELTA_IMPACT_ASSURANCE",
+    "A1": "COMPOSITION_ASSURANCE",
+    "A2": "EXACT_FINAL_ASSURANCE",
+    "A3": "POST_WRITE_EQUIVALENCE"
+  },
+  "cipr_execution_roles": {
+    "DELTA_EXECUTOR": "EXECUTES_EXACT_DSAI_SELECTED_CLAIM_SET",
+    "WIDE_EXECUTOR": "EXECUTES_DETERMINISTIC_SELECTED_SHARD_UNION",
+    "REFERENCE_EXECUTOR": "EXECUTES_CANONICAL_COMPLETE_REPOSITORY_ASSURANCE"
+  },
+  "current_cipr_binding": {
+    "source_state": "registries/implementation/ci_performance/OVC_CIPR_STATE_v0_8_SHADOW_QUALIFICATION_APPROVED.json",
+    "qualified_surface": "POST_PYT_CANONICAL_PYTEST_SHARD_SHADOW",
+    "allowed_use": "REFERENCE_EXECUTOR_CANDIDATE_EVIDENCE_ONLY",
+    "cutover_gate": "CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER",
+    "cutover_consumed": false
+  },
+  "physical_integration": {
+    "controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
+    "gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+    "parallel_physical_merge": false,
+    "grt_exact_final_required": true,
+    "post_write_tree_equality_required": true
+  },
+  "reference_safety": {
+    "initial_mode": "DUAL_RUN_SHADOW",
+    "incremental_self_authentication": "PROHIBITED",
+    "unexplained_disagreement": "ASSURANCE_MODEL_DIVERGENCE",
+    "divergence_action": "HALT_QUARANTINE_FALLBACK_CORRECT_REQUALIFY"
+  },
+  "reserved_gates": [
+    "DSAI3V-RAC-G-DELTA-ASSURANCE-PILOT",
+    "DSAI3V-RAC-G-DELTA-ASSURANCE-GENERAL"
+  ],
+  "rollback": "Forward-disable delta reuse and return affected packet classes to fresh canonical reference assurance; preserve VIT/SIQ/GRT routing, evidence, decisions and Git history."
+}

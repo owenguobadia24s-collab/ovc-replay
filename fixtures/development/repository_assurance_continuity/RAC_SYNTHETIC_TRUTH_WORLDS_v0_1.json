@@ -1,0 +1,113 @@
+{
+  "schema": "ovc-rac-synthetic-truth-worlds/v1",
+  "fixture_id": "RAC-SYNTHETIC-TRUTH-WORLDS-v0.1",
+  "policy": {
+    "policy_id": "DSAI3V-CIPR-RAC-POLICY-v0.1",
+    "fail_closed_on_unclassified": true,
+    "global_invalidation_patterns": [
+      "harness:*",
+      "environment:*",
+      "requirements:*",
+      "path:.github/workflows/**"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "CLAIM::A",
+      "claim_class": "UNIT_CONFORMANCE",
+      "dependencies": ["path:src/a.py", "owner:A"],
+      "harness_id": "HARNESS-v1",
+      "execution_profile": "DELTA_EXECUTOR",
+      "wide_rerun": false,
+      "unbounded": false,
+      "reference_only": false
+    },
+    {
+      "claim_id": "CLAIM::B",
+      "claim_class": "UNIT_CONFORMANCE",
+      "dependencies": ["path:src/b.py", "owner:B"],
+      "harness_id": "HARNESS-v1",
+      "execution_profile": "DELTA_EXECUTOR",
+      "wide_rerun": false,
+      "unbounded": false,
+      "reference_only": false
+    },
+    {
+      "claim_id": "CLAIM::SHARED",
+      "claim_class": "SHARED_OWNER_CONFORMANCE",
+      "dependencies": ["owner:SHARED", "path:src/shared/**"],
+      "harness_id": "HARNESS-v1",
+      "execution_profile": "WIDE_EXECUTOR",
+      "wide_rerun": true,
+      "unbounded": false,
+      "reference_only": false
+    }
+  ],
+  "base": {
+    "repository_tree_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "passed_claim_ids": ["CLAIM::A", "CLAIM::B", "CLAIM::SHARED"],
+    "not_evaluable_claim_ids": [],
+    "quarantined_claim_ids": []
+  },
+  "scenarios": [
+    {
+      "scenario_id": "DISJOINT_A",
+      "changed_tokens": ["path:src/a.py"],
+      "classified_tokens": ["path:src/a.py"],
+      "expected": {
+        "CLAIM::A": "RERUN_REQUIRED",
+        "CLAIM::B": "INHERIT_VALID",
+        "CLAIM::SHARED": "INHERIT_VALID"
+      },
+      "reference_required": false
+    },
+    {
+      "scenario_id": "SHARED_OWNER",
+      "changed_tokens": ["owner:SHARED"],
+      "classified_tokens": ["owner:SHARED"],
+      "expected": {
+        "CLAIM::A": "INHERIT_VALID",
+        "CLAIM::B": "INHERIT_VALID",
+        "CLAIM::SHARED": "WIDE_RERUN_REQUIRED"
+      },
+      "reference_required": false
+    },
+    {
+      "scenario_id": "UNCLASSIFIED_MUTATION",
+      "changed_tokens": ["path:src/a.py", "unknown:dynamic-import"],
+      "classified_tokens": ["path:src/a.py"],
+      "expected_all": "FULL_REFERENCE_REQUIRED",
+      "reference_required": true
+    },
+    {
+      "scenario_id": "GLOBAL_HARNESS_CHANGE",
+      "changed_tokens": ["harness:pytest-runner-v2"],
+      "classified_tokens": ["harness:pytest-runner-v2"],
+      "expected_all": "FULL_REFERENCE_REQUIRED",
+      "reference_required": true
+    },
+    {
+      "scenario_id": "PLACEMENT_ONLY_MAIN_MOVEMENT",
+      "changed_tokens": ["path:docs/unrelated.md"],
+      "candidate_dependency_tokens": ["path:src/a.py", "owner:A"],
+      "expected_main_movement_disposition": "PLACEMENT_ONLY"
+    },
+    {
+      "scenario_id": "DEPENDENCY_MAIN_MOVEMENT",
+      "changed_tokens": ["path:src/a.py"],
+      "candidate_dependency_tokens": ["path:src/a.py", "owner:A"],
+      "expected_main_movement_disposition": "RERUN_REQUIRED"
+    },
+    {
+      "scenario_id": "REFERENCE_DIVERGENCE",
+      "reference_results": {
+        "CLAIM::A": "PASS",
+        "CLAIM::B": "FAIL",
+        "CLAIM::SHARED": "PASS"
+      },
+      "expected_status": "ASSURANCE_MODEL_DIVERGENCE"
+    }
+  ],
+  "authority_effect": "NONE",
+  "blocking_path_effect": "NONE"
+}
