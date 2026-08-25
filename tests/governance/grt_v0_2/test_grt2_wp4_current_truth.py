@@ -34,24 +34,19 @@ def test_wp4_entry_and_current_truth_are_exact():
 
 
 def test_wp4_classifies_and_parks_the_moving_projection_repair():
-    pointer = load(IMPL / "CURRENT_STATE_POINTER.json")
-    state = load(IMPL / "OVC_GRT2_STATE_v0_18_WP4_G4_GATE_READY.json")
-    check_logical(state)
-    assert pointer["current_state"].endswith("OVC_GRT2_STATE_v0_16_SUPERSEDING_GATE_READY.json")
-    assert state["gate_id"] == "GRT2-G4"
-    assert state["next_packet"] == "GRT2-G4-OPERATOR-DECISION"
-    assert state["g3_status"] == "COMPLETED_PHYSICALLY_MATERIALISED"
-    assert state["current_projection_status"] == "POST_G3_REPAIR_CANDIDATE_NOT_CURRENT_PENDING_GRT2_G4"
-    assert state["proposed_current_projection_substitution"]["status"] == "NOT_MATERIALISED_PENDING_GRT2_G4"
-    assert state["operator_decision_required"] is True
+    record = load(WP4 / "GRT2_WP4_CURRENT_TRUTH_CLASSIFICATION.json")
+    substitution = record["exact_current_projection_substitution"]
+    assert substitution["inherited_current_state"].endswith("OVC_GRT2_STATE_v0_16_SUPERSEDING_GATE_READY.json")
+    assert substitution["candidate_state"].endswith("OVC_GRT2_STATE_v0_18_WP4_G4_GATE_READY.json")
+    assert substitution["disposition_under_active_grt_exact"] == "REJECTED_AS_NEW_OR_RECURRENT_PENDING_GRT2_G4"
+    assert substitution["extent_change"] == "UNCHANGED"
 
 
 def test_wp4_advances_the_immutable_floor_chain_exactly_once():
-    pointer = load(GOV / "GRT_DEBT_FLOOR_CURRENT.json")
-    floor = load(ROOT / pointer["definition"])
-    check_logical(pointer)
+    floor = load(GOV / "debt_floors/GRT_DEBT_FLOOR_G1.json")
     validate_debt_floor(floor)
-    assert pointer["generation"] == floor["generation"] == 1
+    assert floor["generation"] == 1
+    assert floor["floor_hash"] == "4fdfaf281720232dbb0fd6c9496b2849d26f1e7107d559bba0e6efc51fe02d27"
     assert floor["predecessor_commit"] == "953a24e268f07be27a20f47d06742ba718065441"
     assert floor["predecessor_tree"] == "485e08ed6011d481af8557ca40c19aded2db590f"
     assert len(floor["open_grandfathered_findings"]) <= 1648

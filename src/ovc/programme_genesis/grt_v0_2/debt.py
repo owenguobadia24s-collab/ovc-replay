@@ -21,6 +21,9 @@ B0_SOURCE_TREE = "91374c54bde0e0b61ac51705f6434d4f2b0d8417"
 B0_TOPOLOGY_SHA256 = "4120468ecb1c1f484ab073c851287706f4fb45ad0e99fc355b4624094bb795f2"
 B0_MEMBERSHIP_SHA256 = "3587c224c07360751923e5718c5bedb432ce4a5c8cccd4061f73dd53ef07de5d"
 SCANNER_IDENTITY = f"GRT.V0.1@{B0_SOURCE_COMMIT}:{B0_SOURCE_TREE}"
+G4_GATE_PACKET_LOGICAL_SHA256 = "028257fd9e7c19e5e03031fc09e932ec71411a08bdabc8b203ebfc25d6e62354"
+G4_GRANDFATHERED_FINDING_ID = "GRT.FIND.8995c2197e0d50326967b31f"
+G4_CANDIDATE_FINDING_ID = "GRT.FIND.f9c53308623fa597c63c5f47"
 
 _HEX40 = re.compile(r"^[0-9a-f]{40}$")
 _HEX64 = re.compile(r"^[0-9a-f]{64}$")
@@ -194,6 +197,58 @@ def compare_debt_extent(previous: Mapping[str, int], current: Mapping[str, int])
     return "MATERIAL_CHANGED"
 
 
+def validate_g4_current_projection_substitution(
+    decision: Mapping[str, Any],
+    before_findings: Mapping[str, Mapping[str, Any]],
+    after_findings: Mapping[str, Mapping[str, Any]],
+) -> dict[str, str]:
+    """Validate the exact operator-approved G4 current-state identity substitution.
+
+    This is deliberately not a generic debt waiver. It recognizes only the one
+    path-identity replacement ratified by the merged GRT2-G4 gate packet and
+    requires the rule and debt extent to remain byte-semantically unchanged.
+    """
+    payload = dict(decision)
+    logical_sha256 = str(payload.pop("logical_sha256", ""))
+    if not _HEX64.fullmatch(logical_sha256) or canonical_sha256(payload) != logical_sha256:
+        raise DebtValidationError("GRT_G4_DECISION_LOGICAL_HASH_MISMATCH")
+    if decision.get("schema") != "ovc-grt2-g4-operator-decision/v1":
+        raise DebtValidationError("GRT_G4_DECISION_SCHEMA_INVALID")
+    if decision.get("gate_id") != "GRT2-G4" or decision.get("decision") != "PASS":
+        raise DebtValidationError("GRT_G4_DECISION_NOT_PASS")
+    if decision.get("operator_instruction") != "OVC APPROVE GRT2-G4 PASS":
+        raise DebtValidationError("GRT_G4_OPERATOR_INSTRUCTION_MISMATCH")
+    gate = decision.get("approved_gate_packet")
+    if not isinstance(gate, Mapping) or gate.get("logical_sha256") != G4_GATE_PACKET_LOGICAL_SHA256:
+        raise DebtValidationError("GRT_G4_GATE_PACKET_BINDING_MISMATCH")
+    delta = decision.get("approved_authority_delta")
+    substitution = delta.get("exact_current_projection_substitution") if isinstance(delta, Mapping) else None
+    expected = {
+        "admit_finding_id": G4_CANDIDATE_FINDING_ID,
+        "remove_grandfathered_finding_id": G4_GRANDFATHERED_FINDING_ID,
+        "rule_id": "GRT-R300",
+        "scope": "ONE_FOR_ONE_CURRENT_STATE_TARGET_PATH_IDENTITY_ONLY",
+        "debt_extent_change": "UNCHANGED",
+    }
+    if substitution != expected:
+        raise DebtValidationError("GRT_G4_SUBSTITUTION_NOT_EXACT")
+    before = before_findings.get(G4_GRANDFATHERED_FINDING_ID)
+    after = after_findings.get(G4_CANDIDATE_FINDING_ID)
+    if before is None or after is None:
+        raise DebtValidationError("GRT_G4_SUBSTITUTION_FINDING_MISSING")
+    if G4_CANDIDATE_FINDING_ID in before_findings or G4_GRANDFATHERED_FINDING_ID in after_findings:
+        raise DebtValidationError("GRT_G4_SUBSTITUTION_NOT_ONE_FOR_ONE")
+    if before.get("rule_id") != "GRT-R300" or after.get("rule_id") != "GRT-R300":
+        raise DebtValidationError("GRT_G4_SUBSTITUTION_RULE_MISMATCH")
+    before_extent = before.get("debt_extent")
+    after_extent = after.get("debt_extent")
+    if not isinstance(before_extent, Mapping) or not isinstance(after_extent, Mapping):
+        raise DebtValidationError("GRT_G4_SUBSTITUTION_EXTENT_MISSING")
+    if compare_debt_extent(before_extent, after_extent) != "UNCHANGED":
+        raise DebtValidationError("GRT_G4_SUBSTITUTION_EXTENT_CHANGED")
+    return {G4_GRANDFATHERED_FINDING_ID: G4_CANDIDATE_FINDING_ID}
+
+
 def make_finding(
     *,
     rule_id: str,
@@ -317,6 +372,7 @@ def propose_debt_floor(
     historical_non_debt: Sequence[str] = (),
     quarantined_findings: Sequence[str] = (),
     temporarily_admitted_actionable: Sequence[str] = (),
+    authorized_identity_substitutions: Mapping[str, str] | None = None,
 ) -> dict[str, Any]:
     if isinstance(generation, bool) or not isinstance(generation, int) or generation < 0:
         raise DebtValidationError("GRT_DEBT_FLOOR_GENERATION_INVALID")
@@ -332,7 +388,16 @@ def propose_debt_floor(
         if generation != int(previous_floor.get("generation", -1)) + 1:
             raise DebtValidationError("GRT_DEBT_FLOOR_GENERATION_NOT_MONOTONIC")
         previous_open = set(previous_floor.get("open_grandfathered_findings", []))
-        if current - previous_open:
+        substitutions = dict(authorized_identity_substitutions or {})
+        removed = set(substitutions)
+        added = set(substitutions.values())
+        if len(added) != len(substitutions):
+            raise DebtValidationError("GRT_DEBT_FLOOR_SUBSTITUTION_NOT_ONE_FOR_ONE")
+        if not removed.issubset(previous_open) or not added.issubset(current):
+            raise DebtValidationError("GRT_DEBT_FLOOR_SUBSTITUTION_MEMBERSHIP_INVALID")
+        if removed & current or added & previous_open:
+            raise DebtValidationError("GRT_DEBT_FLOOR_SUBSTITUTION_NOT_EXACT_REPLACEMENT")
+        if current - previous_open - added:
             raise DebtValidationError("GRT_DEBT_FLOOR_GRANDFATHERED_SET_GREW")
     floor = {
         "schema": "grt-debt-floor/v0.2",
@@ -373,6 +438,7 @@ __all__ = [
     "DebtValidationError", "subject_locator_from_anomaly", "baseline_member_id",
     "validate_baseline_member_record", "validate_baseline_members",
     "baseline_membership_sha256", "validate_debt_baseline", "finding_id",
-    "make_finding", "compare_debt_extent", "make_lineage", "validate_lineage",
+    "make_finding", "compare_debt_extent", "validate_g4_current_projection_substitution",
+    "make_lineage", "validate_lineage",
     "classify_debt_transition", "propose_debt_floor", "validate_debt_floor",
 ]

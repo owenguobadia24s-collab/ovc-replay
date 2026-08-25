@@ -18,5 +18,5 @@ def test_superseding_floor_new_valid_inactive():
  f=load(SUP/"GRT2_G3_SUPERSEDING_PROPOSED_DEBT_FLOOR_GENERATION_0.json"); o=load(ROOT/"docs/programmes/grt-v0-2/g3/GRT2_G3_PROPOSED_DEBT_FLOOR_GENERATION_0.json"); s=load(STATE/"OVC_GRT2_STATE_v0_16_SUPERSEDING_GATE_READY.json")
  validate_debt_floor(f); assert len(f["open_grandfathered_findings"])==s["candidate_debt_floor_count"] and f["floor_hash"]==s["candidate_debt_floor_hash"] and f["floor_hash"]!=o["floor_hash"]
  assert s["debt_floor_generation"] is None and s["constitution_status"]=="PROPOSED_UNADMITTED" and s["active_enforcement"]=="LIMITED_NEW_ARTIFACT_ENFORCEMENT"; logical(s)
-def test_pointer_stops_without_activation():
- p=load(STATE/"CURRENT_STATE_POINTER.json"); assert p["packet_id"]=="GRT2-G3-SUPERSEDING-GATE-READY" and p["operator_decision_required"] is True and p["next_packet"]=="GRT2-G3-SUPERSEDING-OPERATOR-DECISION"
+def test_superseding_gate_ready_state_stops_without_activation():
+ s=load(STATE/"OVC_GRT2_STATE_v0_16_SUPERSEDING_GATE_READY.json"); assert s["packet_id"]=="GRT2-G3-SUPERSEDING-GATE-READY" and s["operator_decision_required"] is True and s["next_packet"]=="GRT2-G3-SUPERSEDING-OPERATOR-DECISION"
