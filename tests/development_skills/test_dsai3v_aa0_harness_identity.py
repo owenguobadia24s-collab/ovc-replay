@@ -68,7 +68,9 @@ class Dsai3vAa0HarnessIdentityTests(unittest.TestCase):
     def test_repository_workflow_uses_stable_step_output_not_hashfiles(self) -> None:
         workflow = Path(".github/workflows/tests.yml").read_text(encoding="utf-8")
         self.assertNotIn("hashFiles(", workflow)
-        self.assertEqual(workflow.count("id: aa0-harness"), 3)
+        # G5 PASS adds one operator-approved canonical-shard assurance planner while
+        # preserving the existing unified, unittest-parity, and runner-parity users.
+        self.assertEqual(workflow.count("id: aa0-harness"), 4)
         self.assertGreaterEqual(workflow.count("steps.aa0-harness.outputs.harness_hash"), 6)
 
 
