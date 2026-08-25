@@ -21,13 +21,13 @@ jobs:
       - name: Fetch current physical main
         run: git fetch --no-tags origin main
       - name: Prepare exact next GRT DebtFloor
-        env:
-          PYTHONPATH: src
         run: |
+          git worktree add --detach /tmp/grt-current origin/main
           mkdir -p scripts/governance/grt_v0_2
           git show origin/main:scripts/governance/grt_v0_2/prepare_next_debt_floor.py > scripts/governance/grt_v0_2/prepare_next_debt_floor.py
-          python scripts/governance/grt_v0_2/prepare_next_debt_floor.py --base origin/main --head HEAD
+          PYTHONPATH=/tmp/grt-current/src python scripts/governance/grt_v0_2/prepare_next_debt_floor.py --base origin/main --head HEAD
           rm scripts/governance/grt_v0_2/prepare_next_debt_floor.py
+          git worktree remove /tmp/grt-current
       - name: Commit generated floor and remove temporary workflow
         run: |
           rm .github/workflows/asocsi-grt-floor-reanchor-temp.yml
