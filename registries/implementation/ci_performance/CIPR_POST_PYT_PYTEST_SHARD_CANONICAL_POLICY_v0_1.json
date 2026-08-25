@@ -1,0 +1,41 @@
+{
+  "schema": "ovc-pytest-shard-policy/v1",
+  "policy_id": "CIPR.PYTEST.POST_PYT.CANONICAL.SHARDS.v0.1",
+  "policy_version": "0.1",
+  "programme_id": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "packet_id": "CIPR-WP5C-POST-PYT-CANONICAL-SHARD-CUTOVER",
+  "authority_mode": "OPERATOR_APPROVED_CANONICAL_REQUIRED_TEST_TOPOLOGY",
+  "operator_gate_id": "CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER",
+  "operator_decision": "PASS",
+  "authority_manifest_id": "b61020089792388be5e7ce78b3a28c2db6c436ac667bb48edf451cc5b071f4b8",
+  "required_check_context": "tests",
+  "canonical_reference_command": "PYTHONPATH=src:. python3 -m pytest tests -q --tb=short",
+  "canonical_collection_command": "PYTHONPATH=src:. python3 -m pytest tests --collect-only -q",
+  "shard_count": 4,
+  "assignment_algorithm": "CURRENT_PYTEST_COLLECTION_ORDER_HEAVY_PATH_ISOLATION_THEN_ROUND_ROBIN",
+  "heavy_path_to_shard": {
+    "tests/governance/test_genesis_repository_topology.py": 0,
+    "tests/governance/test_grt_wp9_conformance.py": 1,
+    "tests/test_zzzz_srfdi_g8r_wp6_capacity_profile.py": 2,
+    "tests/test_zzzzzz_golden2_weekly_output.py": 3
+  },
+  "require_pytest_native_items": true,
+  "required_check_substitution_active": false,
+  "runner_cutover_active": true,
+  "xdist_active": false,
+  "invariants": [
+    "exact current canonical pytest-collected item population only",
+    "pytest-native canonical items included",
+    "every canonical item identity assigned exactly once",
+    "configured historical heavyweight source paths isolated to distinct seed shards",
+    "remaining items assigned in canonical pytest collection order by deterministic round robin",
+    "item execution order within each shard preserves canonical collection order",
+    "same-head collection and manifest generation must be deterministic",
+    "one normal pytest session per shard; no xdist or intra-session multiprocessing",
+    "no skip, marker, benchmark freshness, assertion or test-content mutation",
+    "existing required job/context identity tests is preserved",
+    "no GitHub ruleset mutation or required-context rename/retirement",
+    "pytest/unittest parity, runner parity, profile assurance, SIQ READY, VIT/GRT/PDC and merge-readiness semantics remain unchanged"
+  ],
+  "rollback": "Forward-restore the serial PYTHONPATH=src:. python3 -m pytest tests -q --tb=short path behind the existing tests required context; preserve parity, VIT/SIQ/GRT/PDC/merge-readiness, evidence and Git history."
+}

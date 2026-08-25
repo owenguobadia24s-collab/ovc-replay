@@ -105,10 +105,13 @@ jobs:
           PYTHONPATH: src:.
         run: python3 tools/ci/vit_routing_preflight.py
 
-  pytest-unified:
-    name: tests
+  pytest-assurance-plan:
+    name: canonical pytest shard assurance plan
     needs: vit-routing-preflight
     runs-on: ubuntu-latest
+    outputs:
+      disposition: ${{ steps.aa0.outputs.disposition }}
+      harness_hash: ${{ steps.aa0-harness.outputs.harness_hash }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -118,7 +121,7 @@ jobs:
       - name: Compute AA0 assurance harness identity
         id: aa0-harness
         run: python3 tools/ci/aa0_harness_identity.py
-      - name: Restore AA0 PIP-bound repository assurance
+      - name: Restore AA0 PIP-bound repository assurance for planning
         id: cache
         uses: actions/cache/restore@v4
         with:
@@ -139,24 +142,130 @@ jobs:
           if [[ "${EXACT_HIT}" == "true" ]]; then disposition=EXACT_GENERATION_REUSE; elif [[ -n "${MATCHED_KEY}" && "${REUSE_AUTHORIZED}" == "true" ]]; then disposition=PLACEMENT_ONLY_PIP_REUSE; fi
           if [[ "${disposition}" != "RUN_AA0" ]]; then test -f "${RUNNER_TEMP}/ovc-aa0-tests/PASS"; fi
           echo "disposition=${disposition}" >> "$GITHUB_OUTPUT"
-          echo "OVC_CI_METRIC {\"schema\":\"ovc-ci-metric/v1\",\"metric\":\"aa0_pip_assurance_repository\",\"disposition\":\"${disposition}\"}"
+          echo "OVC_CI_METRIC {\"schema\":\"ovc-ci-metric/v1\",\"metric\":\"aa0_pip_assurance_repository\",\"disposition\":\"${disposition}\",\"topology\":\"DETERMINISTIC_FOUR_SHARD_CANONICAL_PYTEST\"}"
+
+  pytest-shard-manifest:
+    name: canonical pytest shard manifest
+    needs: pytest-assurance-plan
+    if: ${{ needs.pytest-assurance-plan.outputs.disposition == 'RUN_AA0' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          show-progress: false
       - uses: actions/setup-python@v5
-        if: steps.aa0.outputs.disposition == 'RUN_AA0'
         with:
           python-version: "3.11.15"
       - name: Install pytest and Research Console test dependencies
-        if: steps.aa0.outputs.disposition == 'RUN_AA0'
         run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
-      - name: Complete repository suite as BASE_INDEPENDENT assurance
-        if: steps.aa0.outputs.disposition == 'RUN_AA0'
+      - name: Prove exact current canonical pytest shard union
         run: |
-          # Historical rollback command (not executed): python3 -m unittest discover -s tests -v
-          PYTHONPATH=src:. python3 -m pytest tests -q --tb=short
-          PYTHONPATH=src:. python3 -m pytest tests/research_console_vnext -q --tb=short
-          mkdir -p "${RUNNER_TEMP}/ovc-aa0-tests"
-          printf '%s\n' "${{ needs.vit-routing-preflight.outputs.pip_id }}" > "${RUNNER_TEMP}/ovc-aa0-tests/PASS"
+          mkdir -p "${RUNNER_TEMP}/ovc-canonical-manifest"
+          PYTHONPATH=src:. python3 tools/ci/pytest_shard_canonical.py prove \
+            --head-sha "${{ github.event.pull_request.head.sha || github.sha }}" \
+            --output "${RUNNER_TEMP}/ovc-canonical-manifest/manifest.json"
+      - name: Upload canonical pytest manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: canonical-pytest-manifest-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/ovc-canonical-manifest/manifest.json
+          if-no-files-found: error
+          retention-days: 7
+
+  pytest-shard:
+    name: canonical pytest shard ${{ matrix.shard }}
+    needs: pytest-assurance-plan
+    if: ${{ needs.pytest-assurance-plan.outputs.disposition == 'RUN_AA0' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          show-progress: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11.15"
+      - name: Install pytest and Research Console test dependencies
+        run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
+      - name: Execute one exact canonical pytest shard session
+        run: |
+          mkdir -p "${RUNNER_TEMP}/ovc-canonical-shard-${{ matrix.shard }}"
+          PYTHONPATH=src:. python3 tools/ci/pytest_shard_canonical.py run \
+            --head-sha "${{ github.event.pull_request.head.sha || github.sha }}" \
+            --shard-index "${{ matrix.shard }}" \
+            --manifest-output "${RUNNER_TEMP}/ovc-canonical-shard-${{ matrix.shard }}/manifest.json" \
+            --result-output "${RUNNER_TEMP}/ovc-canonical-shard-${{ matrix.shard }}/result.json"
+      - name: Upload canonical pytest shard evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: canonical-pytest-shard-${{ matrix.shard }}-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/ovc-canonical-shard-${{ matrix.shard }}
+          if-no-files-found: error
+          retention-days: 7
+
+  pytest-unified:
+    name: tests
+    needs: [vit-routing-preflight, pytest-assurance-plan, pytest-shard-manifest, pytest-shard]
+    if: ${{ always() && needs.vit-routing-preflight.result == 'success' && needs.pytest-assurance-plan.result == 'success' && (needs.pytest-assurance-plan.outputs.disposition != 'RUN_AA0' || (needs.pytest-shard-manifest.result == 'success' && needs.pytest-shard.result == 'success')) }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          show-progress: false
+      - name: Compute AA0 assurance harness identity
+        id: aa0-harness
+        run: python3 tools/ci/aa0_harness_identity.py
+      - name: Restore AA0 PIP-bound repository assurance
+        id: cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/ovc-aa0-tests
+          key: ovc-aa0-tests-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ steps.aa0-harness.outputs.harness_hash }}-gen-${{ needs.vit-routing-preflight.outputs.generation_id }}
+          restore-keys: |
+            ovc-aa0-tests-v2-pip-${{ needs.vit-routing-preflight.outputs.aa0_identity }}-h-${{ steps.aa0-harness.outputs.harness_hash }}-gen-
+      - uses: actions/setup-python@v5
+        if: needs.pytest-assurance-plan.outputs.disposition == 'RUN_AA0'
+        with:
+          python-version: "3.11.15"
+      - name: Install pytest and Research Console test dependencies
+        if: needs.pytest-assurance-plan.outputs.disposition == 'RUN_AA0'
+        run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
+      - name: Download canonical pytest shard evidence
+        if: needs.pytest-assurance-plan.outputs.disposition == 'RUN_AA0'
+        uses: actions/download-artifact@v4
+        with:
+          pattern: canonical-pytest-*-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/ovc-canonical-shards
+          merge-multiple: false
+      - name: Complete repository suite as BASE_INDEPENDENT assurance
+        shell: bash
+        env:
+          DISPOSITION: ${{ needs.pytest-assurance-plan.outputs.disposition }}
+        run: |
+          set -euo pipefail
+          if [[ "${DISPOSITION}" == "RUN_AA0" ]]; then
+            # Historical rollback command (not executed): python3 -m unittest discover -s tests -v
+            PYTHONPATH=src:. python3 tools/ci/pytest_shard_canonical.py aggregate \
+              --root "${RUNNER_TEMP}/ovc-canonical-shards" \
+              --output "${RUNNER_TEMP}/ovc-canonical-shards/aggregate.json"
+            PYTHONPATH=src:. python3 -m pytest tests/research_console_vnext -q --tb=short
+            mkdir -p "${RUNNER_TEMP}/ovc-aa0-tests"
+            printf '%s\n' "${{ needs.vit-routing-preflight.outputs.pip_id }}" > "${RUNNER_TEMP}/ovc-aa0-tests/PASS"
+          else
+            test -f "${RUNNER_TEMP}/ovc-aa0-tests/PASS"
+          fi
       - name: Save AA0 PIP-bound repository assurance
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: ${{ success() && steps.cache.outputs.cache-hit != 'true' }}
         uses: actions/cache/save@v4
         with:
           path: ${{ runner.temp }}/ovc-aa0-tests
