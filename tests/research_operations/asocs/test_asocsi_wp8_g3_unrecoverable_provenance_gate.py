@@ -57,7 +57,13 @@ def test_gate_preparation_and_operator_pass_remain_immutable_while_current_state
     # either historical gate state or starting scientific adjudication / Stage 2.
     assert pointer["programme_id"] == current["programme_id"] == g6["programme_id"]
     assert pointer["status"] == current["status"]
-    assert pointer["next_packet"] == current["next_packet"] == "ASOCSI-WP8-STAGE1-HUMAN-FIDELITY-ADJUDICATION"
+    expected_next = (
+        "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-HUMAN-ADJUDICATION"
+        if current["packet_id"]
+        == "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-FIDELITY-SUPERSESSION"
+        else "ASOCSI-WP8-STAGE1-HUMAN-FIDELITY-ADJUDICATION"
+    )
+    assert pointer["next_packet"] == current["next_packet"] == expected_next
     assert current["preserved"]["wp8_g3_unrecoverable_provenance_gate"] is True
     assert current["preserved"]["wp8_g3_reproduction_block"] is True
     assert current["preserved"]["unrecoverable_provenance_warning"] is True
