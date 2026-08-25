@@ -73,12 +73,13 @@ def test_wp8_source_recovers_exact_g1_but_g3_identity_blocks_reveal():
     assert state["human_adjudication_started"] is False
     assert state["stop_boundary"] == "ASOCSI-WP8-STAGED-REVEAL_NOT_AUTHORIZED_UNTIL_G3_REPRODUCIBLE"
 
-    # The mutable pointer may lawfully advance to a later, stricter no-reveal
-    # disposition/gate state, but it may never erase the historical BLOCK lineage.
+    # The mutable pointer may lawfully advance through a stricter no-reveal gate
+    # and then to the explicit operator-approved provenance supersession. Historical
+    # BLOCK evidence remains immutable and Stage-1 must still be unstarted here.
     assert pointer["programme_id"] == current["programme_id"] == state["programme_id"]
     assert pointer["packet_id"] == current["packet_id"]
     assert pointer["status"] == current["status"]
-    assert current["status"] in {"BLOCKED", "GATE_READY"}
+    assert current["status"] in {"BLOCKED", "GATE_READY", "APPROVED"}
     assert pointer["next_packet"] == current["next_packet"]
     assert _state_generation(pointer["current_state"]) >= _state_generation(
         str(STATE.relative_to(ROOT)).replace("\\", "/")
@@ -108,6 +109,12 @@ def test_wp8_source_recovers_exact_g1_but_g3_identity_blocks_reveal():
         if current["status"] == "GATE_READY":
             assert current["authority_required"] == "OPERATOR_REQUIRED"
             assert current["stop_boundary"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION-OPERATOR-DECISION"
+        elif current["status"] == "APPROVED":
+            operator = _json(WP8 / "ASOCSI_G6_PROVENANCE_SUPERSESSION_OPERATOR_DECISION_v0_1.json")
+            assert current["authority_required"] == "SATISFIED_OPERATOR_PASS"
+            assert current["gate_id"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION"
+            assert operator["decision"] == "PASS" and operator["authority"] == "OPERATOR"
+            assert current["preserved"]["unrecoverable_provenance_warning"] is True
         else:
             assert current["stop_boundary"].startswith(
                 "ASOCSI-WP8-STAGED-REVEAL_NOT_AUTHORIZED"
