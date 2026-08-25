@@ -6,6 +6,7 @@ ROOT = Path(__file__).resolve().parents[2]
 WORKFLOW = ROOT / ".github/workflows/ovc-tiered-tests.yml"
 TESTS_WORKFLOW = ROOT / ".github/workflows/tests.yml"
 RESOLVER = ROOT / "tools/ci/prvitr_live_admission.py"
+READY_SELECTOR = ROOT / "tools/ci/prvitr_rac_ready.py"
 
 
 class CiPerformanceRemediationTests(unittest.TestCase):
@@ -13,6 +14,7 @@ class CiPerformanceRemediationTests(unittest.TestCase):
         self.workflow = WORKFLOW.read_text(encoding="utf-8")
         self.tests_workflow = TESTS_WORKFLOW.read_text(encoding="utf-8")
         self.resolver = RESOLVER.read_text(encoding="utf-8")
+        self.ready_selector = READY_SELECTOR.read_text(encoding="utf-8")
         self.profile = self.workflow.split("\n  profile:\n", 1)[1].split("\n  legacy-required-context:\n", 1)[0]
         self.ready = self.workflow.split("\n  siq-ready-admission:\n", 1)[1].split("\n  merge-readiness:\n", 1)[0]
         self.readiness = self.workflow.split("\n  merge-readiness:\n", 1)[1]
@@ -27,7 +29,9 @@ class CiPerformanceRemediationTests(unittest.TestCase):
     def test_expensive_assurance_completes_before_final_integration_lease(self):
         self.assertIn("BASE_INDEPENDENT assurance", self.tests_workflow)
         self.assertNotIn("final-integration-window-admitted", self.tests_workflow)
-        self.assertIn("prvitr_live_admission.py ready", self.ready)
+        self.assertIn("prvitr_rac_ready.py", self.ready)
+        self.assertIn("import tools.ci.prvitr_live_admission as live", self.ready_selector)
+        self.assertIn("return live.command_ready()", self.ready_selector)
         self.assertIn("OVC_VIT_QUALIFIED_PAYLOAD_READY", self.resolver)
         self.assertIn("prvitr_live_admission.py acquire", self.readiness)
         self.assertIn("OVC_SIQ_BASE_SENSITIVE_LEASE_ACQUIRED", self.resolver)
@@ -40,6 +44,7 @@ class CiPerformanceRemediationTests(unittest.TestCase):
         self.assertNotIn("current_main = _branch_sha(base_ref)", ready_body)
         self.assertNotIn("merge-base", ready_body)
         self.assertIn("no physical-main predecessor is acquired during qualification", ready_body)
+        self.assertNotIn("_branch_sha(base_ref)", self.ready_selector)
 
     def test_required_checks_are_fail_closed_before_ready(self):
         for check_name in ("VIT routing preflight", "tests", "pytest-unittest-parity", "runner-parity"):
@@ -86,7 +91,8 @@ class CiPerformanceRemediationTests(unittest.TestCase):
         self.assertNotIn("actions/github-script@v7", self.tests_workflow)
         self.assertIn("actions/github-script@v9", self.tests_workflow)
         self.assertNotIn("actions/github-script@", self.ready)
-        self.assertIn("prvitr_live_admission.py ready", self.ready)
+        self.assertIn("prvitr_rac_ready.py", self.ready)
+        self.assertIn("return live.command_ready()", self.ready_selector)
 
 
 if __name__ == "__main__":
