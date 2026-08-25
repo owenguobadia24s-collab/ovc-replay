@@ -10,6 +10,7 @@ APPROVED_STATE = ROOT / "registries/implementation/dsai3v_cipr_rac/OVC_DSAI3V_CI
 IMPLEMENTED_STATE = ROOT / "registries/implementation/dsai3v_cipr_rac/OVC_DSAI3V_CIPR_RAC_STATE_v0_4_PILOT_SUBSTRATE_IMPLEMENTED_INACTIVE.json"
 ACTIVE_STATE = ROOT / "registries/implementation/dsai3v_cipr_rac/OVC_DSAI3V_CIPR_RAC_STATE_v0_5_PILOT_BASELINE_ACTIVE.json"
 POINTER = ROOT / "registries/implementation/dsai3v_cipr_rac/CURRENT_STATE_POINTER.json"
+BASELINE = ROOT / "docs/releases/development-skills-architecture-v0-3-vit/repository-assurance-continuity/wp7/DSAI3V_RAC_PILOT_BASELINE_CERTIFICATE_v0_1.json"
 
 
 class TestDsai3vRacPilotApproval(unittest.TestCase):
@@ -50,7 +51,12 @@ class TestDsai3vRacPilotApproval(unittest.TestCase):
             pointer["current_state"],
             "registries/implementation/dsai3v_cipr_rac/OVC_DSAI3V_CIPR_RAC_STATE_v0_5_PILOT_BASELINE_ACTIVE.json",
         )
-        self.assertEqual(pointer["status"], "PILOT_BASELINE_ACTIVATION_PENDING_EXACT_CERTIFICATE")
+        expected_status = (
+            "PILOT_BASELINE_ACTIVE_BOUNDED_EVIDENCE_REQUIRED"
+            if BASELINE.is_file()
+            else "PILOT_BASELINE_ACTIVATION_PENDING_EXACT_CERTIFICATE"
+        )
+        self.assertEqual(pointer["status"], expected_status)
         self.assertEqual(pointer["next_packet"], "DSAI3V-RAC-WP8-BOUNDED-PILOT-EVIDENCE")
         self.assertEqual(pointer["operator_stop_gate"], "DSAI3V-RAC-G-DELTA-ASSURANCE-GENERAL")
         self.assertEqual(state["phase"], "PILOT_SUBSTRATE_IMPLEMENTED_INACTIVE_BASELINE_REQUIRED")
