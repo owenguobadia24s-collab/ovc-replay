@@ -17,6 +17,7 @@ BLOCKER_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_12.json"
 CORRECTION_RUNNING_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_13.json"
 CURRENT_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_14.json"
 GATE_READY_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_15.json"
+SUPERSEDING_GATE_READY_STATE = STATE_ROOT / "OVC_GRT2_STATE_v0_16_SUPERSEDING_GATE_READY.json"
 
 
 class GRT2WP1StateTests(unittest.TestCase):
@@ -44,11 +45,12 @@ class GRT2WP1StateTests(unittest.TestCase):
         correction_running = json.loads(CORRECTION_RUNNING_STATE.read_text(encoding="utf-8"))
         current = json.loads(CURRENT_STATE.read_text(encoding="utf-8"))
         gate_ready = json.loads(GATE_READY_STATE.read_text(encoding="utf-8"))
+        superseding_gate_ready = json.loads(SUPERSEDING_GATE_READY_STATE.read_text(encoding="utf-8"))
         constitution = json.loads((REGISTRIES / "GRT_REPOSITORY_CONSTITUTION_v0_2.json").read_text(encoding="utf-8"))
-        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_15.json")
-        self.assertEqual(pointer["status"], "GATE_READY_OPERATOR_REQUIRED")
-        self.assertEqual(pointer["packet_id"], "GRT2-G3-GATE-READY")
-        self.assertEqual(pointer["next_packet"], "GRT2-G3-OPERATOR-DECISION")
+        self.assertEqual(pointer["current_state"], "registries/implementation/grt_v0_2/OVC_GRT2_STATE_v0_16_SUPERSEDING_GATE_READY.json")
+        self.assertEqual(pointer["status"], "GATE_READY_OPERATOR_REQUIRED_PENDING_EXACT_FINAL_PR_ASSURANCE")
+        self.assertEqual(pointer["packet_id"], "GRT2-G3-SUPERSEDING-GATE-READY")
+        self.assertEqual(pointer["next_packet"], "GRT2-G3-SUPERSEDING-OPERATOR-DECISION")
         self.assertEqual(readiness["status"], "BLOCKED")
         self.assertEqual(readiness["packet_id"], "GRT2-G2-READINESS-EVIDENCE")
         self.assertEqual(readiness["next_packet"], "GRT2-G2-QUALIFICATION-EVIDENCE")
@@ -79,6 +81,10 @@ class GRT2WP1StateTests(unittest.TestCase):
         self.assertEqual(gate_ready["status"], "GATE_READY_OPERATOR_REQUIRED")
         self.assertEqual(gate_ready["authority_effect"], "NONE_GATE_PREPARATION_ONLY")
         self.assertTrue(gate_ready["operator_decision_required"])
+        self.assertEqual(superseding_gate_ready["status"], "GATE_READY_OPERATOR_REQUIRED_PENDING_EXACT_FINAL_PR_ASSURANCE")
+        self.assertEqual(superseding_gate_ready["authority_effect"], "NONE_GATE_PREPARATION_ONLY")
+        self.assertEqual(superseding_gate_ready["constitution_status"], "PROPOSED_UNADMITTED")
+        self.assertIsNone(superseding_gate_ready["debt_floor_generation"])
         self.assertEqual(current["authority_delta"], "NONE_CORRECTIVE_IMPLEMENTATION_ONLY")
 
         self.assertEqual(state["status"], "APPROVED")
