@@ -136,6 +136,14 @@ def test_programme_state_preserves_narrowed_block_across_lawful_successors() -> 
         assert current["evidence"]["frozen_census_sha256"] == FROZEN_CENSUS
         assert current["evidence"]["frozen_ordered_trace_ids_sha256"] == FROZEN_ORDERED
         assert current["evidence"]["frozen_observation_trace_sha256"] == FROZEN_TRACES
-        assert current["status"] == "GATE_READY"
-        assert current["authority_required"] == "OPERATOR_REQUIRED"
-        assert current["stop_boundary"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION-OPERATOR-DECISION"
+        if current["status"] == "GATE_READY":
+            assert current["authority_required"] == "OPERATOR_REQUIRED"
+            assert current["stop_boundary"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION-OPERATOR-DECISION"
+        elif current["status"] == "APPROVED":
+            operator = load(WP8 / "ASOCSI_G6_PROVENANCE_SUPERSESSION_OPERATOR_DECISION_v0_1.json")
+            assert current["authority_required"] == "SATISFIED_OPERATOR_PASS"
+            assert current["gate_id"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION"
+            assert operator["decision"] == "PASS" and operator["authority"] == "OPERATOR"
+            assert current["preserved"]["unrecoverable_provenance_warning"] is True
+        else:
+            raise AssertionError(f"unexpected successor status: {current['status']}")
