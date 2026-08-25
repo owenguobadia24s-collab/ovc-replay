@@ -76,7 +76,7 @@ def test_preparation_preserves_current_g6_operator_pass_across_later_stage1_inte
     assert pointer["status"] == state["status"]
     assert state["gate_id"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION"
     assert state["authority_required"] == "SATISFIED_OPERATOR_PASS"
-    assert pointer["next_packet"] == "ASOCSI-WP8-STAGE1-HUMAN-FIDELITY-ADJUDICATION"
+    assert pointer["next_packet"] == "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-HUMAN-ADJUDICATION"
     assert state["preserved"]["wp8_g3_reproduction_block"] is True
     assert state["preserved"]["unrecoverable_provenance_warning"] is True
     assert state.get("human_adjudication_started", False) is False
