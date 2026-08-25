@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest import mock
 
 from tools.ci import pytest_shard_canonical as canonical
 from tools.ci import pytest_shard_shadow as shadow
@@ -17,6 +18,19 @@ def _synthetic_policy() -> dict:
     policy = json.loads(POLICY.read_text(encoding="utf-8"))
     policy["heavy_path_to_shard"] = {}
     return policy
+
+
+def _synthetic_manifest(nodeids: list[str], sha: str) -> dict:
+    # These tests exercise deterministic manifest/aggregate mechanics only. Keep the
+    # production fail-closed legacy-parity census intact by replacing its repository
+    # census input solely inside this bounded synthetic fixture.
+    with mock.patch.object(canonical.shadow, "_legacy_keys", return_value={nodeids[0]}):
+        return canonical.build_manifest(
+            nodeids,
+            _synthetic_policy(),
+            head_sha=sha,
+            execution_sha=sha,
+        )
 
 
 def test_canonical_policy_is_exact_operator_approved_g5_surface() -> None:
@@ -39,12 +53,7 @@ def test_shadow_policy_cannot_be_loaded_as_canonical_authority() -> None:
 
 def test_manifest_exact_union_and_order_are_preserved() -> None:
     nodeids = [f"tests/test_x.py::test_{index}" for index in range(12)]
-    manifest = canonical.build_manifest(
-        nodeids,
-        _synthetic_policy(),
-        head_sha="a" * 40,
-        execution_sha="a" * 40,
-    )
+    manifest = _synthetic_manifest(nodeids, "a" * 40)
     shadow.prove_manifest(manifest, nodeids)
     flattened = [item for shard in manifest["shards"] for item in shard["items"]]
     assert set(flattened) == set(nodeids)
@@ -88,12 +97,7 @@ def test_selection_fails_closed_on_authority_mismatch() -> None:
 
 def test_aggregate_requires_byte_identical_manifest_and_all_four_results() -> None:
     nodeids = [f"tests/test_x.py::test_{index}" for index in range(8)]
-    manifest = canonical.build_manifest(
-        nodeids,
-        _synthetic_policy(),
-        head_sha="b" * 40,
-        execution_sha="b" * 40,
-    )
+    manifest = _synthetic_manifest(nodeids, "b" * 40)
     with tempfile.TemporaryDirectory() as directory:
         root = Path(directory)
         for index in range(5):
