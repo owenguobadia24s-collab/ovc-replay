@@ -23,6 +23,10 @@ POLICY_PATH = (
     ROOT
     / "registries/implementation/ci_performance/CIPR_POST_PYT_PYTEST_SHARD_POLICY_v0_1.json"
 )
+CANONICAL_POLICY_PATH = (
+    ROOT
+    / "registries/implementation/ci_performance/CIPR_POST_PYT_PYTEST_SHARD_CANONICAL_POLICY_v0_1.json"
+)
 WORKFLOW_PATH = ROOT / ".github/workflows/ci-pytest-shard-shadow.yml"
 TESTS_WORKFLOW = ROOT / ".github/workflows/tests.yml"
 TIERED_WORKFLOW = ROOT / ".github/workflows/ovc-tiered-tests.yml"
@@ -190,10 +194,22 @@ class PytestShardShadowTests(unittest.TestCase):
         self.assertIn("pytest_shard_shadow.py run", workflow)
         self.assertNotIn("xdist", workflow)
 
-        self.assertIn(
-            "PYTHONPATH=src:. python3 -m pytest tests -q --tb=short",
-            tests_workflow,
-        )
+        serial_command = "PYTHONPATH=src:. python3 -m pytest tests -q --tb=short"
+        if serial_command not in tests_workflow:
+            canonical_policy = json.loads(
+                CANONICAL_POLICY_PATH.read_text(encoding="utf-8")
+            )
+            self.assertIn("pytest_shard_canonical.py aggregate", tests_workflow)
+            self.assertIn("name: tests", tests_workflow)
+            self.assertEqual(
+                canonical_policy["operator_gate_id"],
+                "CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER",
+            )
+            self.assertEqual(canonical_policy["operator_decision"], "PASS")
+            self.assertTrue(canonical_policy["runner_cutover_active"])
+            self.assertFalse(canonical_policy["required_check_substitution_active"])
+        else:
+            self.assertIn(serial_command, tests_workflow)
         self.assertIn("SIQ READY admission", tiered_workflow)
         self.assertIn("OVC merge readiness", tiered_workflow)
 
