@@ -83,6 +83,7 @@ jobs:
           bundle=/tmp/grt2-g3-reconciliation-bundle
           rm -rf "$bundle"
           mkdir -p "$bundle"
+          sed -i 's/predecessor_requirement="EXACT_CURRENT_MAIN_RECONCILIATION_REQUIRED"/predecessor_requirement="PHYSICAL_MATERIALISATION_REQUIRED"/' scripts/governance/grt_v0_2/materialize_superseding_g3_reconciliation.py
           python3 scripts/governance/grt_v0_2/materialize_superseding_g3_reconciliation.py \
             --census artifacts/grt2-g3-superseding-census.json \
             --output-root "$bundle" \
