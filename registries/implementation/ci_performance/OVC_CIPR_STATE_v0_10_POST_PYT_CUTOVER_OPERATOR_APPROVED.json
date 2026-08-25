@@ -5,7 +5,7 @@
   "plan_version": "0.1",
   "status": "APPROVED",
   "packet_id": "CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER",
-  "phase": "POST_PYT_CONSOLIDATED_CUTOVER_OPERATOR_APPROVED",
+  "phase": "POST_PYT_CONSOLIDATED_CUTOVER_OPERATOR_APPROVED_PENDING_PHYSICAL_CUTOVER",
   "prerequisites": [
     "CIPR-WP5R-SHADOW-QUALIFICATION delegated PASS and merged via PR #1300",
     "CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER GATE_READY packet at 61c656f5ce8c186fe58ed4d5449bec2d5ad56b0d",
@@ -35,6 +35,8 @@
   "xdist_authorized": false,
   "scientific_authority_delta": false,
   "next_packet": "CIPR-WP5C-POST-PYT-CANONICAL-SHARD-CUTOVER",
-  "operator_stop_gate": null,
+  "operator_stop_gate": "CIPR-G5-POST-PYT-CONSOLIDATED-CUTOVER",
+  "operator_stop_gate_decision": "PASS",
+  "physical_cutover_complete": false,
   "rollback": "Forward-revert or supersede only the approved canonical execution topology change; preserve current check identity, parity, profile assurance, SIQ/VIT/GRT/PDC/merge-readiness and Git history."
 }
