@@ -51,11 +51,13 @@ class TestDsai3vRacPilotApproval(unittest.TestCase):
         self.assertEqual(pointer["status"], "PILOT_SUBSTRATE_IMPLEMENTED_INACTIVE_BASELINE_REQUIRED")
         self.assertEqual(pointer["next_packet"], "DSAI3V-RAC-WP7B-PILOT-BASELINE-ACTIVATION")
         self.assertIsNone(pointer["operator_stop_gate"])
-        self.assertFalse(state["active_pilot"])
-        self.assertFalse(state["baseline_bound"])
+        self.assertEqual(state["phase"], "PILOT_SUBSTRATE_IMPLEMENTED_INACTIVE_BASELINE_REQUIRED")
+        self.assertEqual(state["status"], "IMPLEMENTED_QA_REVIEW")
         self.assertFalse(state["blocking_path_substitution_active"])
         self.assertFalse(state["required_check_substitution_active"])
         self.assertFalse(state["runner_cutover_active"])
+        self.assertEqual(state["next_packet"], "DSAI3V-RAC-WP7B-PILOT-BASELINE-ACTIVATION")
+        self.assertEqual(state["next_boundary_class"], "OPERATOR_REQUIRED")
 
 
 if __name__ == "__main__":
