@@ -174,7 +174,13 @@ class TestRacBoundedPilot(unittest.TestCase):
         self.assertIn("run: python3 tools/ci/prvitr_live_admission.py acquire", tiered)
         self.assertIn("run: python3 tools/ci/prvitr_live_admission.py finalize", tiered)
         policy = json.loads((ROOT / "registries/development/skills/REPOSITORY_ASSURANCE_PILOT_POLICY_v0_1.json").read_text(encoding="utf-8"))
-        self.assertNotEqual(policy["status"], "ACTIVE_BOUNDED_PILOT")
+        self.assertEqual(policy["status"], "ACTIVE_BOUNDED_PILOT")
+        self.assertEqual(policy["pilot_class"], PILOT_CLASS)
+        self.assertEqual(
+            policy["reference_reconciliation"],
+            "EXISTING_TESTS_WORKFLOW_CONCURRENT_ORACLE",
+        )
+        self.assertEqual(policy["general_gate"], "DSAI3V-RAC-G-DELTA-ASSURANCE-GENERAL")
 
 
 if __name__ == "__main__":
