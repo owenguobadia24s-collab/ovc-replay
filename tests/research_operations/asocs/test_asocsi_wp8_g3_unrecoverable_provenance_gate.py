@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import json
 from pathlib import Path
 
@@ -8,8 +9,10 @@ GATE_READY_STATE = ROOT / "records/research_operations/asocs/ASOCSI_PROGRAMME_ST
 G6_STATE = ROOT / "records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_25_G6_PROVENANCE_SUPERSESSION_APPROVED.json"
 POINTER = ROOT / "registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json"
 
+
 def _json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
 
 def test_unrecoverable_provenance_gate_preserves_frozen_scientific_record() -> None:
     evidence = _json(WP8 / "ASOCSI_WP8_G3_UNRECOVERABLE_PROVENANCE_EVIDENCE_v0_1.json")
@@ -24,6 +27,7 @@ def test_unrecoverable_provenance_gate_preserves_frozen_scientific_record() -> N
     assert gate["recommended_decision"] == "PASS"
     assert gate["proposed_delta"]["class"] == "OPERATOR_REQUIRED_ACCEPTANCE_CONDITION_SUPERSESSION"
 
+
 def test_gate_preparation_and_operator_pass_remain_immutable_while_current_state_advances_lawfully() -> None:
     authority = _json(WP8 / "ASOCSI_WP8_G3_UNRECOVERABLE_PROVENANCE_AUTHORITY_v0_1.json")
     qa = _json(WP8 / "ASOCSI_WP8_G3_UNRECOVERABLE_PROVENANCE_QA_v0_1.json")
@@ -34,16 +38,14 @@ def test_gate_preparation_and_operator_pass_remain_immutable_while_current_state
     non_grants = set(authority["non_grants"])
 
     assert authority["authority_delta"] == "NONE"
-    assert {"SUPERSEDE_EXACT_MANIFEST_REPRODUCTION_REQUIREMENT","START_STAGE1_REVEAL","SEMANTIC_REMEDIATION","REPLACE_OR_REWRITE_FROZEN_G3"}.issubset(non_grants)
+    assert {"SUPERSEDE_EXACT_MANIFEST_REPRODUCTION_REQUIREMENT", "START_STAGE1_REVEAL", "SEMANTIC_REMEDIATION", "REPLACE_OR_REWRITE_FROZEN_G3"}.issubset(non_grants)
     assert qa["qa_recommendation"] == "PASS_TO_OPERATOR_GATE"
 
-    # Historical gate preparation never self-granted the reserved decision.
     assert gate_ready["status"] == "GATE_READY"
     assert gate_ready["authority_required"] == "OPERATOR_REQUIRED"
     assert gate_ready["preserved"]["stage1_reveal_started"] is False
     assert gate_ready["next_packet"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION-OPERATOR-DECISION"
 
-    # The exact operator PASS remains a separate immutable historical state.
     decision = _json(WP8 / "ASOCSI_G6_PROVENANCE_SUPERSESSION_OPERATOR_DECISION_v0_1.json")
     assert g6["status"] == "APPROVED"
     assert g6["authority_required"] == "SATISFIED_OPERATOR_PASS"
@@ -53,19 +55,19 @@ def test_gate_preparation_and_operator_pass_remain_immutable_while_current_state
     assert g6["preserved"]["unrecoverable_provenance_warning"] is True
     assert decision["decision"] == "PASS" and decision["authority"] == "OPERATOR"
 
-    # A later presentation-only Stage-1 packet may now be current without rewriting
-    # either historical gate state or starting scientific adjudication / Stage 2.
     assert pointer["programme_id"] == current["programme_id"] == g6["programme_id"]
     assert pointer["status"] == current["status"]
-    expected_next = (
-        "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-HUMAN-ADJUDICATION"
-        if current["packet_id"]
-        == "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-FIDELITY-SUPERSESSION"
-        else "ASOCSI-WP8-STAGE1-HUMAN-FIDELITY-ADJUDICATION"
-    )
-    assert pointer["next_packet"] == current["next_packet"] == expected_next
+    assert pointer["next_packet"] == current["next_packet"]
     assert current["preserved"]["wp8_g3_unrecoverable_provenance_gate"] is True
     assert current["preserved"]["wp8_g3_reproduction_block"] is True
     assert current["preserved"]["unrecoverable_provenance_warning"] is True
     assert current.get("human_adjudication_started", False) is False
     assert current.get("stage2_reveal_started", False) is False
+
+    if current["packet_id"] == "ASOCSI-WP8-S01-STAGE1-TO-STAGE2-TRANSITION-SUPERSESSION":
+        assert current["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
+        assert current["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
+        assert current["stage1_complete_session_freeze_required_for_stage2"] is False
+        assert current["stage2_human_scientific_input_required"] is True
+        assert current["stage2_human_answer_synthesis_allowed"] is False
+        assert current["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
