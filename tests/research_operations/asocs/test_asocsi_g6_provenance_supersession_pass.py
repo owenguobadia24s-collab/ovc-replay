@@ -9,6 +9,8 @@ POINTER = ROOT / "registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POIN
 G6_STATE = ROOT / "records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_25_G6_PROVENANCE_SUPERSESSION_APPROVED.json"
 STAGE2_PREP = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
 
+# Successor-state assertions distinguish immutable historical evidence from the lawful current Stage-2 reveal state.
+
 
 def _json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
