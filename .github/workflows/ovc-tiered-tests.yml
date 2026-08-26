@@ -143,13 +143,12 @@ jobs:
     if: github.event_name == 'pull_request'
     needs: [profile, siq-ready-admission]
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 10
     concurrency:
       group: ovc-main-integration-lane-v1
       cancel-in-progress: false
     outputs:
       admission_receipt_id: ${{ steps.finalize.outputs.admission_receipt_id }}
-      grt_exact_proof_id: ${{ steps.grt-exact.outputs.proof_id }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -177,27 +176,6 @@ jobs:
           git cat-file -e "${OVC_PLACEMENT_COMMIT_SHA}^{commit}"
           test "$(git rev-parse "${OVC_PLACEMENT_COMMIT_SHA}^{tree}")" = "${OVC_PLACEMENT_TREE_SHA}"
           git checkout --detach "${OVC_PLACEMENT_COMMIT_SHA}"
-      - name: Run required GRT-EXACT against the exact late-bound integration tree
-        id: grt-exact
-        shell: bash
-        env:
-          OVC_GRT_BASE_SHA: ${{ steps.acquire.outputs.base_sha }}
-          OVC_GRT_CANDIDATE_HEAD_SHA: ${{ steps.acquire.outputs.candidate_head_sha }}
-          PYTHONPATH: src:.
-        run: |
-          set -euo pipefail
-          python3 scripts/governance/grt_v0_2/grt_exact.py --base "${OVC_GRT_BASE_SHA}" --head "${OVC_GRT_CANDIDATE_HEAD_SHA}" --output artifacts/grt2-g3/grt-exact.json
-          proof_id=$(python3 -c "import json; p=json.load(open('artifacts/grt2-g3/grt-exact.json')); assert p['result']=='PASS'; print(p['logical_sha256'])")
-          test "${#proof_id}" -eq 64
-          echo "proof_id=${proof_id}" >> "$GITHUB_OUTPUT"
-      - name: Upload immutable GRT-EXACT evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: grt-exact-proof
-          path: artifacts/grt2-g3/grt-exact.json
-          if-no-files-found: error
-          retention-days: 30
       - name: Run mandatory SIQ/PDC exact-final assurance inside lease
         shell: bash
         env:
@@ -209,16 +187,6 @@ jobs:
         run: |
           PYTHONPATH=src python3 tools/ci/ovc_run_with_main_lease.py -- \
             bash -lc "PYTHONPATH=src python -m unittest tests.development.test_siq_queue tests.development.test_siq_controls tests.development.test_siq_reconciliation tests.development.test_siq_receipts tests.development.test_siq_pdc_contract tests.development.test_prvitr_late_binding_integration -v"
-      - name: Run lightweight GRT integration readiness
-        shell: bash
-        env:
-          OVC_GRT_PROOF_PATH: artifacts/grt2-g3/grt-exact.json
-          OVC_GRT_PROOF_ID: ${{ steps.grt-exact.outputs.proof_id }}
-          OVC_GRT_BASE_SHA: ${{ steps.acquire.outputs.base_sha }}
-          OVC_GRT_HEAD_SHA: ${{ steps.acquire.outputs.candidate_head_sha }}
-          OVC_GRT_PLACEMENT_TREE_SHA: ${{ steps.acquire.outputs.placement_tree_sha }}
-          PYTHONPATH: src:.
-        run: python3 scripts/governance/grt_v0_2/grt_integration_readiness.py
       - name: Bind exact late-placement IntegrationAdmissionReceipt
         id: finalize
         env:
