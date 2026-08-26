@@ -72,7 +72,7 @@ def test_external_artifact_bindings_and_review_contract():
     assert c['stage2_reveal']=='NOT_CONSTRUCTED_NOT_REVEALED'
     assert wb['export']['filename']=='ASOCSI_WP8_S01_STAGE1_C1_CASE_NARRATIVE_HUMAN_INPUT.json'
 
-def test_qa_decision_state_pointer_stop_at_human_input():
+def test_qa_decision_state_preserves_historical_human_input_boundary_after_forward_supersession():
     qa=load(WP8/'ASOCSI_WP8_S01_STAGE1_C1_CASE_NARRATIVE_QA_v0_1.json')
     dec=load(WP8/'ASOCSI_WP8_S01_STAGE1_C1_CASE_NARRATIVE_DECISION_v0_1.json')
     st=load(ROOT/'records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_27_WP8_S01_STAGE1_C1_CASE_NARRATIVE_FIDELITY_SUPERSESSION_COMPLETED.json')
@@ -84,5 +84,5 @@ def test_qa_decision_state_pointer_stop_at_human_input():
     assert st['required_human_input_started'] is False and st['human_adjudication_started'] is False
     assert st['stage2_reveal_started'] is False
     assert st['historical_single_anchor_human_completion_required'] is False
-    assert ptr['current_state'].endswith('ASOCSI_PROGRAMME_STATE_v0_27_WP8_S01_STAGE1_C1_CASE_NARRATIVE_FIDELITY_SUPERSESSION_COMPLETED.json')
-    assert ptr['next_packet']=='ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-HUMAN-ADJUDICATION'
+    assert ptr['current_state'].endswith('ASOCSI_PROGRAMME_STATE_v0_28_WP8_S01_STAGE1_TO_STAGE2_TRANSITION_SUPERSESSION_COMPLETED.json')
+    assert ptr['next_packet']=='ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION'

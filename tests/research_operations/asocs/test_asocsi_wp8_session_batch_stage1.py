@@ -22,6 +22,7 @@ PACKET = WP8 / "ASOCSI_WP8_S01_STAGE1_REVEAL_PACKET_v0_1.json"
 TEMPLATE = WP8 / "ASOCSI_WP8_S01_STAGE1_HUMAN_INPUT_TEMPLATE_v0_1.json"
 QA = WP8 / "ASOCSI_WP8_S01_STAGE1_SESSION_BATCH_QA_v0_1.json"
 CONTRACT = WP8 / "ASOCSI_WP8_SESSION_BATCH_EXECUTION_CONTRACT_v0_1.json"
+TRANSITION_SUPERSESSION = WP8 / "ASOCSI_WP8_S01_STAGE_TRANSITION_SUPERSESSION_CONTRACT_v0_1.json"
 POINTER = ROOT / "registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json"
 
 
@@ -89,8 +90,6 @@ def test_stage1_packet_exposes_exact_source_and_c1_but_no_later_stage_case_evide
     for case in anchors:
         evidence = case["revealed_evidence"]
         assert set(evidence["source_ohlc"]) == {"open", "high", "low", "close"}
-        # The exact reproduced historical trace serialization lawfully omits the
-        # redundant repair_applied=false field for complete anchors.
         assert evidence["source_lineage"].get("repair_applied") in {None, False}
         assert evidence["c1"]["construct"] == "C1_ARITHMETIC_PRIMITIVES"
         assert evidence["c1"]["route"] == "MORPHOLOGY_COMPATIBLE"
@@ -190,7 +189,7 @@ def test_complete_submission_freezes_atomically_per_case_and_binds_raw_input(tmp
         )
 
 
-def test_qa_schemas_and_pointer_preserve_the_single_human_boundary() -> None:
+def test_qa_schemas_and_pointer_preserve_stage1_history_and_scoped_stage2_supersession() -> None:
     qa = _j(QA)
     assert qa["qa_disposition"] == "PASS_REVEAL_PACKET_AND_TEMPLATE_ONLY"
     assert qa["checks"]["single_session_human_input_template"] == "PASS_ONE_FILE_25_CASES"
@@ -207,14 +206,32 @@ def test_qa_schemas_and_pointer_preserve_the_single_human_boundary() -> None:
         "session_human_input_sha256",
         "case_validation_status",
     }.issubset(reveal_record["required"])
+
     pointer = _j(POINTER)
     state = _j(ROOT / pointer["current_state"])
-    assert state["gate_id"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION"
-    assert state["authority_required"] == "SATISFIED_OPERATOR_PASS"
-    expected_next = (
-        "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-HUMAN-ADJUDICATION"
-        if state["packet_id"]
-        == "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-FIDELITY-SUPERSESSION"
-        else "ASOCSI-WP8-STAGE1-HUMAN-FIDELITY-ADJUDICATION"
-    )
-    assert pointer["next_packet"] == state["next_packet"] == expected_next
+    assert pointer["next_packet"] == state["next_packet"]
+    assert state.get("stage2_reveal_started", False) is False
+
+    if state["packet_id"] == "ASOCSI-WP8-S01-STAGE1-TO-STAGE2-TRANSITION-SUPERSESSION":
+        supersession = _j(TRANSITION_SUPERSESSION)
+        assert state["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
+        assert state["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
+        assert state["stage1_complete_session_freeze_required_for_stage2"] is False
+        assert state["stage2_preparation_authorized"] is True
+        assert state["stage2_human_scientific_input_required"] is True
+        assert state["stage2_human_answer_synthesis_allowed"] is False
+        assert state["stage2_to_stage3_freeze_requirement_changed"] is False
+        assert state["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
+        assert supersession["stage1_disposition"]["scientific_conclusion"] == "NOT_ESTABLISHED"
+        assert supersession["stage2_admission"]["stage2_human_judgement_required"] is True
+        assert supersession["stage2_admission"]["stage2_human_judgement_may_be_synthesized_by_agent"] is False
+    else:
+        assert state["gate_id"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION"
+        assert state["authority_required"] == "SATISFIED_OPERATOR_PASS"
+        expected_next = (
+            "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-HUMAN-ADJUDICATION"
+            if state["packet_id"]
+            == "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-FIDELITY-SUPERSESSION"
+            else "ASOCSI-WP8-STAGE1-HUMAN-FIDELITY-ADJUDICATION"
+        )
+        assert state["next_packet"] == expected_next

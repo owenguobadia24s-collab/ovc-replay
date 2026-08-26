@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import hashlib
 import json
 from pathlib import Path
@@ -57,13 +58,16 @@ EXPECTED_BLIND_HASHES = [
 "d0735edf0fe86db410073b21f6a1c59c91e90ccaae4e16b7115eadf65f1b6036",
 ]
 
+
 def _j(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
 
 def _cid(value: dict) -> str:
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()).hexdigest()
 
-def test_preparation_preserves_current_g6_operator_pass_across_later_stage1_interface() -> None:
+
+def test_preparation_preserves_g6_operator_pass_and_lawful_current_supersession() -> None:
     g6 = _j(G6_STATE)
     assert g6["status"] == "APPROVED"
     assert g6["gate_id"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION"
@@ -74,13 +78,25 @@ def test_preparation_preserves_current_g6_operator_pass_across_later_stage1_inte
     pointer = _j(POINTER)
     state = _j(ROOT / pointer["current_state"])
     assert pointer["status"] == state["status"]
-    assert state["gate_id"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION"
-    assert state["authority_required"] == "SATISFIED_OPERATOR_PASS"
-    assert pointer["next_packet"] == "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-HUMAN-ADJUDICATION"
+    assert pointer["next_packet"] == state["next_packet"]
     assert state["preserved"]["wp8_g3_reproduction_block"] is True
     assert state["preserved"]["unrecoverable_provenance_warning"] is True
     assert state.get("human_adjudication_started", False) is False
     assert state.get("stage2_reveal_started", False) is False
+
+    if state["packet_id"] == "ASOCSI-WP8-S01-STAGE1-TO-STAGE2-TRANSITION-SUPERSESSION":
+        assert state["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
+        assert state["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
+        assert state["stage1_complete_session_freeze_required_for_stage2"] is False
+        assert state["stage2_preparation_authorized"] is True
+        assert state["stage2_human_scientific_input_required"] is True
+        assert state["stage2_human_answer_synthesis_allowed"] is False
+        assert state["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
+    else:
+        assert state["gate_id"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION"
+        assert state["authority_required"] == "SATISFIED_OPERATOR_PASS"
+        assert pointer["next_packet"] == "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-HUMAN-ADJUDICATION"
+
 
 def test_session1_pack_is_exact_locked_prefix_and_stage1_only() -> None:
     pack = _j(WP8 / "ASOCSI_WP8_STAGE1_SESSION_01_REVEAL_PACK_v0_1.json")
@@ -97,6 +113,7 @@ def test_session1_pack_is_exact_locked_prefix_and_stage1_only() -> None:
     assert pack["human_judgements"] == []
     assert pack["stage2_reveal_started"] is False
     assert "PROHIBITED" in pack["construct_survival_decision"]
+
 
 def test_anchor_cases_bind_exact_source_and_frozen_c1_without_upper_stack_reveal() -> None:
     pack = _j(WP8 / "ASOCSI_WP8_STAGE1_SESSION_01_REVEAL_PACK_v0_1.json")
@@ -115,7 +132,8 @@ def test_anchor_cases_bind_exact_source_and_frozen_c1_without_upper_stack_reveal
     assert gap["repair_applied"] is False
     assert gap["c1_disposition"] == "C1_NOT_EVALUABLE_SOURCE"
 
-def test_human_fidelity_is_not_formula_recalculation_and_freezes_before_stage2() -> None:
+
+def test_human_fidelity_is_not_formula_recalculation_and_historical_freeze_rule_is_preserved() -> None:
     prep = _j(WP8 / "ASOCSI_WP8_STAGE1_SESSION_01_PREPARATION_v0_1.json")
     assert prep["human_reviewer_does_not_recompute_formula_arithmetic"] is True
     assert prep["mechanical_checks"]
@@ -123,6 +141,7 @@ def test_human_fidelity_is_not_formula_recalculation_and_freezes_before_stage2()
     assert prep["freeze_rule"].endswith("BEFORE_ANY_C2_PRIMITIVE_REVEAL")
     assert prep["information_gap_rule"].startswith("EVALUATE_SOURCE_MEASUREMENT_ADEQUACY")
     assert prep["construct_survival_rule"].startswith("NO_CONSTRUCT_SURVIVAL_STATE")
+
 
 def test_authority_frontier_and_schemas_remain_bounded() -> None:
     authority = _j(WP8 / "ASOCSI_WP8_STAGE1_AUTHORITY_MANIFEST_v0_1.json")
@@ -137,7 +156,7 @@ def test_authority_frontier_and_schemas_remain_bounded() -> None:
     assert pack["dependency_frontier_id"] == _cid(frontier)
     j = _j(SCHEMAS / "asocs_stage1_fidelity_judgement_v0_1.schema.json")
     assert j["properties"]["construct_survival_decision"]["const"] == "PROHIBITED_DURING_CASE_REVIEW"
-    assert set(j["properties"]["fidelity_disposition"]["enum"]) == {"PASS_FIDELITY","MATERIAL_MISMATCH","SOURCE_LIMITED","INDETERMINATE"}
+    assert set(j["properties"]["fidelity_disposition"]["enum"]) == {"PASS_FIDELITY", "MATERIAL_MISMATCH", "SOURCE_LIMITED", "INDETERMINATE"}
     r = _j(SCHEMAS / "asocs_reveal_stage_record_v0_1.schema.json")
     assert r["properties"]["frozen_before_next_reveal"]["const"] is True
     f = _j(SCHEMAS / "asocs_failure_attribution_v0_1.schema.json")

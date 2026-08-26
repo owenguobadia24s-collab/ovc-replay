@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import json
 from pathlib import Path
 
@@ -22,10 +23,10 @@ def test_operator_pass_supersedes_only_exact_manifest_reproduction_precondition(
     assert effect["authority_delta"] == "SUPERSEDE_ONE_G3_REPRODUCTION_ACCEPTANCE_PRECONDITION_ONLY"
     assert "RESUME_ASOCSI_WP8_STAGE1_REVEAL_PREPARATION" in effect["grants"]
     assert "RESUME_STAGE1_HUMAN_FIDELITY_ADJUDICATION_UNDER_EXISTING_NONAUTHORITATIVE_ASOCS_RESEARCH_SCOPE" in effect["grants"]
-    assert {"VALIDATION","EC1","PUBLICATION","PROBABILITY","RISK","EXPOSURE","TRADING","EXECUTION","AGENT_WRITE"}.issubset(set(effect["non_grants"]))
+    assert {"VALIDATION", "EC1", "PUBLICATION", "PROBABILITY", "RISK", "EXPOSURE", "TRADING", "EXECUTION", "AGENT_WRITE"}.issubset(set(effect["non_grants"]))
 
 
-def test_approved_g6_state_remains_immutable_while_current_state_may_advance_to_stage1_human_boundary() -> None:
+def test_approved_g6_state_remains_immutable_while_current_state_may_advance_lawfully() -> None:
     g6 = _json(G6_STATE)
     assert g6["status"] == "APPROVED"
     assert g6["gate_id"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION"
@@ -41,13 +42,7 @@ def test_approved_g6_state_remains_immutable_while_current_state_may_advance_to_
     current = _json(ROOT / pointer["current_state"])
     assert pointer["programme_id"] == current["programme_id"] == g6["programme_id"]
     assert pointer["status"] == current["status"]
-    expected_next = (
-        "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-HUMAN-ADJUDICATION"
-        if current["packet_id"]
-        == "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-FIDELITY-SUPERSESSION"
-        else "ASOCSI-WP8-STAGE1-HUMAN-FIDELITY-ADJUDICATION"
-    )
-    assert pointer["next_packet"] == current["next_packet"] == expected_next
+    assert pointer["next_packet"] == current["next_packet"]
     assert current["preserved"]["g3_frozen_generation"] is True
     assert current["preserved"]["g4_review_population"] is True
     assert current["preserved"]["g5_human_evidence"] is True
@@ -55,3 +50,16 @@ def test_approved_g6_state_remains_immutable_while_current_state_may_advance_to_
     assert current["preserved"]["unrecoverable_provenance_warning"] is True
     assert current.get("human_adjudication_started", False) is False
     assert current.get("stage2_reveal_started", False) is False
+
+    if current["packet_id"] == "ASOCSI-WP8-S01-STAGE1-TO-STAGE2-TRANSITION-SUPERSESSION":
+        assert current["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
+        assert current["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
+        assert current["stage1_complete_session_freeze_required_for_stage2"] is False
+        assert current["stage2_preparation_authorized"] is True
+        assert current["stage2_human_scientific_input_required"] is True
+        assert current["stage2_human_answer_synthesis_allowed"] is False
+        assert current["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
+    elif current["packet_id"] == "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-FIDELITY-SUPERSESSION":
+        assert current["next_packet"] == "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-HUMAN-ADJUDICATION"
+    else:
+        assert current["next_packet"] == "ASOCSI-WP8-STAGE1-HUMAN-FIDELITY-ADJUDICATION"

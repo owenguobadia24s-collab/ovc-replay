@@ -126,28 +126,45 @@ def test_programme_state_preserves_narrowed_block_across_lawful_successors() -> 
         assert pointer["packet_id"] == "ASOCSI-WP8-G3-REPRODUCTION-INTEGRITY-RESOLUTION"
         assert pointer["status"] == "BLOCKED"
         assert pointer["next_packet"] == "ASOCSI-WP8-G3-CENSUS-IDENTITY-RESOLUTION"
-    else:
-        prerequisites = set(current.get("prerequisites", []))
-        preserved = current.get("preserved", {})
-        assert RESOLUTION_EFFECTIVE in prerequisites or preserved.get("wp8_g3_reproduction_block") is True
-        assert current["preserved"]["g3_frozen_generation"] is True
-        assert current["preserved"]["g4_review_population"] is True
-        assert current["preserved"]["g5_human_evidence"] is True
-        assert current["evidence"]["frozen_census_sha256"] == FROZEN_CENSUS
-        assert current["evidence"]["frozen_ordered_trace_ids_sha256"] == FROZEN_ORDERED
-        assert current["evidence"]["frozen_observation_trace_sha256"] == FROZEN_TRACES
-        if current["status"] == "GATE_READY":
-            assert current.get("stage1_reveal_started", False) is False
-            assert current["authority_required"] == "OPERATOR_REQUIRED"
-            assert current["stop_boundary"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION-OPERATOR-DECISION"
-        elif current["status"] == "APPROVED":
-            operator = load(WP8 / "ASOCSI_G6_PROVENANCE_SUPERSESSION_OPERATOR_DECISION_v0_1.json")
-            assert current.get("stage1_reveal_started", False) is False
-            assert current["authority_required"] == "SATISFIED_OPERATOR_PASS"
-            assert current["gate_id"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION"
-            assert operator["decision"] == "PASS" and operator["authority"] == "OPERATOR"
-            assert current["preserved"]["unrecoverable_provenance_warning"] is True
-        elif current["status"] == "COMPLETED":
+        return
+
+    prerequisites = set(current.get("prerequisites", []))
+    preserved = current.get("preserved", {})
+    assert RESOLUTION_EFFECTIVE in prerequisites or preserved.get("wp8_g3_reproduction_block") is True
+    assert preserved["g3_frozen_generation"] is True
+    assert preserved["g4_review_population"] is True
+    assert preserved["g5_human_evidence"] is True
+    assert current["evidence"]["frozen_census_sha256"] == FROZEN_CENSUS
+    assert current["evidence"]["frozen_ordered_trace_ids_sha256"] == FROZEN_ORDERED
+    assert current["evidence"]["frozen_observation_trace_sha256"] == FROZEN_TRACES
+
+    if current["status"] == "GATE_READY":
+        assert current.get("stage1_reveal_started", False) is False
+        assert current["authority_required"] == "OPERATOR_REQUIRED"
+        assert current["stop_boundary"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION-OPERATOR-DECISION"
+    elif current["status"] == "APPROVED":
+        operator = load(WP8 / "ASOCSI_G6_PROVENANCE_SUPERSESSION_OPERATOR_DECISION_v0_1.json")
+        assert current.get("stage1_reveal_started", False) is False
+        assert current["authority_required"] == "SATISFIED_OPERATOR_PASS"
+        assert current["gate_id"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION"
+        assert operator["decision"] == "PASS" and operator["authority"] == "OPERATOR"
+        assert preserved["unrecoverable_provenance_warning"] is True
+    elif current["status"] == "COMPLETED":
+        assert preserved["wp8_g3_reproduction_block"] is True
+        assert preserved["unrecoverable_provenance_warning"] is True
+        assert current["construct_survival_decision"] == "PROHIBITED_DURING_CASE_REVIEW"
+        if current["packet_id"] == "ASOCSI-WP8-S01-STAGE1-TO-STAGE2-TRANSITION-SUPERSESSION":
+            assert current["authority_delta"] == "SCOPED_FROZEN_REVIEW_SEQUENCE_SUPERSESSION"
+            assert current["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
+            assert current["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
+            assert current["stage1_complete_session_freeze_required_for_stage2"] is False
+            assert current["stage1_human_completion_required"] is False
+            assert current["stage2_preparation_authorized"] is True
+            assert current["stage2_human_scientific_input_required"] is True
+            assert current["stage2_human_answer_synthesis_allowed"] is False
+            assert current["stage2_to_stage3_freeze_requirement_changed"] is False
+            assert current["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
+        else:
             assert current["packet_id"] in {
                 "ASOCSI-WP8-S01-STAGE1-HUMAN-REVIEW-INTERFACE",
                 "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-FIDELITY-SUPERSESSION",
@@ -155,9 +172,6 @@ def test_programme_state_preserves_narrowed_block_across_lawful_successors() -> 
             assert current["authority_delta"] == "NONE"
             assert current["stage1_reveal_started"] is True
             assert current["human_scientific_input_boundary"] is True
-            assert current["construct_survival_decision"] == "PROHIBITED_DURING_CASE_REVIEW"
-            assert current["preserved"]["wp8_g3_reproduction_block"] is True
-            assert current["preserved"]["unrecoverable_provenance_warning"] is True
             expected_next = (
                 "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-HUMAN-ADJUDICATION"
                 if current["packet_id"]
@@ -165,5 +179,5 @@ def test_programme_state_preserves_narrowed_block_across_lawful_successors() -> 
                 else "ASOCSI-WP8-STAGE1-HUMAN-FIDELITY-ADJUDICATION"
             )
             assert current["next_packet"] == expected_next
-        else:
-            raise AssertionError(f"unexpected successor status: {current['status']}")
+    else:
+        raise AssertionError(f"unexpected successor status: {current['status']}")
