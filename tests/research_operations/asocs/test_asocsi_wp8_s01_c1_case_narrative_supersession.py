@@ -6,6 +6,7 @@ WP8=ROOT/'docs/programmes/asocs-v0-1/implementation/wp8'
 STAGE2_PREP='ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION'
 STAGE2_HUMAN='ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-HUMAN-ADJUDICATION'
 NATIVE_ROUTE='ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-ROUTE-AMENDMENT'
+NATIVE_HUMAN='ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-HUMAN-ADJUDICATION'
 
 def load(p): return json.loads(p.read_text(encoding='utf-8'))
 def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
@@ -124,6 +125,14 @@ def test_qa_decision_state_preserves_historical_human_input_boundary_after_forwa
         assert current['stage3_reveal_started'] is False
         assert current['preserved']['wp8_g3_reproduction_block'] is True
         assert current['next_packet']=='ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-REPLAY'
+    elif current['packet_id']==NATIVE_HUMAN:
+        assert current['status']=='GATE_READY'
+        assert current['authority_required']=='HUMAN_SCIENTIFIC_INPUT'
+        assert current['stage1_review_route_status']=='SUPERSEDED_UNCOMPLETED'
+        assert current['stage2_human_answer_count']==0
+        assert current['stage2_human_answer_synthesis_allowed'] is False
+        assert current['stage3_reveal_started'] is False
+        assert current['next_packet']==NATIVE_HUMAN
     else:
         assert ptr['current_state'].endswith('ASOCSI_PROGRAMME_STATE_v0_28_WP8_S01_STAGE1_TO_STAGE2_TRANSITION_SUPERSESSION_COMPLETED.json')
         assert ptr['next_packet']==STAGE2_PREP

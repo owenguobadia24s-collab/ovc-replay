@@ -13,6 +13,7 @@ STAGE2_PREP = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
 STAGE2_HUMAN = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-HUMAN-ADJUDICATION"
 STAGE2_NATIVE_ROUTE = "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-ROUTE-AMENDMENT"
 STAGE2_NATIVE_REPLAY = "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-REPLAY"
+STAGE2_NATIVE_HUMAN = "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-HUMAN-ADJUDICATION"
 
 LOCKED_SESSION1 = "9aaa80991365cf290122caef513f0e8d706a7b1283475fa041d01d8e5f9f1a0e"
 NON_ADMITTED_CORRECTION = "4f0f06c8f6ba061e56079b04a6400013d12a0a6a578f653fc7abf553744c42ef"
@@ -87,7 +88,7 @@ def test_preparation_preserves_g6_operator_pass_and_lawful_current_supersession(
     assert state["preserved"]["unrecoverable_provenance_warning"] is True
     assert state.get("human_adjudication_started", False) is False
 
-    if state["packet_id"] in {STAGE2_PREP, STAGE2_HUMAN, STAGE2_NATIVE_ROUTE}:
+    if state["packet_id"] in {STAGE2_PREP, STAGE2_HUMAN, STAGE2_NATIVE_ROUTE, STAGE2_NATIVE_HUMAN}:
         assert state["stage2_reveal_started"] is True
         assert state["stage2_reveal_prepared"] is True
         assert state["stage2_human_adjudication_started"] is False
@@ -103,6 +104,11 @@ def test_preparation_preserves_g6_operator_pass_and_lawful_current_supersession(
             assert state["stage2_human_scientific_input_required"] is True
             assert state["stage2_human_answer_synthesis_allowed"] is False
             assert state["next_packet"] == STAGE2_NATIVE_REPLAY
+        elif state["packet_id"] == STAGE2_NATIVE_HUMAN:
+            assert state["status"] == "GATE_READY"
+            assert state["authority_required"] == "HUMAN_SCIENTIFIC_INPUT"
+            assert state["stage2_human_answer_count"] == 0
+            assert state["next_packet"] == STAGE2_NATIVE_HUMAN
         else:
             assert state["next_packet"] == STAGE2_HUMAN
             if state["packet_id"] == STAGE2_HUMAN:

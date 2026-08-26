@@ -9,6 +9,7 @@ SCHEMAS = ROOT / "schemas/research_operations/asocs"
 STAGE2_PREP = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
 STAGE2_HUMAN = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-HUMAN-ADJUDICATION"
 NATIVE_ROUTE = "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-ROUTE-AMENDMENT"
+NATIVE_HUMAN = "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-HUMAN-ADJUDICATION"
 
 
 def load(path):
@@ -133,6 +134,15 @@ def test_transition_schema_contract_and_current_programme_state():
         assert current["preserved"]["g3_frozen_generation"] is True
         assert current["preserved"]["g5_blind_evidence"] is True
         assert pointer["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-REPLAY"
+    elif current["packet_id"] == NATIVE_HUMAN:
+        assert current["status"] == "GATE_READY"
+        assert current["authority_required"] == "HUMAN_SCIENTIFIC_INPUT"
+        assert current["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
+        assert current["stage2_reveal_started"] is True
+        assert current["stage2_human_adjudication_started"] is False
+        assert current["stage2_human_answer_count"] == 0
+        assert current["stage3_reveal_started"] is False
+        assert pointer["next_packet"] == NATIVE_HUMAN
     else:
         assert pointer["current_state"].endswith("ASOCSI_PROGRAMME_STATE_v0_28_WP8_S01_STAGE1_TO_STAGE2_TRANSITION_SUPERSESSION_COMPLETED.json")
         assert pointer["next_packet"] == STAGE2_PREP

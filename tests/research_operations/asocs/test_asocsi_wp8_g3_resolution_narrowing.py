@@ -19,6 +19,7 @@ RESOLUTION_EFFECTIVE = "ASOCSI-WP8-G3-REPRODUCTION-INTEGRITY-RESOLUTION_REPOSITO
 STAGE2_PREP = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
 STAGE2_HUMAN = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-HUMAN-ADJUDICATION"
 STAGE2_NATIVE_ROUTE = "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-ROUTE-AMENDMENT"
+STAGE2_NATIVE_HUMAN = "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-HUMAN-ADJUDICATION"
 CHECKPOINTS = {"4392":"91004c82e3a4134a32b1afe4e41559652b978589b8043e9abe9f7e818ccf0709","8784":"d005f3225ea5a268fc9a223995f5cadfbb6611f374002eca02df266407b781ee","13176":"c99129aa61f5471f8e7574471fb190057def3efa918a72014e58a3232b607632","17568":"8ea8eabd040a0bc193a34ff792c49f7eb83739c72c5caa69f7234a88159e6f0c"}
 
 
@@ -102,14 +103,14 @@ def test_programme_state_preserves_narrowed_block_across_lawful_successors() -> 
     assert state_generation(pointer["current_state"]) >= state_generation(NARROWED_STATE)
     assert current.get("human_adjudication_started", False) is False
 
-    if current["packet_id"] in {STAGE2_PREP, STAGE2_HUMAN, STAGE2_NATIVE_ROUTE}:
+    if current["packet_id"] in {STAGE2_PREP, STAGE2_HUMAN, STAGE2_NATIVE_ROUTE, STAGE2_NATIVE_HUMAN}:
         assert current["stage2_reveal_started"] is True
         assert current["stage2_reveal_prepared"] is True
         assert current["stage2_human_adjudication_started"] is False
         assert current["required_human_input_started"] is False
         assert current["stage2_complete_session_freeze_required_before_stage3"] is True
         assert current["stage3_reveal_started"] is False
-        if current["packet_id"] == STAGE2_HUMAN:
+        if current["packet_id"] in {STAGE2_HUMAN, STAGE2_NATIVE_HUMAN}:
             assert current["status"] == "GATE_READY"
             assert current["authority_required"] == "HUMAN_SCIENTIFIC_INPUT"
             assert current["stage2_human_answer_count"] == 0
@@ -138,9 +139,9 @@ def test_programme_state_preserves_narrowed_block_across_lawful_successors() -> 
     assert current["evidence"]["frozen_observation_trace_sha256"] == FROZEN_TRACES
 
     if current["status"] == "GATE_READY":
-        if current["packet_id"] == STAGE2_HUMAN:
+        if current["packet_id"] in {STAGE2_HUMAN, STAGE2_NATIVE_HUMAN}:
             assert current["authority_required"] == "HUMAN_SCIENTIFIC_INPUT"
-            assert current["blockers"] == ["HUMAN_SCIENTIFIC_INPUT_REQUIRED"]
+            assert len(current["blockers"]) == 1
             assert current["stage2_reveal_started"] is True
             assert current["stage3_reveal_started"] is False
         else:

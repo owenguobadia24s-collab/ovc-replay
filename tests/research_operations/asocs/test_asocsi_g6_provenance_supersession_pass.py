@@ -11,6 +11,7 @@ STAGE2_PREP = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
 STAGE2_HUMAN = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-HUMAN-ADJUDICATION"
 STAGE2_NATIVE_ROUTE = "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-ROUTE-AMENDMENT"
 STAGE2_NATIVE_REPLAY = "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-REPLAY"
+STAGE2_NATIVE_HUMAN = "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-HUMAN-ADJUDICATION"
 
 # Successor-state assertions distinguish immutable historical evidence from the lawful current Stage-2 reveal state.
 
@@ -56,7 +57,7 @@ def test_approved_g6_state_remains_immutable_while_current_state_may_advance_law
     assert current["preserved"]["unrecoverable_provenance_warning"] is True
     assert current.get("human_adjudication_started", False) is False
 
-    if current["packet_id"] in {STAGE2_PREP, STAGE2_HUMAN, STAGE2_NATIVE_ROUTE}:
+    if current["packet_id"] in {STAGE2_PREP, STAGE2_HUMAN, STAGE2_NATIVE_ROUTE, STAGE2_NATIVE_HUMAN}:
         assert current["stage2_reveal_started"] is True
         assert current["stage2_reveal_prepared"] is True
         assert current["stage2_human_adjudication_started"] is False
@@ -72,6 +73,11 @@ def test_approved_g6_state_remains_immutable_while_current_state_may_advance_law
             assert current["stage2_human_scientific_input_required"] is True
             assert current["stage2_human_answer_synthesis_allowed"] is False
             assert current["next_packet"] == STAGE2_NATIVE_REPLAY
+        elif current["packet_id"] == STAGE2_NATIVE_HUMAN:
+            assert current["status"] == "GATE_READY"
+            assert current["authority_required"] == "HUMAN_SCIENTIFIC_INPUT"
+            assert current["stage2_human_answer_count"] == 0
+            assert current["next_packet"] == STAGE2_NATIVE_HUMAN
         else:
             assert current["next_packet"] == STAGE2_HUMAN
             if current["packet_id"] == STAGE2_HUMAN:

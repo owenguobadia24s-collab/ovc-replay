@@ -1,0 +1,76 @@
+{
+  "schema": "ovc-asocsi-wp8-stage2-c2-native-observation-human-adjudication-qa/v0_1",
+  "programme_id": "OVC-ASOCS-6M-v0.1",
+  "packet_id": "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-HUMAN-ADJUDICATION",
+  "baseline_commit": "e0341ed634600e9d68c4ee5696d310c103551cb6",
+  "checks": [
+    {
+      "id": "ROUTE_PR_1360_EXACT_HEAD_QUALIFIED_CHECKED_AND_SQUASH_MERGED",
+      "physical_merge_sha": "e0341ed634600e9d68c4ee5696d310c103551cb6",
+      "status": "PASS"
+    },
+    {
+      "id": "EXACT_SOURCE_CASE_SEQUENCE_AND_FROZEN_C1_PARITY",
+      "source_rows": 186145,
+      "frozen_case_rows_checked": 23343,
+      "complete_c1_rows_checked": 15335,
+      "status": "PASS"
+    },
+    {
+      "id": "UNCHANGED_FROZEN_C2_PACKAGE_EXECUTED",
+      "package_sha256": "150de1997be8801baa59db6d0fe98b11cb21a6b70525b908537aeb31bfd00cc3",
+      "status": "PASS"
+    },
+    {
+      "id": "TWO_INDEPENDENT_FULL_IDENTITY_BEARING_PROJECTIONS_EQUAL",
+      "identity_bearing_sha256": "e27df7280638837217383a6c0d366d10b1ad722a81049a133cf7a5cce50ec912",
+      "status": "PASS"
+    },
+    {
+      "id": "EXACT_25_CASE_IDENTITY_AND_ORDER",
+      "anchor_cases": 24,
+      "source_gap_cases": 1,
+      "status": "PASS"
+    },
+    {
+      "id": "SOURCE_GAP_C2_NOT_FABRICATED",
+      "case_id": "ASOCS.BLIND.9b251b8cfedc5e9a61396830",
+      "status": "PASS"
+    },
+    {
+      "id": "ACTUAL_HORIZON_LEVEL_CONTAINER_RELATION_ONLY",
+      "components": ["HORIZON", "LEVEL", "CONTAINER", "RELATION"],
+      "status": "PASS"
+    },
+    {
+      "id": "WORKBOOK_EXTERNAL_ARTIFACT_SHA256_AND_BYTES_VERIFIED_AFTER_DRIVE_UPLOAD",
+      "drive_file_id": "1DXeVDu_f3Q8pHvCdr-w0EKsQNdKyRqd7",
+      "byte_size": 6348232,
+      "sha256": "2577f0273df0d88aa150eed586a7efc47eab2d28aaa61446e0a112413253dbaa",
+      "status": "PASS"
+    },
+    {
+      "id": "WORKBOOK_STATIC_JSON_BINDING_AND_JAVASCRIPT_SYNTAX",
+      "notes": "25-case order, 24 actual C2 surfaces, one empty source gap, initial export-disabled state and JavaScript parse verified.",
+      "status": "PASS"
+    },
+    {
+      "id": "ZERO_HUMAN_ANSWERS_PREPOPULATED",
+      "human_answer_count": 0,
+      "status": "PASS"
+    },
+    {
+      "id": "NO_HISTORICAL_PROVENANCE_MUTATION_OR_LATER_STAGE_REVEAL",
+      "status": "PASS"
+    }
+  ],
+  "blocking_findings": [],
+  "qa_recommendation": "PASS",
+  "repository_ci": "PENDING_REPLAY_PR_EXACT_HEAD",
+  "next_boundary": "HUMAN_SCIENTIFIC_INPUT",
+  "scientific_warnings": [
+    "Replay output is audit-only and nonauthoritative; it does not establish scientific coherence.",
+    "BID and UTC remain FORENSICALLY_SUPPORTED_NOT_DECLARED and do not backfill historical provenance.",
+    "No human Stage-2 judgement exists until the operator completes and returns the workbook export."
+  ]
+}
