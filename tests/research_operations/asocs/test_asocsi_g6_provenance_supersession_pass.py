@@ -41,7 +41,13 @@ def test_approved_g6_state_remains_immutable_while_current_state_may_advance_to_
     current = _json(ROOT / pointer["current_state"])
     assert pointer["programme_id"] == current["programme_id"] == g6["programme_id"]
     assert pointer["status"] == current["status"]
-    assert pointer["next_packet"] == current["next_packet"] == "ASOCSI-WP8-STAGE1-HUMAN-FIDELITY-ADJUDICATION"
+    expected_next = (
+        "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-HUMAN-ADJUDICATION"
+        if current["packet_id"]
+        == "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-FIDELITY-SUPERSESSION"
+        else "ASOCSI-WP8-STAGE1-HUMAN-FIDELITY-ADJUDICATION"
+    )
+    assert pointer["next_packet"] == current["next_packet"] == expected_next
     assert current["preserved"]["g3_frozen_generation"] is True
     assert current["preserved"]["g4_review_population"] is True
     assert current["preserved"]["g5_human_evidence"] is True
