@@ -1,0 +1,40 @@
+{
+  "acceptance_conditions": [
+    "GRT-EXACT and GRT integration-readiness are removed from the permanent merge-readiness lane",
+    "SIQ/PDC exact-final assurance and one-writer late-binding lane remain unchanged",
+    "G2.5 limited-new-artifact candidate enforcement remains active in the existing repository test listener",
+    "DebtFloor G0/G1/G2 files and current pointer bytes are not changed by the rollback packet",
+    "prepare_next_debt_floor no longer writes or advances any floor while rollback authority is active",
+    "full GRT-EXACT remains available only as historical/diagnostic code and is not an ordinary integration prerequisite",
+    "no non-GRT authority is granted"
+  ],
+  "authority_effect": "NONE_QA_ONLY",
+  "baseline_commit": "00ed2badf959d999ef0469892333268910838ac7",
+  "gate_id": "GRT2-G3",
+  "local_review": {
+    "limited_enforcement_source": "registries/authority/GRT2_ACTIVE_ENFORCEMENT_AUTHORITY_v0_1.json",
+    "prestaged_rollback_bundle_hash": "b8ab2ace9b5a526385ac632106193ffe53c01d1c3f6f42f9c9057d3936b04294",
+    "result": "PASS_PENDING_REMOTE_EXACT_FINAL",
+    "workflow_restoration_source": "ae09f9aa6fbbeba917ed6476da561ae8a2e4427e:.github/workflows/ovc-tiered-tests.yml"
+  },
+  "logical_sha256": "ba302ad447ad51a037781201b20980b35d3b042d33ae3746be6d7dee5f410226",
+  "operator_decision": "PASS",
+  "operator_decision_record": "docs/programmes/grt-v0-2/g3/GRT2_G3_ROLLBACK_OPERATOR_DECISION.json",
+  "packet_id": "GRT2-G3-ROLLBACK-TO-LIMITED-ENFORCEMENT",
+  "programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
+  "recommendation": "PASS",
+  "required_exact_final": [
+    "repository tests",
+    "pytest/unittest parity",
+    "runner parity",
+    "profile assurance",
+    "VIT detached qualification",
+    "SIQ READY",
+    "SIQ/PDC exact-final",
+    "OVC merge readiness",
+    "post-merge tree equality"
+  ],
+  "schema": "ovc-grt2-g3-rollback-qa/v1",
+  "unresolved_issues": [],
+  "warnings": []
+}

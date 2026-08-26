@@ -65,15 +65,23 @@ def test_substitution_validator_is_exact_and_fail_closed():
         validate_g4_current_projection_substitution(tampered, before, after)
 
 
-def test_current_projection_and_wp5_boundary():
-    pointer = load(IMPL / "CURRENT_STATE_POINTER.json")
-    state = load(ROOT / pointer["current_state"])
-    check_logical(state)
-    assert pointer["gate_id"] == state["gate_id"] == "GRT2-G4"
-    assert pointer["next_packet"] == state["next_packet"] == "GRT2-WP5"
-    assert state["operator_decision"] == "PASS"
-    assert state["wp5_status"] == "NOT_STARTED"
-    assert state["proposed_current_projection_substitution"]["status"] == "APPROVED_PENDING_MAIN_MATERIALISATION"
+def test_g4_completion_is_preserved_historically_and_wp5_remains_unstarted():
+    g4_state = load(IMPL / "OVC_GRT2_STATE_v0_18_WP4_G4_GATE_READY.json")
+    check_logical(g4_state)
+    assert g4_state["gate_id"] == "GRT2-G4"
+    assert g4_state["next_packet"] == "GRT2-WP5"
+    assert g4_state["operator_decision"] == "PASS"
+    assert g4_state["wp5_status"] == "NOT_STARTED"
+    assert g4_state["proposed_current_projection_substitution"]["status"] == "APPROVED_PENDING_MAIN_MATERIALISATION"
+
+    current_pointer = load(IMPL / "CURRENT_STATE_POINTER.json")
+    current_state = load(ROOT / current_pointer["current_state"])
+    check_logical(current_state)
+    assert current_pointer["gate_id"] == current_state["gate_id"] == "GRT2-G3"
+    assert current_pointer["packet_id"] == current_state["packet_id"] == "GRT2-G3-ROLLBACK-TO-LIMITED-ENFORCEMENT"
+    assert current_pointer["next_packet"] == current_state["next_packet"] == "GRT2-WP5"
+    assert current_state["g4_status"] == "HISTORICAL_COMPLETED"
+    assert current_state["wp5_status"] == "NOT_STARTED"
 
 
 def test_generation_two_floor_contains_exact_substituted_census():

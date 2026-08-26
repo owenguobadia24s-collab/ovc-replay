@@ -1,0 +1,65 @@
+{
+  "approved_authority_delta": {
+    "debt_floor": {
+      "preserve_generations": [
+        0,
+        1,
+        2
+      ],
+      "transition": "ACTIVE_INTEGRATION_PREREQUISITE_TO_IMMUTABLE_HISTORICAL_NON_ENFORCING_EVIDENCE"
+    },
+    "enforcement": {
+      "required_assurance": "GRT2_G2_5_LIMITED_CANDIDATE_ENFORCEMENT",
+      "transition": "FULL_GRT_EXACT_TO_LIMITED_NEW_ARTIFACT_ENFORCEMENT"
+    },
+    "repository_constitution": {
+      "canonical_hash": "cac9fc5f0e31db08c4c37153c92a214fcc482414421f34d74c594faec65a71b0",
+      "transition": "ACTIVE_ENFORCED_TO_ACTIVE_ENFORCEMENT_SUSPENDED"
+    }
+  },
+  "authority_effect": "ROLLBACK_GRT2_G3_ENFORCEMENT_TO_G2_5_LIMITED",
+  "baseline_commit": "00ed2badf959d999ef0469892333268910838ac7",
+  "baseline_tree": "f2c5bec83cf3587f95640d8f389aaae83cfb077c",
+  "blocking_scope": [
+    "newly ADDED governed artifacts violating applicable constitutional rules",
+    "new permanent repository roots introduced after the G2.5 pilot baseline",
+    "new workflows introduced after the G2.5 pilot baseline",
+    "new writes into constitutionally forbidden roots",
+    "new writes into roots classified DEPRECATED_NO_NEW_WRITES"
+  ],
+  "decided_at": "2026-08-26T01:27:00+01:00",
+  "decision": "PASS",
+  "decision_class": "OPERATOR_REQUIRED_ROLLBACK",
+  "forbidden": [
+    "force-push",
+    "history rewrite",
+    "B0 rewrite",
+    "DebtFloor rewrite or deletion",
+    "silent advisory downgrade",
+    "constitutional semantic amendment",
+    "Programme Genesis adoption",
+    "owner reassignment",
+    "market/scientific/Validation/publication/probability/risk/exposure/trading/execution/agent-write authority"
+  ],
+  "gate_id": "GRT2-G3",
+  "logical_sha256": "97a87c320ed1808fbc2c942a3f4fba11717f231102820d6be9407823cc692422",
+  "next_packet": "GRT2-WP5",
+  "next_packet_status": "NOT_STARTED_BY_ROLLBACK",
+  "operator_instruction": "OVC APPROVE GRT2-G3 ROLLBACK TO LIMITED_NEW_ARTIFACT_ENFORCEMENT",
+  "plan_id": "OVC-GRT-V0.2-RCCC-CONFORMANCE-IMPLEMENTATION-PLAN-0.2-REVISED-RATIFIED",
+  "plan_version": "0.2_REVISED_RATIFIED",
+  "preserved_history": [
+    "GRT2-G3 terminal supersession decision and operator PASS",
+    "GRT2-G4 operator PASS and current-projection substitution",
+    "DebtFloor G0/G1/G2 bytes and hashes",
+    "B0 immutable 569-member baseline",
+    "all GRT-EXACT proofs and prior integration receipts"
+  ],
+  "programme_id": "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE",
+  "restored_enforcement_source": "docs/programmes/grt-v0-2/gates/GRT2_G2_5_OPERATOR_DECISION.json",
+  "rollback_bundle": "docs/programmes/grt-v0-2/g3/GRT2_G3_ROLLBACK_BUNDLE.json",
+  "rollback_bundle_logical_sha256": "b8ab2ace9b5a526385ac632106193ffe53c01d1c3f6f42f9c9057d3936b04294",
+  "rollback_effect": "STOP_DEBTFLOOR_GENERATION_AND_GRT_EXACT_FROM_ORDINARY_INTEGRATION_WHILE_RESTORING_G2_5_LIMITED_ENFORCEMENT",
+  "schema": "ovc-grt2-g3-rollback-operator-decision/v1",
+  "superseded_active_authority": "registries/authority/GRT2_ACTIVE_ENFORCEMENT_AUTHORITY_v0_2.json"
+}
