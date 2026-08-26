@@ -75,8 +75,8 @@ def test_wp8_source_recovers_exact_g1_but_g3_identity_blocks_reveal():
 
     # The current pointer may lawfully advance only through explicit later authority.
     # G6 superseded one exact-reproduction acceptance condition without rewriting this
-    # historical BLOCK; the Stage-1 presentation packet may therefore expose Stage 1
-    # while human adjudication and every later reveal remain unstarted.
+    # historical BLOCK. Later scoped review-route supersessions must continue to carry
+    # the exact historical G3 evidence and the permanent provenance warning forward.
     assert pointer["programme_id"] == current["programme_id"] == state["programme_id"]
     assert pointer["packet_id"] == current["packet_id"]
     assert pointer["status"] == current["status"]
@@ -120,11 +120,26 @@ def test_wp8_source_recovers_exact_g1_but_g3_identity_blocks_reveal():
             assert operator["decision"] == "PASS" and operator["authority"] == "OPERATOR"
             assert current["preserved"]["unrecoverable_provenance_warning"] is True
         elif current["status"] == "COMPLETED":
-            assert current["packet_id"] == "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-FIDELITY-SUPERSESSION"
-            assert current["authority_delta"] == "NONE"
-            assert current["stage1_reveal_started"] is True
-            assert current["human_scientific_input_boundary"] is True
-            assert current["construct_survival_decision"] == "PROHIBITED_DURING_CASE_REVIEW"
+            if current["packet_id"] == "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-FIDELITY-SUPERSESSION":
+                assert current["authority_delta"] == "NONE"
+                assert current["stage1_reveal_started"] is True
+                assert current["human_scientific_input_boundary"] is True
+                assert current["construct_survival_decision"] == "PROHIBITED_DURING_CASE_REVIEW"
+            elif current["packet_id"] == "ASOCSI-WP8-S01-STAGE1-TO-STAGE2-TRANSITION-SUPERSESSION":
+                assert current["authority_delta"] == "SCOPED_FROZEN_REVIEW_SEQUENCE_SUPERSESSION"
+                assert current["stage1_reveal_started"] is True
+                assert current["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
+                assert current["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
+                assert current["stage1_human_completion_required"] is False
+                assert current["stage1_complete_session_freeze_required_for_stage2"] is False
+                assert current["stage2_preparation_authorized"] is True
+                assert current["stage2_reveal_started"] is False
+                assert current["stage2_human_scientific_input_required"] is True
+                assert current["stage2_human_answer_synthesis_allowed"] is False
+                assert current["stage2_to_stage3_freeze_requirement_changed"] is False
+                assert current["construct_survival_decision"] == "PROHIBITED_DURING_CASE_REVIEW"
+            else:
+                raise AssertionError(f"unrecognized completed ASOCSI WP8 state: {current['packet_id']}")
             assert current["preserved"]["wp8_g3_reproduction_block"] is True
             assert current["preserved"]["unrecoverable_provenance_warning"] is True
         else:
