@@ -17,12 +17,8 @@ FROZEN_G4 = "ff6eb37724aea5b2706666903f7b5a1bc063af8ef9026f4496429b5e33fa15fe"
 NARROWED_STATE = "records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_23_WP8_G3_CENSUS_IDENTITY_BLOCKED.json"
 RESOLUTION_EFFECTIVE = "ASOCSI-WP8-G3-REPRODUCTION-INTEGRITY-RESOLUTION_REPOSITORY_EFFECTIVE"
 STAGE2_PREP = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
-CHECKPOINTS = {
-    "4392": "91004c82e3a4134a32b1afe4e41559652b978589b8043e9abe9f7e818ccf0709",
-    "8784": "d005f3225ea5a268fc9a223995f5cadfbb6611f374002eca02df266407b781ee",
-    "13176": "c99129aa61f5471f8e7574471fb190057def3efa918a72014e58a3232b607632",
-    "17568": "8ea8eabd040a0bc193a34ff792c49f7eb83739c72c5caa69f7234a88159e6f0c",
-}
+STAGE2_HUMAN = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-HUMAN-ADJUDICATION"
+CHECKPOINTS = {"4392":"91004c82e3a4134a32b1afe4e41559652b978589b8043e9abe9f7e818ccf0709","8784":"d005f3225ea5a268fc9a223995f5cadfbb6611f374002eca02df266407b781ee","13176":"c99129aa61f5471f8e7574471fb190057def3efa918a72014e58a3232b607632","17568":"8ea8eabd040a0bc193a34ff792c49f7eb83739c72c5caa69f7234a88159e6f0c"}
 
 
 def load(path: Path) -> dict:
@@ -40,7 +36,7 @@ def test_resolution_evidence_reproduces_every_resolved_frozen_identity() -> None
     reproduction = evidence["resolution_paths"]["historical_deterministic_reconstruction"]
     assert reproduction["source_sha256"] == "210233ec5761bf82998172832bb554ddf10dfeb3099f6bc6488d5bb0f6bec4f2"
     assert reproduction["g1_audit_15m_sha256"] == "df060a22bf8a6c1d990d22af90e189848bd2c5f3090ef65a8c5637e4456bb7d9"
-    assert reproduction["frozen"]["observation_traces"] == {"byte_size": 10995130, "compression": "gzip-mtime-0-jsonl", "record_count": 17568, "sha256": FROZEN_TRACES}
+    assert reproduction["frozen"]["observation_traces"] == {"byte_size":10995130,"compression":"gzip-mtime-0-jsonl","record_count":17568,"sha256":FROZEN_TRACES}
     assert reproduction["frozen"]["ordered_trace_ids_sha256"] == FROZEN_ORDERED
     assert reproduction["frozen"]["checkpoints"] == CHECKPOINTS
     assert reproduction["checkpoints_reproduced"] is True
@@ -92,7 +88,7 @@ def test_programme_state_preserves_narrowed_block_across_lawful_successors() -> 
     assert narrowed["status"] == "BLOCKED"
     assert narrowed["authority_delta"] == "NONE"
     assert narrowed["blockers"] == ["G3_FROZEN_CENSUS_IDENTITY_AND_COMPACT_MANIFEST_CONSTRUCTION_NOT_REPRODUCIBLE"]
-    assert narrowed["preserved"] == {"g3_frozen_generation": True, "g4_review_population": True, "g5_human_evidence": True}
+    assert narrowed["preserved"] == {"g3_frozen_generation":True,"g4_review_population":True,"g5_human_evidence":True}
     assert narrowed["human_adjudication_started"] is False
     assert narrowed["stage1_reveal_started"] is False
 
@@ -105,13 +101,17 @@ def test_programme_state_preserves_narrowed_block_across_lawful_successors() -> 
     assert state_generation(pointer["current_state"]) >= state_generation(NARROWED_STATE)
     assert current.get("human_adjudication_started", False) is False
 
-    if current["packet_id"] == STAGE2_PREP:
+    if current["packet_id"] in {STAGE2_PREP, STAGE2_HUMAN}:
         assert current["stage2_reveal_started"] is True
         assert current["stage2_reveal_prepared"] is True
         assert current["stage2_human_adjudication_started"] is False
         assert current["required_human_input_started"] is False
         assert current["stage2_complete_session_freeze_required_before_stage3"] is True
         assert current["stage3_reveal_started"] is False
+        if current["packet_id"] == STAGE2_HUMAN:
+            assert current["status"] == "GATE_READY"
+            assert current["authority_required"] == "HUMAN_SCIENTIFIC_INPUT"
+            assert current["stage2_human_answer_count"] == 0
     else:
         assert current.get("stage2_reveal_started", False) is False
 
@@ -133,9 +133,15 @@ def test_programme_state_preserves_narrowed_block_across_lawful_successors() -> 
     assert current["evidence"]["frozen_observation_trace_sha256"] == FROZEN_TRACES
 
     if current["status"] == "GATE_READY":
-        assert current.get("stage1_reveal_started", False) is False
-        assert current["authority_required"] == "OPERATOR_REQUIRED"
-        assert current["stop_boundary"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION-OPERATOR-DECISION"
+        if current["packet_id"] == STAGE2_HUMAN:
+            assert current["authority_required"] == "HUMAN_SCIENTIFIC_INPUT"
+            assert current["blockers"] == ["HUMAN_SCIENTIFIC_INPUT_REQUIRED"]
+            assert current["stage2_reveal_started"] is True
+            assert current["stage3_reveal_started"] is False
+        else:
+            assert current.get("stage1_reveal_started", False) is False
+            assert current["authority_required"] == "OPERATOR_REQUIRED"
+            assert current["stop_boundary"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION-OPERATOR-DECISION"
     elif current["status"] == "APPROVED":
         operator = load(WP8 / "ASOCSI_G6_PROVENANCE_SUPERSESSION_OPERATOR_DECISION_v0_1.json")
         assert current.get("stage1_reveal_started", False) is False
@@ -153,7 +159,7 @@ def test_programme_state_preserves_narrowed_block_across_lawful_successors() -> 
             assert current["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
             assert current["stage2_human_scientific_input_required"] is True
             assert current["stage2_human_answer_synthesis_allowed"] is False
-            assert current["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-HUMAN-ADJUDICATION"
+            assert current["next_packet"] == STAGE2_HUMAN
         elif current["packet_id"] == "ASOCSI-WP8-S01-STAGE1-TO-STAGE2-TRANSITION-SUPERSESSION":
             assert current["authority_delta"] == "SCOPED_FROZEN_REVIEW_SEQUENCE_SUPERSESSION"
             assert current["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
@@ -164,13 +170,11 @@ def test_programme_state_preserves_narrowed_block_across_lawful_successors() -> 
             assert current["stage2_human_scientific_input_required"] is True
             assert current["stage2_human_answer_synthesis_allowed"] is False
             assert current["stage2_to_stage3_freeze_requirement_changed"] is False
-            assert current["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
+            assert current["next_packet"] == STAGE2_PREP
         else:
             assert current["packet_id"] in {"ASOCSI-WP8-S01-STAGE1-HUMAN-REVIEW-INTERFACE", "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-FIDELITY-SUPERSESSION"}
             assert current["authority_delta"] == "NONE"
             assert current["stage1_reveal_started"] is True
             assert current["human_scientific_input_boundary"] is True
-            expected_next = "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-HUMAN-ADJUDICATION" if current["packet_id"] == "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-FIDELITY-SUPERSESSION" else "ASOCSI-WP8-STAGE1-HUMAN-FIDELITY-ADJUDICATION"
-            assert current["next_packet"] == expected_next
     else:
         raise AssertionError(f"unexpected successor status: {current['status']}")

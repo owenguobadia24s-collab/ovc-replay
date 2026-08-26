@@ -9,6 +9,7 @@ GATE_READY_STATE = ROOT / "records/research_operations/asocs/ASOCSI_PROGRAMME_ST
 G6_STATE = ROOT / "records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_25_G6_PROVENANCE_SUPERSESSION_APPROVED.json"
 POINTER = ROOT / "registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json"
 STAGE2_PREP = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
+STAGE2_HUMAN = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-HUMAN-ADJUDICATION"
 
 
 def _json(path: Path) -> dict:
@@ -41,7 +42,6 @@ def test_gate_preparation_and_operator_pass_remain_immutable_while_current_state
     assert authority["authority_delta"] == "NONE"
     assert {"SUPERSEDE_EXACT_MANIFEST_REPRODUCTION_REQUIREMENT", "START_STAGE1_REVEAL", "SEMANTIC_REMEDIATION", "REPLACE_OR_REWRITE_FROZEN_G3"}.issubset(non_grants)
     assert qa["qa_recommendation"] == "PASS_TO_OPERATOR_GATE"
-
     assert gate_ready["status"] == "GATE_READY"
     assert gate_ready["authority_required"] == "OPERATOR_REQUIRED"
     assert gate_ready["preserved"]["stage1_reveal_started"] is False
@@ -64,7 +64,7 @@ def test_gate_preparation_and_operator_pass_remain_immutable_while_current_state
     assert current["preserved"]["unrecoverable_provenance_warning"] is True
     assert current.get("human_adjudication_started", False) is False
 
-    if current["packet_id"] == STAGE2_PREP:
+    if current["packet_id"] in {STAGE2_PREP, STAGE2_HUMAN}:
         assert current["stage2_reveal_started"] is True
         assert current["stage2_reveal_prepared"] is True
         assert current["stage2_human_adjudication_started"] is False
@@ -73,7 +73,11 @@ def test_gate_preparation_and_operator_pass_remain_immutable_while_current_state
         assert current["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
         assert current["stage2_complete_session_freeze_required_before_stage3"] is True
         assert current["stage3_reveal_started"] is False
-        assert current["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-HUMAN-ADJUDICATION"
+        assert current["next_packet"] == STAGE2_HUMAN
+        if current["packet_id"] == STAGE2_HUMAN:
+            assert current["status"] == "GATE_READY"
+            assert current["authority_required"] == "HUMAN_SCIENTIFIC_INPUT"
+            assert current["stage2_human_answer_count"] == 0
     elif current["packet_id"] == "ASOCSI-WP8-S01-STAGE1-TO-STAGE2-TRANSITION-SUPERSESSION":
         assert current.get("stage2_reveal_started", False) is False
         assert current["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
@@ -81,6 +85,6 @@ def test_gate_preparation_and_operator_pass_remain_immutable_while_current_state
         assert current["stage1_complete_session_freeze_required_for_stage2"] is False
         assert current["stage2_human_scientific_input_required"] is True
         assert current["stage2_human_answer_synthesis_allowed"] is False
-        assert current["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
+        assert current["next_packet"] == STAGE2_PREP
     else:
         assert current.get("stage2_reveal_started", False) is False
