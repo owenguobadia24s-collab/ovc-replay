@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Reconcile GRT2-G2.5 pilot evidence from exact Git candidate trees.
+"""Reconcile GRT2-G2.5 limited enforcement from exact Git candidate trees.
 
-The historical mode deliberately replays actual physical integration commits
-rather than counting PRs as evidence.  It may establish the G2.5 observation
-threshold, but it cannot activate G3 or invent unavailable full-G3 semantics.
+After the operator-approved GRT2-G3 rollback, this runtime is again the active
+integration-facing GRT surface. Historical G3/G4 and DebtFloor evidence remains
+immutable, but FULL_GRT_EXACT and DebtFloor generation are not ordinary
+integration prerequisites.
 """
 from __future__ import annotations
 
@@ -24,9 +25,10 @@ from ovc.programme_genesis.grt_v0_2.pilot import (  # noqa: E402
     summarize_pilot,
 )
 
-AUTHORITY = ROOT / "registries/authority/GRT2_ACTIVE_ENFORCEMENT_AUTHORITY_v0_1.json"
+AUTHORITY = ROOT / "registries/authority/GRT2_ACTIVE_ENFORCEMENT_AUTHORITY_v0_3.json"
 ROOT_REGISTRY = ROOT / "registries/governance/grt_v0_2/GRT_ROOT_REGISTRY_v0_2.json"
 DEFAULT_MANIFEST = ROOT / "docs/programmes/grt-v0-2/gates/GRT2_G2_5_RETROSPECTIVE_CANDIDATE_MANIFEST.json"
+ROLLBACK_STATUS = "ROLLED_BACK_TO_G2_5_LIMITED_ENFORCEMENT"
 
 
 def run(*args: str) -> str:
@@ -50,8 +52,7 @@ def parse_name_status(base: str, head: str) -> list[dict[str, Any]]:
         if not line.strip():
             continue
         parts = line.split("\t")
-        raw_status = parts[0]
-        status = raw_status[0]
+        status = parts[0][0]
         if status in {"R", "C"}:
             if len(parts) != 3:
                 raise PilotEvidenceError("GRT2_G2_5_GIT_DIFF_ROW_INVALID")
@@ -72,14 +73,18 @@ def exact_commit_exists(commit: str) -> None:
 
 
 def validate_authority(authority: dict[str, Any]) -> None:
-    if authority.get("gate_id") != "GRT2-G2.5":
-        raise PilotEvidenceError("GRT2_G2_5_AUTHORITY_GATE_MISMATCH")
-    if authority.get("authority_status") != "ACTIVE":
-        raise PilotEvidenceError("GRT2_G2_5_AUTHORITY_NOT_ACTIVE")
+    if authority.get("gate_id") != "GRT2-G3":
+        raise PilotEvidenceError("GRT2_G2_5_ROLLBACK_AUTHORITY_GATE_MISMATCH")
+    if authority.get("authority_status") != "ACTIVE_ON_MAIN_MATERIALISATION":
+        raise PilotEvidenceError("GRT2_G2_5_ROLLBACK_AUTHORITY_NOT_ACTIVE")
     if authority.get("enforcement_mode") != "LIMITED_NEW_ARTIFACT_ENFORCEMENT":
-        raise PilotEvidenceError("GRT2_G2_5_AUTHORITY_MODE_MISMATCH")
-    if authority.get("g3_status") != "NOT_AUTHORISED":
-        raise PilotEvidenceError("GRT2_G2_5_G3_BOUNDARY_NOT_PRESERVED")
+        raise PilotEvidenceError("GRT2_G2_5_ROLLBACK_AUTHORITY_MODE_MISMATCH")
+    if authority.get("g3_status") != ROLLBACK_STATUS:
+        raise PilotEvidenceError("GRT2_G2_5_ROLLBACK_STATUS_MISMATCH")
+    if authority.get("full_grt_exact_required") is not False:
+        raise PilotEvidenceError("GRT2_G2_5_FULL_EXACT_STILL_REQUIRED")
+    if authority.get("ordinary_packet_debt_floor_generation_required") is not False:
+        raise PilotEvidenceError("GRT2_G2_5_DEBTFLOOR_STILL_REQUIRED")
 
 
 def evaluate_manifest(manifest_path: Path, evaluated_at: str) -> dict[str, Any]:
@@ -138,15 +143,15 @@ def evaluate_manifest(manifest_path: Path, evaluated_at: str) -> dict[str, Any]:
 
     summary = summarize_pilot(
         candidate_records=records,
-        pilot_start=authority["effective_from"],
+        pilot_start="2026-08-14T13:53:00+01:00",
         evaluated_at=evaluated_at,
         minimum_elapsed_hours=24,
         minimum_eligible_candidate_count=8,
     )
     return {
-        "schema": "ovc-grt2-g2-5-retrospective-reconciliation/v1",
+        "schema": "ovc-grt2-g2-5-retrospective-reconciliation/v2",
         "programme_id": authority["programme_id"],
-        "gate_id": "GRT2-G2.5",
+        "gate_id": "GRT2-G3",
         "pilot_baseline_commit": authority["pilot_baseline_commit"],
         "runtime_commit": run("git", "rev-parse", "HEAD"),
         "runtime_tree": physical_tree("HEAD"),
@@ -154,7 +159,7 @@ def evaluate_manifest(manifest_path: Path, evaluated_at: str) -> dict[str, Any]:
         "candidate_evaluations": records,
         "summary": summary,
         "authority_effect": "NONE_EVIDENCE_RECONCILIATION_ONLY",
-        "g3_status": "NOT_AUTHORISED",
+        "g3_status": ROLLBACK_STATUS,
     }
 
 
@@ -167,8 +172,8 @@ def evaluate_current(base: str, head: str, evaluated_at: str) -> dict[str, Any]:
     changes = parse_name_status(base, head)
     evaluation = evaluate_limited_candidate(changes=changes, root_registry=root_registry)
     return {
-        "schema": "ovc-grt2-g2-5-current-candidate-evaluation/v1",
-        "gate_id": "GRT2-G2.5",
+        "schema": "ovc-grt2-g2-5-current-candidate-evaluation/v2",
+        "gate_id": "GRT2-G3",
         "base_commit": base,
         "head_commit": head,
         "head_tree": physical_tree(head),
@@ -176,7 +181,7 @@ def evaluate_current(base: str, head: str, evaluated_at: str) -> dict[str, Any]:
         "changed_path_count": len(changes),
         **evaluation,
         "enforcement_result": "BLOCK" if evaluation["pilot_decision"] in {"FAIL", "NOT_EVALUABLE"} else "PASS",
-        "g3_status": "NOT_AUTHORISED",
+        "g3_status": ROLLBACK_STATUS,
     }
 
 
@@ -201,7 +206,7 @@ def main() -> int:
             result = evaluate_manifest(args.manifest, evaluated_at)
             exit_code = 0
     except PilotEvidenceError as exc:
-        result = {"schema": "ovc-grt2-g2-5-run-failure/v1", "status": "BLOCK", "reason_code": str(exc)}
+        result = {"schema": "ovc-grt2-g2-5-run-failure/v2", "status": "BLOCK", "reason_code": str(exc)}
         exit_code = 2
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
