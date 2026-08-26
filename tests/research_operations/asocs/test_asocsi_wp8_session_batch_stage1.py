@@ -222,9 +222,9 @@ def test_qa_schemas_and_pointer_preserve_stage1_history_and_scoped_stage2_supers
         assert state["stage2_human_answer_synthesis_allowed"] is False
         assert state["stage2_to_stage3_freeze_requirement_changed"] is False
         assert state["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
-        assert supersession["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
-        assert supersession["stage2_human_scientific_input_required"] is True
-        assert supersession["stage2_human_answer_synthesis_allowed"] is False
+        assert supersession["stage1_disposition"]["scientific_conclusion"] == "NOT_ESTABLISHED"
+        assert supersession["stage2_admission"]["stage2_human_judgement_required"] is True
+        assert supersession["stage2_admission"]["stage2_human_judgement_may_be_synthesized_by_agent"] is False
     else:
         assert state["gate_id"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION"
         assert state["authority_required"] == "SATISFIED_OPERATOR_PASS"
