@@ -21,16 +21,18 @@ class GRT2G25ActiveEnforcementTests(unittest.TestCase):
             check=False,
         )
 
-    def test_active_authority_remains_limited_and_g3_denied(self) -> None:
+    def test_current_authority_is_operator_rolled_back_limited_enforcement(self) -> None:
         authority = json.loads(
-            (ROOT / "registries/authority/GRT2_ACTIVE_ENFORCEMENT_AUTHORITY_v0_1.json").read_text(encoding="utf-8")
+            (ROOT / "registries/authority/GRT2_ACTIVE_ENFORCEMENT_AUTHORITY_v0_3.json").read_text(encoding="utf-8")
         )
-        self.assertEqual(authority["gate_id"], "GRT2-G2.5")
-        self.assertEqual(authority["authority_status"], "ACTIVE")
+        self.assertEqual(authority["gate_id"], "GRT2-G3")
+        self.assertEqual(authority["authority_status"], "ACTIVE_ON_MAIN_MATERIALISATION")
         self.assertEqual(authority["enforcement_mode"], "LIMITED_NEW_ARTIFACT_ENFORCEMENT")
-        self.assertEqual(authority["g3_status"], "NOT_AUTHORISED")
+        self.assertEqual(authority["g3_status"], "ROLLED_BACK_TO_G2_5_LIMITED_ENFORCEMENT")
+        self.assertFalse(authority["full_grt_exact_required"])
+        self.assertFalse(authority["ordinary_packet_debt_floor_generation_required"])
 
-    def test_eight_bound_real_candidates_replay_exactly_and_meet_threshold(self) -> None:
+    def test_historical_g2_5_candidate_population_still_replays_under_limited_semantics(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             output = Path(temp_dir) / "reconciliation.json"
             cp = self._run(
@@ -52,9 +54,7 @@ class GRT2G25ActiveEnforcementTests(unittest.TestCase):
             self.assertEqual(summary["blocking_false_positive_count"], 0)
             self.assertEqual(summary["unresolved_false_negative_count"], 0)
             self.assertEqual(summary["scope_leakage_count"], 0)
-            self.assertFalse(summary["g3_ready"])
-            self.assertEqual(summary["status"], "THRESHOLD_MET_G3_EVIDENCE_INCOMPLETE")
-            self.assertEqual(result["g3_status"], "NOT_AUTHORISED")
+            self.assertEqual(result["g3_status"], "ROLLED_BACK_TO_G2_5_LIMITED_ENFORCEMENT")
 
     def test_pull_request_candidate_is_enforced_inside_existing_required_listener(self) -> None:
         if os.environ.get("GITHUB_EVENT_NAME") != "pull_request":
@@ -82,7 +82,7 @@ class GRT2G25ActiveEnforcementTests(unittest.TestCase):
             self.assertEqual(cp.returncode, 0, msg=cp.stdout + cp.stderr)
             result = json.loads(output.read_text(encoding="utf-8"))
             self.assertEqual(result["enforcement_result"], "PASS")
-            self.assertEqual(result["g3_status"], "NOT_AUTHORISED")
+            self.assertEqual(result["g3_status"], "ROLLED_BACK_TO_G2_5_LIMITED_ENFORCEMENT")
 
 
 if __name__ == "__main__":
