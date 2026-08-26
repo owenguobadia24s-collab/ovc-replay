@@ -7,6 +7,7 @@ ROOT = Path(__file__).resolve().parents[3]
 WP8 = ROOT / "docs/programmes/asocs-v0-1/implementation/wp8"
 POINTER = ROOT / "registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json"
 G6_STATE = ROOT / "records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_25_G6_PROVENANCE_SUPERSESSION_APPROVED.json"
+STAGE2_PREP = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
 
 
 def _json(path: Path) -> dict:
@@ -49,9 +50,19 @@ def test_approved_g6_state_remains_immutable_while_current_state_may_advance_law
     assert current["preserved"]["wp8_g3_reproduction_block"] is True
     assert current["preserved"]["unrecoverable_provenance_warning"] is True
     assert current.get("human_adjudication_started", False) is False
-    assert current.get("stage2_reveal_started", False) is False
 
-    if current["packet_id"] == "ASOCSI-WP8-S01-STAGE1-TO-STAGE2-TRANSITION-SUPERSESSION":
+    if current["packet_id"] == STAGE2_PREP:
+        assert current["stage2_reveal_started"] is True
+        assert current["stage2_reveal_prepared"] is True
+        assert current["stage2_human_adjudication_started"] is False
+        assert current["required_human_input_started"] is False
+        assert current["stage2_complete_session_freeze_required_before_stage3"] is True
+        assert current["stage3_reveal_started"] is False
+        assert current["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
+        assert current["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
+        assert current["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-HUMAN-ADJUDICATION"
+    elif current["packet_id"] == "ASOCSI-WP8-S01-STAGE1-TO-STAGE2-TRANSITION-SUPERSESSION":
+        assert current.get("stage2_reveal_started", False) is False
         assert current["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
         assert current["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
         assert current["stage1_complete_session_freeze_required_for_stage2"] is False
@@ -60,6 +71,8 @@ def test_approved_g6_state_remains_immutable_while_current_state_may_advance_law
         assert current["stage2_human_answer_synthesis_allowed"] is False
         assert current["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
     elif current["packet_id"] == "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-FIDELITY-SUPERSESSION":
+        assert current.get("stage2_reveal_started", False) is False
         assert current["next_packet"] == "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-HUMAN-ADJUDICATION"
     else:
+        assert current.get("stage2_reveal_started", False) is False
         assert current["next_packet"] == "ASOCSI-WP8-STAGE1-HUMAN-FIDELITY-ADJUDICATION"

@@ -6,6 +6,7 @@ WP8 = ROOT / "docs/programmes/asocs-v0-1/implementation/wp8"
 STATE = ROOT / "records/research_operations/asocs"
 REG = ROOT / "registries/research_operations/asocs"
 SCHEMAS = ROOT / "schemas/research_operations/asocs"
+STAGE2_PREP = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
 
 
 def load(path):
@@ -44,8 +45,7 @@ def test_scoped_contract_supersedes_only_stage1_to_stage2_freeze_precondition():
 
 
 def test_stage2_admission_preserves_exact_frozen_case_and_source_lineage():
-    contract = load(WP8 / "ASOCSI_WP8_S01_STAGE_TRANSITION_SUPERSESSION_CONTRACT_v0_1.json")
-    admission = contract["stage2_admission"]
+    admission = load(WP8 / "ASOCSI_WP8_S01_STAGE_TRANSITION_SUPERSESSION_CONTRACT_v0_1.json")["stage2_admission"]
     assert admission["case_count"] == 25
     assert admission["required_case_order"] == "EXACT_FROZEN_SESSION1_PRESENTATION_ORDER"
     assert admission["required_case_identity"] == "EXACT_FROZEN_SESSION1_CASE_IDS"
@@ -80,6 +80,7 @@ def test_transition_schema_contract_and_current_programme_state():
         assert required in contract
     state = load(STATE / "ASOCSI_PROGRAMME_STATE_v0_28_WP8_S01_STAGE1_TO_STAGE2_TRANSITION_SUPERSESSION_COMPLETED.json")
     pointer = load(REG / "CURRENT_ASOCSI_STATE_POINTER.json")
+    current = load(ROOT / pointer["current_state"])
     assert state["status"] == "COMPLETED"
     assert state["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
     assert state["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
@@ -87,8 +88,21 @@ def test_transition_schema_contract_and_current_programme_state():
     assert state["stage2_reveal_started"] is False
     assert state["stage2_human_scientific_input_required"] is True
     assert state["stage2_to_stage3_freeze_requirement_changed"] is False
-    assert pointer["current_state"].endswith("ASOCSI_PROGRAMME_STATE_v0_28_WP8_S01_STAGE1_TO_STAGE2_TRANSITION_SUPERSESSION_COMPLETED.json")
-    assert pointer["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
+    assert pointer["packet_id"] == current["packet_id"] and pointer["status"] == current["status"] and pointer["next_packet"] == current["next_packet"]
+    if current["packet_id"] == STAGE2_PREP:
+        assert pointer["current_state"].endswith("ASOCSI_PROGRAMME_STATE_v0_29_WP8_S01_STAGE2_C2_PRIMITIVE_STRUCTURE_PREPARATION_COMPLETED.json")
+        assert current["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
+        assert current["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
+        assert current["stage2_reveal_started"] is True
+        assert current["stage2_reveal_prepared"] is True
+        assert current["stage2_human_adjudication_started"] is False
+        assert current["required_human_input_started"] is False
+        assert current["stage2_complete_session_freeze_required_before_stage3"] is True
+        assert current["stage3_reveal_started"] is False
+        assert pointer["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-HUMAN-ADJUDICATION"
+    else:
+        assert pointer["current_state"].endswith("ASOCSI_PROGRAMME_STATE_v0_28_WP8_S01_STAGE1_TO_STAGE2_TRANSITION_SUPERSESSION_COMPLETED.json")
+        assert pointer["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
 
 
 def test_qa_and_dependency_frontier_are_clear_for_stage2_preparation():
@@ -97,9 +111,4 @@ def test_qa_and_dependency_frontier_are_clear_for_stage2_preparation():
     assert qa["qa_recommendation"] == "PASS"
     assert qa["blocking_findings"] == []
     assert dep["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
-    assert set(dep["not_required_for_stage2"]) == {
-        "STAGE1_HUMAN_INPUT",
-        "STAGE1_HUMAN_INPUT_RECEIPT",
-        "STAGE1_COMPLETE_SESSION_FREEZE_RECEIPT",
-        "STAGE1_HUMAN_ADJUDICATION",
-    }
+    assert set(dep["not_required_for_stage2"]) == {"STAGE1_HUMAN_INPUT", "STAGE1_HUMAN_INPUT_RECEIPT", "STAGE1_COMPLETE_SESSION_FREEZE_RECEIPT", "STAGE1_HUMAN_ADJUDICATION"}
