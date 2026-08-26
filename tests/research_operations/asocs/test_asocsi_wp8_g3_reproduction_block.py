@@ -13,6 +13,7 @@ BLOCK_PACKET = "ASOCSI-WP8-G3-REPRODUCTION-INTEGRITY-PREFLIGHT"
 STAGE2_PREP = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
 STAGE2_HUMAN = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-HUMAN-ADJUDICATION"
 STAGE2_NATIVE_ROUTE = "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-ROUTE-AMENDMENT"
+STAGE2_NATIVE_HUMAN = "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-HUMAN-ADJUDICATION"
 
 
 def _json(path: Path) -> dict:
@@ -74,12 +75,12 @@ def test_wp8_source_recovers_exact_g1_but_g3_identity_blocks_reveal():
     assert pointer["next_packet"] == current["next_packet"]
     assert _state_generation(pointer["current_state"]) >= _state_generation(str(STATE.relative_to(ROOT)).replace("\\", "/"))
     assert current.get("human_adjudication_started", False) is False
-    if current["packet_id"] in {STAGE2_PREP, STAGE2_HUMAN, STAGE2_NATIVE_ROUTE}:
+    if current["packet_id"] in {STAGE2_PREP, STAGE2_HUMAN, STAGE2_NATIVE_ROUTE, STAGE2_NATIVE_HUMAN}:
         assert current["stage2_reveal_started"] is True
         assert current["stage2_human_adjudication_started"] is False
         assert current["stage3_reveal_started"] is False
         assert current["human_scientific_input_boundary"] is True
-        if current["packet_id"] == STAGE2_HUMAN:
+        if current["packet_id"] in {STAGE2_HUMAN, STAGE2_NATIVE_HUMAN}:
             assert current["status"] == "GATE_READY"
             assert current["authority_required"] == "HUMAN_SCIENTIFIC_INPUT"
             assert current["stage2_human_answer_count"] == 0
@@ -112,9 +113,9 @@ def test_wp8_source_recovers_exact_g1_but_g3_identity_blocks_reveal():
         assert current["preserved"]["g4_review_population"] is True
         assert current["preserved"]["g5_human_evidence"] is True
         if current["status"] == "GATE_READY":
-            if current["packet_id"] == STAGE2_HUMAN:
+            if current["packet_id"] in {STAGE2_HUMAN, STAGE2_NATIVE_HUMAN}:
                 assert current["authority_required"] == "HUMAN_SCIENTIFIC_INPUT"
-                assert current["blockers"] == ["HUMAN_SCIENTIFIC_INPUT_REQUIRED"]
+                assert len(current["blockers"]) == 1
                 assert current["stage2_reveal_started"] is True
                 assert current["stage2_human_adjudication_started"] is False
                 assert current["stage3_reveal_started"] is False

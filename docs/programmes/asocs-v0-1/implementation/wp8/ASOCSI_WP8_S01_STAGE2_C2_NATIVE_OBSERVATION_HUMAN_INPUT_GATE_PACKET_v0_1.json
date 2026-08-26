@@ -1,0 +1,44 @@
+{
+  "schema": "ovc-operator-required-gate-packet/v1",
+  "programme_id": "OVC-ASOCS-6M-v0.1",
+  "packet_id": "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-HUMAN-ADJUDICATION",
+  "gate_id": "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-HUMAN-ADJUDICATION",
+  "title": "Session 1 replacement Stage 2 actual C2 native-observation human adjudication",
+  "status": "GATE_READY",
+  "authority_required": "HUMAN_SCIENTIFIC_INPUT",
+  "recommended_decision": "DEFER",
+  "recommended_decision_reason": "The replay and interface are QA PASS and ready, but the operator-reserved 25-case scientific input has not been supplied.",
+  "acceptance_conditions": [
+    "Operator completes all 25 cases in exact frozen order.",
+    "Judgement is limited to displayed actual C2 Horizon/Level/Container/Relation observations beside frozen WP7 evidence.",
+    "Each case supplies comparison_evaluability, per-component disposition/confidence/notes, information_gap_disposition and case_notes.",
+    "construct_survival_decision remains PROHIBITED_DURING_CASE_REVIEW.",
+    "No agent supplies, infers, repairs or summarizes a human scientific answer.",
+    "Raw operator export is preserved byte-exact and validated before any complete-session Stage-2 freeze.",
+    "Stage 3 remains unrevealed until the validated complete-session Stage-2 freeze exists."
+  ],
+  "operator_action": {
+    "type": "COMPLETE_WORKBOOK_AND_RETURN_EXPORTED_JSON",
+    "workbook_url": "https://drive.google.com/file/d/1DXeVDu_f3Q8pHvCdr-w0EKsQNdKyRqd7/view?usp=drivesdk",
+    "expected_export_filename": "ASOCSI_WP8_S01_STAGE2_C2_NATIVE_OBSERVATION_HUMAN_INPUT.json"
+  },
+  "external_artifact_hashes": [
+    {
+      "drive_file_id": "1DXeVDu_f3Q8pHvCdr-w0EKsQNdKyRqd7",
+      "byte_size": 6348232,
+      "sha256": "2577f0273df0d88aa150eed586a7efc47eab2d28aaa61446e0a112413253dbaa"
+    }
+  ],
+  "completed_packets": [
+    "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-ROUTE-AMENDMENT",
+    "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-REPLAY"
+  ],
+  "exact_work_after_operator_input": [
+    "Preserve the returned raw human export byte-exact and compute SHA-256.",
+    "Validate exact session/stage/case count/order and per-case schema without synthesizing or repairing answers.",
+    "If valid, materialise the complete-session replacement Stage-2 freeze binding the reveal index and raw human input hash.",
+    "Stop at any operator-reserved Stage-3 authority boundary before revealing later-stage material."
+  ],
+  "unresolved_issues": ["HUMAN_STAGE2_SCIENTIFIC_INPUT_NOT_YET_SUPPLIED"],
+  "proposed_authority_delta": "NONE"
+}

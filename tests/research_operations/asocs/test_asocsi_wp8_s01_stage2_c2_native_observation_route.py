@@ -11,7 +11,7 @@ def load(path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def test_operator_pass_is_bounded_and_not_yet_repository_effective():
+def test_operator_pass_is_bounded_and_historical_approval_record_is_immutable():
     decision = load(WP8 / "ASOCSI_WP8_S01_STAGE2_C2_NATIVE_OBSERVATION_ROUTE_OPERATOR_DECISION_v0_1.json")
     effect = load(WP8 / "ASOCSI_WP8_S01_STAGE2_C2_NATIVE_OBSERVATION_ROUTE_AUTHORITY_EFFECT_v0_1.json")
     state = load(RECORDS / "ASOCSI_PROGRAMME_STATE_v0_32_WP8_S01_STAGE2_C2_NATIVE_OBSERVATION_ROUTE_APPROVED.json")
@@ -25,9 +25,18 @@ def test_operator_pass_is_bounded_and_not_yet_repository_effective():
     assert "C2_SEMANTIC_THRESHOLD_MODEL_FAMILY_SELECTOR_OR_IMPLEMENTATION_CHANGE" in effect["non_grants"]
     assert "VALIDATION" in effect["non_grants"]
     assert state["status"] == "APPROVED" and state["repository_effective"] is False
-    assert pointer["status"] == "APPROVED" and pointer["repository_effective"] is False
+    assert pointer["status"] in {"APPROVED", "GATE_READY"}
+    if pointer["status"] == "APPROVED":
+        assert pointer["repository_effective"] is False
+    else:
+        assert pointer["repository_effective"] is True
+        assert pointer["authority_required"] == "HUMAN_SCIENTIFIC_INPUT"
+        assert pointer["replay_complete"] is True
     assert pointer["stage3_reveal_started"] is False
-    assert pointer["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-REPLAY"
+    assert pointer["next_packet"] in {
+        "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-REPLAY",
+        "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-HUMAN-ADJUDICATION",
+    }
 
 
 def test_forensic_bid_utc_binding_does_not_backfill_historical_provenance():

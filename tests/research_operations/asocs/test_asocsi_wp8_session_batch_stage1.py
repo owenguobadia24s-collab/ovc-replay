@@ -26,6 +26,7 @@ POINTER = ROOT / "registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POIN
 STAGE2_PREP = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
 STAGE2_HUMAN = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-HUMAN-ADJUDICATION"
 NATIVE_ROUTE = "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-ROUTE-AMENDMENT"
+NATIVE_HUMAN = "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-HUMAN-ADJUDICATION"
 
 
 def _j(path: Path) -> dict:
@@ -204,6 +205,16 @@ def test_qa_schemas_and_pointer_preserve_stage1_history_and_scoped_stage2_supers
         assert state["preserved"]["g5_blind_evidence"] is True
         assert state["preserved"]["wp8_g3_reproduction_block"] is True
         assert state["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-REPLAY"
+    elif state["packet_id"] == NATIVE_HUMAN:
+        assert state["status"] == "GATE_READY"
+        assert state["authority_required"] == "HUMAN_SCIENTIFIC_INPUT"
+        assert state["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
+        assert state["stage2_reveal_started"] is True
+        assert state["stage2_human_adjudication_started"] is False
+        assert state["stage2_human_answer_count"] == 0
+        assert state["stage2_human_answer_synthesis_allowed"] is False
+        assert state["stage3_reveal_started"] is False
+        assert state["next_packet"] == NATIVE_HUMAN
     elif state["packet_id"] == "ASOCSI-WP8-S01-STAGE1-TO-STAGE2-TRANSITION-SUPERSESSION":
         assert state.get("stage2_reveal_started", False) is False
         supersession = _j(TRANSITION_SUPERSESSION)

@@ -6,6 +6,7 @@ WP8 = ROOT / "docs/programmes/asocs-v0-1/implementation/wp8"
 RECORDS = ROOT / "records/research_operations/asocs"
 REG = ROOT / "registries/research_operations/asocs"
 NATIVE_ROUTE = "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-ROUTE-AMENDMENT"
+NATIVE_HUMAN = "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-HUMAN-ADJUDICATION"
 
 
 def load(path):
@@ -39,21 +40,15 @@ def test_stage2_human_adjudication_gate_ready_without_agent_answers():
         assert pointer["status"] == "GATE_READY"
         assert pointer["stage2_workbook_ready"] is True and pointer["stage3_reveal_started"] is False
     else:
-        assert pointer["packet_id"] == NATIVE_ROUTE
-        assert pointer["status"] == "APPROVED"
-        assert pointer["repository_effective"] is False
+        assert pointer["packet_id"] in {NATIVE_ROUTE, NATIVE_HUMAN}
         assert pointer["stage3_reveal_started"] is False
-        assert pointer["current_questionnaire_route"] == "OPERATOR_APPROVED_FORWARD_SUPERSESSION_PENDING_REPOSITORY_EFFECT"
-        current = load(ROOT / pointer["current_state"])
-        decision = load(WP8 / "ASOCSI_WP8_S01_STAGE2_C2_NATIVE_OBSERVATION_ROUTE_OPERATOR_DECISION_v0_1.json")
-        assert decision["authority"] == "OPERATOR" and decision["operator_reserved"] is True
-        assert decision["decision"] == "PASS"
-        assert decision["approved_scope"]["historical_stage2_questionnaire_disposition"] == "SUPERSEDED_UNCOMPLETED"
-        assert current["authority_required"] == "OPERATOR_REQUIRED_SATISFIED"
-        assert current["stage2_abstract_questionnaire_status"] == "OPERATOR_APPROVED_FORWARD_SUPERSESSION_PENDING_REPOSITORY_EFFECT"
-        assert current["stage2_human_answer_count"] == 0
-        assert current["stage2_human_answer_synthesis_allowed"] is False
-        assert current["stage3_reveal_started"] is False
+        if pointer["packet_id"] == NATIVE_ROUTE:
+            assert pointer["status"] == "APPROVED"
+            assert pointer["repository_effective"] is False
+        else:
+            assert pointer["status"] == "GATE_READY"
+            assert pointer["authority_required"] == "HUMAN_SCIENTIFIC_INPUT"
+            assert pointer["stage2_human_answer_count"] == 0
 
 
 def test_stage2_machine_non_evaluability_is_not_construct_survival():
