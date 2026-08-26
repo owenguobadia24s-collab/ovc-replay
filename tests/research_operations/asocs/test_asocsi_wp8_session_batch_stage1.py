@@ -25,6 +25,7 @@ TRANSITION_SUPERSESSION = WP8 / "ASOCSI_WP8_S01_STAGE_TRANSITION_SUPERSESSION_CO
 POINTER = ROOT / "registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json"
 STAGE2_PREP = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
 STAGE2_HUMAN = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-HUMAN-ADJUDICATION"
+NATIVE_ROUTE = "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-ROUTE-AMENDMENT"
 
 
 def _j(path: Path) -> dict:
@@ -186,6 +187,23 @@ def test_qa_schemas_and_pointer_preserve_stage1_history_and_scoped_stage2_supers
             assert state["status"] == "GATE_READY"
             assert state["authority_required"] == "HUMAN_SCIENTIFIC_INPUT"
             assert state["stage2_human_answer_count"] == 0
+    elif state["packet_id"] == NATIVE_ROUTE:
+        decision = _j(WP8 / "ASOCSI_WP8_S01_STAGE2_C2_NATIVE_OBSERVATION_ROUTE_OPERATOR_DECISION_v0_1.json")
+        assert decision["decision"] == "PASS" and decision["operator_reserved"] is True
+        assert state["status"] == "APPROVED"
+        assert state["authority_required"] == "OPERATOR_REQUIRED_SATISFIED"
+        assert state["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
+        assert state["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
+        assert state["stage2_reveal_started"] is True
+        assert state["stage2_human_adjudication_started"] is False
+        assert state["stage2_human_answer_count"] == 0
+        assert state["stage2_human_answer_synthesis_allowed"] is False
+        assert state["required_human_input_started"] is False
+        assert state["stage2_complete_session_freeze_required_before_stage3"] is True
+        assert state["stage3_reveal_started"] is False
+        assert state["preserved"]["g5_blind_evidence"] is True
+        assert state["preserved"]["wp8_g3_reproduction_block"] is True
+        assert state["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-REPLAY"
     elif state["packet_id"] == "ASOCSI-WP8-S01-STAGE1-TO-STAGE2-TRANSITION-SUPERSESSION":
         assert state.get("stage2_reveal_started", False) is False
         supersession = _j(TRANSITION_SUPERSESSION)

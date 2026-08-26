@@ -9,6 +9,8 @@ POINTER = ROOT / "registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POIN
 G6_STATE = ROOT / "records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_25_G6_PROVENANCE_SUPERSESSION_APPROVED.json"
 STAGE2_PREP = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
 STAGE2_HUMAN = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-HUMAN-ADJUDICATION"
+STAGE2_NATIVE_ROUTE = "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-ROUTE-AMENDMENT"
+STAGE2_NATIVE_REPLAY = "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-REPLAY"
 
 # Successor-state assertions distinguish immutable historical evidence from the lawful current Stage-2 reveal state.
 
@@ -54,7 +56,7 @@ def test_approved_g6_state_remains_immutable_while_current_state_may_advance_law
     assert current["preserved"]["unrecoverable_provenance_warning"] is True
     assert current.get("human_adjudication_started", False) is False
 
-    if current["packet_id"] in {STAGE2_PREP, STAGE2_HUMAN}:
+    if current["packet_id"] in {STAGE2_PREP, STAGE2_HUMAN, STAGE2_NATIVE_ROUTE}:
         assert current["stage2_reveal_started"] is True
         assert current["stage2_reveal_prepared"] is True
         assert current["stage2_human_adjudication_started"] is False
@@ -63,11 +65,19 @@ def test_approved_g6_state_remains_immutable_while_current_state_may_advance_law
         assert current["stage3_reveal_started"] is False
         assert current["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
         assert current["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
-        assert current["next_packet"] == STAGE2_HUMAN
-        if current["packet_id"] == STAGE2_HUMAN:
-            assert current["status"] == "GATE_READY"
-            assert current["authority_required"] == "HUMAN_SCIENTIFIC_INPUT"
-            assert current["stage2_human_answer_count"] == 0
+        if current["packet_id"] == STAGE2_NATIVE_ROUTE:
+            assert current["status"] == "APPROVED"
+            assert current["authority_required"] == "OPERATOR_REQUIRED_SATISFIED"
+            assert current["repository_effective"] is False
+            assert current["stage2_human_scientific_input_required"] is True
+            assert current["stage2_human_answer_synthesis_allowed"] is False
+            assert current["next_packet"] == STAGE2_NATIVE_REPLAY
+        else:
+            assert current["next_packet"] == STAGE2_HUMAN
+            if current["packet_id"] == STAGE2_HUMAN:
+                assert current["status"] == "GATE_READY"
+                assert current["authority_required"] == "HUMAN_SCIENTIFIC_INPUT"
+                assert current["stage2_human_answer_count"] == 0
     elif current["packet_id"] == "ASOCSI-WP8-S01-STAGE1-TO-STAGE2-TRANSITION-SUPERSESSION":
         assert current.get("stage2_reveal_started", False) is False
         assert current["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"

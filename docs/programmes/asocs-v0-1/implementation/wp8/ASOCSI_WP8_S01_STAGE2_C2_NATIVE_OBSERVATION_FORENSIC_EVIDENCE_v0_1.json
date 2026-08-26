@@ -1,0 +1,111 @@
+{
+  "authority_effect": "NONE",
+  "comparison_artifact": {
+    "drive_file_id": "185KzULNjd8zZqlfBfdNmtkaqH7PizN1y",
+    "logical_role": "FORENSIC_COMPARATOR_ONLY_NO_SOURCE_AUTHORITY",
+    "sha256": "8ba9b5654e26793c62bcae3f6b6dc50abe796175a532a8d2b57ef7d2137e7125",
+    "title": "C2VNEXT-JUNE-REAL-OBSERVATION-MATERIALISATION-v1.tgz"
+  },
+  "c2_runtime_binding": {
+    "active_component_count": 9,
+    "active_components": [
+      "OBSERVATION",
+      "HORIZON",
+      "LEVEL",
+      "CONTAINER",
+      "RELATION",
+      "FORMULA",
+      "TRANSITION",
+      "PARENT_CONTEXT",
+      "COMPUTABILITY"
+    ],
+    "authority_id": "AUTH.OPT-B.C2.vNext.ACTIVE.RUNTIME.v0.1",
+    "package_id": "C2AR.INTEGRATED.SHADOW.PACKAGE.v1",
+    "package_sha256": "150de1997be8801baa59db6d0fe98b11cb21a6b70525b908537aeb31bfd00cc3"
+  },
+  "evidence_class": "FORENSIC_PROVENANCE_RECOVERY_FOR_OPERATOR_DECISION_ONLY",
+  "forensic_binding_candidate": {
+    "binding_status": "PROPOSED_OPERATOR_REQUIRED",
+    "price_side": "BID",
+    "price_side_classification": "FORENSICALLY_SUPPORTED_NOT_DECLARED",
+    "timestamp_timezone": "UTC",
+    "timestamp_timezone_classification": "FORENSICALLY_SUPPORTED_NOT_DECLARED"
+  },
+  "historical_source_provenance_preserved": {
+    "price_side": "UNRESOLVED_SINGLE_STREAM",
+    "timestamp_timezone": "SOURCE_TIMEZONE_UNRESOLVED",
+    "wp1_wp4_backfill": "PROHIBITED"
+  },
+  "method": {
+    "price_side": {
+      "comparison": "Exact interval-by-interval OHLC comparison of the ASOCS single stream against both BID and ASK observations in the independently preserved June real C2 vNext materialisation.",
+      "matched_15m_intervals": 2036,
+      "ohlc_comparisons_per_side": 8144,
+      "results": {
+        "ASK": {
+          "absolute_diff_lte_1e_5_fraction": 0.0022102161100196463,
+          "absolute_diff_lte_2e_5_fraction": 0.006630648330058939,
+          "absolute_diff_lte_5e_5_fraction": 0.17264243614931238,
+          "exact_fraction": 0.0004911591355599214,
+          "mean_absolute_diff": 9.567534381139497e-05,
+          "mean_signed_diff": 9.563113948919456e-05,
+          "median_absolute_diff": 7.00000000000145e-05,
+          "median_signed_diff": 7e-05
+        },
+        "BID": {
+          "absolute_diff_lte_1e_5_fraction": 0.7291257367387033,
+          "absolute_diff_lte_2e_5_fraction": 0.8910854616895875,
+          "absolute_diff_lte_5e_5_fraction": 0.9641453831041258,
+          "exact_fraction": 0.29580058939096265,
+          "mean_absolute_diff": 1.7266699410609005e-05,
+          "mean_signed_diff": -6.065815324168778e-07,
+          "median_absolute_diff": 1.0000000000065512e-05,
+          "median_signed_diff": 0.0
+        }
+      },
+      "support_assessment": "STRONG_SUPPORT_FOR_BID_OVER_ASK"
+    },
+    "timezone": {
+      "cross_provider_shift_comparison": {
+        "median_absolute_ohlc_diff_minus_1h": 0.00052,
+        "median_absolute_ohlc_diff_plus_1h": 0.00053,
+        "median_absolute_ohlc_diff_zero_shift": 1.0000000000065512e-05
+      },
+      "support_assessment": "STRONG_SUPPORT_FOR_UTC",
+      "weekly_gap_diagnostic": {
+        "description": "H1 2026 weekly source gaps align with the standard NY 17:00 FX close when source timestamps are interpreted as UTC, including the March 2026 US DST transition.",
+        "friday_to_sunday_gap_count": 26,
+        "post_us_dst_typical_friday_last": "20:54",
+        "post_us_dst_typical_sunday_first": "21:05",
+        "pre_us_dst_typical_friday_last": "21:54",
+        "pre_us_dst_typical_sunday_first": "22:05",
+        "us_dst_transition_example": "2026-03-06 21:54 -> 2026-03-08 21:05"
+      }
+    }
+  },
+  "operator_intent": "Replace the abstract Stage-2 primitive questionnaire with a review of the actual frozen C2 vNext observations beside each frozen ASOCS case chart, without changing C2 semantics.",
+  "output_class_if_approved": "C2_NATIVE_RUNTIME_AUDIT_REPLAY_NONAUTHORITATIVE",
+  "packet_id": "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-ROUTE-AMENDMENT",
+  "plan_id": "OVC-ASOCS-CONFORMANCE-SCIENTIFIC-PREREGISTRATION-IMPLEMENTATION-PLAN-0.1-R1",
+  "plan_version": "0.1_REVISED_1",
+  "programme_id": "OVC-ASOCS-6M-v0.1",
+  "retained_denials": [
+    "NO_PROVIDER_ACTIVATION",
+    "NO_ACTIVE_SOURCE_IDENTITY",
+    "NO_EC1_AUTHORITY",
+    "NO_DISCOVERY_DEVELOPMENT_VALIDATION_ROLE_ADMISSION",
+    "NO_EXACT_ACTIVE_INTERFACE_EQUIVALENCE_CLAIM",
+    "NO_C2_SEMANTIC_THRESHOLD_MODEL_FAMILY_SELECTOR_CHANGE",
+    "NO_HISTORICAL_WP1_WP4_BACKFILL",
+    "NO_CANONICAL_PUBLICATION",
+    "NO_PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_AGENT_WRITE"
+  ],
+  "schema": "ovc-asocsi-stage2-c2-native-observation-forensic-evidence/v0_1",
+  "source_artifact": {
+    "byte_size": 11048144,
+    "drive_file_id": "1FREz4p2UHaAJnlDh29envZRKBvHA_vu1",
+    "logical_name": "2026.8.19GBPUSD_darwinex(2)-M1-No Session.csv",
+    "row_count": 186145,
+    "sha256": "210233ec5761bf82998172832bb554ddf10dfeb3099f6bc6488d5bb0f6bec4f2"
+  }
+}

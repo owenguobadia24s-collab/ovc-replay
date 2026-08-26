@@ -18,6 +18,7 @@ NARROWED_STATE = "records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_23
 RESOLUTION_EFFECTIVE = "ASOCSI-WP8-G3-REPRODUCTION-INTEGRITY-RESOLUTION_REPOSITORY_EFFECTIVE"
 STAGE2_PREP = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
 STAGE2_HUMAN = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-HUMAN-ADJUDICATION"
+STAGE2_NATIVE_ROUTE = "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-ROUTE-AMENDMENT"
 CHECKPOINTS = {"4392":"91004c82e3a4134a32b1afe4e41559652b978589b8043e9abe9f7e818ccf0709","8784":"d005f3225ea5a268fc9a223995f5cadfbb6611f374002eca02df266407b781ee","13176":"c99129aa61f5471f8e7574471fb190057def3efa918a72014e58a3232b607632","17568":"8ea8eabd040a0bc193a34ff792c49f7eb83739c72c5caa69f7234a88159e6f0c"}
 
 
@@ -101,7 +102,7 @@ def test_programme_state_preserves_narrowed_block_across_lawful_successors() -> 
     assert state_generation(pointer["current_state"]) >= state_generation(NARROWED_STATE)
     assert current.get("human_adjudication_started", False) is False
 
-    if current["packet_id"] in {STAGE2_PREP, STAGE2_HUMAN}:
+    if current["packet_id"] in {STAGE2_PREP, STAGE2_HUMAN, STAGE2_NATIVE_ROUTE}:
         assert current["stage2_reveal_started"] is True
         assert current["stage2_reveal_prepared"] is True
         assert current["stage2_human_adjudication_started"] is False
@@ -112,6 +113,10 @@ def test_programme_state_preserves_narrowed_block_across_lawful_successors() -> 
             assert current["status"] == "GATE_READY"
             assert current["authority_required"] == "HUMAN_SCIENTIFIC_INPUT"
             assert current["stage2_human_answer_count"] == 0
+        elif current["packet_id"] == STAGE2_NATIVE_ROUTE:
+            assert current["stage2_human_scientific_input_required"] is True
+            assert current["stage2_human_answer_synthesis_allowed"] is False
+            assert current["construct_survival_decision"] == "PROHIBITED_DURING_CASE_REVIEW"
     else:
         assert current.get("stage2_reveal_started", False) is False
 
@@ -143,12 +148,23 @@ def test_programme_state_preserves_narrowed_block_across_lawful_successors() -> 
             assert current["authority_required"] == "OPERATOR_REQUIRED"
             assert current["stop_boundary"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION-OPERATOR-DECISION"
     elif current["status"] == "APPROVED":
-        operator = load(WP8 / "ASOCSI_G6_PROVENANCE_SUPERSESSION_OPERATOR_DECISION_v0_1.json")
-        assert current.get("stage1_reveal_started", False) is False
-        assert current["authority_required"] == "SATISFIED_OPERATOR_PASS"
-        assert current["gate_id"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION"
-        assert operator["decision"] == "PASS" and operator["authority"] == "OPERATOR"
-        assert preserved["unrecoverable_provenance_warning"] is True
+        if current["packet_id"] == STAGE2_NATIVE_ROUTE:
+            route_operator = load(WP8 / "ASOCSI_WP8_S01_STAGE2_C2_NATIVE_OBSERVATION_ROUTE_OPERATOR_DECISION_v0_1.json")
+            assert route_operator["decision"] == "PASS" and route_operator["authority"] == "OPERATOR"
+            assert current["authority_required"] == "OPERATOR_REQUIRED_SATISFIED"
+            assert current["stage2_reveal_started"] is True
+            assert current["stage2_human_adjudication_started"] is False
+            assert current["stage3_reveal_started"] is False
+            assert current["repository_effective"] is False
+            assert preserved["wp8_g3_reproduction_block"] is True
+            assert preserved["unrecoverable_provenance_warning"] is True
+        else:
+            operator = load(WP8 / "ASOCSI_G6_PROVENANCE_SUPERSESSION_OPERATOR_DECISION_v0_1.json")
+            assert current.get("stage1_reveal_started", False) is False
+            assert current["authority_required"] == "SATISFIED_OPERATOR_PASS"
+            assert current["gate_id"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION"
+            assert operator["decision"] == "PASS" and operator["authority"] == "OPERATOR"
+            assert preserved["unrecoverable_provenance_warning"] is True
     elif current["status"] == "COMPLETED":
         assert preserved["wp8_g3_reproduction_block"] is True
         assert preserved["unrecoverable_provenance_warning"] is True
