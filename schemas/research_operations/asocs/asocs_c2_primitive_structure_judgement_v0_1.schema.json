@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-asocsi-c2-primitive-structure-judgement/v0_1",
+  "title": "ASOCS Stage2 C2 primitive-structure human judgement",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["case_id", "comparison_evaluability", "component_judgements", "information_gap_disposition", "case_notes", "construct_survival_decision"],
+  "properties": {
+    "case_id": {"type": "string", "minLength": 1},
+    "comparison_evaluability": {"enum": ["EVALUABLE", "INFORMATION_GAP", "SOURCE_LIMITED", "INDETERMINATE"]},
+    "information_gap_disposition": {"enum": ["NO_INFORMATION_GAP", "INFORMATION_GAP", "SOURCE_LIMITED", "INDETERMINATE"]},
+    "case_notes": {"type": "string"},
+    "construct_survival_decision": {"const": "PROHIBITED_DURING_CASE_REVIEW"},
+    "component_judgements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["HORIZON", "LEVEL", "CONTAINER", "RELATION"],
+      "properties": {
+        "HORIZON": {"$ref": "#/$defs/component"},
+        "LEVEL": {"$ref": "#/$defs/component"},
+        "CONTAINER": {"$ref": "#/$defs/component"},
+        "RELATION": {"$ref": "#/$defs/component"}
+      }
+    }
+  },
+  "$defs": {
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["disposition", "confidence", "notes"],
+      "properties": {
+        "disposition": {"enum": ["COHERENT", "COHERENT_SCOPE_RESTRICTED", "MECHANICALLY_VALID_EMPIRICALLY_WEAK", "OVER_SENSITIVE", "UNDER_SENSITIVE", "SEMANTICALLY_OVERLOADED", "POSSIBLE_REDUNDANCY", "REPRESENTATION_ARTEFACT", "INFORMATION_GAP", "NEEDS_REDEFINITION", "INVALID", "INDETERMINATE", "SOURCE_LIMITED"]},
+        "confidence": {"enum": ["HIGH", "MODERATE", "LOW"]},
+        "notes": {"type": "string"}
+      }
+    }
+  }
+}

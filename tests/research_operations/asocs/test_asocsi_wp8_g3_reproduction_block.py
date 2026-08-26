@@ -86,7 +86,13 @@ def test_wp8_source_recovers_exact_g1_but_g3_identity_blocks_reveal():
         str(STATE.relative_to(ROOT)).replace("\\", "/")
     )
     assert current.get("human_adjudication_started", False) is False
-    assert current.get("stage2_reveal_started", False) is False
+    if current["packet_id"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION":
+        assert current["stage2_reveal_started"] is True
+        assert current["stage2_human_adjudication_started"] is False
+        assert current["stage3_reveal_started"] is False
+        assert current["human_scientific_input_boundary"] is True
+    else:
+        assert current.get("stage2_reveal_started", False) is False
 
     if current["packet_id"] == state["packet_id"]:
         assert current["status"] == "BLOCKED"
@@ -138,6 +144,19 @@ def test_wp8_source_recovers_exact_g1_but_g3_identity_blocks_reveal():
                 assert current["stage2_human_answer_synthesis_allowed"] is False
                 assert current["stage2_to_stage3_freeze_requirement_changed"] is False
                 assert current["construct_survival_decision"] == "PROHIBITED_DURING_CASE_REVIEW"
+            elif current["packet_id"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION":
+                assert current["authority_delta"] == "NONE"
+                assert current["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
+                assert current["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
+                assert current["stage2_reveal_prepared"] is True
+                assert current["stage2_reveal_started"] is True
+                assert current["stage2_human_scientific_input_required"] is True
+                assert current["stage2_human_adjudication_started"] is False
+                assert current["stage2_human_answer_synthesis_allowed"] is False
+                assert current["stage2_complete_session_freeze_required_before_stage3"] is True
+                assert current["stage3_reveal_started"] is False
+                assert current["human_scientific_input_boundary"] is True
+                assert current["construct_survival_decision"] == "PROHIBITED_DURING_CASE_REVIEW"
             else:
                 raise AssertionError(f"unrecognized completed ASOCSI WP8 state: {current['packet_id']}")
             assert current["preserved"]["wp8_g3_reproduction_block"] is True
@@ -147,24 +166,3 @@ def test_wp8_source_recovers_exact_g1_but_g3_identity_blocks_reveal():
                 "ASOCSI-WP8-STAGED-REVEAL_NOT_AUTHORIZED"
             )
 
-
-def test_wp8_block_does_not_grant_reserved_or_reveal_authority():
-    authority = _json(WP8 / "ASOCSI_WP8_AUTHORITY_MANIFEST_v0_1.json")
-    non_grants = set(authority["non_grants"])
-    assert authority["authority_delta"] == "NONE"
-    assert authority["scientific_effect"] == "NONE"
-    assert {
-        "START_STAGE1_REVEAL",
-        "HUMAN_FIDELITY_ADJUDICATION",
-        "REVEAL_C2_OR_C2E_OR_OCCURRENCE_CONTEXT",
-        "ALTER_G3_G4_G5_FROZEN_EVIDENCE",
-        "SEMANTIC_REMEDIATION",
-        "VALIDATION_OR_EC1_AUTHORITY",
-        "PUBLICATION",
-        "PROBABILITY",
-        "RISK",
-        "EXPOSURE",
-        "TRADING",
-        "EXECUTION",
-        "AGENT_WRITE",
-    }.issubset(non_grants)

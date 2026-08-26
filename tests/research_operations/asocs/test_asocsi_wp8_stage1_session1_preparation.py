@@ -9,6 +9,7 @@ WP8 = ROOT / "docs/programmes/asocs-v0-1/implementation/wp8"
 SCHEMAS = ROOT / "schemas/research_operations/asocs"
 POINTER = ROOT / "registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json"
 G6_STATE = ROOT / "records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_25_G6_PROVENANCE_SUPERSESSION_APPROVED.json"
+STAGE2_PREP = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
 
 LOCKED_SESSION1 = "9aaa80991365cf290122caef513f0e8d706a7b1283475fa041d01d8e5f9f1a0e"
 NON_ADMITTED_CORRECTION = "4f0f06c8f6ba061e56079b04a6400013d12a0a6a578f653fc7abf553744c42ef"
@@ -82,9 +83,19 @@ def test_preparation_preserves_g6_operator_pass_and_lawful_current_supersession(
     assert state["preserved"]["wp8_g3_reproduction_block"] is True
     assert state["preserved"]["unrecoverable_provenance_warning"] is True
     assert state.get("human_adjudication_started", False) is False
-    assert state.get("stage2_reveal_started", False) is False
 
-    if state["packet_id"] == "ASOCSI-WP8-S01-STAGE1-TO-STAGE2-TRANSITION-SUPERSESSION":
+    if state["packet_id"] == STAGE2_PREP:
+        assert state["stage2_reveal_started"] is True
+        assert state["stage2_reveal_prepared"] is True
+        assert state["stage2_human_adjudication_started"] is False
+        assert state["required_human_input_started"] is False
+        assert state["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
+        assert state["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
+        assert state["stage2_complete_session_freeze_required_before_stage3"] is True
+        assert state["stage3_reveal_started"] is False
+        assert state["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-HUMAN-ADJUDICATION"
+    elif state["packet_id"] == "ASOCSI-WP8-S01-STAGE1-TO-STAGE2-TRANSITION-SUPERSESSION":
+        assert state.get("stage2_reveal_started", False) is False
         assert state["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
         assert state["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
         assert state["stage1_complete_session_freeze_required_for_stage2"] is False
@@ -93,6 +104,7 @@ def test_preparation_preserves_g6_operator_pass_and_lawful_current_supersession(
         assert state["stage2_human_answer_synthesis_allowed"] is False
         assert state["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
     else:
+        assert state.get("stage2_reveal_started", False) is False
         assert state["gate_id"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION"
         assert state["authority_required"] == "SATISFIED_OPERATOR_PASS"
         assert pointer["next_packet"] == "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-HUMAN-ADJUDICATION"

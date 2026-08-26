@@ -14,7 +14,6 @@ from ovc.research_operations.asocs.session_batch import (
     validate_session_submission,
 )
 
-
 ROOT = Path(__file__).resolve().parents[3]
 WP8 = ROOT / "docs/programmes/asocs-v0-1/implementation/wp8"
 SCHEMAS = ROOT / "schemas/research_operations/asocs"
@@ -24,6 +23,7 @@ QA = WP8 / "ASOCSI_WP8_S01_STAGE1_SESSION_BATCH_QA_v0_1.json"
 CONTRACT = WP8 / "ASOCSI_WP8_SESSION_BATCH_EXECUTION_CONTRACT_v0_1.json"
 TRANSITION_SUPERSESSION = WP8 / "ASOCSI_WP8_S01_STAGE_TRANSITION_SUPERSESSION_CONTRACT_v0_1.json"
 POINTER = ROOT / "registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json"
+STAGE2_PREP = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
 
 
 def _j(path: Path) -> dict:
@@ -66,15 +66,9 @@ def test_session1_stage1_packet_has_all_cases_exactly_once_in_frozen_order() -> 
     assert packet["stage"] == "SOURCE_C1_FIDELITY"
     assert packet["case_count"] == len(packet["cases"]) == 25
     assert [case["presentation_ordinal"] for case in packet["cases"]] == list(range(1, 26))
-    assert [case["case_id"] for case in packet["cases"]] == [
-        case["case_id"] for case in preparation["cases"]
-    ]
-    assert [case["predecessor_blind_record_sha256"] for case in packet["cases"]] == [
-        case["blind_sha256"] for case in preparation["cases"]
-    ]
-    assert [case["review_unit_id"] for case in packet["cases"]] == [
-        case["review_unit_id"] for case in preparation["cases"]
-    ]
+    assert [case["case_id"] for case in packet["cases"]] == [case["case_id"] for case in preparation["cases"]]
+    assert [case["predecessor_blind_record_sha256"] for case in packet["cases"]] == [case["blind_sha256"] for case in preparation["cases"]]
+    assert [case["review_unit_id"] for case in packet["cases"]] == [case["review_unit_id"] for case in preparation["cases"]]
     assert len({case["case_id"] for case in packet["cases"]}) == 25
     assert all(case["human_judgement"] is None for case in packet["cases"])
     assert all(case["information_gap_disposition"] is None for case in packet["cases"])
@@ -111,49 +105,30 @@ def test_one_template_binds_all_25_cases_and_is_deliberately_incomplete() -> Non
     template = _j(TEMPLATE)
     assert template["reveal_packet_sha256"] == _sha(PACKET)
     assert len(template["cases"]) == 25
-    assert [case["case_id"] for case in template["cases"]] == [
-        case["case_id"] for case in packet["cases"]
-    ]
-    assert all(
-        case["human_judgement"]["construct_survival_decision"]
-        == "PROHIBITED_DURING_CASE_REVIEW"
-        for case in template["cases"]
-    )
+    assert [case["case_id"] for case in template["cases"]] == [case["case_id"] for case in packet["cases"]]
+    assert all(case["human_judgement"]["construct_survival_decision"] == "PROHIBITED_DURING_CASE_REVIEW" for case in template["cases"])
     with pytest.raises(ASOCSSessionBatchError, match="FIDELITY_DISPOSITION_INVALID"):
-        validate_session_submission(
-            template, reveal_packet=packet, reveal_packet_sha256=_sha(PACKET)
-        )
+        validate_session_submission(template, reveal_packet=packet, reveal_packet_sha256=_sha(PACKET))
 
 
 def test_complete_session_validation_rejects_omissions_reordering_and_bad_predecessors() -> None:
     packet = _j(PACKET)
     valid = _completed_fixture()
-    validated = validate_session_submission(
-        valid, reveal_packet=packet, reveal_packet_sha256=_sha(PACKET)
-    )
+    validated = validate_session_submission(valid, reveal_packet=packet, reveal_packet_sha256=_sha(PACKET))
     assert len(validated["cases"]) == 25
     assert validated["cases"][0]["human_judgement"]["notes"] == "  exact operator text Ω\nline 2  "
-
     omitted = copy.deepcopy(valid)
     omitted["cases"].pop()
     with pytest.raises(ASOCSSessionBatchError, match="CASE_COUNT_MISMATCH"):
-        validate_session_submission(
-            omitted, reveal_packet=packet, reveal_packet_sha256=_sha(PACKET)
-        )
-
+        validate_session_submission(omitted, reveal_packet=packet, reveal_packet_sha256=_sha(PACKET))
     reordered = copy.deepcopy(valid)
     reordered["cases"][0], reordered["cases"][1] = reordered["cases"][1], reordered["cases"][0]
     with pytest.raises(ASOCSSessionBatchError, match="ORDER_MISMATCH"):
-        validate_session_submission(
-            reordered, reveal_packet=packet, reveal_packet_sha256=_sha(PACKET)
-        )
-
+        validate_session_submission(reordered, reveal_packet=packet, reveal_packet_sha256=_sha(PACKET))
     bad_predecessor = copy.deepcopy(valid)
     bad_predecessor["cases"][3]["predecessor_blind_record_sha256"] = "0" * 64
     with pytest.raises(ASOCSSessionBatchError, match="PREDECESSOR_MISMATCH"):
-        validate_session_submission(
-            bad_predecessor, reveal_packet=packet, reveal_packet_sha256=_sha(PACKET)
-        )
+        validate_session_submission(bad_predecessor, reveal_packet=packet, reveal_packet_sha256=_sha(PACKET))
 
 
 def test_complete_submission_freezes_atomically_per_case_and_binds_raw_input(tmp_path: Path) -> None:
@@ -162,11 +137,7 @@ def test_complete_submission_freezes_atomically_per_case_and_binds_raw_input(tmp
     raw_input = json.dumps(supplied, ensure_ascii=False, indent=2).encode("utf-8") + b"\n"
     submission.write_bytes(raw_input)
     output_parent = tmp_path / "freeze"
-    frozen = freeze_session_submission(
-        submission_path=submission,
-        reveal_packet_path=PACKET,
-        output_parent=output_parent,
-    )
+    frozen = freeze_session_submission(submission_path=submission, reveal_packet_path=PACKET, output_parent=output_parent)
     records = sorted(frozen.glob("CASE_*.json"))
     assert len(records) == 25
     input_sha = hashlib.sha256(raw_input).hexdigest()
@@ -182,11 +153,7 @@ def test_complete_submission_freezes_atomically_per_case_and_binds_raw_input(tmp
     assert receipt["stage2_reveal_materialized"] is False
     assert not list(frozen.glob("*STAGE2*"))
     with pytest.raises(ASOCSSessionBatchError, match="TARGET_ALREADY_EXISTS"):
-        freeze_session_submission(
-            submission_path=submission,
-            reveal_packet_path=PACKET,
-            output_parent=output_parent,
-        )
+        freeze_session_submission(submission_path=submission, reveal_packet_path=PACKET, output_parent=output_parent)
 
 
 def test_qa_schemas_and_pointer_preserve_stage1_history_and_scoped_stage2_supersession() -> None:
@@ -199,20 +166,23 @@ def test_qa_schemas_and_pointer_preserve_stage1_history_and_scoped_stage2_supers
     assert qa["human_input_template_sha256"] == _sha(TEMPLATE)
     assert _j(SCHEMAS / "asocs_session_stage_human_input_v0_1.schema.json")
     reveal_record = _j(SCHEMAS / "asocs_reveal_stage_record_v0_1.schema.json")
-    assert {
-        "session",
-        "presentation_ordinal",
-        "review_unit_id",
-        "session_human_input_sha256",
-        "case_validation_status",
-    }.issubset(reveal_record["required"])
+    assert {"session", "presentation_ordinal", "review_unit_id", "session_human_input_sha256", "case_validation_status"}.issubset(reveal_record["required"])
 
     pointer = _j(POINTER)
     state = _j(ROOT / pointer["current_state"])
     assert pointer["next_packet"] == state["next_packet"]
-    assert state.get("stage2_reveal_started", False) is False
-
-    if state["packet_id"] == "ASOCSI-WP8-S01-STAGE1-TO-STAGE2-TRANSITION-SUPERSESSION":
+    if state["packet_id"] == STAGE2_PREP:
+        assert state["stage2_reveal_started"] is True
+        assert state["stage2_reveal_prepared"] is True
+        assert state["stage2_human_adjudication_started"] is False
+        assert state["required_human_input_started"] is False
+        assert state["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
+        assert state["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
+        assert state["stage2_complete_session_freeze_required_before_stage3"] is True
+        assert state["stage3_reveal_started"] is False
+        assert state["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-HUMAN-ADJUDICATION"
+    elif state["packet_id"] == "ASOCSI-WP8-S01-STAGE1-TO-STAGE2-TRANSITION-SUPERSESSION":
+        assert state.get("stage2_reveal_started", False) is False
         supersession = _j(TRANSITION_SUPERSESSION)
         assert state["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
         assert state["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
@@ -226,12 +196,8 @@ def test_qa_schemas_and_pointer_preserve_stage1_history_and_scoped_stage2_supers
         assert supersession["stage2_admission"]["stage2_human_judgement_required"] is True
         assert supersession["stage2_admission"]["stage2_human_judgement_may_be_synthesized_by_agent"] is False
     else:
+        assert state.get("stage2_reveal_started", False) is False
         assert state["gate_id"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION"
         assert state["authority_required"] == "SATISFIED_OPERATOR_PASS"
-        expected_next = (
-            "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-HUMAN-ADJUDICATION"
-            if state["packet_id"]
-            == "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-FIDELITY-SUPERSESSION"
-            else "ASOCSI-WP8-STAGE1-HUMAN-FIDELITY-ADJUDICATION"
-        )
+        expected_next = "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-HUMAN-ADJUDICATION" if state["packet_id"] == "ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-FIDELITY-SUPERSESSION" else "ASOCSI-WP8-STAGE1-HUMAN-FIDELITY-ADJUDICATION"
         assert state["next_packet"] == expected_next
