@@ -5,9 +5,12 @@ ROOT = Path(__file__).resolve().parents[3]
 WP8 = ROOT / "docs/programmes/asocs-v0-1/implementation/wp8"
 RECORDS = ROOT / "records/research_operations/asocs"
 REG = ROOT / "registries/research_operations/asocs"
+NATIVE_ROUTE = "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-ROUTE-AMENDMENT"
+
 
 def load(path):
     return json.loads(path.read_text(encoding="utf-8"))
+
 
 def test_stage2_human_adjudication_gate_ready_without_agent_answers():
     template = load(WP8 / "ASOCSI_WP8_S01_STAGE2_C2_PRIMITIVE_STRUCTURE_HUMAN_INPUT_TEMPLATE_v0_1.json")
@@ -31,8 +34,27 @@ def test_stage2_human_adjudication_gate_ready_without_agent_answers():
     assert gate["recommended_decision"] == "DEFER"
     assert state["status"] == "GATE_READY" and state["stage2_human_answer_count"] == 0
     assert state["human_adjudication_started"] is False and state["stage3_reveal_started"] is False
-    assert pointer["packet_id"] == state["packet_id"] and pointer["status"] == "GATE_READY"
-    assert pointer["stage2_workbook_ready"] is True and pointer["stage3_reveal_started"] is False
+
+    if pointer["packet_id"] == state["packet_id"]:
+        assert pointer["status"] == "GATE_READY"
+        assert pointer["stage2_workbook_ready"] is True and pointer["stage3_reveal_started"] is False
+    else:
+        assert pointer["packet_id"] == NATIVE_ROUTE
+        assert pointer["status"] == "APPROVED"
+        assert pointer["repository_effective"] is False
+        assert pointer["stage3_reveal_started"] is False
+        assert pointer["current_questionnaire_route"] == "OPERATOR_APPROVED_FORWARD_SUPERSESSION_PENDING_REPOSITORY_EFFECT"
+        current = load(ROOT / pointer["current_state"])
+        decision = load(WP8 / "ASOCSI_WP8_S01_STAGE2_C2_NATIVE_OBSERVATION_ROUTE_OPERATOR_DECISION_v0_1.json")
+        assert decision["authority"] == "OPERATOR" and decision["operator_reserved"] is True
+        assert decision["decision"] == "PASS"
+        assert decision["approved_scope"]["historical_stage2_questionnaire_disposition"] == "SUPERSEDED_UNCOMPLETED"
+        assert current["authority_required"] == "OPERATOR_REQUIRED_SATISFIED"
+        assert current["stage2_abstract_questionnaire_status"] == "OPERATOR_APPROVED_FORWARD_SUPERSESSION_PENDING_REPOSITORY_EFFECT"
+        assert current["stage2_human_answer_count"] == 0
+        assert current["stage2_human_answer_synthesis_allowed"] is False
+        assert current["stage3_reveal_started"] is False
+
 
 def test_stage2_machine_non_evaluability_is_not_construct_survival():
     reveal = load(WP8 / "ASOCSI_WP8_S01_STAGE2_C2_PRIMITIVE_STRUCTURE_REVEAL_INDEX_v0_1.json")
