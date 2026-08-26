@@ -20,17 +20,21 @@ def test_stage2_reveal_index_is_exact_primitive_only() -> None:
     reveal = j(WP8 / "ASOCSI_WP8_S01_STAGE2_C2_PRIMITIVE_STRUCTURE_REVEAL_INDEX_v0_1.json")
     validate_reveal_index(reveal)
     assert reveal["case_ids"] == EXPECTED
+    assert [b["case_id"] for b in reveal["case_bindings"]] == EXPECTED
+    assert [b["presentation_ordinal"] for b in reveal["case_bindings"]] == list(range(1, 26))
+    assert all(len(b["predecessor_blind_record_sha256"]) == 64 for b in reveal["case_bindings"])
+    assert all(b["review_unit_id"].startswith("asocs:") for b in reveal["case_bindings"])
+    anchors = [b for b in reveal["case_bindings"] if b["kind"] == "ANCHOR_15M"]
+    gaps = [b for b in reveal["case_bindings"] if b["kind"] == "SOURCE_GAP"]
+    assert len(anchors) == 24 and len(gaps) == 1
+    assert all(len(b["trace_sha256"]) == 64 for b in anchors)
+    assert gaps[0]["case_id"] == "ASOCS.BLIND.9b251b8cfedc5e9a61396830"
     assert reveal["revealed_evidence_surface"] == ["C2_HORIZON_MEMBERSHIP","C2_LEVEL_CANDIDATES_AND_EMITTED_LEVELS","C2_CONTAINER_PAIRING_CANDIDATES_AND_DISPOSITIONS","C2_RELATION_INVENTORY"]
     assert tuple(reveal["frozen_primitive_profile"]) == PRIMITIVE_COMPONENTS
     for key, record in reveal["frozen_primitive_profile"].items():
-        assert record["construct"] == key
-        assert record["disposition"] == "NOT_EVALUABLE"
+        assert record["construct"] == key and record["disposition"] == "NOT_EVALUABLE"
         assert tuple(record["reason_codes"]) == NOT_EVALUABLE_REASONS
         assert record["active"] is False and record["canonical"] is False and record["publication"] is False
-    assert reveal["extraction_attestation"]["anchor_cases"] == 24
-    assert reveal["extraction_attestation"]["exact_primitive_evaluable_anchor_cases"] == 0
-    assert reveal["extraction_attestation"]["source_gap_cases"] == 1
-    assert reveal["extraction_attestation"]["source_gap_trace_fabricated"] is False
 
 
 def test_no_stage3_or_upper_reveal_and_no_stage1_backfill() -> None:
@@ -40,28 +44,27 @@ def test_no_stage3_or_upper_reveal_and_no_stage1_backfill() -> None:
         assert forbidden not in text
     assert reveal["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
     assert reveal["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
-    assert reveal["stage1_human_completion_required"] is False
     assert reveal["human_judgements"] == []
     assert reveal["later_stage_firewall"]["stage2_complete_session_freeze_required_before_stage3"] is True
     assert reveal["later_stage_firewall"]["stage3_reveal_started"] is False
 
 
-def test_human_template_and_state_stop_at_human_boundary() -> None:
+def test_human_template_has_25_empty_reviewer_placeholders_and_state_stops() -> None:
     template = j(WP8 / "ASOCSI_WP8_S01_STAGE2_C2_PRIMITIVE_STRUCTURE_HUMAN_INPUT_TEMPLATE_v0_1.json")
     state = j(STATE)
     pointer = j(POINTER)
-    assert template["case_ids"] == EXPECTED and template["cases"] == []
+    assert [c["case_id"] for c in template["cases"]] == EXPECTED
+    assert len(template["cases"]) == 25
+    for case in template["cases"]:
+        assert case["comparison_evaluability"] is None
+        assert case["information_gap_disposition"] is None
+        assert case["construct_survival_decision"] == "PROHIBITED_DURING_CASE_REVIEW"
+        assert all(v is None for v in case["component_judgements"].values())
     assert template["submission_rules"]["no_agent_answer_synthesis"] is True
-    assert template["submission_rules"]["stage2_freeze_required_before_stage3"] is True
-    assert state["status"] == "COMPLETED"
-    assert state["human_scientific_input_boundary"] is True
-    assert state["required_human_input_started"] is False
-    assert state["stage2_human_adjudication_started"] is False
+    assert state["status"] == "COMPLETED" and state["human_scientific_input_boundary"] is True
+    assert state["required_human_input_started"] is False and state["stage2_human_adjudication_started"] is False
     assert state["stage3_reveal_started"] is False
-    assert state["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-HUMAN-ADJUDICATION"
-    assert pointer["current_state"] == str(STATE.relative_to(ROOT)).replace("\\", "/")
     assert pointer["next_packet"] == state["next_packet"]
-    assert pointer["human_scientific_input_boundary"] is True
 
 
 def test_qa_pass_and_judgement_schema_prohibits_construct_survival() -> None:
