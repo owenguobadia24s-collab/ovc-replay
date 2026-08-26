@@ -1,0 +1,63 @@
+{
+  "authority_effect": "NONE",
+  "checks": [
+    {
+      "check": "SOURCE_BYTES_HASH_VERIFIED",
+      "result": "PASS"
+    },
+    {
+      "check": "HISTORICAL_WP1_WP4_PROVENANCE_PRESERVED",
+      "result": "PASS"
+    },
+    {
+      "check": "FORENSIC_BINDING_IS_NOT_MISREPRESENTED_AS_DECLARED_PROVENANCE",
+      "result": "PASS"
+    },
+    {
+      "check": "BID_SUPPORT_MATERIALLY_STRONGER_THAN_ASK",
+      "result": "PASS"
+    },
+    {
+      "check": "UTC_SUPPORT_DOMINATES_PLUS_MINUS_ONE_HOUR",
+      "result": "PASS"
+    },
+    {
+      "check": "FROZEN_C2_RUNTIME_IDENTITY_EXISTS",
+      "result": "PASS"
+    },
+    {
+      "check": "NO_C2_SEMANTIC_OR_THRESHOLD_CHANGE_PROPOSED",
+      "result": "PASS"
+    },
+    {
+      "check": "CURRENT_STAGE2_QUESTIONNAIRE_NOT_SILENTLY_COMPLETED",
+      "result": "PASS"
+    },
+    {
+      "check": "MATERIAL_RESEARCH_ROUTE_CHANGE_ESCALATED_TO_OPERATOR",
+      "result": "PASS"
+    },
+    {
+      "check": "STAGE3_REMAINS_UNREVEALED",
+      "result": "PASS"
+    }
+  ],
+  "external_evidence": {
+    "asocs_source_sha256": "210233ec5761bf82998172832bb554ddf10dfeb3099f6bc6488d5bb0f6bec4f2",
+    "june_c2_comparator_sha256": "8ba9b5654e26793c62bcae3f6b6dc50abe796175a532a8d2b57ef7d2137e7125"
+  },
+  "packet_id": "ASOCSI-WP8-S01-STAGE2-C2-NATIVE-OBSERVATION-ROUTE-AMENDMENT",
+  "programme_id": "OVC-ASOCS-6M-v0.1",
+  "recommendation": "PASS_TO_OPERATOR_REQUIRED_ROUTE_AMENDMENT_GATE",
+  "repository_ci": {
+    "result": "NOT_RUN_IN_CONNECTED_PREFLIGHT",
+    "reason": "This packet contains only evidence, QA, gate and programme-state records; repository CI is to be observed on the opened PR head before operator decision."
+  },
+  "result": "PASS",
+  "schema": "ovc-asocsi-stage2-c2-native-observation-route-amendment-qa/v0_1",
+  "warnings": [
+    "The BID/UTC binding is forensic evidence, not declared source provenance and not an active source identity.",
+    "Using the proposed binding to execute the frozen C2 runtime changes the frozen Stage-2 research route and therefore remains OPERATOR_REQUIRED.",
+    "The current Stage-2 human questionnaire remains historically valid evidence but is not completed by this packet."
+  ]
+}
