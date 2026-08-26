@@ -10,6 +10,8 @@ Only Horizon, Level, Container and Relation evidence is in scope. The exact G3 t
 
 Use the already-frozen WP7 source-native/blind evidence as the human observational reference. Complete one Stage-2 judgement per case in the exact frozen case order. Record comparison evaluability, separate Horizon/Level/Container/Relation disposition and confidence, information-gap disposition and notes. Do not decide construct survival.
 
+The programme-state compatibility field `human_review_started=true` records the already-completed historical WP7 human-review lineage only. It does not mean Stage-2 human adjudication has started: `stage2_human_adjudication_started=false` and `required_human_input_started=false` remain the governing current-stage facts.
+
 The assistant may validate schema, identity, completeness, hashes and transport. It may not choose, infer, repair, summarize into or manufacture a human scientific answer.
 
 No C2 composition, C2E or OccurrenceContext evidence may be revealed. The complete Session-1 Stage-2 human input must be validated and frozen append-only before Stage 3 (`C2_COMPOSITION`) can begin.
