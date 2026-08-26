@@ -10,6 +10,8 @@ WP8 = ROOT / "docs/programmes/asocs-v0-1/implementation/wp8"
 STATE = ROOT / "records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_21_WP8_G3_REPRODUCTION_BLOCKED.json"
 POINTER = ROOT / "registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json"
 BLOCK_PACKET = "ASOCSI-WP8-G3-REPRODUCTION-INTEGRITY-PREFLIGHT"
+STAGE2_PREP = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
+STAGE2_HUMAN = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-HUMAN-ADJUDICATION"
 
 
 def _json(path: Path) -> dict:
@@ -17,9 +19,7 @@ def _json(path: Path) -> dict:
 
 
 def _cid(value: dict) -> str:
-    return hashlib.sha256(
-        json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()
-    ).hexdigest()
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()).hexdigest()
 
 
 def _state_generation(path: str) -> int:
@@ -44,21 +44,15 @@ def test_wp8_source_recovers_exact_g1_but_g3_identity_blocks_reveal():
     assert source["source"]["sha256"] == "210233ec5761bf82998172832bb554ddf10dfeb3099f6bc6488d5bb0f6bec4f2"
     assert source["verification"]["g1_audit_15m"]["result"] == "PASS"
     assert source["verification"]["g1_audit_15m"]["observed_sha256"] == "df060a22bf8a6c1d990d22af90e189848bd2c5f3090ef65a8c5637e4456bb7d9"
-
     assert repro["reproduction_basis"]["clean_attempt_count"] == 2
     assert repro["reproduction_basis"]["clean_attempts_identical"] is True
     assert repro["population_reconciliation"]["counts_match_frozen"] is True
     assert repro["expected_frozen"]["census_sha256"] != repro["observed_reproduction"]["census_sha256"]
     assert repro["expected_frozen"]["ordered_trace_ids_sha256"] != repro["observed_reproduction"]["ordered_trace_ids_sha256"]
     assert repro["expected_frozen"]["observation_traces"]["sha256"] != repro["observed_reproduction"]["observation_traces"]["sha256"]
-    assert all(
-        repro["expected_frozen"]["checkpoints"][key]
-        != repro["observed_reproduction"]["checkpoints"][key]
-        for key in ("4392", "8784", "13176", "17568")
-    )
+    assert all(repro["expected_frozen"]["checkpoints"][key] != repro["observed_reproduction"]["checkpoints"][key] for key in ("4392", "8784", "13176", "17568"))
     assert repro["result"] == "FAIL_G3_CONTENT_IDENTITY_MISMATCH"
     assert repro["stage1_reveal_allowed"] is False
-
     assert packet["authority_manifest_id"] == _cid(authority)
     assert packet["dependency_frontier_id"] == _cid(frontier)
     assert qa["qa_recommendation"] == "BLOCK"
@@ -67,30 +61,27 @@ def test_wp8_source_recovers_exact_g1_but_g3_identity_blocks_reveal():
     assert decision["stage1_reveal_authorized"] is False
     assert decision["human_adjudication_started"] is False
 
-    # The immutable reproduction-preflight court record remains a BLOCK forever.
     assert state["status"] == "BLOCKED"
     assert state["authority_delta"] == "NONE"
     assert state["human_adjudication_started"] is False
     assert state["stop_boundary"] == "ASOCSI-WP8-STAGED-REVEAL_NOT_AUTHORIZED_UNTIL_G3_REPRODUCIBLE"
 
-    # The current pointer may lawfully advance only through explicit later authority.
-    # G6 superseded one exact-reproduction acceptance condition without rewriting this
-    # historical BLOCK. Later scoped review-route supersessions must continue to carry
-    # the exact historical G3 evidence and the permanent provenance warning forward.
     assert pointer["programme_id"] == current["programme_id"] == state["programme_id"]
     assert pointer["packet_id"] == current["packet_id"]
     assert pointer["status"] == current["status"]
     assert current["status"] in {"BLOCKED", "GATE_READY", "APPROVED", "COMPLETED"}
     assert pointer["next_packet"] == current["next_packet"]
-    assert _state_generation(pointer["current_state"]) >= _state_generation(
-        str(STATE.relative_to(ROOT)).replace("\\", "/")
-    )
+    assert _state_generation(pointer["current_state"]) >= _state_generation(str(STATE.relative_to(ROOT)).replace("\\", "/"))
     assert current.get("human_adjudication_started", False) is False
-    if current["packet_id"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION":
+    if current["packet_id"] in {STAGE2_PREP, STAGE2_HUMAN}:
         assert current["stage2_reveal_started"] is True
         assert current["stage2_human_adjudication_started"] is False
         assert current["stage3_reveal_started"] is False
         assert current["human_scientific_input_boundary"] is True
+        if current["packet_id"] == STAGE2_HUMAN:
+            assert current["status"] == "GATE_READY"
+            assert current["authority_required"] == "HUMAN_SCIENTIFIC_INPUT"
+            assert current["stage2_human_answer_count"] == 0
     else:
         assert current.get("stage2_reveal_started", False) is False
 
@@ -115,9 +106,16 @@ def test_wp8_source_recovers_exact_g1_but_g3_identity_blocks_reveal():
         assert current["preserved"]["g4_review_population"] is True
         assert current["preserved"]["g5_human_evidence"] is True
         if current["status"] == "GATE_READY":
-            assert current.get("stage1_reveal_started", False) is False
-            assert current["authority_required"] == "OPERATOR_REQUIRED"
-            assert current["stop_boundary"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION-OPERATOR-DECISION"
+            if current["packet_id"] == STAGE2_HUMAN:
+                assert current["authority_required"] == "HUMAN_SCIENTIFIC_INPUT"
+                assert current["blockers"] == ["HUMAN_SCIENTIFIC_INPUT_REQUIRED"]
+                assert current["stage2_reveal_started"] is True
+                assert current["stage2_human_adjudication_started"] is False
+                assert current["stage3_reveal_started"] is False
+            else:
+                assert current.get("stage1_reveal_started", False) is False
+                assert current["authority_required"] == "OPERATOR_REQUIRED"
+                assert current["stop_boundary"] == "ASOCSI-G6-PROVENANCE-SUPERSESSION-OPERATOR-DECISION"
         elif current["status"] == "APPROVED":
             operator = _json(WP8 / "ASOCSI_G6_PROVENANCE_SUPERSESSION_OPERATOR_DECISION_v0_1.json")
             assert current.get("stage1_reveal_started", False) is False
@@ -144,7 +142,7 @@ def test_wp8_source_recovers_exact_g1_but_g3_identity_blocks_reveal():
                 assert current["stage2_human_answer_synthesis_allowed"] is False
                 assert current["stage2_to_stage3_freeze_requirement_changed"] is False
                 assert current["construct_survival_decision"] == "PROHIBITED_DURING_CASE_REVIEW"
-            elif current["packet_id"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION":
+            elif current["packet_id"] == STAGE2_PREP:
                 assert current["authority_delta"] == "NONE"
                 assert current["stage1_review_route_status"] == "SUPERSEDED_UNCOMPLETED"
                 assert current["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
@@ -162,7 +160,4 @@ def test_wp8_source_recovers_exact_g1_but_g3_identity_blocks_reveal():
             assert current["preserved"]["wp8_g3_reproduction_block"] is True
             assert current["preserved"]["unrecoverable_provenance_warning"] is True
         else:
-            assert current["stop_boundary"].startswith(
-                "ASOCSI-WP8-STAGED-REVEAL_NOT_AUTHORIZED"
-            )
-
+            assert current["stop_boundary"].startswith("ASOCSI-WP8-STAGED-REVEAL_NOT_AUTHORIZED")
