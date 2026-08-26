@@ -28,7 +28,7 @@ def test_case_sequence_index_exact_scope_and_upper_layer_firewall():
     idx=load(WP8/'ASOCSI_WP8_S01_STAGE1_C1_CASE_SEQUENCE_INDEX_v0_1.json')
     assert idx['case_count']==25 and len(idx['cases'])==25
     assert [c['presentation_ordinal'] for c in idx['cases']]==list(range(1,26))
-    assert len({c['case_id'] for c in idx['cases']})==25
+    assert len({c['case_id'] for c in idx['cases'])==25
     assert all(set(c['navigation_window'])=={'local','development','wider'} for c in idx['cases'])
     assert idx['source_bindings']['source_sha256']=='210233ec5761bf82998172832bb554ddf10dfeb3099f6bc6488d5bb0f6bec4f2'
     assert idx['source_bindings']['g1_audit_15m_sha256']=='df060a22bf8a6c1d990d22af90e189848bd2c5f3090ef65a8c5637e4456bb7d9'
@@ -76,6 +76,7 @@ def test_qa_decision_state_pointer_stop_at_human_input():
     qa=load(WP8/'ASOCSI_WP8_S01_STAGE1_C1_CASE_NARRATIVE_QA_v0_1.json')
     dec=load(WP8/'ASOCSI_WP8_S01_STAGE1_C1_CASE_NARRATIVE_DECISION_v0_1.json')
     st=load(ROOT/'records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_27_WP8_S01_STAGE1_C1_CASE_NARRATIVE_FIDELITY_SUPERSESSION_COMPLETED.json')
+    effective=load(ROOT/'records/research_operations/asocs/ASOCSI_PROGRAMME_STATE_v0_28_WP8_S01_STAGE1_C1_CASE_NARRATIVE_FIDELITY_SUPERSESSION_REPOSITORY_EFFECTIVE.json')
     ptr=load(ROOT/'registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json')
     assert qa['qa_recommendation']=='PASS' and not qa['blocking_findings']
     assert dec['decision']=='PASS' and dec['authority_delta']=='NONE'
@@ -84,5 +85,11 @@ def test_qa_decision_state_pointer_stop_at_human_input():
     assert st['required_human_input_started'] is False and st['human_adjudication_started'] is False
     assert st['stage2_reveal_started'] is False
     assert st['historical_single_anchor_human_completion_required'] is False
-    assert ptr['current_state'].endswith('ASOCSI_PROGRAMME_STATE_v0_27_WP8_S01_STAGE1_C1_CASE_NARRATIVE_FIDELITY_SUPERSESSION_COMPLETED.json')
+    assert effective['status']=='COMPLETED_REPOSITORY_EFFECTIVE'
+    assert effective['merge_commit']=='6986acc3caf92c2fd3cdf32ed8460fe1bd858c06'
+    assert effective['human_scientific_input_boundary'] is True
+    assert effective['required_human_input_started'] is False and effective['human_adjudication_started'] is False
+    assert effective['stage2_reveal_started'] is False
+    assert ptr['current_state'].endswith('ASOCSI_PROGRAMME_STATE_v0_28_WP8_S01_STAGE1_C1_CASE_NARRATIVE_FIDELITY_SUPERSESSION_REPOSITORY_EFFECTIVE.json')
+    assert ptr['status']=='COMPLETED_REPOSITORY_EFFECTIVE'
     assert ptr['next_packet']=='ASOCSI-WP8-S01-STAGE1-C1-CASE-NARRATIVE-HUMAN-ADJUDICATION'
