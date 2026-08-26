@@ -24,6 +24,7 @@ CONTRACT = WP8 / "ASOCSI_WP8_SESSION_BATCH_EXECUTION_CONTRACT_v0_1.json"
 TRANSITION_SUPERSESSION = WP8 / "ASOCSI_WP8_S01_STAGE_TRANSITION_SUPERSESSION_CONTRACT_v0_1.json"
 POINTER = ROOT / "registries/research_operations/asocs/CURRENT_ASOCSI_STATE_POINTER.json"
 STAGE2_PREP = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
+STAGE2_HUMAN = "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-HUMAN-ADJUDICATION"
 
 
 def _j(path: Path) -> dict:
@@ -171,7 +172,7 @@ def test_qa_schemas_and_pointer_preserve_stage1_history_and_scoped_stage2_supers
     pointer = _j(POINTER)
     state = _j(ROOT / pointer["current_state"])
     assert pointer["next_packet"] == state["next_packet"]
-    if state["packet_id"] == STAGE2_PREP:
+    if state["packet_id"] in {STAGE2_PREP, STAGE2_HUMAN}:
         assert state["stage2_reveal_started"] is True
         assert state["stage2_reveal_prepared"] is True
         assert state["stage2_human_adjudication_started"] is False
@@ -180,7 +181,11 @@ def test_qa_schemas_and_pointer_preserve_stage1_history_and_scoped_stage2_supers
         assert state["stage1_scientific_conclusion"] == "NOT_ESTABLISHED"
         assert state["stage2_complete_session_freeze_required_before_stage3"] is True
         assert state["stage3_reveal_started"] is False
-        assert state["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-HUMAN-ADJUDICATION"
+        assert state["next_packet"] == STAGE2_HUMAN
+        if state["packet_id"] == STAGE2_HUMAN:
+            assert state["status"] == "GATE_READY"
+            assert state["authority_required"] == "HUMAN_SCIENTIFIC_INPUT"
+            assert state["stage2_human_answer_count"] == 0
     elif state["packet_id"] == "ASOCSI-WP8-S01-STAGE1-TO-STAGE2-TRANSITION-SUPERSESSION":
         assert state.get("stage2_reveal_started", False) is False
         supersession = _j(TRANSITION_SUPERSESSION)
@@ -191,7 +196,7 @@ def test_qa_schemas_and_pointer_preserve_stage1_history_and_scoped_stage2_supers
         assert state["stage2_human_scientific_input_required"] is True
         assert state["stage2_human_answer_synthesis_allowed"] is False
         assert state["stage2_to_stage3_freeze_requirement_changed"] is False
-        assert state["next_packet"] == "ASOCSI-WP8-S01-STAGE2-C2-PRIMITIVE-STRUCTURE-PREPARATION"
+        assert state["next_packet"] == STAGE2_PREP
         assert supersession["stage1_disposition"]["scientific_conclusion"] == "NOT_ESTABLISHED"
         assert supersession["stage2_admission"]["stage2_human_judgement_required"] is True
         assert supersession["stage2_admission"]["stage2_human_judgement_may_be_synthesized_by_agent"] is False
