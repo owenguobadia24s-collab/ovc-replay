@@ -57,11 +57,14 @@ def test_debtfloor_g0_g1_g2_and_pointer_remain_historical_bytes():
     assert pointer["definition"].endswith("GRT_DEBT_FLOOR_G2.json")
 
 
-def test_current_programme_state_and_pointer_expose_resume_without_wp5_start():
-    state = load(IMPL / "OVC_GRT2_STATE_v0_19_G3_ROLLBACK_LIMITED_ENFORCEMENT.json")
+def test_current_programme_state_and_pointer_expose_completed_resume_without_wp5_start():
+    state = load(IMPL / "OVC_GRT2_STATE_v0_20_G3_ROLLBACK_COMPLETED.json")
     assert_hashed(state)
     pointer = load(IMPL / "CURRENT_STATE_POINTER.json")
-    assert pointer["current_state"].endswith("OVC_GRT2_STATE_v0_19_G3_ROLLBACK_LIMITED_ENFORCEMENT.json")
+    assert pointer["current_state"].endswith("OVC_GRT2_STATE_v0_20_G3_ROLLBACK_COMPLETED.json")
+    assert pointer["status"] == "COMPLETED"
+    assert pointer["operator_decision_required"] is False
+    assert state["status"] == "COMPLETED"
     assert state["active_enforcement"] == "LIMITED_NEW_ARTIFACT_ENFORCEMENT"
     assert state["ordinary_packet_debt_floor_generation_required"] is False
     assert state["wp5_status"] == "NOT_STARTED"
