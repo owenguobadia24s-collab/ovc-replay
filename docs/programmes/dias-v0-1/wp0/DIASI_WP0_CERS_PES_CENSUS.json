@@ -1,0 +1,32 @@
+{
+  "schema": "ovc-diasi-cers-pes-census/v1",
+  "manifest_id": "DIASI-WP0-CERS-PES-CENSUS-20260827",
+  "baseline_commit": "4e7401a4b7a91d77fe862fec24317035a46eb6ca",
+  "cers": {
+    "current_status": "COMPLETED_ACTIVE_PERSISTENT_SUPERVISOR",
+    "dispatch": "ALLOWED_EXACT_ADMITTED_SCOPE_ONLY",
+    "quiescence_mode": "RUN",
+    "controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
+    "gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+    "worker_concurrency": 1,
+    "admitted_programmes": ["OVC-DSAI3V-CERS-CONFORMANCE-v0.1", "OVC-P2CTI-CONFORMANCE-v0.1", "OVC-ASOCS-6M-v0.1", "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE", "OVC-SHARED-SYSTEMS-v0.1"],
+    "admission_registry": {"path": "registries/development/skills/cers/CERS_PERSISTENT_PROGRAMME_ADMISSION_REGISTRY_v0_4.json", "blob": "8e70a6968fd2218031385bb225d477c468139602"},
+    "triggers": ["PERSISTENT_SWEEP", "HEARTBEAT", "LEASE_RECLAIM", "OWNER_PACKET_DISCOVERY", "START_ACK", "SUCCESSOR_RESOLUTION"],
+    "credentials": {"raw_values_observed": false, "logical_refs": [], "status": "NO_CREDENTIAL_REFERENCE_IN_CURRENT_CERS_STATE_OR_ADMISSION_REGISTRY"},
+    "in_flight": {"status": "RUNTIME_AUTHORITATIVE_COUNT_NOT_AVAILABLE_FROM_REPOSITORY_SNAPSHOT", "cutover_requirement": "EXACT_LIVE_ENUMERATION_AND_DISPOSITION_REQUIRED"},
+    "code_and_control_roots": ["src/ovc/development/skills/cers", "tools/ci/run_cers_persistent_qualification.py", "contracts/development/skills/cers", "schemas/development/skills/cers", "registries/development/skills/cers", "registries/implementation/dsai3v_cers_v0_1", "docs/releases/development-skills-v0-3/cers-persistent-supervisor", "tests/development_skills/cers"]
+  },
+  "pes": {
+    "current_status": "ACTIVE_BOUNDED",
+    "write_domain": "ovc/vit-qualification-ledger-v1:.ovc/vit-qualifications",
+    "ledger_head_at_freeze": "1c15b3a3e4a0c4dbf69423bb4334d1d95a497d81",
+    "executor_scope": "TRUSTED_OWNER_ISSUED_REQUEST_ONLY",
+    "triggers": ["OWNER_ISSUED_QUALIFICATION_REQUEST", "PERSISTENT_FENCING_BOUND_DISPATCH", "CONTENT_ADDRESSED_REPLAY"],
+    "credentials": {"raw_values_observed": false, "logical_refs": ["GIT_REMOTE_AUTHORITY_FOR_DETACHED_LEDGER_REF"], "status": "LOGICAL_ONLY_EXACT_HOST_SECRET_NOT_READ"},
+    "in_flight": {"status": "NO_CANONICAL_ACTIVE_REQUEST_INDEX_FOUND_IN_REPOSITORY_SNAPSHOT", "cutover_requirement": "RECONCILE_LEDGER_ACTIVE_HEAD_POINTERS_AND_OWNER_REQUESTS"},
+    "code_and_control_roots": ["src/ovc/development/skills/pes_vit_qualification_producer.py", "tools/ci/pes_vit_qualification_producer.py", "contracts/development/skills/pes", "docs/releases/development-skills-v0-3/pes-vit-liveness", "tests/development_skills/test_pes_vit_qualification_producer.py", "tests/development_skills/test_pes_vit_qualification_liveness.py", "refs/heads/ovc/vit-qualification-ledger-v1:.ovc/vit-qualifications"]
+  },
+  "host_probe": {"scheduled_task_or_service_attribution": "NO_CANONICAL_OVC_CERS_PES_HOST_REGISTRATION_IDENTIFIED", "process_probe": "NOT_USED_FOR_ZERO_PROOF_COMMAND_LINE_INSPECTION_CAN_SELF_MATCH"},
+  "retirement_authority": "DENIED",
+  "next_required_census": "EXACT_LIVE_CUTOVER_GATE_CENSUS"
+}

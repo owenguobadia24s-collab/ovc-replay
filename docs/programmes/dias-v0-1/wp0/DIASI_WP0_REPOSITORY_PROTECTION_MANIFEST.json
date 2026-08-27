@@ -1,0 +1,33 @@
+{
+  "schema": "ovc-repository-protection-manifest/v1",
+  "manifest_id": "DIASI-WP0-REPOSITORY-PROTECTION-20260827",
+  "observed_at": "2026-08-27T11:02:12.3277656+01:00",
+  "repository": "owenguobadia24s-collab/ovc-replay",
+  "physical_main": {"commit": "4e7401a4b7a91d77fe862fec24317035a46eb6ca", "tree": "9b5a2ef28be73bc6c575063571fbee47d3501052"},
+  "ruleset": {
+    "id": 20229411,
+    "name": "OVC main protection",
+    "enforcement": "active",
+    "target": "refs/heads/main",
+    "deletion_prohibited": true,
+    "non_fast_forward_prohibited": true,
+    "pull_request_required": true,
+    "allowed_merge_methods": ["squash"],
+    "required_status_checks": [{"context": "OVC merge readiness", "integration_id": 15368}],
+    "strict_required_status_checks": false,
+    "required_review_thread_resolution": true,
+    "bypass_actors": [],
+    "current_user_can_bypass": "never",
+    "updated_at": "2026-08-24T12:46:03.557+01:00"
+  },
+  "physical_writer": {
+    "controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
+    "gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+    "parallel_physical_merge": false,
+    "source": "registries/development/skills/VIT_PHYSICAL_MAIN_EXCLUSIVITY_v0_1.json",
+    "source_blob": "b187ea670c51fd9b24f55fe06fb20358f74a8401"
+  },
+  "runner_observation": {"self_hosted_windows_total": 2, "online": 0, "offline": 2, "authority_effect": "NONE"},
+  "revalidation_required_immediately_before_physical_write": true,
+  "drift_disposition": "BLOCK_MATERIALISATION_AND_RECOMPUTE"
+}

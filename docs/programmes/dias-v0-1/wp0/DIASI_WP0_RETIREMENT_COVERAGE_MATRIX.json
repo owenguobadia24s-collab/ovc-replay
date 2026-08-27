@@ -1,0 +1,18 @@
+{
+  "schema": "ovc-diasi-retirement-coverage-matrix/v1",
+  "manifest_id": "DIASI-WP0-RETIREMENT-COVERAGE-MATRIX-20260827",
+  "scope": ["CERS_ACTIVE_RUNTIME", "PES_VIT_QUALIFICATION_PRODUCER"],
+  "census_complete_for_wp0": true,
+  "retirement_eligible": false,
+  "functions": [
+    {"function": "PROGRAMME_DISCOVERY_AND_ADMISSION", "incumbent": "CERS", "active": true, "replacement_owner": "DSAI_VIT_OWNER_LOCAL", "replacement_status": "NOT_IMPLEMENTED", "cutover_gate": "DIASI-G-DGS-CUTOVER-DRAIN", "removal_gate": "DIASI-G-DGS-RETIRE-REMOVE"},
+    {"function": "PERSISTENT_SWEEP_HEARTBEAT_LEASE_RECLAIM", "incumbent": "CERS", "active": true, "replacement_owner": "DSAI_VIT_OWNER_LOCAL", "replacement_status": "NOT_IMPLEMENTED", "cutover_gate": "DIASI-G-DGS-CUTOVER-DRAIN", "removal_gate": "DIASI-G-DGS-RETIRE-REMOVE"},
+    {"function": "PACKET_START_AND_SUCCESSOR_DISPATCH", "incumbent": "CERS", "active": true, "replacement_owner": "DSAI_VIT_OWNER_LOCAL", "replacement_status": "NOT_IMPLEMENTED", "cutover_gate": "DIASI-G-DGS-CUTOVER-DRAIN", "removal_gate": "DIASI-G-DGS-RETIRE-REMOVE"},
+    {"function": "DETACHED_QUALIFICATION_LEDGER_ENVELOPE_WRITE", "incumbent": "PES", "active": true, "replacement_owner": "VIT_QUALIFICATION_OWNER_LOCAL", "replacement_status": "NOT_IMPLEMENTED", "cutover_gate": "DIASI-G-DGS-CUTOVER-DRAIN", "removal_gate": "DIASI-G-DGS-RETIRE-REMOVE"},
+    {"function": "EXACT_HEAD_POINTER_PUBLICATION", "incumbent": "PES", "active": true, "replacement_owner": "VIT_QUALIFICATION_OWNER_LOCAL", "replacement_status": "NOT_IMPLEMENTED", "cutover_gate": "DIASI-G-DGS-CUTOVER-DRAIN", "removal_gate": "DIASI-G-DGS-RETIRE-REMOVE"},
+    {"function": "CONTENT_ADDRESSED_IDEMPOTENT_REPLAY", "incumbent": "PES", "active": true, "replacement_owner": "VIT_QUALIFICATION_OWNER_LOCAL", "replacement_status": "NOT_IMPLEMENTED", "cutover_gate": "DIASI-G-DGS-CUTOVER-DRAIN", "removal_gate": "DIASI-G-DGS-RETIRE-REMOVE"},
+    {"function": "POST_MERGE_COMPLETION_AND_RECEIPT_RECOVERY", "incumbent": "VIT_EXISTING_OWNER", "active": true, "replacement_owner": "VIT_EXISTING_OWNER", "replacement_status": "REUSE_REQUIRED_NOT_RETIREMENT_SCOPE", "cutover_gate": null, "removal_gate": null}
+  ],
+  "coverage_rule": "NO_FUNCTION_MAY_BE_FROZEN_DEACTIVATED_OR_REMOVED_UNTIL_EXACT_REPLACEMENT_TRIGGER_STATE_CREDENTIAL_REF_INFLIGHT_AND_HISTORY_COVERAGE_IS_CLOSED",
+  "current_blockers": ["OWNER_LOCAL_REPLACEMENTS_NOT_IMPLEMENTED", "TRIGGER_CREDENTIAL_AND_INFLIGHT_ZERO_PROOFS_NOT_AVAILABLE", "STABILISATION_NOT_RUN", "REMOVAL_AUTHORITY_NOT_GRANTED"]
+}
