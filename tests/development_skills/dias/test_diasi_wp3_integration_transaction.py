@@ -148,7 +148,6 @@ def test_wp3_court_record_binds_vit_and_zero_runtime_dependencies() -> None:
     assert canonical_sha256(authority["payload"]) == authority["logical_id"]
     assert canonical_sha256(frontier["payload"]) == frontier["logical_id"]
     assert packet["runtime_state_dependencies"] == []
-    pointer = json.loads((root / "registries/implementation/dias_v0_1/CURRENT_STATE_POINTER.json").read_text(encoding="utf-8"))
-    state = json.loads((root / pointer["current_state"]).read_text(encoding="utf-8"))
+    state = json.loads((root / "registries/implementation/dias_v0_1/DIASI_CURRENT_v0_4.json").read_text(encoding="utf-8"))
     assert state["next_packet"] == "DIASI-WP4A"
     assert state["live_cutover"] is False
