@@ -1,0 +1,47 @@
+{
+  "schema": "ovc-dsai-vit-owner-local-maintenance-packet/v1",
+  "packet_id": "DSAI3V-AA0-PREWARM-MAINT-v0.1",
+  "title": "Post-DIASI exact-generation AA0 prewarm maintenance",
+  "status": "IMPLEMENTED_PENDING_ASSURANCE",
+  "owner": "DSAI_VIT",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "programme_state": "COMPLETED_NOT_REOPENED",
+  "historical_programme": "OVC-CI-PERFORMANCE-REMEDIATION-v0.1",
+  "historical_programme_disposition": "COMPLETED_NOT_REOPENED_OR_AMENDED",
+  "authority_delta": "NONE",
+  "authority_manifest_id": "afeb3cdaf3e20913d75ac33dcaa2f51e60f8019f3a1f71d2682f8718eeb4714d",
+  "dependency_frontier_id": "ff2968b1f20cf5a6b4d866d30d8e7b38dcc9ee6a270d3938091f6ffde1efa305",
+  "maintenance_basis": [
+    "registries/authority/DSAI3V_VIT_GENERAL_AUTHORITY_v0_1.json",
+    "registries/authority/DEFAULT_EXECUTION_SUBSTRATE.json",
+    "registries/development/skills/VIT_ASSURANCE_DECOUPLING_POLICY_v0_1.json"
+  ],
+  "purpose": "Move the unchanged PIP-bound exact AA0 reference execution before PR opening by adding an explicit producer mode to the existing tests workflow and VIT assurance preflight.",
+  "write_set": [
+    ".github/workflows/tests.yml",
+    "tools/ci/vit_assurance_preflight.py",
+    "tests/development_skills/test_vit_assurance_preflight_tool.py",
+    "tests/development_skills/test_post_diasi_aa0_prewarm_contract.py",
+    "docs/releases/development-skills-architecture-v0-3-vit/post-diasi-aa0-prewarm/DSAI3V_AA0_PREWARM_AUTHORITY_MANIFEST_v0_1.json",
+    "docs/releases/development-skills-architecture-v0-3-vit/post-diasi-aa0-prewarm/DSAI3V_AA0_PREWARM_DEPENDENCY_FRONTIER_v0_1.json",
+    "docs/releases/development-skills-architecture-v0-3-vit/post-diasi-aa0-prewarm/DSAI3V_AA0_PREWARM_MAINTENANCE_PACKET_v0_1.json"
+  ],
+  "assurance_semantics": {
+    "prewarm_disposition": "RUN_AA0",
+    "later_exact_pr_disposition": "EXACT_GENERATION_REUSE",
+    "cache_transport": "EXISTING_GITHUB_ACTIONS_CONTENT_ADDRESSED_AA0_CACHE",
+    "identity": "PIP_PLUS_AA0_HARNESS_PLUS_DETACHED_QUALIFICATION_GENERATION",
+    "placement_bound_assurance": "ALWAYS_FRESH",
+    "racpr_proof_substitution": false
+  },
+  "explicit_non_authority": [
+    "NO_NEW_WORKFLOW_AUTHORITY",
+    "NO_NEW_EVIDENCE_STORE",
+    "NO_SUPERVISOR_DAEMON_SERVICE_OR_CONTROL_PLANE",
+    "NO_RULESET_OR_BYPASS_CHANGE",
+    "NO_DIASI_PES_OR_CERS_RUNTIME_PARTICIPATION",
+    "NO_RAC_AUTHORITY_CHANGE"
+  ],
+  "mandatory_stop": "Any required authority, protection, assurance-meaning, persistent-service, force-push, destructive-action or scope delta stops this packet.",
+  "rollback": "Forward-revert the explicit prewarm input and producer branch while preserving existing pull_request and ordinary non-PR assurance behavior, evidence and Git history."
+}

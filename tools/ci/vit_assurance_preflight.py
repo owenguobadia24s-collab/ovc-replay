@@ -18,6 +18,7 @@ from tools.ci.vit_lineage_source import resolve_candidate_lineage
 from tools.ci.vit_no_late_surprises import compile_prequalification
 
 REUSE = re.compile(r"(?im)^VIT-AA0-Reuse-B64:\s*([A-Za-z0-9_\-=]+)\s*$")
+SHA40 = re.compile(r"^[0-9a-f]{40}$")
 
 
 def _decode(marker: re.Pattern[str], body: str, label: str) -> Mapping[str, Any] | None:
@@ -54,6 +55,101 @@ def _git_tree(root: Path, commit: str) -> str:
     if proc.returncode != 0:
         raise RuntimeError(proc.stderr.strip() or "VIT_ASSURANCE_GIT_TREE_RESOLUTION_FAILED")
     return proc.stdout.strip()
+
+
+def _git(root: Path, args: list[str], failure: str) -> str:
+    proc = subprocess.run(
+        ["git", "-C", str(root), *args],
+        check=False,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(proc.stderr.strip() or failure)
+    return proc.stdout.strip()
+
+
+def _prewarm_target(event_name: str) -> str | None:
+    raw = os.environ.get("OVC_AA0_PREWARM_TARGET_HEAD_SHA", "")
+    if raw == "":
+        return None
+    target = raw.strip()
+    if event_name != "workflow_dispatch":
+        raise RuntimeError("VIT_AA0_PREWARM_EVENT_INVALID")
+    if not SHA40.fullmatch(target):
+        raise RuntimeError("VIT_AA0_PREWARM_TARGET_SHA_INVALID")
+    assurance_target = os.environ.get("OVC_ASSURANCE_TARGET_HEAD_SHA", "").strip()
+    if assurance_target != target:
+        raise RuntimeError("VIT_AA0_PREWARM_ASSURANCE_TARGET_MISMATCH")
+    return target
+
+
+def _validate_prewarm_checkout(root: Path, target: str) -> tuple[str, ...]:
+    _git(root, ["cat-file", "-e", f"{target}^{{commit}}"], "VIT_AA0_PREWARM_TARGET_NOT_FOUND")
+    execution_head = _git(root, ["rev-parse", "HEAD"], "VIT_AA0_PREWARM_EXECUTION_HEAD_UNRESOLVED")
+    if execution_head != target:
+        raise RuntimeError(
+            f"VIT_AA0_PREWARM_EXECUTION_HEAD_MISMATCH:target {target}, checkout {execution_head}"
+        )
+    refs = tuple(
+        line
+        for line in _git(
+            root,
+            [
+                "for-each-ref",
+                "--format=%(refname)",
+                "--contains",
+                target,
+                "refs/remotes/origin",
+                "refs/tags",
+            ],
+            "VIT_AA0_PREWARM_PUSHED_REF_RESOLUTION_FAILED",
+        ).splitlines()
+        if line and line != "refs/remotes/origin/HEAD"
+    )
+    if not refs:
+        raise RuntimeError("VIT_AA0_PREWARM_TARGET_NOT_REACHABLE_FROM_PUSHED_REF")
+    return refs
+
+
+def _emit_lineage_identity(lineage_source: Any, lineage: Any) -> None:
+    _write_output("aa0_identity", lineage.pip_id)
+    _write_output("generation_id", lineage_source.immutable_ref)
+    _write_output("pip_id", lineage.pip_id)
+    _write_output("lineage_source", lineage_source.source)
+    _write_output("lineage_ref", lineage_source.immutable_ref)
+    _write_output("qualification_id", lineage_source.immutable_ref)
+
+
+def _run_prewarm(*, root: Path, target: str) -> int:
+    pushed_refs = _validate_prewarm_checkout(root, target)
+    lineage_source = resolve_candidate_lineage(
+        root=root,
+        head_sha=target,
+        require=True,
+        allow_legacy_pr_body=False,
+    )
+    assert lineage_source is not None
+    if lineage_source.source != "DETACHED_QUALIFICATION_LEDGER":
+        raise RuntimeError("VIT_AA0_PREWARM_DETACHED_QUALIFICATION_REQUIRED")
+    lineage_record = lineage_source.record
+    lineage = validate_vit_lineage_record(lineage_record)
+    if not lineage.late_binding:
+        raise RuntimeError("VIT_AA0_PREWARM_IMMUTABLE_PIP_REQUIRED")
+    prequalification = compile_prequalification(
+        root=root,
+        head_sha=target,
+        lineage_record=lineage_record,
+    )
+    print(f"OVC_NO_LATE_SURPRISES_PREFLIGHT=PASS {prequalification['receipt_id']}")
+    print(f"OVC_VIT_AA0_PREWARM_PUSHED_REFS={','.join(pushed_refs)}")
+    _emit_lineage_identity(lineage_source, lineage)
+    _write_output("aa0_producer_mode", "true")
+    _write_output("aa0_reuse_authorized", "false")
+    _write_output("aa0_reuse_reason", "PRE_PR_AA0_PRODUCER")
+    print("OVC_VIT_AA0_PREWARM_DISPOSITION=RUN_AA0")
+    return 0
 
 
 def _emit_prewrite_freeze(*, event: Mapping[str, Any], pr: Mapping[str, Any], lineage_record: Mapping[str, Any]) -> None:
@@ -105,11 +201,18 @@ def _live_pr_payload(event: Mapping[str, Any]) -> Mapping[str, Any]:
 
 
 def main() -> int:
-    if os.environ.get("GITHUB_EVENT_NAME", "") != "pull_request":
+    event_name = os.environ.get("GITHUB_EVENT_NAME", "")
+    target = _prewarm_target(event_name)
+    if target is not None:
+        root = Path(os.environ.get("GITHUB_WORKSPACE", ".")).resolve()
+        return _run_prewarm(root=root, target=target)
+
+    if event_name != "pull_request":
         sha = os.environ.get("GITHUB_SHA", "NON_PR")
         for name in ("aa0_identity", "generation_id", "pip_id", "lineage_ref", "qualification_id"):
             _write_output(name, sha)
         _write_output("lineage_source", "NON_PR")
+        _write_output("aa0_producer_mode", "false")
         _write_output("aa0_reuse_authorized", "false")
         _write_output("aa0_reuse_reason", "NON_PULL_REQUEST")
         return 0
@@ -142,6 +245,7 @@ def main() -> int:
         for name in ("aa0_identity", "generation_id", "pip_id", "lineage_ref", "qualification_id"):
             _write_output(name, head_sha)
         _write_output("lineage_source", "REGISTERED_EXCEPTION_OR_NO_QUALIFICATION")
+        _write_output("aa0_producer_mode", "false")
         _write_output("aa0_reuse_authorized", "false")
         _write_output("aa0_reuse_reason", "REGISTERED_EXCEPTION_OR_NO_QUALIFICATION")
         return 0
@@ -157,12 +261,8 @@ def main() -> int:
         print(f"OVC_NO_LATE_SURPRISES_PREFLIGHT=PASS {prequalification['receipt_id']}")
     else:
         print("OVC_NO_LATE_SURPRISES_PREFLIGHT=LEGACY_PLACEMENT_REPLAY_ONLY")
-    _write_output("aa0_identity", lineage.pip_id)
-    _write_output("generation_id", lineage_source.immutable_ref)
-    _write_output("pip_id", lineage.pip_id)
-    _write_output("lineage_source", lineage_source.source)
-    _write_output("lineage_ref", lineage_source.immutable_ref)
-    _write_output("qualification_id", lineage_source.immutable_ref)
+    _emit_lineage_identity(lineage_source, lineage)
+    _write_output("aa0_producer_mode", "false")
 
     if lineage.late_binding:
         print("OVC_VIT_PREWRITE_FREEZE_DEFERRED=LATE_BINDING_NO_PHYSICAL_PLACEMENT")
