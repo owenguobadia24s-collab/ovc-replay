@@ -46,3 +46,14 @@ def test_frozen_bundle_amendment_requires_explicit_successor_generation() -> Non
     with pytest.raises(SFFContractError, match="SUCCESSOR"):
         amend_frozen_bundle(compiled, successor_generation_id=None)
     assert amend_frozen_bundle(compiled, successor_generation_id="generation-v2").startswith("SUCCESSOR_REQUIRED")
+
+
+def test_contaminated_feasibility_and_nested_protected_access_fail_closed() -> None:
+    fields = valid_fields()
+    fields["feasibility_evidence"]["scope"] = "OUTCOME_EXPOSED_NONCONFIRMATORY"
+    with pytest.raises(SFFContractError, match="FEASIBILITY_OUTCOME_CONTAMINATED"):
+        compile_preregistration(fields)
+    fields = valid_fields()
+    fields["scientific_endpoint_manifest"]["protected_outcomes_accessed"] = True
+    with pytest.raises(SFFContractError, match="PROTECTED_OUTCOME_ACCESS_PRESENT"):
+        compile_preregistration(fields)

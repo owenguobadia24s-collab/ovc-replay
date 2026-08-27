@@ -51,3 +51,14 @@ def test_repeated_snapshots_share_explicit_dependence_group() -> None:
     manifest = ForecastRiskSetManifest.build("p", rows)
     assert len({row.dependence_group_id for row in manifest.entries}) == 1
     assert manifest.repeated_snapshot_policy == "DEPENDENT_WITHIN_ORIGIN"
+
+
+def test_nonfinite_probability_and_repeated_origin_pseudo_independence_fail_closed() -> None:
+    with pytest.raises(SFFContractError, match="finite"):
+        DistributionRecord({"A": float("nan")}, "COMPLETE", "KNOWN")
+    rows = (
+        RiskSetEntry("t1", "origin", 0, RiskStatus.STILL_AT_RISK, "dependence:one"),
+        RiskSetEntry("t1", "origin", 1, RiskStatus.RESOLVED, "dependence:two"),
+    )
+    with pytest.raises(SFFContractError, match="PSEUDO_INDEPENDENCE"):
+        ForecastRiskSetManifest.build("p", rows)

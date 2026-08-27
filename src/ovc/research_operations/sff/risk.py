@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
+import math
 from typing import Mapping, Protocol, Sequence
 
 from .core import SFFContractError, content_identity
@@ -43,6 +44,11 @@ class ForecastRiskSetManifest:
             raise SFFContractError("risk-set population and entries are required")
         if len({(row.target_id, row.position) for row in rows}) != len(rows):
             raise SFFContractError("duplicate target-position risk-set entry")
+        groups_by_origin: dict[str, set[str]] = {}
+        for row in rows:
+            groups_by_origin.setdefault(row.origin_id, set()).add(row.dependence_group_id)
+        if any(len(groups) != 1 for groups in groups_by_origin.values()):
+            raise SFFContractError("REPEATED_SNAPSHOT_PSEUDO_INDEPENDENCE")
         normalized = tuple(
             RiskSetEntry(
                 target_id=row.target_id,
@@ -75,6 +81,8 @@ class DistributionRecord:
     def __post_init__(self) -> None:
         if not self.probabilities:
             raise SFFContractError("probability distribution must not be empty")
+        if any(not math.isfinite(value) for value in self.probabilities.values()):
+            raise SFFContractError("probabilities must be finite")
         if any(value < 0 or value > 1 for value in self.probabilities.values()):
             raise SFFContractError("probabilities must be within [0,1]")
         total = sum(self.probabilities.values())

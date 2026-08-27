@@ -1,0 +1,42 @@
+{
+  "schema": "ovc-sffi-wp8-remediation-record/v0.1",
+  "programme_id": "OVC-SFF-CONFORMANCE-PREREG-v0.1",
+  "packet_id": "SFFI-WP8-REMEDIATION-R1",
+  "trigger_review": "docs/programmes/sff-v0-1/reviews/sffi_g8_alg_20260827/SFFI_G8_ALG_INDEPENDENT_REVIEW_v0_1.json",
+  "trigger_decision": "BLOCK",
+  "reviewed_base_commit": "2f5016621787653d7749e22e0c3a1694b6723b0c",
+  "remediation_base_commit": "47ba0e7be93c52c3a46c73e2a118bada58e747bc",
+  "corrections": [
+    {
+      "finding_id": "SFFI-G8-B01",
+      "disposition": "REJECT_NONFINITE_PROBABILITIES_BEFORE_RANGE_OR_TOTAL_CHECKS"
+    },
+    {
+      "finding_id": "SFFI-G8-B02",
+      "disposition": "ENFORCE_ONE_DEPENDENCE_GROUP_PER_ORIGIN"
+    },
+    {
+      "finding_id": "SFFI-G8-B03",
+      "disposition": "MAKE_MATCHED_AND_FULL_POPULATION_CHALLENGER_FAILURES_NONCOMPENSATING_BLOCKERS"
+    },
+    {
+      "finding_id": "SFFI-G8-B04",
+      "disposition": "REJECT_CONTAMINATED_FEASIBILITY_AND_NESTED_PROTECTED_OUTCOME_ACCESS"
+    },
+    {
+      "finding_id": "SFFI-G8-B05",
+      "disposition": "REPLACE_SELF_FULFILLING_ATTACK_STUBS_WITH_PRODUCTION_PATH_EXERCISES"
+    }
+  ],
+  "verification": {
+    "repository_sff_and_authority_pytest": "58_PASS",
+    "frozen_independent_reproduction": "32_PASS_0_BLOCK",
+    "fresh_independent_review_required": true
+  },
+  "authority_effect": "NONE_IMPLEMENTATION_REMEDIATION_ONLY",
+  "scientific_effect": "NONE",
+  "real_source_access": false,
+  "validation_access": false,
+  "status": "READY_FOR_FRESH_INDEPENDENT_REVIEW",
+  "next_packet": "SFFI-WP8-REVIEW-R2"
+}
