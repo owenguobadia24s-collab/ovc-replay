@@ -1,0 +1,71 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-P1CDI-CONFORMANCE-v0.1",
+  "plan_id": "OVC-P1CDI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "eeb3cfef77c8a61ce2fb825f8f0f649ac35281f30d43ba24651fc329a11a0b9a",
+  "state_id": "P1CDII-PROGRAMME-STATE-v0.4-CONTINUOUS-INTAKE-DEFERRED",
+  "supersedes": "records/research_operations/p1cdi/P1CDII_PROGRAMME_STATE_v0_3_WP11_GATE_READY.json@blob:b7396d178e90b736df76e6cce2f1c70b8cdaade0",
+  "current_packet": "P1CDII-G-CONTINUOUS-INTAKE",
+  "packet_id": "P1CDII-G-CONTINUOUS-INTAKE",
+  "status": "DEFERRED_AT_OPERATOR_GATE",
+  "decision_baseline_main": "9fbdab8931e4d339e8922a9cd63276d19a925eed",
+  "decision_baseline_tree": "0a4414ceed9c318f80b2643282a6a3b64961dfb3",
+  "authority_required": "OPERATOR_REQUIRED_FOR_RECONSIDERATION",
+  "authority_delta": "NONE",
+  "authority": {
+    "P1CDII-G0": "OPERATOR_PASS_MATERIALISED",
+    "operational_read_only": "ACTIVE_EXACT_QUALIFIED_SOURCE_SCOPE_ONLY",
+    "continuous_intake": "DENIED"
+  },
+  "wp11": {
+    "status": "COMPLETED_LOGICALLY_AND_PHYSICALLY",
+    "physical_merge_commit": "66db8351f0b7d4f1ba5233ea48c0f78bbde61542",
+    "physical_result_tree": "8caf1001eaaf9c472d9ec18de0b2c171eae563e4",
+    "physical_materialisation_receipt": "c8764d92150eaa3d39af58ff9a8187bfd78ee218f554241c14642e52d60abb7f",
+    "packet_completion_receipt": "8de6ccbad6f99a35d52f8c0fe04c1609bc06e37e71594ca382f84e83e8fb66b3",
+    "completion_proof": "8c631516a6a3806d5a3ebd2c23a64a635d4e75de737f42c9fc2227143006408c",
+    "durable_write_effect": false
+  },
+  "continuous_intake_gate": {
+    "gate_id": "P1CDII-G-CONTINUOUS-INTAKE",
+    "status": "DEFERRED",
+    "decision": "DEFER",
+    "decision_record": "docs/programmes/p1cdi-v0-1/wp11/P1CDII_G_CONTINUOUS_INTAKE_OPERATOR_DECISION_v0_1.json",
+    "proposed_authority_delta": "ACTIVATE_MINIMAL_DURABLE_P1CDI_CONTINUOUS_INTAKE_CONTROL_SURFACE_ONLY",
+    "proposed_operation_allowlist": [
+      "SOURCE_EXPLICIT_EXACT_INTAKE",
+      "EXACT_DUPLICATE",
+      "SAME_GENERATION_EVIDENCE_ATTACHMENT"
+    ],
+    "activation": "NOT_AUTHORISED"
+  },
+  "exact_source_scope": {
+    "source_census_id": "P1CDI-G0-SOURCE-CENSUS:lawful-main-35d3dc73:v0.2",
+    "expected_subject_count": 0,
+    "reconciled_subject_count": 0,
+    "operational_current_subject_count": 0,
+    "scope_expansion": "SEPARATELY_GOVERNED"
+  },
+  "required_return_gate": "P1CDII-G-CONTINUOUS-INTAKE",
+  "research_console_source_admission": "PRODUCER_READY_CONSUMER_ADMISSION_NOT_GRANTED",
+  "explicit_non_grants": [
+    "RESEARCH_CONSOLE_SOURCE_PRESENTATION_AUTHORITY",
+    "P1CDI_CONTINUOUS_INTAKE_WRITES",
+    "NEW_PATH1_REAL_SOURCE_INTAKE",
+    "CANDIDATE_OR_FREEZE_AUTHORITY",
+    "SCIENTIFIC_DISPOSITION_WRITE",
+    "VALIDATION",
+    "PUBLICATION",
+    "PROBABILITY",
+    "RISK",
+    "EXPOSURE",
+    "TRADING",
+    "EXECUTION",
+    "AGENT_WRITE"
+  ],
+  "blockers": [],
+  "unresolved_issues": [],
+  "next_packet": "P1CDII-G-CONTINUOUS-INTAKE",
+  "next_action": "AWAIT_EXPLICIT_OPERATOR_RECONSIDERATION",
+  "rollback": "No activation occurred. Preserve the DEFER decision and completed WP11 evidence; supersede forward only through a new explicit operator decision."
+}
