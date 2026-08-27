@@ -30,7 +30,7 @@ def _reject_diasi_selected_class_old_route(
     repo: Path,
     request: Mapping[str, object],
 ) -> None:
-    """Fence the exact class transferred to its owner-local generation-2 writer."""
+    """Fence the exact class transferred to its owner-local writer."""
     route = load_json(repo / SELECTED_CLASS_ROUTE)
     policy = validate_pilot_policy(load_json(repo / PILOT_POLICY))
     lineage = request.get("lineage")
@@ -62,10 +62,17 @@ def _reject_diasi_selected_class_old_route(
         and route.get("route_generation") == 3
         and "old_route" not in route
     )
+    terminal_owner_local_fence = (
+        route.get("schema") == "ovc-vit-owner-local-selected-class-route/v1"
+        and route.get("status") == "ACTIVE_OWNER_LOCAL"
+        and route.get("owner") == "DSAI_VIT"
+        and route.get("route_generation") == 3
+        and "old_route" not in route
+    )
     if (
         route.get("selected_class") != policy["pilot_class"]
         or route.get("qualification_writer") != "VIT_QUALIFICATION_OWNER_LOCAL"
-        or not (pre_removal_fence or post_removal_fence)
+        or not (pre_removal_fence or post_removal_fence or terminal_owner_local_fence)
     ):
         raise RuntimeError("PES_VIT_PRODUCER_DIASI_SELECTED_CLASS_ROUTE_STATE_DRIFT")
     raise RuntimeError("PES_VIT_PRODUCER_DIASI_SELECTED_CLASS_OLD_ROUTE_FENCED")
