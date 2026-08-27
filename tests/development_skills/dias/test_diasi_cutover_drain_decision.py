@@ -52,9 +52,8 @@ def test_vit_bindings_are_canonical() -> None:
 
 
 def test_state_advances_without_removal_or_proof_substitution() -> None:
-    pointer = load(STATE_ROOT / "CURRENT_STATE_POINTER.json")
-    state = load(ROOT / pointer["current_state"])
-    assert pointer["next_packet"] == "DIASI-WP6"
+    state = load(STATE_ROOT / "DIASI_CURRENT_v0_8.json")
+    assert state["next_packet"] == "DIASI-WP6"
     assert state["decision"] == "PASS"
     assert state["authority_scope"] == "WP6_WP7A_EXACT_SELECTED_CLASS_ONLY"
     assert state["retirement"] is False

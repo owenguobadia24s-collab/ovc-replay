@@ -1,0 +1,30 @@
+{
+  "schema": "ovc-diasi-route-writer-transfer-manifest/v1",
+  "packet_id": "DIASI-WP6-CUTOVER-ACTIVATION",
+  "selected_class": "DSAI_VIT_RECEIPT_ONLY_V0_1",
+  "route": {
+    "from": "CERS_PES_EXACT_OLD_ROUTE",
+    "from_generation": 1,
+    "to": "DSAI_VIT_AND_VIT_QUALIFICATION_OWNER_LOCAL",
+    "to_generation": 2,
+    "old_after": "DISABLED_RETAINED",
+    "stale_generation_accepted": false
+  },
+  "qualification_writer": {
+    "from": "PES",
+    "from_generation": 1,
+    "to": "VIT_QUALIFICATION_OWNER_LOCAL",
+    "to_generation": 2,
+    "functions": ["ENVELOPE_WRITE", "EXACT_HEAD_POINTER", "IDEMPOTENT_REPLAY"],
+    "one_writer": true
+  },
+  "physical_main": {
+    "controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
+    "gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+    "changed": false,
+    "parallel_writer": false
+  },
+  "reference_assurance": "COMPLETE_CANONICAL_REFERENCE_REQUIRED",
+  "non_selected_classes": "UNCHANGED_SCOPED_NOT_RETIRED",
+  "rollback": "ADVANCE_FENCE_BEFORE_EXACT_CLASS_RETURN_NO_DUAL_ROUTE"
+}

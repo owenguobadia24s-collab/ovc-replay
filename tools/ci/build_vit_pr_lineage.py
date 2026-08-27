@@ -19,6 +19,7 @@ from tools.ci.vit_qualification_store import (
     build_qualification_envelope,
     publish_qualification_envelope,
 )
+from tools.ci.vit_qualification_owner import publish_owner_local_qualification
 
 SHA64 = re.compile(r"^[0-9a-f]{64}$")
 
@@ -135,6 +136,7 @@ def main() -> int:
     parser.add_argument("--completion-transition-json", default='{"status":"COMPLETED"}')
     parser.add_argument("--publish-detached", action="store_true", help="Publish the immutable qualification envelope and exact-head pointer to the detached VIT ledger.")
     parser.add_argument("--replace-head-qualification", action="store_true", help="Lawfully supersede the pointer for the same Git head while preserving the prior immutable envelope.")
+    parser.add_argument("--qualification-packet-class", help="Route an exact admitted packet class through its active owner-local qualification writer.")
     parser.add_argument("--emit-legacy-pr-marker", action="store_true", help="Migration/recovery only: also print the legacy VIT-Lineage-B64 PR-body marker.")
     parser.add_argument("--legacy-placement", action="store_true", help="Historical v1 early-placement output only.")
     parser.add_argument("--train-generation-id", default="LEGACY")
@@ -172,10 +174,19 @@ def main() -> int:
         if args.legacy_placement:
             raise RuntimeError("detached qualification publication requires payload-only late-binding lineage")
         envelope = build_qualification_envelope(root=repo, head_sha=args.head, lineage_record=record)
-        qualification_id = publish_qualification_envelope(
-            envelope,
-            replace_head_binding=args.replace_head_qualification,
-        )
+        if args.qualification_packet_class:
+            qualification_id = publish_owner_local_qualification(
+                root=repo,
+                envelope=envelope,
+                lineage_record=record,
+                packet_class=args.qualification_packet_class,
+                replace_head_binding=args.replace_head_qualification,
+            )
+        else:
+            qualification_id = publish_qualification_envelope(
+                envelope,
+                replace_head_binding=args.replace_head_qualification,
+            )
         print(f"VIT-Qualification-ID: {qualification_id}")
 
     if args.emit_legacy_pr_marker:
