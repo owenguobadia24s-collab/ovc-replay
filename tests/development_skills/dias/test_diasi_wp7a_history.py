@@ -15,7 +15,7 @@ def load(path: Path) -> dict:
 
 def test_every_retained_programme_state_is_interpretable_without_runtime() -> None:
     states = sorted(STATE_ROOT.glob("DIASI_*.json"))
-    assert len(states) == 10
+    assert len(states) == 11
     interpretations = [interpret_diasi_history(load(path)) for path in states]
     assert all(item.authority_effect == "NONE_INTERPRETATION_ONLY" for item in interpretations)
     assert len({item.interpretation_id for item in interpretations}) == len(interpretations)
