@@ -1,0 +1,197 @@
+{
+  "schema": "ovc-sffi-greal-candidate-input/v0.1",
+  "programme_id": "OVC-SFF-CONFORMANCE-PREREG-v0.1",
+  "packet_id": "SFFI-WP9",
+  "fields": {
+    "selected_target_grammar_candidate_provenance": {
+      "candidate_id": "SFF-GREAL-GEN1-GBPUSD-ONE-STEP-STRUCTURAL-v0.1",
+      "design_id": "OVC-SFF-DESIGN-SPEC-0.1-R2-RATIFIED",
+      "design_sha256": "1e9ff016667829e8851214314ca2931d693f7f8b98a569b28a13512054a261dc",
+      "grammar_identity": "SFF-GRAMMAR-ONE-STEP-CONTINUATION-REVERSAL-TERMINATION-v0.1",
+      "labels": ["CONTINUATION", "REVERSAL", "TERMINATION"],
+      "selected_pre_outcome": true,
+      "activation_state": "PROPOSED_NOT_ACTIVE"
+    },
+    "exposure_class": {
+      "class": "ONE_EXACT_PROSPECTIVE_REAL_STUDY_GENERATION",
+      "instrument": "GBPUSD",
+      "sides": ["BID", "ASK"],
+      "clocks": ["15M", "2H_A_L"],
+      "publication": "PROHIBITED"
+    },
+    "pre_outcome_support_feasibility_evidence": {
+      "identity": "SFFI-G8-ALG-R2-94-OF-94-PLUS-WP6-31-OF-31",
+      "scope": "SUPPORT_ONLY_PRE_OUTCOME",
+      "mechanical_evidence": [
+        "docs/programmes/sff-v0-1/reviews/sffi_g8_alg_r2_20260827/SFFI_G8_ALG_R2_INDEPENDENT_REVIEW_v0_1.json",
+        "fixtures/research_operations/sff/SFFI_WP6_ADVERSARIAL_CORPUS_v0_1.json"
+      ],
+      "scientific_utility_claimed": false
+    },
+    "target_complexity_budget": {
+      "identity": "SFF-GREAL-GEN1-BUDGET-v0.1",
+      "maximum_targets_per_antecedent": 3,
+      "maximum_depth": 1,
+      "maximum_branching": 3,
+      "deep_tree_state": "DEFERRED_NON_EXECUTABLE"
+    },
+    "population": {
+      "identity": "SFF-GREAL-GEN1-POPULATION-v0.1",
+      "instrument": "GBPUSD",
+      "sides": ["BID", "ASK"],
+      "clocks": ["15M", "2H_A_L"],
+      "antecedent_window_utc": ["2026-09-01T00:00:00Z", "2026-09-30T23:59:59Z"],
+      "inclusion": "EVERY_FIRST_VALID_CURRENT_OWNER_AUTHORIZED_C2_VNEXT_C2E_STRUCTURAL_ANTECEDENT_IN_WINDOW",
+      "exclusion": "ONLY_PREDECLARED_MISSING_CONFLICTING_STALE_OR_UNAUTHORIZED_OWNER_FACTS"
+    },
+    "cutoff_schedule": {
+      "identity": "SFF-GREAL-GEN1-CUTOFF-v0.1",
+      "target_horizon": "NEXT_ONE_STRUCTURALLY_RESOLVED_POSITION",
+      "forecast_freeze": "IMMEDIATELY_AFTER_EACH_FIRST_VALID_ANTECEDENT_AND_BEFORE_TARGET_OUTCOME",
+      "study_close_utc": "2026-10-31T23:59:59Z"
+    },
+    "risk_set_semantics": {
+      "identity": "SFF-GREAL-GEN1-RISK-SET-v0.1",
+      "statuses": ["RESOLVED", "PREEMPTED", "EXPIRED", "CENSORED", "NOT_EVALUABLE", "OUT_OF_SCOPE", "ABSTAINED", "STILL_AT_RISK"],
+      "origin_and_later_positions_retained": true,
+      "survivor_filtering": "PROHIBITED"
+    },
+    "denominator_semantics": {
+      "identity": "SFF-GREAL-GEN1-DENOMINATOR-v0.1",
+      "denominator": "ALL_DECLARED_TARGET_INSTANCES_FROM_ALL_INCLUDED_ANTECEDENTS",
+      "partition_reconciliation": "SUM_OF_ALL_STATUS_PARTITIONS_MUST_EQUAL_DECLARED_DENOMINATOR",
+      "unexplained_attrition": "BLOCK"
+    },
+    "static_model_generation": {
+      "identity": "SFF-GREAL-GEN1-STATIC-UNIFORM-v0.1",
+      "mode": "STATIC",
+      "labels": ["CONTINUATION", "REVERSAL", "TERMINATION"],
+      "probabilities": {"CONTINUATION": 0.3333333333333333, "REVERSAL": 0.3333333333333333, "TERMINATION": 0.3333333333333334},
+      "same_generation_outcome_update": "PROHIBITED",
+      "adaptive_state": "DEFERRED_NON_EXECUTABLE"
+    },
+    "forecast_search_exposure_manifest": {
+      "identity": "SFF-GREAL-GEN1-SEARCH-EXPOSURE-v0.1",
+      "searched_targets": ["CONTINUATION", "REVERSAL", "TERMINATION"],
+      "strata": ["GBPUSD_BID_15M", "GBPUSD_ASK_15M", "GBPUSD_BID_2H_A_L", "GBPUSD_ASK_2H_A_L"],
+      "unregistered_search": "PROHIBITED"
+    },
+    "calibration_generation_partition": {
+      "identity": "SFF-GREAL-GEN1-CALIBRATION-v0.1",
+      "generation": "STATIC_IDENTITY_CALIBRATION_NO_OUTCOME_FIT",
+      "partition": "NONE_PROSPECTIVE_OUTCOMES_EXCLUDED",
+      "calibration_leakage": "BLOCK"
+    },
+    "credible_simpler_challengers": {
+      "identity": "SFF-GREAL-GEN1-CHALLENGERS-v0.1",
+      "challengers": ["EMPIRICAL_FREQUENCY_PRE_STUDY_DEVELOPMENT_ONLY", "UNIFORM_THREE_CLASS"],
+      "matched_support_required": "PASS",
+      "full_population_required": "PASS"
+    },
+    "uncertainty_plane_requirements": {
+      "identity": "SFF-GREAL-GEN1-UNCERTAINTY-v0.1",
+      "planes": ["EPISTEMIC", "ALEATORIC", "SUPPORT"],
+      "unearned_or_unknown": "ABSTAIN_NO_DISTRIBUTION"
+    },
+    "falsification_contract": {
+      "identity": "SFF-GREAL-GEN1-FALSIFICATION-v0.1",
+      "blocking_dimensions": ["FULL_POPULATION", "MATCHED_SUPPORT", "CALIBRATION", "UNCERTAINTY"],
+      "non_compensation": true,
+      "claim_decision_rule": "MECHANICAL_ELIGIBILITY_ONLY_IF_EVERY_BLOCKING_DIMENSION_AND_CHALLENGER_COMPARISON_PASSES"
+    },
+    "endpoint": {
+      "identity": "SFF-GREAL-GEN1-ENDPOINT-v0.1",
+      "primary": "MEAN_MULTICLASS_BRIER_SCORE_DIFFERENCE_CHALLENGER_MINUS_SFF_OVER_FULL_POPULATION",
+      "direction": "POSITIVE_FAVOURS_SFF",
+      "post_result_swap": "PROHIBITED"
+    },
+    "materiality_rule": {
+      "identity": "SFF-GREAL-GEN1-MATERIALITY-v0.1",
+      "minimum_mean_brier_improvement": 0.02,
+      "confidence_requirement": "PAIRED_ORIGIN_BLOCK_BOOTSTRAP_95_PERCENT_LOWER_BOUND_GREATER_THAN_ZERO",
+      "scientific_pass_authority": "REQUIRES_SEPARATE_POST_STUDY_DECISION"
+    },
+    "multiplicity_policy": {
+      "identity": "SFF-GREAL-GEN1-MULTIPLICITY-v0.1",
+      "family": "PRIMARY_PLUS_FOUR_PREDECLARED_STRATA",
+      "method": "HOLM",
+      "familywise_alpha": 0.05
+    },
+    "dependence_policy": {
+      "identity": "SFF-GREAL-GEN1-DEPENDENCE-v0.1",
+      "grouping": "ALL_SNAPSHOTS_FROM_ONE_ORIGIN_SHARE_ONE_DEPENDENCE_GROUP",
+      "resampling_unit": "ORIGIN_ID",
+      "pseudo_independence": "BLOCK"
+    },
+    "failure_disposition_contract": {
+      "identity": "SFF-GREAL-GEN1-FAILURE-v0.1",
+      "blocking_failure": "FAILED_CONFIRMATORY",
+      "same_generation_rescue": "PROHIBITED",
+      "changed_semantics": "SUCCESSOR_GENERATION_REQUIRED",
+      "recording": "APPEND_ONLY"
+    },
+    "executable_method_binding": {
+      "identity": "SFF-GREAL-GEN1-EXECUTABLE-BINDING-v0.1",
+      "implementation": "ovc.research_operations.sff.frontier.generate_one_step_frontier+ovc.research_operations.sff.forecast.build_forecast_snapshot",
+      "grammar_identity": "SFF-GRAMMAR-ONE-STEP-CONTINUATION-REVERSAL-TERMINATION-v0.1",
+      "model_identity": "SFF-GREAL-GEN1-STATIC-UNIFORM-v0.1",
+      "identity_mismatch": "BLOCK"
+    },
+    "evaluation_population_ledger_constitution": {
+      "identity": "SFF-GREAL-GEN1-EVALUATION-LEDGER-v0.1",
+      "one_row_per_declared_target": true,
+      "required_keys": ["target_id", "origin_id", "position", "status", "dependence_group_id", "owner_dependency_state"],
+      "attrition_reconciliation": "EXACT"
+    },
+    "source_authority": {
+      "identity": "SFF-GREAL-GEN1-SOURCE-AUTHORITY-CANDIDATE-v0.1",
+      "current_authority": "AUTH.RESEARCH_OPERATIONS.ACTIVE_FOUNDATION.v0.1_READ_ONLY_EVIDENCE_INTEGRATION",
+      "active_stack_ref": "registries/governance/active_stack/OVC_ACTIVE_STACK_STATE_v0_1.json",
+      "research_operations_ref": "registries/research_operations/ACTIVE_FOUNDATION_AUTHORITY_v0_1.json",
+      "source_spine": ["OPT-B.C2.vNext", "OPT-B.C2E.v0.2"],
+      "real_source_sff_execution_currently_authorized": false,
+      "proposed_delta_after_pass": "ONE_EXACT_READ_ONLY_SFF_GREAL_GEN1_STUDY_WITH_APPEND_ONLY_RESEARCH_EVIDENCE"
+    },
+    "independent_reviewer_binding": {
+      "identity": "SFFI-G8-ALG-R2-INDEPENDENT-20260827",
+      "reviewer_id": "OPENAI_CODEX_GPT5_INDEPENDENT_SFFI_G8_ALG_R2_20260827",
+      "reviewed_commit": "ddc4a57f1b7d50380798ea23d70a885898be1db8",
+      "reviewed_tree": "50d4e8603d145bdb8b54ab82e23899529b791514",
+      "decision": "PASS",
+      "independence": "PASS",
+      "combined_tests": "94_OF_94_PASS"
+    },
+    "external_artifact_root": {
+      "identity": "SFFI-EXTERNAL-ARTIFACT-ROOT-v0.1",
+      "provider": "GOOGLE_DRIVE",
+      "folder_id": "1s-I8kQkelxB1ZYS0vKVKCeNL1XZSBdZS",
+      "research_operations_folder_id": "11QwJjRJ6SxUHMeAHu_ipNfZ_ELLbQMUT",
+      "effect": "PROVENANCE_AND_FUTURE_LARGE_EVIDENCE_LOCATION_ONLY"
+    },
+    "capacity_restart_plan": {
+      "identity": "SFF-GREAL-GEN1-CAPACITY-RESTART-v0.1",
+      "checkpoint": "CANONICAL_BYTES_PER_ORIGIN_AND_DECLARED_POPULATION_LEDGER",
+      "restart": "CLEAN_PROCESS_EXACT_FROZEN_INPUT_REPLAY",
+      "cache_corruption": "DISCARD_AND_CLEAN_REBUILD",
+      "capacity_exceeded": "TYPED_PARTIAL_CAPACITY_OR_ABSTAIN_NO_HIDDEN_SAMPLING"
+    },
+    "no_outcome_access_embargo_proof": {
+      "identity": "SFF-GREAL-GEN1-EMBARGO-v0.1",
+      "protected_outcomes_accessed": false,
+      "embargo_state": "LOCKED_UNCONSUMED",
+      "validation_state": "LOCKED_UNCONSUMED",
+      "unlock_condition": "SFFI-GREAL-SCI-PREREG_OPERATOR_PASS_PLUS_SUCCESSOR_FREEZE_RECEIPT"
+    },
+    "rollback": {
+      "before_outcome_access": "FORWARD_SUPERSEDE_OR_REVOKE_CANDIDATE_WITHOUT_RUNNING_STUDY",
+      "after_any_outcome_access": "QUARANTINE_EXPOSURE_PRESERVE_APPEND_ONLY_EVIDENCE_NO_SAME_GENERATION_RESCUE",
+      "repository": "FORWARD_REVERT_WP9_KEEP_G8_AND_ALL_PRIOR_EVIDENCE"
+    },
+    "proposed_successor_after_operator_pass": {
+      "packet_id": "SFFI-REAL-GEN1-FREEZE-AND-RUN",
+      "initial_state": "AWAIT_EXPLICIT_SFFI_GREAL_SCI_PREREG_PASS",
+      "allowed_first_action": "VERIFY_OWNER_AUTHORITY_AND_ATOMICALLY_FREEZE_EXACT_CANDIDATE_BEFORE_ANY_REAL_TARGET_OR_OUTCOME_ACCESS",
+      "automatic_start": false
+    }
+  }
+}
