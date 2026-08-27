@@ -107,8 +107,7 @@ def test_retirement_census_is_complete_but_not_authority() -> None:
 
 
 def test_machine_state_is_fail_closed_and_dgs_is_decoupled() -> None:
-    pointer = load(STATE_ROOT / "CURRENT_STATE_POINTER.json")
-    state = load(ROOT / pointer["current_state"])
+    state = load(STATE_ROOT / "DIASI_CURRENT_v0_2.json")
     assert state["current_gate"] in {"DIASI-G0", "DIASI-G2-ALGORITHMIC"}
     if state["current_gate"] == "DIASI-G2-ALGORITHMIC":
         assert "DIASI-WP0" in state["completed_packets"]

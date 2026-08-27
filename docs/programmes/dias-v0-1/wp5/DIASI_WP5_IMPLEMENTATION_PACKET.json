@@ -1,0 +1,15 @@
+{
+  "schema": "ovc-diasi-implementation-packet/v1",
+  "programme_id": "OVC-DIAS-CONFORMANCE-v0.1",
+  "packet_id": "DIASI-WP5",
+  "title": "DGS full side-effect-free shadow and cutover/drain gate preparation",
+  "predecessor": {"packet_id": "DIASI-WP4B", "physical_main": "7afc0483c024d6dc488dacb7fb07a3d5827a6f12", "physical_tree": "0ea34ca2b4de08a6f77cb2e6f7d91b122023d3ea", "completion_proof": "81bb64f60b30cf5247f0093ba78121a37a4ca021763ee05b97bd5e746d6633ae"},
+  "selected_class": "DSAI_VIT_RECEIPT_ONLY_V0_1",
+  "outputs": ["FullShadowRun", "ShadowSideEffectFirewall", "QualificationUniverseManifest", "RetirementCoverageMatrix", "ShadowOperationalBudget", "CutoverReadinessAssessment", "InFlightDispositionCandidate", "RouteAndWriterFencingCandidate", "CutoverRollbackManifest", "ConsolidatedOperatorGatePacket"],
+  "auto_gates": ["DIASI-G3-DGS-TRANSACTION-SHADOW", "DIASI-G4-RACPR-REFERENCE-EQUIVALENCE", "DIASI-G5-DGS-CUTOVER-READY"],
+  "adversarial_fixture_count": 16,
+  "live_side_effects": false,
+  "live_authority": false,
+  "next_packet_after_operator_pass": "DIASI-WP6",
+  "operator_stop_gate": "DIASI-G-DGS-CUTOVER-DRAIN"
+}

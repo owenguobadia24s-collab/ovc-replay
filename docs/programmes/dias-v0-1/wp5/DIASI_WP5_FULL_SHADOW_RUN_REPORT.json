@@ -1,0 +1,31 @@
+{
+  "schema": "ovc-diasi-full-shadow-run-report/v1",
+  "packet_id": "DIASI-WP5",
+  "selected_class": "DSAI_VIT_RECEIPT_ONLY_V0_1",
+  "mode": "DETERMINISTIC_SIDE_EFFECT_FREE_SHADOW",
+  "old_reference_outcomes": {"admission": "PASS", "dispatch": "PASS", "qualification": "PASS", "receipt": "PASS", "successor": "PASS", "currentness": "PASS"},
+  "new_shadow_outcomes": {"admission": "PASS", "dispatch": "PASS", "qualification": "PASS", "receipt": "PASS", "successor": "PASS", "currentness": "PASS"},
+  "exact_equivalence": true,
+  "complete_reference_route_available": true,
+  "adversarial_results": [
+    {"fixture": "DIAS-AV-01", "disposition": "BLOCK_MATERIALISATION_ON_DRIFT", "status": "PASS"},
+    {"fixture": "DIAS-AV-02", "disposition": "RECONCILE_IDEMPOTENTLY", "status": "PASS"},
+    {"fixture": "DIAS-AV-03", "disposition": "FRESH_PROCESS_RECONSTRUCT_PASS", "status": "PASS"},
+    {"fixture": "DIAS-AV-04", "disposition": "REJECT_STALE_AND_QUARANTINE_DUAL_WRITER", "status": "PASS"},
+    {"fixture": "DIAS-AV-05", "disposition": "RECONSTRUCT_RECEIPTS_AND_RELEASE_ONCE", "status": "PASS"},
+    {"fixture": "DIAS-AV-06", "disposition": "DENY_SHADOW_SIDE_EFFECT_AND_INVALIDATE_EVIDENCE", "status": "PASS"},
+    {"fixture": "DIAS-AV-07", "disposition": "DENY_PARENT_RAC_CONTAMINATION", "status": "PASS"},
+    {"fixture": "DIAS-AV-08", "disposition": "REQUIRE_THIRD_PATH_OR_REFERENCE", "status": "PASS"},
+    {"fixture": "DIAS-AV-09", "disposition": "REJECT_COHORT_FREEZE_MANIPULATION", "status": "PASS"},
+    {"fixture": "DIAS-AV-10", "disposition": "DENY_GLOBAL_FREEZE_FOR_PARTIAL_COVERAGE", "status": "PASS"},
+    {"fixture": "DIAS-AV-11", "disposition": "BLOCK_REMOVAL_WITHOUT_HISTORICAL_INTERPRETATION", "status": "PASS"},
+    {"fixture": "DIAS-AV-12", "disposition": "BLOCK_REMOVAL_BEFORE_STABILISATION", "status": "PASS"},
+    {"fixture": "DIAS-AV-13", "disposition": "QUARANTINE_UNRECOGNISED_WRITER_OR_A3_MISMATCH", "status": "PASS"},
+    {"fixture": "DIAS-AV-14", "disposition": "RECONSTRUCT_RECEIPTS_FROM_PHYSICAL_MAIN", "status": "PASS"},
+    {"fixture": "DIAS-AV-15", "disposition": "BLOCK_OWNER_CURRENTNESS_CONFLICT", "status": "PASS"},
+    {"fixture": "DIAS-AV-16", "disposition": "BLOCK_TERMINAL_WITH_ACTIVE_DIASI_REGISTRY", "status": "PASS"}
+  ],
+  "side_effects": {"physical_main_writes": 0, "qualification_ledger_writes": 0, "live_status_writes": 0, "live_dispatches": 0, "intake_freezes": 0, "writer_transfers": 0, "cers_pes_mutations": 0, "parent_rac_evidence_writes": 0},
+  "unsafe_outcome_count": 0,
+  "status": "PASS"
+}
