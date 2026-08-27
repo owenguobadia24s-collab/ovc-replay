@@ -150,7 +150,6 @@ def test_wp4b_court_record_is_reference_only_and_advances_to_wp5() -> None:
     assert canonical_sha256(frontier["payload"]) == frontier["logical_id"]
     assert interlock["decision_bearing_substitution"] == "DENIED"
     assert interlock["parent_rac_evidence_contamination"] == "PROHIBITED"
-    pointer = json.loads((root / "registries/implementation/dias_v0_1/CURRENT_STATE_POINTER.json").read_text(encoding="utf-8"))
-    state = json.loads((root / pointer["current_state"]).read_text(encoding="utf-8"))
+    state = json.loads((root / "registries/implementation/dias_v0_1/DIASI_CURRENT_v0_6.json").read_text(encoding="utf-8"))
     assert state["next_packet"] == "DIASI-WP5"
     assert state["proof_substitution"] is False
