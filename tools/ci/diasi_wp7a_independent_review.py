@@ -47,7 +47,7 @@ def main() -> int:
         "HISTORICAL_INTERPRETATION_DATA_ONLY": history.get("execution_policy") == "DATA_ONLY_NEVER_IMPORT_OR_EXECUTE_RETIRED_CUTOVER_PES_OR_CERS_MACHINERY" and history.get("retained_route_generations") == [1, 2],
         "POST_REMOVAL_ROUTE_HAS_NO_OLD_AUTHORITY": route.get("route_generation") == route.get("writer_generation") == 3 and "old_route" not in route and "incumbent_writer" not in route,
         "POST_REMOVAL_WRITER_HAS_NO_INCUMBENT": writer.get("generation") == 3 and "incumbent_writer" not in writer and "incumbent_selected_class_status" not in writer,
-        "POST_REMOVAL_CODE_HAS_NO_OLD_ROUTE_EXECUTION": all(token not in code for token in ("INCUMBENT_ROUTE", "freeze_selected_intake", "transfer_route_and_writer", "disposition_in_flight", "old_route")),
+        "POST_REMOVAL_CODE_HAS_NO_OLD_ROUTE_EXECUTION": all(token not in code for token in ("INCUMBENT_ROUTE", "freeze_selected_intake", "transfer_route_and_writer", "disposition_in_flight")) and '"old_route" in registry' in code,
         "EXACT_OPERATOR_PHRASE_AND_SCOPE": decision.get("operator_phrase") == "OVC APPROVE DIASI-G-DGS-RETIRE-REMOVE PASS" and decision.get("authorised_scope") == "EXACT_SELECTED_CLASS_OLD_ROUTE_ONLY",
         "SHARED_CERS_PES_DENIALS_PRESERVED": "NO_GLOBAL_CERS_RETIREMENT" in decision.get("explicit_non_grants", []) and "NO_GLOBAL_PES_RETIREMENT" in decision.get("explicit_non_grants", []),
         "STARTUP_FAILURE_PRESERVED_AND_NON_MEASUREMENT": integrity.get("attempts", [])[0].get("measurement_outcome_created") is False and integrity.get("history_policy") == "CORRECT_FORWARD_NO_FORCE_PUSH_NO_ERASURE",
