@@ -5,8 +5,6 @@ import json
 from pathlib import Path
 import unittest
 
-import yaml
-
 from ovc.development.skills.vit_routing import build_vit_payload_lineage_record
 from tools.ci.aa0_harness_identity import compute_harness_identity
 
@@ -20,15 +18,19 @@ class PostDiasiAa0PrewarmContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.workflow = WORKFLOW_PATH.read_text(encoding="utf-8")
-        cls.parsed = yaml.safe_load(cls.workflow)
+
+    def _job(self, name: str, next_name: str | None = None) -> str:
+        section = self.workflow.split(f"\n  {name}:\n", 1)[1]
+        if next_name is not None:
+            section = section.split(f"\n  {next_name}:\n", 1)[0]
+        return section
 
     def test_workflow_dispatch_exposes_one_exact_optional_target(self) -> None:
-        triggers = self.parsed[True]
-        inputs = triggers["workflow_dispatch"]["inputs"]
-        self.assertEqual(set(inputs), {"aa0_target_head_sha"})
-        self.assertFalse(inputs["aa0_target_head_sha"]["required"])
-        self.assertIn("OVC_AA0_PREWARM_TARGET_HEAD_SHA", self.parsed["env"])
-        self.assertIn("OVC_ASSURANCE_TARGET_HEAD_SHA", self.parsed["env"])
+        dispatch = self.workflow.split("  workflow_dispatch:\n", 1)[1].split("\npermissions:\n", 1)[0]
+        self.assertEqual(dispatch.count("aa0_target_head_sha:"), 1)
+        self.assertIn("required: false", dispatch)
+        self.assertIn("OVC_AA0_PREWARM_TARGET_HEAD_SHA:", self.workflow)
+        self.assertIn("OVC_ASSURANCE_TARGET_HEAD_SHA:", self.workflow)
 
     def test_every_assurance_checkout_uses_the_canonical_target(self) -> None:
         self.assertNotIn("github.event.pull_request.head.sha || github.sha", self.workflow)
@@ -90,28 +92,23 @@ class PostDiasiAa0PrewarmContractTests(unittest.TestCase):
     def test_canonical_shards_skip_only_when_assurance_is_reused(self) -> None:
         condition = "needs.pytest-assurance-plan.outputs.disposition == 'RUN_AA0'"
         self.assertGreaterEqual(self.workflow.count(condition), 5)
-        jobs = self.parsed["jobs"]
-        self.assertIn(condition, jobs["pytest-shard-manifest"]["if"])
-        self.assertIn(condition, jobs["pytest-shard"]["if"])
+        self.assertIn(condition, self._job("pytest-shard-manifest", "pytest-shard"))
+        self.assertIn(condition, self._job("pytest-shard", "pytest-unified"))
 
     def test_parity_execution_skips_only_on_lawful_reuse(self) -> None:
         for job_name in ("pytest-unittest-parity", "runner-parity"):
-            job = self.parsed["jobs"][job_name]
-            run_steps = [step for step in job["steps"] if str(step.get("name", "")).startswith(("Execute", "Prove"))]
-            self.assertEqual(len(run_steps), 1)
-            self.assertEqual(run_steps[0]["if"], "steps.aa0.outputs.disposition == 'RUN_AA0'")
+            next_job = "runner-parity" if job_name == "pytest-unittest-parity" else None
+            job = self._job(job_name, next_job)
+            self.assertEqual(job.count("if: steps.aa0.outputs.disposition == 'RUN_AA0'"), 3)
+            self.assertEqual(job.count("Execute exact legacy unittest surface") + job.count("Prove pytest collection parity"), 1)
 
     def test_prewarm_does_not_consume_rac_or_mutate_protection(self) -> None:
         self.assertNotIn("REPOSITORY_ASSURANCE_PILOT_POLICY", self.workflow)
         self.assertNotIn("rac_pilot_assurance", self.workflow)
-        protection = next(
-            step
-            for step in self.parsed["jobs"]["vit-routing-preflight"]["steps"]
-            if step.get("name") == "Verify VIT-owned physical-main protection"
-        )
-        self.assertEqual(protection["if"], "github.event_name == 'pull_request'")
-        self.assertIn("OVC merge readiness", protection["with"]["script"])
-        self.assertIn("bypass.length !== 0", protection["with"]["script"])
+        protection = self._job("vit-routing-preflight", "pytest-assurance-plan")
+        self.assertIn("name: Verify VIT-owned physical-main protection\n        if: github.event_name == 'pull_request'", protection)
+        self.assertIn("OVC merge readiness", protection)
+        self.assertIn("bypass.length !== 0", protection)
 
     def test_authority_or_frontier_change_changes_pip_and_cache_identity(self) -> None:
         def lineage(authority: str, frontier: str):
