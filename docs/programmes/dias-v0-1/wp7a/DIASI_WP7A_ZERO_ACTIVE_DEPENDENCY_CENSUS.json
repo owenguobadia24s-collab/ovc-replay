@@ -1,0 +1,87 @@
+{
+  "schema": "ovc-diasi-zero-active-dependency-census/v1",
+  "packet_id": "DIASI-WP7A",
+  "selected_class": "DSAI_VIT_RECEIPT_ONLY_V0_1",
+  "retirement_scope": "CERS_PES_EXACT_OLD_ROUTE_FOR_SELECTED_CLASS_ONLY",
+  "dimensions": [
+    {
+      "dimension": "CODE",
+      "active_old_route_dependencies": 0,
+      "disabled_retained_removal_candidates": ["src/ovc/development/skills/dias_cutover.py:INCUMBENT_ROUTE_INITIAL_FREEZE_TRANSFER_SURFACE"],
+      "evidence": ["registries/development/skills/VIT_SELECTED_CLASS_ROUTE_v0_1.json:old_route=DISABLED_RETAINED", "tools/ci/pes_vit_qualification_producer.py:_reject_diasi_selected_class_old_route"]
+    },
+    {
+      "dimension": "WORKFLOW",
+      "active_old_route_dependencies": 0,
+      "evidence": ["NO_.github/workflows_REFERENCE_TO_pes_vit_qualification_producer", "VIT_SELECTED_CLASS_ROUTE_GENERATION_2_OWNER_LOCAL"]
+    },
+    {
+      "dimension": "REGISTRY",
+      "active_old_route_dependencies": 0,
+      "disabled_retained_removal_candidates": ["registries/development/skills/VIT_SELECTED_CLASS_ROUTE_v0_1.json@blob:10389be4d99d469f99c89c0285e36a8893337a8a", "registries/development/skills/VIT_QUALIFICATION_WRITER_AUTHORITY_v0_1.json@blob:2b859d276fbd0f07e484808226e34e1aed324132"],
+      "evidence": ["route_generation=2", "writer_generation=2", "parallel_physical_writer=false"]
+    },
+    {
+      "dimension": "ASSIGNMENT",
+      "active_old_route_dependencies": 0,
+      "evidence": ["selected_class_route=DSAI_VIT_AND_VIT_QUALIFICATION_OWNER_LOCAL", "selected_class_writer=VIT_QUALIFICATION_OWNER_LOCAL"]
+    },
+    {
+      "dimension": "CREDENTIAL",
+      "active_old_route_dependencies": 0,
+      "dedicated_selected_class_old_route_credentials": 0,
+      "shared_credentials_disposition": "SCOPED_NOT_RETIRED_SECRET_VALUES_NOT_ENUMERATED",
+      "evidence": ["NO_REPOSITORY_DECLARED_SELECTED_CLASS_PES_CREDENTIAL"]
+    },
+    {
+      "dimension": "DETACHED_REF",
+      "active_old_route_dependencies": 0,
+      "shared_or_successor_dependencies": 1,
+      "evidence": ["origin/ovc/vit-qualification-ledger-v1", "qualification=ca35567882286f193623c3a402cc1c434b77113535725298afa2e21685f98505"],
+      "disposition": "SCOPED_NOT_RETIRED_SUCCESSOR_AND_SHARED_EVIDENCE_STORE"
+    },
+    {
+      "dimension": "EXTERNAL_STORE",
+      "active_old_route_dependencies": 0,
+      "shared_or_successor_dependencies": 1,
+      "evidence": ["DETACHED_GIT_LEDGER_CONTENT_ADDRESSED_ENVELOPES_AND_POINTERS"],
+      "disposition": "SCOPED_NOT_RETIRED_PRESERVE_EVIDENCE"
+    },
+    {
+      "dimension": "IN_FLIGHT_ROUTE",
+      "active_old_route_dependencies": 0,
+      "unknown": 0,
+      "undispositioned": 0,
+      "evidence": ["docs/programmes/dias-v0-1/wp6/DIASI_WP6_IN_FLIGHT_DRAIN_RECORD.json"]
+    },
+    {
+      "dimension": "LIVE_TRIGGER",
+      "active_old_route_dependencies": 0,
+      "evidence": ["tools/ci/vit_qualification_owner.py=ONLY_SELECTED_CLASS_LIVE_PUBLICATION_ROUTE", "tools/ci/pes_vit_qualification_producer.py=EXACT_SELECTED_CLASS_FAIL_CLOSED_FENCE"]
+    }
+  ],
+  "shared_machinery": {
+    "global_pes_producer": {
+      "status": "ACTIVE_BOUNDED_OTHER_AUTHORISED_OWNER_REQUESTS",
+      "paths": ["src/ovc/development/skills/pes_vit_qualification_producer.py", "tools/ci/pes_vit_qualification_producer.py", "docs/releases/development-skills-v0-3/pes-vit-liveness/PES_VIT_QUALIFICATION_PRODUCER_ACTIVATION_PACKET_v0_1.json"],
+      "disposition": "SCOPED_NOT_RETIRED"
+    },
+    "global_cers_persistent_service": {
+      "status": "RUN_EXACT_ADMITTED_SCOPE_ONLY",
+      "active_admission_count": 5,
+      "active_programmes": ["OVC-DSAI3V-CERS-CONFORMANCE-v0.1", "OVC-P2CTI-CONFORMANCE-v0.1", "OVC-ASOCS-6M-v0.1", "OVC-GRT-V0.2-REPOSITORY-CONSTITUTION-CONTINUOUS-CONFORMANCE", "OVC-SHARED-SYSTEMS-v0.1"],
+      "source": "registries/development/skills/cers/CERS_PERSISTENT_PROGRAMME_ADMISSION_REGISTRY_v0_4.json",
+      "disposition": "SCOPED_NOT_RETIRED"
+    },
+    "physical_controller_and_gateway": {
+      "status": "UNCHANGED_SHARED",
+      "controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
+      "gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+      "disposition": "SCOPED_NOT_RETIRED"
+    }
+  },
+  "census_result": "ZERO_ACTIVE_DEPENDENCY_EXACT_SELECTED_CLASS_OLD_ROUTE",
+  "global_retirement_claimed": false,
+  "unresolved_warning_count": 0,
+  "status": "PASS"
+}

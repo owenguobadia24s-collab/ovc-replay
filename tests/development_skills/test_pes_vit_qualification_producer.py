@@ -44,7 +44,7 @@ def _rehash(record: dict, identity_key: str) -> dict:
     return record
 
 
-def _lineage():
+def _lineage(path: str = "example.txt"):
     pip = {
         "schema_version": "packet-integration-payload/v0.1",
         "programme_id": "TEST-PROGRAMME",
@@ -52,7 +52,7 @@ def _lineage():
         "logical_changes": [
             {
                 "op": "ADD",
-                "path": "example.txt",
+                "path": path,
                 "blob_sha": "2" * 40,
                 "mode": "100644",
             }
@@ -332,6 +332,24 @@ class PesVitQualificationProducerTests(unittest.TestCase):
         self.assertFalse(hasattr(producer_cli, "merge_pull_request"))
         self.assertFalse(hasattr(producer_cli, "write_main"))
         self.assertFalse(hasattr(producer_cli, "force_push"))
+
+    def test_diasi_selected_class_is_fenced_before_pes_envelope_or_publish(self) -> None:
+        request = build_qualification_publication_request(
+            candidate_head_sha="1" * 40,
+            lineage_record=_lineage(
+                "docs/releases/development-skills-v0-3/dias/EXACT_SELECTED_RECEIPT.json"
+            ),
+            issuer_identity=ISSUER,
+            owner_authority_source="records/owner/authority.json@blob:abc123",
+        )
+        with mock.patch.object(producer_cli, "build_qualification_envelope") as build:
+            with self.assertRaisesRegex(RuntimeError, "SELECTED_CLASS_OLD_ROUTE_FENCED"):
+                producer_cli.prepare_shadow_envelope(
+                    repo=ROOT,
+                    request=request,
+                    expected_issuer_identity=ISSUER,
+                )
+        build.assert_not_called()
 
 
 if __name__ == "__main__":
