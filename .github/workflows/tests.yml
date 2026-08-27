@@ -6,14 +6,23 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      aa0_target_head_sha:
+        description: Exact pushed candidate head to run as a PRE_PR_AA0_WARM producer
+        required: false
+        type: string
 
 permissions:
   contents: read
   checks: read
   pull-requests: read
 
+env:
+  OVC_ASSURANCE_TARGET_HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || (github.event_name == 'workflow_dispatch' && inputs.aa0_target_head_sha != '' && inputs.aa0_target_head_sha) || github.sha }}
+  OVC_AA0_PREWARM_TARGET_HEAD_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.aa0_target_head_sha || '' }}
+
 concurrency:
-  group: ovc-tests-${{ github.event.pull_request.number || github.ref }}
+  group: ovc-tests-${{ github.event.pull_request.number || inputs.aa0_target_head_sha || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -26,12 +35,14 @@ jobs:
       pip_id: ${{ steps.assurance.outputs.pip_id }}
       lineage_source: ${{ steps.assurance.outputs.lineage_source }}
       lineage_ref: ${{ steps.assurance.outputs.lineage_ref }}
+      qualification_id: ${{ steps.assurance.outputs.qualification_id }}
+      aa0_producer_mode: ${{ steps.assurance.outputs.aa0_producer_mode }}
       aa0_reuse_authorized: ${{ steps.assurance.outputs.aa0_reuse_authorized }}
       aa0_reuse_reason: ${{ steps.assurance.outputs.aa0_reuse_reason }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ env.OVC_ASSURANCE_TARGET_HEAD_SHA }}
           fetch-depth: 0
           show-progress: false
 
@@ -115,8 +126,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 0
+          ref: ${{ env.OVC_ASSURANCE_TARGET_HEAD_SHA }}
+          fetch-depth: 1
           show-progress: false
       - name: Compute AA0 assurance harness identity
         id: aa0-harness
@@ -135,11 +146,12 @@ jobs:
         env:
           EXACT_HIT: ${{ steps.cache.outputs.cache-hit }}
           MATCHED_KEY: ${{ steps.cache.outputs.cache-matched-key }}
+          PRODUCER_MODE: ${{ needs.vit-routing-preflight.outputs.aa0_producer_mode }}
           REUSE_AUTHORIZED: ${{ needs.vit-routing-preflight.outputs.aa0_reuse_authorized }}
         run: |
           set -euo pipefail
           disposition=RUN_AA0
-          if [[ "${EXACT_HIT}" == "true" ]]; then disposition=EXACT_GENERATION_REUSE; elif [[ -n "${MATCHED_KEY}" && "${REUSE_AUTHORIZED}" == "true" ]]; then disposition=PLACEMENT_ONLY_PIP_REUSE; fi
+          if [[ "${PRODUCER_MODE}" != "true" && "${EXACT_HIT}" == "true" ]]; then disposition=EXACT_GENERATION_REUSE; elif [[ "${PRODUCER_MODE}" != "true" && -n "${MATCHED_KEY}" && "${REUSE_AUTHORIZED}" == "true" ]]; then disposition=PLACEMENT_ONLY_PIP_REUSE; fi
           if [[ "${disposition}" != "RUN_AA0" ]]; then test -f "${RUNNER_TEMP}/ovc-aa0-tests/PASS"; fi
           echo "disposition=${disposition}" >> "$GITHUB_OUTPUT"
           echo "OVC_CI_METRIC {\"schema\":\"ovc-ci-metric/v1\",\"metric\":\"aa0_pip_assurance_repository\",\"disposition\":\"${disposition}\",\"topology\":\"DETERMINISTIC_FOUR_SHARD_CANONICAL_PYTEST\"}"
@@ -152,7 +164,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ env.OVC_ASSURANCE_TARGET_HEAD_SHA }}
           fetch-depth: 0
           show-progress: false
       - uses: actions/setup-python@v5
@@ -164,12 +176,12 @@ jobs:
         run: |
           mkdir -p "${RUNNER_TEMP}/ovc-canonical-manifest"
           PYTHONPATH=src:. python3 tools/ci/pytest_shard_canonical.py prove \
-            --head-sha "${{ github.event.pull_request.head.sha || github.sha }}" \
+            --head-sha "${OVC_ASSURANCE_TARGET_HEAD_SHA}" \
             --output "${RUNNER_TEMP}/ovc-canonical-manifest/manifest.json"
       - name: Upload canonical pytest manifest
         uses: actions/upload-artifact@v4
         with:
-          name: canonical-pytest-manifest-${{ github.event.pull_request.head.sha || github.sha }}
+          name: canonical-pytest-manifest-${{ env.OVC_ASSURANCE_TARGET_HEAD_SHA }}
           path: ${{ runner.temp }}/ovc-canonical-manifest/manifest.json
           if-no-files-found: error
           retention-days: 7
@@ -186,7 +198,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ env.OVC_ASSURANCE_TARGET_HEAD_SHA }}
           fetch-depth: 0
           show-progress: false
       - uses: actions/setup-python@v5
@@ -198,7 +210,7 @@ jobs:
         run: |
           mkdir -p "${RUNNER_TEMP}/ovc-canonical-shard-${{ matrix.shard }}"
           PYTHONPATH=src:. python3 tools/ci/pytest_shard_canonical.py run \
-            --head-sha "${{ github.event.pull_request.head.sha || github.sha }}" \
+            --head-sha "${OVC_ASSURANCE_TARGET_HEAD_SHA}" \
             --shard-index "${{ matrix.shard }}" \
             --manifest-output "${RUNNER_TEMP}/ovc-canonical-shard-${{ matrix.shard }}/manifest.json" \
             --result-output "${RUNNER_TEMP}/ovc-canonical-shard-${{ matrix.shard }}/result.json"
@@ -206,7 +218,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: canonical-pytest-shard-${{ matrix.shard }}-${{ github.event.pull_request.head.sha || github.sha }}
+          name: canonical-pytest-shard-${{ matrix.shard }}-${{ env.OVC_ASSURANCE_TARGET_HEAD_SHA }}
           path: ${{ runner.temp }}/ovc-canonical-shard-${{ matrix.shard }}
           if-no-files-found: error
           retention-days: 7
@@ -219,8 +231,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 0
+          ref: ${{ env.OVC_ASSURANCE_TARGET_HEAD_SHA }}
+          fetch-depth: 1
           show-progress: false
       - name: Compute AA0 assurance harness identity
         id: aa0-harness
@@ -244,7 +256,7 @@ jobs:
         if: needs.pytest-assurance-plan.outputs.disposition == 'RUN_AA0'
         uses: actions/download-artifact@v4
         with:
-          pattern: canonical-pytest-*-${{ github.event.pull_request.head.sha || github.sha }}
+          pattern: canonical-pytest-*-${{ env.OVC_ASSURANCE_TARGET_HEAD_SHA }}
           path: ${{ runner.temp }}/ovc-canonical-shards
           merge-multiple: false
       - name: Complete repository suite as BASE_INDEPENDENT assurance
@@ -278,8 +290,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 0
+          ref: ${{ env.OVC_ASSURANCE_TARGET_HEAD_SHA }}
+          fetch-depth: 1
           show-progress: false
       - name: Compute AA0 assurance harness identity
         id: aa0-harness
@@ -298,11 +310,12 @@ jobs:
         env:
           EXACT_HIT: ${{ steps.cache.outputs.cache-hit }}
           MATCHED_KEY: ${{ steps.cache.outputs.cache-matched-key }}
+          PRODUCER_MODE: ${{ needs.vit-routing-preflight.outputs.aa0_producer_mode }}
           REUSE_AUTHORIZED: ${{ needs.vit-routing-preflight.outputs.aa0_reuse_authorized }}
         run: |
           set -euo pipefail
           disposition=RUN_AA0
-          if [[ "${EXACT_HIT}" == "true" ]]; then disposition=EXACT_GENERATION_REUSE; elif [[ -n "${MATCHED_KEY}" && "${REUSE_AUTHORIZED}" == "true" ]]; then disposition=PLACEMENT_ONLY_PIP_REUSE; fi
+          if [[ "${PRODUCER_MODE}" != "true" && "${EXACT_HIT}" == "true" ]]; then disposition=EXACT_GENERATION_REUSE; elif [[ "${PRODUCER_MODE}" != "true" && -n "${MATCHED_KEY}" && "${REUSE_AUTHORIZED}" == "true" ]]; then disposition=PLACEMENT_ONLY_PIP_REUSE; fi
           if [[ "${disposition}" != "RUN_AA0" ]]; then test -f "${RUNNER_TEMP}/ovc-aa0-unittest/PASS"; fi
           echo "disposition=${disposition}" >> "$GITHUB_OUTPUT"
           echo "OVC_CI_METRIC {\"schema\":\"ovc-ci-metric/v1\",\"metric\":\"aa0_pip_assurance_unittest_parity\",\"disposition\":\"${disposition}\"}"
@@ -344,8 +357,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 0
+          ref: ${{ env.OVC_ASSURANCE_TARGET_HEAD_SHA }}
+          fetch-depth: 1
           show-progress: false
       - name: Compute AA0 assurance harness identity
         id: aa0-harness
@@ -364,11 +377,12 @@ jobs:
         env:
           EXACT_HIT: ${{ steps.cache.outputs.cache-hit }}
           MATCHED_KEY: ${{ steps.cache.outputs.cache-matched-key }}
+          PRODUCER_MODE: ${{ needs.vit-routing-preflight.outputs.aa0_producer_mode }}
           REUSE_AUTHORIZED: ${{ needs.vit-routing-preflight.outputs.aa0_reuse_authorized }}
         run: |
           set -euo pipefail
           disposition=RUN_AA0
-          if [[ "${EXACT_HIT}" == "true" ]]; then disposition=EXACT_GENERATION_REUSE; elif [[ -n "${MATCHED_KEY}" && "${REUSE_AUTHORIZED}" == "true" ]]; then disposition=PLACEMENT_ONLY_PIP_REUSE; fi
+          if [[ "${PRODUCER_MODE}" != "true" && "${EXACT_HIT}" == "true" ]]; then disposition=EXACT_GENERATION_REUSE; elif [[ "${PRODUCER_MODE}" != "true" && -n "${MATCHED_KEY}" && "${REUSE_AUTHORIZED}" == "true" ]]; then disposition=PLACEMENT_ONLY_PIP_REUSE; fi
           if [[ "${disposition}" != "RUN_AA0" ]]; then test -f "${RUNNER_TEMP}/ovc-aa0-runner/PASS"; fi
           echo "disposition=${disposition}" >> "$GITHUB_OUTPUT"
           echo "OVC_CI_METRIC {\"schema\":\"ovc-ci-metric/v1\",\"metric\":\"aa0_pip_assurance_runner_parity\",\"disposition\":\"${disposition}\"}"
