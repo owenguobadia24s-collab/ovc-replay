@@ -1,0 +1,29 @@
+{
+  "schema": "ovc-diasi-retirement-removal-manifest/v1",
+  "programme_id": "OVC-DIAS-CONFORMANCE-v0.1",
+  "packet_id": "DIASI-WP7B-RETIREMENT-REMOVAL",
+  "gate_id": "DIASI-G-DGS-RETIRE-REMOVE",
+  "required_operator_phrase": "OVC APPROVE DIASI-G-DGS-RETIRE-REMOVE PASS",
+  "execution_preconditions": ["MATERIALISED_OPERATOR_DECISION_BLOB_EXACT", "ZERO_ACTIVE_DEPENDENCY_CENSUS_PASS", "STABILISATION_RESULT_PASS", "HISTORICAL_INTERPRETATION_PASS", "INDEPENDENT_REVIEW_PASS", "REMOTE_MAIN_EQUALS_WP7A_PHYSICAL_COMPLETION"],
+  "pre_removal_candidate": {"commit": "d98808cdd3ef7b152aa74de6fcb3814252300ada", "tree": "6e6b364dc4e5436b0a6676926886f97ad3a898ed", "final_wp7a_merge_identity": "RESOLVED_BY_VIT_POST_MERGE_COMPLETION"},
+  "operations": [
+    {"op": "MODIFY", "path": "registries/development/skills/VIT_SELECTED_CLASS_ROUTE_v0_1.json", "pre_blob": "10389be4d99d469f99c89c0285e36a8893337a8a", "post_blob": "810a73704f950bbb7ba272a90094bf20b8f90f4e", "source": "docs/programmes/dias-v0-1/wp7a/removal-candidate/VIT_SELECTED_CLASS_ROUTE_v0_1.json.candidate"},
+    {"op": "MODIFY", "path": "registries/development/skills/VIT_QUALIFICATION_WRITER_AUTHORITY_v0_1.json", "pre_blob": "2b859d276fbd0f07e484808226e34e1aed324132", "post_blob": "8b7279d7bc49ce3fee549873b42a270fa7ce38f2", "source": "docs/programmes/dias-v0-1/wp7a/removal-candidate/VIT_QUALIFICATION_WRITER_AUTHORITY_v0_1.json.candidate"},
+    {"op": "MODIFY", "path": "src/ovc/development/skills/dias_cutover.py", "pre_blob": "d1b19117e0e2d949f73685f286c4073e9596dbcb", "post_blob": "bdc4a7d47666ba7542821945d548033495e5545d", "source": "docs/programmes/dias-v0-1/wp7a/removal-candidate/dias_cutover.py.candidate"},
+    {"op": "MODIFY", "path": "tests/development_skills/dias/test_diasi_wp6_live_cutover.py", "pre_blob": "0d427140df42cdccc4b1f19855aed168762944a1", "post_blob": "d81c6d62203c01a7ccd27d1c09c36fe00aeea1f6", "source": "docs/programmes/dias-v0-1/wp7a/removal-candidate/test_diasi_wp6_live_cutover.py.candidate"},
+    {"op": "MODIFY", "path": "tests/development_skills/dias/test_diasi_wp7a_history.py", "pre_blob": "516e26c04dd3eb91a2cd61de9fc2143714fd8320", "post_blob": "fddd4856450231963e6379cf7cb8630afd20acfc", "source": "docs/programmes/dias-v0-1/wp7a/removal-candidate/test_diasi_wp7a_history.py.candidate"},
+    {"op": "MODIFY", "path": "tests/development_skills/dias/test_diasi_wp7a_gate_ready.py", "pre_blob": "54b1dfebaa58c473ea642b77f90f11e6c12f7ba5", "post_blob": "c7b4a5747e5e361e0a8345e0969b706b0cdc5a04", "source": "docs/programmes/dias-v0-1/wp7a/removal-candidate/test_diasi_wp7a_gate_ready.py.candidate"},
+    {"op": "ADD_AFTER_EXACT_OPERATOR_PASS", "path": "docs/programmes/dias-v0-1/retire-remove/DIASI_G_DGS_RETIRE_REMOVE_OPERATOR_DECISION.json", "post_blob": "72db10080432582418fc87906ede395f7194eaec", "source": "docs/programmes/dias-v0-1/wp7a/removal-candidate/DIASI_G_DGS_RETIRE_REMOVE_OPERATOR_DECISION.json.candidate"},
+    {"op": "DELETE", "path": "tools/ci/diasi_wp7a_stabilisation.py", "pre_blob": "dced20cfe2270e881e7d62e6f2589430f714c683", "reason": "MEASUREMENT_COMPLETE_REMOVE_PRE_GATE_EXECUTABLE"},
+    {"op": "DELETE", "path": "tools/ci/diasi_wp7a_independent_review.py", "pre_blob": "799db106e35933af53315250f955aab3bdb13e66", "reason": "REVIEW_COMPLETE_REMOVE_PRE_GATE_EXECUTABLE"},
+    {"op": "DELETE_DIRECTORY", "path": "docs/programmes/dias-v0-1/wp7a/removal-candidate", "member_count": 7, "reason": "CANDIDATE_PAYLOADS_MATERIALISED_OR_NO_LONGER_EXECUTABLE"},
+    {"op": "DELETE", "path": "docs/programmes/dias-v0-1/wp7a/DIASI_WP7A_RETIREMENT_REMOVAL_MANIFEST.json", "reason": "SELF_DISPOSITION_PRESERVE_EXACT_BLOB_IN_PARENT_GIT_HISTORY_AVOID_ACTIVE_REMOVAL_AUTHORITY"}
+  ],
+  "triggers": {"operator_gate": "EXACT_PHRASE_ONLY", "automatic_trigger": false, "scheduler_trigger": false, "workflow_trigger": false, "in_flight_trigger": false},
+  "credentials": {"dedicated_selected_class_old_route_credentials": 0, "delete": [], "shared_credentials": "SCOPED_NOT_RETIRED_SECRET_VALUES_NOT_ENUMERATED"},
+  "shared_machinery": {"global_pes_producer": "SCOPED_NOT_RETIRED_WITH_EXACT_SELECTED_CLASS_FENCE", "global_cers_service": "SCOPED_NOT_RETIRED_FIVE_ACTIVE_ADMISSIONS", "detached_ledger": "SCOPED_NOT_RETIRED_SUCCESSOR_AND_HISTORY", "physical_controller_gateway": "UNCHANGED"},
+  "historical_preservation": {"bundle": "docs/programmes/dias-v0-1/wp7a/DIASI_WP7A_HISTORICAL_INTERPRETATION_BUNDLE.json", "active_retired_runtime_required": false, "pre_removal_records_in_git_parent": true},
+  "expected_post_removal_tree": "a0f45e49f9036e281ad044c51aad8124fb38210f",
+  "expected_tree_scope": "FULL_REPOSITORY_TREE_AFTER_EXACT_OPERATIONS_AND_DECISION_MATERIALISATION_BEFORE_WP7B_QA_CLOSEOUT",
+  "authority_effect": "NONE_PENDING_OPERATOR_PASS"
+}

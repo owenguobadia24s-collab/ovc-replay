@@ -34,8 +34,7 @@ def test_closeout_bindings_and_current_state() -> None:
     for name in ("DIASI_WP6_CLOSEOUT_VIT_AUTHORITY_MANIFEST.json", "DIASI_WP6_CLOSEOUT_VIT_DEPENDENCY_FRONTIER.json"):
         binding = load(WP6 / name)
         assert binding["logical_id"] == canonical_id(binding["payload"])
-    pointer = load(ROOT / "registries/implementation/dias_v0_1/CURRENT_STATE_POINTER.json")
-    state = load(ROOT / pointer["current_state"])
+    state = load(ROOT / "registries/implementation/dias_v0_1/DIASI_CURRENT_v0_10.json")
     assert state["decision"] == "PASS" and state["next_packet"] == "DIASI-WP7A"
     assert state["old_route"] == "DISABLED_RETAINED_EXACT_SELECTED_CLASS"
     assert state["global_cers_state_changed"] is False

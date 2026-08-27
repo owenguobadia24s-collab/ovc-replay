@@ -1,0 +1,63 @@
+{
+  "schema": "ovc-diasi-stabilisation-window-freeze/v1",
+  "programme_id": "OVC-DIAS-CONFORMANCE-v0.1",
+  "packet_id": "DIASI-WP7A",
+  "freeze_recorded_at_utc": "2026-08-27T13:54:19.9703657Z",
+  "frozen_before_outcomes": true,
+  "outcomes_recorded": false,
+  "selected_class": "DSAI_VIT_RECEIPT_ONLY_V0_1",
+  "old_route_state_required": "DISABLED_RETAINED",
+  "baseline": {
+    "main": "e7531677f544766022e21181b802dab6e0e84227",
+    "tree": "36f2b8a006cfccded68bd14210682c153f7fcd7e",
+    "wp6_completion_proof": "0d19f79ace5c767f3fc5f3c81977c919fd0d7f5e865d59c61e8119481b3713cb",
+    "ruleset_id": 20229411,
+    "ruleset_updated_at": "2026-08-24T12:46:03.557+01:00",
+    "required_check": "OVC merge readiness",
+    "merge_method": "squash",
+    "bypass_actor_count": 0,
+    "grt_active_authority_path": "registries/authority/GRT2_ACTIVE_ENFORCEMENT_AUTHORITY_v0_1.json",
+    "grt_active_authority_blob": "7e4d7b901754fd4084baa7cfdaf3d2bb3404c9ef",
+    "grt_rule_bundle_path": "registries/governance/grt_v0_2/GRT_RULE_BUNDLE_v0_2.json",
+    "grt_rule_bundle_blob": "7ef28a4015836a37b012bd9ef948c24df82dfbf4"
+  },
+  "window": {
+    "minimum_elapsed_seconds": 300,
+    "cycle_count": 5,
+    "cycle_schedule_seconds": [0, 75, 150, 225, 300],
+    "maximum_progress_silence_seconds": 30,
+    "fresh_process_required_each_cycle": true
+  },
+  "tests": [
+    "REFERENCE_DIFFERENTIAL",
+    "CLEAN_PROCESS_RESTART",
+    "DROPPED_DUPLICATE_OUT_OF_ORDER_EVENT_RECONCILIATION",
+    "RECEIPT_STORE_LOSS_RECONSTRUCTION",
+    "QUALIFICATION_LEDGER_RECOVERY",
+    "ROUTE_AND_WRITER_FENCING_ATTACKS",
+    "STALE_WRITER_ATTACKS",
+    "RULESET_AND_GRT_DRIFT_FAIL_CLOSED",
+    "ROLLBACK_REHEARSAL",
+    "INTEGRITY_INCIDENT_REVIEW"
+  ],
+  "thresholds": {
+    "false_differential_count_maximum": 0,
+    "unsafe_outcome_count_maximum": 0,
+    "unknown_outcome_count_maximum": 0,
+    "duplicate_successor_count_maximum": 0,
+    "a3_mismatch_count_maximum": 0,
+    "stale_writer_accepted_count_maximum": 0,
+    "integrity_incident_count_maximum": 0,
+    "receipt_reconstruction_seconds_maximum": 60,
+    "liveness_reconciliation_seconds_maximum": 300
+  },
+  "qualification_ledger_probe": {
+    "ref": "origin/ovc/vit-qualification-ledger-v1",
+    "candidate_head": "3c2b3572c304a0f35dbbf2b8a4cad67fadcf22cc",
+    "qualification_id": "ca35567882286f193623c3a402cc1c434b77113535725298afa2e21685f98505",
+    "candidate_tree": "36f2b8a006cfccded68bd14210682c153f7fcd7e"
+  },
+  "side_effect_policy": "READ_ONLY_NO_LIVE_WRITES",
+  "retirement_authority": "DENIED_PENDING_DIASI-G-DGS-RETIRE-REMOVE",
+  "authority_effect": "NONE"
+}

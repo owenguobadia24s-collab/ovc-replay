@@ -10,10 +10,65 @@ from ovc.development.skills.pes_vit_qualification_producer import (
     validate_producer_dispatch,
     validate_qualification_publication_request,
 )
+from ovc.development.skills.repository_assurance_pilot import (
+    is_pilot_receipt_path,
+    load_json,
+    validate_pilot_policy,
+)
 from tools.ci.vit_qualification_store import (
     build_qualification_envelope,
     publish_qualification_envelope,
 )
+
+
+SELECTED_CLASS_ROUTE = Path("registries/development/skills/VIT_SELECTED_CLASS_ROUTE_v0_1.json")
+PILOT_POLICY = Path("registries/development/skills/REPOSITORY_ASSURANCE_PILOT_POLICY_v0_1.json")
+
+
+def _reject_diasi_selected_class_old_route(
+    *,
+    repo: Path,
+    request: Mapping[str, object],
+) -> None:
+    """Fence the exact class transferred to its owner-local generation-2 writer."""
+    route = load_json(repo / SELECTED_CLASS_ROUTE)
+    policy = validate_pilot_policy(load_json(repo / PILOT_POLICY))
+    lineage = request.get("lineage")
+    if not isinstance(lineage, Mapping):
+        return
+    pip = lineage.get("pip")
+    if not isinstance(pip, Mapping):
+        return
+    changes = pip.get("logical_changes")
+    if not isinstance(changes, list) or not changes:
+        return
+    exact_selected_class = all(
+        isinstance(change, Mapping)
+        and str(change.get("op", "")) in policy["allowed_ops"]
+        and is_pilot_receipt_path(str(change.get("path", "")), policy)
+        for change in changes
+    )
+    if not exact_selected_class:
+        return
+    pre_removal_fence = (
+        route.get("schema") == "ovc-diasi-selected-class-live-route/v1"
+        and route.get("status") == "ACTIVE_REFERENCE_ASSURED"
+        and route.get("route_generation") == 2
+        and route.get("old_route") == "DISABLED_RETAINED"
+    )
+    post_removal_fence = (
+        route.get("schema") == "ovc-diasi-selected-class-live-route/v2"
+        and route.get("status") == "ACTIVE_RETIREMENT_COMPLETE"
+        and route.get("route_generation") == 3
+        and "old_route" not in route
+    )
+    if (
+        route.get("selected_class") != policy["pilot_class"]
+        or route.get("qualification_writer") != "VIT_QUALIFICATION_OWNER_LOCAL"
+        or not (pre_removal_fence or post_removal_fence)
+    ):
+        raise RuntimeError("PES_VIT_PRODUCER_DIASI_SELECTED_CLASS_ROUTE_STATE_DRIFT")
+    raise RuntimeError("PES_VIT_PRODUCER_DIASI_SELECTED_CLASS_OLD_ROUTE_FENCED")
 
 
 def _load_canonical_object(path: Path) -> Mapping[str, object]:
@@ -42,6 +97,7 @@ def prepare_shadow_envelope(
     request: Mapping[str, object],
     expected_issuer_identity: str,
 ) -> Mapping[str, object]:
+    _reject_diasi_selected_class_old_route(repo=repo, request=request)
     validated = validate_qualification_publication_request(
         request,
         expected_issuer_identity=expected_issuer_identity,
