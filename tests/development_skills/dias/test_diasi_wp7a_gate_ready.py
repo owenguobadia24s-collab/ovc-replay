@@ -27,37 +27,30 @@ def test_stabilisation_and_zero_dependency_are_gate_qualified() -> None:
     assert census["shared_machinery"]["global_cers_persistent_service"]["active_admission_count"] == 5
 
 
-def test_history_review_and_gate_packet_are_exact_and_non_executing() -> None:
+def test_historical_gate_packet_and_materialised_decision_are_exact() -> None:
     history = load(WP7A / "DIASI_WP7A_HISTORICAL_INTERPRETATION_BUNDLE.json")
     review = load(WP7A / "DIASI_WP7A_INDEPENDENT_RETIREMENT_REVIEW.json")
     gate = load(WP7A / "DIASI_G_DGS_RETIRE_REMOVE_OPERATOR_GATE_PACKET.json")
+    decision = load(ROOT / "docs/programmes/dias-v0-1/retire-remove/DIASI_G_DGS_RETIRE_REMOVE_OPERATOR_DECISION.json")
     assert history["status"] == "PASS" and history["authority_effect"] == "NONE_HISTORY_ONLY"
     assert review["recommendation"] == "PASS" and review["unresolved_warning_count"] == 0
-    assert gate["decision_status"] == "PENDING_OPERATOR"
-    assert gate["canonical_operator_phrase"] == "OVC APPROVE DIASI-G-DGS-RETIRE-REMOVE PASS"
-    assert gate["authority_effect"] == "NONE_PENDING_EXACT_OPERATOR_PHRASE"
-    assert "NO_GLOBAL_CERS_RETIREMENT" in gate["explicit_non_grants"]
-    assert "NO_GLOBAL_PES_RETIREMENT" in gate["explicit_non_grants"]
+    assert gate["decision_status"] == "PENDING_OPERATOR" and gate["authority_effect"] == "NONE_PENDING_EXACT_OPERATOR_PHRASE"
+    assert decision["decision"] == "PASS"
+    assert decision["operator_phrase"] == gate["canonical_operator_phrase"] == "OVC APPROVE DIASI-G-DGS-RETIRE-REMOVE PASS"
+    assert "NO_GLOBAL_CERS_RETIREMENT" in decision["explicit_non_grants"]
+    assert "NO_GLOBAL_PES_RETIREMENT" in decision["explicit_non_grants"]
 
 
-def test_vit_bindings_and_current_state_are_gate_preparation_only() -> None:
+def test_vit_bindings_remain_historical_gate_preparation_evidence() -> None:
     for name in ("DIASI_WP7A_VIT_AUTHORITY_MANIFEST.json", "DIASI_WP7A_VIT_DEPENDENCY_FRONTIER.json"):
         binding = load(WP7A / name)
         assert binding["logical_id"] == canonical(binding["payload"])
-    pointer = load(ROOT / "registries/implementation/dias_v0_1/CURRENT_STATE_POINTER.json")
-    state = load(ROOT / pointer["current_state"])
-    assert state["current_gate"] == "DIASI-G-DGS-RETIRE-REMOVE"
-    assert state["decision"] == "PENDING_OPERATOR"
-    assert state["operator_decision_required"] is True
-    assert state["zero_active_dependency"] is True
-    assert state["retirement"] is False and state["proof_substitution"] is False
 
 
-def test_removal_candidate_advances_fences_without_global_retirement() -> None:
-    route = load(WP7A / "removal-candidate/VIT_SELECTED_CLASS_ROUTE_v0_1.json.candidate")
-    writer = load(WP7A / "removal-candidate/VIT_QUALIFICATION_WRITER_AUTHORITY_v0_1.json.candidate")
-    decision = load(WP7A / "removal-candidate/DIASI_G_DGS_RETIRE_REMOVE_OPERATOR_DECISION.json.candidate")
+def test_active_route_and_writer_have_retirement_complete_generation_3() -> None:
+    route = load(ROOT / "registries/development/skills/VIT_SELECTED_CLASS_ROUTE_v0_1.json")
+    writer = load(ROOT / "registries/development/skills/VIT_QUALIFICATION_WRITER_AUTHORITY_v0_1.json")
     assert route["route_generation"] == route["writer_generation"] == writer["generation"] == 3
+    assert route["status"] == "ACTIVE_RETIREMENT_COMPLETE"
     assert "old_route" not in route and "incumbent_writer" not in writer
     assert route["non_selected_classes"] == "SCOPED_NOT_RETIRED_UNCHANGED"
-    assert decision["decision"] == "PASS" and decision["decision_source"] == "EXACT_OPERATOR_CHAT_PHRASE"
