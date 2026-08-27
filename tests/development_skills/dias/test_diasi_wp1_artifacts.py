@@ -28,6 +28,10 @@ def test_identity_bearing_wp1_records_are_canonical() -> None:
     assert canonical_sha256(authority["payload"], role="programme-authority-envelope/v1") == authority["envelope_id"]
     assert canonical_sha256(dependencies["payload"], role="test-dependency-manifest/v1") == dependencies["manifest_id"]
     assert canonical_sha256(projection["payload"], role="current-execution-projection/v1") == projection["projection_id"]
+    vit_authority = load(WP1 / "DIASI_WP1_VIT_AUTHORITY_MANIFEST.json")
+    vit_frontier = load(WP1 / "DIASI_WP1_VIT_DEPENDENCY_FRONTIER.json")
+    assert canonical_sha256(vit_authority["payload"]) == vit_authority["logical_id"]
+    assert canonical_sha256(vit_frontier["payload"]) == vit_frontier["logical_id"]
 
 
 def test_projection_binds_wp0_physical_completion_without_becoming_authority() -> None:
@@ -96,3 +100,27 @@ def test_conflict_free_review_tool_is_executable_in_fresh_process() -> None:
     assert review["external_human_or_model_claim"] is False
     assert review["classifier"]["authority_dominance_checks"] == 28
     assert review["owner_precedence"]["recency_override_rejected"] is True
+
+
+def test_materialised_algorithmic_review_and_gate_decisions_bind_subject() -> None:
+    review = load(WP1 / "DIASI_WP1_ALGORITHMIC_REVIEW.json")
+    g1 = load(WP1 / "DIASI_G1_MECHANICAL_PASS.json")
+    g2 = load(WP1 / "DIASI_G2_ALGORITHMIC_PASS.json")
+    identity_payload = {key: value for key, value in review.items() if key != "review_id"}
+    assert canonical_sha256(identity_payload) == review["review_id"]
+    assert review["decision"] == "PASS"
+    assert g1["decision"] == "PASS_DELEGATED"
+    assert g2["decision"] == "PASS"
+    assert g1["subject_head"] == review["subject_head"] == g2["subject_head"]
+    assert g2["review_id"] == review["review_id"]
+
+
+def test_programme_state_advances_without_crossing_reserved_authority() -> None:
+    pointer = load(ROOT / "registries/implementation/dias_v0_1/CURRENT_STATE_POINTER.json")
+    state = load(ROOT / pointer["current_state"])
+    assert state["completed_packets"] == ["DIASI-WP0"]
+    assert state["next_packet"] == "DIASI-WP2"
+    assert state["next_reserved_operator_gate"] == "DIASI-G-DGS-CUTOVER-DRAIN"
+    assert state["live_cutover"] is False
+    assert state["retirement"] is False
+    assert state["proof_substitution"] is False
