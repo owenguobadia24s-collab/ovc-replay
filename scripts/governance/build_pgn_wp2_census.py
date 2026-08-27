@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[2]
 EXCLUDED = {
     "registries/governance/programme_genesis/OVC_PG_PROGRAMME_STATE_v0_2.json",
     "registries/implementation/system_atlas_v0_1/ATLAS_PROGRAMME_STATE_v0_1.json",
+    "registries/implementation/dias_v0_1/DIASI_PROGRAMME_STATE_v0_1.json",
 }
 NATIVE_STATE_SCHEMAS = {"ovc-native-programme-state/v1"}
 EXPECTED_TARGETS = {

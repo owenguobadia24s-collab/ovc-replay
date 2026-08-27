@@ -1,0 +1,21 @@
+{
+  "schema": "ovc-diasi-canonical-identity-gate-registry/v1",
+  "registry_id": "OVC-DIASI-CANONICAL-IDENTITY-GATE-REGISTRY-v0.1",
+  "programme_id": "OVC-DIAS-CONFORMANCE-v0.1",
+  "plan_id": "OVC-DIAS-CONFORMANCE-PLAN-0.1-R1",
+  "packet_namespace": "DIASI-WP*",
+  "packets": ["DIASI-WP0", "DIASI-WP1", "DIASI-WP2", "DIASI-WP3", "DIASI-WP4A", "DIASI-WP4B", "DIASI-WP5", "DIASI-WP6", "DIASI-WP7A", "DIASI-WP7B", "DIASI-WP8", "DIASI-WP9"],
+  "gates": [
+    {"gate_id": "DIASI-G0", "authority": "OPERATOR", "status": "PASS_PENDING_PHYSICAL_MATERIALISATION"},
+    {"gate_id": "DIASI-G1-MECHANICAL", "authority": "AUTO_RATIFIABLE_WHEN_ELIGIBLE", "status": "NOT_YET_ELIGIBLE"},
+    {"gate_id": "DIASI-G2-ALGORITHMIC", "authority": "CONFLICT_FREE_INDEPENDENT_REVIEW", "status": "NOT_YET_ELIGIBLE"},
+    {"gate_id": "DIASI-G5-DGS-CUTOVER-READY", "authority": "AUTO_RATIFIABLE_WHEN_ELIGIBLE", "status": "NOT_YET_ELIGIBLE"},
+    {"gate_id": "DIASI-G-DGS-CUTOVER-DRAIN", "authority": "OPERATOR", "status": "RESERVED"},
+    {"gate_id": "DIASI-G-DGS-RETIRE-REMOVE", "authority": "OPERATOR", "status": "RESERVED"},
+    {"gate_id": "DIASI-G-RACPR-PROOF-SUBSTITUTION-PILOT", "authority": "OPERATOR_IF_REACHED", "status": "CONDITIONALLY_RESERVED"},
+    {"gate_id": "DIASI-G-RACPR-ASSURANCE-COMPRESSION-GENERAL", "authority": "OPERATOR_IF_JUSTIFIED", "status": "CONDITIONALLY_RESERVED"},
+    {"gate_id": "DIASI-G-TERMINAL", "authority": "AUTO_RATIFIABLE_INSIDE_GRANTED_AUTHORITY", "status": "NOT_YET_ELIGIBLE"}
+  ],
+  "terminal_states": ["DIAS_COMPLETED_REFERENCE_SAFE", "DIAS_COMPLETED_QUALIFIED_PROOF_COMPRESSION_OPERATIONAL"],
+  "unknown_identity_behavior": "DENY"
+}
