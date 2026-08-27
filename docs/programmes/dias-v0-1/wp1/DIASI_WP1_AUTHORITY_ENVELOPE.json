@@ -1,0 +1,21 @@
+{
+  "schema": "ovc-programme-authority-envelope-binding/v1",
+  "envelope_id": "76ee7b701a9e0f56b86103b0bbb722f97b482d2044cc519f2fad2cdd1982d850",
+  "payload": {
+    "programme_id": "OVC-DIAS-CONFORMANCE-v0.1",
+    "plan_id": "OVC-DIAS-CONFORMANCE-PLAN-0.1-R1",
+    "packet_id": "DIASI-WP1",
+    "gate_id": "DIASI-G0",
+    "authority_class": "AUTO_EXECUTABLE",
+    "authority_sources": [
+      "docs/plans/dias-v0-1/DIASI_PLAN_SOURCE_IDENTITY_v0_1_R1.json",
+      "docs/programmes/dias-v0-1/wp0/DIASI_G0_OPERATOR_DECISION.json"
+    ],
+    "allowed_actions": ["ALGORITHMIC_REVIEW", "BRANCH_REVERSIBLE_IMPLEMENTATION", "MECHANICAL_GATE_RATIFICATION", "NON_LIVE_SHADOW_EXECUTION"],
+    "denied_actions": ["CERS_OR_PES_DEACTIVATION", "CERS_OR_PES_REMOVAL", "GENERIC_REPLACEMENT_SUPERVISOR", "LIVE_CUTOVER", "OLD_INTAKE_FREEZE", "PHYSICAL_WRITER_TRANSFER", "PROOF_SUBSTITUTION", "RULESET_MUTATION"],
+    "write_families": ["contracts/development/dias", "docs/programmes/dias-v0-1/wp1", "fixtures/development_skills/dias", "registries/implementation/dias_v0_1", "schemas/development/dias", "src/ovc/development/skills/dias.py", "tests/development_skills/dias", "tools/ci/diasi_algorithmic_review.py"],
+    "reserved_boundaries": ["DIASI-G-DGS-CUTOVER-DRAIN", "DIASI-G-DGS-RETIRE-REMOVE", "DIASI-G-RACPR-ASSURANCE-COMPRESSION-GENERAL", "DIASI-G-RACPR-PROOF-SUBSTITUTION-PILOT"],
+    "rollback": "FORWARD_DISABLE_AND_PRESERVE_EVIDENCE",
+    "expires_on": null
+  }
+}

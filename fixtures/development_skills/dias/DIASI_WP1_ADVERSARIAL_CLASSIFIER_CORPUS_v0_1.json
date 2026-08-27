@@ -1,0 +1,25 @@
+{
+  "schema": "ovc-diasi-adversarial-classifier-corpus/v1",
+  "corpus_id": "DIASI-WP1-ADVERSARIAL-CLASSIFIER-CORPUS-v0.1",
+  "frozen_against_wp0_universe": "DIASI-WP0-QUALIFICATION-UNIVERSE-FROZEN-20260827",
+  "cases": [
+    {"id": "DIAS-CL-01", "action": {"action_id": "placement", "effects": ["PLACEMENT"]}, "expected": {"planes": ["FLOW"], "controlling_plane": "FLOW", "requires_split": false}},
+    {"id": "DIAS-CL-02", "action": {"action_id": "retry", "effects": ["RETRY", "EVENT_CURSOR"]}, "expected": {"planes": ["FLOW"], "controlling_plane": "FLOW", "requires_split": false}},
+    {"id": "DIAS-CL-03", "action": {"action_id": "qualify", "effects": ["QUALIFY"]}, "expected": {"planes": ["EVIDENCE"], "controlling_plane": "EVIDENCE", "requires_split": false}},
+    {"id": "DIAS-CL-04", "action": {"action_id": "source-role", "effects": ["ROUTE"], "source_consumer_role_change": true}, "expected": {"planes": ["FLOW", "EVIDENCE"], "controlling_plane": "EVIDENCE", "requires_split": false}},
+    {"id": "DIAS-CL-05", "action": {"action_id": "writer-transfer", "effects": ["TRANSFER_WRITER"]}, "expected": {"planes": ["AUTHORITY"], "controlling_plane": "AUTHORITY", "requires_split": false}},
+    {"id": "DIAS-CL-06", "action": {"action_id": "evidence-and-cutover", "effects": ["PRODUCE_EVIDENCE", "CUTOVER"]}, "expected": {"planes": ["EVIDENCE", "AUTHORITY"], "controlling_plane": "AUTHORITY", "requires_split": true}},
+    {"id": "DIAS-CL-07", "action": {"action_id": "route-and-live-write", "effects": ["ROUTE", "LIVE_WRITE"]}, "expected": {"planes": ["FLOW", "AUTHORITY"], "controlling_plane": "AUTHORITY", "requires_split": true}},
+    {"id": "DIAS-CL-08", "action": {"action_id": "retirement", "effects": ["RETIRE", "REMOVE"]}, "expected": {"planes": ["AUTHORITY"], "controlling_plane": "AUTHORITY", "requires_split": false}},
+    {"id": "DIAS-CL-09", "action": {"action_id": "proof", "effects": ["VALIDATE", "PROOF_SUBSTITUTE"]}, "expected": {"planes": ["EVIDENCE", "AUTHORITY"], "controlling_plane": "AUTHORITY", "requires_split": true}},
+    {"id": "DIAS-CL-10", "action": {"action_id": "owner-change", "effects": ["CHANGE_OWNER"], "authority_delta": "OWNER_TRANSFER"}, "expected": {"planes": ["AUTHORITY"], "controlling_plane": "AUTHORITY", "requires_split": false}},
+    {"id": "DIAS-CL-11", "action": {"action_id": "scientific-role", "effects": ["CHANGE_RESEARCH_ROLE", "EXPOSURE"]}, "expected": {"planes": ["EVIDENCE", "AUTHORITY"], "controlling_plane": "AUTHORITY", "requires_split": true}},
+    {"id": "DIAS-CL-12", "action": {"action_id": "successor", "effects": ["RELEASE_SUCCESSOR", "PRODUCE_EVIDENCE"]}, "expected": {"planes": ["FLOW", "EVIDENCE"], "controlling_plane": "EVIDENCE", "requires_split": false}}
+  ],
+  "negative_cases": [
+    {"id": "DIAS-CL-N01", "action": {"action_id": "implicit", "effects": []}, "expected_error": "DiasContractError"},
+    {"id": "DIAS-CL-N02", "action": {"action_id": "unknown", "effects": ["MAGIC"]}, "expected_error": "DiasContractError"},
+    {"id": "DIAS-CL-N03", "action": {"action_id": "duplicate", "effects": ["ROUTE", "ROUTE"]}, "expected_error": "DiasContractError"}
+  ],
+  "authority_effect": "NONE"
+}

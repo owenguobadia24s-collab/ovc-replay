@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/development/dias/diasi-common-substrate-v0.1",
+  "title": "DIASI common deterministic substrate records",
+  "oneOf": [
+    {"$ref": "#/$defs/authorityEnvelope"},
+    {"$ref": "#/$defs/consequenceClassification"},
+    {"$ref": "#/$defs/testDependencyManifest"},
+    {"$ref": "#/$defs/currentExecutionProjection"}
+  ],
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{40}([0-9a-f]{24})?$"},
+    "nonEmpty": {"type": "string", "minLength": 1},
+    "authorityEnvelope": {
+      "type": "object",
+      "required": ["programme_id", "plan_id", "packet_id", "gate_id", "authority_class", "authority_sources", "allowed_actions", "denied_actions", "write_families", "rollback"],
+      "properties": {
+        "programme_id": {"$ref": "#/$defs/nonEmpty"},
+        "plan_id": {"$ref": "#/$defs/nonEmpty"},
+        "packet_id": {"pattern": "^DIASI-WP"},
+        "gate_id": {"pattern": "^DIASI-G"},
+        "authority_class": {"enum": ["AUTO_EXECUTABLE", "OPERATOR_REQUIRED", "HARD_DENY"]},
+        "authority_sources": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/nonEmpty"}},
+        "allowed_actions": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/nonEmpty"}},
+        "denied_actions": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/nonEmpty"}},
+        "write_families": {"type": "array", "items": {"$ref": "#/$defs/nonEmpty"}},
+        "reserved_boundaries": {"type": "array", "uniqueItems": true, "items": {"pattern": "^DIASI-G"}},
+        "rollback": {"$ref": "#/$defs/nonEmpty"},
+        "expires_on": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "consequenceClassification": {
+      "type": "object",
+      "required": ["action_id", "effects", "planes", "controlling_plane", "requires_split", "disposition"],
+      "properties": {
+        "action_id": {"$ref": "#/$defs/nonEmpty"},
+        "effects": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/nonEmpty"}},
+        "planes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["FLOW", "EVIDENCE", "AUTHORITY"]}},
+        "controlling_plane": {"enum": ["FLOW", "EVIDENCE", "AUTHORITY"]},
+        "requires_split": {"type": "boolean"},
+        "disposition": {"$ref": "#/$defs/nonEmpty"}
+      },
+      "additionalProperties": false
+    },
+    "testDependencyManifest": {
+      "type": "object",
+      "required": ["programme_id", "packet_id", "tests", "unresolved_behavior"],
+      "properties": {
+        "programme_id": {"$ref": "#/$defs/nonEmpty"},
+        "packet_id": {"pattern": "^DIASI-WP"},
+        "tests": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+        "unresolved_behavior": {"const": "BLOCK"}
+      },
+      "additionalProperties": false
+    },
+    "currentExecutionProjection": {
+      "type": "object",
+      "required": ["programme_id", "resolved_facts", "shadow_only", "derivative", "authority_effect"],
+      "properties": {
+        "programme_id": {"$ref": "#/$defs/nonEmpty"},
+        "resolved_facts": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+        "shadow_only": {"const": true},
+        "derivative": {"const": true},
+        "authority_effect": {"const": "NONE"}
+      },
+      "additionalProperties": false
+    }
+  }
+}
