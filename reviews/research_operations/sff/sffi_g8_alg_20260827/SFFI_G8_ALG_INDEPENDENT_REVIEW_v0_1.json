@@ -1,0 +1,148 @@
+{
+  "schema": "ovc-sffi-g8-alg-independent-review/v0.1",
+  "review_id": "SFFI-G8-ALG-INDEPENDENT-20260827",
+  "gate_id": "SFFI-G8-ALG",
+  "programme_id": "OVC-SFF-CONFORMANCE-PREREG-v0.1",
+  "decision": "BLOCK",
+  "decision_scope": "WP1_THROUGH_WP7_MECHANICAL_IMPLEMENTATION_AT_EXACT_ORIGIN_MAIN",
+  "reviewed_ref": "origin/main",
+  "reviewed_commit": "2f5016621787653d7749e22e0c3a1694b6723b0c",
+  "reviewed_tree": "123dd62e3b543ea3b83d81c7dc35c9fdcce4b6c6",
+  "review_branch": "review/sffi-g8-alg-20260827",
+  "review_worktree": "C:/Users/Owner/OVC/worktrees/sffi-g8-review-20260827",
+  "reviewed_commit_authored_at": "2026-08-27T19:40:40+01:00",
+  "review_executed_at": "2026-08-27T19:53:42+01:00",
+  "reviewer": {
+    "reviewer_id": "OPENAI_CODEX_GPT5_INDEPENDENT_SFFI_G8_ALG_20260827",
+    "reviewer_class": "INDEPENDENT_IMPLEMENTATION_STAGE_ALGORITHM_REVIEWER",
+    "implementation_author": "owenguobadia24s-collab",
+    "independence_attestation": [
+      "REVIEWER_DID_NOT_IMPLEMENT_SFFI_WP1_THROUGH_WP7",
+      "REVIEW_BRANCH_WAS_CREATED_AFTER_WP7_FROM_EXACT_ORIGIN_MAIN",
+      "REVIEWER_ID_DIFFERS_FROM_ALL_WP1_THROUGH_WP7_COMMIT_AUTHORS",
+      "NO_IMPLEMENTATION_SOURCE_TEST_FIXTURE_OR_GOVERNING_PACKET_WAS_CHANGED_BY_REVIEW"
+    ]
+  },
+  "governing_evidence": {
+    "g0_operator_decision": "docs/programmes/sff-v0-1/implementation/SFFI_G0_OPERATOR_DECISION_v0_1.json",
+    "g0_gate_packet": "docs/programmes/sff-v0-1/implementation/SFFI_G0_GATE_PACKET_v0_1.json",
+    "fc0_reconciliation": "records/research_operations/sff/SFFI_FC0_RECONCILIATION_RECORD_v0_1.json",
+    "programme_state": "records/research_operations/sff/SFFI_PROGRAMME_STATE_v0_1.json",
+    "external_plan_identity_sha256": "6a928f6364c5b63e0c88e1d127da5be004b870f7fb76c75c07c35c5c2a12da53",
+    "external_design_identity_sha256": "1e9ff016667829e8851214314ca2931d693f7f8b98a569b28a13512054a261dc",
+    "external_bytes_available_in_repository": false,
+    "review_basis": "REPOSITORY_COURT_RECORD_AND_HASH_BINDINGS_ONLY"
+  },
+  "identity_and_chronology": {
+    "status": "PASS",
+    "origin_main_exact": true,
+    "wp1_wp7_linear_parent_chain": true,
+    "wp1_wp7_baseline_tree_bindings_exact": true,
+    "wp1_wp7_commit_times_strictly_increasing": true,
+    "review_after_implementation": true
+  },
+  "test_summary": {
+    "repository_sff_and_authority_pytest": {"total": 54, "passed": 54, "failed": 0, "command": "python -m pytest tests/research_operations/sff tests/authority/test_active_namespace_allowlist.py -q"},
+    "independent_reproduction": {"total": 32, "passed": 26, "blocked": 6, "exit_code": 1},
+    "combined": {"total": 86, "passed": 80, "blocked_or_failed": 6}
+  },
+  "frozen_evidence": {
+    "harness": "reviews/research_operations/sff/sffi_g8_alg_20260827/reproduce_review.py",
+    "harness_sha256": "bb965529232fc519fa1bcd4e5c5407c59517821bef0c334173876296f62071bd",
+    "input": "reviews/research_operations/sff/sffi_g8_alg_20260827/frozen_input_v0_1.json",
+    "input_sha256": "5a3c1e60de3e47dd7609bbfb6138c96069e5c2edc44ab429d5dcbe8ee8bb729d",
+    "expected_output": "reviews/research_operations/sff/sffi_g8_alg_20260827/frozen_expected_output_v0_1.json",
+    "expected_output_sha256": "d68deb88a3003de2505fb96f6260468e142707008efec8ecc7c4d0482947ca08",
+    "actual_output": "reviews/research_operations/sff/sffi_g8_alg_20260827/actual_output_v0_1.json",
+    "actual_output_sha256": "cadcb205703ca32983904e7d3275f24493cd5b262a2401da8e6584fd5edf6c6a",
+    "test_execution": "reviews/research_operations/sff/sffi_g8_alg_20260827/test_execution_v0_1.json"
+  },
+  "dimension_results": {
+    "identity_chronology": "PASS",
+    "frontier_mechanics": "PASS",
+    "risk_and_denominators": "BLOCK",
+    "uncertainty_and_abstention": "PASS",
+    "falsification_and_failure": "BLOCK",
+    "preregistration_compiler": "BLOCK",
+    "authority_firewall": "PASS_BOUNDED_SYNTHETIC_OUTPUT_ONLY",
+    "no_future_leakage_and_outcome_access": "BLOCK",
+    "reviewer_independence": "PASS"
+  },
+  "blocking_findings": [
+    {
+      "finding_id": "SFFI-G8-B01",
+      "severity": "BLOCKING",
+      "title": "Non-finite complete probability distribution is accepted",
+      "implementation_ref": "src/ovc/research_operations/sff/risk.py:78",
+      "evidence_case": "RISK-04",
+      "observed": "DistributionRecord({'A': NaN}, 'COMPLETE', 'KNOWN') is accepted because comparisons and the sum tolerance do not reject NaN.",
+      "violated_claim": "SFFI-WP3 distribution_completeness PASS_FAIL_CLOSED",
+      "required_disposition": "Reject every non-finite probability before range and total checks."
+    },
+    {
+      "finding_id": "SFFI-G8-B02",
+      "severity": "BLOCKING",
+      "title": "Risk-set manifest permits repeated-origin pseudo-independence",
+      "implementation_ref": "src/ovc/research_operations/sff/risk.py:40",
+      "evidence_case": "RISK-05",
+      "observed": "Two snapshots from one origin with different dependence_group_id values are accepted while repeated_snapshot_policy is emitted as DEPENDENT_WITHIN_ORIGIN.",
+      "violated_claim": "SFFI-WP3 repeated_snapshot_dependence PASS",
+      "required_disposition": "Enforce one dependence group per origin during manifest construction."
+    },
+    {
+      "finding_id": "SFFI-G8-B03",
+      "severity": "BLOCKING",
+      "title": "Challenger comparison results do not participate in claim decision",
+      "implementation_ref": "src/ovc/research_operations/sff/claims.py:59",
+      "evidence_cases": ["FAL-02", "FAL-03"],
+      "observed": "A credible simpler challenger with FAIL on matched support or full population still yields MECHANICAL_ELIGIBLE because decide_claim checks only credible_simpler and ignores both result fields.",
+      "violated_claims": ["SFFI-WP5 matched_support PASS_REQUIRED", "SFFI-WP5 full_population PASS_REQUIRED", "SFFI-WP5 challengers PASS_CREDIBLE_SIMPLER"],
+      "required_disposition": "Make non-passing challenger comparisons blocking and preserve non-compensation."
+    },
+    {
+      "finding_id": "SFFI-G8-B04",
+      "severity": "BLOCKING",
+      "title": "Preregistration compiler accepts outcome-contaminated contradictory bundles",
+      "implementation_ref": "src/ovc/research_operations/sff/preregistration.py:75",
+      "evidence_cases": ["PRE-04", "PRE-05"],
+      "observed": "The compiler emits a receipt claiming protected_outcomes_accessed=false when feasibility_evidence explicitly says OUTCOME_EXPOSED_NONCONFIRMATORY or another decision field explicitly records protected_outcomes_accessed=true.",
+      "violated_claims": ["SFFI-WP7 outcome_embargo LOCKED_NO_ACCESS", "SFFI-WP6 feasibility contamination must be typed nonconfirmatory", "No future leakage/outcome access boundary"],
+      "required_disposition": "Validate cross-field consistency and reject any protected-outcome access or contaminated feasibility before receipt creation."
+    },
+    {
+      "finding_id": "SFFI-G8-B05",
+      "severity": "BLOCKING_ASSURANCE_GAP",
+      "title": "Repository adversarial corpus is materially self-fulfilling",
+      "implementation_refs": ["src/ovc/research_operations/sff/adversarial.py:70", "src/ovc/research_operations/sff/adversarial.py:83"],
+      "evidence_case": "ADV-01",
+      "observed": "Multiple attacks pass because _exercise directly raises or returns the expected literal instead of invoking the production path. The corpus reports 31/31 while independent production-path cases expose blockers.",
+      "violated_claim": "SFFI-WP6 adversarial_total 31 and adversarial_passed 31 are not sufficient execution evidence",
+      "required_disposition": "Replace literal outcome stubs with attacks against the actual WP1-WP7 public mechanics."
+    }
+  ],
+  "positive_findings": [
+    "CANONICAL_IDENTITY_IS_ORDER_STABLE_AND_SEMANTICALLY_SENSITIVE",
+    "STRICT_ANTECEDENT_CUTOFF_CHRONOLOGY_REJECTS_EQUALITY_AND_FUTURE",
+    "ONE_STEP_FRONTIER_REPLAY_IS_BYTE_DETERMINISTIC",
+    "OWNER_MISMATCH_FAILS_CLOSED",
+    "DECLARED_RISK_DENOMINATOR_RECONCILES_WHEN_INPUT_IS_LAWFUL",
+    "MISSING_OWNER_STATE_BECOMES_NOT_EVALUABLE",
+    "UNKNOWN_SUPPORT_DOES_NOT_IMPLY_ZERO",
+    "STALE_SUPPORT_AND_UNEARNED_UNCERTAINTY_ABSTAIN_WITHOUT_DISTRIBUTION",
+    "SAME_GENERATION_MODEL_UPDATE_AND_FAILURE_RESCUE_ARE_PROHIBITED",
+    "VALID_SYNTHETIC_PREREGISTRATION_IS_BYTE_DETERMINISTIC",
+    "DIRECT_EMBARGO_BREACH_AND_ADAPTIVE_MODEL_ARE_REJECTED",
+    "SFF_NAMESPACE_HAS_NO_NETWORK_CLIENT_IMPORTS_OR_REAL_SOURCE_LOADER",
+    "COMPILED_RECEIPT_REMAINS_SYNTHETIC_AND_CANNOT_FREEZE_A_REAL_STUDY"
+  ],
+  "implementation_changes": "NONE",
+  "review_evidence_changes_only": true,
+  "disposition": {
+    "g8_alg_pass_eligible": false,
+    "downstream_real_source_activation_eligible": false,
+    "quarantine": "KEEP_ALL_SFF_OUTPUTS_SYNTHETIC_REFERENCE_ONLY; DO_NOT_PROMOTE_OR_FREEZE_REAL_STUDY",
+    "remediation": "IMPLEMENTATION_OWNER_MUST_CORRECT_BLOCKERS_ON_A_SEPARATE_AUTHORIZED_PACKET_AND_REQUEST_FRESH_INDEPENDENT_REVIEW",
+    "pr_opened": false,
+    "merge_performed": false
+  }
+}

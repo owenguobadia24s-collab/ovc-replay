@@ -1,0 +1,28 @@
+{
+  "schema": "ovc-sffi-g8-alg-test-execution/v0.1",
+  "review_id": "SFFI-G8-ALG-INDEPENDENT-20260827",
+  "executed_at": "2026-08-27T19:53:42+01:00",
+  "worktree": "C:/Users/Owner/OVC/worktrees/sffi-g8-review-20260827",
+  "reviewed_commit": "2f5016621787653d7749e22e0c3a1694b6723b0c",
+  "runs": [
+    {
+      "run_id": "REPOSITORY_SFF_AND_AUTHORITY",
+      "command": "python -m pytest tests/research_operations/sff tests/authority/test_active_namespace_allowlist.py -q",
+      "exit_code": 0,
+      "total": 54,
+      "passed": 54,
+      "failed": 0,
+      "summary": "54 passed in 0.73s"
+    },
+    {
+      "run_id": "INDEPENDENT_CLEAN_PROCESS_REPRODUCTION",
+      "command": "python -I -B reviews/research_operations/sff/sffi_g8_alg_20260827/reproduce_review.py --input reviews/research_operations/sff/sffi_g8_alg_20260827/frozen_input_v0_1.json --expected reviews/research_operations/sff/sffi_g8_alg_20260827/frozen_expected_output_v0_1.json --output reviews/research_operations/sff/sffi_g8_alg_20260827/actual_output_v0_1.json",
+      "exit_code": 1,
+      "total": 32,
+      "passed": 26,
+      "blocked": 6,
+      "summary": "Expected non-zero review result because implementation defects are preserved as BLOCK evidence."
+    }
+  ],
+  "combined": {"total": 86, "passed": 80, "blocked_or_failed": 6}
+}
