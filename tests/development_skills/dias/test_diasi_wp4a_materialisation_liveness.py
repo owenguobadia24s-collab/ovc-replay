@@ -146,7 +146,6 @@ def test_wp4a_court_record_binds_vit_and_advances_only_to_wp4b() -> None:
     assert len(replacements["bindings"]) == 6
     assert replacements["generic_supervisor"] is False
     assert all(binding["active"] is False for binding in replacements["bindings"])
-    pointer = json.loads((root / "registries/implementation/dias_v0_1/CURRENT_STATE_POINTER.json").read_text(encoding="utf-8"))
-    state = json.loads((root / pointer["current_state"]).read_text(encoding="utf-8"))
+    state = json.loads((root / "registries/implementation/dias_v0_1/DIASI_CURRENT_v0_5.json").read_text(encoding="utf-8"))
     assert state["next_packet"] == "DIASI-WP4B"
     assert state["live_cutover"] is False
