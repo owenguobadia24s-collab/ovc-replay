@@ -126,8 +126,9 @@ def test_wp5_court_record_auto_ratifies_g5_and_stops_at_reserved_gate() -> None:
     assert gate["canonical_operator_phrase"] == "OVC APPROVE DIASI-G-DGS-CUTOVER-DRAIN PASS"
     assert gate["recommendation"] == "PASS"
     assert "CERS_PES_DELETION_OR_REMOVAL" in gate["explicit_denials"]
-    pointer = json.loads((root / "registries/implementation/dias_v0_1/CURRENT_STATE_POINTER.json").read_text(encoding="utf-8"))
-    state = json.loads((root / pointer["current_state"]).read_text(encoding="utf-8"))
+    state = json.loads(
+        (root / "registries/implementation/dias_v0_1/DIASI_CURRENT_v0_7.json").read_text(encoding="utf-8")
+    )
     assert state["operator_decision_required"] is True
     assert state["live_cutover"] is False
     assert state["next_reserved_operator_gate"] == "DIASI-G-DGS-CUTOVER-DRAIN"
