@@ -119,7 +119,6 @@ def test_wp6_artifacts_bind_canonical_ids_and_pending_live_pilot() -> None:
         assert binding["logical_id"] == canonical_id(binding["payload"])
     drain = load(WP6 / "DIASI_WP6_IN_FLIGHT_DRAIN_RECORD.json")
     assert drain["counts"]["unknown"] == drain["counts"]["undispositioned"] == 0
-    pointer = load(ROOT / "registries/implementation/dias_v0_1/CURRENT_STATE_POINTER.json")
-    state = load(ROOT / pointer["current_state"])
+    state = load(ROOT / "registries/implementation/dias_v0_1/DIASI_CURRENT_v0_9.json")
     assert state["next_packet"] == "DIASI-WP6-LIVE-PILOT"
     assert state["retirement"] is False and state["proof_substitution"] is False
