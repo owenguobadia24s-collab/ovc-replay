@@ -4,8 +4,8 @@ This namespace is bounded synthetic research mechanics and conformance only.
 It intentionally contains no real-source loader, target activation, semantic
 promotion, Validation consumption, OPT-F admission, publication adapter,
 probability-as-exposure, risk, trading, execution, agent-write authority, or
-mutable model runtime.  Every missing authority or owner dependency fails
-closed.
+mutable model runtime.  Resolution fails closed for every missing authority or
+owner dependency.
 """
 
 from .core import (
