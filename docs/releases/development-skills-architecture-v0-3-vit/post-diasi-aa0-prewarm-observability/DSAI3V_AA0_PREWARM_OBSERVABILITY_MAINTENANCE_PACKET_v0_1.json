@@ -1,0 +1,51 @@
+{
+  "schema": "ovc-dsai-vit-owner-local-maintenance-packet/v1",
+  "packet_id": "DSAI3V-AA0-PREWARM-OBSERVABILITY-MAINT-v0.1",
+  "title": "Post-DIASI AA0 prewarm integration latency observability",
+  "status": "PACKET_READY_PENDING_EXACT_LINUX_AA0",
+  "owner": "DSAI_VIT",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "programme_state": "COMPLETED_NOT_REOPENED",
+  "authority_delta": "NONE",
+  "authority_manifest_id": "5e85b3a1b5cd163250e3209c56b1d7ea21ca7cecf90705147d13e41fd58bf41c",
+  "dependency_frontier_id": "3f29a9eae3eafccc028632c14cc6d9db77f5d7fed7020b3664bb5885aee81757",
+  "maintenance_basis": [
+    "registries/authority/DSAI3V_VIT_GENERAL_AUTHORITY_v0_1.json",
+    "registries/authority/DEFAULT_EXECUTION_SUBSTRATE.json",
+    "registries/development/skills/development_latency_completion_receipt_v0_1.json"
+  ],
+  "purpose": "Compile deterministic machine-readable integration latency reports from existing GitHub and owner-local receipt evidence without write or assurance authority.",
+  "write_set": [
+    "tools/ci/aa0_integration_latency_report.py",
+    "tests/development_skills/test_aa0_integration_latency_report.py",
+    "docs/releases/development-skills-architecture-v0-3-vit/post-diasi-aa0-prewarm-observability/DSAI3V_AA0_PREWARM_OBSERVABILITY_AUTHORITY_MANIFEST_v0_1.json",
+    "docs/releases/development-skills-architecture-v0-3-vit/post-diasi-aa0-prewarm-observability/DSAI3V_AA0_PREWARM_OBSERVABILITY_DEPENDENCY_FRONTIER_v0_1.json",
+    "docs/releases/development-skills-architecture-v0-3-vit/post-diasi-aa0-prewarm-observability/DSAI3V_AA0_PREWARM_OBSERVABILITY_MAINTENANCE_PACKET_v0_1.json",
+    "docs/releases/development-skills-architecture-v0-3-vit/post-diasi-aa0-prewarm-observability/DSAI3V_AA0_PREWARM_OBSERVABILITY_QA_PACKET_v0_1.json"
+  ],
+  "report_contract": {
+    "evidence_schema": "ovc-aa0-integration-latency-evidence/v1",
+    "report_schema": "ovc-aa0-integration-latency-report/v1",
+    "output": "CANONICAL_JSON_STDOUT_ONLY",
+    "timestamp_precedence": [
+      "GITHUB_API",
+      "OWNER_LOCAL_RECEIPT",
+      "EXACT_LOG",
+      "CONTROLLER_OBSERVATION"
+    ],
+    "missing_timestamp": "NULL_PLUS_TYPED_WARNING",
+    "identity_mismatch": "FAIL_CLOSED"
+  },
+  "validation_specimen": "THIS_SAME_USEFUL_PACKET",
+  "assurance_machinery_changes": false,
+  "explicit_non_authority": [
+    "NO_GITHUB_OR_REPOSITORY_WRITE_API",
+    "NO_ASSURANCE_WORKFLOW_HARNESS_OR_CACHE_CHANGE",
+    "NO_NEW_EVIDENCE_STORE",
+    "NO_SUPERVISOR_DAEMON_SERVICE_SCHEDULER_OR_CONTROL_PLANE",
+    "NO_RULESET_OR_BYPASS_CHANGE",
+    "NO_DIASI_PES_OR_CERS_RUNTIME_PARTICIPATION",
+    "NO_RAC_AUTHORITY_OR_PROOF_SUBSTITUTION_CHANGE"
+  ],
+  "rollback": "Forward-revert the read-only latency compiler, its tests and packet artifacts while preserving all historical timing evidence, integration receipts and Git history."
+}
