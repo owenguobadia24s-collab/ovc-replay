@@ -47,10 +47,13 @@ def test_vit_bindings_remain_historical_gate_preparation_evidence() -> None:
         assert binding["logical_id"] == canonical(binding["payload"])
 
 
-def test_active_route_and_writer_have_retirement_complete_generation_3() -> None:
+def test_active_route_and_writer_are_owner_local_generation_3_after_sunset() -> None:
     route = load(ROOT / "registries/development/skills/VIT_SELECTED_CLASS_ROUTE_v0_1.json")
     writer = load(ROOT / "registries/development/skills/VIT_QUALIFICATION_WRITER_AUTHORITY_v0_1.json")
     assert route["route_generation"] == route["writer_generation"] == writer["generation"] == 3
-    assert route["status"] == "ACTIVE_RETIREMENT_COMPLETE"
+    assert route["schema"] == "ovc-vit-owner-local-selected-class-route/v1"
+    assert route["status"] == writer["status"] == "ACTIVE_OWNER_LOCAL"
+    assert route["owner"] == "DSAI_VIT"
+    assert writer["owner"] == "VIT_QUALIFICATION_OWNER_LOCAL"
     assert "old_route" not in route and "incumbent_writer" not in writer
     assert route["non_selected_classes"] == "SCOPED_NOT_RETIRED_UNCHANGED"

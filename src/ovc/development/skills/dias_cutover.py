@@ -1,4 +1,4 @@
-"""Fail-closed owner-local route after exact-scope retirement removal."""
+"""Fail-closed VIT owner-local route; historical module path retained."""
 
 from __future__ import annotations
 
@@ -11,10 +11,6 @@ SUCCESSOR_ROUTE = "DSAI_VIT_AND_VIT_QUALIFICATION_OWNER_LOCAL"
 SUCCESSOR_WRITER = "VIT_QUALIFICATION_OWNER_LOCAL"
 PHYSICAL_CONTROLLER = "DSAI_VIT_PHYSICAL_CONTROLLER"
 PHYSICAL_GATEWAY = "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY"
-CUTOVER_GATE = "DIASI-G-DGS-CUTOVER-DRAIN"
-CUTOVER_PHRASE = "OVC APPROVE DIASI-G-DGS-CUTOVER-DRAIN PASS"
-RETIREMENT_GATE = "DIASI-G-DGS-RETIRE-REMOVE"
-RETIREMENT_PHRASE = "OVC APPROVE DIASI-G-DGS-RETIRE-REMOVE PASS"
 ACTIVE_GENERATION = 3
 
 
@@ -37,14 +33,12 @@ class CutoverState:
 
 
 def validate_live_registry(registry: Mapping[str, object]) -> CutoverState:
-    if registry.get("schema") != "ovc-diasi-selected-class-live-route/v2":
-        raise DiasCutoverError("DIASI_ROUTE_REGISTRY_SCHEMA_INVALID")
-    if registry.get("status") != "ACTIVE_RETIREMENT_COMPLETE":
-        raise DiasCutoverError("DIASI_ROUTE_RETIREMENT_NOT_COMPLETE")
-    if registry.get("cutover_gate_id") != CUTOVER_GATE:
-        raise DiasCutoverError("DIASI_ROUTE_CUTOVER_AUTHORITY_INVALID")
-    if registry.get("retirement_gate_id") != RETIREMENT_GATE or registry.get("retirement_operator_phrase") != RETIREMENT_PHRASE:
-        raise DiasCutoverError("DIASI_ROUTE_RETIREMENT_AUTHORITY_INVALID")
+    if registry.get("schema") != "ovc-vit-owner-local-selected-class-route/v1":
+        raise DiasCutoverError("VIT_OWNER_LOCAL_ROUTE_REGISTRY_SCHEMA_INVALID")
+    if registry.get("status") != "ACTIVE_OWNER_LOCAL" or registry.get("owner") != "DSAI_VIT":
+        raise DiasCutoverError("VIT_OWNER_LOCAL_ROUTE_NOT_ACTIVE")
+    if any(key in registry for key in ("programme_id", "packet_id", "cutover_gate_id", "retirement_gate_id", "retirement_operator_phrase")):
+        raise DiasCutoverError("DIASI_ACTIVE_CONTROL_BINDING_PRESENT_AFTER_SUNSET")
     if "old_route" in registry or "incumbent_writer" in registry:
         raise DiasCutoverError("DIASI_ROUTE_RETIRED_AUTHORITY_PRESENT")
     state = CutoverState(
