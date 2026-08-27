@@ -1,0 +1,133 @@
+{
+  "schema": "ovc-sffi-g8-alg-r2-independent-review/v0.1",
+  "review_id": "SFFI-G8-ALG-R2-INDEPENDENT-20260827",
+  "gate_id": "SFFI-G8-ALG",
+  "programme_id": "OVC-SFF-CONFORMANCE-PREREG-v0.1",
+  "decision": "PASS",
+  "decision_scope": "WP1_THROUGH_WP7_MECHANICS_AND_WP8_REMEDIATION_AT_EXACT_ORIGIN_MAIN",
+  "reviewed_ref": "origin/main",
+  "reviewed_commit": "ddc4a57f1b7d50380798ea23d70a885898be1db8",
+  "reviewed_tree": "50d4e8603d145bdb8b54ab82e23899529b791514",
+  "review_branch": "review/sffi-g8-alg-r2-20260827",
+  "review_worktree": "C:/Users/Owner/OVC/worktrees/sffi-g8-review-r2-20260827",
+  "reviewed_commit_authored_at": "2026-08-27T20:17:12+01:00",
+  "review_executed_at": "2026-08-27T20:23:36+01:00",
+  "reviewer": {
+    "reviewer_id": "OPENAI_CODEX_GPT5_INDEPENDENT_SFFI_G8_ALG_R2_20260827",
+    "reviewer_class": "FRESH_INDEPENDENT_IMPLEMENTATION_STAGE_ALGORITHM_REVIEWER",
+    "implementation_author": "owenguobadia24s-collab",
+    "independence_attestation": [
+      "REVIEWER_DID_NOT_IMPLEMENT_WP1_THROUGH_WP7",
+      "REVIEWER_DID_NOT_IMPLEMENT_WP8_REMEDIATION_R1",
+      "NEW_REVIEW_BRANCH_AND_WORKTREE_CREATED_AFTER_REMEDIATION_FROM_EXACT_ORIGIN_MAIN",
+      "REVIEWER_ID_DIFFERS_FROM_ALL_IMPLEMENTATION_AND_REMEDIATION_COMMIT_AUTHORS",
+      "NO_IMPLEMENTATION_SOURCE_TEST_FIXTURE_OR_GOVERNING_RECORD_WAS_CHANGED_BY_REVIEW"
+    ]
+  },
+  "governing_evidence": {
+    "g0_operator_decision": "docs/programmes/sff-v0-1/implementation/SFFI_G0_OPERATOR_DECISION_v0_1.json",
+    "g0_gate_packet": "docs/programmes/sff-v0-1/implementation/SFFI_G0_GATE_PACKET_v0_1.json",
+    "fc0_reconciliation": "records/research_operations/sff/SFFI_FC0_RECONCILIATION_RECORD_v0_1.json",
+    "prior_independent_block_review": "docs/programmes/sff-v0-1/reviews/sffi_g8_alg_20260827/SFFI_G8_ALG_INDEPENDENT_REVIEW_v0_1.json",
+    "remediation_record": "docs/programmes/sff-v0-1/wp8/SFFI_WP8_REMEDIATION_RECORD_v0_1.json",
+    "programme_state": "records/research_operations/sff/SFFI_PROGRAMME_STATE_v0_1.json",
+    "external_plan_identity_sha256": "6a928f6364c5b63e0c88e1d127da5be004b870f7fb76c75c07c35c5c2a12da53",
+    "external_design_identity_sha256": "1e9ff016667829e8851214314ca2931d693f7f8b98a569b28a13512054a261dc",
+    "review_basis": "REPOSITORY_COURT_RECORD_AND_HASH_BINDINGS_ONLY"
+  },
+  "identity_and_chronology": {
+    "status": "PASS",
+    "origin_main_exact": true,
+    "reviewed_tree_exact": true,
+    "wp1_wp7_linear_parent_chain": true,
+    "prior_block_evidence_and_wp8_remediation_linear_parent_chain": true,
+    "all_baseline_tree_bindings_exact": true,
+    "commit_times_strictly_increasing": true,
+    "fresh_review_after_remediation": true
+  },
+  "test_summary": {
+    "repository_sff_and_authority_pytest": {"total": 58, "passed": 58, "failed": 0, "command": "python -m pytest tests/research_operations/sff tests/authority/test_active_namespace_allowlist.py -q"},
+    "independent_isolated_reproduction": {"total": 36, "passed": 36, "blocked": 0, "exit_code": 0},
+    "combined": {"total": 94, "passed": 94, "blocked_or_failed": 0}
+  },
+  "frozen_evidence": {
+    "harness": "docs/programmes/sff-v0-1/reviews/sffi_g8_alg_r2_20260827/reproduce_review.py",
+    "harness_sha256": "31d5cdef09718f3a09d73e6aa5ca17369890d461dc04c943446a47c8ed3e811f",
+    "input": "docs/programmes/sff-v0-1/reviews/sffi_g8_alg_r2_20260827/frozen_input_v0_1.json",
+    "input_sha256": "ae9e4d27ebaf97380478f178cd7d314dbf615de615e84d586e24aed1712bb278",
+    "expected_output": "docs/programmes/sff-v0-1/reviews/sffi_g8_alg_r2_20260827/frozen_expected_output_v0_1.json",
+    "expected_output_sha256": "b1c8f2b26c7553a313011800ccd7520b36192a8fd597ae58c5c8666a95c2131a",
+    "actual_output": "docs/programmes/sff-v0-1/reviews/sffi_g8_alg_r2_20260827/actual_output_v0_1.json",
+    "actual_output_sha256": "2a2a532df7e8508e73c754a0a8e1c7a221039cf3b7a40e073900dd3dc2926f9f",
+    "test_execution": "docs/programmes/sff-v0-1/reviews/sffi_g8_alg_r2_20260827/test_execution_v0_1.json"
+  },
+  "dimension_results": {
+    "identity_chronology": "PASS",
+    "frontier_mechanics": "PASS",
+    "risk_and_denominators": "PASS",
+    "uncertainty_and_abstention": "PASS",
+    "falsification_and_failure": "PASS",
+    "preregistration_compiler": "PASS",
+    "authority_firewall": "PASS_BOUNDED_SYNTHETIC_OUTPUT_ONLY",
+    "no_future_leakage_and_outcome_access": "PASS",
+    "reviewer_independence": "PASS"
+  },
+  "prior_blocker_retest": [
+    {
+      "finding_id": "SFFI-G8-B01",
+      "status": "PASS_REMEDIATED",
+      "evidence_cases": ["RISK-04", "R2-B01"],
+      "finding": "NaN and both infinities are rejected before distribution range and total checks."
+    },
+    {
+      "finding_id": "SFFI-G8-B02",
+      "status": "PASS_REMEDIATED",
+      "evidence_case": "RISK-05",
+      "finding": "A repeated origin cannot be assigned multiple dependence groups."
+    },
+    {
+      "finding_id": "SFFI-G8-B03",
+      "status": "PASS_REMEDIATED",
+      "evidence_cases": ["FAL-02", "FAL-03", "R2-B03"],
+      "finding": "Matched-support and full-population challenger failures are non-compensating blockers, including across multiple challengers."
+    },
+    {
+      "finding_id": "SFFI-G8-B04",
+      "status": "PASS_REMEDIATED",
+      "evidence_cases": ["PRE-04", "PRE-05", "R2-B04"],
+      "finding": "Outcome-contaminated feasibility and protected-outcome access at nested mapping/list depth are rejected before receipt creation."
+    },
+    {
+      "finding_id": "SFFI-G8-B05",
+      "status": "PASS_REMEDIATED",
+      "evidence_cases": ["ADV-01", "R2-B05"],
+      "finding": "The 31-case corpus passes, the dispatcher calls required production validators/classes, all six remediation helpers are condition-guarded, and no corpus-expected literal is raised unguarded."
+    }
+  ],
+  "blocking_findings": [],
+  "positive_findings": [
+    "ALL_PRIOR_B01_THROUGH_B05_BLOCKERS_REMEDIATED",
+    "CANONICAL_IDENTITY_AND_STRICT_CHRONOLOGY_PASS",
+    "ONE_STEP_FRONTIER_REPLAY_AND_OWNER_BINDING_PASS",
+    "FULL_POPULATION_DENOMINATOR_AND_DEPENDENCE_PASS",
+    "UNKNOWN_SUPPORT_AND_UNEARNED_UNCERTAINTY_ABSTAIN",
+    "STATIC_MODEL_AND_SAME_GENERATION_RESCUE_FIREWALLS_PASS",
+    "FALSIFICATION_IS_NON_COMPENSATING_ACROSS_DIMENSIONS_AND_CHALLENGERS",
+    "PREREGISTRATION_IS_DETERMINISTIC_ATOMIC_AND_OUTCOME_EMBARGOED",
+    "WP6_CORPUS_EXECUTES_CONDITION_GUARDED_PRODUCTION_PATHS",
+    "SFF_NAMESPACE_HAS_NO_NETWORK_CLIENT_IMPORTS_OR_REAL_SOURCE_LOADER",
+    "OUTPUTS_REMAIN_SYNTHETIC_REFERENCE_ONLY_WITH_NO_SCIENTIFIC_AUTHORITY_EFFECT"
+  ],
+  "implementation_changes": "NONE",
+  "review_evidence_changes_only": true,
+  "disposition": {
+    "g8_alg_mechanical_pass_eligible": true,
+    "scientific_claim_created": false,
+    "real_source_activation_created": false,
+    "validation_access_created": false,
+    "publication_or_execution_authority_created": false,
+    "later_operator_reserved_gates_preserved": true,
+    "pr_opened": false,
+    "merge_performed": false
+  }
+}
