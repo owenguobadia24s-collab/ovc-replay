@@ -1,0 +1,56 @@
+{
+  "schema": "ovc-diasi-selected-class-live-transaction-receipt/v1",
+  "receipt_id": "40832172320070cbd712796ddde0bdc6e3e96b16e4c06235bcf671153e9d3e70",
+  "payload": {
+    "programme_id": "OVC-DIAS-CONFORMANCE-v0.1",
+    "packet_id": "DIASI-WP6-LIVE-PILOT",
+    "selected_class": "DSAI_VIT_RECEIPT_ONLY_V0_1",
+    "transaction_kind": "EXACT_RECEIPT_ONLY_REFERENCE_ASSURED_LIVE_PILOT",
+    "cutover_activation": {
+      "commit": "908408cbbf47a7be15c45f0ffa2de7ad09574b69",
+      "tree": "a1639b5455ca0c526237eb99cf323a0163ecffca",
+      "completion_proof": "2ebe47e6df15870918a9a3c1f0dbe94b7d45b9eb9c397397db9bd0cb3b15731a"
+    },
+    "route": {
+      "owner": "DSAI_VIT_OWNER_LOCAL",
+      "route_generation": 2,
+      "qualification_writer": "VIT_QUALIFICATION_OWNER_LOCAL",
+      "writer_generation": 2,
+      "incumbent_selected_class_status": "DISABLED_RETAINED_FENCED_GENERATION_1",
+      "physical_controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
+      "physical_gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+      "parallel_physical_writer": false
+    },
+    "qualification_ledger_pre_transaction_head": "5e5ec5af751dbd9da0d8ddf1ca1235eb415c3887",
+    "authority_manifest_id": "0dc1440418893b86160e0c897cafcd3aa641e70412a21c38f7dba31338855f2e",
+    "dependency_frontier_id": "c91f101b9b6e2de9d9b6c0a36fa6ac0d546af187c5f6940514ed50cd60b8e1d0",
+    "assurance": {
+      "mode": "COMPLETE_CANONICAL_REFERENCE",
+      "required_checks": [
+        "VIT routing preflight",
+        "OVC profile assurance",
+        "SIQ READY admission",
+        "canonical pytest shard 0",
+        "canonical pytest shard 1",
+        "canonical pytest shard 2",
+        "canonical pytest shard 3",
+        "pytest-unittest-parity",
+        "runner-parity",
+        "tests",
+        "OVC merge readiness"
+      ],
+      "proof_substitution": false
+    },
+    "expected_completion": {
+      "protected_squash_merge": true,
+      "exact_post_write_tree_equality": true,
+      "four_content_addressed_receipts": true,
+      "single_successor": true,
+      "late_physical_binding": true
+    },
+    "authority_effect": "NONE_RECEIPT_ONLY_TRANSACTION",
+    "global_cers_state_change": false,
+    "non_selected_class_change": false,
+    "retirement": false
+  }
+}
