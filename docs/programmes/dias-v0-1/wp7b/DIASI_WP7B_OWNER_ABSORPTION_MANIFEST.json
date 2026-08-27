@@ -1,0 +1,20 @@
+{
+  "schema": "ovc-diasi-owner-absorption-manifest/v1",
+  "programme_id": "OVC-DIAS-CONFORMANCE-v0.1",
+  "packet_id": "DIASI-WP7B",
+  "bindings": [
+    {"function": "PACKET_READY_PIP_AND_INTEGRATION_TRANSACTION", "owner": "DSAI_VIT", "surfaces": ["src/ovc/development/skills/dias_packet.py", "src/ovc/development/skills/dias_transaction.py"], "owner_local": true},
+    {"function": "QUALIFICATION_ENVELOPE_HEAD_POINTER_AND_IDEMPOTENT_REPLAY", "owner": "VIT_QUALIFICATION_OWNER_LOCAL", "surfaces": ["tools/ci/vit_qualification_owner.py", "registries/development/skills/VIT_QUALIFICATION_WRITER_AUTHORITY_v0_1.json"], "owner_local": true},
+    {"function": "REPOSITORY_PROTECTION_AND_PHYSICAL_MATERIALISATION", "owner": "DSAI_SIQ_PHYSICAL_CONTROLLER", "surfaces": ["src/ovc/development/skills/dias_materialisation.py", "registries/development/skills/VIT_PHYSICAL_MAIN_EXCLUSIVITY_v0_1.json"], "owner_local": true},
+    {"function": "RECEIPTS_AND_CURRENT_EXECUTION_PROJECTION", "owner": "VIT_SIQ_OWNER_LOCAL_SURFACES", "surfaces": ["src/ovc/development/skills/vit_completion_runtime.py", "src/ovc/development/skills/vit_current_state.py"], "owner_local": true},
+    {"function": "PROOF_CURRENTNESS_REFERENCE_DEBT", "owner": "RAC_ASYNC_ASSURANCE", "surfaces": ["src/ovc/development/skills/dias_racpr.py", "src/ovc/development/skills/async_assurance.py"], "mode": "REFERENCE_ONLY"},
+    {"function": "HISTORICAL_CERS_PES_INTERPRETATION", "owner": "GOVERNED_HISTORY", "surfaces": ["src/ovc/development/skills/dias_history.py", "docs/programmes/dias-v0-1/wp7a/DIASI_WP7A_HISTORICAL_INTERPRETATION_BUNDLE.json"], "active_runtime": false}
+  ],
+  "diasi_active_scheduler": false,
+  "diasi_active_physical_writer": false,
+  "diasi_independent_currentness_authority": false,
+  "diasi_liveness_service": false,
+  "diasi_generic_authority_platform": false,
+  "generic_replacement_supervisor": false,
+  "status": "PASS_OWNER_ABSORBED"
+}
