@@ -39,17 +39,17 @@ class PostDiasiAa0PrewarmContractTests(unittest.TestCase):
             7,
         )
 
-    def test_only_lineage_preflight_retains_full_history(self) -> None:
-        self.assertEqual(self.workflow.count("fetch-depth: 0"), 1)
-        self.assertEqual(self.workflow.count("fetch-depth: 1"), 6)
+    def test_history_depth_matches_empirically_proven_dependencies(self) -> None:
+        self.assertEqual(self.workflow.count("fetch-depth: 0"), 3)
+        self.assertEqual(self.workflow.count("fetch-depth: 1"), 4)
+        self.assertIn("fetch-depth: 0", self._job("pytest-shard-manifest", "pytest-shard"))
+        self.assertIn("fetch-depth: 0", self._job("pytest-shard", "pytest-unified"))
 
     def test_depth_one_aa0_scripts_have_no_ancestry_dependency(self) -> None:
         sources = {
             path: (ROOT / path).read_text(encoding="utf-8")
             for path in (
                 "tools/ci/aa0_harness_identity.py",
-                "tools/ci/pytest_shard_shadow.py",
-                "tools/ci/pytest_shard_canonical.py",
                 "tools/ci/pytest_unittest_parity.py",
             )
         }
@@ -65,7 +65,6 @@ class PostDiasiAa0PrewarmContractTests(unittest.TestCase):
         for path, source in sources.items():
             for operation in history_operations:
                 self.assertNotIn(operation, source, f"{path} requires history via {operation}")
-        self.assertIn('["git", "rev-parse", "HEAD"]', sources["tools/ci/pytest_shard_shadow.py"])
         self.assertIn('["ls-files", "-z", "--", pathspec]', sources["tools/ci/aa0_harness_identity.py"])
 
     def test_exact_cache_keys_bind_pip_harness_and_qualification_generation(self) -> None:
