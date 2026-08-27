@@ -131,8 +131,7 @@ def test_wp2_court_records_bind_vit_identities_and_reserved_boundary() -> None:
     frontier = json.loads((wp2 / "DIASI_WP2_VIT_DEPENDENCY_FRONTIER.json").read_text(encoding="utf-8"))
     assert canonical_sha256(authority["payload"]) == authority["logical_id"]
     assert canonical_sha256(frontier["payload"]) == frontier["logical_id"]
-    pointer = json.loads((root / "registries/implementation/dias_v0_1/CURRENT_STATE_POINTER.json").read_text(encoding="utf-8"))
-    state = json.loads((root / pointer["current_state"]).read_text(encoding="utf-8"))
+    state = json.loads((root / "registries/implementation/dias_v0_1/DIASI_CURRENT_v0_3.json").read_text(encoding="utf-8"))
     assert state["next_packet"] == "DIASI-WP3"
     assert state["next_reserved_operator_gate"] == "DIASI-G-DGS-CUTOVER-DRAIN"
     assert state["live_cutover"] is False
