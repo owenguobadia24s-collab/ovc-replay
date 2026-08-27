@@ -109,7 +109,10 @@ def test_retirement_census_is_complete_but_not_authority() -> None:
 def test_machine_state_is_fail_closed_and_dgs_is_decoupled() -> None:
     pointer = load(STATE_ROOT / "CURRENT_STATE_POINTER.json")
     state = load(ROOT / pointer["current_state"])
-    assert state["current_gate"] == "DIASI-G0"
+    assert state["current_gate"] in {"DIASI-G0", "DIASI-G2-ALGORITHMIC"}
+    if state["current_gate"] == "DIASI-G2-ALGORITHMIC":
+        assert "DIASI-WP0" in state["completed_packets"]
+        assert state["algorithmic_gate"] == "PASS"
     assert state["dgs_independent_of_racpr"] is True
     assert state["racpr_disposition"].startswith("REFERENCE_ONLY")
     assert state["live_cutover"] is False
