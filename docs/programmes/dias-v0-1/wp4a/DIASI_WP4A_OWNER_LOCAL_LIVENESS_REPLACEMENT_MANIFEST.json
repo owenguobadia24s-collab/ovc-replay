@@ -1,0 +1,16 @@
+{
+  "schema": "ovc-diasi-owner-local-liveness-replacement-manifest/v1",
+  "packet_id": "DIASI-WP4A",
+  "status": "INACTIVE_SHADOW_CANDIDATE",
+  "generic_supervisor": false,
+  "bindings": [
+    {"function": "PROGRAMME_DISCOVERY_AND_ADMISSION", "incumbent": "CERS", "replacement_owner": "DSAI_VIT_OWNER_LOCAL", "durable_trigger": "VIT_OWNER_DISCOVERY_ADMISSION_TRIGGER", "reconciliation_route": "VIT_OWNER_DISCOVERY_RECONCILIATION", "active": false},
+    {"function": "PERSISTENT_SWEEP_HEARTBEAT_LEASE_RECLAIM", "incumbent": "CERS", "replacement_owner": "DSAI_VIT_OWNER_LOCAL", "durable_trigger": "VIT_OWNER_LIVENESS_TIMER_TRIGGER", "reconciliation_route": "VIT_OWNER_LIVENESS_RECONCILIATION", "active": false},
+    {"function": "PACKET_START_AND_SUCCESSOR_DISPATCH", "incumbent": "CERS", "replacement_owner": "DSAI_VIT_OWNER_LOCAL", "durable_trigger": "VIT_OWNER_PACKET_DISPATCH_TRIGGER", "reconciliation_route": "VIT_OWNER_PACKET_RECONCILIATION", "active": false},
+    {"function": "DETACHED_QUALIFICATION_LEDGER_ENVELOPE_WRITE", "incumbent": "PES", "replacement_owner": "VIT_QUALIFICATION_OWNER_LOCAL", "durable_trigger": "VIT_QUALIFICATION_LEDGER_WRITE_TRIGGER", "reconciliation_route": "VIT_QUALIFICATION_LEDGER_RECONCILIATION", "active": false},
+    {"function": "EXACT_HEAD_POINTER_PUBLICATION", "incumbent": "PES", "replacement_owner": "VIT_QUALIFICATION_OWNER_LOCAL", "durable_trigger": "VIT_QUALIFICATION_HEAD_PUBLICATION_TRIGGER", "reconciliation_route": "VIT_QUALIFICATION_HEAD_RECONCILIATION", "active": false},
+    {"function": "CONTENT_ADDRESSED_IDEMPOTENT_REPLAY", "incumbent": "PES", "replacement_owner": "VIT_QUALIFICATION_OWNER_LOCAL", "durable_trigger": "VIT_QUALIFICATION_REPLAY_TRIGGER", "reconciliation_route": "VIT_QUALIFICATION_REPLAY_RECONCILIATION", "active": false}
+  ],
+  "activation_authority": "DIASI-G-DGS-CUTOVER-DRAIN",
+  "retirement_authority": "DIASI-G-DGS-RETIRE-REMOVE"
+}
