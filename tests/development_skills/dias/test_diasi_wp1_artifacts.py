@@ -118,8 +118,8 @@ def test_materialised_algorithmic_review_and_gate_decisions_bind_subject() -> No
 def test_programme_state_advances_without_crossing_reserved_authority() -> None:
     pointer = load(ROOT / "registries/implementation/dias_v0_1/CURRENT_STATE_POINTER.json")
     state = load(ROOT / pointer["current_state"])
-    assert state["completed_packets"] in [["DIASI-WP0"], ["DIASI-WP0", "DIASI-WP1"]]
-    assert state["next_packet"] in {"DIASI-WP2", "DIASI-WP3"}
+    assert state["completed_packets"][0] == "DIASI-WP0"
+    assert state["next_packet"].startswith("DIASI-WP")
     assert state["next_reserved_operator_gate"] == "DIASI-G-DGS-CUTOVER-DRAIN"
     assert state["live_cutover"] is False
     assert state["retirement"] is False

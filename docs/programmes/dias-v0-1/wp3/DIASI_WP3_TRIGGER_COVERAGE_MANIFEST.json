@@ -1,0 +1,14 @@
+{
+  "schema": "ovc-integration-trigger-coverage-manifest/v1",
+  "nonterminal": [
+    {"state": "READY", "durable_triggers": ["PACKET_READY_RECORD"], "reconciliation_route": "REBUILD_FROM_PIP", "maximum_age_seconds": 300, "dead_letter_disposition": "DEAD_LETTER"},
+    {"state": "ADMITTED", "durable_triggers": ["ADMISSION_RECEIPT"], "reconciliation_route": "REVALIDATE_ADMISSION", "maximum_age_seconds": 300, "dead_letter_disposition": "DEAD_LETTER"},
+    {"state": "APPLYING", "durable_triggers": ["PRE_MATERIALISATION_ANCHOR"], "reconciliation_route": "OBSERVE_PHYSICAL_MAIN", "maximum_age_seconds": 300, "dead_letter_disposition": "DEAD_LETTER"},
+    {"state": "WRITE_UNKNOWN", "durable_triggers": ["PHYSICAL_MAIN_OBSERVATION"], "reconciliation_route": "RECONSTRUCT_WRITE", "maximum_age_seconds": 120, "dead_letter_disposition": "QUARANTINED"},
+    {"state": "MATERIALISED", "durable_triggers": ["PHYSICAL_MATERIALISATION_RECEIPT"], "reconciliation_route": "RECONSTRUCT_RECEIPTS", "maximum_age_seconds": 300, "dead_letter_disposition": "DEAD_LETTER"},
+    {"state": "RECEIPTS_PENDING", "durable_triggers": ["RECEIPT_RECONCILIATION"], "reconciliation_route": "RECONSTRUCT_RECEIPTS", "maximum_age_seconds": 300, "dead_letter_disposition": "DEAD_LETTER"}
+  ],
+  "terminal": ["COMPLETED", "DEAD_LETTER", "QUARANTINED"],
+  "coverage": "COMPLETE",
+  "authority_effect": "NONE"
+}
