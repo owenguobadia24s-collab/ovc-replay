@@ -29,7 +29,10 @@ class ParallelIntegrationLaneTests(unittest.TestCase):
 
     def test_per_pr_cancellation_is_preserved(self):
         self.assertIn("group: ovc-pr-${{ github.event.pull_request.number || github.ref }}", self.workflow)
-        self.assertIn("group: ovc-tests-${{ github.event.pull_request.number || github.ref }}", self.tests_workflow)
+        self.assertIn(
+            "group: ovc-tests-${{ github.event.pull_request.number || inputs.aa0_target_head_sha || github.ref }}",
+            self.tests_workflow,
+        )
         self.assertIn("cancel-in-progress: true", self.workflow)
         self.assertIn("cancel-in-progress: true", self.tests_workflow)
 
