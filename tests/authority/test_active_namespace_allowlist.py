@@ -35,6 +35,7 @@ EXPECTED_OVC_PACKAGES = {
     "ovc.research_operations.prsc",
     "ovc.research_operations.rccr",
     "ovc.research_operations.p2cti",
+    "ovc.research_operations.sff",
     "ovc.research_operations.v0_2",
     "ovc.research_operations.v0_3",
     "ovc.research_operations.v0_4",
@@ -101,6 +102,21 @@ class ActiveNamespaceAllowlistTests(unittest.TestCase):
         self.assertIn("candidate", init_text)
         self.assertIn("validation", init_text)
         self.assertIn("actuation authority", init_text)
+
+    def test_sff_namespace_is_synthetic_conformance_only(self) -> None:
+        init_text = (SRC / "ovc" / "research_operations" / "sff" / "__init__.py").read_text(encoding="utf-8").lower()
+        self.assertIn("synthetic", init_text)
+        self.assertIn("conformance only", init_text)
+        self.assertIn("no real-source", init_text)
+        self.assertIn("target activation", init_text)
+        self.assertIn("validation", init_text)
+        self.assertIn("opt-f", init_text)
+        self.assertIn("probability-as-exposure", init_text)
+        self.assertIn("risk", init_text)
+        self.assertIn("trading", init_text)
+        self.assertIn("execution", init_text)
+        self.assertIn("agent-write authority", init_text)
+        self.assertIn("fails closed", init_text)
 
     def test_console_vnext_namespace_is_local_read_only_application_only(self) -> None:
         init_text = (SRC / "ovc" / "console_vnext" / "__init__.py").read_text(encoding="utf-8").lower()
