@@ -58,7 +58,12 @@ def decide_claim(
         raise SFFContractError(f"CLAIM_DIMENSIONS_MISSING:{','.join(missing)}")
     if not challengers or any(not challenger.credible_simpler for challenger in challengers):
         raise SFFContractError("CREDIBLE_SIMPLER_CHALLENGER_MISSING")
-    blockers = tuple(sorted(dimension for dimension in falsification.blocking_dimensions if dimension_results[dimension] != "PASS"))
+    blockers = [dimension for dimension in falsification.blocking_dimensions if dimension_results[dimension] != "PASS"]
+    if any(challenger.matched_support_result != "PASS" for challenger in challengers):
+        blockers.append("CHALLENGER_MATCHED_SUPPORT")
+    if any(challenger.full_population_result != "PASS" for challenger in challengers):
+        blockers.append("CHALLENGER_FULL_POPULATION")
+    blockers = tuple(sorted(blockers))
     return ClaimDecision(generation_id, "FAIL" if blockers else "MECHANICAL_ELIGIBLE", blockers)
 
 

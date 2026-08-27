@@ -48,3 +48,22 @@ def test_failure_is_append_only_and_same_generation_rescue_is_forbidden() -> Non
     with pytest.raises(SFFContractError, match="SAME_GENERATION"):
         reentry_generation(failure, proposed_generation_id="g1", proposed_target_semantics_id="narrowed-after-result")
     assert reentry_generation(failure, proposed_generation_id="g2", proposed_target_semantics_id="semantics-v2") == "SUCCESSOR_GENERATION_NEW_SEMANTICS_REQUIRED"
+
+
+@pytest.mark.parametrize(
+    ("challenger", "blocker"),
+    [
+        (ChallengerComparison("c", True, "FAIL", "PASS"), "CHALLENGER_MATCHED_SUPPORT"),
+        (ChallengerComparison("c", True, "PASS", "FAIL"), "CHALLENGER_FULL_POPULATION"),
+    ],
+)
+def test_nonpassing_credible_challenger_is_noncompensating(challenger, blocker) -> None:
+    results = {dimension: "PASS" for dimension in _contract().blocking_dimensions}
+    decision = decide_claim(
+        generation_id="g1",
+        dimension_results=results,
+        falsification=_contract(),
+        challengers=(challenger,),
+    )
+    assert decision.decision == "FAIL"
+    assert decision.blocking_failures == (blocker,)

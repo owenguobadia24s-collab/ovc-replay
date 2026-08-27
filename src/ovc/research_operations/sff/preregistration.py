@@ -72,6 +72,18 @@ def _validate_value(path: str, value: Any) -> None:
             _validate_value(f"{path}[{index}]", nested)
 
 
+def _contains_protected_outcome_access(value: Any) -> bool:
+    if isinstance(value, Mapping):
+        return any(
+            (str(key) == "protected_outcomes_accessed" and nested is not False)
+            or _contains_protected_outcome_access(nested)
+            for key, nested in value.items()
+        )
+    if isinstance(value, (list, tuple)):
+        return any(_contains_protected_outcome_access(item) for item in value)
+    return False
+
+
 def compile_preregistration(fields: Mapping[str, Any]) -> CompiledPreregistration:
     missing = [field for field in REQUIRED_FIELDS if field not in fields]
     extras = sorted(set(fields) - set(REQUIRED_FIELDS))
@@ -84,6 +96,14 @@ def compile_preregistration(fields: Mapping[str, Any]) -> CompiledPreregistratio
     embargo = fields["outcome_access_embargo_manifest"]
     if not isinstance(embargo, Mapping) or embargo.get("protected_outcomes_accessed") is not False:
         raise SFFContractError("PREREG_OUTCOME_EMBARGO_NOT_PROVEN")
+    if fields["feasibility_evidence"].get("scope") != "SUPPORT_ONLY_PRE_OUTCOME":
+        raise SFFContractError("PREREG_FEASIBILITY_OUTCOME_CONTAMINATED")
+    if any(
+        _contains_protected_outcome_access(fields[field])
+        for field in REQUIRED_FIELDS
+        if field != "outcome_access_embargo_manifest"
+    ):
+        raise SFFContractError("PREREG_PROTECTED_OUTCOME_ACCESS_PRESENT")
     if fields["static_model_generation"].get("mode") != "STATIC":
         raise SFFContractError("PREREG_MODEL_NOT_STATIC")
     payload = {field: fields[field] for field in REQUIRED_FIELDS}
