@@ -108,7 +108,7 @@ def clean_process_restart(payload: Mapping[str, Any]) -> str:
         if key.upper() in {"PATH", "PATHEXT", "SYSTEMROOT", "WINDIR", "TEMP", "TMP"}
     }
     child_env["PYTHONNOUSERSITE"] = "1"
-    child_env["PYTHONPATH"] = str(ROOT)
+    child_env["PYTHONPATH"] = os.pathsep.join((str(ROOT / "src"), str(ROOT)))
     proc = subprocess.run(
         (sys.executable, str(Path(__file__).resolve()), "--child-reconstruct"),
         cwd=ROOT,
