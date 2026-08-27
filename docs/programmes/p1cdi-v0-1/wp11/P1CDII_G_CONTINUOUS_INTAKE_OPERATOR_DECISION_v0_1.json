@@ -1,0 +1,65 @@
+{
+  "schema": "ovc-operator-decision/v1",
+  "decision_id": "P1CDII-G-CONTINUOUS-INTAKE.OPERATOR.DEFER.20260827T174459+0100",
+  "programme_id": "OVC-P1CDI-CONFORMANCE-v0.1",
+  "plan_id": "OVC-P1CDI-CONFORMANCE-IMPLEMENTATION-PLAN-0.1",
+  "plan_version": "eeb3cfef77c8a61ce2fb825f8f0f649ac35281f30d43ba24651fc329a11a0b9a",
+  "gate_id": "P1CDII-G-CONTINUOUS-INTAKE",
+  "decision": "DEFER",
+  "decision_class": "OPERATOR_REQUIRED",
+  "decision_authority": "OPERATOR",
+  "operator_instruction": "DEFER",
+  "recorded_local_time": "2026-08-27T17:44:59+01:00",
+  "decision_baseline_main": "9fbdab8931e4d339e8922a9cd63276d19a925eed",
+  "decision_baseline_tree": "0a4414ceed9c318f80b2643282a6a3b64961dfb3",
+  "gate_packet": "docs/programmes/p1cdi-v0-1/wp11/P1CDII_G_CONTINUOUS_INTAKE_GATE_PACKET_v0_1.json",
+  "gate_packet_blob_sha": "c70804423319f82b3f9aa9d21498f4f499a76ef6",
+  "exact_current_gate_projection_id": "e5804e7ffa27abe2f2e8dbf1bf324d2a2950e33abbeb99c0c2b349aa593780fd",
+  "wp11_physical_merge_commit": "66db8351f0b7d4f1ba5233ea48c0f78bbde61542",
+  "wp11_physical_result_tree": "8caf1001eaaf9c472d9ec18de0b2c171eae563e4",
+  "wp11_receipts": {
+    "physical_materialisation_receipt": "c8764d92150eaa3d39af58ff9a8187bfd78ee218f554241c14642e52d60abb7f",
+    "packet_completion_receipt": "8de6ccbad6f99a35d52f8c0fe04c1609bc06e37e71594ca382f84e83e8fb66b3",
+    "completion_proof": "8c631516a6a3806d5a3ebd2c23a64a635d4e75de737f42c9fc2227143006408c"
+  },
+  "authority_delta": "NONE",
+  "effects": [
+    "Do not activate the minimal durable P1CDI continuous-intake control surface.",
+    "Keep durable continuous-intake writes denied.",
+    "Preserve operational read-only authority for the exact qualified source scope only.",
+    "Preserve the zero-subject source scope without admitting any new real source.",
+    "Keep Research Console source presentation, candidate/freeze, scientific disposition, Validation, publication, probability, risk, exposure, trading, execution and agent-write authority ungranted.",
+    "Pause at P1CDII-G-CONTINUOUS-INTAKE until an explicit future operator reconsideration decision against then-current court-record facts."
+  ],
+  "authority_after": {
+    "operational_read_only": "ACTIVE_EXACT_QUALIFIED_SOURCE_SCOPE_ONLY",
+    "continuous_intake": "DENIED",
+    "research_console_consumer_admission": "NOT_GRANTED"
+  },
+  "exact_source_scope": {
+    "source_census_id": "P1CDI-G0-SOURCE-CENSUS:lawful-main-35d3dc73:v0.2",
+    "source_census_sha256": "daea12a31cbfbd255f0ae5115a3298aabc39b4ead8380c117b83f1ac9a25d439",
+    "source_completeness_sha256": "24198edc0f846cc8ba463c8467e025dd2a90125952e21c7c92f3bcc4a4abdc9c",
+    "expected_subject_count": 0,
+    "reconciled_subject_count": 0,
+    "current_subject_count": 0
+  },
+  "explicit_non_grants": [
+    "RESEARCH_CONSOLE_SOURCE_PRESENTATION_AUTHORITY",
+    "P1CDI_CONTINUOUS_INTAKE_WRITES",
+    "NEW_PATH1_REAL_SOURCE_INTAKE",
+    "CANDIDATE_OR_FREEZE_AUTHORITY",
+    "SCIENTIFIC_DISPOSITION_WRITE",
+    "VALIDATION",
+    "PUBLICATION",
+    "PROBABILITY",
+    "RISK",
+    "EXPOSURE",
+    "TRADING",
+    "EXECUTION",
+    "AGENT_WRITE"
+  ],
+  "reason": "OPERATOR_DEFERRED_WITHOUT_ADDITIONAL_REASON",
+  "rollback": "No destructive rollback. Preserve this DEFER decision and all WP11 materialisation/completion evidence as immutable history. A later PASS or other disposition requires a new explicit operator decision against then-current facts.",
+  "next_action": "STOP_P1CDI_DEFERRED_AT_P1CDII_G_CONTINUOUS_INTAKE_AWAIT_EXPLICIT_OPERATOR_RECONSIDERATION"
+}
