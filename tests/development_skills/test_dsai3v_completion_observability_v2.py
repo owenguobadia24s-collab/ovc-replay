@@ -204,9 +204,12 @@ class CanonicalCompletionReceiptV2Tests(unittest.TestCase):
 
     def test_no_new_storage_or_write_authority(self) -> None:
         binding = json.loads((ROOT / "registries/development/skills/VIT_COMPLETION_RECEIPTSTORE_BINDING_v0_1.json").read_text())
-        self.assertEqual(binding["receipt_store"], "ovc.development.skills.vit_materialisation.ReceiptStore")
-        self.assertFalse(binding["repository_fallback"])
-        self.assertFalse(binding["ephemeral_fallback"])
+        receipt_store = binding["receipt_store"]
+        self.assertEqual(receipt_store["implementation"], "ovc.development.skills.vit_materialisation.ReceiptStore")
+        self.assertFalse(receipt_store["repository_fallback"])
+        self.assertFalse(receipt_store["ephemeral_fallback"])
+        self.assertEqual(binding["controller"], "DSAI_VIT_PHYSICAL_CONTROLLER")
+        self.assertEqual(binding["physical_gateway"], "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY")
         self.assertEqual(build_canonical_completion_latency_receipt_v2(v1_receipt=self.v1())["authority_effect"], "NONE")
 
     def test_post_merge_runtime_emits_v1_and_v2_without_changing_v1_index(self) -> None:
