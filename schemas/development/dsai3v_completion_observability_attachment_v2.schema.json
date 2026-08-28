@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-dsai3v-completion-observability-attachment/v2",
+  "type": "object",
+  "required": ["schema","programme_id","packet_id","completion_receipt_id","development_latency_receipt_id","authority_effect","attachment_id"],
+  "properties": {
+    "schema": {"const":"ovc-dsai3v-completion-observability-attachment/v2"},
+    "programme_id": {"type":"string","minLength":1},
+    "packet_id": {"type":"string","minLength":1},
+    "completion_receipt_id": {"type":"string","minLength":1},
+    "development_latency_receipt_id": {"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "authority_effect": {"const":"NONE"},
+    "attachment_id": {"type":"string","pattern":"^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}
