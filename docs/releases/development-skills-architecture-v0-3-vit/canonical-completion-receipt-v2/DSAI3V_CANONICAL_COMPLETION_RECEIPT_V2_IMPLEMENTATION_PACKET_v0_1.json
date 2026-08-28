@@ -1,0 +1,42 @@
+{
+  "schema": "ovc-dsai-vit-owner-local-maintenance-packet/v1",
+  "packet_id": "DSAI3V-CANONICAL-COMPLETION-RECEIPT-v2-MAINT-v0.1",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "owner": "DSAI_VIT_DEVOBS_COMPLETION_OBSERVABILITY_OWNER",
+  "authority_delta": "NONE",
+  "authority_manifest_id": "0f1d65dc5c48952688255f40691051f8e5aba53f0c5c60d555df23d84329f72d",
+  "dependency_frontier_id": "8f02774e018b490ae364bcf9b080331bd32628605c000408180a5b7daf289598",
+  "purpose": "Add a prospective source-bound canonical completion receipt v2 while preserving historical v1 receipts and using this unchanged fast-path packet as the next clean AA0 prewarm sub-60 validation specimen.",
+  "implementation": {
+    "v1_builder_changed": false,
+    "v1_schema_changed": false,
+    "v1_policy_changed": false,
+    "v1_required_bundle_changed": false,
+    "receiptstore_implementation_changed": false,
+    "v2_schema": "ovc-development-latency-canonical-dsai3v/v2",
+    "v2_attachment_schema": "ovc-dsai3v-completion-observability-attachment/v2",
+    "v2_writer": "build_canonical_completion_latency_receipt_v2",
+    "compatibility_reader": "validate_compatible_canonical_completion_receipt",
+    "forward_writer_policy": "EXISTING_REQUIRED_V1_BUNDLE_PLUS_PROSPECTIVE_V2_AND_V2_ATTACHMENT",
+    "storage": "EXISTING_BOUND_RECEIPTSTORE_ONLY",
+    "source_precedence": "OWNER_RECEIPT_THEN_GITHUB_THEN_DEVOBS_THEN_EXACT_LOG_THEN_NULL",
+    "invalid_order_policy": "PRESERVE_RAW_EMIT_TYPED_WARNING_NULL_UNSAFE_DERIVED",
+    "identity": "CONTENT_ADDRESSED_DETERMINISTIC_CANONICAL_JSON"
+  },
+  "clean_specimen_controls": {
+    "workflow_files_changed": false,
+    "aa0_cache_key_semantics_changed": false,
+    "canonical_pytest_sharding_changed": false,
+    "pytest_unittest_parity_changed": false,
+    "runner_parity_changed": false,
+    "siq_ready_polling_changed": false,
+    "rac_assurance_changed": false,
+    "merge_readiness_changed": false,
+    "repository_protection_changed": false,
+    "physical_main_writer_changed": false,
+    "new_service_store_or_control_plane": false,
+    "production_sub60_claim": "PENDING_EXACT_PRODUCTION_MEASUREMENT"
+  },
+  "rollback": "Forward-revert v2 prospective files/runtime emission only; leave existing v1 and any already-emitted v2 evidence untouched.",
+  "logical_id": "cbf32e22e25be68c856cc2a394c3a3e8bacc12a9dd004ee5c560bf4759f84dc6"
+}
