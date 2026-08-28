@@ -1,0 +1,62 @@
+{
+  "schema": "ovc-dsai3v-canonical-completion-v2-source-binding-remediation/v1",
+  "packet_id": "DSAI3V-CANONICAL-COMPLETION-RECEIPT-v2-MAINT-v0.1",
+  "authority_class": "AUTO_EXECUTABLE",
+  "authority_delta": "NONE",
+  "initial_merge": {
+    "pr_number": 1393,
+    "merge_sha": "dcbf6f2e515ef02ef9f784a449f6179578bf876f",
+    "tree_sha": "99f7001a6e9ff571289adc2a30adff92a1056a12",
+    "completion_proof_id": "3a3c9a523e0cdd7bccabcfb674d23d21510c6adcaa0156adf35b86729287b7ae",
+    "completion_receipt_id": "eb9e2c459e0cdee24bfad0e3f92f4ab24e9da92852d7578ad8a626cb737163c7",
+    "v1_development_latency_receipt_id": "c708501deaf783a5ad9da0a07e9c5348a57e044bc72976a431e07bc938ada58d",
+    "materialisation_receipt_id": "6f89b83cb2814d63fb34c6c1d98e7c98da302cf2348613fa19d15ece25b43d2d",
+    "v1_attachment_id": "62fcf7e8c4eb0a9c06ef55f2fe89653049c7172fd05d9df2a0c6609e08a280e1",
+    "trace_summary_id": "22d083c0ba5740569c23ef11cb68a258d0a28145febdf6c003250b965d3d0b96"
+  },
+  "finding": {
+    "classification": "CORRECTABLE_IN_SCOPE_POST_MERGE_OBSERVABILITY_DEFECT",
+    "description": "The first prospective v2 receipt and attachment were durably emitted, but the owner-local post-merge executor did not pass the already-observed GitHub PR/job timestamps into completion_timing_sources. The emitted v2 timing model therefore remained UNAVAILABLE and could not source-bind PR_OPEN_TO_MATERIALISED inside the v2 record.",
+    "physical_write_affected": false,
+    "v1_affected": false,
+    "historical_data_rewrite_required": false,
+    "authority_change_required": false
+  },
+  "authoritative_timing_evidence": {
+    "pr_created_at_utc": "2026-08-28T10:56:59Z",
+    "pr_merged_at_utc": "2026-08-28T10:59:59Z",
+    "pr_open_to_materialised_ms": 180000.0,
+    "sub_60_result": "PERFORMANCE_MISS"
+  },
+  "remediation": {
+    "direct_source_helper": "src/ovc/development/dsai3v_completion_source_binding.py",
+    "runtime_plumbing": "src/ovc/development/skills/vit_local_completion_executor.py",
+    "owner_local_integration": "tools/ci/vit_post_merge_completion_late_binding.py",
+    "recovery_request": "registries/development/skills/VIT_POST_MERGE_RECOVERY_REQUESTS_v0_1.json",
+    "recovery_semantics": "Append a new source-bound v2 receipt and v2 attachment for an already-completed prospective v2 generation only when its existing v2 receipt cannot safely evaluate PR_OPEN_TO_MATERIALISED. Historical v1-only completions remain untouched.",
+    "proof_output": "Expose v2 receipt IDs, timing status and PR_OPEN_TO_MATERIALISED in owner-local completion logs without changing the stored v1 completion-proof schema."
+  },
+  "preserved": [
+    "HISTORICAL_V1_IMMUTABILITY",
+    "EXISTING_RECEIPTSTORE_BINDING",
+    "NO_NEW_STORAGE_BACKEND",
+    "NO_REPOSITORY_FALLBACK",
+    "NO_AA0_CACHE_SEMANTIC_CHANGE",
+    "NO_SHARDING_OR_PARITY_CHANGE",
+    "NO_VIT_ROUTING_CHANGE",
+    "NO_SIQ_GATEWAY_CHANGE",
+    "NO_PHYSICAL_MAIN_WRITER_CHANGE",
+    "NO_REPOSITORY_PROTECTION_CHANGE"
+  ],
+  "acceptance": [
+    "DIRECT_GITHUB_PR_CREATED_AT_AND_MERGED_AT_ARE_V2_SOURCE_ROWS",
+    "ASSURANCE_JOB_COMPLETION_TIMES_ARE_DIRECT_GITHUB_WORKFLOW_JOB_SOURCE_ROWS_WHEN_PRESENT",
+    "PR_OPEN_TO_MATERIALISED_IS_180000_MS_FOR_PR_1393",
+    "EXISTING_BLANK_PROSPECTIVE_V2_REPLAYS_APPEND_ONLY",
+    "HISTORICAL_V1_ONLY_COMPLETION_REMAINS_ALREADY_COMPLETED",
+    "SOURCE_BOUND_V2_IDS_ARE_EXPOSED_BY_OWNER_LOCAL_COMPLETION",
+    "TARGETED_AND_REPOSITORY_ASSURANCE_PASS"
+  ],
+  "rollback": "Squash-revert the corrective integration. Existing v1 receipts, the first v2 receipt, the source-bound v2 receipt if already appended, and all physical Git history remain immutable; rollback stops future source-binding enrichment only.",
+  "status": "IMPLEMENTED_AWAITING_EXACT_HEAD_ASSURANCE"
+}
