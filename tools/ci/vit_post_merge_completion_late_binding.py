@@ -9,6 +9,10 @@ from pathlib import Path
 from typing import Any, Mapping
 from urllib.parse import quote, urlencode
 
+from ovc.development.dsai3v_completion_source_binding import (
+    build_github_completion_source_binding,
+    has_source_bound_pr_to_materialised,
+)
 from ovc.development.identity import canonical_sha256
 from ovc.development.prvit_remediation import IntegrationAdmissionReceipt
 from ovc.development.skills.vit_core import VitContractError
@@ -35,6 +39,7 @@ from tools.ci.vit_lineage_source import resolve_candidate_lineage
 LATE_PLACEMENT_MARKER = "OVC_VIT_LATE_BINDING_PLACEMENT_ACQUIRED="
 ADMISSION_MARKER = "OVC_INTEGRATION_ADMISSION_RECEIPT="
 RECOVERY_SCHEMA = "ovc-vit-post-merge-recovery-request/v1"
+V2_SCHEMA = "ovc-development-latency-canonical-dsai3v/v2"
 
 
 def _marker_payloads(text: str, marker: str) -> tuple[Mapping[str, Any], ...]:
@@ -145,7 +150,10 @@ def _late_binding_freeze_from_merge_readiness_logs(
         if admission.disposition != "SHADOW_READY":
             raise legacy.PostMergeCompletionError("late-binding admission was not ready")
 
-        allow_legacy_body = os.environ.get("OVC_VIT_ALLOW_LEGACY_PR_BODY_LINEAGE", "").lower() == "true"
+        allow_legacy_body = (
+            os.environ.get("OVC_VIT_ALLOW_LEGACY_PR_BODY_LINEAGE", "").lower()
+            == "true"
+        )
         lineage_source = resolve_candidate_lineage(
             root=repo_root,
             head_sha=head_sha,
@@ -159,14 +167,20 @@ def _late_binding_freeze_from_merge_readiness_logs(
         if not lineage.late_binding:
             return None
         if lineage.pip_id != admission.pip_id:
-            raise legacy.PostMergeCompletionError("late-binding qualification/admission PIP mismatch")
+            raise legacy.PostMergeCompletionError(
+                "late-binding qualification/admission PIP mismatch"
+            )
         pip = lineage_record.get("pip")
         if not isinstance(pip, Mapping):
             raise legacy.PostMergeCompletionError("late-binding PIP missing")
         if str(pip.get("authority_manifest_id", "")) != placement.authority_manifest_id:
-            raise legacy.PostMergeCompletionError("late-binding authority frontier mismatch")
+            raise legacy.PostMergeCompletionError(
+                "late-binding authority frontier mismatch"
+            )
         if str(pip.get("dependency_frontier_id", "")) != placement.dependency_frontier_id:
-            raise legacy.PostMergeCompletionError("late-binding dependency frontier mismatch")
+            raise legacy.PostMergeCompletionError(
+                "late-binding dependency frontier mismatch"
+            )
 
         ticket_id = "VIT-LATE-" + canonical_sha256(
             {
@@ -250,7 +264,13 @@ def _late_binding_freeze_from_merge_readiness_logs(
 
 
 def _freeze_for_pr(
-    *, repo_root: Path, repository: str, head_sha: str, pr_number: int, pr_body: str, token: str
+    *,
+    repo_root: Path,
+    repository: str,
+    head_sha: str,
+    pr_number: int,
+    pr_body: str,
+    token: str,
 ) -> Mapping[str, Any]:
     late = _late_binding_freeze_from_merge_readiness_logs(
         repo_root=repo_root,
@@ -270,6 +290,25 @@ def _freeze_for_pr(
     )
 
 
+def _prospective_v2_rows(
+    receipt_store: ReceiptStore, completion_receipt_id: str
+) -> tuple[Mapping[str, Any], ...]:
+    rows: list[Mapping[str, Any]] = []
+    for path in sorted(receipt_store.root.glob("*.json")):
+        try:
+            value = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if (
+            isinstance(value, Mapping)
+            and value.get("schema") == V2_SCHEMA
+            and str(value.get("completion_receipt_id", ""))
+            == completion_receipt_id
+        ):
+            rows.append(dict(value))
+    return tuple(rows)
+
+
 def _already_completed(receipt_store: ReceiptStore, merge_sha: str) -> bool:
     proof_root = receipt_store.root / "proofs"
     if not proof_root.is_dir():
@@ -286,12 +325,37 @@ def _already_completed(receipt_store: ReceiptStore, merge_sha: str) -> bool:
             and value.get("exact_tree_equal") is True
             and value.get("four_content_addressed_receipts_present") is True
         ):
+            receipt_ids = value.get("receipt_ids")
+            completion_id = (
+                str(receipt_ids.get("completion_receipt_id", ""))
+                if isinstance(receipt_ids, Mapping)
+                else ""
+            )
+            v2_rows = (
+                _prospective_v2_rows(receipt_store, completion_id)
+                if completion_id
+                else ()
+            )
+            if not v2_rows:
+                print(
+                    f"OVC_VIT_POST_MERGE_COMPLETION_ALREADY_PRESENT merge={merge_sha} "
+                    f"proof={value.get('proof_id', path.stem)}",
+                    flush=True,
+                )
+                return True
+            if any(has_source_bound_pr_to_materialised(row) for row in v2_rows):
+                print(
+                    f"OVC_VIT_POST_MERGE_COMPLETION_ALREADY_PRESENT_SOURCE_BOUND_V2 "
+                    f"merge={merge_sha} proof={value.get('proof_id', path.stem)}",
+                    flush=True,
+                )
+                return True
             print(
-                f"OVC_VIT_POST_MERGE_COMPLETION_ALREADY_PRESENT merge={merge_sha} "
+                f"OVC_DSAI3V_V2_SOURCE_BINDING_REPLAY_REQUIRED merge={merge_sha} "
                 f"proof={value.get('proof_id', path.stem)}",
                 flush=True,
             )
-            return True
+            return False
     return False
 
 
@@ -338,14 +402,20 @@ def _recover_one(
         )
 
     trace_bundle: Mapping[str, Any] | None = None
+    source_binding: Mapping[str, Any] | None = None
     context = freeze.get("completion_context")
     if isinstance(context, Mapping):
+        workflow_runs, jobs_by_run = legacy._pr_head_workflow_observations(
+            repository,
+            head_sha,
+            token,
+        )
+        source_binding = build_github_completion_source_binding(
+            pr=pr,
+            workflow_runs=workflow_runs,
+            jobs_by_run=jobs_by_run,
+        )
         try:
-            workflow_runs, jobs_by_run = legacy._pr_head_workflow_observations(
-                repository,
-                head_sha,
-                token,
-            )
             trace_bundle = legacy.build_observed_completion_trace(
                 programme_id=str(context["programme_id"]),
                 packet_id=str(context["packet_id"]),
@@ -377,8 +447,22 @@ def _recover_one(
         observed_tree=observed_tree,
         receipt_store=receipt_store,
         siq_receipts=legacy._siq_observations(repository, head_sha, token),
-        trace_summary=(trace_bundle.get("trace_summary") if trace_bundle is not None else None),
-        async_assurance_metrics=(trace_bundle.get("async_assurance_metrics") if trace_bundle is not None else None),
+        trace_summary=(
+            trace_bundle.get("trace_summary") if trace_bundle is not None else None
+        ),
+        async_assurance_metrics=(
+            trace_bundle.get("async_assurance_metrics")
+            if trace_bundle is not None
+            else None
+        ),
+        completion_timing_sources=(
+            source_binding.get("timing_sources") if source_binding is not None else ()
+        ),
+        completion_aa0_observability=(
+            source_binding.get("aa0_observability")
+            if source_binding is not None
+            else None
+        ),
     )
     safe = {
         "schema": proof["schema"],
@@ -387,13 +471,33 @@ def _recover_one(
         "observed_commit": proof["observed_commit"],
         "observed_tree": proof["observed_tree"],
         "exact_tree_equal": proof["exact_tree_equal"],
-        "four_content_addressed_receipts_present": proof["four_content_addressed_receipts_present"],
+        "four_content_addressed_receipts_present": proof[
+            "four_content_addressed_receipts_present"
+        ],
         "receipt_ids": proof["receipt_ids"],
         "authority_effect": proof["authority_effect"],
     }
     if proof.get("trace_summary_id"):
         safe["trace_summary_id"] = proof["trace_summary_id"]
-    print("OVC_VIT_POST_MERGE_COMPLETION_PROOF " + json.dumps(safe, sort_keys=True), flush=True)
+    v2_ids = proof.get("v2_receipt_ids")
+    if isinstance(v2_ids, Mapping):
+        safe["v2_receipt_ids"] = dict(v2_ids)
+        v2_receipt_id = str(v2_ids.get("v2_development_latency_receipt_id", ""))
+        if v2_receipt_id:
+            v2_path = receipt_store.root / f"{v2_receipt_id}.json"
+            v2_payload = json.loads(v2_path.read_text(encoding="utf-8"))
+            timing = v2_payload.get("timing") if isinstance(v2_payload, Mapping) else None
+            if isinstance(timing, Mapping):
+                safe["v2_timing_status"] = timing.get("status")
+                derived = timing.get("derived_latency_ms")
+                if isinstance(derived, Mapping):
+                    safe["pr_open_to_materialised_ms"] = derived.get(
+                        "pr_open_to_materialised_ms"
+                    )
+    print(
+        "OVC_VIT_POST_MERGE_COMPLETION_PROOF " + json.dumps(safe, sort_keys=True),
+        flush=True,
+    )
     return safe
 
 
@@ -405,7 +509,9 @@ def _manifest_requests(path: Path | None) -> tuple[str, ...]:
         raise legacy.PostMergeCompletionError("post-merge recovery manifest schema invalid")
     requests = value.get("requests")
     if not isinstance(requests, list):
-        raise legacy.PostMergeCompletionError("post-merge recovery manifest requests invalid")
+        raise legacy.PostMergeCompletionError(
+            "post-merge recovery manifest requests invalid"
+        )
     result: list[str] = []
     for row in requests:
         if not isinstance(row, Mapping):
@@ -416,9 +522,13 @@ def _manifest_requests(path: Path | None) -> tuple[str, ...]:
         try:
             int(sha, 16)
         except ValueError as exc:
-            raise legacy.PostMergeCompletionError("post-merge recovery merge SHA invalid") from exc
+            raise legacy.PostMergeCompletionError(
+                "post-merge recovery merge SHA invalid"
+            ) from exc
         if row.get("authority_effect") != "NONE":
-            raise legacy.PostMergeCompletionError("post-merge recovery authority effect invalid")
+            raise legacy.PostMergeCompletionError(
+                "post-merge recovery authority effect invalid"
+            )
         result.append(sha)
     return tuple(result)
 
@@ -437,12 +547,18 @@ def main() -> int:
             create=False,
         )
         receipt_store = ReceiptStore(external_root / "receipts")
-        recovery_path = Path(args.recovery_manifest).resolve() if args.recovery_manifest else None
+        recovery_path = (
+            Path(args.recovery_manifest).resolve() if args.recovery_manifest else None
+        )
         requested = [args.merge_sha, *_manifest_requests(recovery_path)]
         seen: set[str] = set()
         queue = [sha for sha in requested if not (sha in seen or seen.add(sha))]
         for merge_sha in queue:
-            _recover_one(repo_root=repo_root, merge_sha=merge_sha, receipt_store=receipt_store)
+            _recover_one(
+                repo_root=repo_root,
+                merge_sha=merge_sha,
+                receipt_store=receipt_store,
+            )
         return 0
     except (
         legacy.PostMergeCompletionError,
