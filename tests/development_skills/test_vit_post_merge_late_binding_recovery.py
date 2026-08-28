@@ -161,14 +161,20 @@ class VitPostMergeLateBindingRecoveryTests(unittest.TestCase):
         self.assertIn("VIT_POST_MERGE_RECOVERY_REQUESTS_v0_1.json", text)
         self.assertNotIn("python tools/ci/vit_post_merge_completion.py --repo-root . --merge-sha", text)
 
-    def test_recovery_manifest_is_authority_inert_and_names_first_late_binding_merge(self) -> None:
+    def test_recovery_manifest_is_append_only_and_authority_inert(self) -> None:
         value = json.loads(RECOVERY.read_text(encoding="utf-8"))
         self.assertEqual(value["schema"], TOOL.RECOVERY_SCHEMA)
-        self.assertEqual(len(value["requests"]), 1)
-        row = value["requests"][0]
-        self.assertEqual(row["merge_sha"], "b22ea057ddef98acc2e43dfff689b7fa56934385")
-        self.assertEqual(row["packet_id"], "DSAI3V-LB-WP1")
-        self.assertEqual(row["authority_effect"], "NONE")
+        requests = value["requests"]
+        self.assertGreaterEqual(len(requests), 2)
+        self.assertTrue(all(row["authority_effect"] == "NONE" for row in requests))
+        by_merge = {row["merge_sha"]: row for row in requests}
+        first = by_merge["b22ea057ddef98acc2e43dfff689b7fa56934385"]
+        self.assertEqual(first["packet_id"], "DSAI3V-LB-WP1")
+        remediation = by_merge["dcbf6f2e515ef02ef9f784a449f6179578bf876f"]
+        self.assertEqual(
+            remediation["packet_id"],
+            "DSAI3V-CANONICAL-COMPLETION-RECEIPT-v2-MAINT-v0.1",
+        )
 
 
 if __name__ == "__main__":
