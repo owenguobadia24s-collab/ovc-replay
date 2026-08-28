@@ -1,0 +1,32 @@
+{
+  "schema": "ovc-development-latency-completion-policy/v2",
+  "policy_id": "OVC.DEVOBS.DSAI3V.COMPLETION.20260828.v2",
+  "status": "IMPLEMENTED_PROSPECTIVE",
+  "authority_effect": "NONE",
+  "scope": "EVERY_DSAI3V_PACKET_COMPLETION_WHEN_V2_IMPLEMENTATION_AVAILABLE",
+  "historical_v1": {
+    "schema": "ovc-development-latency-canonical-dsai3v/v1",
+    "policy": "registries/development/skills/development_latency_completion_receipt_v0_1.json",
+    "immutability": "PRESERVE_EXACT_NO_REWRITE"
+  },
+  "prospective_v2": {
+    "schema": "ovc-development-latency-canonical-dsai3v/v2",
+    "writer": "build_canonical_completion_latency_receipt_v2",
+    "timing_rule": "DIRECT_SOURCE_BOUND_ONLY",
+    "missingness": "NULL_OR_UNAVAILABLE_NEVER_INFER",
+    "attachment_schema": "ovc-dsai3v-completion-observability-attachment/v2",
+    "attachment_versioning_reason": "V1_ATTACHMENT_INDEX_OWNS_UNQUALIFIED_COMPLETION_KEY; V2_ATTACHMENT_AVOIDS_MUTATING_V1_INDEX_OR_IDENTITY"
+  },
+  "writer_policy": "EMIT_EXISTING_REQUIRED_V1_BUNDLE_PLUS_PROSPECTIVE_V2_AND_V2_ATTACHMENT",
+  "reader_policy": "ACCEPT_V1_AND_V2_DISTINGUISH_BY_SCHEMA",
+  "required_bundle_semantics": "V1_REQUIRED_BUNDLE_UNCHANGED",
+  "storage": {
+    "binding": "registries/development/skills/VIT_COMPLETION_RECEIPTSTORE_BINDING_v0_1.json",
+    "new_backend": false,
+    "repository_fallback": false,
+    "ephemeral_fallback": false
+  },
+  "identity": "CONTENT_ADDRESSED_CANONICAL_JSON_EXISTING_REPOSITORY_MECHANISM",
+  "rollback": "Forward-revert v2 writer/reader additions; keep every emitted v2 receipt and historical v1 record immutable.",
+  "logical_id": "1c394a2452c04e0dbfba54d69fd77369abc44f8b7b0abd853b3f9aa17567f0e7"
+}

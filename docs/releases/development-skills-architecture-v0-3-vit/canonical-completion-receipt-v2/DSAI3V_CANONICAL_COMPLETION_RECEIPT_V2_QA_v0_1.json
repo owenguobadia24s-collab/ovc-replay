@@ -1,0 +1,103 @@
+{
+  "schema": "ovc-dsai-vit-owner-local-qa-packet/v1",
+  "packet_id": "DSAI3V-CANONICAL-COMPLETION-RECEIPT-v2-MAINT-v0.1",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "status": "REMEDIATED_AWAITING_REPLACEMENT_EXACT_HEAD_AA0",
+  "authority_delta": "NONE",
+  "historical_v1": {
+    "schema_unchanged": true,
+    "policy_unchanged": true,
+    "builder_unchanged": true,
+    "required_bundle_unchanged": true,
+    "frozen_fixture_record_id": "3d17ae4908a3edd3d16b038a79470fb0bd11e9913495913760f5a79e57925168"
+  },
+  "requested_v2_case_design": {
+    "coverage": "35_REQUESTED_CASES_COVERED_BY_TEST_ASSERTIONS_AND_SUBTESTS",
+    "current_remediated_exact_head_execution": "PENDING_PRE_PR_AA0_WARM",
+    "no_post_remediation_pass_claim": true
+  },
+  "pre_pr_aa0_generation_1": {
+    "candidate_head": "2cb6d1b9b5e574d7d8be698de777e31f2b4c313b",
+    "qualification_id": "d1abb330f63b47844a237a0ff3ee1718a65505d3634641e26f318beb545b9409",
+    "pip_id": "3edcb9e3326b83ae70cca8ba32bec22171fe2ff33040a5f3eb69ba55e255a185",
+    "workflow_run_id": 33160288592,
+    "aa0_harness_id": "22bf0ba9d934b718753b30edfec1bb67c46e8a563a9b82aed48f18dc5a4e12ec",
+    "no_late_surprises_hash": "04a30d2decc68aa33428e1110c7c497a25b9c83c8d3fb363a717c4fd3ab7caf4",
+    "vit_routing_preflight": "PASS",
+    "no_late_surprises_preflight": "PASS",
+    "aa0_repository_plan": "PASS_RUN_AA0",
+    "runner_parity": "PASS",
+    "canonical_pytest_shard_manifest": "PASS",
+    "canonical_pytest_shard_0": "FAIL_2",
+    "canonical_pytest_shard_1": "PASS",
+    "canonical_pytest_shard_2": "FAIL_1",
+    "canonical_pytest_shard_3": "FAIL_1",
+    "pytest_unittest_parity": "FAIL_4",
+    "tests_aggregator": "SKIPPED",
+    "shard_0_summary": "2_FAILED_1336_PASSED_4004_DESELECTED_95_SUBTESTS_PASSED",
+    "unittest_summary": "4_FAILED_1627_PASSED",
+    "result": "FAIL_CORRECTABLE_IN_SCOPE",
+    "generation_status": "SUPERSEDED"
+  },
+  "failure_findings": [
+    {
+      "code": "STALE_RECEIPTSTORE_BINDING_ASSERTION_SHAPE",
+      "scope": "TEST_CONFORMANCE",
+      "fix": "ASSERT_RECEIPT_STORE_NESTED_IMPLEMENTATION_AND_NO_FALLBACK_FIELDS"
+    },
+    {
+      "code": "STALE_RECEIPTSTORE_CARDINALITY_EXPECTATION_4_ACTUAL_6",
+      "scope": "TEST_CONFORMANCE",
+      "affected_paths": [
+        "EXACT_LIVE_COMPLETION",
+        "RETRY_IDEMPOTENCE_STORE_CARDINALITY",
+        "WRITE_EFFECTIVE_RECEIPT_RECOVERY"
+      ],
+      "fix": "EXPECT_EXISTING_V1_FOUR_RECORD_BUNDLE_PLUS_TWO_PROSPECTIVE_V2_RECORDS"
+    },
+    {
+      "code": "RUNTIME_SYNTHESIZED_RETRY_WALL_CLOCK_CHANGED_V2_CONTENT_ADDRESS",
+      "scope": "V2_SOURCE_BOUND_RUNTIME",
+      "fix": "REMOVE_LOCAL_NOW_SOURCE; ADMIT ONLY EXPLICIT AUTHORITATIVE CALLER TIMING SOURCES",
+      "scientific_effect": "NO_INVENTED_CHRONOLOGY_AND_DETERMINISTIC_RETRY_IDEMPOTENCE"
+    }
+  ],
+  "remediation": {
+    "implemented": true,
+    "production_code_changed": true,
+    "production_change_limited_to": "V2_COMPLETION_OBSERVABILITY_TIMING_SOURCE_ADMISSION",
+    "v1_semantics_changed": false,
+    "receiptstore_changed": false,
+    "workflow_files_changed": false,
+    "aa0_fast_path_changed": false,
+    "vit_siq_fast_path_changed": false,
+    "physical_writer_changed": false,
+    "new_authority": false,
+    "interim_generation": {
+      "candidate_head": "7a95cbf4212450449075fce15f1e15e1bd479f1e",
+      "pip_id": "880bb125e4db41617b5d6910183873c060016f8885b378061396efcaf26764d1",
+      "qualification_id": "64546ddde8837d81b5171b33d0a338854715522e0361576140d19474fae1a849",
+      "status": "SUPERSEDED_BEFORE_DISPATCH"
+    }
+  },
+  "repository_assurance": {
+    "replacement_exact_head_aa0_prewarm": "PENDING",
+    "targeted_devobs": "PENDING_REPLACEMENT_EXACT_HEAD_AA0_PREWARM",
+    "completion_observability": "PENDING_REPLACEMENT_EXACT_HEAD_AA0_PREWARM",
+    "vit_completion_runtime": "PENDING_REPLACEMENT_EXACT_HEAD_AA0_PREWARM",
+    "receiptstore": "PENDING_REPLACEMENT_EXACT_HEAD_AA0_PREWARM",
+    "post_merge_completion": "PENDING_REPLACEMENT_EXACT_HEAD_AA0_PREWARM",
+    "dsai3v_completion": "PENDING_REPLACEMENT_EXACT_HEAD_AA0_PREWARM",
+    "aa0_prewarm_regressions": "PENDING_REPLACEMENT_EXACT_HEAD_AA0_PREWARM",
+    "siq_ready_poll_latency_regressions": "PENDING_REPLACEMENT_EXACT_HEAD_AA0_PREWARM",
+    "merge_readiness": "PENDING_REPLACEMENT_EXACT_HEAD_AA0_PREWARM",
+    "full_repository_suite": "PENDING_REPLACEMENT_EXACT_HEAD_AA0_PREWARM",
+    "pytest_unittest_parity": "PENDING_REPLACEMENT_EXACT_HEAD_AA0_PREWARM",
+    "runner_parity": "PENDING_REPLACEMENT_EXACT_HEAD_AA0_PREWARM",
+    "development_profile": "PENDING_REPLACEMENT_EXACT_HEAD_AA0_PREWARM",
+    "authority_profile": "PENDING_REPLACEMENT_EXACT_HEAD_AA0_PREWARM"
+  },
+  "blocking_warning": "REPLACEMENT_EXACT_HEAD_AA0_PREWARM_MUST_PASS_BEFORE_PR; CURRENT_GITHUB_EXECUTION_CONNECTOR_EXPOSES_NO_WORKFLOW_DISPATCH_ACTION",
+  "recommendation": "FREEZE THE FULL REMEDIATION GENERATION, PUBLISH ITS IMMUTABLE PIP AND DETACHED QUALIFICATION, THEN DISPATCH THE FULL REPLACEMENT PRE_PR_AA0_WARM. DO NOT OPEN A PR, MERGE, EMIT A PRODUCTION COMPLETION RECEIPT, OR CLAIM SUB60 UNTIL THAT REQUIRED ASSURANCE PASSES.",
+  "logical_id": "0f6faa95531290992bd15003fda2be42c298e1740ab5f92485071fba1324292e"
+}

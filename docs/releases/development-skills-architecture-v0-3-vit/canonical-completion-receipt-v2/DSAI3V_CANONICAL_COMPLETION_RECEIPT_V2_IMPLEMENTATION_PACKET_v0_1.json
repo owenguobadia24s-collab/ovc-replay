@@ -1,0 +1,117 @@
+{
+  "schema": "ovc-dsai-vit-owner-local-maintenance-packet/v1",
+  "packet_id": "DSAI3V-CANONICAL-COMPLETION-RECEIPT-v2-MAINT-v0.1",
+  "programme_id": "OVC-DSAI-VIT-v0.3",
+  "owner": "DSAI_VIT_DEVOBS_COMPLETION_OBSERVABILITY_OWNER",
+  "authority_delta": "NONE",
+  "authority_manifest_id": "0f1d65dc5c48952688255f40691051f8e5aba53f0c5c60d555df23d84329f72d",
+  "dependency_frontier_id": "8f02774e018b490ae364bcf9b080331bd32628605c000408180a5b7daf289598",
+  "purpose": "Add a prospective source-bound canonical completion receipt v2 while preserving historical v1 receipts and using this unchanged fast-path packet as the next clean AA0 prewarm sub-60 validation specimen.",
+  "implementation": {
+    "v1_builder_changed": false,
+    "v1_schema_changed": false,
+    "v1_policy_changed": false,
+    "v1_required_bundle_changed": false,
+    "receiptstore_implementation_changed": false,
+    "v2_schema": "ovc-development-latency-canonical-dsai3v/v2",
+    "v2_attachment_schema": "ovc-dsai3v-completion-observability-attachment/v2",
+    "v2_writer": "build_canonical_completion_latency_receipt_v2",
+    "compatibility_reader": "validate_compatible_canonical_completion_receipt",
+    "forward_writer_policy": "EXISTING_REQUIRED_V1_BUNDLE_PLUS_PROSPECTIVE_V2_AND_V2_ATTACHMENT",
+    "storage": "EXISTING_BOUND_RECEIPTSTORE_ONLY",
+    "source_precedence": "OWNER_RECEIPT_THEN_GITHUB_THEN_DEVOBS_THEN_EXACT_LOG_THEN_NULL",
+    "invalid_order_policy": "PRESERVE_RAW_EMIT_TYPED_WARNING_NULL_UNSAFE_DERIVED",
+    "runtime_timing_policy": "AUTHORITATIVE_CALLER_SOURCE_ROWS_ONLY_NO_LOCAL_WALL_CLOCK_SYNTHESIS",
+    "identity": "CONTENT_ADDRESSED_DETERMINISTIC_CANONICAL_JSON"
+  },
+  "pre_pr_aa0_generation_1": {
+    "candidate_head": "2cb6d1b9b5e574d7d8be698de777e31f2b4c313b",
+    "pip_id": "3edcb9e3326b83ae70cca8ba32bec22171fe2ff33040a5f3eb69ba55e255a185",
+    "qualification_id": "d1abb330f63b47844a237a0ff3ee1718a65505d3634641e26f318beb545b9409",
+    "workflow_run_id": 33160288592,
+    "aa0_harness_id": "22bf0ba9d934b718753b30edfec1bb67c46e8a563a9b82aed48f18dc5a4e12ec",
+    "no_late_surprises_hash": "04a30d2decc68aa33428e1110c7c497a25b9c83c8d3fb363a717c4fd3ab7caf4",
+    "result": "FAIL_CORRECTABLE_IN_SCOPE",
+    "passes": [
+      "VIT_ROUTING_PREFLIGHT",
+      "NO_LATE_SURPRISES_PREFLIGHT",
+      "AA0_REPOSITORY_PLAN_RUN_AA0",
+      "RUNNER_PARITY",
+      "CANONICAL_PYTEST_SHARD_MANIFEST",
+      "CANONICAL_PYTEST_SHARD_1"
+    ],
+    "failures": [
+      {
+        "surface": "CANONICAL_PYTEST_SHARD_0",
+        "test": "tests/development_skills/test_dsai3v_completion_observability_v2.py::CanonicalCompletionReceiptV2Tests::test_no_new_storage_or_write_authority",
+        "code": "STALE_RECEIPTSTORE_BINDING_ASSERTION_SHAPE",
+        "disposition": "CORRECTABLE_IN_SCOPE_TEST_CONFORMANCE"
+      },
+      {
+        "surface": "CANONICAL_PYTEST_SHARD_0",
+        "test": "tests/development_skills/test_dsai3v_vit_completion_runtime.py::Dsai3vVitCompletionRuntimeTests::test_retry_is_idempotent",
+        "code": "RUNTIME_SYNTHESIZED_RETRY_WALL_CLOCK_CHANGED_V2_CONTENT_ADDRESS",
+        "disposition": "CORRECTABLE_IN_SCOPE_SOURCE_BINDING_DEFECT"
+      },
+      {
+        "surface": "CANONICAL_PYTEST_SHARD_2",
+        "test": "tests/development_skills/test_dsai3v_vit_completion_runtime.py::Dsai3vVitCompletionRuntimeTests::test_exact_live_completion_persists_materialisation_completion_devobs_and_attachment",
+        "code": "STALE_RECEIPTSTORE_CARDINALITY_EXPECTATION_4_ACTUAL_6",
+        "disposition": "CORRECTABLE_IN_SCOPE_TEST_CONFORMANCE"
+      },
+      {
+        "surface": "CANONICAL_PYTEST_SHARD_3",
+        "test": "tests/development_skills/test_dsai3v_vit_completion_runtime.py::Dsai3vVitCompletionRuntimeTests::test_recover_after_effective_write_and_partial_receipt_persistence",
+        "code": "STALE_RECEIPTSTORE_CARDINALITY_EXPECTATION_4_ACTUAL_6",
+        "disposition": "CORRECTABLE_IN_SCOPE_TEST_CONFORMANCE"
+      },
+      {
+        "surface": "PYTEST_UNITTEST_PARITY",
+        "code": "FOUR_CORRESPONDING_FAILURES",
+        "disposition": "CORRECTABLE_IN_SCOPE"
+      }
+    ],
+    "aggregator": "SKIPPED_AFTER_REQUIRED_PRODUCER_FAILURE"
+  },
+  "remediation": {
+    "production_runtime": {
+      "changed": true,
+      "change": "REMOVE_SYNTHESIZED_PACKET_COMPLETION_WALL_CLOCK_SOURCE",
+      "source_policy": "PACKET_COMPLETION_PERSISTENCE_AND_OTHER_CANONICAL_TIMES_REMAIN_NULL_UNLESS_EXPLICIT_AUTHORITATIVE_SOURCE_ROW_IS_SUPPLIED",
+      "retry_effect": "CONTENT_ADDRESSED_V2_IDEMPOTENCE_RESTORED_BY_DESIGN",
+      "generic_devobs_trace_reinterpretation": false
+    },
+    "tests": [
+      "ALIGN_SUCCESS_PATH_RECEIPTSTORE_CARDINALITY_4_TO_6_FOR_UNCHANGED_V1_FOUR_RECORD_BUNDLE_PLUS_TWO_PROSPECTIVE_V2_RECORDS",
+      "ASSERT_EXISTING_RECEIPTSTORE_BINDING_IMPLEMENTATION_AND_FALLBACK_FIELDS_FROM_RECEIPT_STORE_OBJECT",
+      "ASSERT_NO_LOCAL_WALL_CLOCK_SOURCE_AND_EXPLICIT_CALLER_SOURCE_ADMISSION"
+    ],
+    "v1_semantics_changed": false,
+    "workflow_or_aa0_fast_path_changed": false,
+    "vit_or_siq_fast_path_changed": false,
+    "new_storage_or_write_authority": false
+  },
+  "superseded_interim_generation": {
+    "candidate_head": "7a95cbf4212450449075fce15f1e15e1bd479f1e",
+    "pip_id": "880bb125e4db41617b5d6910183873c060016f8885b378061396efcaf26764d1",
+    "qualification_id": "64546ddde8837d81b5171b33d0a338854715522e0361576140d19474fae1a849",
+    "reason": "IMMUTABLE_PARTIAL_REMEDIATION_GENERATION_SUPERSEDED_BEFORE_DISPATCH_AFTER_FULL_FAILED_SURFACE_REVIEW_IDENTIFIED_ADDITIONAL_CORRECTABLE_DEFECTS"
+  },
+  "clean_specimen_controls": {
+    "workflow_files_changed": false,
+    "aa0_cache_key_semantics_changed": false,
+    "canonical_pytest_sharding_changed": false,
+    "pytest_unittest_parity_changed": false,
+    "runner_parity_changed": false,
+    "siq_ready_polling_changed": false,
+    "rac_assurance_changed": false,
+    "merge_readiness_changed": false,
+    "repository_protection_changed": false,
+    "physical_main_writer_changed": false,
+    "new_service_store_or_control_plane": false,
+    "production_sub60_claim": "PENDING_EXACT_PRODUCTION_MEASUREMENT"
+  },
+  "replacement_exact_head_assurance": "PENDING_PRE_PR_AA0_WARM",
+  "rollback": "Forward-revert v2 prospective files/runtime emission and packet-scoped test conformance changes only; leave existing v1 and any already-emitted or qualified evidence untouched.",
+  "logical_id": "c103c384d9fdc9917dad5b80aa0e458c8a3f2df7cdc22139cc702e36a1ac7c91"
+}

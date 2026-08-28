@@ -62,7 +62,7 @@ class Dsai3vVitCompletionRuntimeTests(unittest.TestCase):
             self.assertEqual(result["controller"], "DSAI_VIT_PHYSICAL_CONTROLLER")
             self.assertEqual(result["physical_gateway"], "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY")
             files = list(Path(tmp).glob("*.json"))
-            self.assertEqual(len(files), 4)
+            self.assertEqual(len(files), 6)
             devobs = json.loads((Path(tmp) / f"{result['development_latency_receipt_id']}.json").read_text(encoding="utf-8"))
             self.assertEqual(devobs["latency"]["status"], "UNAVAILABLE")
             self.assertEqual(devobs["vit"]["exact_tree_equal_count"], 1)
@@ -85,7 +85,7 @@ class Dsai3vVitCompletionRuntimeTests(unittest.TestCase):
                 **self._kwargs(store),
             )
             self.assertEqual(first, second)
-            self.assertEqual(len(list(Path(tmp).glob("*.json"))), 4)
+            self.assertEqual(len(list(Path(tmp).glob("*.json"))), 6)
 
     def test_recover_after_effective_write_and_partial_receipt_persistence(self) -> None:
         transaction = self._transaction()
@@ -101,7 +101,7 @@ class Dsai3vVitCompletionRuntimeTests(unittest.TestCase):
             )
             self.assertEqual(result["status"], "WRITE_EFFECTIVE_RECEIPT_RECOVERED")
             self.assertEqual(result["materialisation_receipt_id"], materialisation.receipt_id)
-            self.assertEqual(len(list(Path(tmp).glob("*.json"))), 4)
+            self.assertEqual(len(list(Path(tmp).glob("*.json"))), 6)
 
     def test_tree_mismatch_is_evidenced_and_fails_before_completion(self) -> None:
         transaction = self._transaction()

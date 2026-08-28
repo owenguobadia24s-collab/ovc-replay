@@ -3,9 +3,15 @@ from __future__ import annotations
 from dataclasses import asdict
 import os
 from pathlib import Path
+import re
 from typing import Any, Mapping, Sequence
 
 from ovc.development.dsai3v_completion_observability import build_canonical_completion_latency_receipt
+from ovc.development.dsai3v_completion_observability_v2 import (
+    build_canonical_completion_latency_receipt_v2,
+    build_completion_attachment_v2,
+    validate_canonical_completion_latency_receipt_v2,
+)
 from ovc.development.skills.vit_core import VitContractError
 from ovc.development.skills.vit_materialisation import (
     PacketCompletionReceipt,
@@ -20,6 +26,7 @@ SIQ_PHYSICAL_GATEWAY = "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY"
 RECEIPT_STORE_ROOT_ENV = "OVC_DSAI3V_RECEIPT_STORE_ROOT"
 EXTERNAL_ARTIFACT_ROOT_ENV = "OVC_EXTERNAL_ARTIFACT_ROOT"
 EXTERNAL_RECEIPTS_RELATIVE_ROOT = "receipts"
+_IMPLEMENTATION_HEAD = re.compile(r"^github:pr:\d+:head:([0-9a-f]{40})$")
 
 
 def resolve_receipt_store(
@@ -57,6 +64,19 @@ def resolve_receipt_store(
     return ReceiptStore(path)
 
 
+def _bind_exact_observation(
+    target: dict[str, Any],
+    key: str,
+    exact_value: Any,
+) -> None:
+    if exact_value is None:
+        return
+    supplied = target.get(key)
+    if supplied is not None and supplied != exact_value:
+        raise VitContractError(f"V2_OBSERVABILITY_{key.upper()}_MISMATCH")
+    target[key] = exact_value
+
+
 def persist_physical_completion(
     *,
     transaction: PhysicalMaterialisationTransaction,
@@ -78,15 +98,24 @@ def persist_physical_completion(
     vit_receipts: Sequence[Mapping[str, Any]] = (),
     siq_receipts: Sequence[Mapping[str, Any]] = (),
     async_assurance_metrics: Mapping[str, Any] | None = None,
+    completion_timing_sources: Sequence[Mapping[str, Any]] = (),
+    completion_aa0_observability: Mapping[str, Any] | None = None,
 ) -> Mapping[str, Any]:
     """Persist one live VIT/SIQ materialisation and mandatory completion bundle.
 
-    This is the runtime binding for the existing physical controller. It creates no
-    merge authority and performs no Git write. The caller supplies the already-observed
-    post-write commit/tree. Exact tree mismatch is persisted as evidence and fails
-    closed before PacketCompletionReceipt creation. Bundle writes are content-addressed
-    and idempotent, so retry after an interrupted receipt write is recovery, not a new
-    completion.
+    The historical v1 bundle is emitted exactly as before. A prospective v2 receipt
+    and v2 attachment are then added to the same bound ReceiptStore. V2 is
+    observability-only; it does not become a prerequisite for the historical bundle,
+    change merge authority, or create a new storage/write path.
+
+    V2 timing accepts only explicit source rows supplied by their current owner. This
+    runtime does not synthesize a persistence timestamp from its local wall clock: the
+    existing PacketCompletionReceipt carries no authoritative timestamp, and making
+    one up at retry time would both infer chronology and make the content-addressed v2
+    record non-idempotent. A packet-completion persistence time is therefore null
+    unless an authoritative caller supplies that source explicitly. Generic DEVOBS
+    trace-completion time is likewise never reinterpreted as physical materialisation,
+    SIQ readiness, PR open, or another canonical event.
     """
     if controller != VIT_PHYSICAL_CONTROLLER:
         raise VitContractError("PHYSICAL_MAIN_WRITER_IDENTITY_INVALID")
@@ -124,10 +153,53 @@ def persist_physical_completion(
         async_assurance_metrics=async_assurance_metrics,
     )
     bundle_ids = receipt_store.put_completion_with_devobs(completion, development_latency_receipt)
+
+    timing_sources: list[Mapping[str, Any]] = [dict(row) for row in completion_timing_sources]
+
+    aa0_observability: dict[str, Any] = dict(completion_aa0_observability or {})
+    exact_pip_id = payload_id if re.fullmatch(r"[0-9a-f]{64}", str(payload_id)) else None
+    _bind_exact_observation(aa0_observability, "pip_id", exact_pip_id)
+    _bind_exact_observation(aa0_observability, "prospective_tree_sha", transaction.expected_result_tree)
+    _bind_exact_observation(aa0_observability, "physical_tree_sha", observed_tree)
+    head_match = _IMPLEMENTATION_HEAD.fullmatch(str(implementation_ref))
+    if head_match:
+        _bind_exact_observation(aa0_observability, "candidate_head_sha", head_match.group(1))
+        _bind_exact_observation(aa0_observability, "pr_head_sha", head_match.group(1))
+
+    v2_receipt = build_canonical_completion_latency_receipt_v2(
+        v1_receipt=development_latency_receipt,
+        timing_sources=timing_sources,
+        aa0_observability=aa0_observability,
+    )
+    expected: dict[str, Any] = {
+        "programme_id": programme_id,
+        "packet_id": packet_id,
+        "completion_receipt_id": completion.receipt_id,
+        "prospective_tree_sha": transaction.expected_result_tree,
+        "physical_tree_sha": observed_tree,
+    }
+    if head_match:
+        expected["candidate_head_sha"] = head_match.group(1)
+        expected["pr_head_sha"] = head_match.group(1)
+    if exact_pip_id:
+        expected["pip_id"] = exact_pip_id
+    validate_canonical_completion_latency_receipt_v2(v2_receipt, expected=expected)
+    v2_receipt_id = str(v2_receipt["record_id"])
+    receipt_store.put_record(v2_receipt, v2_receipt_id)
+    v2_attachment = build_completion_attachment_v2(
+        programme_id=programme_id,
+        packet_id=packet_id,
+        completion_receipt_id=completion.receipt_id,
+        development_latency_receipt=v2_receipt,
+    )
+    receipt_store.put_record(v2_attachment.to_record(), v2_attachment.attachment_id)
+
     return {
         "transaction_id": transaction.transaction_id,
         "materialisation_receipt_id": materialisation.receipt_id,
         **bundle_ids,
+        "v2_development_latency_receipt_id": v2_receipt_id,
+        "v2_attachment_id": v2_attachment.attachment_id,
         "observed_commit": observed_commit,
         "observed_tree": observed_tree,
         "exact_tree_equal": True,
@@ -147,8 +219,8 @@ def recover_effective_write_completion(
     """Recover receipt persistence after main advanced but bundle persistence did not.
 
     The physical write is never repeated here. If the exact expected result tree is
-    already physical, the same deterministic completion bundle is persisted idempotently.
-    Any other post-write state fails closed.
+    already physical, the same deterministic historical completion bundle is persisted
+    idempotently. Prospective v2 is append-only and reuses the same bound store.
     """
     disposition = recover_unknown_write(transaction, observed_commit, observed_tree)
     if disposition == "WRITE_NOT_EFFECTIVE_RETRYABLE":
