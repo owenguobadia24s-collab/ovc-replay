@@ -8,49 +8,77 @@
     "schema_unchanged": true,
     "policy_unchanged": true,
     "builder_unchanged": true,
+    "required_bundle_unchanged": true,
     "frozen_fixture_record_id": "3d17ae4908a3edd3d16b038a79470fb0bd11e9913495913760f5a79e57925168"
   },
-  "v2_isolated_assurance": {
-    "result": "PASS",
-    "coverage": "35_REQUESTED_CASES_COVERED_BY_ASSERTIONS_AND_SUBTESTS",
-    "same_inputs_same_id": true,
-    "source_change_changes_id": true,
-    "utc_normalization": true,
-    "missingness_not_inferred": true,
-    "partial_complete_unavailable_states": true,
-    "invalid_order_typed_warning": true,
-    "unsafe_negative_latency_not_emitted": true,
-    "identity_mismatch_fail_closed": true,
-    "v1_v2_coexist": true,
-    "receiptstore_append_only": true,
-    "authority_effect_none": true,
-    "new_storage_service": false,
-    "new_physical_writer": false,
-    "post_merge_v2_emission_path": true
+  "requested_v2_case_design": {
+    "coverage": "35_REQUESTED_CASES_COVERED_BY_TEST_ASSERTIONS_AND_SUBTESTS",
+    "current_remediated_exact_head_execution": "PENDING_PRE_PR_AA0_WARM",
+    "no_post_remediation_pass_claim": true
   },
   "pre_pr_aa0_generation_1": {
     "candidate_head": "2cb6d1b9b5e574d7d8be698de777e31f2b4c313b",
     "qualification_id": "d1abb330f63b47844a237a0ff3ee1718a65505d3634641e26f318beb545b9409",
     "pip_id": "3edcb9e3326b83ae70cca8ba32bec22171fe2ff33040a5f3eb69ba55e255a185",
     "workflow_run_id": 33160288592,
+    "aa0_harness_id": "22bf0ba9d934b718753b30edfec1bb67c46e8a563a9b82aed48f18dc5a4e12ec",
+    "no_late_surprises_hash": "04a30d2decc68aa33428e1110c7c497a25b9c83c8d3fb363a717c4fd3ab7caf4",
     "vit_routing_preflight": "PASS",
+    "no_late_surprises_preflight": "PASS",
     "aa0_repository_plan": "PASS_RUN_AA0",
     "runner_parity": "PASS",
     "canonical_pytest_shard_manifest": "PASS",
-    "canonical_pytest_shard_3": "FAIL",
-    "failure_test": "tests/development_skills/test_dsai3v_vit_completion_runtime.py::Dsai3vVitCompletionRuntimeTests::test_recover_after_effective_write_and_partial_receipt_persistence",
-    "failure_detail": "EXPECTED_4_JSON_RECORDS_ACTUAL_6",
-    "disposition": "CORRECTABLE_IN_SCOPE_STALE_TEST_EXPECTATION",
-    "generation_status": "SUPERSEDED_BY_REMEDIATED_CANDIDATE"
+    "canonical_pytest_shard_0": "FAIL_2",
+    "canonical_pytest_shard_1": "PASS",
+    "canonical_pytest_shard_2": "FAIL_1",
+    "canonical_pytest_shard_3": "FAIL_1",
+    "pytest_unittest_parity": "FAIL_4",
+    "tests_aggregator": "SKIPPED",
+    "shard_0_summary": "2_FAILED_1336_PASSED_4004_DESELECTED_95_SUBTESTS_PASSED",
+    "unittest_summary": "4_FAILED_1627_PASSED",
+    "result": "FAIL_CORRECTABLE_IN_SCOPE",
+    "generation_status": "SUPERSEDED"
   },
+  "failure_findings": [
+    {
+      "code": "STALE_RECEIPTSTORE_BINDING_ASSERTION_SHAPE",
+      "scope": "TEST_CONFORMANCE",
+      "fix": "ASSERT_RECEIPT_STORE_NESTED_IMPLEMENTATION_AND_NO_FALLBACK_FIELDS"
+    },
+    {
+      "code": "STALE_RECEIPTSTORE_CARDINALITY_EXPECTATION_4_ACTUAL_6",
+      "scope": "TEST_CONFORMANCE",
+      "affected_paths": [
+        "EXACT_LIVE_COMPLETION",
+        "RETRY_IDEMPOTENCE_STORE_CARDINALITY",
+        "WRITE_EFFECTIVE_RECEIPT_RECOVERY"
+      ],
+      "fix": "EXPECT_EXISTING_V1_FOUR_RECORD_BUNDLE_PLUS_TWO_PROSPECTIVE_V2_RECORDS"
+    },
+    {
+      "code": "RUNTIME_SYNTHESIZED_RETRY_WALL_CLOCK_CHANGED_V2_CONTENT_ADDRESS",
+      "scope": "V2_SOURCE_BOUND_RUNTIME",
+      "fix": "REMOVE_LOCAL_NOW_SOURCE; ADMIT ONLY EXPLICIT AUTHORITATIVE CALLER TIMING SOURCES",
+      "scientific_effect": "NO_INVENTED_CHRONOLOGY_AND_DETERMINISTIC_RETRY_IDEMPOTENCE"
+    }
+  ],
   "remediation": {
-    "production_code_changed": false,
-    "test_file": "tests/development_skills/test_dsai3v_vit_completion_runtime.py",
-    "change": "SUCCESS_PATH_RECEIPTSTORE_CARDINALITY_EXPECTATION_4_TO_6_FOR_PROSPECTIVE_V2_WRITER",
-    "reason": "THE_EXISTING_V1 FOUR_RECORD REQUIRED BUNDLE REMAINS UNCHANGED AND THE PROSPECTIVE WRITER ADDS EXACTLY TWO V2 RECORDS",
-    "scope": "PACKET_LOCAL_TEST_CONFORMANCE_ONLY",
-    "fast_path_changed": false,
-    "v1_semantics_changed": false
+    "implemented": true,
+    "production_code_changed": true,
+    "production_change_limited_to": "V2_COMPLETION_OBSERVABILITY_TIMING_SOURCE_ADMISSION",
+    "v1_semantics_changed": false,
+    "receiptstore_changed": false,
+    "workflow_files_changed": false,
+    "aa0_fast_path_changed": false,
+    "vit_siq_fast_path_changed": false,
+    "physical_writer_changed": false,
+    "new_authority": false,
+    "interim_generation": {
+      "candidate_head": "7a95cbf4212450449075fce15f1e15e1bd479f1e",
+      "pip_id": "880bb125e4db41617b5d6910183873c060016f8885b378061396efcaf26764d1",
+      "qualification_id": "64546ddde8837d81b5171b33d0a338854715522e0361576140d19474fae1a849",
+      "status": "SUPERSEDED_BEFORE_DISPATCH"
+    }
   },
   "repository_assurance": {
     "replacement_exact_head_aa0_prewarm": "PENDING",
@@ -69,8 +97,7 @@
     "development_profile": "PENDING_REPLACEMENT_EXACT_HEAD_AA0_PREWARM",
     "authority_profile": "PENDING_REPLACEMENT_EXACT_HEAD_AA0_PREWARM"
   },
-  "fast_path_changed": false,
-  "blocking_warning": "REPLACEMENT_EXACT_HEAD_AA0_PREWARM_MUST_PASS_BEFORE_PR; CURRENT_EXECUTION_CONNECTOR_EXPOSES_NO_WORKFLOW_DISPATCH_ACTION",
-  "recommendation": "FREEZE REMEDIATED GENERATION, REPUBLISH IMMUTABLE PIP AND DETACHED QUALIFICATION, THEN DISPATCH FULL REPLACEMENT AA0 PREWARM BEFORE OPENING PR. DO NOT CLAIM SUB60 OR OPEN PR WITHOUT THE REQUIRED PREWARM.",
-  "logical_id": "55953d59d5dfde443273e590926bcd0ba1b1034d45990bbba8e5a4e95e1bfa7f"
+  "blocking_warning": "REPLACEMENT_EXACT_HEAD_AA0_PREWARM_MUST_PASS_BEFORE_PR; CURRENT_GITHUB_EXECUTION_CONNECTOR_EXPOSES_NO_WORKFLOW_DISPATCH_ACTION",
+  "recommendation": "FREEZE THE FULL REMEDIATION GENERATION, PUBLISH ITS IMMUTABLE PIP AND DETACHED QUALIFICATION, THEN DISPATCH THE FULL REPLACEMENT PRE_PR_AA0_WARM. DO NOT OPEN A PR, MERGE, EMIT A PRODUCTION COMPLETION RECEIPT, OR CLAIM SUB60 UNTIL THAT REQUIRED ASSURANCE PASSES.",
+  "logical_id": "0f6faa95531290992bd15003fda2be42c298e1740ab5f92485071fba1324292e"
 }
