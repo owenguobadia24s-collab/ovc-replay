@@ -3,7 +3,7 @@
   "packet_id": "DSAI3V-CANONICAL-COMPLETION-RECEIPT-v2-MAINT-v0.1",
   "plan_id": "OPERATOR_PACKET_INSTRUCTION_2026-08-28",
   "plan_version": "v0.1",
-  "status": "IMPLEMENTED",
+  "status": "QA_REVIEW",
   "prerequisites": [
     "MAIN_26a42c454e261f9e47b7c7075e4627f2e323ce12",
     "DSAI3V_VIT_GENERAL_AUTHORITY_ACTIVE",
@@ -18,12 +18,21 @@
   "candidate_commit": null,
   "tests": {
     "isolated_v2_conformance": "PASS",
-    "exact_head_aa0_prewarm": "PENDING"
+    "pre_pr_aa0_generation_1_run_33160288592": "FAIL_CORRECTABLE_STALE_TEST_EXPECTATION",
+    "replacement_exact_head_aa0_prewarm": "PENDING"
   },
-  "qa_packet": "bbfdac480fa191807c2b63297176baede4972354a2caecb1a4fbdfd216027588",
+  "superseded_generation": {
+    "candidate_head": "2cb6d1b9b5e574d7d8be698de777e31f2b4c313b",
+    "pip_id": "3edcb9e3326b83ae70cca8ba32bec22171fe2ff33040a5f3eb69ba55e255a185",
+    "qualification_id": "d1abb330f63b47844a237a0ff3ee1718a65505d3634641e26f318beb545b9409",
+    "reason": "PRE_PR_AA0_EXPOSED_CORRECTABLE_STALE_RUNTIME_TEST_CARDINALITY_EXPECTATION"
+  },
+  "qa_packet": "55953d59d5dfde443273e590926bcd0ba1b1034d45990bbba8e5a4e95e1bfa7f",
   "decision_record": null,
   "merge_commit": null,
-  "blockers": ["EXACT_HEAD_AA0_DISPATCH_CAPABILITY_REQUIRED_BEFORE_PR"],
+  "blockers": [
+    "REPLACEMENT_EXACT_HEAD_AA0_DISPATCH_REQUIRED_BEFORE_PR"
+  ],
   "next_packet": null,
-  "logical_id": "732d635ff04be9141b29d6baed07874d7723072420417af5650f787a01470f5d"
+  "logical_id": "e21f85631f4f1d978ad5b01a314a67f1b3b3845704f15da44f94fd5465ff7d85"
 }
