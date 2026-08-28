@@ -36,6 +36,24 @@
     "recovery_semantics": "Append a new source-bound v2 receipt and v2 attachment for an already-completed prospective v2 generation only when its existing v2 receipt cannot safely evaluate PR_OPEN_TO_MATERIALISED. Historical v1-only completions remain untouched.",
     "proof_output": "Expose v2 receipt IDs, timing status and PR_OPEN_TO_MATERIALISED in owner-local completion logs without changing the stored v1 completion-proof schema."
   },
+  "first_remediation_generation": {
+    "candidate_head_sha": "6e08245bd148c3e00968042d2fa3ce224baf90b4",
+    "candidate_tree_sha": "d96fb21ceda45aea61657086e24e8d5b675840eb",
+    "pip_id": "42d00325521866cb852cf0307d6a2600198f01a472dd94bf1115d93d598c95f1",
+    "qualification_id": "be4b8614cbb36b057d314080714ca56fd61e34de01e9c8bb4793af195731590a",
+    "pre_pr_aa0_run_id": "33168246649",
+    "aa0_harness_id": "b42706379706e52d278a89d3383f742756c32a170e51cffaed049c1e41d87f3c",
+    "no_late_surprises_hash": "8c6995365a64b94522d8b37e07ade9f4c3528443a8be41dc43e04041798efe84",
+    "disposition": "SUPERSEDED_AFTER_CORRECTABLE_TEST_DEFECT",
+    "failure": {
+      "test": "tests/development_skills/test_vit_post_merge_late_binding_recovery.py::VitPostMergeLateBindingRecoveryTests::test_recovery_manifest_is_authority_inert_and_names_first_late_binding_merge",
+      "reason": "The historical test hard-coded one recovery request although the recovery registry is append-only and the remediation lawfully added a second authority-inert recovery request.",
+      "canonical_shard_1": "FAIL_1_OF_1336",
+      "pytest_unittest_parity": "FAIL_1_OF_1634",
+      "other_canonical_shards": "PASS"
+    },
+    "correction": "Replace cardinality=1 with append-only authority-inert assertions that preserve the original DSAI3V-LB-WP1 request and explicitly bind the DSAI3V canonical receipt v2 recovery request."
+  },
   "preserved": [
     "HISTORICAL_V1_IMMUTABILITY",
     "EXISTING_RECEIPTSTORE_BINDING",
@@ -58,5 +76,5 @@
     "TARGETED_AND_REPOSITORY_ASSURANCE_PASS"
   ],
   "rollback": "Squash-revert the corrective integration. Existing v1 receipts, the first v2 receipt, the source-bound v2 receipt if already appended, and all physical Git history remain immutable; rollback stops future source-binding enrichment only.",
-  "status": "IMPLEMENTED_AWAITING_EXACT_HEAD_ASSURANCE"
+  "status": "REMEDIATED_AWAITING_REPLACEMENT_EXACT_HEAD_ASSURANCE"
 }
