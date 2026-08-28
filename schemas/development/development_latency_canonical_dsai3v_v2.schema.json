@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-development-latency-canonical-dsai3v/v2",
+  "type": "object",
+  "required": ["schema","programme_id","packet_id","completion_receipt_id","v1_receipt_id","devobs_context","latency","async_assurance","orch","vit","siq","timing","aa0","evidence_rule","authority_effect","record_id"],
+  "properties": {
+    "schema": {"const": "ovc-development-latency-canonical-dsai3v/v2"},
+    "programme_id": {"type":"string","minLength":1},
+    "packet_id": {"type":"string","minLength":1},
+    "completion_receipt_id": {"type":"string","minLength":1},
+    "v1_receipt_id": {"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "devobs_context": {"type":"object"},
+    "latency": {"type":"object"},
+    "async_assurance": {"type":"object"},
+    "orch": {"type":"object"},
+    "vit": {"type":"object"},
+    "siq": {"type":"object"},
+    "timing": {
+      "type":"object",
+      "required":["status","pr_opened_at_utc","aa0_reuse_observed_at_utc","profile_passed_at_utc","siq_ready_at_utc","merge_readiness_passed_at_utc","physical_materialised_at_utc","packet_completion_receipt_persisted_at_utc","completion_proof_persisted_at_utc","sources","selected_sources","warnings","derived_latency_ms"],
+      "properties": {
+        "status":{"enum":["OBSERVED_COMPLETE","OBSERVED_PARTIAL","UNAVAILABLE"]},
+        "pr_opened_at_utc":{"type":["string","null"]},
+        "aa0_reuse_observed_at_utc":{"type":["string","null"]},
+        "profile_passed_at_utc":{"type":["string","null"]},
+        "siq_ready_at_utc":{"type":["string","null"]},
+        "merge_readiness_passed_at_utc":{"type":["string","null"]},
+        "physical_materialised_at_utc":{"type":["string","null"]},
+        "packet_completion_receipt_persisted_at_utc":{"type":["string","null"]},
+        "completion_proof_persisted_at_utc":{"type":["string","null"]},
+        "sources":{"type":"array","items":{"type":"object","required":["field","source_type","source_id","observed_at_utc","authority"],"properties":{"field":{"enum":["pr_opened_at_utc","aa0_reuse_observed_at_utc","profile_passed_at_utc","siq_ready_at_utc","merge_readiness_passed_at_utc","physical_materialised_at_utc","packet_completion_receipt_persisted_at_utc","completion_proof_persisted_at_utc"]},"source_type":{"enum":["GITHUB_PR","GITHUB_WORKFLOW_JOB","GITHUB_CHECK_RUN","INTEGRATION_ADMISSION_RECEIPT","PHYSICAL_MATERIALISATION_RECEIPT","PACKET_COMPLETION_RECEIPT","DEVOBS_RECEIPT","COMPLETION_PROOF","OWNER_LOCAL_RECEIPT","EXACT_LOG"]},"source_id":{"type":"string","minLength":1},"observed_at_utc":{"type":"string"},"authority":{"const":"OBSERVATIONAL_ONLY"}},"additionalProperties":false}},
+        "selected_sources":{"type":"object"},
+        "warnings":{"type":"array","items":{"type":"object"}},
+        "derived_latency_ms":{"type":"object","required":["pr_open_to_materialised_ms","pr_open_to_siq_ready_ms","pr_open_to_merge_readiness_ms","merge_readiness_to_materialised_ms","materialised_to_packet_completion_ms","materialised_to_completion_proof_ms"],"properties":{"pr_open_to_materialised_ms":{"type":["number","null"],"minimum":0},"pr_open_to_siq_ready_ms":{"type":["number","null"],"minimum":0},"pr_open_to_merge_readiness_ms":{"type":["number","null"],"minimum":0},"merge_readiness_to_materialised_ms":{"type":["number","null"],"minimum":0},"materialised_to_packet_completion_ms":{"type":["number","null"],"minimum":0},"materialised_to_completion_proof_ms":{"type":["number","null"],"minimum":0}},"additionalProperties":false}
+      },
+      "additionalProperties": false
+    },
+    "aa0": {
+      "type":"object",
+      "required":["repository_assurance_disposition","unittest_parity_disposition","runner_parity_disposition","canonical_shards_executed","candidate_head_sha","pr_head_sha","pip_id","qualification_id","aa0_harness_id","prewarm_run_id","prewarm_completed_at_utc","pr_assurance_run_id","prospective_tree_sha","physical_tree_sha"],
+      "properties": {
+        "repository_assurance_disposition":{"type":["string","null"]},
+        "unittest_parity_disposition":{"type":["string","null"]},
+        "runner_parity_disposition":{"type":["string","null"]},
+        "canonical_shards_executed":{"type":["boolean","null"]},
+        "candidate_head_sha":{"type":["string","null"],"pattern":"^[0-9a-f]{40}$"},
+        "pr_head_sha":{"type":["string","null"],"pattern":"^[0-9a-f]{40}$"},
+        "pip_id":{"type":["string","null"],"pattern":"^[0-9a-f]{64}$"},
+        "qualification_id":{"type":["string","null"],"pattern":"^[0-9a-f]{64}$"},
+        "aa0_harness_id":{"type":["string","null"],"pattern":"^[0-9a-f]{64}$"},
+        "prewarm_run_id":{"type":["string","null"]},
+        "prewarm_completed_at_utc":{"type":["string","null"]},
+        "pr_assurance_run_id":{"type":["string","null"]},
+        "prospective_tree_sha":{"type":["string","null"],"pattern":"^[0-9a-f]{40}$"},
+        "physical_tree_sha":{"type":["string","null"],"pattern":"^[0-9a-f]{40}$"}
+      },
+      "additionalProperties": false
+    },
+    "evidence_rule":{"const":"OBSERVED_SOURCE_BOUND_TIMESTAMPS_ONLY_NO_CHRONOLOGY_INFERENCE"},
+    "authority_effect":{"const":"NONE"},
+    "record_id":{"type":"string","pattern":"^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}
