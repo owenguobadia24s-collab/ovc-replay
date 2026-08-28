@@ -1,0 +1,33 @@
+{
+  "schema": "ovc-dsai-vit-owner-local-authority-manifest/v1",
+  "packet_id": "DSAI3V-SIQ-READY-POLL-LATENCY-REMEDIATION-v0.1",
+  "owner": "DSAI_VIT_SIQ_DEVELOPMENT_INTEGRATION_OWNER",
+  "authority_delta": "NONE",
+  "allowed_effects": [
+    "REFACTOR_EXISTING_EXACT_ASSURANCE_OBSERVATION_WAIT_MECHANICS",
+    "REDUCE_BOUNDED_IN_JOB_POLL_CADENCE",
+    "ADD_DETERMINISTIC_EQUIVALENCE_TIMING_AND_CONTRACT_TESTS",
+    "RECORD_NEXT_ELIGIBLE_AA0_PREWARM_PACKET_VALIDATION_OBLIGATION"
+  ],
+  "forbidden_effects": [
+    "ASSURANCE_PREREQUISITE_CHANGE",
+    "AA0_SEMANTIC_CHANGE",
+    "RAC_PROOF_SUBSTITUTION_CHANGE",
+    "VIT_SIQ_GRT_WEAKENING",
+    "REPOSITORY_PROTECTION_OR_BYPASS_CHANGE",
+    "PHYSICAL_MAIN_WRITER_CHANGE",
+    "NEW_SERVICE_DAEMON_SCHEDULER_SUPERVISOR_EVENT_BUS_QUEUE_OR_STORE",
+    "DIASI_PES_OR_CERS_RUNTIME_USE",
+    "PRODUCTION_SUB60_CLAIM_FROM_BOOTSTRAP_PACKET"
+  ],
+  "assurance_prerequisites": {
+    "tests_workflow": [
+      "VIT routing preflight",
+      "tests",
+      "pytest-unittest-parity",
+      "runner-parity"
+    ],
+    "tiered_workflow": ["OVC profile assurance"]
+  },
+  "logical_id": "e00c165b87bf7b6bd870fb3c40abfbaf4b4f09d1f9c30fed8544f9a2e98f8bda"
+}

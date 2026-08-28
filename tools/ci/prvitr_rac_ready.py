@@ -35,18 +35,20 @@ def _wait_required_job(
     helper deliberately composes the live admission module's current run and job
     state primitives instead of depending on a removed private compatibility API.
     """
-    deadline = time.time() + live.READY_TIMEOUT_SECONDS
-    while time.time() < deadline:
-        run = live._exact_run(workflow, pr_number, head_sha)
+    deadline = time.monotonic() + live.READY_TIMEOUT_SECONDS
+    run: Mapping[str, Any] | None = None
+    while time.monotonic() < deadline:
         if run is None:
-            time.sleep(10)
+            run = live._exact_run(workflow, pr_number, head_sha)
+        if run is None:
+            time.sleep(live.DISCOVERY_POLL_SECONDS)
             continue
         state, jobs = live._run_job_state(run, (job_name,))
         if state == "FAIL":
             raise RuntimeError(f"RAC_PILOT_REQUIRED_JOB_FAILED:{workflow}:{job_name}:{run.get('id')}")
         if state == "PASS":
             return run, jobs[0]
-        time.sleep(10)
+        time.sleep(live.ACTIVE_POLL_SECONDS)
     raise RuntimeError(f"RAC_PILOT_REQUIRED_JOB_TIMEOUT:{workflow}:{job_name}")
 
 

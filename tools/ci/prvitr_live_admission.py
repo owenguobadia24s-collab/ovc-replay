@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import argparse
-from dataclasses import asdict
+from dataclasses import asdict, dataclass
 import json
 import os
 from pathlib import Path
@@ -27,6 +27,16 @@ TIERED_WORKFLOW = "ovc-tiered-tests.yml"
 TEST_JOB_NAMES = ("VIT routing preflight", "tests", "pytest-unittest-parity", "runner-parity")
 PROFILE_JOB_NAME = "OVC profile assurance"
 READY_TIMEOUT_SECONDS = 22 * 60
+DISCOVERY_POLL_SECONDS = 2.0
+ACTIVE_POLL_SECONDS = 2.0
+
+
+@dataclass
+class AssurancePollDiagnostics:
+    discovery_cycles: int = 0
+    discovery_api_operations: int = 0
+    active_cycles: int = 0
+    active_api_operations: int = 0
 
 
 def _repo() -> str:
@@ -148,8 +158,12 @@ def _run_matches_pr(run: Mapping[str, Any], pr_number: int, head_sha: str) -> bo
     return any(isinstance(row, Mapping) and int(row.get("number", -1)) == pr_number for row in pulls)
 
 
-def _exact_run(workflow: str, pr_number: int, head_sha: str) -> Mapping[str, Any] | None:
-    candidates = [row for row in _workflow_runs(workflow, head_sha) if _run_matches_pr(row, pr_number, head_sha)]
+def _select_exact_run(
+    runs: Iterable[Mapping[str, Any]],
+    pr_number: int,
+    head_sha: str,
+) -> Mapping[str, Any] | None:
+    candidates = [row for row in runs if _run_matches_pr(row, pr_number, head_sha)]
     if not candidates:
         return None
     candidates.sort(
@@ -157,6 +171,30 @@ def _exact_run(workflow: str, pr_number: int, head_sha: str) -> Mapping[str, Any
         reverse=True,
     )
     return candidates[0]
+
+
+def _exact_run(workflow: str, pr_number: int, head_sha: str) -> Mapping[str, Any] | None:
+    return _select_exact_run(_workflow_runs(workflow, head_sha), pr_number, head_sha)
+
+
+def resolve_exact_assurance_runs(
+    pr_number: int,
+    head_sha: str,
+    *,
+    tests_run: Mapping[str, Any] | None = None,
+    tiered_run: Mapping[str, Any] | None = None,
+    diagnostics: AssurancePollDiagnostics | None = None,
+) -> tuple[Mapping[str, Any] | None, Mapping[str, Any] | None]:
+    """Discover each exact PR/head workflow run once, then retain its identity."""
+    if tests_run is None:
+        if diagnostics is not None:
+            diagnostics.discovery_api_operations += 1
+        tests_run = _exact_run(TESTS_WORKFLOW, pr_number, head_sha)
+    if tiered_run is None:
+        if diagnostics is not None:
+            diagnostics.discovery_api_operations += 1
+        tiered_run = _exact_run(TIERED_WORKFLOW, pr_number, head_sha)
+    return tests_run, tiered_run
 
 
 def _jobs(run_id: int) -> list[Mapping[str, Any]]:
@@ -174,14 +212,23 @@ def _job_by_name(jobs: Iterable[Mapping[str, Any]], name: str) -> Mapping[str, A
     return rows[0]
 
 
-def _run_job_state(run: Mapping[str, Any], required_names: Iterable[str]) -> tuple[str, tuple[Mapping[str, Any], ...]]:
-    jobs = _jobs(int(run.get("id", 0)))
+def evaluate_required_jobs(
+    jobs: Iterable[Mapping[str, Any]],
+    required_names: Iterable[str],
+    *,
+    expected_run_attempt: int | None = None,
+) -> tuple[str, tuple[Mapping[str, Any], ...]]:
+    """Pure required-job evaluator preserving the existing PASS/PENDING/FAIL law."""
+    job_rows = tuple(jobs)
     selected: list[Mapping[str, Any]] = []
     for name in required_names:
-        job = _job_by_name(jobs, name)
+        job = _job_by_name(job_rows, name)
         if job is None:
             return "PENDING", tuple(selected)
         selected.append(job)
+        observed_attempt = int(job.get("run_attempt", 0) or 0)
+        if expected_run_attempt is not None and observed_attempt not in (0, expected_run_attempt):
+            return "FAIL", tuple(selected)
         if str(job.get("status", "")) == "completed" and str(job.get("conclusion", "")) != "success":
             return "FAIL", tuple(selected)
         if str(job.get("status", "")) != "completed":
@@ -189,24 +236,101 @@ def _run_job_state(run: Mapping[str, Any], required_names: Iterable[str]) -> tup
     return "PASS", tuple(selected)
 
 
-def _wait_exact_assurance(pr_number: int, head_sha: str) -> tuple[Mapping[str, Any], tuple[Mapping[str, Any], ...], Mapping[str, Any], Mapping[str, Any]]:
-    deadline = time.time() + READY_TIMEOUT_SECONDS
-    while time.time() < deadline:
-        tests_run = _exact_run(TESTS_WORKFLOW, pr_number, head_sha)
-        tiered_run = _exact_run(TIERED_WORKFLOW, pr_number, head_sha)
-        if tests_run is None or tiered_run is None:
-            time.sleep(10)
-            continue
-        tests_state, test_jobs = _run_job_state(tests_run, TEST_JOB_NAMES)
-        profile_state, profile_jobs = _run_job_state(tiered_run, (PROFILE_JOB_NAME,))
+def _run_job_state(run: Mapping[str, Any], required_names: Iterable[str]) -> tuple[str, tuple[Mapping[str, Any], ...]]:
+    attempt = int(run.get("run_attempt", 0) or 0) or None
+    return evaluate_required_jobs(
+        _jobs(int(run.get("id", 0))),
+        required_names,
+        expected_run_attempt=attempt,
+    )
+
+
+def _bounded_poll_sleep(
+    deadline: float,
+    cadence: float,
+    *,
+    now: Any,
+    sleep: Any,
+) -> None:
+    remaining = deadline - float(now())
+    if remaining > 0:
+        sleep(min(cadence, remaining))
+
+
+def wait_exact_assurance(
+    pr_number: int,
+    head_sha: str,
+    *,
+    timeout_seconds: float = READY_TIMEOUT_SECONDS,
+    discovery_poll_seconds: float = DISCOVERY_POLL_SECONDS,
+    active_poll_seconds: float = ACTIVE_POLL_SECONDS,
+    now: Any | None = None,
+    sleep: Any | None = None,
+    diagnostics: AssurancePollDiagnostics | None = None,
+) -> tuple[Mapping[str, Any], tuple[Mapping[str, Any], ...], Mapping[str, Any], Mapping[str, Any]]:
+    """Pin exact runs, then poll only their required job sets until terminal state."""
+    if discovery_poll_seconds <= 0 or active_poll_seconds <= 0 or timeout_seconds <= 0:
+        raise ValueError("SIQ_READY_POLL_CONFIGURATION_INVALID")
+    clock = now or time.monotonic
+    sleeper = sleep or time.sleep
+    counters = diagnostics or AssurancePollDiagnostics()
+    deadline = float(clock()) + timeout_seconds
+    tests_run: Mapping[str, Any] | None = None
+    tiered_run: Mapping[str, Any] | None = None
+
+    while float(clock()) < deadline and (tests_run is None or tiered_run is None):
+        counters.discovery_cycles += 1
+        tests_run, tiered_run = resolve_exact_assurance_runs(
+            pr_number,
+            head_sha,
+            tests_run=tests_run,
+            tiered_run=tiered_run,
+            diagnostics=counters,
+        )
+        if tests_run is not None and tiered_run is not None:
+            break
+        _bounded_poll_sleep(
+            deadline,
+            discovery_poll_seconds,
+            now=clock,
+            sleep=sleeper,
+        )
+
+    while float(clock()) < deadline and tests_run is not None and tiered_run is not None:
+        counters.active_cycles += 1
+        counters.active_api_operations += 1
+        tests_state, test_jobs = evaluate_required_jobs(
+            _jobs(int(tests_run.get("id", 0))),
+            TEST_JOB_NAMES,
+            expected_run_attempt=int(tests_run.get("run_attempt", 0) or 0) or None,
+        )
         if tests_state == "FAIL":
             raise RuntimeError(f"SIQ_EXACT_TESTS_WORKFLOW_FAILED:{tests_run.get('id')}")
+        counters.active_api_operations += 1
+        profile_state, profile_jobs = evaluate_required_jobs(
+            _jobs(int(tiered_run.get("id", 0))),
+            (PROFILE_JOB_NAME,),
+            expected_run_attempt=int(tiered_run.get("run_attempt", 0) or 0) or None,
+        )
         if profile_state == "FAIL":
             raise RuntimeError(f"SIQ_EXACT_PROFILE_WORKFLOW_FAILED:{tiered_run.get('id')}")
         if tests_state == "PASS" and profile_state == "PASS":
+            print(
+                "OVC_SIQ_READY_POLL_DIAGNOSTICS="
+                + json.dumps(asdict(counters), sort_keys=True, separators=(",", ":"))
+            )
             return tests_run, test_jobs, tiered_run, profile_jobs[0]
-        time.sleep(10)
+        _bounded_poll_sleep(
+            deadline,
+            active_poll_seconds,
+            now=clock,
+            sleep=sleeper,
+        )
     raise RuntimeError("SIQ_READY_ADMISSION_TIMEOUT: exact required assurance did not complete")
+
+
+def _wait_exact_assurance(pr_number: int, head_sha: str) -> tuple[Mapping[str, Any], tuple[Mapping[str, Any], ...], Mapping[str, Any], Mapping[str, Any]]:
+    return wait_exact_assurance(pr_number, head_sha)
 
 
 def _lineage_from_pr(pr: Mapping[str, Any]) -> tuple[Mapping[str, Any], Any, str]:
