@@ -43,7 +43,9 @@ def _sha(value: str, length: int) -> str:
 
 
 def _write_content_addressed(path: Path, payload: Mapping[str, Any]) -> None:
-    encoded = json.dumps(dict(payload), sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    encoded = json.dumps(
+        dict(payload), sort_keys=True, separators=(",", ":"), ensure_ascii=False
+    )
     path.parent.mkdir(parents=True, exist_ok=True)
     if path.exists():
         if path.read_text(encoding="utf-8") != encoded:
@@ -186,7 +188,9 @@ def decode_freeze_marker(value: str) -> Mapping[str, Any]:
     return payload
 
 
-def validate_live_transaction_freeze(freeze: Mapping[str, Any]) -> PhysicalMaterialisationTransaction:
+def validate_live_transaction_freeze(
+    freeze: Mapping[str, Any],
+) -> PhysicalMaterialisationTransaction:
     if freeze.get("schema") != FREEZE_SCHEMA:
         raise VitContractError("VIT_LIVE_TRANSACTION_FREEZE_SCHEMA_INVALID")
     if freeze.get("controller") != VIT_CONTROLLER:
@@ -218,6 +222,8 @@ def complete_frozen_transaction(
     siq_receipts: Sequence[Mapping[str, Any]] = (),
     trace_summary: Mapping[str, Any] | None = None,
     async_assurance_metrics: Mapping[str, Any] | None = None,
+    completion_timing_sources: Sequence[Mapping[str, Any]] = (),
+    completion_aa0_observability: Mapping[str, Any] | None = None,
 ) -> Mapping[str, Any]:
     """Recover/persist the already-effective physical write and prove its bundle."""
     transaction = validate_live_transaction_freeze(freeze)
@@ -230,7 +236,9 @@ def complete_frozen_transaction(
     if not isinstance(context, Mapping):
         raise VitContractError("VIT_LIVE_COMPLETION_CONTEXT_INVALID")
 
-    transaction_copy = receipt_store.root / "transactions" / f"{transaction.transaction_id}.json"
+    transaction_copy = (
+        receipt_store.root / "transactions" / f"{transaction.transaction_id}.json"
+    )
     _write_content_addressed(transaction_copy, freeze)
 
     trace_summary_id: str | None = None
@@ -254,17 +262,23 @@ def complete_frozen_transaction(
         gate_decision_ref=str(context["gate_decision_ref"]),
         payload_id=str(context["payload_id"]),
         next_packet=(
-            str(context["next_packet"]) if context.get("next_packet") is not None else None
+            str(context["next_packet"])
+            if context.get("next_packet") is not None
+            else None
         ),
         receipt_store=receipt_store,
         siq_receipts=siq_receipts,
         trace_summary=trace_summary,
         async_assurance_metrics=async_assurance_metrics,
+        completion_timing_sources=completion_timing_sources,
+        completion_aa0_observability=completion_aa0_observability,
     )
     ids = {
         "materialisation_receipt_id": str(result["materialisation_receipt_id"]),
         "completion_receipt_id": str(result["completion_receipt_id"]),
-        "development_latency_receipt_id": str(result["development_latency_receipt_id"]),
+        "development_latency_receipt_id": str(
+            result["development_latency_receipt_id"]
+        ),
         "attachment_id": str(result["attachment_id"]),
     }
     if len(set(ids.values())) != 4:
@@ -275,13 +289,31 @@ def complete_frozen_transaction(
         if not (receipt_store.root / f"{receipt_id}.json").is_file()
     ]
     if missing:
-        raise VitContractError("VIT_COMPLETION_BUNDLE_INCOMPLETE:" + ",".join(sorted(missing)))
+        raise VitContractError(
+            "VIT_COMPLETION_BUNDLE_INCOMPLETE:" + ",".join(sorted(missing))
+        )
     for receipt_id in ids.values():
         payload = json.loads(
             (receipt_store.root / f"{receipt_id}.json").read_text(encoding="utf-8")
         )
         if not isinstance(payload, Mapping):
             raise VitContractError("VIT_COMPLETION_BUNDLE_RECORD_INVALID")
+
+    v2_ids = {
+        "v2_development_latency_receipt_id": str(
+            result["v2_development_latency_receipt_id"]
+        ),
+        "v2_attachment_id": str(result["v2_attachment_id"]),
+    }
+    missing_v2 = [
+        receipt_id
+        for receipt_id in v2_ids.values()
+        if not (receipt_store.root / f"{receipt_id}.json").is_file()
+    ]
+    if missing_v2:
+        raise VitContractError(
+            "VIT_COMPLETION_V2_BUNDLE_INCOMPLETE:" + ",".join(sorted(missing_v2))
+        )
 
     index = receipt_store.rebuild_index()
     if index.get(f"transaction_id:{transaction.transaction_id}") != (
@@ -312,4 +344,4 @@ def complete_frozen_transaction(
         receipt_store.root / "proofs" / f"{proof_id}.json",
         proof,
     )
-    return proof
+    return {**proof, "v2_receipt_ids": v2_ids}
