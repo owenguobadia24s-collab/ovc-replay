@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from dataclasses import asdict
-from datetime import datetime, timezone
 import os
 from pathlib import Path
 import re
@@ -28,10 +27,6 @@ RECEIPT_STORE_ROOT_ENV = "OVC_DSAI3V_RECEIPT_STORE_ROOT"
 EXTERNAL_ARTIFACT_ROOT_ENV = "OVC_EXTERNAL_ARTIFACT_ROOT"
 EXTERNAL_RECEIPTS_RELATIVE_ROOT = "receipts"
 _IMPLEMENTATION_HEAD = re.compile(r"^github:pr:\d+:head:([0-9a-f]{40})$")
-
-
-def _utc_now() -> str:
-    return datetime.now(timezone.utc).isoformat(timespec="microseconds").replace("+00:00", "Z")
 
 
 def resolve_receipt_store(
@@ -114,10 +109,13 @@ def persist_physical_completion(
     change merge authority, or create a new storage/write path.
 
     V2 timing accepts only explicit source rows supplied by their current owner. This
-    runtime adds exactly one local timing observation after the historical completion
-    bundle is successfully persisted. It deliberately does not reinterpret a generic
-    DEVOBS trace-completion time as physical materialisation, SIQ readiness, PR open,
-    or any other canonical event.
+    runtime does not synthesize a persistence timestamp from its local wall clock: the
+    existing PacketCompletionReceipt carries no authoritative timestamp, and making
+    one up at retry time would both infer chronology and make the content-addressed v2
+    record non-idempotent. A packet-completion persistence time is therefore null
+    unless an authoritative caller supplies that source explicitly. Generic DEVOBS
+    trace-completion time is likewise never reinterpreted as physical materialisation,
+    SIQ readiness, PR open, or another canonical event.
     """
     if controller != VIT_PHYSICAL_CONTROLLER:
         raise VitContractError("PHYSICAL_MAIN_WRITER_IDENTITY_INVALID")
@@ -155,18 +153,8 @@ def persist_physical_completion(
         async_assurance_metrics=async_assurance_metrics,
     )
     bundle_ids = receipt_store.put_completion_with_devobs(completion, development_latency_receipt)
-    completion_observed_at = _utc_now()
 
     timing_sources: list[Mapping[str, Any]] = [dict(row) for row in completion_timing_sources]
-    timing_sources.append(
-        {
-            "field": "packet_completion_receipt_persisted_at_utc",
-            "source_type": "OWNER_LOCAL_RECEIPT",
-            "source_id": completion.receipt_id,
-            "observed_at_utc": completion_observed_at,
-            "authority": "OBSERVATIONAL_ONLY",
-        }
-    )
 
     aa0_observability: dict[str, Any] = dict(completion_aa0_observability or {})
     exact_pip_id = payload_id if re.fullmatch(r"[0-9a-f]{64}", str(payload_id)) else None
