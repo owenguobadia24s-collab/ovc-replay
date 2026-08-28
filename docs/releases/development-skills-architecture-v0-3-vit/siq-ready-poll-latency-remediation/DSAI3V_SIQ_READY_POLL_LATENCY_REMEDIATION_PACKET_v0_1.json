@@ -1,0 +1,34 @@
+{
+  "schema": "ovc-dsai-vit-owner-local-maintenance-packet/v1",
+  "packet_id": "DSAI3V-SIQ-READY-POLL-LATENCY-REMEDIATION-v0.1",
+  "owner": "DSAI_VIT_SIQ_DEVELOPMENT_INTEGRATION_OWNER",
+  "authority_delta": "NONE",
+  "authority_manifest_id": "e00c165b87bf7b6bd870fb3c40abfbaf4b4f09d1f9c30fed8544f9a2e98f8bda",
+  "dependency_frontier_id": "59be2c781186b9391eac0f35bd6fb96a73d594d1a8574bbad69ee87903eb2655",
+  "purpose": "Remove avoidable coarse polling latency from the existing bounded SIQ READY exact-assurance observer without changing assurance meaning or materialisation controls.",
+  "old_algorithm": {
+    "discovery": "REDISCOVER_TESTS_AND_TIERED_WORKFLOW_HISTORIES_EVERY_CYCLE",
+    "active_state": "REFETCH_BOTH_EXACT_RUN_JOB_SETS_EVERY_CYCLE",
+    "cadence_seconds": 10,
+    "post_pass_fixed_delay": false
+  },
+  "new_algorithm": {
+    "phase_1": "DISCOVER_AND_PIN_EXACT_TESTS_AND_TIERED_RUN_IDS_FOR_PR_AND_HEAD",
+    "phase_2": "POLL_ONLY_REQUIRED_JOB_SETS_OF_PINNED_RUN_IDS",
+    "discovery_cadence_seconds": 2,
+    "active_cadence_seconds": 2,
+    "steady_state_api_operations_per_cycle": 2,
+    "pass_transition": "IMMEDIATE_EXISTING_LIVE_PR_QUALIFICATION_PIP_AUTHORITY_FRONTIER_REVALIDATION",
+    "run_attempt_change": "FAIL_CLOSED"
+  },
+  "required_evidence_set_unchanged": true,
+  "ready_timeout_seconds": 1320,
+  "classification_on_success": "SIQ_READY_POLL_LATENCY_REMEDIATION_PASS",
+  "production_sub60_claim_permitted": false,
+  "standing_validation_requirement": "NEXT_ELIGIBLE_AA0_PREWARM_PACKET",
+  "standing_validation_criterion": "PR_OPEN_TO_MATERIALISED_LT_60_SECONDS",
+  "standing_validation_preferred_target_seconds": 55,
+  "workflow_files_changed": false,
+  "new_persistent_subsystem": false,
+  "rollback": "Forward-revert the polling optimisation and restore the prior bounded polling implementation while preserving historical runs, timing evidence and receipts."
+}
