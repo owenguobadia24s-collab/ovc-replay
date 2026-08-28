@@ -23,6 +23,19 @@
     "invalid_order_policy": "PRESERVE_RAW_EMIT_TYPED_WARNING_NULL_UNSAFE_DERIVED",
     "identity": "CONTENT_ADDRESSED_DETERMINISTIC_CANONICAL_JSON"
   },
+  "pre_pr_aa0_remediation": {
+    "superseded_candidate_head": "2cb6d1b9b5e574d7d8be698de777e31f2b4c313b",
+    "superseded_qualification_id": "d1abb330f63b47844a237a0ff3ee1718a65505d3634641e26f318beb545b9409",
+    "workflow_run_id": 33160288592,
+    "failed_surface": "canonical pytest shard 3",
+    "failed_test": "tests/development_skills/test_dsai3v_vit_completion_runtime.py::Dsai3vVitCompletionRuntimeTests::test_recover_after_effective_write_and_partial_receipt_persistence",
+    "failure": "STALE_HISTORICAL_RECEIPTSTORE_CARDINALITY_EXPECTATION_4_ACTUAL_6",
+    "disposition": "CORRECTABLE_IN_SCOPE_TEST_EXPECTATION",
+    "remediation": "ALIGN_EXISTING_SUCCESS_PATH_CARDINALITY_ASSERTIONS_TO_V1_FOUR_RECORD_BUNDLE_PLUS_TWO_PROSPECTIVE_V2_RECORDS",
+    "production_code_changed_by_remediation": false,
+    "v1_semantics_changed_by_remediation": false,
+    "fast_path_changed_by_remediation": false
+  },
   "clean_specimen_controls": {
     "workflow_files_changed": false,
     "aa0_cache_key_semantics_changed": false,
@@ -37,6 +50,6 @@
     "new_service_store_or_control_plane": false,
     "production_sub60_claim": "PENDING_EXACT_PRODUCTION_MEASUREMENT"
   },
-  "rollback": "Forward-revert v2 prospective files/runtime emission only; leave existing v1 and any already-emitted v2 evidence untouched.",
-  "logical_id": "cbf32e22e25be68c856cc2a394c3a3e8bacc12a9dd004ee5c560bf4759f84dc6"
+  "rollback": "Forward-revert v2 prospective files/runtime emission and packet-scoped test alignment only; leave existing v1 and any already-emitted v2 evidence untouched.",
+  "logical_id": "467b7cc959e4afd030346a5094b736329e0f2364a05210a18fe1fc1b04aa7c88"
 }
