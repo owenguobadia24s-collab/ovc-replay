@@ -69,6 +69,19 @@ def resolve_receipt_store(
     return ReceiptStore(path)
 
 
+def _bind_exact_observation(
+    target: dict[str, Any],
+    key: str,
+    exact_value: Any,
+) -> None:
+    if exact_value is None:
+        return
+    supplied = target.get(key)
+    if supplied is not None and supplied != exact_value:
+        raise VitContractError(f"V2_OBSERVABILITY_{key.upper()}_MISMATCH")
+    target[key] = exact_value
+
+
 def persist_physical_completion(
     *,
     transaction: PhysicalMaterialisationTransaction,
@@ -90,6 +103,8 @@ def persist_physical_completion(
     vit_receipts: Sequence[Mapping[str, Any]] = (),
     siq_receipts: Sequence[Mapping[str, Any]] = (),
     async_assurance_metrics: Mapping[str, Any] | None = None,
+    completion_timing_sources: Sequence[Mapping[str, Any]] = (),
+    completion_aa0_observability: Mapping[str, Any] | None = None,
 ) -> Mapping[str, Any]:
     """Persist one live VIT/SIQ materialisation and mandatory completion bundle.
 
@@ -97,6 +112,12 @@ def persist_physical_completion(
     and v2 attachment are then added to the same bound ReceiptStore. V2 is
     observability-only; it does not become a prerequisite for the historical bundle,
     change merge authority, or create a new storage/write path.
+
+    V2 timing accepts only explicit source rows supplied by their current owner. This
+    runtime adds exactly one local timing observation after the historical completion
+    bundle is successfully persisted. It deliberately does not reinterpret a generic
+    DEVOBS trace-completion time as physical materialisation, SIQ readiness, PR open,
+    or any other canonical event.
     """
     if controller != VIT_PHYSICAL_CONTROLLER:
         raise VitContractError("PHYSICAL_MAIN_WRITER_IDENTITY_INVALID")
@@ -136,35 +157,26 @@ def persist_physical_completion(
     bundle_ids = receipt_store.put_completion_with_devobs(completion, development_latency_receipt)
     completion_observed_at = _utc_now()
 
-    timing_sources: list[dict[str, str]] = [
+    timing_sources: list[Mapping[str, Any]] = [dict(row) for row in completion_timing_sources]
+    timing_sources.append(
         {
             "field": "packet_completion_receipt_persisted_at_utc",
-            "source_type": "PACKET_COMPLETION_RECEIPT",
+            "source_type": "OWNER_LOCAL_RECEIPT",
             "source_id": completion.receipt_id,
             "observed_at_utc": completion_observed_at,
             "authority": "OBSERVATIONAL_ONLY",
         }
-    ]
-    if trace_summary is not None and trace_summary.get("completed_at_utc"):
-        timing_sources.append(
-            {
-                "field": "physical_materialised_at_utc",
-                "source_type": "DEVOBS_RECEIPT",
-                "source_id": str(trace_summary.get("record_id") or "trace-summary"),
-                "observed_at_utc": str(trace_summary["completed_at_utc"]),
-                "authority": "OBSERVATIONAL_ONLY",
-            }
-        )
+    )
 
-    aa0_observability: dict[str, Any] = {
-        "pip_id": payload_id if re.fullmatch(r"[0-9a-f]{64}", str(payload_id)) else None,
-        "prospective_tree_sha": transaction.expected_result_tree,
-        "physical_tree_sha": observed_tree,
-    }
+    aa0_observability: dict[str, Any] = dict(completion_aa0_observability or {})
+    exact_pip_id = payload_id if re.fullmatch(r"[0-9a-f]{64}", str(payload_id)) else None
+    _bind_exact_observation(aa0_observability, "pip_id", exact_pip_id)
+    _bind_exact_observation(aa0_observability, "prospective_tree_sha", transaction.expected_result_tree)
+    _bind_exact_observation(aa0_observability, "physical_tree_sha", observed_tree)
     head_match = _IMPLEMENTATION_HEAD.fullmatch(str(implementation_ref))
     if head_match:
-        aa0_observability["candidate_head_sha"] = head_match.group(1)
-        aa0_observability["pr_head_sha"] = head_match.group(1)
+        _bind_exact_observation(aa0_observability, "candidate_head_sha", head_match.group(1))
+        _bind_exact_observation(aa0_observability, "pr_head_sha", head_match.group(1))
 
     v2_receipt = build_canonical_completion_latency_receipt_v2(
         v1_receipt=development_latency_receipt,
@@ -181,8 +193,8 @@ def persist_physical_completion(
     if head_match:
         expected["candidate_head_sha"] = head_match.group(1)
         expected["pr_head_sha"] = head_match.group(1)
-    if aa0_observability.get("pip_id"):
-        expected["pip_id"] = aa0_observability["pip_id"]
+    if exact_pip_id:
+        expected["pip_id"] = exact_pip_id
     validate_canonical_completion_latency_receipt_v2(v2_receipt, expected=expected)
     v2_receipt_id = str(v2_receipt["record_id"])
     receipt_store.put_record(v2_receipt, v2_receipt_id)
