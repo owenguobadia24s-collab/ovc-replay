@@ -23,7 +23,7 @@ class CanonicalCompletionReceiptV2RuntimeTests(unittest.TestCase):
             materialisation_profile="LIVE_PHYSICAL_MAIN",
         )
 
-    def test_generic_trace_completion_is_not_reinterpreted_as_materialisation_time(self) -> None:
+    def test_generic_trace_completion_is_not_reinterpreted_or_replaced_by_local_clock(self) -> None:
         trace = {
             "schema": "ovc-development-observability-trace-summary/v1",
             "record_id": "9" * 64,
@@ -50,11 +50,9 @@ class CanonicalCompletionReceiptV2RuntimeTests(unittest.TestCase):
             )
             v2 = json.loads((Path(tmp) / f"{result['v2_development_latency_receipt_id']}.json").read_text())
             self.assertIsNone(v2["timing"]["physical_materialised_at_utc"])
-            self.assertIsNotNone(v2["timing"]["packet_completion_receipt_persisted_at_utc"])
-            self.assertEqual(
-                v2["timing"]["selected_sources"]["packet_completion_receipt_persisted_at_utc"]["source_type"],
-                "OWNER_LOCAL_RECEIPT",
-            )
+            self.assertIsNone(v2["timing"]["packet_completion_receipt_persisted_at_utc"])
+            self.assertEqual(v2["timing"]["status"], "UNAVAILABLE")
+            self.assertEqual(v2["timing"]["sources"], [])
 
     def test_exact_caller_sources_are_admitted_without_inference(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -78,7 +76,14 @@ class CanonicalCompletionReceiptV2RuntimeTests(unittest.TestCase):
                         "source_id": "pr:2",
                         "observed_at_utc": "2026-08-28T08:00:50Z",
                         "authority": "OBSERVATIONAL_ONLY",
-                    }
+                    },
+                    {
+                        "field": "packet_completion_receipt_persisted_at_utc",
+                        "source_type": "PACKET_COMPLETION_RECEIPT",
+                        "source_id": "completion:2",
+                        "observed_at_utc": "2026-08-28T08:00:51Z",
+                        "authority": "OBSERVATIONAL_ONLY",
+                    },
                 ],
                 completion_aa0_observability={
                     "repository_assurance_disposition": "EXACT_GENERATION_REUSE",
@@ -89,6 +94,7 @@ class CanonicalCompletionReceiptV2RuntimeTests(unittest.TestCase):
             )
             v2 = json.loads((Path(tmp) / f"{result['v2_development_latency_receipt_id']}.json").read_text())
             self.assertEqual(v2["timing"]["physical_materialised_at_utc"], "2026-08-28T08:00:50Z")
+            self.assertEqual(v2["timing"]["packet_completion_receipt_persisted_at_utc"], "2026-08-28T08:00:51Z")
             self.assertEqual(v2["aa0"]["candidate_head_sha"], "6" * 40)
             self.assertEqual(v2["aa0"]["pip_id"], "7" * 64)
             self.assertEqual(v2["aa0"]["prospective_tree_sha"], "3" * 40)
