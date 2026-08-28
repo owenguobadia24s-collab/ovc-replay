@@ -1,0 +1,53 @@
+{
+  "schema": "ovc-dsai3v-canonical-completion-v2-source-binding-qa/v1",
+  "packet_id": "DSAI3V-CANONICAL-COMPLETION-RECEIPT-v2-MAINT-v0.1",
+  "authority_delta": "NONE",
+  "baseline_main_sha": "dcbf6f2e515ef02ef9f784a449f6179578bf876f",
+  "finding": "CORRECTABLE_IN_SCOPE_POST_MERGE_OBSERVABILITY_DEFECT",
+  "implementation_review": {
+    "historical_v1_unchanged": true,
+    "existing_receipt_store_only": true,
+    "existing_blank_v2_preserved": true,
+    "source_bound_replay_append_only": true,
+    "physical_writer_unchanged": true,
+    "siq_gateway_unchanged": true,
+    "aa0_cache_semantics_unchanged": true,
+    "workflow_sharding_parity_unchanged": true,
+    "repository_protection_unchanged": true
+  },
+  "first_exact_head_assurance": {
+    "candidate_head_sha": "6e08245bd148c3e00968042d2fa3ce224baf90b4",
+    "candidate_tree_sha": "d96fb21ceda45aea61657086e24e8d5b675840eb",
+    "pip_id": "42d00325521866cb852cf0307d6a2600198f01a472dd94bf1115d93d598c95f1",
+    "qualification_id": "be4b8614cbb36b057d314080714ca56fd61e34de01e9c8bb4793af195731590a",
+    "workflow_run_id": "33168246649",
+    "aa0_harness_id": "b42706379706e52d278a89d3383f742756c32a170e51cffaed049c1e41d87f3c",
+    "no_late_surprises_hash": "8c6995365a64b94522d8b37e07ade9f4c3528443a8be41dc43e04041798efe84",
+    "vit_routing": "PASS",
+    "repository_assurance_plan": "PASS_RUN_AA0",
+    "runner_parity": "PASS",
+    "canonical_manifest": "PASS",
+    "canonical_shard_0": "PASS",
+    "canonical_shard_1": "FAIL",
+    "canonical_shard_2": "PASS",
+    "canonical_shard_3": "PASS",
+    "pytest_unittest_parity": "FAIL",
+    "repository_aggregator": "SKIPPED_REQUIRED_FAILURE",
+    "failure_count": 1,
+    "failure_test": "tests/development_skills/test_vit_post_merge_late_binding_recovery.py::VitPostMergeLateBindingRecoveryTests::test_recovery_manifest_is_authority_inert_and_names_first_late_binding_merge",
+    "failure_classification": "STALE_TEST_CARDINALITY_ASSERTION",
+    "disposition": "SUPERSEDED_CORRECTABLE"
+  },
+  "correction": {
+    "path": "tests/development_skills/test_vit_post_merge_late_binding_recovery.py",
+    "rule": "Recovery registry is append-only; assert every request is authority-inert and preserve explicit bindings for both the historical first late-binding recovery and the canonical receipt v2 recovery.",
+    "test_weakening": false,
+    "scope_expansion": false
+  },
+  "replacement_assurance": {
+    "status": "PENDING_EXACT_HEAD_PRE_PR_AA0",
+    "pass_claim": false
+  },
+  "qa_recommendation": "PASS_ONLY_IF_REPLACEMENT_EXACT_HEAD_AA0_IS_FULLY_GREEN",
+  "rollback": "Squash-revert the corrective integration. Do not rewrite historical v1, the first v2, any source-bound v2 already appended, or physical Git history."
+}
