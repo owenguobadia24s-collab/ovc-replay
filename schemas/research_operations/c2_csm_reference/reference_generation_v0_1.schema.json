@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-c2-csm-reference-generation/v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema","generation_id","components","research_state","authority_state","source_completeness","historical_corpus"],
+  "properties": {
+    "schema": {"const": "ovc-c2-csm-reference-generation/v0.1"},
+    "generation_id": {"const": "P3-R5-T2-S2"},
+    "components": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["P3","R5","T2","S2"],
+      "properties": {
+        "P3": {"const": "SPARSE_FORMATION_LIFECYCLE"},
+        "R5": {"const": "INDEPENDENT_BOUNDARY_ROLE_SUCCESSION"},
+        "T2": {"const": "ATOMIC_COMPOUND_TRANSITIONS"},
+        "S2": {"const": "COMPOUND_AWARE_SNAPSHOT_SUCCESSION_LEDGER"}
+      }
+    },
+    "research_state": {"const": "DESCRIPTIVE_REFERENCE_ONLY"},
+    "authority_state": {"const": "ACTIVE_C2_AUTHORITY_NONE"},
+    "source_completeness": {"enum": ["REFERENCE_COMPLETE","REFERENCE_PARTIAL_SOURCE_LIMITED"]},
+    "historical_corpus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["development_cases","development_bars","development_objects","holdout_cases","holdout_bars","holdout_objects","combined_cases","combined_bars","combined_objects","holdout_integrity_pass"],
+      "properties": {
+        "development_cases": {"const": 15},
+        "development_bars": {"const": 1392},
+        "development_objects": {"const": 245},
+        "holdout_cases": {"const": 10},
+        "holdout_bars": {"const": 936},
+        "holdout_objects": {"const": 163},
+        "combined_cases": {"const": 25},
+        "combined_bars": {"const": 2328},
+        "combined_objects": {"const": 408},
+        "holdout_integrity_pass": {"const": "10/10"}
+      }
+    }
+  }
+}
