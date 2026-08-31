@@ -1,0 +1,109 @@
+{
+  "schema": "ovc-c2csm-reference-generation-manifest/v0.1",
+  "manifest_id": "C2CSM.REFERENCE.GENERATION.MANIFEST.P3-R5-T2-S2.v0.1",
+  "programme_id": "OVC-EML-C2S-SPTO-CONFORMANCE-PREREG-v0.1",
+  "packet_id": "C2S-SPTOI-WP2",
+  "generation_id": "P3-R5-T2-S2",
+  "status": "IMPLEMENTED_EXACT_SOURCE_BOUND_PARITY_PENDING_WP3",
+  "source_binding": {
+    "artifact_name": "OVC_C2_CSM_P3R5T2S2_DEV.txt",
+    "sha256": "88bfab773f72817ee9e87228066bcaa223d62aef0fb802dd9261c1a11bce03fd",
+    "source_confidence": "SOURCE_EXACT",
+    "implementation_binding": "EXACT_IMPLEMENTATION_BOUND",
+    "external_artifact_path": "c2s-sptoi/sources/sha256/88bfab773f72817ee9e87228066bcaa223d62aef0fb802dd9261c1a11bce03fd/OVC_C2_CSM_P3R5T2S2_DEV.txt"
+  },
+  "implementation": {
+    "module": "ovc.research_operations.c2_csm_reference",
+    "engine": "C2CSMReferenceEngine",
+    "input": "ReferenceBar",
+    "step_result": "R4Step",
+    "cli": "python -m ovc.research_operations.c2_csm_reference.cli",
+    "files": [
+      "src/ovc/research_operations/c2_csm_reference/__init__.py",
+      "src/ovc/research_operations/c2_csm_reference/models.py",
+      "src/ovc/research_operations/c2_csm_reference/engine.py",
+      "src/ovc/research_operations/c2_csm_reference/compat.py",
+      "src/ovc/research_operations/c2_csm_reference/cli.py"
+    ],
+    "file_sha256": {
+      "src/ovc/research_operations/c2_csm_reference/__init__.py": "bbe582b084a85415a049c2d92a8a9241dc669facd90a2e2b482b4ecbfce41006",
+      "src/ovc/research_operations/c2_csm_reference/models.py": "aa8b4793f66faec7a174fe9ba0ca6ebc9972877500157798cef7aee748a7ba66",
+      "src/ovc/research_operations/c2_csm_reference/engine.py": "ffce271ea6241897e66933d3baad41d6d2dacffc8f8d3b0a1fce34f21db173d0",
+      "src/ovc/research_operations/c2_csm_reference/compat.py": "63d46adb96e60863474ef5dab5b40613b89bb85eeeec0fb46d33c8c47c0d6ffa",
+      "src/ovc/research_operations/c2_csm_reference/cli.py": "44c9b880effc98ec256954fec8495accf3cb4a68492b5346ee0194dbb06000a9"
+    },
+    "historical_export_compatibility": [
+      "Engine", "EngineR2", "EngineR3", "EngineR4",
+      "newEngine", "newEngineR2", "newEngineR3", "newEngineR4",
+      "reset", "resetR2", "resetR3", "resetR4",
+      "step", "stepR2", "stepR3", "stepR4"
+    ]
+  },
+  "semantic_family_bindings": [
+    {
+      "family_id": "P3_FORMATION_LIFECYCLE",
+      "source_lines": "12-386",
+      "python_surface": "C2CSMReferenceEngine._step_r1",
+      "status": "IMPLEMENTED_SOURCE_BOUND"
+    },
+    {
+      "family_id": "R5_BOUNDARY_ROLE_SUCCESSION",
+      "source_lines": "390-1278",
+      "python_surface": "C2CSMReferenceEngine._step_r2/_step_roles",
+      "status": "IMPLEMENTED_SOURCE_BOUND"
+    },
+    {
+      "family_id": "T2_ATOMIC_COMPOUND_TRANSITIONS",
+      "source_lines": "1282-1939",
+      "python_surface": "C2CSMReferenceEngine._step_r3/_advance_compound",
+      "status": "IMPLEMENTED_SOURCE_BOUND"
+    },
+    {
+      "family_id": "S2_SNAPSHOT_SUCCESSION_LEDGER",
+      "source_lines": "1943-2556",
+      "python_surface": "C2CSMReferenceEngine._step_r4/_append_succession_record",
+      "status": "IMPLEMENTED_SOURCE_BOUND"
+    }
+  ],
+  "runtime_bindings": {
+    "pine_na": "PYTHON_NONE",
+    "pine_series_history": "ENGINE_OWNED_SEVEN_OBSERVATION_HIGH_LOW_WINDOW",
+    "pine_format_mintick": "ReferenceBar.mintick; MUST_BE_BOUND_BY_HISTORICAL_FIXTURE_REPLAY",
+    "source_gap": "ReferenceBar.chart_gap",
+    "continuous_segment_observations": "ReferenceBar.segment_obs",
+    "first_valid_cutoff": "ReferenceBar.bar_index",
+    "no_cross_gap_interpolation": true
+  },
+  "source_surface_audit": {
+    "exported_integer_constants": {"pine": 60, "python_exact_value_matches": 60, "mismatches": 0},
+    "type_fields": {
+      "Engine": {"pine": 17, "python_matches": 17, "runtime_only_fields": ["source_high_history", "source_low_history"]},
+      "EngineR2": {"pine": 97, "python_matches": 97},
+      "EngineR3": {"pine": 80, "python_matches": 80},
+      "EngineR4": {"pine": 86, "python_matches": 86}
+    },
+    "historical_typed_consumer_surface": "EngineR4+newEngineR4+stepR4",
+    "historical_typed_consumer_evidence": [
+      "C2E_LIB_0001_R2_Native_Typed_Consumer.pine:134-135",
+      "OVC_C2E_CSM_NEW_LIBRARY_BASED_PROD1.pine:134-135"
+    ]
+  },
+  "determinism": {
+    "checkpoint_schema": "ovc-c2csm-reference-checkpoint/v0.1",
+    "typed_output_schema": "ovc-c2csm-reference-typed-stream/v0.1",
+    "canonical_encoding": "UTF8_SORTED_KEY_COMPACT_JSON_WITH_TRAILING_NEWLINE",
+    "checkpoint_identity": "SHA256_CANONICAL_PAYLOAD",
+    "output_identity": "SHA256_CANONICAL_PAYLOAD",
+    "fresh_process_replay_tested": true,
+    "checkpoint_restart_tested": true
+  },
+  "parity": {
+    "synthetic_exact_mechanics": "PASS",
+    "historical_fixture_replay": "PENDING_WP3_RAW_CASE_INPUTS_UNAVAILABLE",
+    "aggregate_census_used_as_implementation": false,
+    "reference_complete_claimed": false,
+    "next_gate": "C2S-SPTOI-G3-ALG_INDEPENDENT_BLOCKING_REVIEW"
+  },
+  "active_c2_authority": "NONE",
+  "authority_effect": "NONE_HISTORICAL_CONFORMANCE_ONLY"
+}
