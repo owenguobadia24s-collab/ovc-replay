@@ -137,7 +137,7 @@ def test_source_completeness_matrix_does_not_preempt_later_source_requests() -> 
     assert matrix["policy"]["source_limited_continuation_requires_explicit_operator_instruction"] is True
 
 
-def test_g1_auto_pass_is_preserved_after_rolling_state_advances_to_wp3_source_recovery() -> None:
+def test_g1_auto_pass_is_preserved_after_rolling_state_advances_beyond_wp3() -> None:
     decision = load(WP1 / "C2S_SPTOI_G1_DELEGATED_DECISION_v0_1.json")
     qa = load(WP1 / "C2S_SPTOI_WP1_QA_PACKET_v0_1.json")
     state = load(SPTO_RECORDS / "C2S_SPTOI_PROGRAMME_STATE_v0_1.json")
@@ -148,7 +148,8 @@ def test_g1_auto_pass_is_preserved_after_rolling_state_advances_to_wp3_source_re
     assert qa["result"] == "PASS"
     assert qa["checks"]["source_derived_semantics_used"] is False
     assert state["packet_id"] == pointer["current_packet"] == "C2S-SPTOI-WP3"
-    assert state["next_packet"] == pointer["next_packet"] == "C2S-SPTOI-WP3"
+    assert state["next_packet"] == "C2S-SPTOI-WP3"
+    assert pointer["next_packet"] == "C2S-SPTOI-WP4"
     assert state["protected_source"] == pointer["protected_source"] == "DENIED"
     assert state["parity_status"] == "BLOCKED_WP3_FIVE_DIVERGENT_ORIGINAL_TRAJECTORIES_UNAVAILABLE"
     assert state["validation"] == "LOCKED_UNCONSUMED"

@@ -8,8 +8,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 WP3 = ROOT / "docs/programmes/c2s-sptoi-v0-1/wp3"
 HISTORICAL_STATE = ROOT / "records/research_operations/spto/C2S_SPTOI_PROGRAMME_STATE_v0_1.json"
-STATE = ROOT / "records/research_operations/spto/C2S_SPTOI_PROGRAMME_STATE_v0_2.json"
-MATRIX = ROOT / "records/research_operations/spto/C2S_SPTOI_SOURCE_COMPLETENESS_MATRIX_v0_2.json"
+STATE = ROOT / "records/research_operations/spto/C2S_SPTOI_PROGRAMME_STATE_v0_3.json"
+MATRIX = ROOT / "records/research_operations/spto/C2S_SPTOI_SOURCE_COMPLETENESS_MATRIX_v0_3.json"
 POINTER = ROOT / "registries/implementation/c2s_sptoi_v0_1/CURRENT_STATE_POINTER.json"
 FIXTURE_CENSUS = ROOT / "fixtures/research_operations/c2_csm_reference/C2CSM_REFERENCE_FIXTURE_CENSUS_v0_1.json"
 ASSESSMENT = WP3 / "C2S_SPTOI_WP3_CANDIDATE_SOURCE_ASSESSMENT_R10S2_v0_1.json"
@@ -62,15 +62,16 @@ def test_fixture_census_identity_and_population_are_preserved() -> None:
         assert expected_count in requirements
 
 
-def test_programme_state_pointer_and_matrix_agree_at_g3_review_boundary() -> None:
+def test_programme_state_pointer_and_matrix_agree_at_wp3_closeout() -> None:
     state = load(STATE)
     pointer = load(POINTER)
     matrix = load(MATRIX)
     assert state["packet_id"] == pointer["current_packet"] == matrix["current_packet"] == "C2S-SPTOI-WP3"
     assert pointer["current_gate"] == "C2S-SPTOI-G3-ALG"
-    assert state["status"] == pointer["status"] == matrix["families"][0]["status"] == "PARTIAL_SOURCE_LIMITED_G3_ALG_REVIEW_READY"
+    assert state["status"] == pointer["status"] == "COMPLETE_PARTIAL_SOURCE_LIMITED"
+    assert matrix["families"][0]["status"] == "PARTIAL_SOURCE_LIMITED_ACCEPTED_G3_ALG"
     assert state["source_completeness_manifest"] == matrix["families"][0]["manifest"]
-    assert state["next_packet"] == pointer["next_packet"] == "C2S-SPTOI-WP3"
+    assert state["next_packet"] == pointer["next_packet"] == matrix["next_packet"] == "C2S-SPTOI-WP4"
 
 
 def test_historical_source_recovery_qa_is_preserved_without_becoming_current() -> None:
@@ -93,7 +94,7 @@ def test_source_recovery_record_grants_no_authority() -> None:
     request = load(WP3 / "C2S_SPTOI_WP3_SOURCE_REQUEST_PACKET_v0_1.json")
     assert request["authority_effect"] == "NONE_SOURCE_RECOVERY_RECORD_ONLY"
     assert state["authority_delta"] == "NONE_HISTORICAL_CONFORMANCE_ONLY"
-    assert state["gating"]["g3_alg"] == "INDEPENDENT_BLOCKING_REVIEW_IN_PROGRESS"
+    assert state["gating"]["g3_alg"] == "ACCEPT_PARTIAL_SOURCE_LIMITED"
     assert state["active_c2_authority"] == "NONE"
     assert state["historical_reference_as_current_owner_truth"] == "PROHIBITED"
     assert state["validation"] == "LOCKED_UNCONSUMED"
@@ -146,8 +147,8 @@ def test_recovery_priority_amendment_does_not_presume_historical_stream_exports(
     assert amendment["historical_stream_export_search"]["status"] == "NOT_FOUND_EXISTENCE_NOT_ESTABLISHED"
     assert amendment["historical_stream_export_search"]["existence_inference"] == "NOT_MADE"
     assert "five divergent case trajectories" in request["operator_action_required"]
-    assert state["source_recovery_for_missing_five"] == "STOPPED_BY_OPERATOR"
-    assert state["source_completeness_status"] == "PARTIAL_SOURCE_LIMITED_HISTORICAL_CASE_EVIDENCE"
+    assert state["source_recovery_for_missing_five"] == "CLOSED_BY_OPERATOR"
+    assert state["source_completeness_status"] == "PARTIAL_SOURCE_LIMITED_ACCEPTED_G3_ALG"
 
 
 def test_conditional_complete_route_preserves_every_parity_requirement() -> None:
@@ -213,3 +214,27 @@ def test_parity_receipt_maps_all_frozen_modes_and_scope_without_relaxation() -> 
     assert all(item["source_exact_mechanics"] == "PASS" for item in receipt["comparison_scope_results"])
     assert all(item["historical_25_case_stream"] == "PARTIAL_SOURCE_LIMITED" for item in receipt["comparison_scope_results"])
     assert receipt["active_c2_authority"] == "NONE"
+
+
+def test_independent_g3_alg_acceptance_is_exact_tree_bound_and_disclosed() -> None:
+    decision = load(WP3 / "C2S_SPTOI_G3_ALG_INDEPENDENT_DECISION_v0_1.json")
+    assert decision["decision"] == "ACCEPT_PARTIAL_SOURCE_LIMITED"
+    assert decision["review_binding"]["commit"] == "fde6cf5f604b6da69d7a3465f80670bd2fe61d72"
+    assert decision["review_binding"]["tree"] == "3b5a223adda6b6e02c6c99906c8e084a6a92f855"
+    assert decision["reviewer"]["identity"] == "/root/g3_alg_independent"
+    assert decision["reviewer"]["reviewer_type"] == "INDEPENDENT_CODEX_SUBAGENT"
+    assert decision["reviewer"]["external_human_review"] is False
+    assert decision["criteria_weakened"] is False
+    assert decision["active_c2_authority"] == "NONE"
+
+
+def test_wp3_closeout_releases_only_bounded_wp4_owner_read_work() -> None:
+    state = load(STATE)
+    closeout = load(WP3 / "C2S_SPTOI_WP3_CLOSEOUT_v0_1.json")
+    assert closeout["status"] == "COMPLETE_PARTIAL_SOURCE_LIMITED"
+    assert closeout["accepted_reference_state"] == "C2_REFERENCE_PARTIAL_SOURCE_LIMITED"
+    assert closeout["parity_criteria_weakened"] is False
+    assert closeout["next_packet"] == state["next_packet"] == "C2S-SPTOI-WP4"
+    assert "PUBLIC_CURRENT_OWNER_AUTHORISED" in closeout["wp4_boundary"]
+    assert state["blockers"] == []
+    assert state["historical_reference_as_current_owner_truth"] == "PROHIBITED"
