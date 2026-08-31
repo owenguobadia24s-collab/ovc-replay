@@ -12,6 +12,7 @@ MATRIX = ROOT / "records/research_operations/spto/C2S_SPTOI_SOURCE_COMPLETENESS_
 POINTER = ROOT / "registries/implementation/c2s_sptoi_v0_1/CURRENT_STATE_POINTER.json"
 FIXTURE_CENSUS = ROOT / "fixtures/research_operations/c2_csm_reference/C2CSM_REFERENCE_FIXTURE_CENSUS_v0_1.json"
 ASSESSMENT = WP3 / "C2S_SPTOI_WP3_CANDIDATE_SOURCE_ASSESSMENT_R10S2_v0_1.json"
+AMENDMENT = WP3 / "C2S_SPTOI_WP3_RECOVERY_PRIORITY_AMENDMENT_v0_1.json"
 
 
 def load(path: Path) -> dict:
@@ -29,13 +30,13 @@ def test_source_request_is_one_precise_wp3_g3_alg_quarantine_pause() -> None:
     assert request["repository_state_preserved"] is True
 
 
-def test_request_requires_case_trajectories_runtime_bindings_and_expected_ledgers() -> None:
+def test_request_prioritises_five_case_trajectories_and_full_parity_evidence() -> None:
     request = load(WP3 / "C2S_SPTOI_WP3_SOURCE_REQUEST_PACKET_v0_1.json")
     inputs = " ".join(request["missing_component"]["required_inputs"])
     outputs = " ".join(request["missing_component"]["required_expected_outputs"])
-    for term in ("high, low and close", "instrument", "timeframe", "syminfo.mintick", "lab-window", "Chart-gap", "cutoff-time"):
+    for term in ("five priority divergent cases", "instrument", "timeframe", "syminfo.mintick", "lab-window", "Chart-gap", "cutoff-time"):
         assert term in inputs
-    for term in ("P3", "R5", "T2", "S2", "Canonical typed stream", "checkpoint"):
+    for term in ("P3/R5/T2/S2", "canonical typed streams", "checkpoint", "typed-handoff parity"):
         assert term in outputs
 
 
@@ -122,3 +123,37 @@ def test_candidate_replay_evidence_is_exactly_scoped_to_observed_result() -> Non
     assert replay["cases_divergent_at_aggregate_surface"] == 5
     assert len(replay["divergences"]) == 6
     assert assessment["remaining_source_gap"]["all_case_expected_outputs_still_required"] is True
+    amendment = load(AMENDMENT)
+    assert any("presumption" in item for item in amendment["supersession"]["supersedes"])
+
+
+def test_recovery_priority_amendment_does_not_presume_historical_stream_exports() -> None:
+    amendment = load(AMENDMENT)
+    request = load(WP3 / "C2S_SPTOI_WP3_SOURCE_REQUEST_PACKET_v0_1.json")
+    state = load(STATE)
+    assert amendment["operator_amendment"]["primary_irreplaceable_missing_source"] == "THE_FIVE_DIVERGENT_ORIGINAL_CASE_TRAJECTORIES"
+    assert len(amendment["priority_case_ids"]) == 5
+    assert amendment["historical_stream_export_search"]["status"] == "NOT_FOUND_EXISTENCE_NOT_ESTABLISHED"
+    assert amendment["historical_stream_export_search"]["existence_inference"] == "NOT_MADE"
+    assert "five divergent case trajectories" in request["operator_action_required"]
+    assert state["missing_source_components"] == ["EXACT_ORIGINAL_INPUTS_AND_RUNTIME_BINDINGS_FOR_FIVE_DIVERGENT_CASES"]
+
+
+def test_conditional_complete_route_preserves_every_parity_requirement() -> None:
+    amendment = load(AMENDMENT)
+    determination = amendment["contract_determination"]
+    conditions = " ".join(determination["complete_conditions"])
+    exclusions = " ".join(determination["not_sufficient"])
+    assert determination["answer"] == "YES_CONDITIONALLY"
+    for term in (
+        "exact original trajectories",
+        "all 32 source-exact terminal census fields",
+        "historical, fresh-process and checkpoint/restart",
+        "Canonical typed bytes and identities",
+        "append-only succession ledger",
+        "EngineR4/newEngineR4/stepR4 typed handoff",
+        "Independent C2S-SPTOI-G3-ALG review records COMPLETE",
+    ):
+        assert term in conditions
+    assert "PARTIAL_SOURCE_LIMITED without explicit operator instruction" in exclusions
+    assert amendment["operator_amendment"]["parity_criteria_may_be_weakened"] is False
