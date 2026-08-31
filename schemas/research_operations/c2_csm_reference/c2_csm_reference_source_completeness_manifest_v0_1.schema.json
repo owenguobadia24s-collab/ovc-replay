@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/c2_csm_reference/c2_csm_reference_source_completeness_manifest_v0_1.schema.json",
+  "title": "C2CSMReferenceSourceCompletenessManifest v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "manifest_id",
+    "programme_id",
+    "packet_id",
+    "generation_id",
+    "source_completeness_status",
+    "missing_source_components",
+    "primary_source",
+    "semantic_families",
+    "library_lineage",
+    "parity_status",
+    "authority_effect"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-c2csm-reference-source-completeness-manifest/v0.1"},
+    "manifest_id": {"type": "string", "minLength": 1},
+    "programme_id": {"const": "OVC-EML-C2S-SPTO-CONFORMANCE-PREREG-v0.1"},
+    "packet_id": {"const": "C2S-SPTOI-WP1"},
+    "generation_id": {"const": "P3-R5-T2-S2"},
+    "source_completeness_status": {
+      "enum": [
+        "SOURCE_COMPLETE_IMPLEMENTATION_BOUND_PARITY_PENDING",
+        "REFERENCE_COMPLETE",
+        "REFERENCE_PARTIAL_SOURCE_LIMITED",
+        "SOURCE_RECOVERY_REQUIRED",
+        "SOURCE_CONFLICT_QUARANTINED"
+      ]
+    },
+    "missing_source_components": {"type": "array", "items": {"type": "string"}},
+    "primary_source": {"$ref": "#/$defs/sourceBinding"},
+    "semantic_families": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {"$ref": "#/$defs/semanticFamily"}
+    },
+    "library_lineage": {"type": "array", "minItems": 5, "items": {"$ref": "#/$defs/lineageItem"}},
+    "evidence_only_artifacts": {"type": "array", "items": {"$ref": "#/$defs/evidenceArtifact"}},
+    "nonessential_source_gaps": {"type": "array", "items": {"type": "string"}},
+    "parity_status": {"type": "string"},
+    "authority_effect": {"const": "NONE_REFERENCE_CONFORMANCE_ONLY"}
+  },
+  "$defs": {
+    "confidence": {"enum": ["SOURCE_EXACT", "SOURCE_DERIVED", "MISSING"]},
+    "implementationBinding": {"enum": ["EXACT_IMPLEMENTATION_BOUND", "EXACT_EVIDENCE_ONLY", "DERIVED_NON_IMPLEMENTATION", "UNAVAILABLE"]},
+    "sourceBinding": {
+      "type": "object",
+      "required": ["artifact_name", "sha256", "size_bytes", "source_confidence", "implementation_binding"],
+      "properties": {
+        "artifact_name": {"type": "string"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "size_bytes": {"type": "integer", "minimum": 1},
+        "line_count": {"type": "integer", "minimum": 1},
+        "source_confidence": {"$ref": "#/$defs/confidence"},
+        "implementation_binding": {"$ref": "#/$defs/implementationBinding"},
+        "external_artifact_path": {"type": "string"}
+      }
+    },
+    "semanticFamily": {
+      "type": "object",
+      "required": ["family_id", "source_confidence", "implementation_binding", "source_lines", "load_bearing", "status"],
+      "properties": {
+        "family_id": {"enum": ["P3_FORMATION_LIFECYCLE", "R5_BOUNDARY_ROLE_SUCCESSION", "T2_ATOMIC_COMPOUND_TRANSITIONS", "S2_SNAPSHOT_SUCCESSION_LEDGER"]},
+        "source_confidence": {"$ref": "#/$defs/confidence"},
+        "implementation_binding": {"$ref": "#/$defs/implementationBinding"},
+        "source_lines": {"type": "string"},
+        "load_bearing": {"const": true},
+        "status": {"const": "SOURCE_BOUND_PARITY_PENDING"}
+      }
+    },
+    "lineageItem": {
+      "type": "object",
+      "required": ["revision_id", "source_confidence", "implementation_binding", "semantic_delta", "load_bearing"],
+      "properties": {
+        "revision_id": {"type": "string"},
+        "source_confidence": {"$ref": "#/$defs/confidence"},
+        "implementation_binding": {"$ref": "#/$defs/implementationBinding"},
+        "semantic_delta": {"type": "string"},
+        "load_bearing": {"type": "boolean"},
+        "source_lines": {"type": "string"},
+        "evidence": {"type": "string"}
+      }
+    },
+    "evidenceArtifact": {
+      "type": "object",
+      "required": ["artifact_name", "sha256", "size_bytes", "source_confidence", "implementation_binding"],
+      "properties": {
+        "artifact_name": {"type": "string"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "size_bytes": {"type": "integer", "minimum": 1},
+        "source_confidence": {"$ref": "#/$defs/confidence"},
+        "implementation_binding": {"$ref": "#/$defs/implementationBinding"},
+        "role": {"type": "string"}
+      }
+    }
+  }
+}

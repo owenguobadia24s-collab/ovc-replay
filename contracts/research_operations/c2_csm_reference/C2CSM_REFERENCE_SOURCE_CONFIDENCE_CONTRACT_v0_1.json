@@ -1,0 +1,31 @@
+{
+  "schema": "ovc-c2csm-reference-source-confidence-contract/v0.1",
+  "contract_id": "C2CSM.REFERENCE.SOURCE.CONFIDENCE.v0.1",
+  "programme_id": "OVC-EML-C2S-SPTO-CONFORMANCE-PREREG-v0.1",
+  "source_confidence": {
+    "SOURCE_EXACT": "Original bytes or a byte-identical recovered artifact are available and hash-bound.",
+    "SOURCE_DERIVED": "The artifact or proposition is reconstructed from non-implementation evidence and cannot define mechanics.",
+    "MISSING": "No qualifying artifact is available."
+  },
+  "implementation_binding": {
+    "EXACT_IMPLEMENTATION_BOUND": "The exact source is permitted to define the identified historical implementation semantics.",
+    "EXACT_EVIDENCE_ONLY": "The exact artifact is evidence, output, receipt, or transport and cannot define missing implementation semantics.",
+    "DERIVED_NON_IMPLEMENTATION": "Derived material may support lineage only and is not executable authority.",
+    "UNAVAILABLE": "No qualifying implementation binding is available."
+  },
+  "binding_rule": {
+    "required_source_confidence": "SOURCE_EXACT",
+    "required_implementation_binding": "EXACT_IMPLEMENTATION_BOUND",
+    "effect": "Only the conjunction may define historical reference mechanics."
+  },
+  "prohibited_substitutes": [
+    "HISTORICAL_OUTPUT",
+    "SCREENSHOT",
+    "CSV_RESULT",
+    "CONSUMER_IMPORT",
+    "DESIGN_PROSE",
+    "EVIDENTIARY_JOURNAL",
+    "DOWNSTREAM_BEHAVIOUR"
+  ],
+  "authority_effect": "NONE_REFERENCE_CLASSIFICATION_ONLY"
+}

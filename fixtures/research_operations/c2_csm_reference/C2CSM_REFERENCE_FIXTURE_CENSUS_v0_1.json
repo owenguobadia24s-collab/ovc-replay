@@ -1,0 +1,57 @@
+{
+  "schema": "ovc-c2csm-reference-fixture-census/v0.1",
+  "census_id": "C2CSM.REFERENCE.FIXTURE.CENSUS.P3-R5-T2-S2.v0.1",
+  "programme_id": "OVC-EML-C2S-SPTO-CONFORMANCE-PREREG-v0.1",
+  "packet_id": "C2S-SPTOI-WP1",
+  "generation_id": "P3-R5-T2-S2",
+  "historical_anchors": {
+    "development": {"cases": 15, "bars": 1392, "objects": 245},
+    "holdout": {"cases": 10, "bars": 936, "objects": 163, "integrity_pass_cases": 10},
+    "combined": {"cases": 25, "bars": 2328, "objects": 408}
+  },
+  "fixture_artifacts": [
+    {
+      "fixture_id": "C2CSM-G1-DEVELOPMENT-CENSUS",
+      "source_artifact": "C2_CSM_G1_15_Case_Cross_Case_Census.xlsx",
+      "sha256": "69c255faf5e7bf14cf61833abee4480f48b3c841d6ed857d68f6d1817136dce1",
+      "size_bytes": 19481,
+      "source_confidence": "SOURCE_EXACT",
+      "implementation_binding": "EXACT_EVIDENCE_ONLY",
+      "expected_counts": {"cases": 15, "bars": 1392, "objects": 245},
+      "structured_inspection": "PENDING_SPREADSHEET_ARTIFACT_RUNTIME",
+      "authority_effect": "NONE"
+    },
+    {
+      "fixture_id": "C2EXP-0009-HOLDOUT-AND-COMBINED-CENSUS",
+      "source_artifact": "C2_CSM_G1_Census_with_C2EXP_0009_Holdout_Result.xlsx",
+      "sha256": "6721f81697cc80875a51406962bb104a1c2d29fb223f2d6876a55b0f97f8e90a",
+      "size_bytes": 33373,
+      "source_confidence": "SOURCE_EXACT",
+      "implementation_binding": "EXACT_EVIDENCE_ONLY",
+      "expected_counts": {"cases": 25, "bars": 2328, "objects": 408, "holdout_integrity_pass_cases": 10},
+      "structured_inspection": "PENDING_SPREADSHEET_ARTIFACT_RUNTIME",
+      "authority_effect": "NONE"
+    }
+  ],
+  "historical_source_artifacts": [
+    {"artifact_name": "C2EXP_0002_P2_vs_P3_Comparison_View_Append_v0_1.pine", "sha256": "eefe520e683f2b72e32dea1155dba71e9368add918dd01bc79e450c40955e76e", "size_bytes": 14980, "line_count": 307, "role": "P3_FORMATION_EVIDENCE"},
+    {"artifact_name": "C2EXP_0003_P3_Formation_Adapter_Fix.pine", "sha256": "db866be5c428f4ab85e4fbc49013d2ac54f00713cb657b87cddb312e8572c3d3", "size_bytes": 1061, "line_count": 18, "role": "P3_FORMATION_FIX_EVIDENCE"},
+    {"artifact_name": "C2EXP_0003_Persistence_Retirement_Append_v0_1.pine", "sha256": "f90b1bbd906ca1bd391f3ed541fbfb7e4c7a03621f7075e93d6978b9d7c2199d", "size_bytes": 14497, "line_count": 339, "role": "LIFECYCLE_EVIDENCE"},
+    {"artifact_name": "C2EXP_0004_Interaction_Relation_State_Append_v0_1.pine", "sha256": "a65046586f0b3d4ced3b72fcf44e6aa714eef3b2555ac1efbb754d0f45f86c00", "size_bytes": 19818, "line_count": 457, "role": "INTERACTION_RELATION_EVIDENCE"},
+    {"artifact_name": "C2EXP_0005_R2_Current_Live_Structural_Envelope_REPLACE_v0_1.pine", "sha256": "4668f07c7514198d010b39e7b0354e059e68f219c94e0b4d312d545737f5c127", "size_bytes": 23792, "line_count": 618, "role": "ENVELOPE_LINEAGE_EVIDENCE"},
+    {"artifact_name": "C2EXP_0005_R3_Current_ACTIVE_Structural_Envelope_REPLACE_v0_1.pine", "sha256": "725878bd121d4c4c64b6aea5cf761798153e7921e5f1987044ac25351854708a", "size_bytes": 24918, "line_count": 650, "role": "ACTIVE_ENVELOPE_LINEAGE_EVIDENCE"},
+    {"artifact_name": "C2EXP_0005_R4_Stateful_Structural_Envelope_Boundary_Succession_REPLACE_v0_1.pine", "sha256": "998429319c0f61a76ae52d8e26c26136ffcbd6f8e72fdb17af86e9450b6b5380", "size_bytes": 40306, "line_count": 891, "role": "BOUNDARY_SUCCESSION_LINEAGE_EVIDENCE"},
+    {"artifact_name": "C2EXP_0005_R5_Independent_Boundary_Role_Succession_REPLACE_v0_1.pine", "sha256": "6abe114aca38f28b91db79a3c15c60c1760cba506509ccca19d61f566d7bbc37", "size_bytes": 43256, "line_count": 899, "role": "R5_ROLE_SOURCE_CORROBORATION"},
+    {"artifact_name": "C2EXP_0005_Structural_Organisation_Containers_Append_v0_1.pine", "sha256": "0515082917de6ca86c65fab2b389706f5900bb5caae6dae6ab85284ceadb0d83", "size_bytes": 22352, "line_count": 569, "role": "STRUCTURAL_ORGANISATION_EVIDENCE"},
+    {"artifact_name": "C2EXP_0006_R2_Compact_Audit_Table_PATCH.pine", "sha256": "d83873417c3be74be3bf73eb70e7dad36a970bf852ebe622a96ec3bdd1067932", "size_bytes": 3301, "line_count": 64, "role": "AUDIT_SURFACE_EVIDENCE"},
+    {"artifact_name": "C2EXP_0006_R2_Compound_Sequential_Envelope_Shift_REPLACE_v0_1.pine", "sha256": "5c17e2bd827cfe873993f501a1ae4d91ca6494e44dea207beb3d0c7c00e35d7d", "size_bytes": 46396, "line_count": 918, "role": "T2_COMPOUND_SOURCE_CORROBORATION"},
+    {"artifact_name": "C2EXP_0006_Structural_Envelope_Transition_State_Append_v0_1.pine", "sha256": "a18ac682fea82806ba22177a389820f203b5e1f86933a3aff5eb7f0844c94f65", "size_bytes": 24651, "line_count": 591, "role": "ATOMIC_TRANSITION_EVIDENCE"},
+    {"artifact_name": "C2EXP_0007_Current_Structural_Map_Snapshot_Append_v0_1.pine", "sha256": "f235feb96130556118dea97d3133720cc9e40740b68541264b5b1cc4c0c83c8a", "size_bytes": 19781, "line_count": 499, "role": "SNAPSHOT_LINEAGE_EVIDENCE"},
+    {"artifact_name": "C2EXP_0007_R2_Compound_Aware_Current_Structural_Map_Snapshot_REPLACE_v0_1.pine", "sha256": "b3a2319dde1e8f73a389c01fabc6a76bd37efd84599763d0f902d165a434082c", "size_bytes": 24838, "line_count": 595, "role": "S2_SNAPSHOT_SOURCE_CORROBORATION"},
+    {"artifact_name": "C2EXP_0008_R2_Case_Census_Export_Surface_Append_v0_1.pine", "sha256": "409b75d49a60ec8455dd387c71cd7745c5f4cd7def73f5fb8aef1dc3d28a411c", "size_bytes": 15891, "line_count": 307, "role": "FIXTURE_EXPORT_SURFACE_EVIDENCE"},
+    {"artifact_name": "C2EXP_0008_Structural_Map_Snapshot_Succession_Ledger_Append_v0_1.pine", "sha256": "4a447a882dc26081a714538ad9bab928b72a31892d2e01188db220d7ab00accc", "size_bytes": 24486, "line_count": 614, "role": "S2_SUCCESSION_LEDGER_SOURCE_CORROBORATION"}
+  ],
+  "raw_case_inputs_status": "NOT_IN_WP1_OPERATOR_SUPPLIED_SET",
+  "raw_case_inputs_effect": "PARITY_EXECUTION_PENDING_WP3; NO_AGGREGATE_TO_RAW_RECONSTRUCTION",
+  "authority_effect": "NONE_REFERENCE_CENSUS_ONLY"
+}
