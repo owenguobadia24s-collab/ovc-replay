@@ -1,0 +1,70 @@
+{
+  "schema": "ovc-c2-csm-reference-source-completeness/v0.1",
+  "generation_id": "P3-R5-T2-S2",
+  "load_bearing_semantics": [
+    "P3_FORMATION_LIFECYCLE",
+    "R5_BOUNDARY_ROLE_SUCCESSION",
+    "T2_ATOMIC_COMPOUND_TRANSITIONS",
+    "S2_SNAPSHOT_SUCCESSION_LEDGER"
+  ],
+  "sources": [
+    {
+      "source_id": "C2EXP-0008-R2-CENSUS-EXPORT",
+      "source_locator": "external-file-library:C2EXP_0008_R2_Case_Census_Export_Surface_Append_v0_1.pine",
+      "source_confidence": "SOURCE_EXACT",
+      "implementation_binding": "EXACT_EVIDENCE_ONLY",
+      "supports": ["HISTORICAL_CENSUS","INTEGRITY_OUTPUT_SURFACE"],
+      "load_bearing": false,
+      "sha256": null,
+      "notes": "Exact census/export artifact; does not define frozen P3/R5/T2/S2 mechanics."
+    },
+    {
+      "source_id": "C2EXP-0009-HOLDOUT-RESULT",
+      "source_locator": "external-file-library:C2_CSM_G1_Census_with_C2EXP_0009_Holdout_Result.xlsx",
+      "source_confidence": "SOURCE_EXACT",
+      "implementation_binding": "EXACT_EVIDENCE_ONLY",
+      "supports": ["HISTORICAL_HOLDOUT_RESULT","P3_R5_T2_S2_GENERATION_IDENTITY"],
+      "load_bearing": false,
+      "sha256": null,
+      "notes": "Exact result/census evidence; output counts cannot define missing mechanics."
+    },
+    {
+      "source_id": "C2E-LIB-0001-R2-NATIVE-TYPED-CONSUMER",
+      "source_locator": "external-file-library:C2E-LIB-0001 R2 native typed consumer / OVC_C2E_CSM_NEW_LIBRARY_BASED_PROD1.pine",
+      "source_confidence": "SOURCE_EXACT",
+      "implementation_binding": "EXACT_EVIDENCE_ONLY",
+      "supports": ["DOWNSTREAM_TYPED_READ_SURFACE","HISTORICAL_LIBRARY_IMPORT_IDENTITY"],
+      "load_bearing": false,
+      "sha256": null,
+      "notes": "Proves downstream consumption of I8th/OVC_C2_CSM_P3R5T2S2/1; consumer code is not owner implementation semantics."
+    },
+    {
+      "source_id": "C2LIB-0001-R1-R5-LINEAGE",
+      "source_locator": "external-file-library:OVC_C2_CSM_to_C2E_SUPPORT_Phase_Ledger_v0_1.csv",
+      "source_confidence": "SOURCE_DERIVED",
+      "implementation_binding": "DERIVED_NON_IMPLEMENTATION",
+      "supports": ["P3_FORMATION_LIFECYCLE","R5_BOUNDARY_ROLE_SUCCESSION","T2_ATOMIC_COMPOUND_TRANSITIONS","S2_SNAPSHOT_SUCCESSION_LEDGER"],
+      "load_bearing": true,
+      "sha256": null,
+      "notes": "C2LIB R1-R5 are explicitly SOURCE_DERIVED in the source-bound ledger; cannot define implementation behavior."
+    },
+    {
+      "source_id": "PUBLISHED-C2-LIBRARY-SOURCE",
+      "source_locator": "tradingview:I8th/OVC_C2_CSM_P3R5T2S2/1",
+      "source_confidence": "MISSING",
+      "implementation_binding": "UNAVAILABLE",
+      "supports": ["P3_FORMATION_LIFECYCLE","R5_BOUNDARY_ROLE_SUCCESSION","T2_ATOMIC_COMPOUND_TRANSITIONS","S2_SNAPSHOT_SUCCESSION_LEDGER"],
+      "load_bearing": true,
+      "sha256": null,
+      "notes": "Import identity is observed in exact consumers, but exact published library source bytes/code were not recovered in repository or File Library source census."
+    }
+  ],
+  "missing_exact_semantics": [
+    "P3_FORMATION_LIFECYCLE",
+    "R5_BOUNDARY_ROLE_SUCCESSION",
+    "T2_ATOMIC_COMPOUND_TRANSITIONS",
+    "S2_SNAPSHOT_SUCCESSION_LEDGER"
+  ],
+  "status": "REFERENCE_PARTIAL_SOURCE_LIMITED",
+  "prohibited_reconstruction": true
+}
