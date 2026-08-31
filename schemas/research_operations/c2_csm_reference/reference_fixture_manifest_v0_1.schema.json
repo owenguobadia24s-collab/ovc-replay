@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-c2-csm-reference-fixture-manifest/v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema","generation_id","fixtures","historical_corpus"],
+  "properties": {
+    "schema": {"const": "ovc-c2-csm-reference-fixture-manifest/v0.1"},
+    "generation_id": {"const": "P3-R5-T2-S2"},
+    "fixtures": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["fixture_id","source_locator","source_confidence","role","implementation_semantics_allowed"],
+        "properties": {
+          "fixture_id": {"type": "string","minLength": 1},
+          "source_locator": {"type": "string","minLength": 1},
+          "source_confidence": {"enum": ["SOURCE_EXACT","SOURCE_DERIVED"]},
+          "role": {"enum": ["HISTORICAL_RESULT_GOLDEN","CENSUS_EXPORT","OWNER_IMPLEMENTATION_SOURCE","DOWNSTREAM_TYPED_CONSUMER","LINEAGE_ONLY"]},
+          "implementation_semantics_allowed": {"type": "boolean"},
+          "notes": {"type": "string"}
+        }
+      }
+    },
+    "historical_corpus": {"type": "object"}
+  }
+}
