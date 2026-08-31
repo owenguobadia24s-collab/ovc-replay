@@ -9,8 +9,9 @@
     "ratified_wp3_requirement": "PASS:EXACT_FIXTURE_REPLAY_CLEAN_PROCESS_CHECKPOINT_TYPED_HANDOFF_AND_INDEPENDENT_REVIEW",
     "exact_engine_source_available": "PASS:88bfab773f72817ee9e87228066bcaa223d62aef0fb802dd9261c1a11bce03fd",
     "bounded_source_census": "PASS:REPOSITORY_EXTERNAL_ARTIFACTS_DOWNLOADS_DESKTOP_ATTACHMENTS",
-    "raw_case_input_corpus_found": false,
-    "per_case_runtime_bindings_found": false,
+    "candidate_raw_case_input_corpus_found": true,
+    "exact_historical_raw_case_input_corpus_found": false,
+    "per_case_runtime_bindings_found": "PARTIAL_ADJACENT_R10S2_MANIFEST_NO_ORIGINAL_RUN_BINDING_OR_PRICE_SIDE",
     "complete_expected_typed_ledgers_found": false,
     "aggregate_workbook_structure": "PASS:EVIDENCE_ONLY_CASE_ROWS_WITHOUT_PER_BAR_OHLC_OR_FULL_SERIALIZED_LEDGER",
     "aggregate_to_raw_reconstruction_attempted": false,
@@ -18,6 +19,10 @@
     "source_limited_alternative_available": true,
     "source_limited_alternative_taken": false,
     "one_consolidated_source_request": true,
+    "candidate_source_preserved": "PASS:14e462a87fdeeeb839aa498e6152bb626bb2383fedacde1447a87bd34ade4a81",
+    "candidate_case_window_coverage": "PASS:25_CASES_2328_BARS",
+    "candidate_aggregate_replay": "FAIL_EXACT:20_OF_25_CASES_EXACT_794_OF_800_FIELDS_EQUAL_6_DIVERGENT_FIELDS",
+    "candidate_source_classification": "QUARANTINED_SOURCE_DIVERGENCE",
     "independent_g3_review_started": false,
     "wp4_released": false,
     "active_c2_authority": "NONE",
@@ -25,16 +30,16 @@
     "validation_consumed": false
   },
   "tests": {
-    "wp3_source_recovery": "PASS:7",
-    "c2_csm_reference_directory": "PASS:38",
-    "authority_namespace_suite": "PASS:22",
+    "wp3_source_recovery": "PASS:9",
+    "c2_csm_reference_directory": "PASS:40",
+    "authority_namespace_suite": "PASS:39",
     "repository_suite": "NOT_RUN_SOURCE_RECOVERY_STOP",
     "vit": "NOT_APPLICABLE_UNMERGED_SOURCE_RECOVERY_PAUSE",
     "siq": "NOT_APPLICABLE_UNMERGED_SOURCE_RECOVERY_PAUSE",
     "grt_exact_tree": "NOT_APPLICABLE_UNMERGED_SOURCE_RECOVERY_PAUSE"
   },
-  "blocking_source_gap": "EXACT_25_CASE_HISTORICAL_INPUT_RUNTIME_BINDING_AND_EXPECTED_OUTPUT_CORPUS",
-  "recommendation": "PAUSE_AND_REQUEST_ONE_CONSOLIDATED_ARTIFACT_BUNDLE",
+  "blocking_source_gap": "EXACT_HISTORICAL_SOURCE_CONFLICT_IN_FIVE_CASES_AND_COMPLETE_EXPECTED_TYPED_LEDGER_OUTPUTS_UNAVAILABLE",
+  "recommendation": "QUARANTINE_CANDIDATE_AND_REQUEST_ONE_CONSOLIDATED_CORRECTIVE_ARTIFACT_BUNDLE",
   "authority_delta": "NONE_HISTORICAL_CONFORMANCE_ONLY",
-  "result": "PASS_SOURCE_RECOVERY_BOUNDARY_CONFIRMED"
+  "result": "PASS_SOURCE_CONFLICT_QUARANTINED"
 }

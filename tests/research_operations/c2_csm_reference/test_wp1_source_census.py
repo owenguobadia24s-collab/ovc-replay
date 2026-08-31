@@ -126,7 +126,8 @@ def test_source_completeness_matrix_does_not_preempt_later_source_requests() -> 
     matrix = load(SPTO_RECORDS / "C2S_SPTOI_SOURCE_COMPLETENESS_MATRIX_v0_1.json")
     families = {item["family_id"]: item for item in matrix["families"]}
     assert len(families) == 11
-    assert families["A_HISTORICAL_C2_REFERENCE"]["status"] == "SOURCE_RECOVERY_REQUIRED"
+    assert families["A_HISTORICAL_C2_REFERENCE"]["status"] == "SOURCE_CONFLICT_QUARANTINED"
+    assert families["A_HISTORICAL_C2_REFERENCE"]["parity_status"] == "BLOCKED_WP3_CANDIDATE_DIVERGES_IN_FIVE_CASES_AND_FULL_EXPECTED_OUTPUTS_UNAVAILABLE"
     assert families["A_HISTORICAL_C2_REFERENCE"]["missing_components"]
     assert families["A_HISTORICAL_C2_REFERENCE"]["source_request_packet"].endswith("C2S_SPTOI_WP3_SOURCE_REQUEST_PACKET_v0_1.json")
     for family_id, item in families.items():
@@ -149,6 +150,6 @@ def test_g1_auto_pass_is_preserved_after_rolling_state_advances_to_wp3_source_re
     assert state["packet_id"] == pointer["current_packet"] == "C2S-SPTOI-WP3"
     assert state["next_packet"] == pointer["next_packet"] == "C2S-SPTOI-WP3"
     assert state["protected_source"] == pointer["protected_source"] == "DENIED"
-    assert state["parity_status"] == "BLOCKED_WP3_EXACT_HISTORICAL_REPLAY_INPUTS_UNAVAILABLE"
+    assert state["parity_status"] == "BLOCKED_WP3_CANDIDATE_DIVERGES_IN_FIVE_CASES_AND_FULL_EXPECTED_OUTPUTS_UNAVAILABLE"
     assert state["validation"] == "LOCKED_UNCONSUMED"
     assert state["semantic_authority"] == "NONE"
