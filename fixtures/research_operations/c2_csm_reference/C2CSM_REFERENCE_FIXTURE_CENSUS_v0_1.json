@@ -1,0 +1,59 @@
+{
+  "schema": "ovc-c2-csm-reference-fixture-manifest/v0.1",
+  "generation_id": "P3-R5-T2-S2",
+  "fixtures": [
+    {
+      "fixture_id": "C2EXP-0002",
+      "source_locator": "external-file-library:C2EXP_0002_P2_vs_P3_Comparison_View_Append_v0_1.pine",
+      "source_confidence": "SOURCE_EXACT",
+      "role": "LINEAGE_ONLY",
+      "implementation_semantics_allowed": false,
+      "notes": "Exact P2-vs-P3 experiment evidence, but not the complete frozen P3 formation/lifecycle implementation."
+    },
+    {
+      "fixture_id": "C2EXP-0008-R2",
+      "source_locator": "external-file-library:C2EXP_0008_R2_Case_Census_Export_Surface_Append_v0_1.pine",
+      "source_confidence": "SOURCE_EXACT",
+      "role": "CENSUS_EXPORT",
+      "implementation_semantics_allowed": false,
+      "notes": "Machine-readable historical case/integrity export surface."
+    },
+    {
+      "fixture_id": "C2EXP-0009",
+      "source_locator": "external-file-library:C2_CSM_G1_Census_with_C2EXP_0009_Holdout_Result.xlsx",
+      "source_confidence": "SOURCE_EXACT",
+      "role": "HISTORICAL_RESULT_GOLDEN",
+      "implementation_semantics_allowed": false,
+      "notes": "10/10 holdout integrity PASS and frozen generation census."
+    },
+    {
+      "fixture_id": "C2-CSM-G1",
+      "source_locator": "external-file-library:C2 G1 holdout result + C2 library artefact lineage",
+      "source_confidence": "SOURCE_EXACT",
+      "role": "HISTORICAL_RESULT_GOLDEN",
+      "implementation_semantics_allowed": false,
+      "notes": "Exact historical freeze/result identity; load-bearing library source remains unavailable."
+    },
+    {
+      "fixture_id": "C2LIB-0001-R1-R5",
+      "source_locator": "external-file-library:C2LIB-0001 source/library lineage in phase ledger and evidentiary journal",
+      "source_confidence": "SOURCE_DERIVED",
+      "role": "LINEAGE_ONLY",
+      "implementation_semantics_allowed": false,
+      "notes": "All C2LIB R1-R5 phases are SOURCE_DERIVED in the source-bound ledger."
+    },
+    {
+      "fixture_id": "C2E-LIB-0001-R2",
+      "source_locator": "external-file-library:OVC_C2E_CSM_NEW_LIBRARY_BASED_PROD1.pine / native typed consumer",
+      "source_confidence": "SOURCE_EXACT",
+      "role": "DOWNSTREAM_TYPED_CONSUMER",
+      "implementation_semantics_allowed": false,
+      "notes": "Exact consumer proves frozen library import/read surface, not owner mechanics."
+    }
+  ],
+  "historical_corpus": {
+    "development": {"cases": 15, "bars": 1392, "objects": 245},
+    "holdout": {"cases": 10, "bars": 936, "objects": 163, "integrity_pass": "10/10"},
+    "combined": {"cases": 25, "bars": 2328, "objects": 408}
+  }
+}
