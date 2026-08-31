@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-c2-csm-reference-source-completeness/v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema","generation_id","load_bearing_semantics","sources","status","prohibited_reconstruction"],
+  "properties": {
+    "schema": {"const": "ovc-c2-csm-reference-source-completeness/v0.1"},
+    "generation_id": {"const": "P3-R5-T2-S2"},
+    "load_bearing_semantics": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": {"enum": ["P3_FORMATION_LIFECYCLE","R5_BOUNDARY_ROLE_SUCCESSION","T2_ATOMIC_COMPOUND_TRANSITIONS","S2_SNAPSHOT_SUCCESSION_LEDGER"]}
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_id","source_locator","source_confidence","implementation_binding","supports","load_bearing","notes"],
+        "properties": {
+          "source_id": {"type": "string","minLength": 1},
+          "source_locator": {"type": "string","minLength": 1},
+          "source_confidence": {"enum": ["SOURCE_EXACT","SOURCE_DERIVED","MISSING"]},
+          "implementation_binding": {"enum": ["EXACT_IMPLEMENTATION_BOUND","EXACT_EVIDENCE_ONLY","DERIVED_NON_IMPLEMENTATION","UNAVAILABLE"]},
+          "supports": {"type": "array","items": {"type": "string"},"uniqueItems": true},
+          "load_bearing": {"type": "boolean"},
+          "sha256": {"type": ["string","null"],"pattern": "^[0-9a-f]{64}$"},
+          "notes": {"type": "string"}
+        }
+      }
+    },
+    "missing_exact_semantics": {"type": "array","items": {"enum": ["P3_FORMATION_LIFECYCLE","R5_BOUNDARY_ROLE_SUCCESSION","T2_ATOMIC_COMPOUND_TRANSITIONS","S2_SNAPSHOT_SUCCESSION_LEDGER"]},"uniqueItems": true},
+    "status": {"enum": ["REFERENCE_COMPLETE","REFERENCE_PARTIAL_SOURCE_LIMITED"]},
+    "prohibited_reconstruction": {"const": true}
+  }
+}
