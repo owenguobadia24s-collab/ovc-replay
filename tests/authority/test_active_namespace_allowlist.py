@@ -31,6 +31,7 @@ EXPECTED_OVC_PACKAGES = {
     "ovc.programme_genesis.grt_v0_2",
     "ovc.research_operations",
     "ovc.research_operations.asocs",
+    "ovc.research_operations.c2_csm_reference",
     "ovc.research_operations.p1cdi",
     "ovc.research_operations.prsc",
     "ovc.research_operations.rccr",
@@ -102,6 +103,25 @@ class ActiveNamespaceAllowlistTests(unittest.TestCase):
         self.assertIn("candidate", init_text)
         self.assertIn("validation", init_text)
         self.assertIn("actuation authority", init_text)
+
+    def test_c2_csm_reference_namespace_is_historical_conformance_only(self) -> None:
+        init_text = (
+            SRC / "ovc" / "research_operations" / "c2_csm_reference" / "__init__.py"
+        ).read_text(encoding="utf-8").lower()
+        self.assertIn("historical", init_text)
+        self.assertIn("reference conformance only", init_text)
+        self.assertIn("no current c2", init_text)
+        self.assertIn("owner authority", init_text)
+        self.assertIn("protected source", init_text)
+        self.assertIn("validation", init_text)
+        self.assertIn("publish", init_text)
+        self.assertIn("probability", init_text)
+        self.assertIn("risk", init_text)
+        self.assertIn("exposure", init_text)
+        self.assertIn("trading", init_text)
+        self.assertIn("execution", init_text)
+        self.assertIn("agent-write authority", init_text)
+        self.assertIn("fail closed", init_text)
 
     def test_sff_namespace_is_synthetic_conformance_only(self) -> None:
         init_text = (SRC / "ovc" / "research_operations" / "sff" / "__init__.py").read_text(encoding="utf-8").lower()

@@ -1,3 +1,10 @@
+"""Historical P3-R5-T2-S2 reference conformance only.
+
+This namespace has no current C2 or owner authority, does not consume protected source or
+Validation, and cannot publish, promote semantics, or create probability, risk, exposure,
+trading, execution, or agent-write authority. Source/parity gaps fail closed.
+"""
+
 from .engine import (
     ACTIVE_C2_AUTHORITY,
     ENV_IDENTITY_AMBIGUOUS,
