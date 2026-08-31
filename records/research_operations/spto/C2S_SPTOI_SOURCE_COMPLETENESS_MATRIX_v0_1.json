@@ -2,16 +2,21 @@
   "schema": "ovc-c2s-sptoi-source-completeness-matrix/v0.1",
   "matrix_id": "C2S-SPTOI.SOURCE-COMPLETENESS.v0.1",
   "programme_id": "OVC-EML-C2S-SPTO-CONFORMANCE-PREREG-v0.1",
-  "current_packet": "C2S-SPTOI-WP1",
+  "current_packet": "C2S-SPTOI-WP3",
   "target": "SOURCE_COMPLETE_RECONSTRUCTION",
   "families": [
     {
       "family_id": "A_HISTORICAL_C2_REFERENCE",
-      "status": "SOURCE_COMPLETE_IMPLEMENTED_PARITY_PENDING",
+      "status": "SOURCE_RECOVERY_REQUIRED",
       "load_bearing_now": true,
       "manifest": "records/research_operations/c2_csm_reference/C2CSM_REFERENCE_SOURCE_COMPLETENESS_MANIFEST_v0_1.json",
-      "missing_components": [],
-      "parity_status": "WP2_IMPLEMENTATION_COMPLETE_WP3_HISTORICAL_REPLAY_PENDING"
+      "missing_components": [
+        "EXACT_25_CASE_PER_BAR_SOURCE_INPUTS",
+        "PER_CASE_SYMBOL_TIMEFRAME_PRICE_SIDE_MINTICK_WINDOW_SEQUENCE_CUTOFF_GAP_AND_CHECKPOINT_BINDINGS",
+        "COMPLETE_EXPECTED_P3_R5_T2_S2_TYPED_AND_LEDGER_OUTPUTS"
+      ],
+      "parity_status": "BLOCKED_WP3_EXACT_HISTORICAL_REPLAY_INPUTS_UNAVAILABLE",
+      "source_request_packet": "docs/programmes/c2s-sptoi-v0-1/wp3/C2S_SPTOI_WP3_SOURCE_REQUEST_PACKET_v0_1.json"
     },
     {"family_id": "B_C0B_ORIGINAL_STRUCTURAL_SOURCE", "status": "NOT_YET_LOAD_BEARING", "load_bearing_now": false, "next_relevant_packet": "C2S-SPTOI-WP5"},
     {"family_id": "C_TVX2_RICH_SUBSTRATE", "status": "NOT_YET_LOAD_BEARING", "load_bearing_now": false, "next_relevant_packet": "C2S-SPTOI-WP6"},

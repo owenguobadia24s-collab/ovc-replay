@@ -126,8 +126,9 @@ def test_source_completeness_matrix_does_not_preempt_later_source_requests() -> 
     matrix = load(SPTO_RECORDS / "C2S_SPTOI_SOURCE_COMPLETENESS_MATRIX_v0_1.json")
     families = {item["family_id"]: item for item in matrix["families"]}
     assert len(families) == 11
-    assert families["A_HISTORICAL_C2_REFERENCE"]["status"] == "SOURCE_COMPLETE_IMPLEMENTED_PARITY_PENDING"
-    assert families["A_HISTORICAL_C2_REFERENCE"]["missing_components"] == []
+    assert families["A_HISTORICAL_C2_REFERENCE"]["status"] == "SOURCE_RECOVERY_REQUIRED"
+    assert families["A_HISTORICAL_C2_REFERENCE"]["missing_components"]
+    assert families["A_HISTORICAL_C2_REFERENCE"]["source_request_packet"].endswith("C2S_SPTOI_WP3_SOURCE_REQUEST_PACKET_v0_1.json")
     for family_id, item in families.items():
         if family_id != "A_HISTORICAL_C2_REFERENCE":
             assert item["status"] == "NOT_YET_LOAD_BEARING"
@@ -135,7 +136,7 @@ def test_source_completeness_matrix_does_not_preempt_later_source_requests() -> 
     assert matrix["policy"]["source_limited_continuation_requires_explicit_operator_instruction"] is True
 
 
-def test_g1_auto_pass_is_preserved_after_rolling_state_advances_to_wp2() -> None:
+def test_g1_auto_pass_is_preserved_after_rolling_state_advances_to_wp3_source_recovery() -> None:
     decision = load(WP1 / "C2S_SPTOI_G1_DELEGATED_DECISION_v0_1.json")
     qa = load(WP1 / "C2S_SPTOI_WP1_QA_PACKET_v0_1.json")
     state = load(SPTO_RECORDS / "C2S_SPTOI_PROGRAMME_STATE_v0_1.json")
@@ -145,9 +146,9 @@ def test_g1_auto_pass_is_preserved_after_rolling_state_advances_to_wp2() -> None
     assert decision["authority_delta"] == "NONE_REFERENCE_ONLY_MACHINERY"
     assert qa["result"] == "PASS"
     assert qa["checks"]["source_derived_semantics_used"] is False
-    assert state["packet_id"] == pointer["current_packet"] == "C2S-SPTOI-WP2"
+    assert state["packet_id"] == pointer["current_packet"] == "C2S-SPTOI-WP3"
     assert state["next_packet"] == pointer["next_packet"] == "C2S-SPTOI-WP3"
     assert state["protected_source"] == pointer["protected_source"] == "DENIED"
-    assert state["parity_status"] == "WP2_IMPLEMENTATION_COMPLETE_WP3_HISTORICAL_REPLAY_PENDING"
+    assert state["parity_status"] == "BLOCKED_WP3_EXACT_HISTORICAL_REPLAY_INPUTS_UNAVAILABLE"
     assert state["validation"] == "LOCKED_UNCONSUMED"
     assert state["semantic_authority"] == "NONE"
