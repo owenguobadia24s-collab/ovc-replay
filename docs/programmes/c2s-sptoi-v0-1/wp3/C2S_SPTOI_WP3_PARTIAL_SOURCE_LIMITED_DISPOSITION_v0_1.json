@@ -1,0 +1,96 @@
+{
+  "schema": "ovc-c2s-sptoi-wp3-partial-source-limited-disposition/v1",
+  "disposition_id": "C2S-SPTOI-WP3.PARTIAL-SOURCE-LIMITED.v0.1",
+  "programme_id": "OVC-EML-C2S-SPTO-CONFORMANCE-PREREG-v0.1",
+  "packet_id": "C2S-SPTOI-WP3",
+  "gate_id": "C2S-SPTOI-G3-ALG",
+  "decision_authority": "OPERATOR_EXPLICIT_INSTRUCTION",
+  "operator_command": "OVC CONTINUE C2S-SPTOI — AUTHORISE WP3 SOURCE-LIMITED DISPOSITION",
+  "decision_date": "2026-08-31",
+  "decision": "AUTHORISE_PARTIAL_SOURCE_LIMITED",
+  "supersedes_for_current_disposition": [
+    "The recovery requirement in C2S_SPTOI_WP3_SOURCE_REQUEST_PACKET_v0_1.json for the five original divergent trajectories before WP3 may proceed.",
+    "The false value of partial_source_limited_authorised in C2S_SPTOI_WP3_RECOVERY_PRIORITY_AMENDMENT_v0_1.json.",
+    "The pre-disposition WP3 SOURCE_CONFLICT_QUARANTINED programme state."
+  ],
+  "does_not_rewrite_or_delete": [
+    "C2S_SPTOI_WP3_SOURCE_REQUEST_PACKET_v0_1.json",
+    "C2S_SPTOI_WP3_CANDIDATE_SOURCE_ASSESSMENT_R10S2_v0_1.json",
+    "C2S_SPTOI_WP3_RECOVERY_PRIORITY_AMENDMENT_v0_1.json",
+    "C2S_SPTOI_WP3_SOURCE_RECOVERY_QA_v0_1.json"
+  ],
+  "historical_limitation": {
+    "status": "HISTORICALLY_UNAVAILABLE_NON_RETAINED",
+    "scope": "EXACT_ORIGINAL_C2EXP_0008_R2_C2EXP_0009_TRAJECTORIES_FOR_FIVE_CASES",
+    "case_ids": [
+      "C2CASE-20260323-0000_20260324-0000",
+      "C2CASE-20260402-0000_20260402-2100",
+      "C2CASE-20260403-0000_20260403-2100",
+      "C2CASE-20260421-0000_20260422-0000",
+      "C2CASE-20260423-0000_20260424-0000"
+    ],
+    "source_recovery": "STOPPED_BY_OPERATOR_FOR_THESE_FIVE_CASES",
+    "historical_stream_exports": "NOT_FOUND_EXISTENCE_NOT_ESTABLISHED",
+    "stream_export_existence_inference": "NONE",
+    "trajectory_synthesis_repair_or_interpolation": "PROHIBITED",
+    "missing_event_chronology_inference": "PROHIBITED",
+    "missing_succession_ledger_inference": "PROHIBITED",
+    "re_entry_condition": "DISCOVERY_OF_ANY_OR_ALL_ORIGINAL_FIVE_TRAJECTORIES_REOPENS_EXACT_HISTORICAL_REFERENCE_REPLAY_AND_MAY_UPGRADE_THE_REFERENCE_ONLY_AFTER_FULL_UNWEAKENED_PARITY_AND_INDEPENDENT_REVIEW"
+  },
+  "quarantined_candidate": {
+    "artifact": "R10S2_TRADINGVIEW_RAW.csv",
+    "sha256": "14e462a87fdeeeb839aa498e6152bb626bb2383fedacde1447a87bd34ade4a81",
+    "quarantine_path": "C:/Users/Owner/OVC/ovc-replay-external-artifacts/c2s-sptoi/quarantine/sha256/14e462a87fdeeeb839aa498e6152bb626bb2383fedacde1447a87bd34ade4a81/R10S2_TRADINGVIEW_RAW.csv",
+    "quarantine_hash_reverified": true,
+    "historical_exact_source": false,
+    "historical_fixture_promotion": "DENIED",
+    "other_content_addressed_copy_role": "BYTE_PRESERVATION_ONLY_NOT_AN_ADMISSION_OR_SOURCE_PROMOTION",
+    "evidentiary_role": "CORROBORATING_LATER_CAPTURE_ONLY"
+  },
+  "preserved_divergences": [
+    {"case_id": "C2CASE-20260323-0000_20260324-0000", "field": "Final Relation", "historical_expected": "BELOW", "candidate_replay": "INSIDE"},
+    {"case_id": "C2CASE-20260402-0000_20260402-2100", "field": "Final Relation", "historical_expected": "ABOVE", "candidate_replay": "INSIDE"},
+    {"case_id": "C2CASE-20260403-0000_20260403-2100", "field": "Final Relation", "historical_expected": "ABOVE", "candidate_replay": "BELOW"},
+    {"case_id": "C2CASE-20260421-0000_20260422-0000", "field": "Objects", "historical_expected": 17, "candidate_replay": 14},
+    {"case_id": "C2CASE-20260421-0000_20260422-0000", "field": "Final Active", "historical_expected": 10, "candidate_replay": 7},
+    {"case_id": "C2CASE-20260423-0000_20260424-0000", "field": "Ledger Records", "historical_expected": 26, "candidate_replay": 25}
+  ],
+  "corroborating_evidence_only": {
+    "cases_exact_at_aggregate_surface": "20/25",
+    "aggregate_field_concordance": "794/800",
+    "field_surface_per_case": 32,
+    "historical_exact_parity_claim": false,
+    "full_typed_stream_parity_claim": false,
+    "use_to_infer_missing_five": "PROHIBITED"
+  },
+  "frozen_historical_terminal_goldens": [
+    {
+      "artifact": "C2_CSM_G1_15_Case_Cross_Case_Census.xlsx",
+      "sha256": "69c255faf5e7bf14cf61833abee4480f48b3c841d6ed857d68f6d1817136dce1",
+      "hash_reverified": true,
+      "role": "SOURCE_EXACT_TERMINAL_GOLDEN"
+    },
+    {
+      "artifact": "C2_CSM_G1_Census_with_C2EXP_0009_Holdout_Result.xlsx",
+      "sha256": "6721f81697cc80875a51406962bb104a1c2d29fb223f2d6876a55b0f97f8e90a",
+      "hash_reverified": true,
+      "role": "SOURCE_EXACT_TERMINAL_GOLDEN"
+    }
+  ],
+  "parity_rule": {
+    "criteria_weakened": false,
+    "existing_evidence_tolerance_relaxed": false,
+    "limitation_applies_only_to": "HISTORICAL_SOURCE_EVIDENCE_NEVER_RETAINED",
+    "admissible_completion": "PASS_ALL_DETERMINISTIC_REFERENCE_ENGINE_FRESH_PROCESS_CHECKPOINT_RESTART_SERIALIZATION_AND_TYPED_C2LIB_HANDOFF_TESTS_NOT_DEPENDENT_ON_THE_FIVE_UNAVAILABLE_TRAJECTORIES_THEN_INDEPENDENT_G3_ALG_PARTIAL_SOURCE_LIMITED_ASSESSMENT"
+  },
+  "authority": {
+    "active_c2_authority": "NONE",
+    "historical_reference_role": "DESCRIPTIVE_REFERENCE_CONFORMANCE_ONLY",
+    "historical_reference_as_current_c2_owner_truth": "PROHIBITED",
+    "validation": "LOCKED_UNCONSUMED",
+    "semantic_selector_family_event_authority": "NONE",
+    "probability_risk_exposure_trading_execution_authority": "NONE"
+  },
+  "transition_rule": "IF_AND_ONLY_IF_INDEPENDENT_G3_ALG_ACCEPTS_PARTIAL_SOURCE_LIMITED_CLOSE_WP3_AND_CONTINUE_TO_WP4",
+  "wp4_boundary": "BIND_ONLY_A_PUBLIC_CURRENT_OWNER_AUTHORISED_C2_STRUCTURAL_SNAPSHOT_READ_SURFACE;PRIVATE_ENGINE_INTROSPECTION_OR_RECONSTRUCTION_PROHIBITED;IF_NOT_EXPOSED_STOP_OWNER_READ_SURFACE_REQUIRED_SOURCE_NOT_EVALUABLE"
+}
