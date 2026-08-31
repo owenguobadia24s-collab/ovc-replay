@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/c2_csm_reference/c2_csm_reference_generation_manifest_v0_1.schema.json",
+  "title": "C2-CSM historical reference generation manifest v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "manifest_id",
+    "programme_id",
+    "packet_id",
+    "generation_id",
+    "status",
+    "source_binding",
+    "implementation",
+    "semantic_family_bindings",
+    "runtime_bindings",
+    "determinism",
+    "parity",
+    "active_c2_authority",
+    "authority_effect"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-c2csm-reference-generation-manifest/v0.1"},
+    "manifest_id": {"type": "string", "minLength": 1},
+    "programme_id": {"const": "OVC-EML-C2S-SPTO-CONFORMANCE-PREREG-v0.1"},
+    "packet_id": {"const": "C2S-SPTOI-WP2"},
+    "generation_id": {"const": "P3-R5-T2-S2"},
+    "status": {"const": "IMPLEMENTED_EXACT_SOURCE_BOUND_PARITY_PENDING_WP3"},
+    "source_binding": {
+      "type": "object",
+      "required": ["artifact_name", "sha256", "source_confidence", "implementation_binding"],
+      "properties": {
+        "artifact_name": {"const": "OVC_C2_CSM_P3R5T2S2_DEV.txt"},
+        "sha256": {"const": "88bfab773f72817ee9e87228066bcaa223d62aef0fb802dd9261c1a11bce03fd"},
+        "source_confidence": {"const": "SOURCE_EXACT"},
+        "implementation_binding": {"const": "EXACT_IMPLEMENTATION_BOUND"},
+        "external_artifact_path": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "implementation": {"type": "object"},
+    "semantic_family_bindings": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["family_id", "source_lines", "python_surface", "status"],
+        "properties": {
+          "family_id": {"type": "string"},
+          "source_lines": {"type": "string"},
+          "python_surface": {"type": "string"},
+          "status": {"const": "IMPLEMENTED_SOURCE_BOUND"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "runtime_bindings": {"type": "object"},
+    "source_surface_audit": {"type": "object"},
+    "determinism": {"type": "object"},
+    "parity": {"type": "object"},
+    "active_c2_authority": {"const": "NONE"},
+    "authority_effect": {"const": "NONE_HISTORICAL_CONFORMANCE_ONLY"}
+  }
+}
