@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-c2-csm-reference-parity-receipt/v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema","generation_id","source_completeness","disposition","authority_state"],
+  "properties": {
+    "schema": {"const": "ovc-c2-csm-reference-parity-receipt/v0.1"},
+    "generation_id": {"const": "P3-R5-T2-S2"},
+    "source_completeness": {"enum": ["REFERENCE_COMPLETE","REFERENCE_PARTIAL_SOURCE_LIMITED"]},
+    "disposition": {"enum": ["PARITY_PASS","PARITY_FAIL","NOT_EVALUABLE_SOURCE_LIMITED","QUARANTINED_SOURCE_CONFLICT"]},
+    "authority_state": {"const": "ACTIVE_C2_AUTHORITY_NONE"},
+    "logical_output_hash": {"type": ["string","null"]},
+    "notes": {"type": "string"}
+  }
+}
