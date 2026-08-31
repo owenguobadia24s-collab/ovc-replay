@@ -10,8 +10,8 @@ import subprocess
 import sys
 
 import pytest
-from jsonschema import Draft202012Validator
 
+from ovc.development.skills.registry import validate_against_schema
 from ovc.research_operations.c2_csm_reference import (
     ACTIVE_C2_AUTHORITY,
     GENERATION_ID,
@@ -97,7 +97,8 @@ def test_generation_manifest_validates_and_keeps_parity_pending() -> None:
     schema = json.loads(
         (ROOT / "schemas/research_operations/c2_csm_reference/c2_csm_reference_generation_manifest_v0_1.schema.json").read_text(encoding="utf-8")
     )
-    Draft202012Validator(schema).validate(manifest)
+    assert schema["$schema"] == "https://json-schema.org/draft/2020-12/schema"
+    validate_against_schema(manifest, schema)
     assert manifest["status"] == "IMPLEMENTED_EXACT_SOURCE_BOUND_PARITY_PENDING_WP3"
     assert manifest["parity"]["historical_fixture_replay"] == "PENDING_WP3_RAW_CASE_INPUTS_UNAVAILABLE"
     assert manifest["parity"]["reference_complete_claimed"] is False
