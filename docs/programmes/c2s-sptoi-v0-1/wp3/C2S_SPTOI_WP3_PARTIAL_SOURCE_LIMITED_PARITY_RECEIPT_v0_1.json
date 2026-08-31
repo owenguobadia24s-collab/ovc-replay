@@ -1,0 +1,86 @@
+{
+  "schema": "ovc-c2s-sptoi-wp3-partial-source-limited-parity-receipt/v1",
+  "receipt_id": "C2S-SPTOI-WP3.PARITY.PARTIAL-SOURCE-LIMITED.v0.1",
+  "programme_id": "OVC-EML-C2S-SPTO-CONFORMANCE-PREREG-v0.1",
+  "packet_id": "C2S-SPTOI-WP3",
+  "gate_id": "C2S-SPTOI-G3-ALG",
+  "generation_id": "P3-R5-T2-S2",
+  "implementation_source_sha256": "88bfab773f72817ee9e87228066bcaa223d62aef0fb802dd9261c1a11bce03fd",
+  "parity_contract": "contracts/research_operations/c2_csm_reference/C2CSM_REFERENCE_PARITY_CONTRACT_v0_1.json",
+  "parity_contract_sha256": "c807e5d1b582b052027a4c16ce800f5fc3f2dc28e22a6da747af8bd872517cd6",
+  "criteria_weakened": false,
+  "mode_results": [
+    {
+      "mode": "HISTORICAL_FIXTURE_REPLAY",
+      "result": "PARTIAL_SOURCE_LIMITED_NOT_EVALUABLE_FOR_EXACT_25_CASE_CORPUS",
+      "reason": "Five original trajectories were not retained; the later candidate is quarantined and cannot substitute. Twenty aggregate-concordant cases and 794/800 fields are corroborating evidence only, not historical exact replay.",
+      "passed_claimed": false
+    },
+    {
+      "mode": "FRESH_PROCESS_REPLAY",
+      "result": "PASS_FOR_ALL_SOURCE_EXACT_MECHANICS_NOT_DEPENDENT_ON_UNAVAILABLE_TRAJECTORIES",
+      "evidence": [
+        "test_wp2_reference_engine.py::test_clean_process_replay_is_byte_identical",
+        "test_wp3_partial_source_limited.py::test_clean_process_checkpoint_restart_matches_uninterrupted_bytes"
+      ]
+    },
+    {
+      "mode": "CHECKPOINT_RESTART_REPLAY",
+      "result": "PASS_FOR_ALL_SOURCE_EXACT_MECHANICS_NOT_DEPENDENT_ON_UNAVAILABLE_TRAJECTORIES",
+      "coverage": "EVERY_ADMISSIBLE_NON_TERMINAL_CUT_1_THROUGH_20_PLUS_CLEAN_PROCESS_CUTS_1_7_14_20",
+      "evidence": [
+        "test_wp2_reference_engine.py::test_checkpoint_restart_and_fresh_replay_are_byte_identical",
+        "test_wp3_partial_source_limited.py::test_every_admissible_checkpoint_cut_is_logically_and_byte_identical",
+        "test_wp3_partial_source_limited.py::test_clean_process_checkpoint_restart_matches_uninterrupted_bytes"
+      ]
+    },
+    {
+      "mode": "SERIALIZED_OUTPUT_IDENTITY",
+      "result": "PASS_FOR_ALL_SOURCE_EXACT_MECHANICS_NOT_DEPENDENT_ON_UNAVAILABLE_TRAJECTORIES",
+      "identity": "CANONICAL_UTF8_SORTED_KEY_COMPACT_JSON_AND_SHA256_OUTPUT_ID_BYTE_IDENTICAL",
+      "evidence": [
+        "test_wp2_reference_engine.py::test_checkpoint_restart_and_fresh_replay_are_byte_identical",
+        "test_wp3_partial_source_limited.py::test_repeated_serialization_preserves_identity_and_authority_firewall"
+      ]
+    },
+    {
+      "mode": "TYPED_HANDOFF_SURFACE_PARITY",
+      "result": "PASS_WHERE_EXACT_SOURCE_EXISTS",
+      "surface": "EngineR4/newEngineR4/stepR4",
+      "coverage": "PRIMARY_AND_COMPATIBLE_BYTES_AND_CHECKPOINTS_EQUAL_AFTER_EVERY_ONE_OF_21_STEPS",
+      "evidence": [
+        "test_wp2_reference_engine.py::test_historical_engine_r4_typed_call_surface_matches_primary_api",
+        "test_wp3_partial_source_limited.py::test_c2lib_engine_r4_surface_matches_primary_api_after_every_step"
+      ]
+    }
+  ],
+  "comparison_scope_results": [
+    {"scope": "FORMATION_AND_OBJECT_IDENTITY", "source_exact_mechanics": "PASS", "historical_25_case_stream": "PARTIAL_SOURCE_LIMITED", "evidence": "test_strict_formation_and_same_cutoff_lifecycle_order"},
+    {"scope": "LIFECYCLE_TRANSITIONS", "source_exact_mechanics": "PASS", "historical_25_case_stream": "PARTIAL_SOURCE_LIMITED", "evidence": "test_strict_formation_and_same_cutoff_lifecycle_order"},
+    {"scope": "BOUNDARY_ROLE_SUCCESSION", "source_exact_mechanics": "PASS", "historical_25_case_stream": "PARTIAL_SOURCE_LIMITED", "evidence": "test_role_atomic_compound_and_snapshot_outputs_match_source_order"},
+    {"scope": "RELATION_AND_ENVELOPE_STATE", "source_exact_mechanics": "PASS", "historical_25_case_stream": "PARTIAL_SOURCE_LIMITED", "evidence": "test_role_atomic_compound_and_snapshot_outputs_match_source_order;test_gap_censors_relation_without_interpolation_or_synthetic_event"},
+    {"scope": "ATOMIC_AND_COMPOUND_TRANSITIONS", "source_exact_mechanics": "PASS", "historical_25_case_stream": "PARTIAL_SOURCE_LIMITED", "evidence": "test_atomic_classification_preserves_enum_and_value_order;test_role_atomic_compound_and_snapshot_outputs_match_source_order"},
+    {"scope": "OPEN_COMPOUND_AND_DEVELOPMENT_STATE", "source_exact_mechanics": "PASS", "historical_25_case_stream": "PARTIAL_SOURCE_LIMITED", "evidence": "test_role_atomic_compound_and_snapshot_outputs_match_source_order"},
+    {"scope": "SNAPSHOT_TRIGGER_MASKS", "source_exact_mechanics": "PASS", "historical_25_case_stream": "PARTIAL_SOURCE_LIMITED", "evidence": "test_role_atomic_compound_and_snapshot_outputs_match_source_order"},
+    {"scope": "APPEND_ONLY_SUCCESSION_LEDGER", "source_exact_mechanics": "PASS", "historical_25_case_stream": "PARTIAL_SOURCE_LIMITED", "evidence": "test_role_atomic_compound_and_snapshot_outputs_match_source_order;test_every_admissible_checkpoint_cut_is_logically_and_byte_identical"},
+    {"scope": "BREAK_AND_WARMUP_BEHAVIOUR", "source_exact_mechanics": "PASS", "historical_25_case_stream": "PARTIAL_SOURCE_LIMITED", "evidence": "test_gap_censors_relation_without_interpolation_or_synthetic_event;test_strict_p3_rejects_tied_candidate"}
+  ],
+  "execution": {
+    "command": "py -m pytest -q tests/research_operations/c2_csm_reference/test_wp3_partial_source_limited.py tests/research_operations/c2_csm_reference/test_wp2_reference_engine.py",
+    "result": "PASS",
+    "test_count": 26,
+    "elapsed_seconds": 6.72,
+    "all_admissible_checkpoint_restart_cuts": 20,
+    "clean_process_checkpoint_cuts": [1, 7, 14, 20],
+    "typed_handoff_step_comparisons": 21
+  },
+  "preserved_historical_evidence": {
+    "terminal_goldens_hash_reverified": true,
+    "quarantined_candidate_hash_reverified": true,
+    "five_case_synthesis_or_repair": false,
+    "missing_chronology_or_ledger_inference": false
+  },
+  "overall_result": "PARTIAL_SOURCE_LIMITED_READY_FOR_INDEPENDENT_G3_ALG_REVIEW",
+  "active_c2_authority": "NONE",
+  "historical_reference_as_current_owner_truth": "PROHIBITED"
+}

@@ -1,0 +1,121 @@
+{
+  "schema": "ovc-c2s-sptoi-wp3-candidate-source-assessment/v1",
+  "programme_id": "OVC-EML-C2S-SPTO-CONFORMANCE-PREREG-v0.1",
+  "packet_id": "C2S-SPTOI-WP3",
+  "gate_id": "C2S-SPTOI-G3-ALG",
+  "candidate": {
+    "original_path": "C:/Users/Owner/OVC/OVC_CSM_Automation/runs/c2e-support-r10s2/source_artifacts/incoming/R10S2_TRADINGVIEW_RAW.csv",
+    "original_filename": "R10S2_TRADINGVIEW_RAW.csv",
+    "sha256": "14e462a87fdeeeb839aa498e6152bb626bb2383fedacde1447a87bd34ade4a81",
+    "size_bytes": 1927804,
+    "row_count": 13432,
+    "column_count": 42,
+    "first_observed_utc": "2026-02-15T22:30:00Z",
+    "last_observed_utc": "2026-08-28T20:45:00Z",
+    "preserved_source_path": "C:/Users/Owner/OVC/ovc-replay-external-artifacts/c2s-sptoi/sources/sha256/14e462a87fdeeeb839aa498e6152bb626bb2383fedacde1447a87bd34ade4a81/R10S2_TRADINGVIEW_RAW.csv",
+    "quarantine_path": "C:/Users/Owner/OVC/ovc-replay-external-artifacts/c2s-sptoi/quarantine/sha256/14e462a87fdeeeb839aa498e6152bb626bb2383fedacde1447a87bd34ade4a81/R10S2_TRADINGVIEW_RAW.csv",
+    "preserved_hash_verified": true,
+    "quarantine_hash_verified": true
+  },
+  "adjacent_provenance": {
+    "generation_id": "R10S2-GBPUSD-FXCM-15M-20260216T0000Z-20260508T2100Z",
+    "provider": "FXCM through TradingView",
+    "symbol": "GBPUSD",
+    "timeframe": "15m",
+    "timezone": "UTC",
+    "mintick": "0.00001",
+    "manifest_sha256": "d5ecd9590115f4f2468424e63bcfff91edab9b696b34dbd368bbfa1b37d6182f",
+    "normalized_sha256": "b2c6eca0e55c2b158acad2286e1361f8e4eaf9b1c70a4e5015db780f42893db9",
+    "gap_ledger_sha256": "63f5a1a9d13574cba7fbd188bb40e259349016f8bee30f59b58cca0b4eb8712c",
+    "gap_ledger_summary": {
+      "scheduled_weekend_closures": 11,
+      "unexpected_gap_events": 1,
+      "unexpected_missing_15m_slots": 1,
+      "unexpected_gap": "2026-04-02T20:45:00Z_TO_2026-04-02T21:15:00Z",
+      "inside_historical_case_windows": false
+    }
+  },
+  "structural_inspection": {
+    "unique_strictly_increasing_timestamps": true,
+    "malformed_rows": 0,
+    "ohlc_constraint_failures": 0,
+    "historical_cases_present": 25,
+    "historical_case_bars_present": 2328,
+    "case_window_bar_counts_exact": 25,
+    "case_internal_non_15m_steps": 0,
+    "contains_p3_r5_t2_s2_expected_output_columns": false,
+    "contains_case_id_or_runtime_binding_columns": false
+  },
+  "replay_assessment": {
+    "engine_generation": "P3-R5-T2-S2",
+    "engine_source_sha256": "88bfab773f72817ee9e87228066bcaa223d62aef0fb802dd9261c1a11bce03fd",
+    "case_window_semantics": "HALF_OPEN_UTC_START_INCLUSIVE_END_EXCLUSIVE",
+    "checkpoint_every": 16,
+    "checkpoint_cadence_basis": "Reconstructed from the historical ledger totals; 24 of 25 ledger totals match with 16-bar evidence checkpoints and no relation-only or interaction-only records.",
+    "aggregate_fields_compared_per_case": 32,
+    "aggregate_cells_compared": 800,
+    "aggregate_cells_equal": 794,
+    "aggregate_cells_divergent": 6,
+    "cases_exact_at_aggregate_surface": 20,
+    "cases_divergent_at_aggregate_surface": 5,
+    "case_integrity_pass": 25,
+    "divergences": [
+      {
+        "case_id": "C2CASE-20260323-0000_20260324-0000",
+        "field": "Final Relation",
+        "historical_expected": "BELOW",
+        "candidate_replay": "INSIDE"
+      },
+      {
+        "case_id": "C2CASE-20260402-0000_20260402-2100",
+        "field": "Final Relation",
+        "historical_expected": "ABOVE",
+        "candidate_replay": "INSIDE"
+      },
+      {
+        "case_id": "C2CASE-20260403-0000_20260403-2100",
+        "field": "Final Relation",
+        "historical_expected": "ABOVE",
+        "candidate_replay": "BELOW"
+      },
+      {
+        "case_id": "C2CASE-20260421-0000_20260422-0000",
+        "field": "Objects",
+        "historical_expected": 17,
+        "candidate_replay": 14
+      },
+      {
+        "case_id": "C2CASE-20260421-0000_20260422-0000",
+        "field": "Final Active",
+        "historical_expected": 10,
+        "candidate_replay": 7
+      },
+      {
+        "case_id": "C2CASE-20260423-0000_20260424-0000",
+        "field": "Ledger Records",
+        "historical_expected": 26,
+        "candidate_replay": 25
+      }
+    ]
+  },
+  "classification": {
+    "source_confidence": "CORRELATED_LATER_CAPTURE_NOT_EXACT_HISTORICAL_SOURCE",
+    "implementation_binding": "AGGREGATE_REPLAY_EQUIVALENT_FOR_20_OF_25_CASES_ONLY",
+    "admission": "QUARANTINED_SOURCE_DIVERGENCE",
+    "historical_fixture_promotion": false,
+    "source_limited_continuation": false,
+    "reason": "The later R10S2 capture materially correlates with the historical population but fails exact aggregate replay in five cases and contains no complete historical P3/R5/T2/S2 typed or ledger exports."
+  },
+  "remaining_source_gap": {
+    "priority_divergent_case_inputs": [
+      "C2CASE-20260323-0000_20260324-0000",
+      "C2CASE-20260402-0000_20260402-2100",
+      "C2CASE-20260403-0000_20260403-2100",
+      "C2CASE-20260421-0000_20260422-0000",
+      "C2CASE-20260423-0000_20260424-0000"
+    ],
+    "all_case_expected_outputs_still_required": true,
+    "required_resolution": "Supply the original immutable C2EXP-0008-R2/C2EXP-0009 case bundle, or exact original per-bar inputs for the five divergent cases plus complete expected typed and succession-ledger exports for all 25 cases and provenance sufficient to bind the 20 aggregate-equivalent trajectories."
+  },
+  "authority_effect": "NONE_QUARANTINE_AND_SOURCE_ACCOUNTING_ONLY"
+}

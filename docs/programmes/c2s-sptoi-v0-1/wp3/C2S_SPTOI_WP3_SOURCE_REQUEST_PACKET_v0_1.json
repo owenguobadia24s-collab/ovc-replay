@@ -1,0 +1,181 @@
+{
+  "schema": "ovc-source-request-packet/v1",
+  "programme_id": "OVC-EML-C2S-SPTO-CONFORMANCE-PREREG-v0.1",
+  "programme_short_id": "C2S-SPTOI",
+  "packet_id": "C2S-SPTOI-WP3",
+  "gate_id": "C2S-SPTOI-G3-ALG",
+  "status": "SOURCE_CONFLICT_QUARANTINED",
+  "missing_component": {
+    "component_id": "C2CSM.P3-R5-T2-S2.HISTORICAL.CASE.CORPUS.v0.1",
+    "description": "Primary irreplaceable recovery of the exact original trajectories and runtime bindings for the five cases that diverge under the supplied later R10S2 capture.",
+    "required_inputs": [
+      "Per-bar source high, low and close values for the five priority divergent cases",
+      "Per-case instrument or symbol, timeframe, price side and syminfo.mintick for those cases",
+      "Exact lab-window start/end, expected frontier, first-bar, sequence and cutoff-time bindings for those cases",
+      "Chart-gap and continuous-segment observation bindings without interpolation or inferred repair",
+      "Checkpoint cadence and every runtime setting that affects deterministic serialization"
+    ],
+    "required_expected_outputs": [
+      "Any complete historical P3/R5/T2/S2 typed or succession-ledger exports that were actually retained, without presuming such exports existed",
+      "The already-held source-exact terminal census goldens for all 25 cases",
+      "If no historical stream exports exist, regenerated canonical typed streams and checkpoint identities from the exact-source trajectories and exact implementation",
+      "Fresh-process, checkpoint/restart, serialized-output-identity and C2LIB typed-handoff parity across the full frozen comparison scope"
+    ]
+  },
+  "why_essential": [
+    "WP3 requires replay of the exact-source historical fixture corpus, not synthetic mechanics alone.",
+    "Clean-process and checkpoint/restart equivalence must be demonstrated on the historical case trajectories.",
+    "Aggregate terminal counts cannot recover bar chronology, formation cutoffs, gap censoring, open compound state or append-only ledger order.",
+    "The independent G3-ALG reviewer cannot record COMPLETE without reproducible case-level parity evidence.",
+    "The supplied later R10S2 capture reproduces the 32-field aggregate surface exactly for 20 cases but diverges in five cases, making the five original trajectories the primary irreplaceable source gap.",
+    "A bounded search found no complete historical typed or succession-ledger export and did not establish that one existed; absence of an unproven artifact is not itself a COMPLETE blocker when the exact-source replay and deterministic parity conditions are fully satisfied."
+  ],
+  "expected_historical_identifiers": [
+    "P3-R5-T2-S2",
+    "C2CASE-20260323-0000_20260324-0000 through the 15-case development census",
+    "C2CASE-20260413-0000_20260414-0000 through the 10-case holdout census",
+    "C2EXP-0008-R2",
+    "C2EXP-0009",
+    "C2-CSM-G1",
+    "C2LIB-0001-R1",
+    "C2LIB-0001-R2",
+    "C2LIB-0001-R3",
+    "C2LIB-0001-R4",
+    "C2LIB-0001-R5",
+    "I8th/OVC_C2_CSM_P3R5T2S2/1",
+    "C2EXP_0008_R2_Case_Census_Export_Surface_Append_v0_1.pine",
+    "C2E_LIB_0001_R2_Native_Typed_Consumer.pine",
+    "OVC_C2E_CSM_NEW_LIBRARY_BASED_PROD1.pine"
+  ],
+  "last_known_evidence": [
+    {
+      "artifact": "OVC_C2_CSM_P3R5T2S2_DEV.txt",
+      "sha256": "88bfab773f72817ee9e87228066bcaa223d62aef0fb802dd9261c1a11bce03fd",
+      "proves": "Exact implementation-bearing P3/R5/T2/S2 mechanics, but not the historical case inputs."
+    },
+    {
+      "artifact": "C2_CSM_G1_15_Case_Cross_Case_Census.xlsx",
+      "sha256": "69c255faf5e7bf14cf61833abee4480f48b3c841d6ed857d68f6d1817136dce1",
+      "proves": "15 development case identifiers and aggregate results: 1,392 bars, 245 objects and 402 ledger records."
+    },
+    {
+      "artifact": "C2_CSM_G1_Census_with_C2EXP_0009_Holdout_Result.xlsx",
+      "sha256": "6721f81697cc80875a51406962bb104a1c2d29fb223f2d6876a55b0f97f8e90a",
+      "proves": "10 holdout case identifiers, 10/10 integrity PASS and combined 25-case aggregate results: 2,328 bars and 408 objects."
+    },
+    {
+      "artifact": "OVC_C2_CSM_to_C2E_SUPPORT_Evidentiary_Journal_v0_1.docx",
+      "sha256": "4564ba3fe83efe708e2e5457d0cd310184748478fe2ac3db4e74efb449462b97",
+      "proves": "Experiment/library lineage and historical disposition only."
+    },
+    {
+      "artifact": "C2E_LIB_0001_R2_Native_Typed_Consumer.pine",
+      "sha256": "9c587c26b64add6c6d3aafff0cbc69367210dcde70ee2853c4fa96d7307478b7",
+      "proves": "Historical EngineR4/newEngineR4/stepR4 typed call surface only."
+    },
+    {
+      "artifact": "OVC_C2E_CSM_NEW_LIBRARY_BASED_PROD1.pine",
+      "sha256": "b4974b916de04711f0d8d76fff85fc9170163a79279c2a8b3228ee4aa3cd760c",
+      "proves": "Published-alias typed consumer surface only."
+    },
+    {
+      "artifact": "fixtures/research_operations/c2_csm_reference/C2CSM_REFERENCE_FIXTURE_CENSUS_v0_1.json",
+      "sha256": "3ab06e54d511d12f6fb8917f590945d9819a92028474d0691d2da3dd21b32ac2",
+      "proves": "Repository census records that raw case inputs were not supplied and forbids aggregate-to-raw reconstruction."
+    },
+    {
+      "artifact": "R10S2_TRADINGVIEW_RAW.csv",
+      "sha256": "14e462a87fdeeeb839aa498e6152bb626bb2383fedacde1447a87bd34ade4a81",
+      "proves": "Later FXCM-through-TradingView 15-minute GBPUSD capture with all 25 case windows and 2,328 bars; exact aggregate replay for 20 cases, but six load-bearing field divergences across five cases."
+    },
+    {
+      "artifact": "docs/programmes/c2s-sptoi-v0-1/wp3/C2S_SPTOI_WP3_CANDIDATE_SOURCE_ASSESSMENT_R10S2_v0_1.json",
+      "sha256": "811dd774bb4eca59e9d8365be50cddc40d88b63a2ad05f83e59bcc68b4bc8f00",
+      "proves": "Byte preservation, runtime correlation, 25-case replay assessment and typed quarantine decision for the supplied candidate."
+    },
+    {
+      "artifact": "docs/programmes/c2s-sptoi-v0-1/wp3/C2S_SPTOI_WP3_RECOVERY_PRIORITY_AMENDMENT_v0_1.json",
+      "sha256": "f96bc93929305b74fcbcdd4c817c1b5403964888e016f1dccf0a9d145e73a387",
+      "proves": "Operator recovery priority, bounded historical-stream-export search and conditional COMPLETE contract determination without parity relaxation."
+    }
+  ],
+  "already_available": [
+    "Exact implementation-bound P3-R5-T2-S2 source and WP2 reference engine",
+    "All four load-bearing semantic-family bindings",
+    "Development and holdout aggregate census workbooks with exact hashes",
+    "Sixteen historical C2EXP source/evidence artifacts",
+    "Two exact typed consumer surfaces",
+    "Exact evidentiary journal",
+    "Synthetic mechanics, clean-process and checkpoint/restart tests",
+    "A preserved later R10S2 raw capture with exact bar-count coverage for all 25 cases",
+    "Aggregate replay equivalence across all 32 exported fields for 20 of 25 cases",
+    "Source-exact terminal census goldens for every development and holdout case",
+    "Exact source-bound C2LIB EngineR4/newEngineR4/stepR4 typed handoff surfaces"
+  ],
+  "not_sufficient": [
+    "The census workbooks contain one aggregate row per case, not per-bar OHLC or full event/ledger streams.",
+    "The journal is evidence-only and may not define missing inputs or expected mechanics.",
+    "Typed consumers prove the call surface but do not contain the historical case trajectories.",
+    "Screenshots, totals and terminal states cannot reconstruct chronology or deterministic serialized identities.",
+    "The supplied R10S2 capture is a later source generation, contains no P3/R5/T2/S2 typed or ledger exports and conflicts with six historical aggregate fields across five cases."
+  ],
+  "preferred_artifact": "The exact original per-bar trajectories and runtime bindings for C2CASE-20260323-0000_20260324-0000, C2CASE-20260402-0000_20260402-2100, C2CASE-20260403-0000_20260403-2100, C2CASE-20260421-0000_20260422-0000 and C2CASE-20260423-0000_20260424-0000; include complete historical typed/ledger exports only if they were actually retained.",
+  "also_acceptable": "The original immutable 25-case C2EXP-0008-R2/C2EXP-0009 input bundle, with exact runtime bindings. Historical typed/succession-ledger exports are welcome if found but are not presumed to have existed.",
+  "integrity_requirements": [
+    "Preserve original filenames and bytes and provide SHA-256 identities.",
+    "Bind every row/export to generation P3-R5-T2-S2 and a unique historical case ID.",
+    "Cover exactly 15 development cases / 1,392 bars / 245 objects and 10 holdout cases / 936 bars / 163 objects, combined 25 cases / 2,328 bars / 408 objects.",
+    "Preserve the two 84-bar provider-frontier cases and all source-gap/segment boundaries without interpolation.",
+    "Preserve instrument, timeframe, mintick, window, sequence, cutoff and checkpoint metadata.",
+    "Preserve C2EXP-0009 10/10 holdout integrity evidence without post-exposure repair.",
+    "Do not infer, reconstruct or repair any of the five divergent source trajectories from the 20 aggregate-concordant cases.",
+    "Do not reduce the frozen parity comparison scope if historical stream exports are absent."
+  ],
+  "work_blocked": [
+    "Exact historical fixture replay",
+    "Historical clean-process and checkpoint/restart serialized parity",
+    "C2LIB typed handoff parity over exact-source historical case replays",
+    "Independent C2S-SPTOI-G3-ALG completion review",
+    "Release of C2S-SPTOI-WP4"
+  ],
+  "work_completed_before_pause": [
+    "WP1 source census and exact source binding merged at 4afbca47b64263093ff6f23d1c76a8503d1a35d9.",
+    "WP2 exact-source reference engine, deterministic typed output and authority firewall merged at afa902c84c8ad406ef40e65640b9c418a40f693c.",
+    "WP2 exact-head VIT, SIQ, all four canonical shards, parity and merge-readiness checks passed.",
+    "WP3 ratified requirement and bounded repository/external/Downloads/Desktop/attachment source census completed.",
+    "Both aggregate workbooks were structurally inspected and confirmed to contain case-level aggregates rather than raw bar trajectories.",
+    "The supplied R10S2 candidate was preserved at SHA-256 14e462a87fdeeeb839aa498e6152bb626bb2383fedacde1447a87bd34ade4a81 and correlated to FXCM-through-TradingView GBPUSD 15-minute UTC source metadata.",
+    "All 25 case windows and 2,328 bars were replayed through the exact P3-R5-T2-S2 reference engine using the reconstructed 16-bar evidence-checkpoint cadence.",
+    "Twenty cases matched all 32 historical aggregate fields; five cases produced six divergences and the candidate was quarantined without source promotion.",
+    "Repository, external-artifact, automation, Downloads, Desktop, attachment, Office-package, archive-member and git-history searches found no complete historical typed or succession-ledger stream export.",
+    "The ratified WP3 and parity contracts were adjudicated to permit COMPLETE without a pre-existing stream export only when exact-source trajectories, exact implementation, all source-exact terminal goldens, full regenerated deterministic parity and independent G3-ALG review pass."
+  ],
+  "branch": "record/c2s-sptoi-wp3-source-recovery-20260831",
+  "head_binding": "RESOLVE_AT_COMMITTED_PAUSE_BRANCH_HEAD",
+  "tests": {
+    "wp3_source_recovery": "PASS:11",
+    "c2_csm_reference_directory": "PASS:42",
+    "authority_namespace_suite": "PASS:39",
+    "repository_suite": "NOT_RUN_SOURCE_RECOVERY_STOP"
+  },
+  "qa": {
+    "packet": "docs/programmes/c2s-sptoi-v0-1/wp3/C2S_SPTOI_WP3_SOURCE_RECOVERY_QA_v0_1.json",
+    "result": "PASS_SOURCE_CONFLICT_QUARANTINED"
+  },
+  "candidate_assessment": "docs/programmes/c2s-sptoi-v0-1/wp3/C2S_SPTOI_WP3_CANDIDATE_SOURCE_ASSESSMENT_R10S2_v0_1.json",
+  "recovery_priority_amendment": "docs/programmes/c2s-sptoi-v0-1/wp3/C2S_SPTOI_WP3_RECOVERY_PRIORITY_AMENDMENT_v0_1.json",
+  "repository_state_preserved": true,
+  "lawful_source_limited_alternative_exists": true,
+  "source_limited_alternative_taken": false,
+  "exact_action_after_operator_supplies_artifact": [
+    "Preserve the supplied original bytes, filename and SHA-256 in the governed external artifact store.",
+    "Correlate every case and runtime binding with the historical census, journal, source and C2LIB lineage.",
+    "Classify source confidence and implementation/evidence binding; quarantine any unexplained conflict.",
+    "Build the exact WP3 fixture manifest and run all 25 historical cases through the reference engine.",
+    "Compare all 32 terminal goldens and the full P3/R5/T2/S2 comparison scope using canonical typed streams and identities in historical, fresh-process and checkpoint/restart modes.",
+    "Run EngineR4/newEngineR4/stepR4 typed handoff parity against the primary reference API and the independent C2S-SPTOI-G3-ALG blocking review.",
+    "If complete, update programme/source state, QA and gate evidence, qualify the exact head, squash-merge and continue to WP4."
+  ],
+  "operator_action_required": "Supply the exact original five divergent case trajectories and runtime bindings. Include complete historical typed/succession-ledger exports if they are found, but their existence is not presumed. No CONTINUE SOURCE-LIMITED instruction has been given; PARTIAL_SOURCE_LIMITED remains unavailable unless explicitly instructed by the operator.",
+  "authority_effect": "NONE_SOURCE_RECOVERY_RECORD_ONLY"
+}
