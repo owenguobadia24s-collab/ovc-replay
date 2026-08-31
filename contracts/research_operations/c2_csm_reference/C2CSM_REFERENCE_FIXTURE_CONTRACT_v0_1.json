@@ -1,0 +1,23 @@
+{
+  "schema": "ovc-c2csm-reference-fixture-contract/v0.1",
+  "contract_id": "C2CSM.REFERENCE.FIXTURE.v0.1",
+  "programme_id": "OVC-EML-C2S-SPTO-CONFORMANCE-PREREG-v0.1",
+  "generation_id": "P3-R5-T2-S2",
+  "required_fixture_fields": [
+    "fixture_id",
+    "source_artifact",
+    "sha256",
+    "source_confidence",
+    "implementation_binding",
+    "expected_counts",
+    "authority_effect"
+  ],
+  "historical_population": {
+    "development": {"cases": 15, "bars": 1392, "objects": 245},
+    "holdout": {"cases": 10, "bars": 936, "objects": 163, "integrity_pass_cases": 10},
+    "combined": {"cases": 25, "bars": 2328, "objects": 408}
+  },
+  "confidence_rule": "Fixture outputs and workbooks are EXACT_EVIDENCE_ONLY even when byte-exact; they cannot define missing engine mechanics.",
+  "missingness_rule": "Unavailable case-level raw inputs remain typed and may not be reconstructed from aggregate workbook totals.",
+  "authority_effect": "NONE_REFERENCE_FIXTURES_ONLY"
+}
