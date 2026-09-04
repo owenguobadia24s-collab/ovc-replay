@@ -3,28 +3,30 @@
   "programme_id": "OVC-DSAI3V-REMOTE-POST-MERGE-0001",
   "plan_id": "OVC_DSAI3V_REMOTE_POST_MERGE_PLAN_v0_1",
   "plan_version": "0.1",
-  "status": "APPROVED",
+  "status": "RUNNING",
   "prerequisites": [
     "OVC-DSAI-VIT-v0.3 ACTIVE",
     "DSAI3V-VIT-GENERAL-AUTHORITY-v0.1 ACTIVE",
     "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
-    "existing Cloudflare R2 OVC remote configuration"
+    "existing Cloudflare R2 OVC remote configuration",
+    "DSAI3V-REMOTE-G-CUTOVER-R2 OPERATOR PASS"
   ],
   "authority_required": "DSAI3V-REMOTE-G-CUTOVER-R2 SATISFIED_BY_OPERATOR_PASS",
   "authority_delta": "REPLACE_SELF_HOSTED_EXECUTOR_AND_ENABLE_DEDICATED_R2_DEVELOPMENT_RECEIPT_NAMESPACE",
   "baseline_commit": "3280d4e67e9a0acf7c9aad3d8425cf415464edd9",
   "current_main_at_operator_approval": "f08572bb7eb2de146df85395563c9cb13cb91093",
-  "branch": "governance/dsai3v-remote-post-merge-20260904",
-  "tested_candidate_commit": "619dd385dd82c43bd72991510f2368e342c66c79",
-  "tested_candidate_tree": "7e6aeb1f3d3586e8faeab0f02f0fcca0e679a5f1",
-  "gate_ready_head": "e1a608c15156f9cc1a28c0ef13dcfbedb49ab201",
-  "operator_approval_materialisation_parent": "fbca51fa5fddce7021477099ceb6a7a2505ec6e5",
+  "cutover_merge_commit": "49d2bc7a36e3e8754eb9d26eed750d2d481a2eb2",
+  "cutover_merge_tree": "4479a72b9e2d460e502f226eab0a8789548d52c5",
+  "branch": "corrective/dsai3v-remote-workflow-context-20260904",
+  "tested_candidate_commit": "706985cc3104048c08eb2d1f03e05ea78701de16",
+  "tested_candidate_tree": "2de01f3eec8f289f2abc9dd15405a53c354cfb44",
+  "exact_head_qualification": "bdb19a17b6640d3fd649ede9e452b32c59082af37d99fb3190427373f0fe2de1",
   "tests": [
-    "GitHub tests workflow 33901765417 / #6455 SUCCESS on gate-ready head e1a608c15156f9cc1a28c0ef13dcfbedb49ab201",
-    "GitHub tiered workflow 33901765407 / #4393 SUCCESS on gate-ready head e1a608c15156f9cc1a28c0ef13dcfbedb49ab201",
-    "1638 unittest tests OK on pre-gate tested implementation snapshot",
-    "VIT/SIQ/GRT/merge-readiness PASS on gate-ready head",
-    "fresh post-decision exact-final qualification REQUIRED before merge"
+    "GitHub tests workflow 33908007016 / #6474 SUCCESS on final cutover candidate",
+    "GitHub tiered workflow 33908006994 / #4410 SUCCESS on final cutover candidate",
+    "exact-final merge readiness PASS against main@692e730ac2c70cd5cfdfb34713be7bf7f184a137",
+    "live cutover workflow 33908682221 / #263 FAILURE before job creation",
+    "bounded corrective CI and exact-final qualification pending"
   ],
   "qa_packet": "docs/programmes/dsai3v-remote-post-merge/DSAI3V_REMOTE_WP0_WP3_QA_v0_1.json",
   "qa_recommendation": "PASS_TO_OPERATOR_CUTOVER_GATE",
@@ -32,11 +34,14 @@
   "gate_packet": "docs/programmes/dsai3v-remote-post-merge/DSAI3V_REMOTE_G_CUTOVER_R2_GATE_PACKET_v0_1.json",
   "gate_decision": "PASS",
   "approved_remote_binding": "DSAI3V.VIT.REMOTE.POST_MERGE.COMPLETION.v0.1",
-  "merge_commit": null,
+  "live_cutover_failure_evidence": "docs/programmes/dsai3v-remote-post-merge/DSAI3V_REMOTE_LIVE_CUTOVER_PROOF_R1_FAILURE_v0_1.json",
+  "merge_commit": "49d2bc7a36e3e8754eb9d26eed750d2d481a2eb2",
   "blockers": [],
   "warnings": [
-    "FIRST_LIVE_R2_CUTOVER_PROOF_PENDING_AFTER_PR_1404_MERGE",
-    "FAIL_CLOSED_AND_DO_NOT_REPLAY_PHYSICAL_MAIN_IF_LIVE_PROOF_FAILS"
+    "FIRST_LIVE_RUN_FAILED_GITHUB_WORKFLOW_VALIDATION_BEFORE_ANY_JOB_OR_R2_WRITE",
+    "CORRECTABLE_IN_SCOPE",
+    "DO_NOT_REPLAY_PHYSICAL_MAIN",
+    "QUEUED_IDEMPOTENT_RECEIPT_RECOVERY_FOR_49D2BC7A36E3E8754EB9D26EED750D2D481A2EB2"
   ],
-  "next_packet": "DSAI3V-REMOTE-LIVE-CUTOVER-PROOF"
+  "next_packet": "DSAI3V-REMOTE-LIVE-CUTOVER-PROOF-CORRECTIVE-R1"
 }
