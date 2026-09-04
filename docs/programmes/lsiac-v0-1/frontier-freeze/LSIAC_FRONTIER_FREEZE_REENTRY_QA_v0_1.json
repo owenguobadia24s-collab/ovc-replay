@@ -1,0 +1,42 @@
+{
+  "schema": "ovc-lsiac-frontier-freeze-reentry-qa/v0.1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "packet_id": "LSIAC-FRONTIER-FREEZE",
+  "gate_id": "LSIAC-G-FRONTIER-FREEZE",
+  "baseline_main": "3280d4e67e9a0acf7c9aad3d8425cf415464edd9",
+  "superseded_blocker_evidence": "docs/programmes/lsiac-v0-1/frontier-freeze/LSIAC_FRONTIER_FREEZE_BLOCKER_v0_1.json",
+  "reentry_currentness": "docs/programmes/lsiac-v0-1/frontier-freeze/LSIAC_SOURCE_CENSUS_CURRENTNESS_CHECK_2_REENTRY_v0_1.json",
+  "checks": {
+    "ratified_constitution_materialised": "PASS",
+    "source_census_merged": "PASS:3280d4e67e9a0acf7c9aad3d8425cf415464edd9",
+    "currentness_check_1": "PASS",
+    "currentness_check_2_reentry": "PASS",
+    "repository_main_unchanged_during_reentry": "PASS",
+    "open_lsiac_prs_none": "PASS",
+    "file_library_retrieval_restored": "PASS",
+    "representation_robustness_exact_pack": "NOT_FOUND_EXPLICIT_PENDING_SOURCE_BINDING_NOT_OMITTED",
+    "observer_state_geometry_exact_pack": "NOT_FOUND_EXPLICIT_PENDING_SOURCE_BINDING_NOT_OMITTED",
+    "observer_state_sufficiency_gamma": "PASS_RESEARCH_FRONTIER_NOT_RESULT",
+    "post_v0_5_0005_0006_sources": "PASS_ALREADY_PRESENT_IN_DELTA",
+    "known_unresolved_pre_cutoff_omission": "PASS_NONE_KNOWN",
+    "scientific_accession_decisions_absent": "PASS_ZERO",
+    "adjudication_protocol_absent": "PASS_REQUIRED_UNTIL_AFTER_FRONTIER_FREEZE",
+    "development_freeze_inactive": "PASS",
+    "frontier_receipt_not_prematurely_created": "PASS"
+  },
+  "source_census_identity": {
+    "source_universe_manifest_sha256": "b7011ae64be2e87d58e95004f495c05d10548e082a0a87e13b0c9009661aea24",
+    "post_v0_5_delta_manifest_sha256": "1ed67410854478b2947d62055b3b619ad8081c782907c66efa78bbf1d823a42d",
+    "source_passports_sha256": "f97ba927944326864f1a5cc20ecc69a0a4623743231aa8479d713984bbe68019",
+    "subject_count": 432,
+    "passport_count": 434
+  },
+  "qa_result": "PASS_GATE_READY_OPERATOR_REQUIRED",
+  "warnings": [
+    "Two nominated high-priority subjects remain PENDING_SOURCE_BINDING/NOT_EVALUABLE; they are explicit census members and cannot receive decision-bearing forward inheritance until exact source packs are recovered.",
+    "The authoritative accession cutoff must be resolved by one final currentness check immediately after operator PASS and immediately before the immutable AccessionFrontierFreezeReceipt is materialised."
+  ],
+  "blocking_issues": [],
+  "authority_effect": "NONE",
+  "rollback": "Preserve the original blocked currentness record and this reentry evidence. If a pre-cutoff omission is later discovered, declare FRONTIER_INTEGRITY_INCIDENT and repair/supersede the generation forward-only."
+}

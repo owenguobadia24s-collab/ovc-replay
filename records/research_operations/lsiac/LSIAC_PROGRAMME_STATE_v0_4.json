@@ -1,0 +1,47 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "plan_id": "OVC-LSIAC-CONSTITUTION-0.1-REVISED-1",
+  "plan_version": "0.1-R1-RATIFIED",
+  "packet_id": "LSIAC-FRONTIER-FREEZE",
+  "status": "GATE_READY",
+  "prerequisites": [
+    "LSIAC-R1-RATIFICATION:MERGED:3fc5aa1cd51da59976a4a43a7d390474969b5c9c",
+    "LSIAC-SOURCE-CENSUS:MERGED:3280d4e67e9a0acf7c9aad3d8425cf415464edd9",
+    "LSIAC_SOURCE_CENSUS_CURRENTNESS_CHECK_1:PASS",
+    "LSIAC_SOURCE_CENSUS_CURRENTNESS_CHECK_2_REENTRY:PASS_GATE_READY"
+  ],
+  "authority_required": "OPERATOR_REQUIRED",
+  "authority_delta": "PROPOSED_FRONTIER_FREEZE_AND_DEVELOPMENT_FREEZE_ACTIVATION",
+  "baseline_commit": "3280d4e67e9a0acf7c9aad3d8425cf415464edd9",
+  "branch": "governance/lsiac-frontier-freeze-20260904",
+  "candidate_commit": null,
+  "candidate_commit_status": "RESOLVE_AT_GATE_PACKET_BRANCH_HEAD",
+  "tests": {
+    "source_census_ci": "PASS_PR_1405_TESTS_TIERED_SIQ_READY_MERGE_READINESS",
+    "repository_main_currentness": "PASS:3280d4e67e9a0acf7c9aad3d8425cf415464edd9",
+    "open_lsiac_pr_currentness": "PASS_NONE",
+    "file_library_retrieval": "PASS_RESTORED",
+    "currentness_check_1": "PASS",
+    "currentness_check_2_reentry": "PASS_GATE_READY",
+    "known_unresolved_pre_cutoff_omission": "PASS_NONE_KNOWN"
+  },
+  "qa_packet": "docs/programmes/lsiac-v0-1/frontier-freeze/LSIAC_FRONTIER_FREEZE_REENTRY_QA_v0_1.json",
+  "decision_record": null,
+  "merge_commit": null,
+  "blockers": [],
+  "current_gate": "LSIAC-G-FRONTIER-FREEZE",
+  "gate_status": "GATE_READY_OPERATOR_REQUIRED",
+  "development_freeze": "NOT_ACTIVE_PENDING_OPERATOR_PASS_AND_AUTHORITATIVE_FRONTIER_RECEIPT",
+  "accession_frontier_freeze_receipt": "CANDIDATE_ONLY_NOT_EFFECTIVE",
+  "accession_frontier_candidate": "docs/programmes/lsiac-v0-1/frontier-freeze/LSIAC_ACCESSION_FRONTIER_FREEZE_CANDIDATE_v0_1.json",
+  "accession_adjudication_protocol": null,
+  "scientific_accession_decisions": 0,
+  "known_missing_sources": [
+    "OVC-REPRESENTATION-ROBUSTNESS-0001",
+    "OVC-RRSCG-OBSERVER-STATE-GEOMETRY-0001"
+  ],
+  "next_packet": "LSIAC-ADJUDICATION-PROTOCOL-FREEZE",
+  "next_operator_gate": "LSIAC-G-FRONTIER-FREEZE",
+  "rollback": "Forward-only. Preserve stale blocker evidence and reentry evidence. If a pre-cutoff source is later discovered, declare FRONTIER_INTEGRITY_INCIDENT and repair/supersede the generation."
+}

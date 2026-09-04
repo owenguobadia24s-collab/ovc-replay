@@ -1,0 +1,52 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "plan_id": "OVC-LSIAC-CONSTITUTION-0.1-REVISED-1",
+  "plan_version": "0.1-R1-RATIFIED",
+  "packet_id": "LSIAC-FRONTIER-FREEZE",
+  "status": "APPROVED",
+  "prerequisites": [
+    "LSIAC-R1-RATIFICATION:MERGED:3fc5aa1cd51da59976a4a43a7d390474969b5c9c",
+    "LSIAC-SOURCE-CENSUS:MERGED:3280d4e67e9a0acf7c9aad3d8425cf415464edd9",
+    "LSIAC_SOURCE_CENSUS_CURRENTNESS_CHECK_1:PASS",
+    "LSIAC_SOURCE_CENSUS_CURRENTNESS_CHECK_2_REENTRY:PASS",
+    "LSIAC-G-FRONTIER-FREEZE:OPERATOR_PASS"
+  ],
+  "authority_required": "OPERATOR_REQUIRED_SATISFIED",
+  "authority_delta": "FRONTIER_FROZEN_AND_BOUNDED_SECTION_23_DEVELOPMENT_FREEZE_ACTIVE_ONLY",
+  "baseline_commit": "3280d4e67e9a0acf7c9aad3d8425cf415464edd9",
+  "branch": "governance/lsiac-frontier-freeze-20260904",
+  "candidate_commit": null,
+  "candidate_commit_status": "RESOLVE_AT_PR_HEAD",
+  "tests": {
+    "operator_decision": "PASS:6aa7f705bd0607d5783ff1940bde7a470191d158bf4ec369ada5d5479cf04f83",
+    "final_currentness": "PASS:fab0e92e665b7f159c54ba71ddb3b49f6e44c2e2ce83aab7159bbcb91781b092",
+    "frontier_receipt": "PASS:54d20c358fe110198c0a33b20132a13244c63e8e89448e3a0fde1ef79fb18996",
+    "gate_closeout_qa": "PASS_OPERATOR_GATE_CLOSED",
+    "repository_ci": "PENDING_PR"
+  },
+  "qa_packet": "docs/programmes/lsiac-v0-1/frontier-freeze/LSIAC_FRONTIER_FREEZE_GATE_CLOSEOUT_QA_v0_1.json",
+  "decision_record": "docs/programmes/lsiac-v0-1/frontier-freeze/LSIAC_FRONTIER_FREEZE_OPERATOR_DECISION_v0_1.json",
+  "merge_commit": null,
+  "blockers": [],
+  "current_gate": "LSIAC-G-FRONTIER-FREEZE",
+  "gate_status": "APPROVED_PENDING_REPOSITORY_INTEGRATION",
+  "development_freeze": {
+    "state": "ACTIVE",
+    "receipt_id": "54d20c358fe110198c0a33b20132a13244c63e8e89448e3a0fde1ef79fb18996",
+    "cutoff": "2026-09-04T19:05:13+01:00",
+    "scope": "BOUNDED_SCIENTIFIC_ARCHITECTURE_DEVELOPMENT_FREEZE_FOR_INITIAL_ACCESSION_GENERATION"
+  },
+  "accession_frontier_freeze_receipt": "docs/programmes/lsiac-v0-1/frontier-freeze/LSIAC_ACCESSION_FRONTIER_FREEZE_RECEIPT_v0_1.json",
+  "accession_adjudication_protocol": null,
+  "scientific_accession_decisions": 0,
+  "known_source_binding_debt": [
+    "OVC-REPRESENTATION-ROBUSTNESS-0001",
+    "OVC-RRSCG-OBSERVER-STATE-GEOMETRY-0001"
+  ],
+  "validation": "LOCKED_UNCONSUMED",
+  "probability_risk_exposure_execution_authority": "NONE",
+  "next_packet": "LSIAC-ADJUDICATION-PROTOCOL-FREEZE",
+  "next_operator_gate": "LSIAC-SCIENCE-RESUME",
+  "rollback": "Forward-only. A later-discovered pre-cutoff source triggers FRONTIER_INTEGRITY_INCIDENT and generation repair/supersession; no deletion or history rewrite."
+}
