@@ -37,15 +37,15 @@ class VitRemoteHistoricalRecoveryScopeTests(unittest.TestCase):
                     patch.object(remote.late, "_recover_one", side_effect=capture),
                 ):
                     self.assertEqual(remote.main(), 0)
+
+            self.assertEqual(events[0], ("1" * 40, None))
+            self.assertEqual(events[1], ("2" * 40, "true"))
+            self.assertNotIn(remote.LEGACY_LINEAGE_ENV, os.environ)
         finally:
             if previous is not None:
                 os.environ[remote.LEGACY_LINEAGE_ENV] = previous
             else:
                 os.environ.pop(remote.LEGACY_LINEAGE_ENV, None)
-
-        self.assertEqual(events[0], ("1" * 40, None))
-        self.assertEqual(events[1], ("2" * 40, "true"))
-        self.assertNotIn(remote.LEGACY_LINEAGE_ENV, os.environ)
 
     def test_historical_opt_in_restores_existing_environment_value(self) -> None:
         observed: list[str | None] = []
