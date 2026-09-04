@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -17,12 +18,19 @@ from ovc.research_operations.lsiac.pass1 import (
 
 ROOT = Path(__file__).resolve().parents[3]
 SUMMARY = ROOT / "docs/programmes/lsiac-v0-1/source-census/LSIAC_LABORATORY_SOURCE_PASSPORTS_v0_1.json"
+ALGORITHM = ROOT / "src/ovc/research_operations/lsiac/pass1.py"
+MANIFEST = ROOT / "docs/programmes/lsiac-v0-1/pass1/LSIAC_PASS1_CLASSIFICATION_VIEW_MANIFEST_v0_1.json"
 ALGORITHM_BLOB_SHA = "c3e840fcb55b6c7eeaac4fdec07e6e069592dabc"
 EXPECTED_VIRTUAL_VIEW_ID = "22b9ffabbc18eb856fa0ffbc8938aa8a73d5e1e412e7401240b0c3ebb95e4816"
 
 
 def _by_subject(view):
     return {row["subject_id"]: row for row in view["classifications"]}
+
+
+def _git_blob_sha(path: Path) -> str:
+    data = path.read_bytes()
+    return hashlib.sha1(f"blob {len(data)}\0".encode("ascii") + data).hexdigest()
 
 
 def test_frozen_passports_reconstruct_completely() -> None:
@@ -111,8 +119,14 @@ def test_dependence_graph_never_infers_independence_from_missing_edge() -> None:
     assert not any(edge["dependence_class"] == "INDEPENDENT_BY_FROZEN_CRITERION" for edge in graph["edges"])
 
 
-def test_virtual_pass1_view_identity_is_stable() -> None:
+def test_virtual_pass1_view_identity_is_stable_and_bound_to_exact_algorithm_bytes() -> None:
+    assert _git_blob_sha(ALGORITHM) == ALGORITHM_BLOB_SHA
     assert build_virtual_view_identity(algorithm_git_blob_sha=ALGORITHM_BLOB_SHA) == EXPECTED_VIRTUAL_VIEW_ID
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    assert manifest["algorithm_git_blob_sha"] == ALGORITHM_BLOB_SHA
+    assert manifest["virtual_view_id"] == EXPECTED_VIRTUAL_VIEW_ID
+    assert manifest["subject_count"] == EXPECTED_SUBJECT_COUNT
+    assert manifest["passport_count"] == EXPECTED_PASSPORT_COUNT
 
 
 def test_source_passport_identity_mismatch_fails_closed(tmp_path: Path) -> None:
