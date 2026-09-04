@@ -163,6 +163,25 @@ def _normalize_locator(value: object) -> str | None:
     return token or None
 
 
+def _locator_dependence_groups(
+    passports: list[Mapping[str, Any]],
+) -> dict[str, list[str]]:
+    locator_subjects: dict[str, set[str]] = defaultdict(set)
+    for passport in passports:
+        locator = _normalize_locator(passport.get("locator_value"))
+        if locator and passport.get("locator_kind") != "None":
+            locator_subjects[locator].add(str(passport["subject_id"]))
+
+    groups: dict[str, list[str]] = {}
+    for locator, subjects in sorted(locator_subjects.items()):
+        ordered = sorted(subjects)
+        if len(ordered) < 2:
+            continue
+        group_id = "DEP-LOC-" + hashlib.sha256(locator.encode("utf-8")).hexdigest()[:20]
+        groups[group_id] = ordered
+    return groups
+
+
 def _aggregate_subject(
     subject_id: str,
     passports: list[Mapping[str, Any]],
@@ -237,20 +256,8 @@ def build_shared_locator_dependence_graph(
     explicit `INDEPENDENT_BY_FROZEN_CRITERION` evidence before independence
     language can be used; this Pass-1 builder emits no such edge.
     """
-    locator_subjects: dict[str, set[str]] = defaultdict(set)
-    for passport in passports:
-        locator = _normalize_locator(passport.get("locator_value"))
-        if locator and passport.get("locator_kind") != "None":
-            locator_subjects[locator].add(str(passport["subject_id"]))
-
     edges: list[dict[str, Any]] = []
-    dependence_groups: dict[str, list[str]] = {}
-    for locator, subjects in sorted(locator_subjects.items()):
-        ordered = sorted(subjects)
-        if len(ordered) < 2:
-            continue
-        group_id = "DEP-LOC-" + hashlib.sha256(locator.encode("utf-8")).hexdigest()[:20]
-        dependence_groups[group_id] = ordered
+    for group_id, ordered in sorted(_locator_dependence_groups(passports).items()):
         for index, left in enumerate(ordered):
             for right in ordered[index + 1 :]:
                 edge_id = "EDGE-" + hashlib.sha256(f"{group_id}|{left}|{right}".encode("utf-8")).hexdigest()[:24]
@@ -264,17 +271,17 @@ def build_shared_locator_dependence_graph(
                     }
                 )
 
-    graph_payload = {
+    identity_payload = {
         "schema": "ovc-lsiac-evidence-dependence-graph/v0.1",
         "generation_id": GENERATION_ID,
         "subject_count": EXPECTED_SUBJECT_COUNT,
         "edges": sorted(edges, key=lambda edge: edge["edge_id"]),
         "authority_effect": "NONE",
     }
-    graph_payload["canonical_sha256"] = _canonical_sha256(graph_payload)
-    graph_payload["dependence_groups"] = dependence_groups
-    graph_payload["absence_rule"] = "NO_EDGE_DOES_NOT_ESTABLISH_INDEPENDENCE"
-    return graph_payload
+    return {
+        **identity_payload,
+        "canonical_sha256": _canonical_sha256(identity_payload),
+    }
 
 
 def build_pass1_classification_view(root: str | Path) -> dict[str, Any]:
@@ -288,9 +295,10 @@ def build_pass1_classification_view(root: str | Path) -> dict[str, Any]:
     if len(grouped) != EXPECTED_SUBJECT_COUNT:
         raise ValueError(f"LSIAC_PASS1_SUBJECT_COUNT_MISMATCH:{len(grouped)}")
 
+    dependence_groups = _locator_dependence_groups(passports)
     graph = build_shared_locator_dependence_graph(passports)
     refs_by_subject: dict[str, set[str]] = defaultdict(set)
-    for group_id, subjects in graph["dependence_groups"].items():
+    for group_id, subjects in dependence_groups.items():
         for subject in subjects:
             refs_by_subject[subject].add(group_id)
 
@@ -333,6 +341,8 @@ def build_pass1_classification_view(root: str | Path) -> dict[str, Any]:
         "classification_records_canonical_sha256": canonical_records_sha256,
         "counts": counts,
         "dependence_graph": graph,
+        "dependence_group_count": len(dependence_groups),
+        "dependence_absence_rule": "NO_EDGE_DOES_NOT_ESTABLISH_INDEPENDENCE",
         "pass1_only": True,
         "forbidden_outputs_absent": [
             "FINAL_INHERITANCE_ROLE",
