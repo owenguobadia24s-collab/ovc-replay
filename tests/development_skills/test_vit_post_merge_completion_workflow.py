@@ -26,6 +26,12 @@ class VitPostMergeCompletionWorkflowTests(unittest.TestCase):
         self.assertIn("python tools/ci/vit_post_merge_completion_remote.py", self.text)
         self.assertIn("--receipt-store-root \"$OVC_VIT_RECEIPT_STAGE\"", self.text)
 
+    def test_runner_context_is_not_used_before_a_runner_exists(self) -> None:
+        job_env = self.text.split("    env:\n", 1)[1].split("    steps:\n", 1)[0]
+        self.assertNotIn("${{ runner.", job_env)
+        self.assertIn("OVC_VIT_RECEIPT_STAGE: ${{ runner.temp }}/vit-completion-receipts", self.text.split("    steps:\n", 1)[1])
+        self.assertIn("OVC_VIT_REMOTE_REPORT: ${{ runner.temp }}/vit-remote-publication-report.json", self.text.split("    steps:\n", 1)[1])
+
     def test_remote_receipt_publication_is_bounded_and_readback_verified(self) -> None:
         self.assertIn("python tools/ci/vit_publish_completion_receipts.py", self.text)
         self.assertIn("--remote ovc_r2", self.text)
