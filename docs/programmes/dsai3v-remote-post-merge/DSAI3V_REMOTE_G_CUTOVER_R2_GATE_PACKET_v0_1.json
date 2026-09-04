@@ -22,15 +22,21 @@
     "physical_writer": "DSAI_VIT_PHYSICAL_CONTROLLER",
     "physical_gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
     "current_post_merge_executor": "EXISTING_LOCAL_SELF_HOSTED_WINDOWS_RUNNER",
+    "current_completion_receiptstore_binding": "DSAI3V.VIT.COMPLETION.RECEIPTSTORE.EXISTING_EXTERNAL_ROOT.v0.1",
     "remote_r2_completion_receipt_publication": "DENIED_PRE_GATE",
     "canonical_release_publication": "UNCHANGED_AND_SEPARATELY_RESERVED"
   },
   "proposed_authority_delta": {
     "activate_runtime": "GITHUB_HOSTED_UBUNTU_POST_MERGE_COMPLETION_EXECUTOR",
+    "activate_executor_binding": "DSAI3V.VIT.REMOTE.POST_MERGE.COMPLETION.v0.1",
     "activate_remote_receipt_namespace": "ovc-evidence/development/vit-completion-receipts/v1",
     "remote_provider": "EXISTING_CLOUDFLARE_R2_OVC_REMOTE",
     "remote_write_semantics": "APPEND_ONLY_BY_IDENTITY_WITH_READBACK_SHA256_VERIFICATION",
-    "retire_as_active_prerequisite": "SELF_HOSTED_WINDOWS_POST_MERGE_EXECUTOR_FOR_ORDINARY_COMPLETION",
+    "retire_as_active_prerequisite": [
+      "DSAI3V.VIT.LOCAL.POST_MERGE.COMPLETION.v0.2.LATE_BINDING",
+      "DSAI3V.VIT.COMPLETION.RECEIPTSTORE.EXISTING_EXTERNAL_ROOT.v0.1"
+    ],
+    "historical_preservation": "OLD_LOCAL_BINDINGS_REMAIN_ADDRESSABLE_AS_HISTORY_AND_BOUNDED_RECOVERY_EVIDENCE",
     "operator_device_requirement": "NONE_FOR_ORDINARY_POST_MERGE_COMPLETION",
     "physical_writer_change": "NONE",
     "physical_gateway_change": "NONE",
@@ -99,12 +105,13 @@
   ],
   "exact_work_after_pass": [
     "Materialise the operator PASS decision and programme-state approval on the bounded PR branch.",
-    "Re-resolve current main and re-publish exact-head detached VIT qualification for any changed gate-ready head.",
+    "Set DSAI3V.VIT.REMOTE.POST_MERGE.COMPLETION.v0.1 to ACTIVE/CUTOVER_APPROVED and make its supersedes_on_cutover declarations effective for the local self-hosted executor and local-only completion ReceiptStore binding; preserve both superseded records as historical/recovery evidence rather than deleting them.",
+    "Re-resolve current main and re-publish exact-head detached VIT qualification for the post-decision head.",
     "Rerun required exact-final tests/checks and ensure PR #1404 remains bounded and mergeable against current main.",
     "Squash-merge PR #1404 into main.",
     "Observe the first main-triggered GitHub-hosted post-merge completion run.",
     "Verify exact physical-tree equality, all four required canonical receipt objects, remote byte/SHA-256 readback equality, and absence of any self-hosted-runner dependency.",
-    "If live proof passes, record completion and retire the self-hosted executor as an active ordinary-completion prerequisite; if it fails, preserve evidence, fail closed and execute only bounded corrective recovery."
+    "If live proof passes, record programme completion and remote-executor currentness; if it fails, preserve evidence, fail closed and execute only bounded corrective recovery."
   ],
   "authority_after_pass_if_materialised": "DEDICATED_DEVELOPMENT_RECEIPT_REMOTE_WRITE_AND_GITHUB_HOSTED_POST_MERGE_EXECUTOR_ONLY",
   "status": "GATE_READY_OPERATOR_REQUIRED"
