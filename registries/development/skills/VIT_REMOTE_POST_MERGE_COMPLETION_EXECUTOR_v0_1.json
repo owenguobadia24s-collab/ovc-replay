@@ -1,0 +1,54 @@
+{
+  "schema": "ovc-vit-remote-post-merge-completion-executor/v1",
+  "binding_id": "DSAI3V.VIT.REMOTE.POST_MERGE.COMPLETION.v0.1",
+  "status": "CUTOVER_CANDIDATE_OPERATOR_GATE_REQUIRED",
+  "programme_id": "OVC-DSAI3V-REMOTE-POST-MERGE-0001",
+  "parent_programme_id": "OVC-DSAI-VIT-v0.3",
+  "controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
+  "physical_gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+  "workflow": ".github/workflows/vit-post-merge-completion.yml",
+  "implementation": "tools/ci/vit_post_merge_completion_late_binding.py",
+  "publisher": "tools/ci/vit_publish_completion_receipts.py",
+  "runtime": "GITHUB_HOSTED_UBUNTU",
+  "runner_labels": ["ubuntu-latest"],
+  "github_permissions": ["actions:read", "checks:read", "contents:read", "pull-requests:read"],
+  "main_write_capability": false,
+  "merge_capability": false,
+  "operator_device_required": false,
+  "staging": {
+    "root": "RUNNER_TEMP/vit-completion-receipts",
+    "ephemeral_role": "STAGING_ONLY",
+    "canonical_identity_change": false
+  },
+  "remote_receipt_namespace": {
+    "provider": "CLOUDFLARE_R2_EXISTING_OVC_REMOTE",
+    "remote": "ovc_r2",
+    "prefix": "ovc-evidence/development/vit-completion-receipts/v1",
+    "release_namespace": false,
+    "content_addressed": true,
+    "overwrite": false,
+    "delete": false,
+    "readback_sha256_required": true,
+    "activation_gate": "DSAI3V-REMOTE-G-CUTOVER-R2"
+  },
+  "required_live_proof": [
+    "PhysicalMaterialisationReceipt",
+    "PacketCompletionReceipt",
+    "ovc-development-latency-canonical-dsai3v/v1",
+    "ovc-dsai3v-completion-observability-attachment/v1"
+  ],
+  "supersedes_on_cutover": [
+    "DSAI3V.VIT.LOCAL.POST_MERGE.COMPLETION.v0.2.LATE_BINDING",
+    "DSAI3V.VIT.COMPLETION.RECEIPTSTORE.EXISTING_EXTERNAL_ROOT.v0.1"
+  ],
+  "explicit_non_authority": [
+    "no new physical-main writer",
+    "no new merge authority",
+    "no new physical gateway",
+    "no Git contents write authority",
+    "no canonical release publication authority",
+    "no force-push or history rewrite",
+    "no scientific, semantic, Validation, probability, risk, exposure, trading or execution authority"
+  ],
+  "rollback": "Forward-revert the workflow to the prior self-hosted executor; preserve all Git and receipt history."
+}
