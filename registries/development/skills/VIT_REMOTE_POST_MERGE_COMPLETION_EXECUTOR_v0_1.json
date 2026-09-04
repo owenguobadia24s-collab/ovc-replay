@@ -1,7 +1,7 @@
 {
   "schema": "ovc-vit-remote-post-merge-completion-executor/v1",
   "binding_id": "DSAI3V.VIT.REMOTE.POST_MERGE.COMPLETION.v0.1",
-  "status": "CUTOVER_CANDIDATE_OPERATOR_GATE_REQUIRED",
+  "status": "ACTIVE_CUTOVER_APPROVED_PENDING_MAIN_MERGE",
   "programme_id": "OVC-DSAI3V-REMOTE-POST-MERGE-0001",
   "parent_programme_id": "OVC-DSAI-VIT-v0.3",
   "controller": "DSAI_VIT_PHYSICAL_CONTROLLER",
@@ -15,6 +15,10 @@
   "main_write_capability": false,
   "merge_capability": false,
   "operator_device_required": false,
+  "cutover_gate": "DSAI3V-REMOTE-G-CUTOVER-R2",
+  "cutover_decision": "PASS",
+  "operator_decision_record": "docs/programmes/dsai3v-remote-post-merge/DSAI3V_REMOTE_G_CUTOVER_R2_OPERATOR_DECISION_v0_1.json",
+  "effective_on": "PR_1404_SQUASH_MERGE_TO_MAIN",
   "staging": {
     "root": "RUNNER_TEMP/vit-completion-receipts",
     "ephemeral_role": "STAGING_ONLY",
@@ -29,7 +33,8 @@
     "overwrite": false,
     "delete": false,
     "readback_sha256_required": true,
-    "activation_gate": "DSAI3V-REMOTE-G-CUTOVER-R2"
+    "activation_gate": "DSAI3V-REMOTE-G-CUTOVER-R2",
+    "activation_gate_decision": "PASS"
   },
   "required_live_proof": [
     "PhysicalMaterialisationReceipt",
@@ -41,6 +46,7 @@
     "DSAI3V.VIT.LOCAL.POST_MERGE.COMPLETION.v0.2.LATE_BINDING",
     "DSAI3V.VIT.COMPLETION.RECEIPTSTORE.EXISTING_EXTERNAL_ROOT.v0.1"
   ],
+  "supersession_semantics": "EFFECTIVE_FOR_ORDINARY_POST_MERGE_COMPLETION_ON_MAIN_AFTER_PR_1404_MERGE; SUPERSEDED RECORDS REMAIN HISTORICAL_AND_RECOVERY_EVIDENCE",
   "explicit_non_authority": [
     "no new physical-main writer",
     "no new merge authority",
