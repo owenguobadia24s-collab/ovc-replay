@@ -27,8 +27,6 @@ jobs:
     timeout-minutes: 15
     env:
       OVC_VIT_RECOVERY_MERGE_SHA: ${{ inputs.merge_sha || github.sha }}
-      OVC_VIT_RECEIPT_STAGE: ${{ runner.temp }}/vit-completion-receipts
-      OVC_VIT_REMOTE_REPORT: ${{ runner.temp }}/vit-remote-publication-report.json
       RCLONE_CONFIG_OVC_R2_TYPE: s3
       RCLONE_CONFIG_OVC_R2_PROVIDER: Cloudflare
       RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID: ${{ secrets.RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID || secrets.OVC_R2_ACCESS_KEY_ID || secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
@@ -71,6 +69,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PYTHONPATH: src:.
+          OVC_VIT_RECEIPT_STAGE: ${{ runner.temp }}/vit-completion-receipts
         run: |
           set -euo pipefail
           rm -rf "$OVC_VIT_RECEIPT_STAGE"
@@ -85,6 +84,8 @@ jobs:
         shell: bash
         env:
           PYTHONPATH: src:.
+          OVC_VIT_RECEIPT_STAGE: ${{ runner.temp }}/vit-completion-receipts
+          OVC_VIT_REMOTE_REPORT: ${{ runner.temp }}/vit-remote-publication-report.json
         run: |
           set -euo pipefail
           python tools/ci/vit_publish_completion_receipts.py \
