@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/lsiac_accession_adjudication_protocol_v0_1.schema.json",
+  "title": "OVC LSIAC AccessionAdjudicationProtocol v0.1",
+  "type": "object",
+  "required": [
+    "schema", "protocol_id", "programme_id", "generation_id", "status",
+    "governing_constitution", "frontier_binding", "binding_contracts", "authority",
+    "closed_vocabularies", "role_cardinality", "role_admissibility_matrix",
+    "claim_strength_cap_function", "source_precedence", "durability_rules",
+    "dependence_and_aggregation", "review_controls", "two_pass_review",
+    "failure_rules", "protocol_mutation_firewall", "pass_order", "rollback"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-lsiac-accession-adjudication-protocol/v0.1"},
+    "protocol_id": {"const": "OVC-LSIAC-ACCESSION-ADJUDICATION-PROTOCOL-0.1"},
+    "programme_id": {"const": "OVC-LSIAC-v0.1"},
+    "generation_id": {"const": "OVC-LSIAC-ACCESSION-GEN-0001"},
+    "status": {"const": "FROZEN_PRE_ADJUDICATION"},
+    "governing_constitution": {"type": "object"},
+    "frontier_binding": {
+      "type": "object",
+      "required": ["receipt_id", "accession_cutoff", "source_universe_manifest_sha256", "source_passports_sha256", "post_v0_5_delta_sha256", "subject_count", "source_passport_count"]
+    },
+    "binding_contracts": {"type": "object", "required": ["protocol_contract", "protocol_schema", "record_schema_pack"]},
+    "authority": {"type": "object"},
+    "closed_vocabularies": {
+      "type": "object",
+      "required": ["source_standing", "scientific_disposition", "exposure_state", "inheritance_role", "lifecycle_state", "authority_state", "source_relation_state", "docket_status", "claim_strength", "negative_type", "triage_class", "architecture_effect", "architecture_gap_severity", "supersession_scope"],
+      "properties": {
+        "source_standing": {"const": ["SOURCE_EXACT", "SOURCE_DERIVED", "SOURCE_BOUND_EXTERNAL", "PENDING_SOURCE_BINDING", "SOURCE_CONFLICT", "LINEAGE_ALIAS"]},
+        "scientific_disposition": {"const": ["SUPPORTED_SCOPED", "NEGATIVE_SUPPORTED", "PARTIAL", "REPRESENTATION_DEPENDENT", "METHOD_DEPENDENT", "TEMPORALLY_HETEROGENEOUS", "UNRESOLVED", "NOT_EVALUABLE"]},
+        "exposure_state": {"const": ["FRESH_UNTOUCHED", "DISCOVERY_EXPOSED", "DEVELOPMENT_EXPOSED", "POST_HOC", "CONTAMINATED", "UNKNOWN"]},
+        "inheritance_role": {"const": ["CANONICAL_PRINCIPLE", "OBSERVER_FACULTY", "RETAINED_INFORMATION_PLANE", "CANONICAL_CAPABILITY", "REFERENCE_ORACLE", "CHALLENGER_CONTROL", "METHODOLOGICAL_DOCTRINE", "NEGATIVE_KNOWLEDGE", "HANDOFF_REQUIREMENT", "NONE"]},
+        "lifecycle_state": {"const": ["PROVISIONAL", "RETAIN_FORWARD", "REFERENCE_ONLY", "SUPERSEDED_NO_FORWARD_CARRY", "LINEAGE_ALIAS", "DEFERRED_UNRESOLVED", "QUARANTINED"]},
+        "authority_state": {"const": ["NONE", "BOUND_OWNER_AUTHORITY", "BOUND_OPERATOR_AUTHORITY", "BOUND_REPOSITORY_AUTHORITY"]},
+        "source_relation_state": {"const": ["CONSISTENT", "MULTIPLE_STANDING", "INTERPRETIVE_DIVERGENCE", "SOURCE_CONFLICT"]},
+        "docket_status": {"const": ["UNASSESSED", "SOURCE_CENSUS_PENDING", "SOURCE_BINDING_REQUIRED", "ADJUDICATION_PENDING", "REVIEW_READY", "CLOSED"]},
+        "claim_strength": {"const": ["HISTORICAL_CONTEXT_ONLY", "DESCRIPTIVE_SCOPED", "DEVELOPMENT_SCOPED", "FRESH_CONFIRMATION_SCOPED", "INTERPRETIVE_ONLY", "NEGATIVE_SCOPED", "NOT_EVALUABLE"]},
+        "negative_type": {"const": ["FALSIFIED_DECLARED_HYPOTHESIS", "NO_SUPPORT_WITHIN_TESTED_UNIVERSE", "NOT_EARNED", "TRANSPORT_FAILURE", "REPRESENTATION_OR_METHOD_LIMITED_NEGATIVE", "PROTOCOL_DEFECT", "NOT_EVALUABLE"]},
+        "triage_class": {"const": ["FULL_INDIVIDUAL_REVIEW", "BULK_ALIAS_ADMINISTRATIVE", "REFERENCE_REPLAY_REVIEW", "SOURCE_BLOCKED"]},
+        "architecture_effect": {"const": ["NO_ARCHITECTURE_CHANGE", "DOCUMENTATION_ALIGNMENT", "OWNER_CONTRACT_EXTENSION_REQUIRED", "CROSS_ARCHITECTURE_AMENDMENT_REQUIRED", "NEW_RESEARCH_OPERATIONS_CAPABILITY_REQUIRED", "REFERENCE_MATERIALISATION_REQUIRED", "DEFERRED_SCIENTIFIC_ROUTE", "NO_FORWARD_IMPLEMENTATION"]},
+        "architecture_gap_severity": {"const": ["DOCUMENTATION_ONLY", "OWNER_EXPORT_BLOCKER", "SCIENTIFIC_DESTINATION_GAP", "CROSS_ARCHITECTURE_CONFLICT", "REPRODUCIBILITY_BLOCKER"]},
+        "supersession_scope": {"const": ["IMPLEMENTATION_ONLY", "ALGORITHM_TIER", "INTERPRETATION_ONLY", "PRIMARY_ROLE_DEMOTION", "PROTOCOL_GENERATION", "COMPLETE_NO_FORWARD_CARRY"]}
+      }
+    },
+    "role_cardinality": {"type": "object"},
+    "role_admissibility_matrix": {"type": "object"},
+    "claim_strength_cap_function": {
+      "type": "object",
+      "required": ["total_cross_product_size", "entries", "fail_closed_rule", "negative_claim_rule"],
+      "properties": {
+        "total_cross_product_size": {"const": 36},
+        "entries": {"type": "array", "minItems": 36, "maxItems": 36}
+      }
+    },
+    "source_precedence": {"type": "object"},
+    "durability_rules": {"type": "object"},
+    "dependence_and_aggregation": {"type": "object"},
+    "review_controls": {"type": "object"},
+    "two_pass_review": {"type": "object", "required": ["PASS_1", "PASS_2"]},
+    "failure_rules": {"type": "object"},
+    "protocol_mutation_firewall": {"type": "object"},
+    "pass_order": {"type": "array", "minItems": 8, "items": {"type": "string"}},
+    "rollback": {"type": "string"}
+  },
+  "additionalProperties": false
+}
