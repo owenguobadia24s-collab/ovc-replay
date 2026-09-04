@@ -1,0 +1,37 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "plan_id": "OVC-LSIAC-CONSTITUTION-0.1-REVISED-1",
+  "plan_version": "0.1-R1-RATIFIED",
+  "packet_id": "LSIAC-FRONTIER-FREEZE",
+  "status": "BLOCKED",
+  "prerequisites": [
+    "LSIAC-SOURCE-CENSUS:MERGED:3280d4e67e9a0acf7c9aad3d8425cf415464edd9"
+  ],
+  "authority_required": "OPERATOR_REQUIRED_AFTER_CURRENTNESS_COMPLETES",
+  "authority_delta": "NONE_BLOCKED_PRE_AUTHORITY",
+  "baseline_commit": "3280d4e67e9a0acf7c9aad3d8425cf415464edd9",
+  "branch": "governance/lsiac-frontier-freeze-20260904",
+  "candidate_commit": null,
+  "tests": {
+    "repository_main_currentness": "PASS",
+    "open_lsiac_pr_currentness": "PASS_NONE",
+    "current_conversation_mount_currentness": "PASS_NO_NEW_LAB_SOURCE",
+    "file_library_currentness": "BLOCKED_RETRIEVAL_CLIENT_RESPONSE_ERROR"
+  },
+  "qa_packet": "docs/programmes/lsiac-v0-1/frontier-freeze/LSIAC_FRONTIER_FREEZE_BLOCKER_v0_1.json",
+  "decision_record": null,
+  "merge_commit": null,
+  "blockers": [
+    "FILE_LIBRARY_RETRIEVAL_UNAVAILABLE",
+    "CURRENTNESS_CHECK_2_INCOMPLETE",
+    "ACCESSION_FRONTIER_FREEZE_RECEIPT_NOT_AUTHORISED"
+  ],
+  "development_freeze": "NOT_ACTIVE",
+  "accession_frontier_freeze_receipt": null,
+  "accession_adjudication_protocol": null,
+  "scientific_accession_decisions": 0,
+  "next_packet": "LSIAC-FRONTIER-FREEZE-REENTRY",
+  "reentry_condition": "FILE_LIBRARY_RETRIEVAL_RESTORED_AND_CURRENTNESS_CHECK_2_COMPLETES_AGAINST_THE_MERGED_SOURCE_CENSUS_BASELINE",
+  "next_operator_gate": "LSIAC-G-FRONTIER-FREEZE"
+}
