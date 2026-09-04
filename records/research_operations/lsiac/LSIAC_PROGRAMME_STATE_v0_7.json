@@ -1,0 +1,44 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "plan_id": "OVC-LSIAC-CONSTITUTION-0.1-REVISED-1",
+  "plan_version": "0.1-R1-RATIFIED",
+  "packet_id": "LSIAC-FRONTIER-INTEGRITY-INCIDENT-0001",
+  "status": "GATE_READY",
+  "prerequisites": [
+    "LSIAC-FRONTIER-FREEZE:MERGED:f08572bb7eb2de146df85395563c9cb13cb91093",
+    "LSIAC-ADJUDICATION-PROTOCOL-FREEZE:MERGED:692e730ac2c70cd5cfdfb34713be7bf7f184a137",
+    "LSIAC-PASS1-SOURCE-STANDING-EXPOSURE-DEPENDENCE:BLOCKED:721591fb3239883a4466d7067a2d56eb884b2c8f"
+  ],
+  "authority_required": "OPERATOR_REQUIRED",
+  "authority_delta": "NONE_UNTIL_OPERATOR_DECISION",
+  "baseline_commit": "49d2bc7a36e3e8754eb9d26eed750d2d481a2eb2",
+  "branch": "governance/lsiac-frontier-integrity-incident-20260904",
+  "candidate_commit": "RESOLVE_AT_GATE_READY_BRANCH_HEAD",
+  "tests": {
+    "source_passport_reconstruction": "PASS:434",
+    "unique_subject_reconstruction": "FAIL:431_NOT_432",
+    "pass1_ci_run": "33909206724:FAIL_CARDINALITY",
+    "blocker_reproduction": "PASS_EXACT_B0415_D011_COREFERENCE"
+  },
+  "qa_packet": "docs/programmes/lsiac-v0-1/frontier-integrity/LSIAC_FRONTIER_INTEGRITY_QA_0001.json",
+  "decision_record": null,
+  "merge_commit": null,
+  "blockers": [
+    "FRONTIER_INTEGRITY_INCIDENT:OPERATOR_FROZEN_432_SUBJECT_COUNT_VS_431_EXACT_RECONSTRUCTION",
+    "MATERIAL_CHANGE_TO_FROZEN_FRONTIER_REQUIRES_OPERATOR_AUTHORITY"
+  ],
+  "development_freeze": "ACTIVE_UNCHANGED",
+  "accession_frontier_freeze_receipt": "54d20c358fe110198c0a33b20132a13244c63e8e89448e3a0fde1ef79fb18996",
+  "accession_adjudication_protocol": "OVC-LSIAC-ACCESSION-ADJUDICATION-PROTOCOL-0.1",
+  "scientific_accession_decisions": 0,
+  "pass1": "BLOCKED_NOT_FROZEN",
+  "pass2": "NOT_STARTED_DENIED",
+  "validation": "LOCKED_UNCONSUMED",
+  "probability_risk_exposure_execution_authority": "NONE",
+  "current_gate": "LSIAC-G-FRONTIER-INTEGRITY-REPAIR",
+  "gate_status": "GATE_READY_OPERATOR_REQUIRED",
+  "recommended_decision": "SUPERSEDE",
+  "next_packet_after_superseed": "LSIAC-FRONTIER-INTEGRITY-REPAIR-0001",
+  "rollback": "Forward-only. Preserve all GEN0001 receipts and evidence; if the operator does not authorise supersession, keep Pass1 blocked and the current development freeze active."
+}

@@ -1,0 +1,111 @@
+{
+  "schema": "ovc-operator-gate-packet/v1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "gate_id": "LSIAC-G-FRONTIER-INTEGRITY-REPAIR",
+  "gate_title": "Frozen accession frontier subject-accounting repair/supersession",
+  "plan_id": "OVC-LSIAC-CONSTITUTION-0.1-REVISED-1",
+  "plan_version": "0.1-R1-RATIFIED",
+  "baseline_commit": "49d2bc7a36e3e8754eb9d26eed750d2d481a2eb2",
+  "candidate_commit": "RESOLVE_AT_GATE_READY_BRANCH_HEAD",
+  "completed_packets": [
+    "LSIAC-FRONTIER-FREEZE:MERGED:f08572bb7eb2de146df85395563c9cb13cb91093",
+    "LSIAC-ADJUDICATION-PROTOCOL-FREEZE:MERGED:692e730ac2c70cd5cfdfb34713be7bf7f184a137",
+    "LSIAC-PASS1-SOURCE-STANDING-EXPOSURE-DEPENDENCE:BLOCKED_HEAD:721591fb3239883a4466d7067a2d56eb884b2c8f"
+  ],
+  "current_authority": {
+    "accession_generation": "OVC-LSIAC-ACCESSION-GEN-0001",
+    "frontier": "FROZEN",
+    "protocol": "FROZEN",
+    "bounded_scientific_architecture_development_freeze": "ACTIVE",
+    "scientific_accession_decisions": 0,
+    "pass2": "DENIED_NOT_STARTED",
+    "validation": "LOCKED_UNCONSUMED",
+    "publication": "NONE",
+    "probability_risk_exposure_e_h_execution": "NONE"
+  },
+  "incident": {
+    "incident_id": "LSIAC-FRONTIER-INTEGRITY-INCIDENT-0001",
+    "frozen_frontier_receipt_id": "54d20c358fe110198c0a33b20132a13244c63e8e89448e3a0fde1ef79fb18996",
+    "frozen_subject_count": 432,
+    "frozen_passport_count": 434,
+    "exact_reconstructed_passport_count": 434,
+    "exact_reconstructed_unique_subject_count": 431,
+    "co_referent_passports": [
+      "B0415:OVC-OBSERVER-STATE-SUFFICIENCY-AND-GAMMA-ROBUSTNESS-FRONTIER",
+      "D011-00:OVC-OBSERVER-STATE-SUFFICIENCY-AND-GAMMA-ROBUSTNESS-FRONTIER"
+    ]
+  },
+  "proposed_authority_delta": {
+    "class": "OPERATOR_RESERVED_FROZEN_FRONTIER_SUPERSESSION_ONLY",
+    "proposal": "SUPERSEDE_GEN0001_AS_DECISION_BEARING_ACCESSION_FRONTIER_WITH_A_FORWARD_ONLY_GEN0002_ACCOUNTING_SUCCESSOR_AFTER_A_COMPLETE_EXACT_434_PASSPORT_IDENTITY_AUDIT; CARRY_THE_EXISTING_ADJUDICATION_PROTOCOL_SEMANTICS_FORWARD_UNCHANGED_WITH_A_NEW_GEN0002_BINDING_RECEIPT; REBUILD_PASS1_ONLY.",
+    "does_not_authorise": [
+      "SURVIVAL_OR_INHERITANCE_ROLE_DECISIONS",
+      "RETAIN_FORWARD",
+      "SCIENTIFIC_OR_SEMANTIC_PROMOTION",
+      "REPRESENTATION_FAMILY_MODEL_SELECTOR_PROMOTION",
+      "VALIDATION",
+      "PUBLICATION",
+      "E_H_PROBABILITY_RISK_EXPOSURE_TRADING_OR_EXECUTION"
+    ]
+  },
+  "acceptance_conditions": [
+    "Operator explicitly authorises forward-only frontier supersession rather than in-place history rewrite.",
+    "All 434 existing frozen passports remain preserved and are re-audited for exact subject identity before successor cardinality is frozen.",
+    "The original GEN0001 frontier and protocol receipts remain immutable historical evidence.",
+    "No new pre-cutoff source may be silently omitted; any additional integrity discrepancy stops the successor repair before freeze.",
+    "Adjudication protocol semantics are not materially changed by this gate.",
+    "Pass1 is regenerated only after the successor frontier and protocol binding are frozen, and Pass2 remains denied until required Pass1 assurance passes."
+  ],
+  "tests": {
+    "pass1_ci_run": "33909206724:FAIL_EXPECTED_432_ACTUAL_431",
+    "pass1_canonical_shard_1": "2_FAILED_1354_PASSED_4064_DESELECTED_303_SUBTESTS_PASSED",
+    "passport_reconstruction": "PASS:434",
+    "unique_subject_reconstruction": "FAIL:431_NOT_432",
+    "other_pass1_preflight_assurance": "VIT_ROUTING_PRECHECK_RUNNER_PARITY_UNITTEST_PARITY_AND_SHARD_MANIFEST_PASSED_BEFORE_CARDINALITY_FAILURE"
+  },
+  "qa": {
+    "packet": "docs/programmes/lsiac-v0-1/frontier-integrity/LSIAC_FRONTIER_INTEGRITY_QA_0001.json",
+    "result": "PASS_GATE_READY_BLOCKER_REPRODUCIBLE",
+    "recommendation": "SUPERSEDE"
+  },
+  "warnings": [
+    "Do not treat 431 as operator-approved until the complete successor subject-identity audit is frozen.",
+    "Do not delete D011-00 or B0415: they are distinct source passports even though they co-refer to one subject.",
+    "Do not reuse the GEN0001 protocol freeze receipt as if it were bound to a new frontier."
+  ],
+  "unresolved_issues": [
+    "FROZEN_432_SUBJECT_CARDINALITY_IS_NOT_REPRODUCIBLE_FROM_THE_BOUND_434_PASSPORT_BYTES"
+  ],
+  "changed_files": [
+    "docs/programmes/lsiac-v0-1/frontier-integrity/LSIAC_FRONTIER_INTEGRITY_INCIDENT_0001.json",
+    "docs/programmes/lsiac-v0-1/frontier-integrity/LSIAC_FRONTIER_INTEGRITY_AUTHORITY_MANIFEST_0001.json",
+    "docs/programmes/lsiac-v0-1/frontier-integrity/LSIAC_FRONTIER_INTEGRITY_QA_0001.json",
+    "docs/programmes/lsiac-v0-1/frontier-integrity/LSIAC_FRONTIER_INTEGRITY_GATE_PACKET_0001.json",
+    "records/research_operations/lsiac/LSIAC_PROGRAMME_STATE_v0_7.json"
+  ],
+  "repository_bound_evidence_hashes": {
+    "source_passport_set_sha256": "f97ba927944326864f1a5cc20ecc69a0a4623743231aa8479d713984bbe68019",
+    "post_v0_5_delta_sha256": "1ed67410854478b2947d62055b3b619ad8081c782907c66efa78bbf1d823a42d",
+    "frozen_protocol_git_blob_sha": "e0541a48ed2206224203485038a7ebcaba3607fc",
+    "frontier_receipt_id": "54d20c358fe110198c0a33b20132a13244c63e8e89448e3a0fde1ef79fb18996"
+  },
+  "external_artifact_hashes": [],
+  "rollback": "Forward-only. Preserve GEN0001 frontier/protocol receipts, source bytes, failed Pass1 branch/PR and CI evidence. If decision is DEFER/BLOCK/QUARANTINE, leave Pass1 blocked and the Section-23 development freeze active. No destructive action or history rewrite.",
+  "recommended_decision": "SUPERSEDE",
+  "allowed_decisions": [
+    "PASS",
+    "DEFER",
+    "BLOCK",
+    "QUARANTINE",
+    "SUPERSEDE"
+  ],
+  "exact_work_after_approval": [
+    "Create OVC-LSIAC-ACCESSION-GEN-0002 as a forward-only accounting successor; do not mutate GEN0001.",
+    "Run and freeze a deterministic identity audit across all exact 434 passports and every subject_id, including explicit co-reference of B0415 and D011-00.",
+    "If the audit is otherwise clean, materialise a successor source-universe manifest and operator-authorised frontier receipt with the audited cardinality; if another discrepancy appears, stop and return to the operator gate.",
+    "Carry OVC-LSIAC-ACCESSION-ADJUDICATION-PROTOCOL-0.1 semantics forward unchanged and materialise a GEN0002 protocol binding/freeze receipt; any semantic change is a separate operator-reserved action.",
+    "Regenerate the Pass1 classification view/receipt against GEN0002 and rerun targeted tests plus repository-wide CI, VIT, SIQ and merge readiness.",
+    "Auto-ratify and squash-merge Pass1 only if every required check passes and its delta remains non-reserved.",
+    "Only after an integrated Pass1 completion receipt may LSIAC-PASS2-SURVIVAL-ROLE-DESTINATION-EFFECT begin."
+  ]
+}
