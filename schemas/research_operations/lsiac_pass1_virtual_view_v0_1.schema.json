@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/lsiac_pass1_virtual_view_v0_1.schema.json",
+  "title": "OVC LSIAC Pass-1 Virtual Classification View v0.1",
+  "type": "object",
+  "required": [
+    "schema", "programme_id", "packet_id", "generation_id", "protocol_id",
+    "source_passport_set_sha256", "post_v0_5_delta_sha256", "algorithm_git_blob_sha",
+    "virtual_view_id", "subject_count", "passport_count", "projection",
+    "dependence_absence_rule", "forbidden_outputs", "authority_effect"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-lsiac-pass1-virtual-view/v0.1"},
+    "programme_id": {"const": "OVC-LSIAC-v0.1"},
+    "packet_id": {"const": "LSIAC-PASS1-SOURCE-STANDING-EXPOSURE-DEPENDENCE"},
+    "generation_id": {"const": "OVC-LSIAC-ACCESSION-GEN-0001"},
+    "protocol_id": {"const": "OVC-LSIAC-ACCESSION-ADJUDICATION-PROTOCOL-0.1"},
+    "source_passport_set_sha256": {"const": "f97ba927944326864f1a5cc20ecc69a0a4623743231aa8479d713984bbe68019"},
+    "post_v0_5_delta_sha256": {"const": "1ed67410854478b2947d62055b3b619ad8081c782907c66efa78bbf1d823a42d"},
+    "algorithm_git_blob_sha": {"const": "c3e840fcb55b6c7eeaac4fdec07e6e069592dabc"},
+    "virtual_view_id": {"const": "22b9ffabbc18eb856fa0ffbc8938aa8a73d5e1e412e7401240b0c3ebb95e4816"},
+    "subject_count": {"const": 432},
+    "passport_count": {"const": 434},
+    "projection": {"const": "PASS1_SOURCE_STANDING_EXPOSURE_DEPENDENCE_CLASSIFICATION_V1"},
+    "dependence_absence_rule": {"const": "NO_EDGE_DOES_NOT_ESTABLISH_INDEPENDENCE"},
+    "forbidden_outputs": {
+      "const": [
+        "FINAL_INHERITANCE_ROLE",
+        "RETAIN_FORWARD",
+        "DESTINATION_BINDING_SET",
+        "ARCHITECTURE_EFFECT_SET",
+        "SCIENTIFIC_PROMOTION"
+      ]
+    },
+    "authority_effect": {"const": "NONE_PASS1_CLASSIFICATION_ONLY"}
+  },
+  "additionalProperties": false
+}
