@@ -60,11 +60,14 @@ def _remote_stat(remote_ref: str, *, runner: Run) -> Mapping[str, Any] | None:
         runner=runner,
         check=False,
     )
-    if proc.returncode != 0:
+    if proc.returncode == 3:
         return None
+    if proc.returncode != 0:
+        detail = proc.stderr.decode("utf-8", errors="replace").strip()
+        raise RemoteReceiptPublishError(f"REMOTE_RECEIPT_STAT_FAILED:{proc.returncode}:{detail}")
     raw = proc.stdout.decode("utf-8", errors="strict").strip()
     if not raw:
-        return None
+        raise RemoteReceiptPublishError("REMOTE_RECEIPT_STAT_EMPTY_SUCCESS")
     try:
         value = json.loads(raw)
     except json.JSONDecodeError as exc:
@@ -88,6 +91,7 @@ def _local_files(root: Path) -> tuple[Path, ...]:
     if not root.is_dir():
         raise RemoteReceiptPublishError("REMOTE_RECEIPT_LOCAL_ROOT_MISSING")
     files: list[Path] = []
+    resolved_root = root.resolve()
     for path in sorted(root.rglob("*")):
         if path.is_symlink():
             raise RemoteReceiptPublishError("REMOTE_RECEIPT_SYMLINK_FORBIDDEN")
@@ -97,7 +101,7 @@ def _local_files(root: Path) -> tuple[Path, ...]:
             raise RemoteReceiptPublishError("REMOTE_RECEIPT_NONFILE_FORBIDDEN")
         resolved = path.resolve()
         try:
-            resolved.relative_to(root.resolve())
+            resolved.relative_to(resolved_root)
         except ValueError as exc:
             raise RemoteReceiptPublishError("REMOTE_RECEIPT_PATH_ESCAPE") from exc
         files.append(path)
