@@ -1,0 +1,43 @@
+{
+  "schema": "ovc-lsiac-frontier-freeze-blocker/v0.1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "packet_id": "LSIAC-FRONTIER-FREEZE",
+  "gate_id": "LSIAC-G-FRONTIER-FREEZE",
+  "governing_constitution": "OVC-LSIAC-CONSTITUTION-0.1-REVISED-1",
+  "baseline_commit": "3280d4e67e9a0acf7c9aad3d8425cf415464edd9",
+  "completed_prerequisites": [
+    "LSIAC-R1-RATIFICATION:MERGED:3fc5aa1cd51da59976a4a43a7d390474969b5c9c",
+    "LSIAC-SOURCE-CENSUS:MERGED:3280d4e67e9a0acf7c9aad3d8425cf415464edd9",
+    "LSIAC_SOURCE_CENSUS_CURRENTNESS_CHECK_1:PASS"
+  ],
+  "current_authority": "DESIGN_CANON_ONLY_PLUS_NON_AUTHORITATIVE_SOURCE_CENSUS",
+  "proposed_authority_delta_if_later_approved": [
+    "FREEZE_EXACT_ACCESSION_SOURCE_FRONTIER",
+    "ACTIVATE_LSIAC_SCIENTIFIC_ARCHITECTURE_DEVELOPMENT_FREEZE"
+  ],
+  "current_decision": "BLOCK",
+  "blocker": "CURRENTNESS_CHECK_2_CANNOT_PROVE_SOURCE_FRONTIER_COMPLETENESS_WHILE_CHATGPT_FILE_LIBRARY_RETRIEVAL_IS_UNAVAILABLE",
+  "evidence": {
+    "currentness_check_2": "docs/programmes/lsiac-v0-1/frontier-freeze/LSIAC_SOURCE_CENSUS_CURRENTNESS_CHECK_2_v0_1.json",
+    "repository_main_recheck": "PASS",
+    "open_lsiac_pr_recheck": "PASS_NONE",
+    "current_conversation_mount_recheck": "PASS_NO_NEW_LAB_SOURCE",
+    "file_library_retrieval": "UNAVAILABLE_RetrievalClientResponseError_AFTER_5_ATTEMPTS"
+  },
+  "acceptance_conditions_not_yet_satisfied": [
+    "SECOND_CURRENTNESS_CHECK_COMPLETES_ACROSS_ALL_DECLARED_SOURCE_CHANNELS",
+    "NO_PRE_CUTOFF_OMISSION_IS_KNOWN_OR_UNRESOLVED",
+    "ACCESSION_FRONTIER_FREEZE_RECEIPT_IS_REPRODUCIBLE"
+  ],
+  "explicit_non_actions": [
+    "NO_ACCESSION_FRONTIER_FREEZE_RECEIPT_CREATED",
+    "NO_SCIENTIFIC_ARCHITECTURE_DEVELOPMENT_FREEZE_ACTIVATED",
+    "NO_ACCESSION_ADJUDICATION_PROTOCOL_CREATED",
+    "NO_INHERITANCE_DECISIONS_CREATED",
+    "NO_SCIENTIFIC_OR_SEMANTIC_PROMOTION"
+  ],
+  "rollback": "No rollback required; preserve source census and blocked currentness evidence. Reentry is forward-only after source retrieval is restored.",
+  "smallest_lawful_resolution": "Restore ChatGPT File Library retrieval, rerun the exact CurrentnessCheck2 queries against the already-merged census baseline, incorporate any newly found source into a successor census generation if necessary, then re-evaluate frontier-freeze readiness.",
+  "recommended_next_decision_after_reentry": "PASS_ONLY_IF_CURRENTNESS_CHECK_2_IS_COMPLETE_AND_NO_PRE_CUTOFF_OMISSION_REMAINS",
+  "authority_effect": "NONE"
+}
