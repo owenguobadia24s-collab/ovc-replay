@@ -1,0 +1,29 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-DSAI3V-REMOTE-POST-MERGE-0001",
+  "plan_id": "OVC_DSAI3V_REMOTE_POST_MERGE_PLAN_v0_1",
+  "plan_version": "0.1",
+  "status": "QA_REVIEW",
+  "prerequisites": [
+    "OVC-DSAI-VIT-v0.3 ACTIVE",
+    "DSAI3V-VIT-GENERAL-AUTHORITY-v0.1 ACTIVE",
+    "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+    "existing Cloudflare R2 OVC remote configuration"
+  ],
+  "authority_required": "DSAI3V-REMOTE-G-CUTOVER-R2",
+  "authority_delta": "REPLACE_SELF_HOSTED_EXECUTOR_AND_ENABLE_DEDICATED_R2_RECEIPT_NAMESPACE",
+  "baseline_commit": "3fc5aa1cd51da59976a4a43a7d390474969b5c9c",
+  "branch": "governance/dsai3v-remote-post-merge-20260904",
+  "candidate_commit": null,
+  "tests": [
+    "tests/development_skills/test_vit_post_merge_completion_workflow.py",
+    "tests/development_skills/test_vit_remote_receipt_publisher.py",
+    "existing DSAI3V VIT completion runtime suites",
+    "repository-wide CI"
+  ],
+  "qa_packet": "PENDING_CI",
+  "decision_record": "docs/programmes/dsai3v-remote-post-merge/OVC_DSAI3V_REMOTE_G0_OPERATOR_DECISION_v0_1.json",
+  "merge_commit": null,
+  "blockers": [],
+  "next_packet": "DSAI3V-REMOTE-G-CUTOVER-R2"
+}
