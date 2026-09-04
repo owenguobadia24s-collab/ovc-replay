@@ -1,0 +1,29 @@
+{
+  "schema": "ovc-operator-decision/v1",
+  "decision_id": "DSAI3V-REMOTE-G0-OPERATOR-PASS-20260904",
+  "programme_id": "OVC-DSAI3V-REMOTE-POST-MERGE-0001",
+  "gate_id": "DSAI3V-REMOTE-G0",
+  "decision": "PASS",
+  "operator_instruction": "yes",
+  "operator_context": "Approve the proposed migration away from a self-hosted Windows post-merge executor so ordinary OVC development can complete from phone, laptop, desktop or agent without requiring an operator-owned computer to remain online.",
+  "baseline_commit": "3fc5aa1cd51da59976a4a43a7d390474969b5c9c",
+  "baseline_tree": "3980d955b7e5d4e677902ea33e489afa83e307e3",
+  "authority_delta": "BOUNDED_IMPLEMENTATION_ONLY",
+  "authorised": [
+    "contracts and registries for remote post-merge completion",
+    "deterministic GitHub-hosted receipt staging",
+    "immutable remote-publisher implementation and synthetic tests",
+    "workflow cutover candidate preparation",
+    "PR and QA/gate-packet preparation"
+  ],
+  "reserved": [
+    "first automatic R2 receipt publication",
+    "activation of the replacement workflow on main",
+    "any new Git/main writer",
+    "canonical release publication",
+    "force-push or history rewrite",
+    "scientific, semantic, Validation, probability, risk, exposure, trading or execution authority"
+  ],
+  "next_gate": "DSAI3V-REMOTE-G-CUTOVER-R2",
+  "rollback": "Forward-revert the candidate workflow and preserve all receipt and Git history."
+}
