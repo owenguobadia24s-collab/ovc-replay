@@ -11,6 +11,13 @@
   "baseline_tree": "ada958021bd9a4f53e36232ea4829235741beb11",
   "tested_candidate_commit": "619dd385dd82c43bd72991510f2368e342c66c79",
   "tested_candidate_tree": "7e6aeb1f3d3586e8faeab0f02f0fcca0e679a5f1",
+  "gate_ready_head": "e1a608c15156f9cc1a28c0ef13dcfbedb49ab201",
+  "operator_decision": {
+    "decision": "PASS",
+    "instruction": "OVC APPROVE DSAI3V-REMOTE-G-CUTOVER-R2",
+    "record": "docs/programmes/dsai3v-remote-post-merge/DSAI3V_REMOTE_G_CUTOVER_R2_OPERATOR_DECISION_v0_1.json",
+    "court_record_main_at_approval": "f08572bb7eb2de146df85395563c9cb13cb91093"
+  },
   "completed_packets": [
     "REMOTE-WP0 — authority/source reconciliation",
     "REMOTE-WP1 — deterministic cloud-neutral canonical receipt staging",
@@ -21,12 +28,12 @@
     "vit_general_authority": "ACTIVE",
     "physical_writer": "DSAI_VIT_PHYSICAL_CONTROLLER",
     "physical_gateway": "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
-    "current_post_merge_executor": "EXISTING_LOCAL_SELF_HOSTED_WINDOWS_RUNNER",
-    "current_completion_receiptstore_binding": "DSAI3V.VIT.COMPLETION.RECEIPTSTORE.EXISTING_EXTERNAL_ROOT.v0.1",
-    "remote_r2_completion_receipt_publication": "DENIED_PRE_GATE",
+    "current_post_merge_executor_on_main_pre_merge": "EXISTING_LOCAL_SELF_HOSTED_WINDOWS_RUNNER",
+    "current_completion_receiptstore_binding_on_main_pre_merge": "DSAI3V.VIT.COMPLETION.RECEIPTSTORE.EXISTING_EXTERNAL_ROOT.v0.1",
+    "remote_r2_completion_receipt_publication": "OPERATOR_APPROVED_FOR_DEDICATED_DEVELOPMENT_NAMESPACE_EFFECTIVE_ON_PR_1404_MERGE",
     "canonical_release_publication": "UNCHANGED_AND_SEPARATELY_RESERVED"
   },
-  "proposed_authority_delta": {
+  "approved_authority_delta": {
     "activate_runtime": "GITHUB_HOSTED_UBUNTU_POST_MERGE_COMPLETION_EXECUTOR",
     "activate_executor_binding": "DSAI3V.VIT.REMOTE.POST_MERGE.COMPLETION.v0.1",
     "activate_remote_receipt_namespace": "ovc-evidence/development/vit-completion-receipts/v1",
@@ -36,7 +43,7 @@
       "DSAI3V.VIT.LOCAL.POST_MERGE.COMPLETION.v0.2.LATE_BINDING",
       "DSAI3V.VIT.COMPLETION.RECEIPTSTORE.EXISTING_EXTERNAL_ROOT.v0.1"
     ],
-    "historical_preservation": "OLD_LOCAL_BINDINGS_REMAIN_ADDRESSABLE_AS_HISTORY_AND_BOUNDED_RECOVERY_EVIDENCE",
+    "historical_preservation": "OLD_LOCAL_BINDINGS_REMAIN_ADDRESSABLE_AS HISTORY_AND BOUNDED RECOVERY EVIDENCE",
     "operator_device_requirement": "NONE_FOR_ORDINARY_POST_MERGE_COMPLETION",
     "physical_writer_change": "NONE",
     "physical_gateway_change": "NONE",
@@ -56,14 +63,11 @@
     "The first merged-main run is treated as the live cutover proof and fails closed on missing credentials, remote collision, readback mismatch, missing freeze evidence or exact-tree mismatch."
   ],
   "tests": {
-    "tests_workflow": "33900794763 / #6451 / SUCCESS",
-    "tiered_workflow": "33900794818 / #4389 / SUCCESS",
-    "unittest": "1638 tests / OK / skipped=2 / exit_code=0",
-    "detached_vit_qualification": "0767dab5757eb1d810bcb670ce74a38fdc6ff3f00b9aa07ffbe5025f6b622bb4",
-    "pip_id": "9c0a0a40dc31cd1e5346ef3cae09c1425b6c5accbdc2bab40f6729bb7e0b4263",
-    "siq": "READY / SHADOW_READY / BASE_STABLE",
-    "grt_exact_tree": "PASS / same_tree=true / 0 advisory findings / 0 effective findings",
-    "merge_readiness": "PASS / SERIALIZED_VIT_READY"
+    "pre_gate_tests_workflow": "33901765417 / #6455 / SUCCESS on e1a608c15156f9cc1a28c0ef13dcfbedb49ab201",
+    "pre_gate_tiered_workflow": "33901765407 / #4393 / SUCCESS on e1a608c15156f9cc1a28c0ef13dcfbedb49ab201",
+    "unittest": "1638 tests / OK / skipped=2 / exit_code=0 on tested implementation snapshot",
+    "pre_gate_vit_siq_grt_merge_readiness": "PASS",
+    "post_decision_exact_final": "PENDING_AUTOMATIC_CI_ON_FINAL_APPROVAL_MATERIALISATION_HEAD"
   },
   "qa": {
     "packet": "docs/programmes/dsai3v-remote-post-merge/DSAI3V_REMOTE_WP0_WP3_QA_v0_1.json",
@@ -71,9 +75,9 @@
     "blocking_findings": []
   },
   "warnings": [
-    "No live R2 receipt object has been written by this candidate before the gate. That is intentional: the first automatic external write and activation of the replacement workflow are the authority changes reserved to this gate.",
-    "The existing R2 configuration is reused; the live credential and namespace path are therefore verified only by the first post-approval merged-main execution.",
-    "If the first live cutover run fails, physical main remains already-effective and must not be replayed; the idempotent recovery route is used only after bounded correction."
+    "The first live R2 receipt object write remains intentionally unexecuted until the approved candidate is merged to main.",
+    "The first merged-main run is the required live credential/namespace/readback proof and must fail closed on any mismatch.",
+    "If the first live cutover run fails, physical main remains already-effective and must not be replayed; only bounded corrective recovery is authorised."
   ],
   "unresolved_issues": [],
   "changed_files": [
@@ -91,22 +95,17 @@
     "tools/ci/vit_post_merge_completion_remote.py",
     "tools/ci/vit_publish_completion_receipts.py",
     "docs/programmes/dsai3v-remote-post-merge/DSAI3V_REMOTE_WP0_WP3_QA_v0_1.json",
-    "docs/programmes/dsai3v-remote-post-merge/DSAI3V_REMOTE_G_CUTOVER_R2_GATE_PACKET_v0_1.json"
+    "docs/programmes/dsai3v-remote-post-merge/DSAI3V_REMOTE_G_CUTOVER_R2_GATE_PACKET_v0_1.json",
+    "docs/programmes/dsai3v-remote-post-merge/DSAI3V_REMOTE_G_CUTOVER_R2_OPERATOR_DECISION_v0_1.json"
   ],
   "external_artifact_hashes": [],
   "rollback": "Forward-revert the workflow to the preceding self-hosted executor, preserve all local/remote receipt history and Git history, and never replay an already-effective physical main write.",
   "recommended_decision": "PASS",
-  "allowed_decisions": [
-    "PASS",
-    "DEFER",
-    "BLOCK",
-    "QUARANTINE",
-    "SUPERSEDE"
-  ],
+  "decision": "PASS",
   "exact_work_after_pass": [
-    "Materialise the operator PASS decision and programme-state approval on the bounded PR branch.",
-    "Set DSAI3V.VIT.REMOTE.POST_MERGE.COMPLETION.v0.1 to ACTIVE/CUTOVER_APPROVED and make its supersedes_on_cutover declarations effective for the local self-hosted executor and local-only completion ReceiptStore binding; preserve both superseded records as historical/recovery evidence rather than deleting them.",
-    "Re-resolve current main and re-publish exact-head detached VIT qualification for the post-decision head.",
+    "Materialise operator PASS decision and programme-state approval on the bounded PR branch.",
+    "Set DSAI3V.VIT.REMOTE.POST_MERGE.COMPLETION.v0.1 to cutover-approved and make its supersedes_on_cutover declarations effective on main merge while preserving superseded records as historical/recovery evidence.",
+    "Re-resolve current main and obtain fresh exact-head detached VIT qualification for the post-decision head.",
     "Rerun required exact-final tests/checks and ensure PR #1404 remains bounded and mergeable against current main.",
     "Squash-merge PR #1404 into main.",
     "Observe the first main-triggered GitHub-hosted post-merge completion run.",
@@ -114,5 +113,5 @@
     "If live proof passes, record programme completion and remote-executor currentness; if it fails, preserve evidence, fail closed and execute only bounded corrective recovery."
   ],
   "authority_after_pass_if_materialised": "DEDICATED_DEVELOPMENT_RECEIPT_REMOTE_WRITE_AND_GITHUB_HOSTED_POST_MERGE_EXECUTOR_ONLY",
-  "status": "GATE_READY_OPERATOR_REQUIRED"
+  "status": "APPROVED_PENDING_EXACT_FINAL_MERGE_AND_LIVE_PROOF"
 }
