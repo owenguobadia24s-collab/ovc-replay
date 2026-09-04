@@ -1,4 +1,4 @@
-name: DSAI3V local post-merge completion
+name: DSAI3V remote post-merge completion
 
 on:
   push:
@@ -17,16 +17,26 @@ permissions:
   pull-requests: read
 
 concurrency:
-  group: ovc-vit-local-post-merge-completion-v1
+  group: ovc-vit-remote-post-merge-completion-v1
   cancel-in-progress: false
 
 jobs:
   complete:
-    name: DSAI3V local post-merge completion
-    runs-on: [self-hosted, Windows]
+    name: DSAI3V remote post-merge completion
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
       OVC_VIT_RECOVERY_MERGE_SHA: ${{ inputs.merge_sha || github.sha }}
+      OVC_VIT_RECEIPT_STAGE: ${{ runner.temp }}/vit-completion-receipts
+      OVC_VIT_REMOTE_REPORT: ${{ runner.temp }}/vit-remote-publication-report.json
+      RCLONE_CONFIG_OVC_R2_TYPE: s3
+      RCLONE_CONFIG_OVC_R2_PROVIDER: Cloudflare
+      RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID: ${{ secrets.RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID || secrets.OVC_R2_ACCESS_KEY_ID || secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+      RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY: ${{ secrets.RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY || secrets.OVC_R2_SECRET_ACCESS_KEY || secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+      RCLONE_CONFIG_OVC_R2_ENDPOINT: https://28bc1b0403ef3fdf5f08093abe3df9f4.r2.cloudflarestorage.com
+      RCLONE_CONFIG_OVC_R2_REGION: auto
+      RCLONE_CONFIG_OVC_R2_ACL: private
+      RCLONE_CONFIG_OVC_R2_NO_CHECK_BUCKET: 'true'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -34,24 +44,62 @@ jobs:
           fetch-depth: 0
           show-progress: false
 
-      - name: Verify existing local external-artifact binding
-        shell: pwsh
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install completion runtime and rclone
+        shell: bash
         run: |
-          if (-not $env:OVC_EXTERNAL_ARTIFACT_ROOT) {
-            throw "OVC_EXTERNAL_ARTIFACT_ROOT is not configured on the existing self-hosted runner."
-          }
-          if (-not $env:OVC_VIT_RECOVERY_MERGE_SHA) {
-            throw "OVC_VIT_RECOVERY_MERGE_SHA did not resolve."
-          }
+          set -euo pipefail
+          python -m pip install -e .
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq rclone
+
+      - name: Verify remote completion prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${OVC_VIT_RECOVERY_MERGE_SHA:-}" || { echo "::error::OVC_VIT_RECOVERY_MERGE_SHA did not resolve"; exit 1; }
+          test -n "${RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID:-}" || { echo "::error::Missing R2 access-key GitHub secret"; exit 1; }
+          test -n "${RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY:-}" || { echo "::error::Missing R2 secret-key GitHub secret"; exit 1; }
+          rclone listremotes | grep -Fx 'ovc_r2:'
           python --version
 
-      - name: Persist canonical VIT completion bundle
-        shell: pwsh
+      - name: Stage canonical VIT completion bundle
+        shell: bash
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          PYTHONPATH: src;.
+          PYTHONPATH: src:.
         run: |
-          python tools/ci/vit_post_merge_completion_late_binding.py `
-            --repo-root . `
-            --merge-sha "$env:OVC_VIT_RECOVERY_MERGE_SHA" `
+          set -euo pipefail
+          rm -rf "$OVC_VIT_RECEIPT_STAGE"
+          mkdir -p "$OVC_VIT_RECEIPT_STAGE"
+          python tools/ci/vit_post_merge_completion_remote.py \
+            --repo-root . \
+            --merge-sha "$OVC_VIT_RECOVERY_MERGE_SHA" \
+            --receipt-store-root "$OVC_VIT_RECEIPT_STAGE" \
             --recovery-manifest registries/development/skills/VIT_POST_MERGE_RECOVERY_REQUESTS_v0_1.json
+
+      - name: Publish immutable remote receipt tree and verify readback
+        shell: bash
+        env:
+          PYTHONPATH: src:.
+        run: |
+          set -euo pipefail
+          python tools/ci/vit_publish_completion_receipts.py \
+            --local-root "$OVC_VIT_RECEIPT_STAGE" \
+            --remote ovc_r2 \
+            --prefix ovc-evidence/development/vit-completion-receipts/v1 \
+            --report "$OVC_VIT_REMOTE_REPORT"
+
+      - name: Upload completion diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dsai3v-remote-post-merge-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/vit-completion-receipts
+            ${{ runner.temp }}/vit-remote-publication-report.json
+          if-no-files-found: warn
+          retention-days: 30
