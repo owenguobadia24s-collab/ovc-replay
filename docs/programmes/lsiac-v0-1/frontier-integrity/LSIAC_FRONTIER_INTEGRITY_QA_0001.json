@@ -1,0 +1,34 @@
+{
+  "schema": "ovc-lsiac-frontier-integrity-qa/v0.1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "packet_id": "LSIAC-FRONTIER-INTEGRITY-INCIDENT-0001",
+  "gate_id": "LSIAC-G-FRONTIER-INTEGRITY-REPAIR",
+  "baseline_main": "49d2bc7a36e3e8754eb9d26eed750d2d481a2eb2",
+  "blocked_pass1_head": "721591fb3239883a4466d7067a2d56eb884b2c8f",
+  "checks": {
+    "frontier_receipt_exists_and_is_operator_approved": "PASS:54d20c358fe110198c0a33b20132a13244c63e8e89448e3a0fde1ef79fb18996",
+    "frontier_receipt_declares_432_subjects_434_passports": "PASS",
+    "frozen_source_passport_set_identity_preserved": "PASS:f97ba927944326864f1a5cc20ecc69a0a4623743231aa8479d713984bbe68019",
+    "frozen_434_passports_reconstruct": "PASS:434",
+    "frozen_unique_subject_cardinality_reconstructs": "FAIL:431_NOT_432",
+    "duplicate_subject_id_localised": "PASS:B0415_AND_D011_00",
+    "failed_test_preserved_without_weakening": "PASS",
+    "pass1_merge_prevented": "PASS:PR1409_OPEN_NOT_MERGED_BLOCKED",
+    "scientific_accession_decisions": "PASS_ZERO",
+    "pass2_not_started": "PASS",
+    "frontier_repair_rule_requires_stop": "PASS",
+    "protocol_mutation_firewall_respected": "PASS:NO_PROTOCOL_BYTES_CHANGED"
+  },
+  "qa_result": "PASS_GATE_READY_BLOCKER_REPRODUCIBLE",
+  "qa_recommendation": "SUPERSEDE_FROZEN_FRONTIER_ACCOUNTING_FORWARD_ONLY_UNDER_OPERATOR_AUTHORITY; DO_NOT_MERGE_OR_RESUME_PASS1_BEFORE_SUCCESSOR_FRONTIER_AND_PROTOCOL_BINDING_ARE_FROZEN",
+  "warnings": [
+    "The currently observed corrected cardinality is 431, but the repair packet must re-audit all 434 exact passports before freezing any successor cardinality.",
+    "No source evidence should be removed merely to restore a prior count; the duplicate passport relation is evidence about source provenance, not permission to delete a passport.",
+    "The existing adjudication protocol semantics remain suitable for the repair, but its GEN0001 freeze receipt binds the erroneous frontier receipt and must not be silently rebound."
+  ],
+  "unresolved_issues": [
+    "SUCCESSOR_FRONTIER_IDENTITY_AND_GENERATION_REQUIRE_OPERATOR_AUTHORITY"
+  ],
+  "authority_effect": "NONE_GATE_PREPARATION_ONLY",
+  "rollback": "Forward-only evidence preservation; no destructive mutation."
+}
