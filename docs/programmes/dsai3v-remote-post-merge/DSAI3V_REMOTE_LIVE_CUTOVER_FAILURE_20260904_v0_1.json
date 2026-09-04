@@ -1,0 +1,23 @@
+{
+  "schema": "ovc-live-cutover-failure/v1",
+  "programme_id": "OVC-DSAI3V-REMOTE-POST-MERGE-0001",
+  "packet_id": "DSAI3V-REMOTE-LIVE-CUTOVER-PROOF",
+  "merge_commit": "49d2bc7a36e3e8754eb9d26eed750d2d481a2eb2",
+  "workflow_run": 33911093471,
+  "workflow": ".github/workflows/vit-post-merge-completion.yml",
+  "result": "FAIL_CLOSED_BEFORE_JOB_INSTANTIATION",
+  "observed_jobs": 0,
+  "diagnosis": "The workflow referenced runner.temp in jobs.complete.env. The runner context is not available at job-level environment evaluation, so GitHub rejected the job configuration before a runner could be instantiated.",
+  "authority": "BOUNDED_CORRECTIVE_RECOVERY_AUTHORISED_BY_DSAI3V-REMOTE-G-CUTOVER-R2_OPERATOR_PASS",
+  "physical_main_replay": false,
+  "external_receipts_written": false,
+  "corrective_scope": [
+    "bind RUNNER_TEMP-derived staging/report paths from a step at runner runtime via GITHUB_ENV",
+    "update the workflow conformance test to prevent job-level runner-context regression",
+    "rerun repository-wide and exact-final qualification",
+    "squash-merge the bounded corrective PR if PASS",
+    "recover merge 49d2bc7a36e3e8754eb9d26eed750d2d481a2eb2 only after the corrected workflow is effective"
+  ],
+  "rollback": "Forward-revert the corrective workflow change while preserving the failed run and all Git history.",
+  "status": "CORRECTABLE_IN_SCOPE"
+}
