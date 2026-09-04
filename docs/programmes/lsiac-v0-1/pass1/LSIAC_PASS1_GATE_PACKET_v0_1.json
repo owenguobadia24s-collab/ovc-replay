@@ -1,0 +1,43 @@
+{
+  "schema": "ovc-lsiac-auto-gate-packet/v0.1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "packet_id": "LSIAC-PASS1-SOURCE-STANDING-EXPOSURE-DEPENDENCE",
+  "gate_id": "LSIAC-G-PASS1-CLASSIFICATION-FREEZE",
+  "gate_title": "Pass-1 Source Standing, Exposure and Dependence Classification Freeze",
+  "plan_id": "OVC-LSIAC-CONSTITUTION-0.1-REVISED-1",
+  "plan_version": "0.1-R1-RATIFIED",
+  "baseline_commit": "692e730ac2c70cd5cfdfb34713be7bf7f184a137",
+  "branch": "research/lsiac-pass1-classification-20260904",
+  "authority_delta": "NONE_PASS1_CLASSIFICATION_ONLY",
+  "frozen_view": {
+    "virtual_view_id": "22b9ffabbc18eb856fa0ffbc8938aa8a73d5e1e412e7401240b0c3ebb95e4816",
+    "algorithm_git_blob_sha": "c3e840fcb55b6c7eeaac4fdec07e6e069592dabc",
+    "subject_count": 432,
+    "passport_count": 434
+  },
+  "acceptance_conditions": {
+    "frontier_and_protocol_frozen_on_main": "PASS",
+    "all_434_passports_reconstruct": "MUST_PASS_CI",
+    "exactly_432_unique_subjects_accounted": "MUST_PASS_CI",
+    "post_v0_5_exact_negative_dispositions_preserved": "MUST_PASS_CI",
+    "source_blocked_nominations_fail_closed": "MUST_PASS_CI",
+    "derived_observer_sufficiency_frontier_not_promoted": "MUST_PASS_CI",
+    "dependence_graph_no_independence_inference": "MUST_PASS_CI",
+    "algorithm_blob_and_virtual_view_identity": "MUST_PASS_CI",
+    "pass2_fields_absent": "MUST_PASS_CI",
+    "scientific_accession_decisions": "PASS_ZERO",
+    "required_repository_assurance": "MUST_PASS_BEFORE_MERGE"
+  },
+  "qa_packet": "docs/programmes/lsiac-v0-1/pass1/LSIAC_PASS1_QA_v0_1.json",
+  "qa_result": "PASS_METHOD_AND_IDENTITY_PENDING_REQUIRED_REPOSITORY_ASSURANCE",
+  "warnings": [
+    "Pass 1 intentionally does not infer baseline scientific disposition or exposure from the historical journal; unresolved/unknown is retained until source-specific Pass-2 review.",
+    "Two nominated programmes remain SOURCE_BLOCKED/PENDING_SOURCE_BINDING and cannot receive later positive inheritance decisions until exact source packs are recovered.",
+    "Dependence graph edges encode shared frozen locators only; absence of an edge is not independence."
+  ],
+  "unresolved_issues": [],
+  "gate_class": "AUTO_RATIFIABLE_NON_RESERVED",
+  "recommended_decision": "PASS_IF_REQUIRED_ASSURANCE_PASSES",
+  "rollback": "Forward-only. Repair deterministic Pass-1 defects in scope before merge; a material post-merge view change requires successor Pass-1 generation/freeze before Pass-2 consumption.",
+  "next_packet": "LSIAC-PASS2-SURVIVAL-ROLE-DESTINATION-EFFECT"
+}
