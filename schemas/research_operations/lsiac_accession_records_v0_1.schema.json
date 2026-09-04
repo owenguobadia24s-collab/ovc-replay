@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/lsiac_accession_records_v0_1.schema.json",
+  "title": "OVC LSIAC Accession Records v0.1",
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "sourceStanding": {"enum": ["SOURCE_EXACT", "SOURCE_DERIVED", "SOURCE_BOUND_EXTERNAL", "PENDING_SOURCE_BINDING", "SOURCE_CONFLICT", "LINEAGE_ALIAS"]},
+    "scientificDisposition": {"enum": ["SUPPORTED_SCOPED", "NEGATIVE_SUPPORTED", "PARTIAL", "REPRESENTATION_DEPENDENT", "METHOD_DEPENDENT", "TEMPORALLY_HETEROGENEOUS", "UNRESOLVED", "NOT_EVALUABLE"]},
+    "exposureState": {"enum": ["FRESH_UNTOUCHED", "DISCOVERY_EXPOSED", "DEVELOPMENT_EXPOSED", "POST_HOC", "CONTAMINATED", "UNKNOWN"]},
+    "inheritanceRole": {"enum": ["CANONICAL_PRINCIPLE", "OBSERVER_FACULTY", "RETAINED_INFORMATION_PLANE", "CANONICAL_CAPABILITY", "REFERENCE_ORACLE", "CHALLENGER_CONTROL", "METHODOLOGICAL_DOCTRINE", "NEGATIVE_KNOWLEDGE", "HANDOFF_REQUIREMENT", "NONE"]},
+    "lifecycleState": {"enum": ["PROVISIONAL", "RETAIN_FORWARD", "REFERENCE_ONLY", "SUPERSEDED_NO_FORWARD_CARRY", "LINEAGE_ALIAS", "DEFERRED_UNRESOLVED", "QUARANTINED"]},
+    "authorityState": {"enum": ["NONE", "BOUND_OWNER_AUTHORITY", "BOUND_OPERATOR_AUTHORITY", "BOUND_REPOSITORY_AUTHORITY"]},
+    "sourceRelationState": {"enum": ["CONSISTENT", "MULTIPLE_STANDING", "INTERPRETIVE_DIVERGENCE", "SOURCE_CONFLICT"]},
+    "claimStrength": {"enum": ["HISTORICAL_CONTEXT_ONLY", "DESCRIPTIVE_SCOPED", "DEVELOPMENT_SCOPED", "FRESH_CONFIRMATION_SCOPED", "INTERPRETIVE_ONLY", "NEGATIVE_SCOPED", "NOT_EVALUABLE"]},
+    "triageClass": {"enum": ["FULL_INDIVIDUAL_REVIEW", "BULK_ALIAS_ADMINISTRATIVE", "REFERENCE_REPLAY_REVIEW", "SOURCE_BLOCKED"]},
+    "scopeEnvelope": {
+      "type": "object",
+      "required": ["population", "representation", "method", "clock", "exposure", "authority_scope"],
+      "properties": {
+        "population": {"type": ["string", "array"]},
+        "representation": {"type": ["string", "array"]},
+        "method": {"type": ["string", "array"]},
+        "clock": {"type": ["string", "array"]},
+        "exposure": {"type": ["string", "array"]},
+        "authority_scope": {"type": ["string", "array"]},
+        "exclusions": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "pass1Classification": {
+      "type": "object",
+      "required": ["schema", "generation_id", "subject_id", "source_standing", "scientific_disposition", "exposure_state", "source_relation_state", "triage_class", "artifact_availability", "reproducibility_class", "dependence_refs", "source_blockers", "classification_rationale", "authority_effect"],
+      "properties": {
+        "schema": {"const": "ovc-lsiac-pass1-classification/v0.1"},
+        "generation_id": {"const": "OVC-LSIAC-ACCESSION-GEN-0001"},
+        "subject_id": {"type": "string", "minLength": 1},
+        "source_standing": {"$ref": "#/$defs/sourceStanding"},
+        "scientific_disposition": {"$ref": "#/$defs/scientificDisposition"},
+        "exposure_state": {"$ref": "#/$defs/exposureState"},
+        "source_relation_state": {"$ref": "#/$defs/sourceRelationState"},
+        "triage_class": {"$ref": "#/$defs/triageClass"},
+        "artifact_availability": {"enum": ["PRESENT_RETRIEVABLE", "VERIFIED_ONCE_UNBOUND", "MISSING", "REGENERABLE"]},
+        "reproducibility_class": {"enum": ["ORIGINAL_SOURCE_EXACT", "ORIGINAL_PRODUCER_EXACT", "BEHAVIOURAL_EXACT_SUCCESSOR", "RECONSTRUCTED_REFERENCE", "RESULT_ONLY", "SYNTHESIS_ONLY"]},
+        "dependence_refs": {"type": "array", "items": {"type": "string"}},
+        "source_blockers": {"type": "array", "items": {"type": "string"}},
+        "classification_rationale": {"type": "string", "minLength": 1},
+        "authority_effect": {"const": "NONE_PASS1_CLASSIFICATION_ONLY"}
+      },
+      "additionalProperties": false
+    },
+    "dependenceEdge": {
+      "type": "object",
+      "required": ["edge_id", "left_subject_id", "right_subject_id", "dependence_class", "basis"],
+      "properties": {
+        "edge_id": {"type": "string"},
+        "left_subject_id": {"type": "string"},
+        "right_subject_id": {"type": "string"},
+        "dependence_class": {"enum": ["IDENTICAL_EVIDENCE", "SHARED_SOURCE_DEPENDENT", "DERIVED_VIEW_DEPENDENT", "OVERLAPPING_POPULATION_DEPENDENT", "INDEPENDENCE_NOT_ESTABLISHED", "INDEPENDENT_BY_FROZEN_CRITERION"]},
+        "basis": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "dependenceGraph": {
+      "type": "object",
+      "required": ["schema", "generation_id", "subject_count", "edges", "canonical_sha256", "authority_effect"],
+      "properties": {
+        "schema": {"const": "ovc-lsiac-evidence-dependence-graph/v0.1"},
+        "generation_id": {"const": "OVC-LSIAC-ACCESSION-GEN-0001"},
+        "subject_count": {"const": 432},
+        "edges": {"type": "array", "items": {"$ref": "#/$defs/dependenceEdge"}},
+        "canonical_sha256": {"$ref": "#/$defs/sha256"},
+        "authority_effect": {"const": "NONE"}
+      },
+      "additionalProperties": false
+    },
+    "counterevidenceManifest": {
+      "type": "object",
+      "required": ["schema", "generation_id", "inheritance_candidate_id", "supporting_load_bearing_subjects", "negative_subjects", "null_or_control_results", "contradictions", "warnings", "protocol_exceptions", "source_binding_debt", "not_evaluable_relevant_subjects", "complete", "manifest_sha256"],
+      "properties": {
+        "schema": {"const": "ovc-lsiac-counterevidence-completeness/v0.1"},
+        "generation_id": {"const": "OVC-LSIAC-ACCESSION-GEN-0001"},
+        "inheritance_candidate_id": {"type": "string"},
+        "supporting_load_bearing_subjects": {"type": "array", "items": {"type": "string"}},
+        "negative_subjects": {"type": "array", "items": {"type": "string"}},
+        "null_or_control_results": {"type": "array", "items": {"type": "string"}},
+        "contradictions": {"type": "array", "items": {"type": "string"}},
+        "warnings": {"type": "array", "items": {"type": "string"}},
+        "protocol_exceptions": {"type": "array", "items": {"type": "string"}},
+        "source_binding_debt": {"type": "array", "items": {"type": "string"}},
+        "not_evaluable_relevant_subjects": {"type": "array", "items": {"type": "string"}},
+        "complete": {"const": true},
+        "manifest_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "reviewerDeclaration": {
+      "type": "object",
+      "required": ["schema", "reviewer_id", "independence_state", "authorship_relationship", "source_information_exposure", "downstream_outcome_exposure", "conflicts_of_interest", "review_packet_sha256", "decision_time"],
+      "properties": {
+        "schema": {"const": "ovc-lsiac-reviewer-declaration/v0.1"},
+        "reviewer_id": {"type": "string"},
+        "independence_state": {"enum": ["INDEPENDENT", "NON_INDEPENDENT", "CONFLICTED", "UNKNOWN"]},
+        "authorship_relationship": {"type": "string"},
+        "source_information_exposure": {"type": "array", "items": {"type": "string"}},
+        "downstream_outcome_exposure": {"type": "array", "items": {"type": "string"}},
+        "conflicts_of_interest": {"type": "array", "items": {"type": "string"}},
+        "review_packet_sha256": {"$ref": "#/$defs/sha256"},
+        "decision_time": {"type": "string", "format": "date-time"}
+      },
+      "additionalProperties": false
+    },
+    "destinationBindingSet": {
+      "type": "object",
+      "required": ["controlling_destination", "consumer_destinations"],
+      "properties": {
+        "controlling_destination": {"type": ["string", "null"]},
+        "consumer_destinations": {"type": "array"}
+      },
+      "additionalProperties": false
+    },
+    "architectureEffectSet": {
+      "type": "object",
+      "required": ["primary_effect", "secondary_effects"],
+      "properties": {
+        "primary_effect": {"enum": ["NO_ARCHITECTURE_CHANGE", "DOCUMENTATION_ALIGNMENT", "OWNER_CONTRACT_EXTENSION_REQUIRED", "CROSS_ARCHITECTURE_AMENDMENT_REQUIRED", "NEW_RESEARCH_OPERATIONS_CAPABILITY_REQUIRED", "REFERENCE_MATERIALISATION_REQUIRED", "DEFERRED_SCIENTIFIC_ROUTE", "NO_FORWARD_IMPLEMENTATION"]},
+        "secondary_effects": {"type": "array", "uniqueItems": true, "items": {"enum": ["NO_ARCHITECTURE_CHANGE", "DOCUMENTATION_ALIGNMENT", "OWNER_CONTRACT_EXTENSION_REQUIRED", "CROSS_ARCHITECTURE_AMENDMENT_REQUIRED", "NEW_RESEARCH_OPERATIONS_CAPABILITY_REQUIRED", "REFERENCE_MATERIALISATION_REQUIRED", "DEFERRED_SCIENTIFIC_ROUTE", "NO_FORWARD_IMPLEMENTATION"]}}
+      },
+      "additionalProperties": false
+    },
+    "accessionDecision": {
+      "type": "object",
+      "required": ["schema", "generation_id", "decision_id", "inheritance_id", "source_subject_ids", "source_standing", "scientific_disposition", "exposure_state", "claim_strength", "inheritance_roles", "lifecycle_state", "authority_state", "authority_ref", "source_relation_state", "scope_envelope", "surviving_statement", "role_justifications", "counterevidence_manifest_sha256", "dependence_graph_refs", "destination_binding_set", "architecture_effect_set", "supersession_edges", "review_declarations", "rollback_reentry", "docket_status", "authority_effect"],
+      "properties": {
+        "schema": {"const": "ovc-lsiac-accession-decision/v0.1"},
+        "generation_id": {"const": "OVC-LSIAC-ACCESSION-GEN-0001"},
+        "decision_id": {"type": "string"},
+        "inheritance_id": {"type": "string"},
+        "source_subject_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "source_standing": {"$ref": "#/$defs/sourceStanding"},
+        "scientific_disposition": {"$ref": "#/$defs/scientificDisposition"},
+        "exposure_state": {"$ref": "#/$defs/exposureState"},
+        "claim_strength": {"$ref": "#/$defs/claimStrength"},
+        "inheritance_roles": {"type": "array", "minItems": 1, "maxItems": 10, "uniqueItems": true, "items": {"$ref": "#/$defs/inheritanceRole"}},
+        "lifecycle_state": {"$ref": "#/$defs/lifecycleState"},
+        "authority_state": {"$ref": "#/$defs/authorityState"},
+        "authority_ref": {"type": ["string", "null"]},
+        "source_relation_state": {"$ref": "#/$defs/sourceRelationState"},
+        "scope_envelope": {"$ref": "#/$defs/scopeEnvelope"},
+        "surviving_statement": {"type": "string"},
+        "role_justifications": {"type": "object"},
+        "counterevidence_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "dependence_graph_refs": {"type": "array", "items": {"type": "string"}},
+        "destination_binding_set": {"$ref": "#/$defs/destinationBindingSet"},
+        "architecture_effect_set": {"$ref": "#/$defs/architectureEffectSet"},
+        "supersession_edges": {"type": "array", "items": {"type": "string"}},
+        "review_declarations": {"type": "array", "items": {"$ref": "#/$defs/reviewerDeclaration"}},
+        "rollback_reentry": {"type": "string"},
+        "docket_status": {"enum": ["UNASSESSED", "SOURCE_CENSUS_PENDING", "SOURCE_BINDING_REQUIRED", "ADJUDICATION_PENDING", "REVIEW_READY", "CLOSED"]},
+        "authority_effect": {"const": "SCIENTIFIC_INHERITANCE_ONLY_NO_OWNER_RUNTIME_SEMANTIC_OR_EXPOSURE_AUTHORITY"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "oneOf": [
+    {"$ref": "#/$defs/pass1Classification"},
+    {"$ref": "#/$defs/dependenceGraph"},
+    {"$ref": "#/$defs/counterevidenceManifest"},
+    {"$ref": "#/$defs/reviewerDeclaration"},
+    {"$ref": "#/$defs/accessionDecision"}
+  ]
+}
