@@ -1,0 +1,31 @@
+{
+  "schema": "ovc-lsiac-gen0002-accounting-repair-qa/v0.1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "packet_id": "LSIAC-GEN0002-FRONTIER-ACCOUNTING-REPAIR",
+  "gate_id": "LSIAC-G-GEN0002-ACCOUNTING-REPAIR",
+  "plan_id": "OVC-LSIAC-CONSTITUTION-0.1-REVISED-1",
+  "plan_version": "0.1-R1-RATIFIED",
+  "baseline_commit": "19ed2b498c10c2341fb2412095752e591c841770",
+  "pre_closeout_candidate_head": "330327ea7fda4e41d5b9337b452ce7fb51a6eb61",
+  "verdict": "PASS",
+  "recommendation": "PASS",
+  "acceptance": [
+    {"id": "EXACT_FROZEN_SOURCE_BYTES", "result": "PASS", "evidence": "434 passports; passport-set SHA-256 f97ba927944326864f1a5cc20ecc69a0a4623743231aa8479d713984bbe68019 unchanged"},
+    {"id": "EXACT_SUBJECT_ACCOUNTING", "result": "PASS", "evidence": "431 exact subject identifiers; 428 singletons; exactly 3 two-passport groups"},
+    {"id": "NO_SEMANTIC_MERGE", "result": "PASS", "evidence": "Identity grouping uses exact subject_id only"},
+    {"id": "NO_SCIENTIFIC_DECISIONS", "result": "PASS", "evidence": "scientific_accession_decisions=0"},
+    {"id": "PROTOCOL_UNCHANGED", "result": "PASS", "evidence": "OVC-LSIAC-ACCESSION-ADJUDICATION-PROTOCOL-0.1 exact Git blob e0541a48ed2206224203485038a7ebcaba3607fc carried forward unchanged"},
+    {"id": "REQUIRED_REPOSITORY_TESTS", "result": "PASS", "evidence": "run 33925929811 complete; canonical 5421-item repository suite PASS"},
+    {"id": "FINAL_HEAD_PROFILE_SIQ", "result": "PASS", "evidence": "run 33925929787 profile assurance, SIQ READY and merge readiness PASS on pre-closeout head"},
+    {"id": "AUTHORITY_DELTA", "result": "PASS", "evidence": "NONE_ACCOUNTING_REPAIR_ONLY"}
+  ],
+  "warnings": [
+    "Final closeout commit changes the candidate head and therefore requires fresh exact-head VIT qualification and required CI before merge.",
+    "Historical GEN0001 frontier records remain unchanged and are superseded forward-only."
+  ],
+  "blockers": [],
+  "authority_delta": "NONE_ACCOUNTING_REPAIR_ONLY",
+  "auto_ratifiable": true,
+  "final_head_assurance_required": true,
+  "rollback": "Forward-only preservation; do not rewrite GEN0001 history or frozen source bytes."
+}
