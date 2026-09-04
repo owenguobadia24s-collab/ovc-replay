@@ -22,7 +22,11 @@ class VitPostMergeCompletionWorkflowTests(unittest.TestCase):
         self.assertIn("runs-on: ubuntu-latest", self.text)
         self.assertNotIn("self-hosted", self.text)
         self.assertNotIn("OVC_EXTERNAL_ARTIFACT_ROOT", self.text)
-        self.assertIn("OVC_VIT_RECEIPT_STAGE: ${{ runner.temp }}/vit-completion-receipts", self.text)
+        self.assertIn("Bind runner-local staging paths", self.text)
+        self.assertIn('echo "OVC_VIT_RECEIPT_STAGE=${RUNNER_TEMP}/vit-completion-receipts" >> "$GITHUB_ENV"', self.text)
+        self.assertIn('echo "OVC_VIT_REMOTE_REPORT=${RUNNER_TEMP}/vit-remote-publication-report.json" >> "$GITHUB_ENV"', self.text)
+        self.assertNotIn("OVC_VIT_RECEIPT_STAGE: ${{ runner.temp }}", self.text)
+        self.assertNotIn("OVC_VIT_REMOTE_REPORT: ${{ runner.temp }}", self.text)
         self.assertIn("python tools/ci/vit_post_merge_completion_remote.py", self.text)
         self.assertIn("--receipt-store-root \"$OVC_VIT_RECEIPT_STAGE\"", self.text)
 
