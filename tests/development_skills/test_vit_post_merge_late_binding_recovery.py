@@ -165,14 +165,25 @@ class VitPostMergeLateBindingRecoveryTests(unittest.TestCase):
         self.assertIn("late._recover_one", wrapper)
         self.assertNotIn("python tools/ci/vit_post_merge_completion.py --repo-root . --merge-sha", text)
 
-    def test_recovery_manifest_is_authority_inert_and_names_first_late_binding_merge(self) -> None:
+    def test_recovery_manifest_is_authority_inert_and_preserves_required_recovery_rows(self) -> None:
         value = json.loads(RECOVERY.read_text(encoding="utf-8"))
         self.assertEqual(value["schema"], TOOL.RECOVERY_SCHEMA)
-        self.assertEqual(len(value["requests"]), 1)
-        row = value["requests"][0]
-        self.assertEqual(row["merge_sha"], "b22ea057ddef98acc2e43dfff689b7fa56934385")
-        self.assertEqual(row["packet_id"], "DSAI3V-LB-WP1")
-        self.assertEqual(row["authority_effect"], "NONE")
+        requests = value["requests"]
+        self.assertTrue(requests)
+        merge_shas = [row["merge_sha"] for row in requests]
+        self.assertEqual(len(merge_shas), len(set(merge_shas)))
+        self.assertTrue(all(len(sha) == 40 and all(ch in "0123456789abcdef" for ch in sha) for sha in merge_shas))
+        self.assertTrue(all(row["authority_effect"] == "NONE" for row in requests))
+
+        rows = {row["merge_sha"]: row for row in requests}
+        historical = rows["b22ea057ddef98acc2e43dfff689b7fa56934385"]
+        self.assertEqual(historical["packet_id"], "DSAI3V-LB-WP1")
+        self.assertEqual(historical["authority_effect"], "NONE")
+
+        cutover = rows["49d2bc7a36e3e8754eb9d26eed750d2d481a2eb2"]
+        self.assertEqual(cutover["packet_id"], "DSAI3V-REMOTE-LIVE-CUTOVER-PROOF")
+        self.assertEqual(cutover["authority_effect"], "NONE")
+        self.assertIs(cutover["remove_after_verified_remote_completion"], True)
 
 
 if __name__ == "__main__":
