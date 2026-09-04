@@ -1,0 +1,77 @@
+{
+  "schema": "ovc-qa-failure-evidence/v1",
+  "evidence_id": "DSAI3V-REMOTE-LIVE-CUTOVER-PROOF-R2-FAILURE-v0.1",
+  "programme_id": "OVC-DSAI3V-REMOTE-POST-MERGE-0001",
+  "packet_id": "DSAI3V-REMOTE-LIVE-CUTOVER-PROOF-CORRECTIVE-R2",
+  "authority_gate": "DSAI3V-REMOTE-G-CUTOVER-R2",
+  "operator_decision": "PASS",
+  "effective_merge_sha": "7ee6beef818e60480a6f5eb2cae6b9691b5bc509",
+  "effective_merge_tree": "8518ff60da4215406dcc4032688fc690efc9116d",
+  "workflow_run": {
+    "run_id": 33928773672,
+    "workflow_path": ".github/workflows/vit-post-merge-completion.yml",
+    "event": "push",
+    "status": "completed",
+    "conclusion": "failure",
+    "job_id": 101202895488,
+    "runner": "ubuntu-latest"
+  },
+  "successful_prepublication_proofs": {
+    "current_merge": {
+      "observed_commit": "7ee6beef818e60480a6f5eb2cae6b9691b5bc509",
+      "observed_tree": "8518ff60da4215406dcc4032688fc690efc9116d",
+      "exact_tree_equal": true,
+      "four_content_addressed_receipts_present": true,
+      "proof_id": "b42dc580ce55edf015c567c68e2423a61557c01c724c1936585736f4535336cb",
+      "transaction_id": "2500fc631174140ee3764f5d46fd59de3ca39698a793a0043a58bb6a00f00ef6"
+    },
+    "historical_recovery_b22ea057": {
+      "observed_commit": "b22ea057ddef98acc2e43dfff689b7fa56934385",
+      "observed_tree": "70cfeb0aa9971f7f0f59b66c6c8d2f256e632330",
+      "exact_tree_equal": true,
+      "four_content_addressed_receipts_present": true,
+      "proof_id": "4e04af1ab55e4fd9a8f02af897e87e0b01ceeee951a9f858a2c689ec2c668b4f"
+    },
+    "historical_recovery_49d2bc7a": {
+      "observed_commit": "49d2bc7a36e3e8754eb9d26eed750d2d481a2eb2",
+      "observed_tree": "4479a72b9e2d460e502f226eab0a8789548d52c5",
+      "exact_tree_equal": true,
+      "four_content_addressed_receipts_present": true,
+      "proof_id": "21e0109670c0367ea32befb4217f1070cb8908d93a2007b0b2de2c4afb6e85e1"
+    }
+  },
+  "failure_phase": "IMMUTABLE_R2_OBJECT_EXISTENCE_PROBE_BEFORE_FIRST_WRITE",
+  "root_cause": {
+    "code": "RCLONE_S3_MISSING_OBJECT_SYNTHETIC_DIRECTORY_SENTINEL_MISCLASSIFIED",
+    "observed_error": "REMOTE_RECEIPT_KEY_IS_DIRECTORY",
+    "detail": "The publisher used `rclone lsjson --stat` as an exact-object existence test. On the R2/S3 bucket backend a missing object path can be represented by rclone as an empty/synthetic directory. The publisher treated that bucket-backend missing-object sentinel as a forbidden directory and failed before publication.",
+    "implementation_path": "tools/ci/vit_publish_completion_receipts.py"
+  },
+  "safety_assessment": {
+    "physical_main_replayed": false,
+    "self_hosted_runner_used": false,
+    "github_hosted_runner_proven": true,
+    "r2_credentials_proven": true,
+    "canonical_receipt_bundle_staged": true,
+    "remote_publication_report_completed": false,
+    "destructive_remote_operation_attempted": false,
+    "authority_expansion": false
+  },
+  "diagnostics_artifact": {
+    "artifact_id": 9957852387,
+    "name": "dsai3v-remote-post-merge-33928773672",
+    "zip_sha256": "427f57f6c510b25e75f07fa766a660b94a59d08f6f617845d998b6e67d4a8b1d",
+    "file_count": 72
+  },
+  "bounded_correction": [
+    "Make the R2/S3 object probe explicitly file-only.",
+    "Treat null, file-not-found exit status and bucket-backend synthetic-directory sentinel as exact-object absence.",
+    "Preserve byte-for-byte collision checks for existing objects before any write.",
+    "Preserve `copyto --immutable`, post-write `cat` readback equality, append-only operation and prohibition on delete/purge/move.",
+    "Add deterministic regression coverage for bucket-backend missing-object semantics and file-not-found exit code 4.",
+    "Rerun repository and VIT/SIQ/GRT exact-final assurance, squash-merge when eligible, and require a successful live R2 publication/readback proof."
+  ],
+  "rollback": "Forward-revert the bounded object-probe correction while preserving the effective main commits, diagnostics artifact, staged completion proofs and all remote evidence; do not replay or rewrite physical main.",
+  "disposition": "CORRECTABLE_IN_SCOPE",
+  "next_action": "RUN_BOUNDED_R2_OBJECT_STAT_CORRECTION_AND_REMOTE_RECOVERY"
+}
