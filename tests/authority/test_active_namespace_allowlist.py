@@ -32,6 +32,7 @@ EXPECTED_OVC_PACKAGES = {
     "ovc.research_operations",
     "ovc.research_operations.asocs",
     "ovc.research_operations.c2_csm_reference",
+    "ovc.research_operations.lsiac",
     "ovc.research_operations.p1cdi",
     "ovc.research_operations.prsc",
     "ovc.research_operations.rccr",
@@ -93,6 +94,23 @@ class ActiveNamespaceAllowlistTests(unittest.TestCase):
             for path in package_root.rglob("__init__.py")
         }
         self.assertEqual(EXPECTED_OVC_PACKAGES, actual)
+
+    def test_lsiac_namespace_is_research_only_non_authoritative_and_fails_closed(self) -> None:
+        init_text = (SRC / "ovc" / "research_operations" / "lsiac" / "__init__.py").read_text(encoding="utf-8").lower()
+        self.assertIn("research-only", init_text)
+        self.assertIn("non-authoritative", init_text)
+        self.assertIn("no active market", init_text)
+        self.assertIn("selector", init_text)
+        self.assertIn("scientific or semantic-promotion", init_text)
+        self.assertIn("validation", init_text)
+        self.assertIn("publication", init_text)
+        self.assertIn("probability", init_text)
+        self.assertIn("risk", init_text)
+        self.assertIn("exposure", init_text)
+        self.assertIn("trading", init_text)
+        self.assertIn("execution authority", init_text)
+        self.assertIn("agent-write authority", init_text)
+        self.assertIn("fail closed", init_text)
 
     def test_p1cdi_namespace_is_advisory_non_decision_bearing_conformance_only(self) -> None:
         init_text = (SRC / "ovc" / "research_operations" / "p1cdi" / "__init__.py").read_text(encoding="utf-8").lower()
