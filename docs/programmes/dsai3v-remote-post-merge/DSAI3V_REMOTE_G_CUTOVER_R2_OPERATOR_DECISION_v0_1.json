@@ -1,0 +1,52 @@
+{
+  "schema": "ovc-operator-decision/v1",
+  "decision_id": "DSAI3V-REMOTE-G-CUTOVER-R2-OPERATOR-PASS-20260904",
+  "programme_id": "OVC-DSAI3V-REMOTE-POST-MERGE-0001",
+  "plan_id": "OVC_DSAI3V_REMOTE_POST_MERGE_PLAN_v0_1",
+  "plan_version": "0.1",
+  "gate_id": "DSAI3V-REMOTE-G-CUTOVER-R2",
+  "decision": "PASS",
+  "operator_instruction": "OVC APPROVE DSAI3V-REMOTE-G-CUTOVER-R2",
+  "operator_decision_date": "2026-09-04",
+  "pr": 1404,
+  "court_record_main_at_approval": "f08572bb7eb2de146df85395563c9cb13cb91093",
+  "court_record_tree_at_approval": "a648a4c2dac71581aa55a50464ccd02f92123cba",
+  "gate_ready_head": "e1a608c15156f9cc1a28c0ef13dcfbedb49ab201",
+  "final_approval_materialisation_head": "03e37b0b5fb14a17d1ef043f6083cc14980abc1e",
+  "final_detached_qualification_id": "83affa1c0491f40d43bb583f35e77632dad2bd17a5cc44c137d3a37a570973e2",
+  "authority_delta": "ACTIVATE_GITHUB_HOSTED_POST_MERGE_COMPLETION_AND_DEDICATED_APPEND_ONLY_R2_DEVELOPMENT_RECEIPT_NAMESPACE",
+  "authorised": [
+    "activate DSAI3V.VIT.REMOTE.POST_MERGE.COMPLETION.v0.1",
+    "make its supersedes_on_cutover declarations effective for the ordinary self-hosted completion executor and local-only completion ReceiptStore binding while preserving those records as historical/recovery evidence",
+    "permit the first automatic publication only under ovc-evidence/development/vit-completion-receipts/v1 on the existing OVC Cloudflare R2 remote",
+    "require append-only identity semantics, remote byte/SHA-256 readback verification and fail-closed collision handling",
+    "rerun exact-final VIT/SIQ/GRT and repository checks against current main",
+    "squash-merge PR #1404 when exact-final qualification remains PASS and the PR remains bounded/mergeable",
+    "observe and verify the first main-triggered GitHub-hosted live cutover proof",
+    "perform only bounded corrective recovery if the live cutover proof fails"
+  ],
+  "unchanged_authority": [
+    "DSAI_VIT_PHYSICAL_CONTROLLER",
+    "DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY",
+    "read-only GitHub repository permissions for the post-merge executor",
+    "physical-main court-record semantics",
+    "exact pre-write freeze / late-binding reconstruction",
+    "canonical completion receipt construction and content-addressed identity"
+  ],
+  "reserved": [
+    "canonical or release publication",
+    "new Git or physical-main writer",
+    "new merge or physical gateway authority",
+    "force-push, history rewrite or deletion of historical receipt/Git evidence",
+    "selector, model, family, candidate, theory or semantic promotion",
+    "ACTIVE_DISCOVERY, ACTIVE_DEVELOPMENT or ACTIVE_VALIDATION authority",
+    "probability, risk, exposure, E-H, trading or execution authority",
+    "agent write authority beyond the already authorised bounded repository changes"
+  ],
+  "qa_packet": "docs/programmes/dsai3v-remote-post-merge/DSAI3V_REMOTE_WP0_WP3_QA_v0_1.json",
+  "gate_packet": "docs/programmes/dsai3v-remote-post-merge/DSAI3V_REMOTE_G_CUTOVER_R2_GATE_PACKET_v0_1.json",
+  "qa_recommendation": "PASS_TO_OPERATOR_CUTOVER_GATE",
+  "blocking_findings": [],
+  "rollback": "Forward-revert the workflow to the preceding self-hosted executor, preserve all local/remote receipt history and Git history, and never replay an already-effective physical-main write.",
+  "next_action": "SQUASH_MERGE_PR_1404_AFTER_CURRENT_BASE_EXACT_FINAL_PASS_THEN_RUN_LIVE_CUTOVER_PROOF"
+}

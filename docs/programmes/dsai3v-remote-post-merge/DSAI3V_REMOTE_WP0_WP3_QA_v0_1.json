@@ -1,0 +1,84 @@
+{
+  "schema": "ovc-qa-packet/v1",
+  "qa_id": "DSAI3V-REMOTE-WP0-WP3-QA-v0.1",
+  "programme_id": "OVC-DSAI3V-REMOTE-POST-MERGE-0001",
+  "plan_id": "OVC_DSAI3V_REMOTE_POST_MERGE_PLAN_v0_1",
+  "plan_version": "0.1",
+  "packet_scope": [
+    "REMOTE-WP0",
+    "REMOTE-WP1",
+    "REMOTE-WP2",
+    "REMOTE-WP3"
+  ],
+  "baseline_main": "3280d4e67e9a0acf7c9aad3d8425cf415464edd9",
+  "tested_candidate_commit": "619dd385dd82c43bd72991510f2368e342c66c79",
+  "tested_candidate_tree": "7e6aeb1f3d3586e8faeab0f02f0fcca0e679a5f1",
+  "pr": 1404,
+  "qa_recommendation": "PASS_TO_OPERATOR_CUTOVER_GATE",
+  "blocking_findings": [],
+  "warnings": [
+    "The first live write to the dedicated Cloudflare R2 development-receipt namespace is intentionally unexecuted before DSAI3V-REMOTE-G-CUTOVER-R2 because that external publication and workflow activation are operator-reserved.",
+    "The first merged-main run is therefore a required live cutover proof and must fail closed on missing R2 credentials, remote-object collision, readback mismatch, missing pre-write freeze evidence or exact-tree mismatch."
+  ],
+  "tests": {
+    "github_tests_workflow": {
+      "run_id": 33900794763,
+      "run_number": 6451,
+      "conclusion": "SUCCESS",
+      "vit_routing_preflight_job": 101114133821,
+      "canonical_pytest_shard_assurance_plan_job": 101114304624,
+      "runner_parity_job": 101114304587,
+      "pytest_unittest_parity_job": 101114304585,
+      "unittest_result": "1638 tests / OK / skipped=2 / exit_code=0"
+    },
+    "github_tiered_workflow": {
+      "run_id": 33900794818,
+      "run_number": 4389,
+      "conclusion": "SUCCESS",
+      "profile_assurance_job": 101114133755,
+      "compatibility_job": 101114223368,
+      "siq_ready_admission_job": 101114223390,
+      "merge_readiness_job": 101115446054
+    },
+    "exact_final_assurance": {
+      "qualification_ref": "0767dab5757eb1d810bcb670ce74a38fdc6ff3f00b9aa07ffbe5025f6b622bb4",
+      "pip_id": "9c0a0a40dc31cd1e5346ef3cae09c1425b6c5accbdc2bab40f6729bb7e0b4263",
+      "placement_id": "c4a8cbbd917b0f19f2c065e9e77382c04a95362086a9489e50a66050a482c65c",
+      "prospective_tree": "7e6aeb1f3d3586e8faeab0f02f0fcca0e679a5f1",
+      "siq_status": "READY",
+      "siq_disposition": "SHADOW_READY",
+      "siq_reason_codes": [
+        "EXACT_ASSURANCE_BOUND",
+        "DETACHED_QUALIFICATION_BOUND",
+        "LATE_BINDING_PLACEMENT",
+        "BASE_STABLE"
+      ],
+      "graph_collateral": "PASS / nodes=830 / edges=112",
+      "grt_exact_tree": "PASS / same_tree=true / advisory_findings=0 / effective_findings=0",
+      "prvit_ready_to_merge": "PASS",
+      "ovc_merge_readiness": "PASS",
+      "enforcement": "SERIALIZED_VIT_READY"
+    }
+  },
+  "acceptance_assessment": {
+    "github_hosted_runtime": "PASS",
+    "operator_device_not_required_by_candidate_workflow": "PASS",
+    "local_external_root_not_required_by_candidate_workflow": "PASS",
+    "existing_physical_writer_and_gateway_unchanged": "PASS",
+    "canonical_receipt_construction_reused": "PASS",
+    "late_binding_recovery_semantics_preserved": "PASS",
+    "immutable_remote_publisher_synthetic_tests": "PASS",
+    "remote_existing_identical_object_idempotence": "PASS",
+    "remote_collision_fail_closed": "PASS",
+    "symlink_and_path_escape_rejection": "PASS",
+    "readback_sha256_verification_implemented": "PASS",
+    "read_only_github_permissions": "PASS",
+    "repository_wide_tests": "PASS",
+    "vit_siq_grt_exact_final": "PASS",
+    "live_r2_cutover": "OPERATOR_RESERVED_NOT_RUN"
+  },
+  "external_artifacts_written_pre_gate": [],
+  "authority_effect": "NONE_BEFORE_OPERATOR_CUTOVER",
+  "rollback": "Forward-revert the candidate workflow to the prior self-hosted executor; preserve all Git and receipt history and never replay an already-effective physical main write.",
+  "next_gate": "DSAI3V-REMOTE-G-CUTOVER-R2"
+}

@@ -18,12 +18,30 @@ class VitPostMergeCompletionWorkflowTests(unittest.TestCase):
         self.assertIn("required: false", self.text)
         self.assertIn("OVC_VIT_RECOVERY_MERGE_SHA: ${{ inputs.merge_sha || github.sha }}", self.text)
 
-    def test_recovery_preserves_existing_controller_executor_boundary(self) -> None:
-        self.assertIn("runs-on: [self-hosted, Windows]", self.text)
-        self.assertIn("OVC_EXTERNAL_ARTIFACT_ROOT", self.text)
+    def test_executor_is_github_hosted_and_operator_device_independent(self) -> None:
+        self.assertIn("runs-on: ubuntu-latest", self.text)
+        self.assertNotIn("self-hosted", self.text)
+        self.assertNotIn("OVC_EXTERNAL_ARTIFACT_ROOT", self.text)
+        self.assertIn("OVC_VIT_RECEIPT_STAGE: ${{ runner.temp }}/vit-completion-receipts", self.text)
+        self.assertIn("python tools/ci/vit_post_merge_completion_remote.py", self.text)
+        self.assertIn("--receipt-store-root \"$OVC_VIT_RECEIPT_STAGE\"", self.text)
+
+    def test_remote_receipt_publication_is_bounded_and_readback_verified(self) -> None:
+        self.assertIn("python tools/ci/vit_publish_completion_receipts.py", self.text)
+        self.assertIn("--remote ovc_r2", self.text)
+        self.assertIn("--prefix ovc-evidence/development/vit-completion-receipts/v1", self.text)
+        self.assertIn("Publish immutable remote receipt tree and verify readback", self.text)
+        self.assertIn("RCLONE_CONFIG_OVC_R2_ACCESS_KEY_ID", self.text)
+        self.assertIn("RCLONE_CONFIG_OVC_R2_SECRET_ACCESS_KEY", self.text)
+
+    def test_executor_preserves_read_only_github_authority(self) -> None:
+        self.assertIn("actions: read", self.text)
+        self.assertIn("checks: read", self.text)
+        self.assertIn("contents: read", self.text)
+        self.assertIn("pull-requests: read", self.text)
+        self.assertNotIn("contents: write", self.text)
         self.assertIn("GITHUB_TOKEN: ${{ github.token }}", self.text)
-        self.assertIn("PYTHONPATH: src;.\n", self.text)
-        self.assertIn("--merge-sha \"$env:OVC_VIT_RECOVERY_MERGE_SHA\"", self.text)
+        self.assertIn("PYTHONPATH: src:.\n", self.text)
 
     def test_checkout_keeps_latest_code_and_fetches_history_for_exact_target(self) -> None:
         self.assertIn("ref: ${{ github.sha }}", self.text)

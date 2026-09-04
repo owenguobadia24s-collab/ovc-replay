@@ -18,6 +18,7 @@ from tools.ci.vit_lineage_source import ResolvedLineageSource
 ROOT = Path(__file__).resolve().parents[2]
 TOOL_PATH = ROOT / "tools" / "ci" / "vit_post_merge_completion_late_binding.py"
 WORKFLOW = ROOT / ".github" / "workflows" / "vit-post-merge-completion.yml"
+REMOTE_WRAPPER = ROOT / "tools" / "ci" / "vit_post_merge_completion_remote.py"
 RECOVERY = ROOT / "registries" / "development" / "skills" / "VIT_POST_MERGE_RECOVERY_REQUESTS_v0_1.json"
 SPEC = importlib.util.spec_from_file_location("vit_post_merge_completion_late_binding_tool", TOOL_PATH)
 assert SPEC is not None and SPEC.loader is not None
@@ -155,10 +156,13 @@ class VitPostMergeLateBindingRecoveryTests(unittest.TestCase):
                         token="token",
                     )
 
-    def test_post_merge_workflow_uses_late_binding_recovery_route(self) -> None:
+    def test_post_merge_workflow_preserves_late_binding_recovery_route_via_remote_wrapper(self) -> None:
         text = WORKFLOW.read_text(encoding="utf-8")
-        self.assertIn("vit_post_merge_completion_late_binding.py", text)
+        wrapper = REMOTE_WRAPPER.read_text(encoding="utf-8")
+        self.assertIn("vit_post_merge_completion_remote.py", text)
         self.assertIn("VIT_POST_MERGE_RECOVERY_REQUESTS_v0_1.json", text)
+        self.assertIn("vit_post_merge_completion_late_binding", wrapper)
+        self.assertIn("late._recover_one", wrapper)
         self.assertNotIn("python tools/ci/vit_post_merge_completion.py --repo-root . --merge-sha", text)
 
     def test_recovery_manifest_is_authority_inert_and_names_first_late_binding_merge(self) -> None:
