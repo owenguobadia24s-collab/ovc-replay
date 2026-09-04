@@ -4,44 +4,43 @@
   "plan_id": "OVC-LSIAC-CONSTITUTION-0.1-REVISED-1",
   "plan_version": "0.1-R1-RATIFIED",
   "packet_id": "LSIAC-PASS1-SOURCE-STANDING-EXPOSURE-DEPENDENCE",
-  "status": "APPROVED",
+  "status": "BLOCKED",
   "prerequisites": [
     "LSIAC-FRONTIER-FREEZE:MERGED:f08572bb7eb2de146df85395563c9cb13cb91093",
     "LSIAC-ADJUDICATION-PROTOCOL-FREEZE:MERGED:692e730ac2c70cd5cfdfb34713be7bf7f184a137"
   ],
-  "authority_required": "AUTO_RATIFIABLE_NON_RESERVED_SATISFIED",
-  "authority_delta": "NONE_PASS1_CLASSIFICATION_ONLY",
+  "authority_required": "OPERATOR_REQUIRED_FOR_FROZEN_FRONTIER_REPAIR_OR_SUPERSESSION",
+  "authority_delta": "NONE_WHILE_BLOCKED",
   "baseline_commit": "692e730ac2c70cd5cfdfb34713be7bf7f184a137",
   "branch": "research/lsiac-pass1-classification-20260904",
-  "candidate_commit": null,
-  "candidate_commit_status": "RESOLVE_AT_PR_HEAD",
+  "candidate_commit": "4b755988ce5804df1a6a9b90d587365b59c54dcc",
   "tests": {
-    "pass1_virtual_view_id": "PASS:22b9ffabbc18eb856fa0ffbc8938aa8a73d5e1e412e7401240b0c3ebb95e4816",
-    "pass1_algorithm_git_blob_sha": "PASS:c3e840fcb55b6c7eeaac4fdec07e6e069592dabc",
-    "targeted_pass1_conformance": "PENDING_PR_CI",
-    "repository_ci": "PENDING_PR"
+    "passport_reconstruction": "PASS:434",
+    "unique_subject_reconstruction": "FAIL:431_NOT_432",
+    "canonical_pytest_shard_1": "FAIL:2_FAILED_1354_PASSED_4064_DESELECTED_303_SUBTESTS_PASSED",
+    "repository_ci": "FAIL_REQUIRED_ASSURANCE"
   },
   "qa_packet": "docs/programmes/lsiac-v0-1/pass1/LSIAC_PASS1_QA_v0_1.json",
   "decision_record": "docs/programmes/lsiac-v0-1/pass1/LSIAC_PASS1_DECISION_v0_1.json",
   "merge_commit": null,
-  "blockers": [],
+  "blockers": [
+    "FRONTIER_INTEGRITY_INCIDENT:OPERATOR_FROZEN_432_SUBJECT_COUNT_VS_431_EXACT_RECONSTRUCTION",
+    "MATERIAL_CHANGE_TO_FROZEN_FRONTIER_REQUIRES_OPERATOR_AUTHORITY"
+  ],
   "development_freeze": "ACTIVE_UNCHANGED",
   "accession_frontier_freeze_receipt": "54d20c358fe110198c0a33b20132a13244c63e8e89448e3a0fde1ef79fb18996",
   "accession_adjudication_protocol": "OVC-LSIAC-ACCESSION-ADJUDICATION-PROTOCOL-0.1",
   "pass1_classification": {
-    "state": "FROZEN_PENDING_REQUIRED_REPOSITORY_ASSURANCE_AND_INTEGRATION",
-    "virtual_view_id": "22b9ffabbc18eb856fa0ffbc8938aa8a73d5e1e412e7401240b0c3ebb95e4816",
-    "subject_count": 432,
+    "state": "BLOCKED_NOT_FROZEN",
+    "virtual_view_candidate_id": "22b9ffabbc18eb856fa0ffbc8938aa8a73d5e1e412e7401240b0c3ebb95e4816",
+    "frozen_expected_subject_count": 432,
+    "actual_reconstructed_unique_subject_count": 431,
     "passport_count": 434
   },
   "scientific_accession_decisions": 0,
-  "known_source_binding_debt": [
-    "OVC-REPRESENTATION-ROBUSTNESS-0001-SOURCE-BINDING",
-    "OVC-RRSCG-OBSERVER-STATE-GEOMETRY-0001-SOURCE-BINDING"
-  ],
   "validation": "LOCKED_UNCONSUMED",
   "probability_risk_exposure_execution_authority": "NONE",
-  "next_packet": "LSIAC-PASS2-SURVIVAL-ROLE-DESTINATION-EFFECT",
-  "next_operator_gate": "LSIAC-SCIENCE-RESUME",
-  "rollback": "Forward-only. Correct Pass-1 deterministic defects before integration; material changes after Pass-2 exposure require successor Pass-1 view generation/freeze."
+  "next_packet": "LSIAC-FRONTIER-INTEGRITY-INCIDENT-0001",
+  "next_operator_gate": "LSIAC-G-FRONTIER-INTEGRITY-REPAIR",
+  "rollback": "Forward-only. Preserve frozen frontier, protocol, source bytes, failed Pass-1 candidate and CI evidence. Do not alter the frozen subject count without operator-authorised repair/supersession."
 }

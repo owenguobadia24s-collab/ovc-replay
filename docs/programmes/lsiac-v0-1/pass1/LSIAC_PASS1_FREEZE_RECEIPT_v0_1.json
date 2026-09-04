@@ -3,53 +3,35 @@
   "programme_id": "OVC-LSIAC-v0.1",
   "packet_id": "LSIAC-PASS1-SOURCE-STANDING-EXPOSURE-DEPENDENCE",
   "generation_id": "OVC-LSIAC-ACCESSION-GEN-0001",
-  "status": "FROZEN_PENDING_REQUIRED_REPOSITORY_ASSURANCE_AND_INTEGRATION",
+  "status": "BLOCKED_NOT_FROZEN_FRONTIER_INTEGRITY_INCIDENT",
   "frontier_receipt_id": "54d20c358fe110198c0a33b20132a13244c63e8e89448e3a0fde1ef79fb18996",
   "protocol_id": "OVC-LSIAC-ACCESSION-ADJUDICATION-PROTOCOL-0.1",
   "protocol_git_blob_sha": "e0541a48ed2206224203485038a7ebcaba3607fc",
   "source_universe": {
-    "subject_count": 432,
+    "frozen_expected_subject_count": 432,
+    "actual_reconstructed_unique_subject_count": 431,
     "passport_count": 434,
     "source_passport_set_sha256": "f97ba927944326864f1a5cc20ecc69a0a4623743231aa8479d713984bbe68019",
     "post_v0_5_delta_sha256": "1ed67410854478b2947d62055b3b619ad8081c782907c66efa78bbf1d823a42d"
   },
-  "classification_view": {
+  "classification_view_candidate": {
     "contract_id": "OVC-LSIAC-PASS1-CLASSIFICATION-VIEW-CONTRACT-0.1",
     "algorithm_path": "src/ovc/research_operations/lsiac/pass1.py",
     "algorithm_git_blob_sha": "c3e840fcb55b6c7eeaac4fdec07e6e069592dabc",
-    "manifest_path": "docs/programmes/lsiac-v0-1/pass1/LSIAC_PASS1_CLASSIFICATION_VIEW_MANIFEST_v0_1.json",
     "virtual_view_id": "22b9ffabbc18eb856fa0ffbc8938aa8a73d5e1e412e7401240b0c3ebb95e4816",
-    "projection": "PASS1_SOURCE_STANDING_EXPOSURE_DEPENDENCE_CLASSIFICATION_V1",
-    "materialisation_policy": "VIRTUAL_VIEW_IS_IDENTITY; ANY_432_ROW_CACHE_IS_REPLAY_ONLY_AND_MUST_PROVE_EQUIVALENCE"
+    "status": "NOT_DECISION_BEARING"
   },
-  "frozen_semantics": {
-    "baseline_disposition_without_exact_source": "UNRESOLVED",
-    "baseline_exposure_without_exact_source": "UNKNOWN",
-    "post_v0_5_exact_disposition_and_exposure": "PRESERVE_EXACT_DELTA_FIELDS_WITHOUT_PROMOTION",
-    "pending_source_binding": "NOT_EVALUABLE_SOURCE_BLOCKED",
-    "source_derived": "HISTORICAL_CONTEXT_WITH_EXACT_LOAD_BEARING_SOURCE_DEBT",
-    "dependence_edges": "ONLY_SHARED_SOURCE_DEPENDENT_FROM_IDENTICAL_FROZEN_LOCATOR",
-    "dependence_absence": "NO_EDGE_DOES_NOT_ESTABLISH_INDEPENDENCE"
+  "assurance_failure": {
+    "ci_run_id": 33909206724,
+    "failing_condition": "CI_RECONSTRUCTS_EXACTLY_434_PASSPORTS_AND_432_UNIQUE_SUBJECTS",
+    "actual": "434_PASSPORTS_431_UNIQUE_SUBJECTS",
+    "duplicate_evidence": [
+      "B0415:OVC-OBSERVER-STATE-SUFFICIENCY-AND-GAMMA-ROBUSTNESS-FRONTIER",
+      "D011-00:OVC-OBSERVER-STATE-SUFFICIENCY-AND-GAMMA-ROBUSTNESS-FRONTIER"
+    ]
   },
-  "forbidden_pass1_outputs": [
-    "FINAL_INHERITANCE_ROLE",
-    "RETAIN_FORWARD",
-    "SURVIVING_STATEMENT",
-    "DESTINATION_BINDING_SET",
-    "ARCHITECTURE_EFFECT_SET",
-    "SCIENTIFIC_PROMOTION"
-  ],
-  "assurance_conditions": [
-    "CI_RECONSTRUCTS_EXACTLY_434_PASSPORTS_AND_432_UNIQUE_SUBJECTS",
-    "CI_EXECUTES_PASS1_VIEW_OVER_ALL_432_SUBJECTS",
-    "CI_PROVES_POST_V0_5_EXACT_NEGATIVES_AND_SOURCE_BLOCKED_NOMINATIONS",
-    "CI_PROVES_NO_FORBIDDEN_PASS2_FIELDS",
-    "CI_PROVES_DEPENDENCE_GRAPH_NEVER_INFERS_INDEPENDENCE",
-    "CI_PROVES_ALGORITHM_GIT_BLOB_AND_VIRTUAL_VIEW_IDENTITY",
-    "REPOSITORY_WIDE_ASSURANCE_SIQ_READY_AND_OVC_MERGE_READINESS_PASS"
-  ],
-  "pass2_permission": "NOT_EFFECTIVE_UNTIL_THIS_PACKET_IS_LAWFULLY_INTEGRATED_ON_MAIN",
+  "pass2_permission": "DENIED_UNTIL_FRONTIER_INTEGRITY_INCIDENT_RESOLVED_AND_SUCCESSOR_PASS1_FREEZE_LAWFULLY_INTEGRATED",
   "scientific_accession_decisions": 0,
-  "authority_effect": "NONE_PASS1_CLASSIFICATION_ONLY",
-  "rollback": "Forward-only. If assurance detects a defect, supersede this candidate receipt with a corrected Pass-1 view/receipt before integration. After integration, a material Pass-1 change requires successor view generation and freeze before Pass 2 consumption."
+  "authority_effect": "NONE_FAIL_CLOSED",
+  "rollback": "Forward-only. Preserve this blocked candidate receipt and all exact source evidence. No history rewrite, source deletion or silent count change."
 }

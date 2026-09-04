@@ -4,37 +4,35 @@
   "packet_id": "LSIAC-PASS1-SOURCE-STANDING-EXPOSURE-DEPENDENCE",
   "gate_id": "LSIAC-G-PASS1-CLASSIFICATION-FREEZE",
   "baseline_main": "692e730ac2c70cd5cfdfb34713be7bf7f184a137",
+  "evaluated_head": "4b755988ce5804df1a6a9b90d587365b59c54dcc",
+  "ci_run_id": 33909206724,
   "checks": {
     "frontier_receipt_bound": "PASS:54d20c358fe110198c0a33b20132a13244c63e8e89448e3a0fde1ef79fb18996",
     "frozen_protocol_bound": "PASS:e0541a48ed2206224203485038a7ebcaba3607fc",
-    "source_universe_identity": "PASS:432_SUBJECTS_434_PASSPORTS",
     "source_passport_set_identity": "PASS:f97ba927944326864f1a5cc20ecc69a0a4623743231aa8479d713984bbe68019",
     "post_v0_5_delta_identity": "PASS:1ed67410854478b2947d62055b3b619ad8081c782907c66efa78bbf1d823a42d",
+    "passport_reconstruction": "PASS:434",
+    "unique_subject_reconstruction": "FAIL:FROZEN_EXPECTED_432_ACTUAL_431",
+    "duplicate_subject_evidence": "FAIL:B0415_AND_D011_SHARE_OVC-OBSERVER-STATE-SUFFICIENCY-AND-GAMMA-ROBUSTNESS-FRONTIER",
     "pass1_algorithm_identity": "PASS:c3e840fcb55b6c7eeaac4fdec07e6e069592dabc",
-    "virtual_view_identity": "PASS:22b9ffabbc18eb856fa0ffbc8938aa8a73d5e1e412e7401240b0c3ebb95e4816",
-    "classification_is_deterministic_and_source_only": "PASS",
-    "baseline_scientific_disposition_not_inferred": "PASS_DEFAULT_UNRESOLVED",
-    "baseline_exposure_not_inferred": "PASS_DEFAULT_UNKNOWN",
-    "post_v0_5_exact_dispositions_preserved_without_promotion": "PASS_BY_ALGORITHM_AND_TEST",
-    "pending_source_binding_fail_closed": "PASS_BY_ALGORITHM_AND_TEST",
-    "source_derived_stronger_claim_debt_preserved": "PASS_BY_ALGORITHM_AND_TEST",
-    "dependence_edges_exact_shared_locator_only": "PASS",
-    "independence_inference_absent": "PASS",
-    "pass2_outputs_absent": "PASS",
+    "virtual_view_identity": "NOT_DECISION_BEARING_WHILE_FRONTIER_INTEGRITY_INCIDENT_OPEN",
     "scientific_accession_decisions": "PASS_ZERO",
-    "targeted_conformance_tests": "PENDING_PR_CI",
-    "repository_wide_assurance": "PENDING_PR_CI",
-    "siq_ready": "PENDING_PR_CI",
-    "ovc_merge_readiness": "PENDING_PR_CI"
+    "canonical_pytest_shard_1": "FAIL:2_FAILED_1354_PASSED_4064_DESELECTED_303_SUBTESTS_PASSED",
+    "repository_wide_assurance": "FAIL_REQUIRED_ASSURANCE_NOT_GREEN",
+    "siq_ready": "NOT_ELIGIBLE",
+    "ovc_merge_readiness": "NOT_ELIGIBLE"
   },
-  "qa_result": "PASS_METHOD_AND_IDENTITY_PENDING_REQUIRED_REPOSITORY_ASSURANCE",
-  "qa_recommendation": "PASS_AUTO_RATIFY_AND_SQUASH_MERGE_ONLY_IF_ALL_REQUIRED_CI_SIQ_AND_MERGE_READINESS_CHECKS_PASS",
+  "qa_result": "BLOCK_FRONTIER_INTEGRITY_INCIDENT",
+  "qa_recommendation": "BLOCK_PASS1_AND_STOP_DECISION_BEARING_ACCESSION_UNTIL_FROZEN_FRONTIER_IS_REPAIRED_OR_SUPERSEDED_FORWARD_ONLY",
   "warnings": [
-    "Most pre-v0.5 baseline subjects intentionally remain scientific_disposition=UNRESOLVED and exposure_state=UNKNOWN in Pass 1 because those fields are not inferred from journal titles or phase statuses; substantive scientific adjudication belongs to Pass 2 under exact load-bearing sources.",
-    "VERIFIED_ONCE_UNBOUND and MISSING source states remain visible as blockers/debt; Pass 1 classification does not make them load-bearing by recording them.",
-    "No missing dependence edge may be interpreted as evidence of independence."
+    "Do not weaken the 432-unique-subject test to make CI green; it exposed a conflict between the operator-frozen frontier receipt and the frozen passport bytes.",
+    "B0415 is a baseline source passport for the Observer-State Sufficiency/Gamma Robustness frontier; D011-00 is a post-v0.5 currentness passport for the same exact subject_id.",
+    "No survival, inheritance-role, destination, architecture-effect, semantic, Validation, publication, E-H, risk, exposure, trading or execution decision has been made."
   ],
-  "blocking_issues": [],
-  "authority_effect": "NONE_PASS1_CLASSIFICATION_ONLY",
-  "rollback": "Correct in-scope deterministic defects before merge and supersede candidate freeze evidence forward-only if its functional identity changes."
+  "blocking_issues": [
+    "FRONTIER_INTEGRITY_INCIDENT:SOURCE_UNIVERSE_SUBJECT_COUNT_CONTRADICTS_FROZEN_PASSPORT_BYTES",
+    "FROZEN_FRONTIER_MATERIAL_CHANGE_REQUIRES_OPERATOR_DECISION"
+  ],
+  "authority_effect": "NONE_FAIL_CLOSED",
+  "rollback": "Forward-only. Preserve the frozen 434-passport set, original frontier receipt, failed CI evidence and candidate Pass-1 work. Do not rewrite or delete historical evidence."
 }
