@@ -1,0 +1,38 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "plan_id": "OVC-LSIAC-CONSTITUTION-0.1-REVISED-1",
+  "plan_version": "0.1-R1-RATIFIED",
+  "packet_id": "LSIAC-GEN0002-FRONTIER-ACCOUNTING-REPAIR",
+  "status": "RUNNING",
+  "prerequisites": [
+    "LSIAC-G-FRONTIER-INTEGRITY-REPAIR:OPERATOR_SUPERSEDE:e6e07b7c1e2709ba72cf16788d47adf12da36083934fdc04db7888ec8f0e3a48",
+    "LSIAC-FRONTIER-INTEGRITY-INCIDENT-0001:MERGED:19ed2b498c10c2341fb2412095752e591c841770"
+  ],
+  "authority_required": "AUTO_RATIFIABLE_WITHIN_OPERATOR_SUPERSEDE_REPAIR_ENVELOPE",
+  "authority_delta": "NONE_ACCOUNTING_REPAIR_ONLY",
+  "baseline_commit": "19ed2b498c10c2341fb2412095752e591c841770",
+  "branch": "research/lsiac-gen0002-frontier-repair-r2-20260904",
+  "candidate_commit": null,
+  "tests": {
+    "exact_434_passport_subject_identity_audit": "PENDING_CI",
+    "expected_subject_count": 431,
+    "expected_multi_passport_subject_groups": 3,
+    "source_bytes_unchanged": "MUST_PASS",
+    "scientific_accession_decisions": "PASS_ZERO"
+  },
+  "qa_packet": null,
+  "decision_record": null,
+  "merge_commit": null,
+  "blockers": [
+    "GEN0002_EXACT_ACCOUNTING_AUDIT_PENDING"
+  ],
+  "accession_generation": "OVC-LSIAC-ACCESSION-GEN-0002_AUTHORISED_NOT_YET_FROZEN",
+  "source_generation_preserved": "OVC-LSIAC-ACCESSION-GEN-0001",
+  "development_freeze": "ACTIVE_UNCHANGED",
+  "scientific_accession_decisions": 0,
+  "pass2": "DENIED",
+  "next_packet": "LSIAC-GEN0002-PASS1-SOURCE-STANDING-EXPOSURE-DEPENDENCE",
+  "next_operator_gate": "LSIAC-SCIENCE-RESUME",
+  "rollback": "Forward-only. Preserve GEN0001 and all source bytes; any unexpected accounting discrepancy becomes a new FRONTIER_INTEGRITY_INCIDENT."
+}
