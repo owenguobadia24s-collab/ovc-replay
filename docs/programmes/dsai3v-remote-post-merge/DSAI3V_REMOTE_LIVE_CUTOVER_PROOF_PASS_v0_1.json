@@ -1,0 +1,118 @@
+{
+  "schema": "ovc-dsai3v-remote-live-cutover-proof-pass/v1",
+  "programme_id": "OVC-DSAI3V-REMOTE-POST-MERGE-0001",
+  "plan_id": "OVC_DSAI3V_REMOTE_POST_MERGE_PLAN_v0_1",
+  "plan_version": "0.1",
+  "packet_id": "DSAI3V-REMOTE-LIVE-CUTOVER-PROOF",
+  "gate_id": "DSAI3V-REMOTE-G-CUTOVER-R2",
+  "gate_decision": "PASS",
+  "status": "PASS",
+  "observed_main_commit": "9ba634e7c3c45bf6ebe8c344e8a276aa492685ae",
+  "observed_main_tree": "e657a807bd2bb12db85f0832f52e493a4b032080",
+  "live_remote_workflow": {
+    "workflow_name": "DSAI3V remote post-merge completion",
+    "run_id": 33929736378,
+    "job_id": 101205729214,
+    "conclusion": "success",
+    "event": "push",
+    "runner_class": "GITHUB_HOSTED",
+    "runner_os": "Ubuntu 24.04.4 LTS",
+    "operator_device_required": false,
+    "github_token_permissions": [
+      "actions:read",
+      "checks:read",
+      "contents:read",
+      "pull-requests:read"
+    ]
+  },
+  "current_main_completion_proof": {
+    "schema": "ovc-vit-local-post-merge-completion-proof/v1",
+    "proof_id": "8aeedec6a7390ce1456ff450370bfdb3921845de9dbe6fba91b6bc7205e68101",
+    "transaction_id": "22f316bdf164d2e1c770e123666ba277ee2761504a573ca11784f4b31446edf5",
+    "observed_commit": "9ba634e7c3c45bf6ebe8c344e8a276aa492685ae",
+    "observed_tree": "e657a807bd2bb12db85f0832f52e493a4b032080",
+    "exact_tree_equal": true,
+    "four_content_addressed_receipts_present": true,
+    "receipt_ids": {
+      "attachment_id": "4fcdc70277432c60f976f28d3e2a83d2dab1b7c1cbff7da990bd117867203042",
+      "completion_receipt_id": "6bb565709bcf2922a6e981d9595c68ebdac6e14e39072acf760eefecc215e83e",
+      "development_latency_receipt_id": "e9523bfcc26446ebd3b8fe0fa92995d597b73a78cf91f80f247ec8e771f06933",
+      "materialisation_receipt_id": "c7691520d0f12234cdefb1889c72b4c1ac0823416c64fe7d2f130ebe19743fe8"
+    },
+    "trace_summary_id": "73c0c50d5f627815d0e614fa9dd4d5b6f72e77163a02bfeabc6274b062ae3c7a",
+    "authority_effect": "NONE"
+  },
+  "historical_recovery_proofs": [
+    {
+      "merge_sha": "b22ea057ddef98acc2e43dfff689b7fa56934385",
+      "observed_tree": "70cfeb0aa9971f7f0f59b66c6c8d2f256e632330",
+      "proof_id": "4e04af1ab55e4fd9a8f02af897e87e0b01ceeee951a9f858a2c689ec2c668b4f",
+      "transaction_id": "ac71c8012674c9a1e0ef195b30d3e6531a3900333dd77365e2ee6a4f28d122d3",
+      "exact_tree_equal": true,
+      "four_content_addressed_receipts_present": true,
+      "authority_effect": "NONE",
+      "manifest_retention": "RETAINED_HISTORICAL_RECOVERY"
+    },
+    {
+      "merge_sha": "49d2bc7a36e3e8754eb9d26eed750d2d481a2eb2",
+      "observed_tree": "4479a72b9e2d460e502f226eab0a8789548d52c5",
+      "proof_id": "21e0109670c0367ea32befb4217f1070cb8908d93a2007b0b2de2c4afb6e85e1",
+      "transaction_id": "2682c8a2983a4743c33a1f42eff3347533edb914324f2154b9db3737ae818ac0",
+      "exact_tree_equal": true,
+      "four_content_addressed_receipts_present": true,
+      "authority_effect": "NONE",
+      "manifest_retention": "ELIGIBLE_FOR_REMOVAL_AFTER_THIS_VERIFIED_REMOTE_COMPLETION"
+    }
+  ],
+  "remote_publication": {
+    "schema": "ovc-vit-remote-receipt-publication-report/v1",
+    "report_id": "e50d40a93eddf347e4a63317ea4a346e1f8f6bb15e28804deff3986e5cae67e0",
+    "remote": "ovc_r2",
+    "prefix": "ovc-evidence/development/vit-completion-receipts/v1",
+    "object_count": 102,
+    "readback_verified": true,
+    "delete": false,
+    "overwrite": false,
+    "publication_class": "DEDICATED_DEVELOPMENT_RECEIPTS_ONLY",
+    "canonical_or_release_publication": false
+  },
+  "diagnostics_artifact": {
+    "artifact_id": 9958221772,
+    "name": "dsai3v-remote-post-merge-33929736378",
+    "file_count": 103,
+    "zip_sha256": "13e05edbdb5d176bcc09b12337ef492da699717f8d68429c457174bd07648811",
+    "size_bytes": 94546,
+    "retention_days": 30,
+    "authority_effect": "NONE"
+  },
+  "acceptance_conditions": {
+    "exact_main_tree_matches_frozen_expected_tree": "PASS",
+    "four_required_content_addressed_completion_receipts_present": "PASS",
+    "immutable_remote_receipt_bytes_read_back_equal": "PASS",
+    "github_hosted_execution_without_operator_device": "PASS",
+    "no_new_git_or_physical_main_writer": "PASS",
+    "no_new_merge_or_gateway_authority": "PASS",
+    "no_canonical_or_release_publication": "PASS"
+  },
+  "qa": {
+    "recommendation": "PASS",
+    "warnings": [],
+    "blockers": []
+  },
+  "authority": {
+    "operator_gate_already_satisfied": "DSAI3V-REMOTE-G-CUTOVER-R2",
+    "authority_delta": "NONE",
+    "authority_effect": "NONE",
+    "delegated_closeout_ratification": true,
+    "reserved_authority_change": false
+  },
+  "rollback": {
+    "strategy": "FORWARD_SUPERSEDE_REMOTE_COMPLETION_IMPLEMENTATION_ONLY",
+    "preserve_git_history": true,
+    "preserve_r2_receipt_evidence": true,
+    "preserve_live_failure_and_corrective_evidence": true,
+    "restore_self_hosted_requirement_without_new_operator_decision": false
+  },
+  "decision": "PASS",
+  "next_packet": null
+}
