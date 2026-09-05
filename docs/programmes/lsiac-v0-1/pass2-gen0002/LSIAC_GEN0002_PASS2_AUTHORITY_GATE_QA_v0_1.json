@@ -16,26 +16,26 @@
     "pass1_scientific_accession_decisions": "PASS_ZERO",
     "frozen_protocol_available": "PASS:OVC-LSIAC-ACCESSION-ADJUDICATION-PROTOCOL-0.1",
     "pass2_prerequisite_order": "PASS:PASS1_EFFECTIVE_INTEGRATION_PRECEDES_PASS2",
-    "current_operator_authority_allows_pass2_scientific_adjudication": "FAIL_EXPECTED_EXPLICITLY_DENIED",
-    "operator_gate_required": "PASS_REQUIRED"
+    "operator_pass2_authority_decision": "PASS:7130e987c4ba3900eff0abfc43d4989d9899393ef151e2a975dd5b5d04377c84",
+    "authority_scope_non_grants_preserved": "PASS:NO_SCIENCE_RESUME_NO_DOWNSTREAM_ACTIVATION"
   },
   "authority_analysis": {
     "ratification_decision": "NO_SCIENTIFIC_ACCESSION_DECISION_AND_NO_INHERITANCE_ROLE_ADJUDICATION",
     "frontier_freeze_decision": "NO_SCIENTIFIC_ACCESSION_DECISION_AND_NO_INHERITANCE_ROLE_ADJUDICATION",
     "frontier_integrity_repair_decision": "NO_SURVIVAL_DECISION_NO_FINAL_INHERITANCE_ROLE_NO_RETAIN_FORWARD",
     "pass1_decision": "NONE_PASS1_CLASSIFICATION_ONLY",
-    "result": "PASS2_SUBSTANTIVE_ADJUDICATION_REQUIRES_NEW_OPERATOR_AUTHORITY"
+    "pass2_operator_decision": "PASS_BOUNDED_PASS2_SCIENTIFIC_ACCESSION_ADJUDICATION_ONLY",
+    "result": "PASS2_BOUNDED_ADJUDICATION_AUTHORISED_WITH_DOWNSTREAM_NON_GRANTS_PRESERVED"
   },
-  "qa_result": "PASS_GATE_READY_OPERATOR_REQUIRED",
-  "qa_recommendation": "PASS_THE_BOUNDED_PASS2_ADJUDICATION_AUTHORITY_GATE_IF_THE_OPERATOR_INTENDS_THE_RATIFIED_LSIAC_SEQUENCE_TO_PROCEED; DO_NOT_TREAT_THIS_AS_LSIAC_SCIENCE_RESUME_OR_DOWNSTREAM_ACTIVATION_AUTHORITY",
+  "qa_result": "PASS_OPERATOR_DECISION_MATERIALISED",
+  "qa_recommendation": "INTEGRATE_THIS_GATE_DECISION_AFTER_EXACT_HEAD_ASSURANCE_THEN_EXECUTE_THE_BOUNDED_PASS2_PACKET_FROM_FRESH_MAIN; DO_NOT_TREAT_THIS_AS_LSIAC_SCIENCE_RESUME_OR_DOWNSTREAM_ACTIVATION_AUTHORITY",
   "warnings": [
-    "Pass2 will create scientific accession decisions and final LSIAC inheritance/lifecycle outcomes; these are explicitly outside current authority.",
+    "Pass2 may create scientific accession decisions and final LSIAC inheritance/lifecycle outcomes only within the frozen GEN0002 protocol and effective 431-subject frontier.",
     "CANONICAL_PRINCIPLE, CANONICAL_CAPABILITY, CROSS_ARCHITECTURE_AMENDMENT_REQUIRED and SOURCE_CONFLICT_RESOLUTION require complete independent review before closure under the frozen protocol.",
     "DestinationBindingSet and ArchitectureEffectSet outputs are adjudication records only and cannot execute downstream architecture, owner, semantic, selector, Validation or publication changes under this gate.",
     "Two Pass1 subjects/programmes remain source-binding debt and must fail closed wherever the exact load-bearing source requirement is unsatisfied."
   ],
-  "blocking_issues": [
-    "OPERATOR_RESERVED_PASS2_SCIENTIFIC_ACCESSION_AUTHORITY_NOT_GRANTED"
-  ],
-  "rollback": "No scientific state has changed. Keep Pass1 effective, Pass2 unstarted and the Section-23 development freeze active unless the operator records PASS."
+  "blocking_issues": [],
+  "decision_record": "docs/programmes/lsiac-v0-1/pass2-gen0002/LSIAC_GEN0002_PASS2_AUTHORITY_OPERATOR_DECISION_v0_1.json",
+  "rollback": "Forward-only. Preserve the operator PASS and effective Pass1 freeze. If exact-head assurance fails, correct only bounded gate-materialisation defects or stop; do not weaken assurance or broaden authority."
 }
