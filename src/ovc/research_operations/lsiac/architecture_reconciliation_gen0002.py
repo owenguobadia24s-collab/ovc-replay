@@ -9,6 +9,7 @@ from .registers_gen0002 import (
     PASS2_MERGE_COMMIT,
     PASS2_VIRTUAL_VIEW_ID,
     build_register_bundle,
+    build_virtual_bundle_identity,
 )
 
 PROGRAMME_ID = "OVC-LSIAC-v0.1"
@@ -16,6 +17,7 @@ GENERATION_ID = "OVC-LSIAC-ACCESSION-GEN-0002"
 PACKET_ID = "LSIAC-GEN0002-ARCHITECTURE-RECONCILIATION"
 SOURCE_REGISTER_MERGE_COMMIT = "e7cf3df85b43bcca07ad6120d2fc838269402810"
 SOURCE_REGISTER_TREE = "38ed3674bcb79d9fb0fc3852514ea0dfe14148d2"
+SOURCE_REGISTER_ALGORITHM_GIT_BLOB_SHA = "ed17ddd29c2361220fbfc214e16147e98a7c24fd"
 SOURCE_REGISTER_VIRTUAL_BUNDLE_ID = "54c047d4c97b90aecfedb2eff7830f10d8a632a9c26405863d7db2f8da0ba8b8"
 PROJECTION = "GEN0002_ARCHITECTURE_RECONCILIATION_NO_FORWARD_ACCESSION_V1"
 AUTHORITY_EFFECT = "NONE_RECONCILIATION_ONLY"
@@ -33,8 +35,15 @@ def _require(condition: bool, code: str) -> None:
 
 
 def build_architecture_reconciliation(root: str) -> dict[str, Any]:
+    virtual_bundle_id = build_virtual_bundle_identity(
+        algorithm_git_blob_sha=SOURCE_REGISTER_ALGORITHM_GIT_BLOB_SHA
+    )
+    _require(
+        virtual_bundle_id == SOURCE_REGISTER_VIRTUAL_BUNDLE_ID,
+        "LSIAC_GEN0002_RECONCILIATION_REGISTER_VIRTUAL_IDENTITY_MISMATCH",
+    )
+
     bundle = build_register_bundle(root)
-    _require(bundle.get("bundle_id") == SOURCE_REGISTER_VIRTUAL_BUNDLE_ID, "LSIAC_GEN0002_RECONCILIATION_REGISTER_BUNDLE_MISMATCH")
     _require(bundle.get("source_pass2_virtual_view_id") == PASS2_VIRTUAL_VIEW_ID, "LSIAC_GEN0002_RECONCILIATION_PASS2_VIEW_MISMATCH")
     _require(bundle.get("source_pass2_merge_commit") == PASS2_MERGE_COMMIT, "LSIAC_GEN0002_RECONCILIATION_PASS2_MERGE_MISMATCH")
     _require(bundle.get("authority_effect") == REGISTER_AUTHORITY_EFFECT, "LSIAC_GEN0002_RECONCILIATION_REGISTER_AUTHORITY_MISMATCH")
