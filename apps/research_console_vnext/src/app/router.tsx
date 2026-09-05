@@ -3,6 +3,7 @@ import { AppShell } from "./AppShell";
 import { WorkspaceFrame } from "../workspace/WorkspaceFrame";
 import { ProductionConsole } from "../production/ProductionConsole";
 import { RepresentationWorkbench } from "../production/RepresentationWorkbench";
+import { DMRPWorkbench } from "../production/DMRPWorkbench";
 import "../production/productionResponsive.css";
 import "../production/productionResponsiveSemantics.css";
 import "../production/productionResponsivePolish.css";
@@ -13,6 +14,7 @@ export const router=createBrowserRouter([
   {path:"/structure",element:<ProductionConsole/>},
   {path:"/research",element:<ProductionConsole/>},
   {path:"/research/representations",element:<RepresentationWorkbench/>},
+  {path:"/research/dmrp",element:<DMRPWorkbench/>},
   {path:"/evidence",element:<ProductionConsole/>},
   {path:"/control",element:<ProductionConsole/>},
 ]);
