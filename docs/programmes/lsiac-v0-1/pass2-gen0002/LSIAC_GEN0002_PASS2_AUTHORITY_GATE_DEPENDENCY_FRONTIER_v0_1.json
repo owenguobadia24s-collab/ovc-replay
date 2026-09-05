@@ -9,11 +9,10 @@
     "GEN0002_SOURCE_UNIVERSE:d29e1c69399d6f312a7e0544c57e2e47c415f37347760f11ce983b926988114c",
     "GEN0002_FRONTIER_RECEIPT:022f6cf4149265cc545e6cffc2d0623a513ec2bf1ab38434c793bbf381a92bbe",
     "GEN0002_PROTOCOL_BINDING:15e449ffe15ded1d6419533257515ab9686122a1b5c73f7c82c49cea6e273d4f",
-    "GEN0002_PASS1_VIRTUAL_VIEW:e9b10aebcae1136c1b5df34fb569392e10bcec0a2bc30e93675588ad4e288c6a"
+    "GEN0002_PASS1_VIRTUAL_VIEW:e9b10aebcae1136c1b5df34fb569392e10bcec0a2bc30e93675588ad4e288c6a",
+    "OPERATOR_PASS:LSIAC-G-GEN0002-PASS2-ADJUDICATION-AUTHORITY:7130e987c4ba3900eff0abfc43d4989d9899393ef151e2a975dd5b5d04377c84"
   ],
-  "unsatisfied_authority_prerequisites": [
-    "OPERATOR_PASS:LSIAC-G-GEN0002-PASS2-ADJUDICATION-AUTHORITY"
-  ],
+  "unsatisfied_authority_prerequisites": [],
   "frozen_inputs": {
     "subject_count": 431,
     "passport_count": 434,
@@ -22,9 +21,11 @@
     "protocol_id": "OVC-LSIAC-ACCESSION-ADJUDICATION-PROTOCOL-0.1",
     "protocol_semantics": "UNCHANGED_GEN0002_BOUND"
   },
-  "blocking_boundary": "OPERATOR_RESERVED_PASS2_SCIENTIFIC_ACCESSION_ADJUDICATION",
+  "blocking_boundary": null,
+  "frontier_complete": true,
+  "operator_decision_record": "docs/programmes/lsiac-v0-1/pass2-gen0002/LSIAC_GEN0002_PASS2_AUTHORITY_OPERATOR_DECISION_v0_1.json",
   "next_packet_if_satisfied": "LSIAC-GEN0002-PASS2-SURVIVAL-ROLE-DESTINATION-EFFECT",
   "next_operator_gate_after_pass2_sequence": "LSIAC-SCIENCE-RESUME",
   "integration_route": "VIT_MANDATORY -> DSAI_SIQ_EXISTING_SERIALIZED_GATEWAY -> GRT_EXACT_TREE",
-  "rollback": "Forward-only. Preserve the effective Pass1 freeze and all prior evidence; without operator PASS do not start Pass2 or create scientific accession decisions."
+  "rollback": "Forward-only. Preserve the effective Pass1 freeze and operator PASS. Pass2 authority is bounded to frozen-protocol adjudication only; any material protocol/frontier change or downstream activation returns to an operator gate."
 }
