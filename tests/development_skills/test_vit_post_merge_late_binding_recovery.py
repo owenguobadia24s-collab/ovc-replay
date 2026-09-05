@@ -165,7 +165,7 @@ class VitPostMergeLateBindingRecoveryTests(unittest.TestCase):
         self.assertIn("late._recover_one", wrapper)
         self.assertNotIn("python tools/ci/vit_post_merge_completion.py --repo-root . --merge-sha", text)
 
-    def test_recovery_manifest_is_authority_inert_and_preserves_required_recovery_rows(self) -> None:
+    def test_recovery_manifest_is_authority_inert_and_retires_verified_cutover_row(self) -> None:
         value = json.loads(RECOVERY.read_text(encoding="utf-8"))
         self.assertEqual(value["schema"], TOOL.RECOVERY_SCHEMA)
         requests = value["requests"]
@@ -179,11 +179,7 @@ class VitPostMergeLateBindingRecoveryTests(unittest.TestCase):
         historical = rows["b22ea057ddef98acc2e43dfff689b7fa56934385"]
         self.assertEqual(historical["packet_id"], "DSAI3V-LB-WP1")
         self.assertEqual(historical["authority_effect"], "NONE")
-
-        cutover = rows["49d2bc7a36e3e8754eb9d26eed750d2d481a2eb2"]
-        self.assertEqual(cutover["packet_id"], "DSAI3V-REMOTE-LIVE-CUTOVER-PROOF")
-        self.assertEqual(cutover["authority_effect"], "NONE")
-        self.assertIs(cutover["remove_after_verified_remote_completion"], True)
+        self.assertNotIn("49d2bc7a36e3e8754eb9d26eed750d2d481a2eb2", rows)
 
 
 if __name__ == "__main__":
