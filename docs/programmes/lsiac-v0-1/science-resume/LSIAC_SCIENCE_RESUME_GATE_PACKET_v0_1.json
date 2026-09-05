@@ -7,7 +7,9 @@
   "plan_id": "OVC-LSIAC-CONSTITUTION-0.1-REVISED-1",
   "plan_version": "0.1-R1-RATIFIED",
   "baseline_commit": "76094bc4af41ffd590523103894ea7ea8580b99e",
-  "status": "GATE_READY_OPERATOR_REQUIRED",
+  "gate_ready_head": "c9d06750ffeb41da3deb0afa8061c8800da351bd",
+  "candidate_commit": "RESOLVE_AT_APPROVED_PR_FINAL_HEAD",
+  "status": "APPROVED_OPERATOR_PASS_PENDING_EXACT_HEAD_ASSURANCE",
   "completed_packets": [
     "LSIAC-R1-RATIFICATION:COMPLETED",
     "LSIAC-ACCESSION-FRONTIER-FREEZE:COMPLETED",
@@ -19,7 +21,7 @@
     "LSIAC-GEN0002-LABORATORY-CANON-ACCESSION-CONFORMANCE-IMPLEMENTATION-PLAN:MERGED:76094bc4af41ffd590523103894ea7ea8580b99e"
   ],
   "current_authority": {
-    "bounded_section_23_scientific_architecture_development_freeze": "ACTIVE",
+    "bounded_section_23_scientific_architecture_development_freeze": "ACTIVE_UNTIL_THIS_APPROVED_GATE_IS_LAWFULLY_INTEGRATED",
     "scientific_accession_decisions": "EFFECTIVE_GEN0002_COMPLETE",
     "forward_lsir_entries": 0,
     "admitted_negative_knowledge_entries": 0,
@@ -34,27 +36,36 @@
   },
   "proposed_authority_delta": {
     "class": "OPERATOR_RESERVED_SCIENCE_RESUME",
-    "proposal": "LIFT_ONLY_THE_BOUNDED_SECTION_23_SCIENTIFIC_ARCHITECTURE_DEVELOPMENT_FREEZE_AND_AUTHORISE_SUCCESSOR_SCIENTIFIC_ARCHITECTURE_DEVELOPMENT_TO_PROCEED UNDER_EXISTING_OVC_GOVERNANCE, WITH_EACH_SUBSEQUENT_RESERVED_AUTHORITY_CHANGE_REMAINING_SEPARATELY_GATED.",
+    "proposal": "LIFT_ONLY_THE_BOUNDED_SECTION_23_SCIENTIFIC_ARCHITECTURE_DEVELOPMENT_FREEZE_AND_AUTHORISE_SUCCESSOR_SCIENTIFIC_ARCHITECTURE_DEVELOPMENT_TO_PROCEED_UNDER_EXISTING_OVC_GOVERNANCE, WITH_EACH_SUBSEQUENT_RESERVED_AUTHORITY_CHANGE_REMAINING_SEPARATELY_GATED.",
     "authorises_if_pass": [
-      "RESUME_BOUNDED_SCIENTIFIC_ARCHITECTURE_DEVELOPMENT",
+      "LIFT_BOUNDED_SECTION_23_SCIENTIFIC_ARCHITECTURE_DEVELOPMENT_FREEZE",
+      "RESUME_BOUNDED_SCIENTIFIC_ARCHITECTURE_DEVELOPMENT_UNDER_EXISTING_OVC_GOVERNANCE",
       "CREATE_SUCCESSOR_SCIENTIFIC_WORK_PACKETS_WITHIN_EXISTING_GOVERNING_SCOPE",
       "RUN_AUTO_EXECUTABLE_DESIGN_IMPLEMENTATION_TEST_QA_AND_SHADOW_COMPARISON_WORK_ALLOWED_BY_THEIR_GOVERNING_PLANS"
     ],
     "does_not_authorise": [
-      "SELECTOR_ACTIVATION_OR_REPLACEMENT",
-      "ACTIVE_DISCOVERY_ACTIVE_DEVELOPMENT_OR_ACTIVE_VALIDATION_UNLESS_SEPARATELY_GRANTED",
-      "SEMANTIC_THRESHOLD_MODEL_FAMILY_CANDIDATE_OR_THEORY_PROMOTION",
-      "CANONICAL_OR_R2_PUBLICATION",
-      "NEW_IMMUTABLE_RELEASE_IDENTITY",
-      "REAL_PROVIDER_INTAKE_REQUIRING_NEW_APPROVAL",
-      "AUTHORITATIVE_RELEASE_FREEZE",
-      "RETIREMENT_OF_ACTIVE_AUTHORITY",
-      "DESTRUCTIVE_ACTION_OR_HISTORY_REWRITE",
-      "DEFERRED_CAPABILITY_ACTIVATION",
-      "MATERIAL_CHANGE_TO_A_FROZEN_CONTRACT",
-      "AGENT_WRITE_AUTHORITY",
-      "PROBABILITY_RISK_EXPOSURE_E_H_OR_EXECUTION_AUTHORITY"
+      "NO_SELECTOR_ACTIVATION_OR_REPLACEMENT",
+      "NO_ACTIVE_DISCOVERY_ACTIVE_DEVELOPMENT_OR_ACTIVE_VALIDATION_UNLESS_SEPARATELY_GRANTED",
+      "NO_SEMANTIC_THRESHOLD_MODEL_FAMILY_CANDIDATE_OR_THEORY_PROMOTION",
+      "NO_CANONICAL_OR_R2_PUBLICATION",
+      "NO_NEW_IMMUTABLE_RELEASE_IDENTITY",
+      "NO_REAL_PROVIDER_INTAKE_REQUIRING_NEW_APPROVAL",
+      "NO_AUTHORITATIVE_RELEASE_FREEZE",
+      "NO_RETIREMENT_OF_ACTIVE_AUTHORITY",
+      "NO_DESTRUCTIVE_ACTION_OR_HISTORY_REWRITE",
+      "NO_DEFERRED_CAPABILITY_ACTIVATION",
+      "NO_MATERIAL_CHANGE_TO_A_FROZEN_CONTRACT",
+      "NO_AGENT_WRITE_AUTHORITY",
+      "NO_PROBABILITY_RISK_EXPOSURE_E_H_OR_EXECUTION_AUTHORITY"
     ]
+  },
+  "operator_decision": {
+    "decision": "PASS",
+    "decision_id": "b5a259e126a6edfcda47520b95fc099cb64350449e6b0169afcaab7e796c42b9",
+    "decision_time_local": "2026-09-05T21:05:32+01:00",
+    "decision_record": "docs/programmes/lsiac-v0-1/science-resume/LSIAC_SCIENCE_RESUME_OPERATOR_DECISION_v0_1.json",
+    "scope": "BOUNDED_SECTION_23_SCIENTIFIC_ARCHITECTURE_DEVELOPMENT_RESUME_ONLY",
+    "effect_rule": "EFFECTIVE_ON_LAWFUL_GATE_INTEGRATION_AFTER_REQUIRED_EXACT_HEAD_ASSURANCE"
   },
   "acceptance_conditions": [
     "The effective GEN0002 accession court record remains exactly preservation-only with zero forward accession payload and zero architecture execution.",
@@ -62,35 +73,55 @@
     "Science resume does not silently grant any independently reserved downstream authority.",
     "Known reproducibility/source-binding gaps remain explicit and are not converted into positive scientific claims by this gate.",
     "Validation remains locked and publication/exposure/execution authority remains unchanged unless separately approved.",
-    "The readiness packet is integrated only after exact-head repository assurance passes; operator decision materialisation then occurs in a separate bounded decision commit."
+    "The approved gate is integrated only after exact-head VIT, repository-wide assurance, FINAL_HEAD profile assurance, SIQ readiness and OVC merge readiness pass."
   ],
   "tests": {
     "canon_conformance_exact_head_vit": "PASS:281be206b1cd9e38cb70b25acd5bec3763e20cc5329d6a67a61e0af7d5e2b149",
     "canon_conformance_repository_assurance": "PASS:WORKFLOW_RUN_33984993324",
     "canon_conformance_final_head_siq_merge_readiness": "PASS:WORKFLOW_RUN_33984993337",
     "canon_conformance_merge": "PASS:76094bc4af41ffd590523103894ea7ea8580b99e",
-    "science_resume_readiness_exact_head_assurance": "PENDING"
+    "science_resume_gate_exact_head_assurance": "PENDING_AFTER_OPERATOR_DECISION_MATERIALISATION"
   },
   "qa": {
     "packet": "docs/programmes/lsiac-v0-1/science-resume/LSIAC_SCIENCE_RESUME_READINESS_QA_v0_1.json",
-    "result": "PASS_GATE_READY_SUBJECT_TO_EXACT_HEAD_ASSURANCE",
-    "recommendation": "PASS"
+    "result": "PASS_OPERATOR_DECISION_MATERIALISED_PENDING_EXACT_HEAD_ASSURANCE",
+    "recommendation": "INTEGRATE_AFTER_ALL_REQUIRED_ASSURANCE_PASSES"
   },
   "warnings": [
-    "GEN0002 contains no forward accession implementation payload; science resume is therefore a governance transition, not an accession-derived architecture mandate.",
+    "GEN0002 contains no forward accession implementation payload; science resume is a governance transition, not an accession-derived architecture mandate.",
     "Two or more explicit reproducibility/source-binding gaps remain preserved for successor re-entry.",
     "PASS does not activate any selector, model, theory, semantic term, Validation, publication, risk, exposure, E-H or execution authority."
   ],
   "unresolved_issues": [],
+  "changed_files": [
+    "docs/programmes/lsiac-v0-1/science-resume/LSIAC_SCIENCE_RESUME_AUTHORITY_MANIFEST_v0_1.json",
+    "docs/programmes/lsiac-v0-1/science-resume/LSIAC_SCIENCE_RESUME_DEPENDENCY_FRONTIER_v0_1.json",
+    "docs/programmes/lsiac-v0-1/science-resume/LSIAC_SCIENCE_RESUME_GATE_PACKET_v0_1.json",
+    "docs/programmes/lsiac-v0-1/science-resume/LSIAC_SCIENCE_RESUME_OPERATOR_DECISION_v0_1.json",
+    "docs/programmes/lsiac-v0-1/science-resume/LSIAC_SCIENCE_RESUME_READINESS_QA_v0_1.json",
+    "records/research_operations/lsiac/LSIAC_PROGRAMME_STATE_v0_16.json"
+  ],
+  "repository_bound_evidence_hashes": {
+    "governing_constitution_sha256": "ec5a28b8edfa572d229b7e1f1694a5439da621aa640229ad23dcfbeb71f5a8c2",
+    "effective_register_virtual_bundle_id": "54c047d4c97b90aecfedb2eff7830f10d8a632a9c26405863d7db2f8da0ba8b8",
+    "pass2_virtual_view_id": "58b364fbf7b8ce160877fb8bba641cb853ea1b29b5af9c4a4b1a5294648749d8",
+    "architecture_reconciliation_id": "c0f2c41f27a392fd0417b73db5449ceae2f768750e61536565309b1dd5eb96c6"
+  },
   "external_artifact_hashes": [],
-  "rollback": "If PASS is later found to have been materialised incorrectly, preserve all accession evidence and restore the bounded development freeze through a forward-only corrective governance packet; never rewrite prior decisions.",
+  "rollback": "Forward-only. Preserve all LSIAC accession evidence and this operator PASS. If the resume authority is later found incorrectly materialised, restore the bounded development freeze through a corrective governance packet without rewriting prior decisions.",
   "recommended_decision": "PASS",
-  "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "recorded_decision": "PASS",
+  "allowed_decisions": [
+    "PASS",
+    "DEFER",
+    "BLOCK",
+    "QUARANTINE",
+    "SUPERSEDE"
+  ],
   "exact_work_after_approval": [
-    "Materialise the operator decision record with the exact approved scope and no broader authority.",
-    "Update programme state to record the Section-23 development freeze as lifted by operator authority.",
-    "Run exact-head VIT, repository-wide assurance, FINAL_HEAD profile assurance, SIQ readiness and OVC merge readiness for the decision materialisation.",
-    "Squash-integrate the bounded decision packet if assurance passes.",
-    "Resolve the first successor scientific packet from repository state and continue automatically only inside the newly approved authority envelope; stop again at any independently reserved gate."
+    "Complete exact-head VIT qualification and repository assurance for this decision materialisation.",
+    "Squash-integrate this bounded operator decision only if FINAL_HEAD assurance, SIQ readiness and OVC merge readiness pass.",
+    "After integration, treat the Section-23 bounded scientific-architecture development freeze as lifted and no broader reserved authority as granted.",
+    "Resolve the first successor scientific packet from repository state and continue automatically only inside the approved authority envelope; stop again at any independently reserved gate."
   ]
 }
