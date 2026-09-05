@@ -1,0 +1,98 @@
+{
+  "schema": "ovc-lsiac-r2-repository-capability-census/v0.1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "packet_id": "LSIAC-R2-REPOSITORY-CAPABILITY-GAP-ACCESSION-REVIEW",
+  "baseline_main": "b9f747212a35d8c84946930ff2dc565fd4518849",
+  "baseline_tree": "836c262e76e03393a57c8a616aa4e4ed0b71e550",
+  "purpose": "Identify repository-effective or available generic machinery before proposing Laboratory accession.",
+  "capabilities": [
+    {
+      "capability_id": "REPO-ACTIVE-STRUCTURAL-SPINE",
+      "class": "CURRENT_OWNER_STACK",
+      "state": "ACTIVE_OR_ACTIVE_FOUNDATION",
+      "evidence": [
+        "registries/governance/active_stack/OVC_ACTIVE_STACK_STATE_v0_1.json"
+      ],
+      "surface": [
+        "OPT-A",
+        "OPT-B.C1.v2",
+        "OPT-B.C2.vNext",
+        "OPT-B.C2E.v0.2",
+        "OCCURRENCE_CONTEXT.v0.1",
+        "RESEARCH_OPERATIONS_FOUNDATION"
+      ],
+      "current_market_envelope": {
+        "instrument": "GBPUSD",
+        "sides": ["BID", "ASK"],
+        "clocks": ["15M", "2H_A_L"],
+        "research_roles": ["DISCOVERY", "DEVELOPMENT"],
+        "validation": "LOCKED_UNCONSUMED"
+      },
+      "r2_consequence": "REUSE_OWNER_TRUTH; no new instrument/clock/side/provider authority is inferred."
+    },
+    {
+      "capability_id": "REPO-IROF-EXECUTION-PLANE",
+      "class": "GENERIC_RESEARCH_EXECUTION_INFRASTRUCTURE",
+      "state": "COMPLETED_INACTIVE_INFRASTRUCTURE_AVAILABLE",
+      "evidence": [
+        "registries/implementation/irof/CURRENT_STATE_POINTER.json",
+        "docs/design/irof-v0-1/OVC_INTEGRATED_RESEARCH_ORCHESTRATION_FRAMEWORK_DESIGN_SPECIFICATION_v0_1.md"
+      ],
+      "features": [
+        "PopulationSpec",
+        "PipelineProfile",
+        "StageSpec_and_adapter_extension",
+        "AuthorityBindings",
+        "deterministic_stage_DAG",
+        "semantic_run_identity",
+        "artifact_reuse",
+        "checkpoint_restart",
+        "capacity_aware_scheduling_without_scope_mutation",
+        "telemetry",
+        "Research_Operations_and_QA_integration"
+      ],
+      "r2_consequence": "REUSE_AS_DEFAULT_LONG_POPULATION_AND_PORTABLE_RESEARCH_EXECUTION_BACKBONE; do not build a second generic runner."
+    },
+    {
+      "capability_id": "REPO-C2S-SPTO-CONTINUOUS-STREAM",
+      "class": "SCIENTIFIC_CONSUMER_PIPELINE",
+      "state": "BLOCKED_OWNER_READ_SURFACE_REQUIRED_SOURCE_NOT_EVALUABLE",
+      "evidence": [
+        "records/research_operations/spto/C2S_SPTOI_PROGRAMME_STATE_v0_4.json"
+      ],
+      "blockers": [
+        "OWNER_READ_SURFACE_REQUIRED",
+        "SOURCE_NOT_EVALUABLE"
+      ],
+      "owner_stream_binding": "ABSENT",
+      "adapter_implementation": "NONE",
+      "re_entry_condition": "A separate current C2 owner packet/gate materialises a public authorised owner structural snapshot stream contract/schema/code/release/chronology binding on main.",
+      "r2_consequence": "P0_HANDOFF_REQUIREMENT; LSIAC must not reconstruct private C2 truth."
+    },
+    {
+      "capability_id": "REPO-SRI-FDI-FAMILY-SURFACES",
+      "class": "SHADOW_RESEARCH_CAPABILITY",
+      "state": "SHADOW",
+      "evidence": [
+        "registries/governance/active_stack/OVC_ACTIVE_STACK_STATE_v0_1.json"
+      ],
+      "r2_consequence": "AVAILABLE_AS_CHALLENGER_OR_OPTIONAL_RESEARCH_INPUT_ONLY; no production representation/family ontology is assumed."
+    },
+    {
+      "capability_id": "REPO-C2P-C25-C3",
+      "class": "FORWARD_LAYER_SURFACES",
+      "state": "NON_EVALUABLE",
+      "evidence": [
+        "registries/governance/active_stack/OVC_ACTIVE_STACK_STATE_v0_1.json"
+      ],
+      "r2_consequence": "DO_NOT_ACTIVATE_FOR_LSIAC_R2; only separately evidenced capability need can reopen them."
+    }
+  ],
+  "conclusion": {
+    "generic_execution_backbone_missing": false,
+    "critical_owner_source_handoff_missing": true,
+    "new_generic_transport_framework_required": false,
+    "recommended_reuse": "IROF + Research Operations + owner-specific StageSpec/adapters",
+    "authority_delta": "NONE"
+  }
+}
