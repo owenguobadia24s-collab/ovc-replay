@@ -21,6 +21,7 @@
     "interval_end",
     "effective_time",
     "first_valid_time",
+    "target_eligible",
     "continuity",
     "projection_eligibility",
     "component_refs",
@@ -84,6 +85,7 @@
     "interval_end": {"type": "string", "format": "date-time"},
     "effective_time": {"type": "string", "format": "date-time"},
     "first_valid_time": {"type": "string", "format": "date-time"},
+    "target_eligible": {"type": "boolean"},
     "continuity": {"type": "object"},
     "projection_eligibility": {"type": "object"},
     "component_refs": {
@@ -103,12 +105,13 @@
     "owner_records": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["observation", "horizon_memberships", "levels", "containers", "relation_sets", "formula_profiles", "parent_context", "transitions", "computability"],
+      "required": ["observation", "horizon_memberships", "levels", "containers", "relations", "relation_sets", "formula_profiles", "parent_context", "transitions", "computability"],
       "properties": {
         "observation": {"type": "object"},
         "horizon_memberships": {"type": "array", "items": {"type": "object"}},
         "levels": {"type": "array", "items": {"type": "object"}},
         "containers": {"type": "array", "items": {"type": "object"}},
+        "relations": {"type": "array", "items": {"type": "object"}},
         "relation_sets": {"type": "array", "items": {"type": "object"}},
         "formula_profiles": {"type": "object"},
         "parent_context": {"type": ["object", "null"]},
