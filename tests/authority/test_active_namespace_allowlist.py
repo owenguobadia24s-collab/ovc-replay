@@ -32,6 +32,7 @@ EXPECTED_OVC_PACKAGES = {
     "ovc.research_operations",
     "ovc.research_operations.asocs",
     "ovc.research_operations.c2_csm_reference",
+    "ovc.research_operations.lsiac",
     "ovc.research_operations.p1cdi",
     "ovc.research_operations.prsc",
     "ovc.research_operations.rccr",

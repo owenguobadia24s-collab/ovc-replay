@@ -1,0 +1,38 @@
+{
+  "schema": "ovc-lsiac-gen0002-accounting-repair-gate-packet/v0.1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "gate_id": "LSIAC-G-GEN0002-ACCOUNTING-REPAIR",
+  "gate_title": "GEN0002 exact frontier accounting repair closeout",
+  "plan_id": "OVC-LSIAC-CONSTITUTION-0.1-REVISED-1",
+  "plan_version": "0.1-R1-RATIFIED",
+  "baseline_commit": "19ed2b498c10c2341fb2412095752e591c841770",
+  "candidate_commit_status": "RESOLVE_AT_FINAL_PR_HEAD",
+  "completed_packets": ["LSIAC-GEN0002-FRONTIER-ACCOUNTING-REPAIR"],
+  "current_authority": "GEN0002_FRONTIER_ACCOUNTING_REPAIR_AUTHORISED_SECTION_23_FREEZE_ACTIVE",
+  "proposed_delta": "NONE_ACCOUNTING_REPAIR_ONLY",
+  "acceptance_conditions": [
+    "all 434 frozen passport bytes remain exact",
+    "431 exact subject IDs reproduce deterministically",
+    "the three known two-passport exact-subject groups are exhaustive",
+    "scientific accession decisions remain zero",
+    "frozen adjudication protocol bytes and semantics remain unchanged",
+    "required repository tests, FINAL_HEAD profile, VIT/SIQ and merge readiness pass on final head"
+  ],
+  "evidence": {
+    "audit_receipt": "LSIAC_GEN0002_EXACT_SUBJECT_ACCOUNTING_AUDIT_v0_1.json",
+    "source_universe_id": "d29e1c69399d6f312a7e0544c57e2e47c415f37347760f11ce983b926988114c",
+    "frontier_receipt_id": "022f6cf4149265cc545e6cffc2d0623a513ec2bf1ab38434c793bbf381a92bbe",
+    "protocol_binding_id": "15e449ffe15ded1d6419533257515ab9686122a1b5c73f7c82c49cea6e273d4f",
+    "qa": "LSIAC_GEN0002_ACCOUNTING_REPAIR_QA_v0_1.json",
+    "pre_closeout_required_test_run": 33925929811,
+    "pre_closeout_siq_run": 33925929787
+  },
+  "warnings": ["Fresh exact-head assurance is mandatory after this closeout packet is committed."],
+  "unresolved_issues": [],
+  "authority_delta": "NONE_ACCOUNTING_REPAIR_ONLY",
+  "rollback": "Forward-only. Preserve GEN0001, frozen source bytes, incident record, operator supersede decision and any failed candidate evidence.",
+  "recommended_decision": "PASS",
+  "gate_class": "AUTO_RATIFIABLE_NON_RESERVED",
+  "next_packet": "LSIAC-GEN0002-PASS1-SOURCE-STANDING-EXPOSURE-DEPENDENCE",
+  "next_operator_gate": "LSIAC-SCIENCE-RESUME"
+}
