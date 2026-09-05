@@ -1,0 +1,37 @@
+{
+  "schema": "ovc-lsiac-gen0002-pass1-qa/v0.1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "packet_id": "LSIAC-GEN0002-PASS1-SOURCE-STANDING-EXPOSURE-DEPENDENCE",
+  "gate_id": "LSIAC-G-GEN0002-PASS1-CLASSIFICATION-FREEZE",
+  "baseline_main": "717603e627ebeea24815d021e32df616f6b71ace",
+  "checks": {
+    "gen0002_source_universe_bound": "PASS:d29e1c69399d6f312a7e0544c57e2e47c415f37347760f11ce983b926988114c",
+    "gen0002_frontier_receipt_bound": "PASS:022f6cf4149265cc545e6cffc2d0623a513ec2bf1ab38434c793bbf381a92bbe",
+    "gen0002_protocol_binding_bound": "PASS:15e449ffe15ded1d6419533257515ab9686122a1b5c73f7c82c49cea6e273d4f",
+    "frozen_source_passport_set_bound": "PASS:f97ba927944326864f1a5cc20ecc69a0a4623743231aa8479d713984bbe68019",
+    "post_v0_5_delta_bound": "PASS:1ed67410854478b2947d62055b3b619ad8081c782907c66efa78bbf1d823a42d",
+    "algorithm_git_blob": "PASS:960eef76c0e59752afde831cf1483e8c6765a223",
+    "virtual_view_identity": "PASS:e9b10aebcae1136c1b5df34fb569392e10bcec0a2bc30e93675588ad4e288c6a",
+    "expected_accounting": "PASS_DECLARED:434_PASSPORTS_431_EXACT_SUBJECTS",
+    "observer_sufficiency_coreference_preserved": "MUST_PASS_CI",
+    "post_v0_5_negative_dispositions_preserved": "MUST_PASS_CI",
+    "pending_source_binding_fail_closed": "MUST_PASS_CI",
+    "dependence_no_independence_inference": "MUST_PASS_CI",
+    "pass2_outputs_absent": "MUST_PASS_CI",
+    "targeted_conformance_tests": "PENDING_PR_CI",
+    "repository_wide_assurance": "PENDING_PR_CI",
+    "siq_ready": "PENDING_PR_CI",
+    "ovc_merge_readiness": "PENDING_PR_CI",
+    "scientific_accession_decisions": "PASS_ZERO"
+  },
+  "qa_result": "PASS_METHOD_AND_IDENTITY_PENDING_REQUIRED_REPOSITORY_ASSURANCE",
+  "qa_recommendation": "PASS_AUTO_RATIFY_AND_FREEZE_ONLY_IF_ALL_REQUIRED_CI_SIQ_AND_MERGE_READINESS_CHECKS_PASS",
+  "warnings": [
+    "The corrected GEN0002 accounting has 431 exact subjects; no semantic merge or source-byte change is performed by Pass 1.",
+    "Two nominated programmes remain PENDING_SOURCE_BINDING and cannot receive later positive inheritance decisions until exact source packs are recovered.",
+    "Absence of a shared-locator dependence edge is not evidence of independence."
+  ],
+  "blocking_issues": [],
+  "authority_effect": "NONE_PASS1_CLASSIFICATION_ONLY",
+  "rollback": "Forward-only. Repair deterministic Pass-1 defects before integration; a material post-integration view change requires a successor frozen Pass-1 generation before Pass-2 consumption."
+}
