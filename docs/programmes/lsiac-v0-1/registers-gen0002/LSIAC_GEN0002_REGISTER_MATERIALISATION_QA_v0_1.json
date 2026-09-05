@@ -1,0 +1,32 @@
+{
+  "schema": "ovc-lsiac-gen0002-register-materialisation-qa/v0.1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "packet_id": "LSIAC-GEN0002-LSIR-REGISTER-MATERIALISATION",
+  "gate_id": "LSIAC-G-GEN0002-REGISTER-MATERIALISATION-CLOSEOUT",
+  "baseline_main": "0c4fb692086854cd341467de7e73baae249b2910",
+  "source_pass2_virtual_view_id": "58b364fbf7b8ce160877fb8bba641cb853ea1b29b5af9c4a4b1a5294648749d8",
+  "virtual_bundle_id": "54c047d4c97b90aecfedb2eff7830f10d8a632a9c26405863d7db2f8da0ba8b8",
+  "expected_checks": {
+    "required_register_kinds": "PASS_IF_EXACTLY_6",
+    "lsir_forward_entries": "PASS_IF_ZERO",
+    "negative_knowledge_admitted_entries": "PASS_IF_ZERO",
+    "deferred_negative_subjects": "PASS_IF_3_AND_NOT_PROMOTED",
+    "supersession_edges": "PASS_IF_ZERO",
+    "destination_bindings": "PASS_IF_ZERO_NON_EMPTY_AND_431_EMPTY",
+    "architecture_effects": "PASS_IF_431_NO_FORWARD_IMPLEMENTATION_AND_ZERO_ACTIONABLE",
+    "architecture_execution": "PASS_IF_ZERO",
+    "architecture_gaps": "PASS_IF_EACH_IS_EXPLICIT_PASS2_SOURCE_BINDING_DEBT_ONLY",
+    "decision_traceability": "PASS_IF_ALL_431_PASS2_DECISIONS_INDEXED",
+    "new_scientific_decisions": "PASS_IF_ZERO",
+    "authority_delta": "PASS_IF_NONE_REGISTER_MATERIALISATION_ONLY"
+  },
+  "qa_result": "PENDING_TARGETED_AND_REPOSITORY_ASSURANCE",
+  "status": "PRE_CLOSEOUT_IMPLEMENTATION_REVIEW",
+  "warnings": [
+    "Empty forward registers are a consequence of the effective fail-closed Pass2 result and must not be filled by inference.",
+    "Architecture-gap entries may expose reproducibility/source-binding debt but do not authorise source intake or downstream remediation.",
+    "LSIAC-SCIENCE-RESUME remains operator-reserved."
+  ],
+  "blocking_issues": [],
+  "rollback": "Forward-only. If assurance fails, correct deterministic register projection defects only; do not alter effective Pass2 decisions or broaden authority."
+}
