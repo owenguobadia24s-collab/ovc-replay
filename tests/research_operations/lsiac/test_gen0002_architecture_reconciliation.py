@@ -12,7 +12,7 @@ from ovc.research_operations.lsiac.architecture_reconciliation_gen0002 import (
 )
 
 ROOT = Path(__file__).resolve().parents[3]
-ALGORITHM_BLOB_SHA = "b1e55fc2af2be7c53ba10fc4c5d41ac0029a859a"
+ALGORITHM_BLOB_SHA = "9559ccd584fd71d791aca154e854a6fd228fd54c"
 
 
 def test_reconciliation_binds_effective_register_court_record() -> None:
@@ -58,6 +58,7 @@ def test_reconciliation_identity_is_deterministic_and_algorithm_bound() -> None:
     second = build_architecture_reconciliation(str(ROOT))
     assert first == second
     identity = build_reconciliation_identity(algorithm_git_blob_sha=ALGORITHM_BLOB_SHA)
+    assert identity == "c0f2c41f27a392fd0417b73db5449ceae2f768750e61536565309b1dd5eb96c6"
     assert len(identity) == 64
     assert identity == build_reconciliation_identity(algorithm_git_blob_sha=ALGORITHM_BLOB_SHA)
     assert identity != build_reconciliation_identity(algorithm_git_blob_sha="0" * 40)
