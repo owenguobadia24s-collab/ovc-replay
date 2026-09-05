@@ -1,11 +1,25 @@
-"""Laboratory Scientific Inheritance & Accession governance-only accounting helpers.
+"""Laboratory Scientific Inheritance & Accession research-governance helpers.
 
 This namespace is research-only and non-authoritative. It does not grant active market,
 selector, scientific-promotion, candidate/family/model/theory promotion, validation,
 publication, probability, risk, exposure, trading, execution, or agent-write authority.
-GEN0002 is exact-source frontier accounting only and fails closed on identity drift.
+GEN0002 carries the exact corrected frontier accounting into a deterministic Pass-1
+source-standing/exposure/dependence classification only; no survival or inheritance
+role is produced here.
 """
 
 from .gen0002 import audit_frozen_passport_subject_identity
+from .pass1 import (
+    build_pass1_classification_view,
+    build_shared_locator_dependence_graph,
+    build_virtual_view_identity,
+    load_source_passports,
+)
 
-__all__ = ["audit_frozen_passport_subject_identity"]
+__all__ = [
+    "audit_frozen_passport_subject_identity",
+    "build_pass1_classification_view",
+    "build_shared_locator_dependence_graph",
+    "build_virtual_view_identity",
+    "load_source_passports",
+]
