@@ -1,0 +1,40 @@
+{
+  "schema": "ovc-delegated-decision-record/v1",
+  "programme_id": "OVC-DSAI3V-REMOTE-POST-MERGE-0001",
+  "plan_id": "OVC_DSAI3V_REMOTE_POST_MERGE_PLAN_v0_1",
+  "plan_version": "0.1",
+  "packet_id": "DSAI3V-REMOTE-LIVE-CUTOVER-PROOF",
+  "gate_id": "DSAI3V-REMOTE-G-CUTOVER-R2",
+  "decision": "PASS",
+  "decision_authority": "DELEGATED_CLOSEOUT_UNDER_OPERATOR_APPROVED_DSAI3V_REMOTE_G_CUTOVER_R2",
+  "operator_gate_decision": "PASS",
+  "baseline_commit": "49d2bc7a36e3e8754eb9d26eed750d2d481a2eb2",
+  "live_proof_main_commit": "9ba634e7c3c45bf6ebe8c344e8a276aa492685ae",
+  "live_proof_main_tree": "e657a807bd2bb12db85f0832f52e493a4b032080",
+  "tests": [
+    "DSAI3V remote post-merge completion workflow 33929736378 SUCCESS",
+    "current main exact-tree equality PASS",
+    "four canonical completion receipt families present PASS",
+    "102 append-only R2 development receipt objects uploaded and read back byte-identically PASS",
+    "historical recovery b22ea057ddef98acc2e43dfff689b7fa56934385 exact-tree PASS",
+    "cutover recovery 49d2bc7a36e3e8754eb9d26eed750d2d481a2eb2 exact-tree PASS",
+    "GitHub-hosted execution without operator device PASS"
+  ],
+  "qa_packet": "docs/programmes/dsai3v-remote-post-merge/DSAI3V_REMOTE_LIVE_CUTOVER_PROOF_PASS_v0_1.json",
+  "qa_recommendation": "PASS",
+  "warnings": [],
+  "unresolved_issues": [],
+  "authority_delta": "NONE",
+  "authority_effect": "NONE",
+  "non_reserved_rationale": "The operator already approved the executor and dedicated development-receipt remote-write cutover. This decision only records successful evidence for that approved change, retires a manifest row explicitly marked removable after verified remote completion, and terminates the programme. It introduces no new writer, gateway, scientific authority, release publication, or other operator-reserved capability.",
+  "rollback": {
+    "strategy": "FORWARD_SUPERSEDE_REMOTE_COMPLETION_IMPLEMENTATION_ONLY",
+    "preserve_history": true,
+    "preserve_remote_receipts": true,
+    "destructive_action": false,
+    "self_hosted_reactivation_requires_operator_decision": true
+  },
+  "live_proof_merge_sha": "9ba634e7c3c45bf6ebe8c344e8a276aa492685ae",
+  "next_packet": null,
+  "terminal": true
+}
