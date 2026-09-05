@@ -6,7 +6,9 @@
   "plan_id": "OVC-LSIAC-CONSTITUTION-0.1-REVISED-1",
   "plan_version": "0.1-R1-RATIFIED",
   "baseline_commit": "2688caed89ce5db10c06a40806dba1e251786600",
-  "candidate_commit": "RESOLVE_AT_GATE_READY_PR_HEAD",
+  "gate_ready_head": "5119a8eb8ae6b5ff0ed403463ec9ebd3b0ff0c33",
+  "candidate_commit": "RESOLVE_AT_APPROVED_PR_FINAL_HEAD",
+  "status": "APPROVED_OPERATOR_PASS_PENDING_EXACT_HEAD_ASSURANCE",
   "completed_packets": [
     "LSIAC-GEN0002-FRONTIER-ACCOUNTING-REPAIR:MERGED:717603e627ebeea24815d021e32df616f6b71ace",
     "LSIAC-GEN0002-PASS1-SOURCE-STANDING-EXPOSURE-DEPENDENCE:MERGED:2688caed89ce5db10c06a40806dba1e251786600"
@@ -18,7 +20,7 @@
     "pass1": "EFFECTIVE_FROZEN_AND_INTEGRATED",
     "bounded_section_23_scientific_architecture_development_freeze": "ACTIVE",
     "scientific_accession_decisions": 0,
-    "pass2": "UNSTARTED_OPERATOR_RESERVED",
+    "pass2": "AUTHORISED_BOUNDED_UNSTARTED_PENDING_GATE_INTEGRATION",
     "validation": "LOCKED_UNCONSUMED",
     "publication": "NONE",
     "active_discovery_development_validation": "NONE",
@@ -28,11 +30,12 @@
     "LSIAC_R1_OPERATOR_RATIFICATION_DECISION:explicit_non_grants:NO_SCIENTIFIC_ACCESSION_DECISION:NO_INHERITANCE_ROLE_ADJUDICATION",
     "LSIAC_FRONTIER_FREEZE_OPERATOR_DECISION:explicit_non_grants:NO_SCIENTIFIC_ACCESSION_DECISION:NO_INHERITANCE_ROLE_ADJUDICATION",
     "LSIAC_FRONTIER_INTEGRITY_OPERATOR_DECISION_0001:explicit_denials:NO_SURVIVAL_DECISION:NO_FINAL_INHERITANCE_ROLE:NO_RETAIN_FORWARD",
-    "LSIAC_GEN0002_PASS1_DECISION:authority_delta:NONE_PASS1_CLASSIFICATION_ONLY"
+    "LSIAC_GEN0002_PASS1_DECISION:authority_delta:NONE_PASS1_CLASSIFICATION_ONLY",
+    "LSIAC_GEN0002_PASS2_AUTHORITY_OPERATOR_DECISION:PASS:7130e987c4ba3900eff0abfc43d4989d9899393ef151e2a975dd5b5d04377c84"
   ],
   "proposed_authority_delta": {
     "class": "OPERATOR_RESERVED_BOUNDED_GEN0002_PASS2_SCIENTIFIC_ACCESSION_ADJUDICATION",
-    "proposal": "AUTHORISE_ONLY_THE_GEN0002_PASS2_SURVIVAL_ROLE_DESTINATION_EFFECT_ADJUDICATION_REQUIRED_BY_THE_RATIFIED_LSIAC_SEQUENCE, USING_THE_EFFECTIVE_FROZEN_PASS1_VIEW_AND_UNCHANGED_FROZEN_PROTOCOL, INCLUDING_FINAL_LSIAC_INHERITANCE_AND_LIFECYCLE RECORDS AND REQUIRED_HIGH_IMPACT_INDEPENDENT_REVIEW, WITHOUT DOWNSTREAM ACTIVATION OR SCIENCE_RESUME.",
+    "proposal": "AUTHORISE_ONLY_THE_GEN0002_PASS2_SURVIVAL_ROLE_DESTINATION_EFFECT_ADJUDICATION_REQUIRED_BY_THE_RATIFIED_LSIAC_SEQUENCE, USING_THE_EFFECTIVE_FROZEN_PASS1_VIEW_AND_UNCHANGED_FROZEN_PROTOCOL, INCLUDING_FINAL_LSIAC_INHERITANCE_AND_LIFECYCLE_RECORDS_AND_REQUIRED_HIGH_IMPACT_INDEPENDENT_REVIEW, WITHOUT_DOWNSTREAM_ACTIVATION_OR_SCIENCE_RESUME.",
     "authorises_if_pass": [
       "SCIENTIFIC_ACCESSION_DECISION_WITHIN_LSIAC_GEN0002_PASS2",
       "SURVIVAL_DECISION_WITHIN_LSIAC_GEN0002_PASS2",
@@ -60,6 +63,13 @@
       "LSIAC_SCIENCE_RESUME"
     ]
   },
+  "operator_decision": {
+    "decision": "PASS",
+    "decision_id": "7130e987c4ba3900eff0abfc43d4989d9899393ef151e2a975dd5b5d04377c84",
+    "decision_time_local": "2026-09-05T12:56:00+01:00",
+    "decision_record": "docs/programmes/lsiac-v0-1/pass2-gen0002/LSIAC_GEN0002_PASS2_AUTHORITY_OPERATOR_DECISION_v0_1.json",
+    "scope": "BOUNDED_GEN0002_PASS2_SCIENTIFIC_ACCESSION_ADJUDICATION_ONLY"
+  },
   "acceptance_conditions": [
     "Operator explicitly grants the bounded Pass2 adjudication delta and no broader science-resume authority.",
     "Pass2 consumes only the effective GEN0002 Pass1 classification view and unchanged GEN0002-bound frozen protocol semantics.",
@@ -77,26 +87,27 @@
     "pass1_final_head_profile_siq_and_merge_readiness": "PASS:WORKFLOW_RUN_33934220185",
     "pass1_integrated_main": "PASS:2688caed89ce5db10c06a40806dba1e251786600",
     "pass1_scientific_accession_decisions": "PASS_ZERO",
-    "pass2_substantive_tests": "NOT_RUN_NOT_AUTHORISED_BEFORE_OPERATOR_PASS"
+    "gate_exact_head_assurance": "PENDING_AFTER_OPERATOR_DECISION_MATERIALISATION",
+    "pass2_substantive_tests": "NOT_RUN_GATE_INTEGRATION_PENDING"
   },
   "qa": {
     "packet": "docs/programmes/lsiac-v0-1/pass2-gen0002/LSIAC_GEN0002_PASS2_AUTHORITY_GATE_QA_v0_1.json",
-    "result": "PASS_GATE_READY_OPERATOR_REQUIRED",
-    "recommendation": "PASS_BOUNDED_PASS2_ADJUDICATION_AUTHORITY_ONLY"
+    "result": "PASS_OPERATOR_DECISION_MATERIALISED",
+    "recommendation": "INTEGRATE_GATE_AFTER_EXACT_HEAD_ASSURANCE_THEN_START_FRESH_MAIN_PASS2"
   },
   "warnings": [
     "The Pass1 programme-state artifact merged with conditional pre-integration fields, but its stated effect rule is satisfied by the exact qualified tree and squash integration at 2688caed89ce5db10c06a40806dba1e251786600; this gate state records the effective post-merge condition without rewriting Pass1 history.",
     "Two known source-binding debts remain and must remain not-evaluable/source-blocked wherever exact load-bearing evidence is required.",
     "No absence of a dependence edge may be interpreted as independence.",
-    "A PASS here is not LSIAC-SCIENCE-RESUME and cannot activate downstream scientific development."
+    "The operator PASS is not LSIAC-SCIENCE-RESUME and cannot activate downstream scientific development."
   ],
-  "unresolved_issues": [
-    "OPERATOR_RESERVED_PASS2_SCIENTIFIC_ACCESSION_AUTHORITY_NOT_GRANTED"
-  ],
+  "unresolved_issues": [],
   "changed_files": [
+    "docs/programmes/lsiac-v0-1/pass2-gen0002/LSIAC_GEN0002_PASS2_AUTHORITY_GATE_DEPENDENCY_FRONTIER_v0_1.json",
     "docs/programmes/lsiac-v0-1/pass2-gen0002/LSIAC_GEN0002_PASS2_AUTHORITY_GATE_MANIFEST_v0_1.json",
-    "docs/programmes/lsiac-v0-1/pass2-gen0002/LSIAC_GEN0002_PASS2_AUTHORITY_GATE_QA_v0_1.json",
     "docs/programmes/lsiac-v0-1/pass2-gen0002/LSIAC_GEN0002_PASS2_AUTHORITY_GATE_PACKET_v0_1.json",
+    "docs/programmes/lsiac-v0-1/pass2-gen0002/LSIAC_GEN0002_PASS2_AUTHORITY_GATE_QA_v0_1.json",
+    "docs/programmes/lsiac-v0-1/pass2-gen0002/LSIAC_GEN0002_PASS2_AUTHORITY_OPERATOR_DECISION_v0_1.json",
     "records/research_operations/lsiac/LSIAC_PROGRAMME_STATE_v0_11.json"
   ],
   "repository_bound_evidence_hashes": {
@@ -108,10 +119,12 @@
     "pass1_merged_tree": "e536e282c6d0db48c6d103e80a122b5963eac260"
   },
   "external_artifact_hashes": [],
-  "rollback": "Forward-only. If the decision is DEFER, BLOCK, QUARANTINE or otherwise not PASS, preserve the effective Pass1 freeze and all prior evidence, leave scientific accession decisions at zero, leave Pass2 unstarted and keep the Section-23 development freeze active. No protocol/source rewrite, history rewrite or downstream activation is permitted.",
+  "rollback": "Forward-only. Preserve the effective Pass1 freeze, the operator PASS decision and all prior evidence. If exact-head gate assurance fails, correct only bounded gate-materialisation defects or stop. Pass2 work may not change the frozen protocol/frontier/Pass1 view or execute downstream activation.",
   "recommended_decision": "PASS",
+  "recorded_decision": "PASS",
   "allowed_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
   "exact_work_after_approval": [
+    "Complete exact-head qualification and repository assurance for this authority-decision materialisation and squash-integrate this gate only if all required checks pass.",
     "Create a fresh bounded Pass2 packet branch from the latest lawful main tip; do not continue from the Pass1 feature branch or this gate branch.",
     "Bind the effective GEN0002 Pass1 virtual view, 431-subject/434-passport frontier, source-dependence graph and unchanged GEN0002 protocol binding as immutable inputs.",
     "Implement deterministic Pass2 admissibility and claim-cap mechanics plus machine schemas/fixtures/tests needed to produce survival, inheritance-role, lifecycle, destination and architecture-effect adjudication records.",
