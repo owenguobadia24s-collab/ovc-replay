@@ -1,0 +1,47 @@
+{
+  "schema": "ovc-qa-failure-evidence/v1",
+  "evidence_id": "DSAI3V-REMOTE-LIVE-CUTOVER-PROOF-R1-FAILURE-v0.1",
+  "programme_id": "OVC-DSAI3V-REMOTE-POST-MERGE-0001",
+  "packet_id": "DSAI3V-REMOTE-LIVE-CUTOVER-PROOF",
+  "authority_gate": "DSAI3V-REMOTE-G-CUTOVER-R2",
+  "operator_decision": "PASS",
+  "effective_merge_sha": "49d2bc7a36e3e8754eb9d26eed750d2d481a2eb2",
+  "effective_merge_tree": "4479a72b9e2d460e502f226eab0a8789548d52c5",
+  "workflow_run": {
+    "run_id": 33908682221,
+    "run_number": 263,
+    "workflow_path": ".github/workflows/vit-post-merge-completion.yml",
+    "event": "push",
+    "status": "completed",
+    "conclusion": "failure",
+    "jobs_created": 0
+  },
+  "failure_phase": "GITHUB_WORKFLOW_VALIDATION_BEFORE_JOB_CREATION",
+  "root_cause": {
+    "code": "RUNNER_CONTEXT_USED_IN_JOB_LEVEL_ENV",
+    "detail": "The candidate placed runner.temp expressions in jobs.complete.env. GitHub Actions does not make the runner context available to jobs.<job_id>.env, so the workflow was rejected before a runner or any step existed.",
+    "affected_keys": [
+      "OVC_VIT_RECEIPT_STAGE",
+      "OVC_VIT_REMOTE_REPORT"
+    ]
+  },
+  "safety_assessment": {
+    "physical_main_replayed": false,
+    "jobs_executed": false,
+    "remote_r2_objects_written_by_failed_run": false,
+    "receipt_bundle_staged": false,
+    "self_hosted_runner_used": false,
+    "authority_expansion": false
+  },
+  "bounded_correction": [
+    "Move runner.temp-dependent staging/report variables from job-level env to step-level env where runner context exists.",
+    "Add a regression test that forbids runner context in the job-level env block.",
+    "Add the already-effective merge SHA to the existing idempotent post-merge recovery manifest.",
+    "Rerun repository and VIT/SIQ/GRT exact-final assurance on the correction candidate.",
+    "Squash-merge the bounded correction when eligible.",
+    "Use the corrected main-triggered workflow to process both the correction merge and the queued already-effective cutover merge without replaying either physical-main write."
+  ],
+  "rollback": "If the bounded correction cannot pass, preserve the effective cutover merge and failure evidence, do not replay physical main, and stop with the remote completion path fail-closed.",
+  "disposition": "CORRECTABLE_IN_SCOPE",
+  "next_action": "RUN_BOUNDED_CORRECTION_AND_REMOTE_RECOVERY"
+}

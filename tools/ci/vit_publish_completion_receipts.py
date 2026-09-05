@@ -55,12 +55,28 @@ def _run_bytes(
 
 
 def _remote_stat(remote_ref: str, *, runner: Run) -> Mapping[str, Any] | None:
+    """Return metadata only when the exact R2/S3 object exists.
+
+    ``rclone lsjson --stat`` intentionally synthesises an empty directory for a
+    missing path on bucket-based backends because it cannot distinguish a
+    missing prefix from an empty directory.  Receipt keys are immutable objects,
+    not directories, so request files only and treat the bucket-backend
+    directory/null sentinel as an absent object.  Existing object bytes are
+    still read and compared before any write, preserving collision safety.
+    """
     proc = _run_bytes(
-        ["rclone", "lsjson", "--stat", "--s3-no-check-bucket", remote_ref],
+        [
+            "rclone",
+            "lsjson",
+            "--stat",
+            "--files-only",
+            "--s3-no-check-bucket",
+            remote_ref,
+        ],
         runner=runner,
         check=False,
     )
-    if proc.returncode == 3:
+    if proc.returncode in {3, 4}:
         return None
     if proc.returncode != 0:
         detail = proc.stderr.decode("utf-8", errors="replace").strip()
@@ -72,10 +88,15 @@ def _remote_stat(remote_ref: str, *, runner: Run) -> Mapping[str, Any] | None:
         value = json.loads(raw)
     except json.JSONDecodeError as exc:
         raise RemoteReceiptPublishError("REMOTE_RECEIPT_STAT_INVALID_JSON") from exc
+    if value is None:
+        return None
     if not isinstance(value, Mapping):
         raise RemoteReceiptPublishError("REMOTE_RECEIPT_STAT_INVALID")
     if value.get("IsDir") is True:
-        raise RemoteReceiptPublishError("REMOTE_RECEIPT_KEY_IS_DIRECTORY")
+        # Older/bucket-specific rclone behaviour may still return the synthetic
+        # directory sentinel even with a file-only stat.  It proves no exact
+        # object exists at this key and is therefore equivalent to missing.
+        return None
     return dict(value)
 
 

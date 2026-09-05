@@ -13,9 +13,10 @@ from tools.ci.vit_publish_completion_receipts import (
 
 
 class FakeRclone:
-    def __init__(self) -> None:
+    def __init__(self, *, missing_stat: str = "null") -> None:
         self.remote: dict[str, bytes] = {}
         self.commands: list[list[str]] = []
+        self.missing_stat = missing_stat
 
     def __call__(self, args, *, check, stdout, stderr):
         argv = list(args)
@@ -23,16 +24,23 @@ class FakeRclone:
         command = argv[1]
         remote_ref = argv[-1]
         if command == "lsjson":
+            if "--stat" not in argv or "--files-only" not in argv:
+                raise AssertionError(f"receipt object probe must be file-only stat: {argv}")
             if remote_ref not in self.remote:
-                return subprocess.CompletedProcess(argv, 3, b"", b"not found")
+                if self.missing_stat == "directory":
+                    payload = json.dumps({"IsDir": True, "Size": -1}).encode()
+                    return subprocess.CompletedProcess(argv, 0, payload, b"")
+                if self.missing_stat == "exit4":
+                    return subprocess.CompletedProcess(argv, 4, b"", b"file not found")
+                return subprocess.CompletedProcess(argv, 0, b"null", b"")
             payload = json.dumps({"IsDir": False, "Size": len(self.remote[remote_ref])}).encode()
             return subprocess.CompletedProcess(argv, 0, payload, b"")
         if command == "cat":
             if remote_ref not in self.remote:
-                error = subprocess.CalledProcessError(3, argv, output=b"", stderr=b"not found")
+                error = subprocess.CalledProcessError(4, argv, output=b"", stderr=b"file not found")
                 if check:
                     raise error
-                return subprocess.CompletedProcess(argv, 3, b"", b"not found")
+                return subprocess.CompletedProcess(argv, 4, b"", b"file not found")
             return subprocess.CompletedProcess(argv, 0, self.remote[remote_ref], b"")
         if command == "copyto":
             local_path = Path(argv[-2])
@@ -78,6 +86,32 @@ class RemoteReceiptPublisherTests(unittest.TestCase):
             self.assertNotIn("delete", verbs)
             self.assertNotIn("purge", verbs)
             self.assertNotIn("move", verbs)
+
+    def test_bucket_backend_missing_object_directory_sentinel_is_absent(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = self._root(Path(raw))
+            fake = FakeRclone(missing_stat="directory")
+            report = publish_receipt_tree(
+                local_root=root,
+                remote="ovc_r2",
+                prefix="ovc-evidence/development/vit-completion-receipts/v1",
+                runner=fake,
+            )
+            self.assertEqual(report["object_count"], 2)
+            self.assertEqual({row["mode"] for row in report["objects"]}, {"UPLOADED_AND_VERIFIED"})
+            self.assertTrue(all("--files-only" in argv for argv in fake.commands if argv[1] == "lsjson"))
+
+    def test_file_not_found_exit_code_four_is_absent(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = self._root(Path(raw))
+            fake = FakeRclone(missing_stat="exit4")
+            report = publish_receipt_tree(
+                local_root=root,
+                remote="ovc_r2",
+                prefix="ovc-evidence/development/vit-completion-receipts/v1",
+                runner=fake,
+            )
+            self.assertEqual({row["mode"] for row in report["objects"]}, {"UPLOADED_AND_VERIFIED"})
 
     def test_existing_different_remote_object_fails_closed(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
