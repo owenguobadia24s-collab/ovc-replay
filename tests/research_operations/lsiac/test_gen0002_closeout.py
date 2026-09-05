@@ -60,8 +60,8 @@ def test_gen0002_protocol_and_history_are_preserved_forward_only() -> None:
     assert protocol["protocol_git_blob_sha"] == "e0541a48ed2206224203485038a7ebcaba3607fc"
     assert protocol["semantics_changed"] is False
     assert protocol["bytes_changed"] is False
-    assert historical["frontier_receipt_id"] == "54d20c358fe110198c0a33b20132a13244c63e8e89448e3a0fde1ef79fb18996"
-    assert frontier["supersedes_frontier_receipt_id"] == historical["frontier_receipt_id"]
+    assert historical["receipt_id"] == "54d20c358fe110198c0a33b20132a13244c63e8e89448e3a0fde1ef79fb18996"
+    assert frontier["supersedes_frontier_receipt_id"] == historical["receipt_id"]
     assert frontier["supersession_semantics"] == "FORWARD_ONLY_PRESERVE_GEN0001_HISTORY"
 
 
