@@ -1,0 +1,71 @@
+{
+  "schema": "ovc-c2-vnext-owner-structural-snapshot-generation/v0.1",
+  "generation_id": "C2VNEXT.OWNER.GENERATION.ASR00.C2AR-PACKAGE-v1.READ-v0.1",
+  "status": "ACTIVE_ON_LAWFUL_MAIN_MATERIALISATION",
+  "baseline_main": "8838681f9012e277ac367e6ade16b79c2ce7571c",
+  "owner": {
+    "surface": "OPT-B.C2.vNext",
+    "authority_id": "AUTH.OPT-B.C2.vNext.ACTIVE.RUNTIME.v0.1",
+    "authority_path": "registries/opt_b/c2/vnext/C2_VNEXT_ACTIVE_RUNTIME_AUTHORITY_v0_1.json",
+    "authority_git_blob_sha": "bae84dc11b4036b275982cb4b1d43b1eb9864d1c",
+    "state": "ACTIVE_STRUCTURAL_DESCRIPTION_DISCOVERY_DEVELOPMENT",
+    "package_id": "C2AR.INTEGRATED.SHADOW.PACKAGE.v1",
+    "package_sha256": "150de1997be8801baa59db6d0fe98b11cb21a6b70525b908537aeb31bfd00cc3",
+    "package_manifest_path": "docs/releases/c2-anatomy-observation-redesign-v0-2/c2ar-wp11/C2AR_WP11_INTEGRATED_MANIFEST.json",
+    "package_manifest_git_blob_sha": "1129d228944d689b7833e0228f9ef64c24d282e5"
+  },
+  "active_component_bindings": [
+    {"component":"OBSERVATION","implementation_path":"src/ovc/opt_b/c2_vnext/observation.py","implementation_git_blob_sha":"3ef277c465b9862e172f9605b5650530d548cd2e","schema_path":"schemas/opt_b/c2/vnext/C2_OBSERVATION_SCHEMA_BUNDLE_vNext_r1.json","schema_git_blob_sha":"be6797bfe87b7942debf54d5d86e667535fe7641"},
+    {"component":"HORIZON","implementation_path":"src/ovc/opt_b/c2_vnext/horizons.py","implementation_git_blob_sha":"e85a2c9fa6d1f7105a5ac46cc3f797e700d9c96c","schema_path":"schemas/opt_b/c2/vnext/C2_HORIZON_SCHEMA_BUNDLE_vNext_r1.json","schema_git_blob_sha":"0cbb1c29ccfea47222cf5cf9158093161a04d153"},
+    {"component":"LEVEL","implementation_path":"src/ovc/opt_b/c2_vnext/levels.py","implementation_git_blob_sha":"77445b0a18c353b3f253b7f92ca8422c7655aa38","schema_path":"schemas/opt_b/c2/vnext/C2_LEVEL_SCHEMA_BUNDLE_vNext_r1.json","schema_git_blob_sha":"eb4e6743d2816288d4c9e097f4202bd1e3b11674"},
+    {"component":"CONTAINER","implementation_path":"src/ovc/opt_b/c2_vnext/containers.py","implementation_git_blob_sha":"ed440f27e2756b30f0eaa23df83f1855c43df540","schema_path":"schemas/opt_b/c2/vnext/C2_CONTAINER_SCHEMA_BUNDLE_vNext_r1.json","schema_git_blob_sha":"4582a17b66fceff2fd5fc6d558f2423c06a348a6"},
+    {"component":"RELATION","implementation_path":"src/ovc/opt_b/c2_vnext/relations_vnext.py","implementation_git_blob_sha":"7ea3de588a35a4c5c44d9dc50613d81cf08ad58e","schema_path":"schemas/opt_b/c2/vnext/C2_RELATION_SCHEMA_BUNDLE_vNext_r1.json","schema_git_blob_sha":"82b7a9d8454b2b301d16f5befbd494f31a6de807"},
+    {"component":"FORMULA","implementation_path":"src/ovc/opt_b/c2_vnext/formula_profiles.py","implementation_git_blob_sha":"a69c36b58665ad179f47c108faf4615862587e33","schema_path":"schemas/opt_b/c2/vnext/C2_FORMULA_PROFILE_SCHEMA_BUNDLE_vNext_r1.json","schema_git_blob_sha":"fe2a921f4edb28f54a623aed999d5db7eaaa8d47"},
+    {"component":"TRANSITION","implementation_path":"src/ovc/opt_b/c2_vnext/transitions.py","implementation_git_blob_sha":"1cf5ef580ccd7558f6ca7da2f53af370fdf31609","schema_path":"schemas/opt_b/c2/vnext/C2_TRANSITION_DETECTOR_SCHEMA_BUNDLE_vNext_r1.json","schema_git_blob_sha":"2430e16a6241f9bf905807f5c3f69dc7a51d810c"},
+    {"component":"PARENT_CONTEXT","implementation_path":"src/ovc/opt_b/c2_vnext/parent_context.py","implementation_git_blob_sha":"7e63ac8774c79486ecf542e33cf6f922a9c3dad4","schema_path":"schemas/opt_b/c2/vnext/c2_parent_context_bundle.schema.json","schema_git_blob_sha":"cf7ef58d45eac25fc2785e4ccdc5a27a33754881"},
+    {"component":"COMPUTABILITY","implementation_path":"src/ovc/opt_b/c2_vnext/computability.py","implementation_git_blob_sha":"89a360687e13499368e7402b87dc918d5f87d672","schema_path":"schemas/opt_b/c2/vnext/C2_COMPUTABILITY_SCHEMA_BUNDLE_vNext_r1.json","schema_git_blob_sha":"2357e477e806c4549cebce6d7099a9796fc51225"}
+  ],
+  "public_read_surface": {
+    "contract_id": "C2.VNEXT.OWNER.STRUCTURAL.SNAPSHOT.READ.HANDOFF.v0.1",
+    "contract_path": "contracts/opt_b/c2/C2_VNEXT_OWNER_STRUCTURAL_SNAPSHOT_READ_HANDOFF_CONTRACT_v0_1.md",
+    "contract_git_blob_sha": "62795ea8e4e98f57ba264dc8be59a971bd4ce6d4",
+    "schema_id": "ovc-c2-vnext-owner-structural-snapshot-read/v0.1",
+    "schema_path": "schemas/opt_b/c2/vnext/C2_OWNER_STRUCTURAL_SNAPSHOT_READ_v0_1.schema.json",
+    "schema_git_blob_sha": "722b7442c91be1c0c9d46a1e7fd53787e52b997b",
+    "reader_api": "src/ovc/opt_b/c2_vnext/owner_read_surface.py::build_owner_snapshot_stream",
+    "reader_code_path": "src/ovc/opt_b/c2_vnext/owner_read_surface.py",
+    "reader_code_git_blob_sha": "e29ae271f8ed50989100b003371fe8bf28070ade"
+  },
+  "market_envelope": {
+    "instrument": "GBPUSD",
+    "sides": ["BID", "ASK"],
+    "clocks": ["15M", "2H_A_L"],
+    "research_roles": ["DISCOVERY", "DEVELOPMENT"],
+    "validation": "LOCKED_UNCONSUMED"
+  },
+  "chronology": {
+    "effective_time": "OBSERVATION_INTERVAL_END",
+    "first_valid_time": "OWNER_OBSERVATION_FIRST_VALID_TIME",
+    "current_contract_relation": "FIRST_VALID_TIME_EQUALS_INTERVAL_END_BUT_SEMANTIC_ROLES_REMAIN_SEPARATE",
+    "future_join_policy": "FAIL_CLOSED"
+  },
+  "missingness_and_breaks": {
+    "neutral_imputation": "PROHIBITED",
+    "warmup": "OWNER_TYPED",
+    "continuity_states": ["SEGMENT_START", "CONTIGUOUS", "GAP_RESET", "CLOSURE_BOUNDARY", "PARTITION_BOUNDARY", "UNKNOWN_BREAK"],
+    "component_absence": "TYPED_ABSTENTION_OR_EXPLICIT_NOT_EMITTED"
+  },
+  "authority_effect": "READ_ONLY_CURRENT_OWNER_STRUCTURAL_SNAPSHOT_HANDOFF_ONLY",
+  "non_grants": [
+    "NEW_PROVIDER_INSTRUMENT_MARKET_SIDE_OR_CLOCK",
+    "SELECTOR_ACTIVATION_OR_REPLACEMENT",
+    "SEMANTIC_FAMILY_CANDIDATE_MODEL_OR_THEORY_PROMOTION",
+    "C2E_BOUNDARY_REPLACEMENT",
+    "C2P_C2_5_C3_ACTIVATION",
+    "VALIDATION_CONSUMPTION",
+    "CANONICAL_OR_R2_PUBLICATION",
+    "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION",
+    "AGENT_WRITE_AUTHORITY"
+  ],
+  "drift_policy": "ANY_BOUND_OWNER_AUTHORITY_PACKAGE_COMPONENT_SCHEMA_OR_PUBLIC_READER_BLOB_DRIFT_REQUIRES_A_NEW_OWNER_GENERATION_BEFORE_CONSUMER_USE"
+}
