@@ -1,8 +1,8 @@
 """Public read-only current-owner C2 vNext structural snapshot surface.
 
-This module exposes existing C2 vNext owner records to governed consumers.  It
+This module exposes existing C2 vNext owner records to governed consumers. It
 must not change C2 algorithms, create source authority, or write active owner
-state.  Population-specific source bindings remain separately authorised.
+state. Population-specific source bindings remain separately authorised.
 """
 from __future__ import annotations
 
@@ -111,7 +111,7 @@ def _validate_rows(
 
 @contextmanager
 def _owner_scope(binding: Mapping[str, Any]):
-    """Bind existing owner materialiser to one authorised population, then restore it."""
+    """Bind the existing owner materialiser to one authorised population, then restore it."""
     overrides = {
         "CONTEXT_START": str(binding["context_start_utc"]),
         "CONTEXT_END": str(binding["context_end_exclusive_utc"]),
@@ -162,6 +162,14 @@ def _unique_index(records: Iterable[Mapping[str, Any]], key: str, label: str) ->
     return output
 
 
+def _relation_index(records: Iterable[Mapping[str, Any]]) -> dict[str, dict[str, Any]]:
+    return _unique_index(
+        (row for row in records if row.get("relation_id") is not None),
+        "relation_id",
+        "RELATION",
+    )
+
+
 def _records_at_time(records: Iterable[Mapping[str, Any]], first_valid_time: str) -> list[dict[str, Any]]:
     result = []
     for raw in records:
@@ -169,7 +177,7 @@ def _records_at_time(records: Iterable[Mapping[str, Any]], first_valid_time: str
         observed = row.get("first_valid_time", row.get("as_of_time"))
         if observed is not None and str(observed) == first_valid_time:
             result.append(row)
-    return sorted(result, key=lambda item: canonical_bytes(item))
+    return sorted(result, key=canonical_bytes)
 
 
 def build_snapshot_stream(
@@ -184,6 +192,7 @@ def build_snapshot_stream(
     memberships = _unique_index(side_result.get("memberships", []), "membership_id", "HORIZON")
     levels = _unique_index(side_result.get("levels", []), "level_id", "LEVEL")
     containers = _unique_index(side_result.get("containers", []), "container_id", "CONTAINER")
+    relations = _relation_index(side_result.get("relations", []))
     relation_sets = _unique_index(side_result.get("relation_sets", []), "relation_set_id", "RELATION_SET")
     profiles = _unique_index(side_result.get("profiles", []), "profile_output_id", "PROFILE")
     contexts = _unique_index(side_result.get("contexts", []), "bundle_id", "PARENT_CONTEXT")
@@ -191,7 +200,10 @@ def build_snapshot_stream(
     computability = list(side_result.get("computability", []))
 
     snapshots: list[dict[str, Any]] = []
-    for raw_bundle in sorted(side_result.get("bundles", []), key=lambda row: (str(row.get("first_valid_time", "")), str(row.get("observation_id", "")))):
+    for raw_bundle in sorted(
+        side_result.get("bundles", []),
+        key=lambda row: (str(row.get("first_valid_time", "")), str(row.get("observation_id", ""))),
+    ):
         bundle = copy.deepcopy(dict(raw_bundle))
         observation_id = str(bundle.get("observation_id", ""))
         _require(observation_id in observations, f"BUNDLE_OBSERVATION_UNRESOLVED:{observation_id}")
@@ -213,8 +225,13 @@ def build_snapshot_stream(
             _require(identity in levels, f"LEVEL_REF_UNRESOLVED:{identity}")
         for identity in container_ids:
             _require(identity in containers, f"CONTAINER_REF_UNRESOLVED:{identity}")
+        relation_ids: list[str] = []
         for identity in relation_set_ids:
             _require(identity in relation_sets, f"RELATION_SET_REF_UNRESOLVED:{identity}")
+            for relation_id in relation_sets[identity].get("relation_ids", []):
+                token = str(relation_id)
+                _require(token in relations, f"RELATION_REF_UNRESOLVED:{token}")
+                relation_ids.append(token)
         for axis, ids in profile_refs.items():
             _require(axis in {"LOCATION", "MOTION", "ORGANISATION", "INTERACTION"}, f"PROFILE_AXIS_INVALID:{axis}")
             for identity in ids:
@@ -262,6 +279,7 @@ def build_snapshot_stream(
                 "horizon_memberships": [copy.deepcopy(memberships[item]) for item in horizon_ids],
                 "levels": [copy.deepcopy(levels[item]) for item in level_ids],
                 "containers": [copy.deepcopy(containers[item]) for item in container_ids],
+                "relations": [copy.deepcopy(relations[item]) for item in sorted(set(relation_ids))],
                 "relation_sets": [copy.deepcopy(relation_sets[item]) for item in relation_set_ids],
                 "formula_profiles": profile_records,
                 "parent_context": None if context_id is None else copy.deepcopy(contexts[str(context_id)]),
@@ -289,8 +307,7 @@ def build_snapshot_stream(
                 "agent_write": "NONE",
             },
         }
-        snapshot = {**body, "snapshot_id": canonical_sha256(body)}
-        snapshots.append(snapshot)
+        snapshots.append({**body, "snapshot_id": canonical_sha256(body)})
     return snapshots
 
 
