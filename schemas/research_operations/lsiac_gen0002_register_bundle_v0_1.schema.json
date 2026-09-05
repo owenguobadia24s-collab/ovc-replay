@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc-lsiac-gen0002-register-bundle/v0.1",
+  "title": "OVC LSIAC GEN0002 post-Pass2 register bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "programme_id",
+    "packet_id",
+    "generation_id",
+    "source_binding",
+    "registers",
+    "register_roots",
+    "authority_effect",
+    "anti_inference",
+    "bundle_id"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-lsiac-gen0002-register-bundle/v0.1"},
+    "programme_id": {"const": "OVC-LSIAC-v0.1"},
+    "packet_id": {"const": "LSIAC-GEN0002-LSIR-REGISTER-MATERIALISATION"},
+    "generation_id": {"const": "OVC-LSIAC-ACCESSION-GEN-0002"},
+    "source_binding": {
+      "type": "object",
+      "required": [
+        "pass2_virtual_view_id",
+        "pass2_algorithm_git_blob_sha",
+        "pass1_virtual_view_id",
+        "protocol_binding_id",
+        "operator_authority_decision_id",
+        "source_universe_id",
+        "frontier_receipt_id",
+        "source_passport_set_sha256",
+        "post_v0_5_delta_sha256",
+        "pass2_authority_effect"
+      ],
+      "properties": {
+        "pass2_virtual_view_id": {"const": "58b364fbf7b8ce160877fb8bba641cb853ea1b29b5af9c4a4b1a5294648749d8"},
+        "pass2_algorithm_git_blob_sha": {"const": "9ef62432a43ea0fffce529fd181bdb17662c2f04"},
+        "pass1_virtual_view_id": {"const": "e9b10aebcae1136c1b5df34fb569392e10bcec0a2bc30e93675588ad4e288c6a"},
+        "protocol_binding_id": {"const": "15e449ffe15ded1d6419533257515ab9686122a1b5c73f7c82c49cea6e273d4f"},
+        "operator_authority_decision_id": {"const": "7130e987c4ba3900eff0abfc43d4989d9899393ef151e2a975dd5b5d04377c84"},
+        "source_universe_id": {"type": "string", "minLength": 64, "maxLength": 64},
+        "frontier_receipt_id": {"type": "string", "minLength": 64, "maxLength": 64},
+        "source_passport_set_sha256": {"type": "string", "minLength": 64, "maxLength": 64},
+        "post_v0_5_delta_sha256": {"type": "string", "minLength": 64, "maxLength": 64},
+        "pass2_authority_effect": {"type": "string"}
+      }
+    },
+    "registers": {
+      "type": "object",
+      "required": [
+        "laboratory_scientific_inheritance_register",
+        "negative_knowledge_register",
+        "supersession_register",
+        "destination_binding_sets",
+        "architecture_effect_sets",
+        "architecture_gap_register"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "laboratory_scientific_inheritance_register": {"$ref": "#/$defs/register"},
+        "negative_knowledge_register": {"$ref": "#/$defs/register"},
+        "supersession_register": {"$ref": "#/$defs/register"},
+        "destination_binding_sets": {"$ref": "#/$defs/register"},
+        "architecture_effect_sets": {"$ref": "#/$defs/register"},
+        "architecture_gap_register": {"$ref": "#/$defs/register"}
+      }
+    },
+    "register_roots": {"type": "object", "minProperties": 6, "maxProperties": 6},
+    "authority_effect": {"const": "NONE_REGISTER_MATERIALISATION_ONLY"},
+    "anti_inference": {"type": "array", "minItems": 6, "items": {"type": "string"}, "uniqueItems": true},
+    "bundle_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "register": {
+      "type": "object",
+      "required": ["register_id", "generation_id", "members", "member_count", "members_canonical_sha256"],
+      "properties": {
+        "register_id": {"type": "string", "minLength": 1},
+        "generation_id": {"const": "OVC-LSIAC-ACCESSION-GEN-0002"},
+        "members": {"type": "array", "items": {"type": "object"}},
+        "member_count": {"type": "integer", "minimum": 0},
+        "members_canonical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "schema": "ovc-lsiac-gen0002-register-materialisation-manifest/v0.1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "packet_id": "LSIAC-GEN0002-LSIR-REGISTER-MATERIALISATION",
+  "generation_id": "OVC-LSIAC-ACCESSION-GEN-0002",
+  "status": "IMPLEMENTED_CANDIDATE_PENDING_ASSURANCE",
+  "baseline_main": "0c4fb692086854cd341467de7e73baae249b2910",
+  "source_binding": {
+    "pass2_virtual_view_id": "58b364fbf7b8ce160877fb8bba641cb853ea1b29b5af9c4a4b1a5294648749d8",
+    "pass2_algorithm_git_blob_sha": "9ef62432a43ea0fffce529fd181bdb17662c2f04",
+    "pass1_virtual_view_id": "e9b10aebcae1136c1b5df34fb569392e10bcec0a2bc30e93675588ad4e288c6a",
+    "protocol_binding_id": "15e449ffe15ded1d6419533257515ab9686122a1b5c73f7c82c49cea6e273d4f",
+    "operator_pass2_authority_decision_id": "7130e987c4ba3900eff0abfc43d4989d9899393ef151e2a975dd5b5d04377c84"
+  },
+  "implementation": {
+    "contract_path": "contracts/research_operations/lsiac/LSIAC_GEN0002_POST_PASS2_REGISTER_MATERIALISATION_CONTRACT_v0_1.md",
+    "schema_path": "schemas/research_operations/lsiac_gen0002_register_bundle_v0_1.schema.json",
+    "algorithm_path": "src/ovc/research_operations/lsiac/registers_gen0002.py",
+    "algorithm_git_blob_sha": "f0664026d0a7bac7c9c23b8396edc40cf2683107",
+    "test_path": "tests/research_operations/lsiac/test_gen0002_register_materialisation.py"
+  },
+  "registers": {
+    "LSIR": {"membership": "ALL_431_PASS2_DECISIONS", "expected_count": 431},
+    "NEGATIVE_KNOWLEDGE_REGISTER": {"membership": "EXACT_FILTER_scientific_disposition_EQ_NEGATIVE_SUPPORTED", "expected_count": "DERIVE_FROM_FROZEN_PASS2"},
+    "SUPERSESSION_REGISTER": {"membership": "EXPLICIT_PASS2_SUPERSESSION_EDGES_ONLY", "expected_count": 0},
+    "DESTINATION_BINDING_SETS": {"membership": "NONEMPTY_PASS2_DESTINATION_BINDINGS_ONLY", "expected_count": 0},
+    "ARCHITECTURE_EFFECT_SETS": {"membership": "ALL_431_PASS2_ARCHITECTURE_EFFECT_SETS", "expected_count": 431, "execution_authority": "NONE"},
+    "ARCHITECTURE_GAP_REGISTER": {"membership": "PASS2_DOCKET_STATUS_SOURCE_BINDING_REQUIRED_ONLY", "expected_count": 2, "gap_class": "SOURCE_BINDING_GAP_NOT_ARCHITECTURE_ACTIVATION_REQUEST"}
+  },
+  "known_source_binding_gap_subjects": [
+    "OVC-REPRESENTATION-ROBUSTNESS-0001-SOURCE-BINDING",
+    "OVC-RRSCG-OBSERVER-STATE-GEOMETRY-0001-SOURCE-BINDING"
+  ],
+  "authority_effect": "NONE_REGISTER_MATERIALISATION_ONLY",
+  "downstream_execution": "NONE",
+  "next_packet_after_effective_integration": "LSIAC-GEN0002-ARCHITECTURE-RECONCILIATION",
+  "next_operator_gate": "LSIAC-SCIENCE-RESUME",
+  "rollback": "Forward-only; preserve frozen Pass2 decisions and failed register evidence. No source, protocol or Pass2 rewrite."
+}
