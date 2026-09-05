@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/lsiac_gen0002_register_bundle_v0_1.schema.json",
+  "title": "OVC LSIAC GEN0002 Register Bundle v0.1",
+  "type": "object",
+  "required": [
+    "schema",
+    "programme_id",
+    "packet_id",
+    "generation_id",
+    "source_pass2_virtual_view_id",
+    "source_pass2_merge_commit",
+    "registers",
+    "register_identities",
+    "register_kind_count",
+    "projection",
+    "authority_effect",
+    "bundle_id"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-lsiac-gen0002-register-bundle/v0.1"},
+    "programme_id": {"const": "OVC-LSIAC-v0.1"},
+    "packet_id": {"const": "LSIAC-GEN0002-LSIR-REGISTER-MATERIALISATION"},
+    "generation_id": {"const": "OVC-LSIAC-ACCESSION-GEN-0002"},
+    "source_pass2_virtual_view_id": {"const": "58b364fbf7b8ce160877fb8bba641cb853ea1b29b5af9c4a4b1a5294648749d8"},
+    "source_pass2_merge_commit": {"const": "0c4fb692086854cd341467de7e73baae249b2910"},
+    "register_kind_count": {"const": 6},
+    "projection": {"const": "GEN0002_POST_PASS2_REGISTER_MATERIALISATION_V1"},
+    "authority_effect": {"const": "NONE_REGISTER_MATERIALISATION_ONLY"},
+    "bundle_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "register_identities": {
+      "type": "object",
+      "required": ["lsir", "negative_knowledge", "supersession", "destination_binding", "architecture_effect", "architecture_gap"],
+      "additionalProperties": false,
+      "properties": {
+        "lsir": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "negative_knowledge": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "supersession": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "destination_binding": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "architecture_effect": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "architecture_gap": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "registers": {
+      "type": "object",
+      "required": ["lsir", "negative_knowledge", "supersession", "destination_binding", "architecture_effect", "architecture_gap"],
+      "additionalProperties": false,
+      "properties": {
+        "lsir": {"$ref": "#/$defs/lsir"},
+        "negative_knowledge": {"$ref": "#/$defs/negativeKnowledge"},
+        "supersession": {"$ref": "#/$defs/supersession"},
+        "destination_binding": {"$ref": "#/$defs/destinationBinding"},
+        "architecture_effect": {"$ref": "#/$defs/architectureEffect"},
+        "architecture_gap": {"$ref": "#/$defs/architectureGap"}
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "baseRegister": {
+      "type": "object",
+      "required": ["schema", "programme_id", "generation_id", "source_pass2_virtual_view_id", "authority_effect", "register_id"],
+      "properties": {
+        "programme_id": {"const": "OVC-LSIAC-v0.1"},
+        "generation_id": {"const": "OVC-LSIAC-ACCESSION-GEN-0002"},
+        "source_pass2_virtual_view_id": {"const": "58b364fbf7b8ce160877fb8bba641cb853ea1b29b5af9c4a4b1a5294648749d8"},
+        "authority_effect": {"const": "NONE_REGISTER_MATERIALISATION_ONLY"},
+        "register_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "lsir": {
+      "allOf": [
+        {"$ref": "#/$defs/baseRegister"},
+        {"type": "object", "required": ["entry_count", "entries", "decision_index_count", "decision_index", "rule"], "properties": {"schema": {"const": "ovc-lsiac-gen0002-lsir/v0.1"}, "entry_count": {"type": "integer", "minimum": 0}, "entries": {"type": "array"}, "decision_index_count": {"const": 431}, "decision_index": {"type": "array", "minItems": 431, "maxItems": 431}, "rule": {"type": "string"}}}
+      ]
+    },
+    "negativeKnowledge": {
+      "allOf": [
+        {"$ref": "#/$defs/baseRegister"},
+        {"type": "object", "required": ["entry_count", "entries", "deferred_negative_subject_count", "deferred_negative_subject_ids", "rule"], "properties": {"schema": {"const": "ovc-lsiac-gen0002-negative-knowledge-register/v0.1"}, "entry_count": {"type": "integer", "minimum": 0}, "entries": {"type": "array"}, "deferred_negative_subject_count": {"type": "integer", "minimum": 0}, "deferred_negative_subject_ids": {"type": "array", "items": {"type": "string"}}, "rule": {"type": "string"}}}
+      ]
+    },
+    "supersession": {
+      "allOf": [
+        {"$ref": "#/$defs/baseRegister"},
+        {"type": "object", "required": ["edge_count", "edges", "rule"], "properties": {"schema": {"const": "ovc-lsiac-gen0002-supersession-register/v0.1"}, "edge_count": {"type": "integer", "minimum": 0}, "edges": {"type": "array"}, "rule": {"type": "string"}}}
+      ]
+    },
+    "destinationBinding": {
+      "allOf": [
+        {"$ref": "#/$defs/baseRegister"},
+        {"type": "object", "required": ["binding_count", "entries", "empty_binding_decision_count", "rule"], "properties": {"schema": {"const": "ovc-lsiac-gen0002-destination-binding-register/v0.1"}, "binding_count": {"type": "integer", "minimum": 0}, "entries": {"type": "array"}, "empty_binding_decision_count": {"type": "integer", "minimum": 0}, "rule": {"type": "string"}}}
+      ]
+    },
+    "architectureEffect": {
+      "allOf": [
+        {"$ref": "#/$defs/baseRegister"},
+        {"type": "object", "required": ["record_count", "records", "primary_effect_counts", "actionable_effect_count", "execution_count", "rule"], "properties": {"schema": {"const": "ovc-lsiac-gen0002-architecture-effect-register/v0.1"}, "record_count": {"const": 431}, "records": {"type": "array", "minItems": 431, "maxItems": 431}, "primary_effect_counts": {"type": "object"}, "actionable_effect_count": {"type": "integer", "minimum": 0}, "execution_count": {"const": 0}, "rule": {"type": "string"}}}
+      ]
+    },
+    "architectureGap": {
+      "allOf": [
+        {"$ref": "#/$defs/baseRegister"},
+        {"type": "object", "required": ["gap_count", "gaps", "rule"], "properties": {"schema": {"const": "ovc-lsiac-gen0002-architecture-gap-register/v0.1"}, "gap_count": {"type": "integer", "minimum": 0}, "gaps": {"type": "array", "items": {"type": "object", "required": ["gap_id", "subject_id", "decision_id", "severity", "basis", "downstream_effect", "resolution_route"], "properties": {"severity": {"const": "REPRODUCIBILITY_BLOCKER"}, "downstream_effect": {"const": "NO_FORWARD_IMPLEMENTATION"}}}}, "rule": {"type": "string"}}}
+      ]
+    }
+  }
+}
