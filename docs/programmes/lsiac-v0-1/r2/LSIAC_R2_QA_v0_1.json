@@ -1,0 +1,26 @@
+{
+  "schema": "ovc-lsiac-r2-qa/v0.1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "packet_id": "LSIAC-R2-REPOSITORY-CAPABILITY-GAP-ACCESSION-REVIEW",
+  "baseline_main": "b9f747212a35d8c84946930ff2dc565fd4518849",
+  "qa_state": "PENDING_EXACT_HEAD_CI",
+  "static_review": {
+    "result": "PASS",
+    "assertions": [
+      "R2 does not rewrite GEN0001 or GEN0002 decisions.",
+      "Ordinary research programmes and nominations are excluded from accession by default.",
+      "IROF is reused rather than duplicated as a generic execution/transport framework.",
+      "The current C2 owner read-surface absence is recorded as an upstream HANDOFF_REQUIREMENT and not reconstructed by LSIAC.",
+      "RRSCG is decomposed into R2 kernel, D9 observer-state machinery and narrow D10 reducer rather than imported monolithically.",
+      "D10 supersession is limited to the reducer layer.",
+      "Multiclock accession preserves clock identity and negative knowledge and does not infer a shared categorical phase lattice.",
+      "TV120_NATIVE is not equated to canonical 2H_A_L.",
+      "No new provider, instrument, asset class, side, clock, research-role, semantic, Validation, publication, probability, risk, exposure or execution authority is granted."
+    ]
+  },
+  "test_target": "tests/research_operations/lsiac/test_r2_repository_capability_accession_review.py",
+  "expected_test_count": 5,
+  "repository_wide_ci": "PENDING_PR",
+  "blocking_warnings": [],
+  "qa_recommendation": "PASS_REVIEW_IF_EXACT_HEAD_TESTS_AND_REQUIRED_REPOSITORY_ASSURANCE_PASS; THEN_CLOSE_R2_WITH_UPSTREAM_OWNER_HANDOFF_AS_NEXT_MANDATORY_BOUNDARY"
+}
