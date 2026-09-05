@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/opt_b/c2/vnext/C2_OWNER_STRUCTURAL_SNAPSHOT_READ_v0_1.schema.json",
+  "title": "C2 vNext Owner Structural Snapshot Read Surface v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "snapshot_id",
+    "handoff_id",
+    "owner_authority_id",
+    "owner_generation_id",
+    "owner_package_id",
+    "owner_package_sha256",
+    "source_binding",
+    "instrument",
+    "side",
+    "clocks",
+    "observation_id",
+    "interval_start",
+    "interval_end",
+    "effective_time",
+    "first_valid_time",
+    "continuity",
+    "projection_eligibility",
+    "component_refs",
+    "owner_records",
+    "component_availability",
+    "authority"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-c2-vnext-owner-structural-snapshot-read/v0.1"},
+    "snapshot_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "handoff_id": {"const": "C2.VNEXT.OWNER.STRUCTURAL.SNAPSHOT.READ.HANDOFF.v0.1"},
+    "owner_authority_id": {"const": "AUTH.OPT-B.C2.vNext.ACTIVE.RUNTIME.v0.1"},
+    "owner_generation_id": {"const": "C2VNEXT.OWNER.GENERATION.ASR00.C2AR-PACKAGE-v1.READ-v0.1"},
+    "owner_package_id": {"const": "C2AR.INTEGRATED.SHADOW.PACKAGE.v1"},
+    "owner_package_sha256": {"const": "150de1997be8801baa59db6d0fe98b11cb21a6b70525b908537aeb31bfd00cc3"},
+    "source_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema", "source_binding_id", "source_authority_ref", "provider",
+        "instrument", "side", "local_clock", "parent_clock", "partition_id",
+        "context_start_utc", "context_end_exclusive_utc", "target_start_utc",
+        "target_end_exclusive_utc", "source_slice_id", "source_manifest_sha256",
+        "opt_a_release_id", "opt_a_manifest_id", "opt_a_manifest_sha256",
+        "c1_release_id", "c1_manifest_id", "source_object_ids"
+      ],
+      "properties": {
+        "schema": {"const": "ovc-c2-vnext-owner-source-binding/v0.1"},
+        "source_binding_id": {"type": "string", "minLength": 1},
+        "source_authority_ref": {"type": "string", "minLength": 1},
+        "provider": {"type": "string", "minLength": 1},
+        "instrument": {"const": "GBPUSD"},
+        "side": {"enum": ["BID", "ASK"]},
+        "local_clock": {"const": "15M"},
+        "parent_clock": {"const": "2H_A_L"},
+        "partition_id": {"type": "string", "minLength": 1},
+        "context_start_utc": {"type": "string", "format": "date-time"},
+        "context_end_exclusive_utc": {"type": "string", "format": "date-time"},
+        "target_start_utc": {"type": "string", "format": "date-time"},
+        "target_end_exclusive_utc": {"type": "string", "format": "date-time"},
+        "source_slice_id": {"type": "string", "minLength": 1},
+        "source_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "opt_a_release_id": {"type": "string", "minLength": 1},
+        "opt_a_manifest_id": {"type": "string", "minLength": 1},
+        "opt_a_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "c1_release_id": {"type": "string", "minLength": 1},
+        "c1_manifest_id": {"type": "string", "minLength": 1},
+        "source_object_ids": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
+      }
+    },
+    "instrument": {"const": "GBPUSD"},
+    "side": {"enum": ["BID", "ASK"]},
+    "clocks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["local", "parent"],
+      "properties": {"local": {"const": "15M"}, "parent": {"const": "2H_A_L"}}
+    },
+    "observation_id": {"type": "string", "minLength": 1},
+    "interval_start": {"type": "string", "format": "date-time"},
+    "interval_end": {"type": "string", "format": "date-time"},
+    "effective_time": {"type": "string", "format": "date-time"},
+    "first_valid_time": {"type": "string", "format": "date-time"},
+    "continuity": {"type": "object"},
+    "projection_eligibility": {"type": "object"},
+    "component_refs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["horizon_membership_ids", "level_ids", "container_ids", "relation_set_ids", "profile_output_ids", "context_bundle_id", "fixed_parent_observation_id"],
+      "properties": {
+        "horizon_membership_ids": {"type": "array", "items": {"type": "string"}},
+        "level_ids": {"type": "array", "items": {"type": "string"}},
+        "container_ids": {"type": "array", "items": {"type": "string"}},
+        "relation_set_ids": {"type": "array", "items": {"type": "string"}},
+        "profile_output_ids": {"type": "object"},
+        "context_bundle_id": {"type": ["string", "null"]},
+        "fixed_parent_observation_id": {"type": ["string", "null"]}
+      }
+    },
+    "owner_records": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observation", "horizon_memberships", "levels", "containers", "relation_sets", "formula_profiles", "parent_context", "transitions", "computability"],
+      "properties": {
+        "observation": {"type": "object"},
+        "horizon_memberships": {"type": "array", "items": {"type": "object"}},
+        "levels": {"type": "array", "items": {"type": "object"}},
+        "containers": {"type": "array", "items": {"type": "object"}},
+        "relation_sets": {"type": "array", "items": {"type": "object"}},
+        "formula_profiles": {"type": "object"},
+        "parent_context": {"type": ["object", "null"]},
+        "transitions": {"type": "array", "items": {"type": "object"}},
+        "computability": {"type": "array", "items": {"type": "object"}}
+      }
+    },
+    "component_availability": {"type": "object"},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["read_only", "owner_state_write", "new_source_authority", "validation", "publication", "probability_risk_exposure_execution", "agent_write"],
+      "properties": {
+        "read_only": {"const": true},
+        "owner_state_write": {"const": "DENIED"},
+        "new_source_authority": {"const": "DENIED"},
+        "validation": {"const": "LOCKED_UNCONSUMED"},
+        "publication": {"const": "NONE"},
+        "probability_risk_exposure_execution": {"const": "NONE"},
+        "agent_write": {"const": "NONE"}
+      }
+    }
+  }
+}
