@@ -3,7 +3,7 @@
   "programme_id": "OVC-LSIAC-v0.1",
   "packet_id": "LSIAC-R2-REPOSITORY-CAPABILITY-GAP-ACCESSION-REVIEW",
   "baseline_main": "b9f747212a35d8c84946930ff2dc565fd4518849",
-  "qa_state": "PENDING_EXACT_HEAD_CI",
+  "qa_state": "PASS_CONDITIONAL_ON_FINAL_CLOSEOUT_HEAD_ASSURANCE",
   "static_review": {
     "result": "PASS",
     "assertions": [
@@ -18,9 +18,25 @@
     ]
   },
   "routing_correction": {
-    "state": "REQUIRES_CANONICAL_VIT_LINEAGE_ON_PERMANENT_PR",
-    "reason": "Initial exact-head workflow reached VIT routing preflight before repository test shards and correctly failed closed because the PR had no canonical late-binding lineage marker. This is transport metadata, not a scientific or review defect.",
-    "remediation": "Attach a canonical payload-only VIT lineage record to PR #1428 and rerun failed workflow jobs on the unchanged logical candidate head."
+    "state": "CLOSED_ON_ASSURED_PREDECESSOR_HEAD",
+    "reason": "The first workflow attempt correctly failed closed before repository test shards because the permanent PR lacked detached exact-head VIT qualification. This was a transport-metadata defect, not a scientific or review defect.",
+    "remediation": "Canonical payload-only VIT lineage and detached exact-head qualification were published without changing the R2 scientific scope."
   },
-  "qa_recommendation": "PASS_REVIEW_IF_EXACT_HEAD_TESTS_AND_REQUIRED_REPOSITORY_ASSURANCE_PASS; THEN_CLOSE_R2_WITH_UPSTREAM_OWNER_HANDOFF_AS_NEXT_MANDATORY_BOUNDARY"
+  "exact_head_assurance": {
+    "assured_head": "ddb7be4665d23d5fed513934febf099ec6f61e15",
+    "assured_tree": "986be11c4469682425a0a5f1eb8d69a911619698",
+    "detached_vit_qualification_id": "864dc27eca7bdb85a7d61eee865c468cf4178df90dd19d3c182b17e90bd43046",
+    "tests_workflow_run": 33995552050,
+    "tests_workflow_result": "PASS",
+    "tiered_shadow_workflow_run": 33995552000,
+    "tiered_shadow_result": "PASS",
+    "vit_routing_preflight": "PASS",
+    "canonical_pytest_manifest": "PASS",
+    "canonical_pytest_shards": "PASS_4_OF_4",
+    "repository_suite": "PASS",
+    "runner_parity": "PASS",
+    "pytest_unittest_parity": "PASS"
+  },
+  "final_closeout_head_rule": "Because this QA record, delegated decision and programme-state transition are themselves part of closeout, the final PR head must receive a fresh detached VIT qualification and repeat required exact-head repository assurance before the decision may become effective.",
+  "qa_recommendation": "PASS"
 }
