@@ -1,0 +1,36 @@
+{
+  "schema": "ovc-c2-owner-read-handoff-qa/v0.1",
+  "programme_id": "OVC-ACTIVE-STACK-RECLASSIFICATION-v0.1",
+  "packet_id": "C2-VNEXT-OWNER-READ-HANDOFF-0001",
+  "gate_id": "C2-OWNER-READ-HANDOFF-G1",
+  "baseline_main": "8838681f9012e277ac367e6ade16b79c2ce7571c",
+  "qa_state": "PENDING_EXACT_HEAD_ASSURANCE",
+  "static_review": {
+    "result": "PASS",
+    "assertions": [
+      "The operator decision is limited to a read-only current-owner C2 handoff.",
+      "The public reader wraps the existing C2 vNext owner materialisation implementation rather than reconstructing or replacing C2 semantics.",
+      "The owner generation binds the exact nine active C2 vNext component implementation and schema identities.",
+      "The source binding fails closed outside the current GBPUSD BID/ASK 15M plus 2H_A_L envelope and requires a separate source-authority reference.",
+      "Observation effective time and first-valid time remain separately represented and no future-first-valid join is authorised.",
+      "Warm-up, gap/reset, closure, partition, unknown-break and component absence remain typed evidence rather than neutral values.",
+      "Relation sets expose their exact owner relation records; no new nearest/best/dominant or semantic relation is constructed.",
+      "Transition and computability records are exposed only when the bound owner materialisation actually emits them; otherwise typed absence is explicit.",
+      "No C2E/C2P/C2.5/C3, Validation, outcome, probability, risk, exposure, trading, execution or agent-write authority is introduced."
+    ]
+  },
+  "targeted_test": "tests/opt_b/c2/vnext/test_owner_read_surface.py",
+  "required_exact_head_assurance": [
+    "VIT_ROUTING_PREFLIGHT",
+    "CANONICAL_PYTEST_SHARDS",
+    "REPOSITORY_SUITE",
+    "PYTEST_UNITTEST_PARITY",
+    "RUNNER_PARITY",
+    "FINAL_HEAD_PROFILE_ASSURANCE",
+    "SIQ_READY",
+    "OVC_MERGE_READINESS"
+  ],
+  "qa_recommendation": "PASS_IF_TARGETED_AND_REQUIRED_EXACT_HEAD_ASSURANCE_PASS_WITH_NO_UNRESOLVED_REVIEW",
+  "authority_delta": "READ_ONLY_CURRENT_OWNER_STRUCTURAL_SNAPSHOT_HANDOFF_ONLY",
+  "rollback": "Forward-only; if assurance fails, repair only packet-local deterministic defects or block without weakening owner boundaries."
+}
