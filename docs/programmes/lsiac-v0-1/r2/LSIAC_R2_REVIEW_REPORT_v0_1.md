@@ -4,7 +4,7 @@
 **Packet:** `LSIAC-R2-REPOSITORY-CAPABILITY-GAP-ACCESSION-REVIEW`  
 **Baseline main:** `b9f747212a35d8c84946930ff2dc565fd4518849`  
 **Baseline tree:** `836c262e76e03393a57c8a616aa4e4ed0b71e550`  
-**Status:** `REVIEW_IMPLEMENTED / QA_PENDING_EXACT_HEAD`  
+**Status:** `DELEGATED_PASS / EFFECTIVE_ONLY_AFTER_FINAL_EXACT_HEAD_ASSURANCE_AND_LAWFUL_INTEGRATION`  
 **Authority effect:** `NONE`
 
 ## 1. Review question
@@ -132,7 +132,13 @@ CURRENT C2 OWNER READ SURFACE
 
 Everything else remains specialised Research Operations work unless and until it produces a durable capability of its own.
 
-## 10. Authority boundary
+## 10. QA and closeout
+
+The R2 static review passed. The first permanent-PR workflow attempt correctly failed closed because detached exact-head VIT qualification had not yet been published. After lawful late-binding qualification was added, exact-head VIT routing, canonical pytest manifest, all four canonical pytest shards, the full repository suite, runner parity, pytest/unittest parity and tiered FINAL_HEAD assurance passed on the assured predecessor closeout head. The final decision/state materialisation changes the PR head and therefore must itself receive fresh detached VIT qualification and the required exact-final-head assurance before R2 becomes effective.
+
+The closeout decision is `PASS` under delegated non-reserved authority with `NONE_CAPABILITY_GAP_REVIEW_ONLY` authority delta.
+
+## 11. Authority boundary
 
 This review creates no C2 source contract, no RRSCG activation, no new provider/instrument/market/side/clock authority, no active Discovery/Development/Validation role, no semantic/family/candidate/model/theory promotion, no C2E boundary authority, no SFF probability, no publication and no exposure/execution authority.
 
