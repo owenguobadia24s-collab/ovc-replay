@@ -1,0 +1,103 @@
+{
+  "$id": "ovc-lsiac-gen0002-laboratory-canon-accession-conformance-plan/v0.1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "authority_effect": {
+      "const": "NONE_PRESERVATION_PLAN_ONLY"
+    },
+    "conformance_plan_mode": {
+      "const": "PRESERVATION_ONLY_NO_FORWARD_ACCESSION_IMPLEMENTATION"
+    },
+    "court_record_summary": {
+      "type": "object"
+    },
+    "explicit_denials": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 10,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "governing_constitution_id": {
+      "const": "OVC-LSIAC-CONSTITUTION-0.1-REVISED-1"
+    },
+    "governing_constitution_sha256": {
+      "const": "ec5a28b8edfa572d229b7e1f1694a5439da621aa640229ad23dcfbeb71f5a8c2"
+    },
+    "next_operator_gate": {
+      "const": "LSIAC-SCIENCE-RESUME"
+    },
+    "packet_id": {
+      "const": "LSIAC-GEN0002-LABORATORY-CANON-ACCESSION-CONFORMANCE-IMPLEMENTATION-PLAN"
+    },
+    "plan_document_id": {
+      "const": "OVC-LSIAC-GEN0002-LABORATORY-CANON-ACCESSION-CONFORMANCE-IMPLEMENTATION-PLAN-0.1"
+    },
+    "plan_identity": {
+      "const": "13f1229a2882b62e4c71a3a8ef7cdb16ae54e3cfb7db6dac0afe3fa0bd1d7387"
+    },
+    "preservation_requirements": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 7,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "programme_id": {
+      "const": "OVC-LSIAC-v0.1"
+    },
+    "required_repository_changes": {
+      "additionalProperties": {
+        "const": false
+      },
+      "type": "object"
+    },
+    "rollback": {
+      "type": "string"
+    },
+    "schema": {
+      "const": "ovc-lsiac-gen0002-laboratory-canon-accession-conformance-plan/v0.1"
+    },
+    "source_architecture_reconciliation_disposition": {
+      "const": "NO_FORWARD_ACCESSION_ARCHITECTURE_CHANGE"
+    },
+    "terminal_state": {
+      "const": "PRESERVATION_CONFORMANT_SCIENCE_RESUME_GATE_READY"
+    },
+    "work_packets": {
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema",
+    "programme_id",
+    "packet_id",
+    "plan_document_id",
+    "plan_identity",
+    "governing_constitution_id",
+    "governing_constitution_sha256",
+    "baseline_main",
+    "baseline_tree",
+    "source_register_virtual_bundle_id",
+    "source_pass2_virtual_view_id",
+    "source_architecture_reconciliation_id",
+    "source_architecture_reconciliation_disposition",
+    "conformance_plan_mode",
+    "court_record_summary",
+    "required_repository_changes",
+    "work_packets",
+    "preservation_requirements",
+    "explicit_denials",
+    "terminal_state",
+    "next_packet",
+    "next_operator_gate",
+    "authority_effect",
+    "rollback"
+  ],
+  "type": "object"
+}
