@@ -167,12 +167,13 @@ class WP5ARepositoryContractTests(unittest.TestCase):
         self.assertEqual("READY", receipt["next_packet_status"])
 
         # WP5A's historical closeout remains immutable while the current programme
-        # pointer lawfully advances through the topology-only WP5 reconciliation.
-        self.assertEqual("RCN-RN-WP5-ARCHITECTURE-RECONCILIATION", state["packet_id"])
-        self.assertEqual("IMPLEMENTED_PENDING_EXACT_HEAD_ASSURANCE", state["status"])
+        # pointer lawfully advances into source-scoped WP5B1 execution.
+        self.assertEqual("RCN-RN-WP5B1", state["packet_id"])
+        self.assertEqual("RCN-RN-WP5B1", state["current_packet"])
+        self.assertEqual("QA_REVIEW", state["status"])
         self.assertEqual("NONE", state["authority_delta"])
-        self.assertEqual("PASS_DELEGATED_CONDITIONAL_ON_EXACT_HEAD_ASSURANCE", state["decision"])
-        self.assertEqual("RCN-RN-WP5B1", state["next_packet"])
+        self.assertEqual("PASS", state["wp5b1"]["source_gate_decision"])
+        self.assertEqual("RCN-RN-WP5B2", state["next_packet"])
         self.assertEqual(
             ["RCN-RN-WP5B1", "RCN-RN-WP5B2"],
             state["architecture_reconciliation"]["legacy_packet_mapping"]["RCN-RN-WP5B"],
