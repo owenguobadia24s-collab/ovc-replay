@@ -31,6 +31,7 @@ EXPECTED_OVC_PACKAGES = {
     "ovc.programme_genesis.grt_v0_2",
     "ovc.research_operations",
     "ovc.research_operations.asocs",
+    "ovc.research_operations.cbs",
     "ovc.research_operations.c2_csm_reference",
     "ovc.research_operations.lsiac",
     "ovc.research_operations.p1cdi",
@@ -100,6 +101,11 @@ class ActiveNamespaceAllowlistTests(unittest.TestCase):
     def test_mcac_namespace_is_inactive_descriptive_conformance_only(self) -> None:
         init_text = (SRC / "ovc" / "research_operations" / "mcac" / "__init__.py").read_text(encoding="utf-8").lower()
         for phrase in ("inactive descriptive", "no clock or source authority", "shared state/phase ontology", "selector", "validation", "publication", "probability", "risk", "exposure", "trading", "execution", "agent-write authority", "fails closed"):
+            self.assertIn(phrase, init_text)
+
+    def test_cbs_namespace_is_research_only_synthetic_and_non_authoritative(self) -> None:
+        init_text = (SRC / "ovc" / "research_operations" / "cbs" / "__init__.py").read_text(encoding="utf-8").lower()
+        for phrase in ("research-only", "synthetic/conformance", "non-authoritative", "no real-source", "selector", "c2e boundary-pack", "activation authority", "validation", "canonical publication", "probability", "risk", "exposure", "trading", "execution", "agent-write authority", "fails closed"):
             self.assertIn(phrase, init_text)
 
     def test_p1cdi_namespace_is_advisory_non_decision_bearing_conformance_only(self) -> None:

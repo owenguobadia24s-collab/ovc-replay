@@ -1,0 +1,19 @@
+{
+  "schema": "ovc-cbs-segmentation-comparator-registry/v0.1",
+  "programme_id": "C2E-BOUNDARY-STABILITY-0001",
+  "comparators": [
+    {"id":"B0","name":"C2E_REFERENCE_AUDIT","availability":"AVAILABLE_READ_ONLY","temporal_class":"OWNER_DEFINED_ONLINE_CAUSAL","dependence_cluster":"OWNER_C2E_REFERENCE","causal_admissibility":"OWNER_DEFINED","implementation":"cbs.comparators.b0_reference","rule":"EXACT_CURRENT_PACK_NO_TUNING_NEVER_GROUND_TRUTH"},
+    {"id":"B1","name":"SIMPLE_RUN_CHANGE","availability":"REFERENCE_REQUIRED","temporal_class":"ONLINE_CAUSAL","dependence_cluster":"CBS_B1_FAMILY","causal_admissibility":true,"implementation":"cbs.comparators.b1_run_change","rule":"FROZEN_PROJECTION_LAB_CONFIGURATION_FIXTURE_ONLY"},
+    {"id":"B2","name":"DIRECTIONAL_CHANGE_EVENT_TIME","availability":"REFERENCE_REQUIRED","temporal_class":"CONFIRMATION_DELAYED","dependence_cluster":"CBS_B2_FAMILY","causal_admissibility":true,"implementation":"cbs.comparators.b2_directional_change","rule":"SEPARATE_ONSET_EFFECTIVE_CONFIRMATION_FVT"},
+    {"id":"B3","name":"PENALISED_OFFLINE_CHANGEPOINT","availability":"REFERENCE_REQUIRED","temporal_class":"RETROSPECTIVE","dependence_cluster":"CBS_B3_FAMILY","causal_admissibility":false,"implementation":"cbs.comparators.b3_pelt","rule":"COMPARISON_ONLY_NO_CAUSAL_JOIN"},
+    {"id":"B4","name":"CROPS","availability":"CONDITIONAL_NOT_ADMITTED","temporal_class":"RETROSPECTIVE","dependence_cluster":"CBS_B3_FAMILY","causal_admissibility":false,"implementation":null,"rule":"NOT_EVALUABLE_WITHOUT_EXACT_DEPENDENCY_ADMISSION"},
+    {"id":"B5","name":"BOCPD","availability":"CONDITIONAL_NOT_ADMITTED","temporal_class":"ONLINE_CAUSAL","dependence_cluster":"CBS_B5_FAMILY","causal_admissibility":true,"implementation":null,"rule":"NOT_EVALUABLE_WITHOUT_EXACT_DEPENDENCY_ADMISSION"},
+    {"id":"B6","name":"WAVELET_MULTISCALE","availability":"CONDITIONAL_NOT_ADMITTED","temporal_class":"CONFIRMATION_DELAYED","dependence_cluster":"CBS_B6_FAMILY","causal_admissibility":true,"implementation":null,"rule":"NOT_EVALUABLE_WITHOUT_EXACT_DEPENDENCY_ADMISSION"},
+    {"id":"B7","name":"HSMM","availability":"CONDITIONAL_NOT_ADMITTED","temporal_class":"RETROSPECTIVE","dependence_cluster":"CBS_B7_FAMILY","causal_admissibility":false,"implementation":null,"rule":"NOT_EVALUABLE_WITHOUT_EXACT_DEPENDENCY_ADMISSION"},
+    {"id":"B8","name":"OPERATOR_ANNOTATION_REFERENCE","availability":"REFERENCE_ONLY_APPEND_ONLY","temporal_class":"REFERENCE_ONLY","dependence_cluster":"HUMAN_REFERENCE","causal_admissibility":false,"implementation":"cbs.comparators.b8_annotation","rule":"NEVER_FITTED_TARGET_OR_GROUND_TRUTH"},
+    {"id":"B9","name":"NO_SEGMENTATION_CONTROL","availability":"REFERENCE_REQUIRED","temporal_class":"CONTROL","dependence_cluster":"CBS_NULL_CONTROL","causal_admissibility":false,"implementation":"cbs.comparators.b9_control","rule":"ZERO_METHOD_BOUNDARIES_SOURCE_EVENTS_REMAIN_TYPED"}
+  ],
+  "minimum_core": ["B0","B1","B2","B3","B9"],
+  "broad_claim_minimum_temporal_classes": ["OWNER_DEFINED_REFERENCE","ONLINE_CAUSAL","CONFIRMATION_DELAYED","RETROSPECTIVE","CONTROL"],
+  "vote_policy": "NO_VOTE_NO_AVERAGE_FAMILY_FACTORISED"
+}
