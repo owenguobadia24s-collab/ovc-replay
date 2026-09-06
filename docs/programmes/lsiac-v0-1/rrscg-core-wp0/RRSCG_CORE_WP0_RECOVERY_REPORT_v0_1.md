@@ -46,4 +46,4 @@ This is a **source-materialisation blocker**, not a scientific rejection. Histor
 
 A source custodian or operator must materialise the exact R2, D9 and D10 algorithm-defining bytes. WP0 then resumes by hashing those bytes, comparing them to the preserved identities, recovering D10's full expected package identity, and verifying exact contents without semantic amendment.
 
-Only if that successor WP0 binding passes may OVC reach the separately operator-reserved gate `LSIAC-G-RRSCG-CORE-ACCESSION-AUTHORITY_AFTER-WP0-SOURCE-BINDING`.
+Only if that successor WP0 binding passes may OVC reach the separately operator-reserved gate `LSIAC-G-RRSCG-CORE-ACCESSION-AUTHORITY_AFTER_WP0_SOURCE_BINDING`.
