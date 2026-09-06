@@ -1,0 +1,77 @@
+{
+  "schema": "ovc-rrscg-core-wp0-exact-source-materialisation-receipt/v0.1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "packet_id": "RRSCG-CORE-WP0-SOURCE-RECOVERY-AND-EXACT-BINDING-SUCCESSOR",
+  "baseline_main": "01621f29cab89d086517b5dbaf6f4fa9f1bbcf7c",
+  "materialisation_class": "OPERATOR_SUPPLIED_EXTERNAL_SOURCE_ARTIFACTS",
+  "verification_time_basis": "2026-09-06 operator upload in the active OVC work session",
+  "repository_binary_residency": false,
+  "preservation_rule": "Original uploaded archives were read byte-for-byte and were not rewritten or repackaged.",
+  "artifacts": [
+    {
+      "role": "RRSCG_R2_CONTINUATION_CONSTRAINT_KERNEL",
+      "operator_supplied_filename": "OVC_EML_GRAMMAR_0003_RRSCG_AlgorithmPack_v0_1_REVISED_2_FREEZE_CANDIDATE(2).zip",
+      "actual_sha256": "5426cd9340c93a2aff0f5c8f3093f9db876647d1790aaa82da3e444a4f3029b5",
+      "expected_sha256": "5426cd9340c93a2aff0f5c8f3093f9db876647d1790aaa82da3e444a4f3029b5",
+      "outer_hash": "PASS_EXACT",
+      "internal_sha256s": "75_OF_75_PASS",
+      "binding": "BOUND_EXACT"
+    },
+    {
+      "role": "RRSCG_D9_EXACT_RELEASE_BUNDLE",
+      "operator_supplied_filename": "OVC_EML_GRAMMAR_0003_RRSCG_D9_EXACT_RELEASE_BUNDLE(2).zip",
+      "actual_sha256": "5898709a7c34a413d775ca1cbb88ef0851809851573e504386c5176b7328b1e5",
+      "expected_sha256": "5898709a7c34a413d775ca1cbb88ef0851809851573e504386c5176b7328b1e5",
+      "bundle_manifest": "12_OF_12_PASS",
+      "embedded_d9_package_sha256": "edbb3e0448845eee375dbefdf2f33fe2d6df3c1ffd4605b28dc117576d7ea398",
+      "expected_d9_package_sha256": "edbb3e0448845eee375dbefdf2f33fe2d6df3c1ffd4605b28dc117576d7ea398",
+      "embedded_release_binding_sha256": "b4fea0c43622f7b7c689136be4844a406db4027c218a8a604eaacde17ae565c5",
+      "expected_release_binding_sha256": "b4fea0c43622f7b7c689136be4844a406db4027c218a8a604eaacde17ae565c5",
+      "binding": "BOUND_EXACT"
+    },
+    {
+      "role": "RRSCG_D9_IMPLEMENTATION_0001_SOURCE_PACKAGE",
+      "operator_supplied_filename": "OVC_EML_GRAMMAR_0003_RRSCG_D9_IMPLEMENTATION_0001(3).zip",
+      "actual_sha256": "15c4f3c5bca53e40894c54c8d4cffdca2675a8f62a537efe1b2533efb09bb23a",
+      "expected_sha256": "15c4f3c5bca53e40894c54c8d4cffdca2675a8f62a537efe1b2533efb09bb23a",
+      "internal_sha256s": "29_OF_29_PASS",
+      "embedded_r2_package_sha256": "5426cd9340c93a2aff0f5c8f3093f9db876647d1790aaa82da3e444a4f3029b5",
+      "embedded_d9_package_sha256": "edbb3e0448845eee375dbefdf2f33fe2d6df3c1ffd4605b28dc117576d7ea398",
+      "binding": "BOUND_EXACT"
+    },
+    {
+      "role": "RRSCG_D10_EXACT_RELEASE_BUNDLE",
+      "operator_supplied_filename": "OVC_EML_GRAMMAR_0003_RRSCG_D10_EXACT_RELEASE_BUNDLE(2).zip",
+      "actual_sha256": "092bf144b38f84a43946d36a15d0905c2bce7f51e7ca815e6814eae361d1ad67",
+      "historical_expected_outer_sha256": null,
+      "bundle_manifest": "12_OF_12_PASS",
+      "embedded_d10_package_sha256": "6b58e9edbb16dd5f8e6f182d0af82c46279a28fc030b4d560bcd69635729515f",
+      "embedded_d10_release_binding_sha256": "cb2315d01379138c1f62d6b1cacc89d9b1314bf2532602e264b7d223a27bf099",
+      "release_state": "SEALED_SUCCESSOR_NOT_ACTIVE",
+      "binding": "BOUND_EXACT_BY_INTERNAL_RELEASE_MANIFEST_AND_REDUNDANT_PACKAGE_MATCH"
+    },
+    {
+      "role": "RRSCG_D10_REDUCER_SUBCOMPONENT_ALGORITHM_PACKAGE",
+      "operator_supplied_filename": "OVC_EML_GRAMMAR_0003_RRSCG_Dynamics_AlgorithmConstitution_v0_2_D10_FREEZE_CANDIDATE(2).zip",
+      "actual_sha256": "6b58e9edbb16dd5f8e6f182d0af82c46279a28fc030b4d560bcd69635729515f",
+      "prior_known_hash_prefix": "6b58e",
+      "recovered_full_expected_sha256": "6b58e9edbb16dd5f8e6f182d0af82c46279a28fc030b4d560bcd69635729515f",
+      "matches_release_bundle_embedded_bytes": true,
+      "internal_sha256s": "64_OF_64_PASS",
+      "binding": "BOUND_EXACT_FULL_IDENTITY_RECOVERED"
+    }
+  ],
+  "cross_chain_checks": [
+    "R2 direct upload hash equals preserved R2 exact identity.",
+    "D9 release-bundle outer hash equals preserved D9 release-bundle identity.",
+    "D9 embedded package hash equals preserved D9 package identity.",
+    "D9 Implementation 0001 outer hash equals preserved implementation source identity.",
+    "D9 Implementation 0001 embeds hash-identical R2 and D9 algorithm packages.",
+    "D10 direct package hash completes the historical 6b58e prefix and matches the hash recorded by the D10 exact release bundle.",
+    "D10 direct package bytes and the release-bundle embedded package are hash-identical.",
+    "D10 final qualification binds its exact D9 parent package to edbb3e0448845eee375dbefdf2f33fe2d6df3c1ffd4605b28dc117576d7ea398.",
+    "No uploaded archive was executed, rewritten or semantically amended during source binding."
+  ],
+  "disposition": "MATERIALISED_AND_EXACT_HASH_VERIFIED",
+  "authority_effect": "NONE_SOURCE_BINDING_EVIDENCE_ONLY"
+}

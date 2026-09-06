@@ -1,0 +1,22 @@
+{
+  "schema": "ovc-rrscg-core-wp0-successor-qa/v0.1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "packet_id": "RRSCG-CORE-WP0-SOURCE-RECOVERY-AND-EXACT-BINDING-SUCCESSOR",
+  "checks": [
+    {"id":"WP0S-QA-01","assertion":"R2 direct archive SHA-256 exactly equals the preserved R2 identity.","result":"PASS"},
+    {"id":"WP0S-QA-02","assertion":"R2 internal SHA256SUMS validates all 75 listed files.","result":"PASS"},
+    {"id":"WP0S-QA-03","assertion":"D9 exact release bundle outer SHA-256 equals the preserved release-bundle identity and all 12 manifest entries validate.","result":"PASS"},
+    {"id":"WP0S-QA-04","assertion":"D9 embedded algorithm package and release binding equal preserved exact identities.","result":"PASS"},
+    {"id":"WP0S-QA-05","assertion":"D9 Implementation 0001 source package SHA-256 equals the preserved exact identity and all 29 SHA256SUMS entries validate.","result":"PASS"},
+    {"id":"WP0S-QA-06","assertion":"D9 Implementation 0001 contains hash-identical R2 and D9 algorithm packages, independently linking the parent chain.","result":"PASS"},
+    {"id":"WP0S-QA-07","assertion":"D10 full package identity is recovered as 6b58e9ed... and begins with the historically preserved 6b58e prefix.","result":"PASS"},
+    {"id":"WP0S-QA-08","assertion":"D10 direct package and exact-release-bundle embedded package are hash-identical; 64 package sums and 12 bundle manifest entries validate.","result":"PASS"},
+    {"id":"WP0S-QA-09","assertion":"D10 remains SEALED_SUCCESSOR_NOT_ACTIVE and this packet does not activate or replace D9.","result":"PASS"},
+    {"id":"WP0S-QA-10","assertion":"No source was reconstructed, executed, rewritten, repackaged or semantically amended for binding.","result":"PASS"},
+    {"id":"WP0S-QA-11","assertion":"No historical claim cap, active role, source envelope, selector/model/theory authority, publication, probability, risk, exposure or execution authority changes.","result":"PASS"},
+    {"id":"WP0S-QA-12","assertion":"The previous WP0 BLOCK remains preserved as historical evidence and is superseded only as current materialisation state.","result":"PASS"}
+  ],
+  "disposition": "PASS_EXACT_SOURCE_BINDING",
+  "authority_delta": "NONE_SOURCE_RECOVERY_AND_EXACT_BINDING_ONLY",
+  "future_gate": "LSIAC-G-RRSCG-CORE-ACCESSION-AUTHORITY_AFTER_WP0_SOURCE_BINDING"
+}
