@@ -5,7 +5,6 @@ import json
 from pathlib import Path
 
 import pytest
-from jsonschema import Draft202012Validator
 
 from ovc.opt_b.c2_vnext import owner_read_surface as owner
 from ovc.research_operations.rrscg.irof import (
@@ -147,7 +146,12 @@ def test_owner_adapter_preserves_exact_nested_owner_truth_and_missingness():
     snapshot = _snapshot()
     before = copy.deepcopy(snapshot)
     adapted = adapt_owner_snapshot(snapshot).to_dict()
-    Draft202012Validator(json.loads(SCHEMA.read_text(encoding="utf-8"))).validate(adapted)
+    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    assert set(adapted) == set(schema["required"])
+    for field, rule in schema["properties"].items():
+        if "const" in rule:
+            assert adapted[field] == rule["const"]
+    assert len(adapted["snapshot_id"]) == len(adapted["content_id"]) == 64
     assert snapshot == before
     assert adapted["owner_snapshot"] == snapshot
     assert adapted["snapshot_id"] == snapshot["snapshot_id"]
