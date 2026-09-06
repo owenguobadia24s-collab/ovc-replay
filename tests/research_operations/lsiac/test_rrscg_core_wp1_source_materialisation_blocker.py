@@ -29,7 +29,7 @@ def test_wp1_fails_closed_without_reconstruction():
     qa = load(WP1 / "RRSCG_CORE_WP1_QA_v0_1.json")
     authority = load(WP1 / "RRSCG_CORE_WP1_AUTHORITY_MANIFEST_v0_1.json")
     assert blocker["no_reconstruction_rule"]["effect"] == "NO_R2_IMPLEMENTATION_WRITTEN"
-    assert blocker["algorithm_implementation_written"] is False if "algorithm_implementation_written" in blocker else True
+    assert blocker["algorithm_implementation_written"] is False
     assert qa["qa_recommendation"] == "BLOCK"
     assert qa["algorithm_implementation_written"] is False
     assert "RECONSTRUCT_R2_FROM_SUMMARIES_OUTPUTS_OR_BEHAVIOUR" in authority["denied"]
