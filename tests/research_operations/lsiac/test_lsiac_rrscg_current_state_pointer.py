@@ -15,7 +15,8 @@ PRIOR_WP2_COMPLETED = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_26.json"
 HISTORICAL_WP3_BLOCKER = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_27.json"
 PRIOR_WP3_COMPLETED = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_28.json"
 PRIOR_WP4_COMPLETED = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_29.json"
-CURRENT_STATE = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_30.json"
+PRIOR_WP5_COMPLETED = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_30.json"
+CURRENT_STATE = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_31.json"
 
 
 def _load(path: Path):
@@ -27,7 +28,7 @@ def test_lsiac_current_state_pointer_advances_terminal_wp5_without_rewriting_his
     assert len(rows) == 1
     assert rows[0]["status"] == "PASS"
     assert rows[0]["reason"] == "POINTER_STATE_CONSISTENT"
-    assert rows[0]["current_state"] == "LSIAC_PROGRAMME_STATE_v0_30.json"
+    assert rows[0]["current_state"] == "LSIAC_PROGRAMME_STATE_v0_31.json"
     pointer = _load(POINTER)
     current = _load(CURRENT_STATE)
     wp1_blocker = _load(HISTORICAL_WP1_BLOCKER)
@@ -37,12 +38,14 @@ def test_lsiac_current_state_pointer_advances_terminal_wp5_without_rewriting_his
     wp3_blocker = _load(HISTORICAL_WP3_BLOCKER)
     wp3_completed = _load(PRIOR_WP3_COMPLETED)
     wp4_completed = _load(PRIOR_WP4_COMPLETED)
+    wp5_completed = _load(PRIOR_WP5_COMPLETED)
     assert pointer["historical_blocker_retained"] == HISTORICAL_WP1_BLOCKER.name
     assert pointer["prior_wp2_blocker_retained"] == HISTORICAL_WP2_BLOCKER.name
     assert pointer["prior_wp2_completed_retained"] == PRIOR_WP2_COMPLETED.name
     assert pointer["prior_wp3_blocker_retained"] == HISTORICAL_WP3_BLOCKER.name
     assert pointer["prior_wp3_completed_retained"] == PRIOR_WP3_COMPLETED.name
     assert pointer["prior_wp4_completed_retained"] == PRIOR_WP4_COMPLETED.name
+    assert pointer["prior_wp5_completed_retained"] == PRIOR_WP5_COMPLETED.name
     assert pointer["status"] == "COMPLETED"
     assert current["status"] == "COMPLETED"
     assert current["packet_id"] == "RRSCG-CORE-WP5-PARITY-REPLAY-SCALE-QUALIFICATION"
@@ -57,3 +60,4 @@ def test_lsiac_current_state_pointer_advances_terminal_wp5_without_rewriting_his
     assert wp3_blocker["blockers"][0]["blocker_id"] == "RRSCG_CORE_WP3_D10_SOURCE_BYTES_UNAVAILABLE_AT_EXECUTION"
     assert wp3_completed["status"] == "APPROVED"
     assert wp4_completed["status"] == "APPROVED"
+    assert wp5_completed["status"] == "COMPLETED"

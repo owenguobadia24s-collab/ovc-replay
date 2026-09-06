@@ -59,7 +59,7 @@ def test_wp3_blocker_state_and_dependency_frontier_are_fail_closed():
     assert state["capability_activation_allowed"] is False
     assert state["blockers"][0]["required_sha256"] == EXPECTED_D10
     assert pointer["status"] == "COMPLETED"
-    assert pointer["current_state"] == "LSIAC_PROGRAMME_STATE_v0_30.json"
+    assert pointer["current_state"] == "LSIAC_PROGRAMME_STATE_v0_31.json"
     assert pointer["prior_wp3_blocker_retained"] == "LSIAC_PROGRAMME_STATE_v0_27.json"
     assert authority["authority_delta"] == "NONE_BLOCKER_RECORD_ONLY"
     assert authority["currently_blocked"][0] == "D10_REDUCER_IMPLEMENTATION"
