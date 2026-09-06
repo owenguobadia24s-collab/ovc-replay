@@ -1,0 +1,18 @@
+{
+  "schema": "ovc-rrscg-core-wp0-successor-qa/v0.1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "packet_id": "RRSCG-CORE-WP0-SOURCE-RECOVERY-AND-EXACT-BINDING-SUCCESSOR",
+  "checks": [
+    {"id":"WP0S-QA-01","assertion":"R2 currently materialised package SHA-256 exactly equals the preserved R2 identity.","result":"PASS"},
+    {"id":"WP0S-QA-02","assertion":"R2 internal SHA256SUMS verifies 75/75 entries and the package's 14 tests pass without source modification.","result":"PASS"},
+    {"id":"WP0S-QA-03","assertion":"D9 exact release bundle SHA-256 equals the preserved release-bundle identity and its nested D9 algorithm package and release binding equal their preserved identities.","result":"PASS"},
+    {"id":"WP0S-QA-04","assertion":"D9 Implementation 0001 source package SHA-256 equals the preserved implementation-source identity; 29/29 internal SHA256SUMS entries verify; vendored R2/D9/binding hashes cross-bind exactly.","result":"PASS"},
+    {"id":"WP0S-QA-05","assertion":"D10 full package identity is recovered as 6b58e9ed... and is independently repeated by the exact release manifest, fresh exact-byte review and final qualification receipt.","result":"PASS"},
+    {"id":"WP0S-QA-06","assertion":"The separately uploaded D10 freeze candidate is byte-identical to the D10 exact-release-bundle nested candidate and satisfies the previously preserved 6b58e prefix.","result":"PASS"},
+    {"id":"WP0S-QA-07","assertion":"No source archive is rewritten, recompressed or committed into ordinary Git; only exact identities and verification evidence are recorded in accordance with artifacts/README.md.","result":"PASS"},
+    {"id":"WP0S-QA-08","assertion":"No RRSCG implementation, persistent capability/faculty accession, ACTIVE_* role, source expansion, semantic/model promotion, Validation, publication, probability, risk, exposure or execution authority is granted by source binding.","result":"PASS"},
+    {"id":"WP0S-QA-09","assertion":"The prior WP0 BLOCK remains preserved as historical evidence and is superseded only for current source-materialisation status by this successor binding generation.","result":"PASS"}
+  ],
+  "disposition": "PASS_EXACT_BINDING_COMPLETE_OPERATOR_GATE_READY",
+  "authority_delta": "NONE_SOURCE_BINDING_ONLY"
+}
