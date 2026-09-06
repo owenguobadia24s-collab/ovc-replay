@@ -1,0 +1,11 @@
+{
+  "schema":"ovc-cbs-comparator-support-manifest-set/v0.1","programme_id":"C2E-BOUNDARY-STABILITY-0001","role":"SYNTHETIC_CONFORMANCE_ONLY",
+  "manifests":[
+    {"comparator_id":"B0","warmup":"OWNER_DEFINED","lookback":"OWNER_DEFINED","lookahead":"OWNER_DEFINED","edge_censor":"OWNER_DEFINED","gap_policy":"PRESERVE_TYPED","abstention":["OWNER_EVENT_ABSENT","CENSOR_GAP","CENSOR_RELEASE_END"]},
+    {"comparator_id":"B1","warmup":1,"lookback":1,"lookahead":0,"edge_censor":0,"gap_policy":"BREAK_AND_CENSOR","abstention":["PUBLIC_FIELD_ABSENT","OWNER_NOT_COMPUTABLE"]},
+    {"comparator_id":"B2","warmup":1,"lookback":1,"lookahead":1,"edge_censor":1,"gap_policy":"BREAK_AND_CENSOR","abstention":["PUBLIC_FIELD_ABSENT","THRESHOLD_NOT_REACHED","OWNER_NOT_COMPUTABLE"]},
+    {"comparator_id":"B3","warmup":"METHOD_PACK","lookback":"MIN_SEGMENT_LENGTH","lookahead":"RETROSPECTIVE_FULL_DECLARED_SEGMENT","edge_censor":"MIN_SEGMENT_LENGTH","gap_policy":"SEGMENT_AND_CENSOR","abstention":["PUBLIC_FIELD_ABSENT","INSUFFICIENT_SEGMENT","OWNER_NOT_COMPUTABLE"]},
+    {"comparator_id":"B9","warmup":0,"lookback":0,"lookahead":0,"edge_censor":0,"gap_policy":"PRESERVE_TYPED","abstention":[]}
+  ],
+  "required_analyses":["MATCHED_SUPPORT","FULL_POPULATION"],"positive_only_denominator":"FORBIDDEN"
+}
