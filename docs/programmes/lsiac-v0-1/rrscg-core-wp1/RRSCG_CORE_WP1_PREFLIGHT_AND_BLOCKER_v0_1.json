@@ -1,0 +1,71 @@
+{
+  "schema": "ovc-rrscg-core-wp1-preflight-blocker/v0.1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "plan_id": "OVC-RRSCG-CORE-ACCESSION-CONFORMANCE-PLAN-0.1",
+  "packet_id": "RRSCG-CORE-WP1-R2-KERNEL-CONFORMANCE-IMPLEMENTATION",
+  "baseline_main": "a0e0ccf48d5be18a6c101d17c3c99d0266b2b56d",
+  "authority_gate": "LSIAC-G-RRSCG-CORE-ACCESSION-AUTHORITY_AFTER_WP0_SOURCE_BINDING",
+  "authority_gate_state": "PASS_AND_REPOSITORY_EFFECTIVE",
+  "authority_scope": "INACTIVE_RRSCG_CORE_CAPABILITY_CONSTRUCTION_AND_CONFORMANCE_TESTING_ONLY",
+  "preflight_disposition": "BLOCKED",
+  "blocker_id": "RRSCG_CORE_WP1_SOURCE_BYTES_UNAVAILABLE_AT_EXECUTION",
+  "blocker_class": "REQUIRED_ARTIFACT_UNAVAILABLE_IN_CURRENT_EXECUTION_ENVIRONMENT",
+  "algorithm_implementation_written": false,
+  "court_record_source_binding": {
+    "state": "BOUND_EXACT",
+    "manifest": "docs/programmes/lsiac-v0-1/rrscg-core-wp0-successor/RRSCG_CORE_WP0_SUCCESSOR_SOURCE_BINDING_MANIFEST_v0_1.json",
+    "artifact_name": "OVC_EML_GRAMMAR_0003_RRSCG_AlgorithmPack_v0_1_REVISED_2_FREEZE_CANDIDATE(2).zip",
+    "canonical_artifact_name": "OVC_EML_GRAMMAR_0003_RRSCG_AlgorithmPack_v0_1_REVISED_2_FREEZE_CANDIDATE.zip",
+    "expected_sha256": "5426cd9340c93a2aff0f5c8f3093f9db876647d1790aaa82da3e444a4f3029b5",
+    "wp0_verified_internal_entries": 75,
+    "wp0_package_tests": "14_PASSED"
+  },
+  "execution_availability": {
+    "state": "SOURCE_BYTES_UNAVAILABLE_AT_EXECUTION",
+    "reason": "The exact R2 archive is intentionally external to ordinary Git and no execution-accessible mounted artifact path or connector file reference for those exact bytes is available to the current execution agent. The repository manifest proves prior exact binding but does not itself provide the algorithm-defining bytes required for a conformance implementation.",
+    "ordinary_git_policy": "artifacts/README.md excludes duplicate engine ZIPs and keeps preserved package archives in the external artifact root.",
+    "implementation_from_summary_or_behaviour": "FORBIDDEN"
+  },
+  "no_reconstruction_rule": {
+    "binding_plan_section": "OVC_RRSCG_CORE_ACCESSION_CONFORMANCE_PLAN_v0_1.md section 3 / WP1",
+    "prohibited_sources_for_algorithm_reconstruction": [
+      "scientific summaries",
+      "journal prose",
+      "chat descriptions",
+      "output tables",
+      "downstream behaviour",
+      "partial constitution snippets"
+    ],
+    "effect": "NO_R2_IMPLEMENTATION_WRITTEN"
+  },
+  "work_preserved": [
+    "operator accession PASS is integrated on main",
+    "R2 exact identity remains immutable and source-bound",
+    "WP1 packet identity is resolved",
+    "no algorithm semantics were guessed or reconstructed"
+  ],
+  "smallest_lawful_resolution": {
+    "action": "Rematerialise the exact R2 source archive into an execution-accessible artifact surface for this agent/runtime, or mount the governed external artifact root containing the exact archive.",
+    "required_file": "OVC_EML_GRAMMAR_0003_RRSCG_AlgorithmPack_v0_1_REVISED_2_FREEZE_CANDIDATE(2).zip",
+    "required_sha256": "5426cd9340c93a2aff0f5c8f3093f9db876647d1790aaa82da3e444a4f3029b5",
+    "verification_before_resume": "SHA-256 byte equality plus internal source-manifest verification must pass before any WP1 implementation mutation.",
+    "new_operator_scientific_authority_required": false
+  },
+  "resume_packet": "RRSCG-CORE-WP1-R2-KERNEL-CONFORMANCE-IMPLEMENTATION",
+  "next_gate_after_successful_implementation": "RRSCG-CORE-G1-R2-CONFORMANCE",
+  "next_gate_requirement": "INDEPENDENT_ALGORITHMIC_REVIEW_REQUIRED_BEFORE_CONTINUATION",
+  "retained_denials": [
+    "CAPABILITY_ACTIVATION",
+    "ACTIVE_DISCOVERY",
+    "ACTIVE_DEVELOPMENT",
+    "ACTIVE_VALIDATION",
+    "NEW_PROVIDER_INSTRUMENT_MARKET_SIDE_OR_CLOCK",
+    "SELECTOR_ACTIVATION_OR_REPLACEMENT",
+    "THRESHOLD_MODEL_FAMILY_CANDIDATE_THEORY_OR_SEMANTIC_PROMOTION",
+    "CANONICAL_OR_R2_PUBLICATION",
+    "PROBABILITY_RISK_EXPOSURE_EH_TRADING_OR_EXECUTION_AUTHORITY",
+    "AGENT_WRITE_AUTHORITY",
+    "C2_OWNER_SEMANTIC_MUTATION"
+  ],
+  "rollback": "No implementation rollback is needed because no RRSCG algorithm implementation was written. Preserve this blocker, the operator PASS and WP0 exact-source binding; resume forward only after exact bytes are execution-accessible."
+}
