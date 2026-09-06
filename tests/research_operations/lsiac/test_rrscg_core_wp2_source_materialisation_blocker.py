@@ -5,7 +5,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 WP2 = ROOT / "docs/programmes/lsiac-v0-1/rrscg-core-wp2"
-STATE = ROOT / "records/research_operations/lsiac/LSIAC_PROGRAMME_STATE_v0_25.json"
+BLOCKED_STATE = ROOT / "records/research_operations/lsiac/LSIAC_PROGRAMME_STATE_v0_25.json"
+CURRENT_STATE = ROOT / "records/research_operations/lsiac/LSIAC_PROGRAMME_STATE_v0_26.json"
 POINTER = ROOT / "records/research_operations/lsiac/CURRENT_STATE_POINTER.json"
 WP0 = ROOT / "docs/programmes/lsiac-v0-1/rrscg-core-wp0-successor/RRSCG_CORE_WP0_SUCCESSOR_SOURCE_BINDING_MANIFEST_v0_1.json"
 ARTIFACT_POLICY = ROOT / "artifacts/README.md"
@@ -18,7 +19,7 @@ def load(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def test_wp2_distinguishes_exact_binding_from_execution_availability():
+def test_historical_wp2_blocker_remains_exactly_a_source_availability_blocker():
     wp0 = load(WP0)
     blocker = load(WP2 / "RRSCG_CORE_WP2_PREFLIGHT_AND_BLOCKER_v0_1.json")
     d9 = next(row for row in wp0["bindings"] if row["object"] == "RRSCG_D9_DYNAMICS_AND_GEOMETRY_KINEMATICS")
@@ -32,41 +33,33 @@ def test_wp2_distinguishes_exact_binding_from_execution_availability():
     assert blocker["preflight_disposition"] == "BLOCKED"
 
 
-def test_wp2_fails_closed_without_d9_reconstruction():
-    blocker = load(WP2 / "RRSCG_CORE_WP2_PREFLIGHT_AND_BLOCKER_v0_1.json")
-    qa = load(WP2 / "RRSCG_CORE_WP2_QA_v0_1.json")
-    authority = load(WP2 / "RRSCG_CORE_WP2_AUTHORITY_MANIFEST_v0_1.json")
-    assert blocker["no_reconstruction_rule"]["effect"] == "NO_D9_IMPLEMENTATION_WRITTEN"
-    assert blocker["d9_implementation_written"] is False
-    assert qa["qa_recommendation"] == "BLOCK"
-    assert "RECONSTRUCT_D9_FROM_SUMMARIES_OUTPUTS_OR_BEHAVIOUR" in authority["denied"]
-
-
-def test_wp2_programme_state_is_blocked_not_deauthorised():
-    state = load(STATE)
+def test_blocker_state_is_preserved_but_current_state_has_advanced_forward_only():
+    blocked = load(BLOCKED_STATE)
+    current = load(CURRENT_STATE)
     pointer = load(POINTER)
-    assert state["status"] == "BLOCKED"
-    assert state["implementation_allowed"] is True
-    assert state["implementation_exercisable_now"] is False
-    assert state["rrscg_persistent_accession_construction_allowed"] is True
-    assert state["operator_decision_required_now"] is False
-    assert state["d9_algorithm_implementation_written"] is False
-    assert state["claim_cap"] == "DESCRIPTIVE_DEVELOPMENT_ONLY"
-    assert state["blockers"][0]["required_sha256"] == EXPECTED_IMPL
-    assert state["next_packet"] == "RRSCG-CORE-WP2-D9-OBSERVER-STATE-FACULTY"
-    assert pointer["current_state"] == "LSIAC_PROGRAMME_STATE_v0_25.json"
-    assert pointer["status"] == "BLOCKED"
+    assert blocked["status"] == "BLOCKED"
+    assert blocked["implementation_allowed"] is True
+    assert blocked["implementation_exercisable_now"] is False
+    assert blocked["d9_algorithm_implementation_written"] is False
+    assert blocked["blockers"][0]["required_sha256"] == EXPECTED_IMPL
+    assert current["status"] == "APPROVED"
+    assert current["exact_d9_source_package_sha256"] == EXPECTED_IMPL
+    assert pointer["prior_wp2_blocker_retained"] == BLOCKED_STATE.name
+    assert pointer["current_state"] == CURRENT_STATE.name
+    assert pointer["status"] == "APPROVED"
 
 
-def test_external_artifact_policy_explains_execution_gap():
+def test_source_rematerialisation_receipt_closes_only_execution_availability():
+    receipt = load(WP2 / "RRSCG_CORE_WP2_SOURCE_REMATERIALISATION_RECEIPT_v0_1.json")
+    assert receipt["expected_sha256"] == EXPECTED_IMPL
+    assert receipt["actual_sha256"] == EXPECTED_IMPL
+    assert receipt["internal_sha256sum_entries_verified"] == 29
+    assert receipt["internal_sha256sum_entries_total"] == 29
+    assert receipt["disposition"] == "SOURCE_BYTES_EXECUTION_ACCESS_RESTORED_AND_EXACTLY_VERIFIED"
+    assert receipt["authority_delta"] == "NONE_SOURCE_AVAILABILITY_ONLY"
+
+
+def test_external_artifact_policy_still_excludes_duplicate_engine_zips():
     policy = ARTIFACT_POLICY.read_text(encoding="utf-8")
     assert "duplicate engine ZIPs" in policy
     assert "ovc-replay-external-artifacts" in policy
-
-
-def test_dependency_frontier_has_one_artifact_availability_blocker():
-    frontier = load(WP2 / "RRSCG_CORE_WP2_DEPENDENCY_FRONTIER_v0_1.json")
-    assert frontier["status"] == "BLOCKED"
-    assert len(frontier["blocked"]) == 1
-    assert frontier["blocked"][0]["id"] == "D9_EXACT_SOURCE_BYTES_EXECUTION_AVAILABILITY"
-    assert frontier["blocked"][0]["required_sha256"] == EXPECTED_IMPL
