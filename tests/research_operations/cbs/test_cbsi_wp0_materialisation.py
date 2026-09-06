@@ -25,6 +25,11 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def canonical_sha256(value: dict) -> str:
+    raw = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("utf-8")
+    return hashlib.sha256(raw).hexdigest()
+
+
 def git_blob(path: str) -> str:
     return subprocess.check_output(
         ["git", "hash-object", path], cwd=ROOT, text=True
@@ -101,3 +106,13 @@ def test_programme_state_advances_only_to_wp1() -> None:
     assert state["next_packet"] == "CBSI-WP1"
     assert state["real_source_development"] == "DENIED"
     assert state["c2e_owner_state"] == "READ_ONLY_UNCHANGED"
+
+
+def test_wp0_vit_authority_and_dependency_frontier_are_canonical() -> None:
+    wp0 = DOCS / "wp0"
+    authority = load(wp0 / "CBSI_WP0_VIT_AUTHORITY_MANIFEST_v0_1.json")
+    frontier = load(wp0 / "CBSI_WP0_VIT_DEPENDENCY_FRONTIER_v0_1.json")
+    assert canonical_sha256(authority["payload"]) == authority["logical_id"]
+    assert canonical_sha256(frontier["payload"]) == frontier["logical_id"]
+    assert authority["payload"]["authority_class"] == "AUTO_EXECUTABLE_RECORDED_OPERATOR_PASS_MATERIALISATION"
+    assert "NO_REAL_SOURCE_DEVELOPMENT_BEFORE_CBSI_GREAL_DEV_PASS" in authority["payload"]["retained_denials"]
