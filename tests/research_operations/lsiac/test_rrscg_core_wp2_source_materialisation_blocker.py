@@ -5,9 +5,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 WP2 = ROOT / "docs/programmes/lsiac-v0-1/rrscg-core-wp2"
-BLOCKED_STATE = ROOT / "records/research_operations/lsiac/LSIAC_PROGRAMME_STATE_v0_25.json"
-CURRENT_STATE = ROOT / "records/research_operations/lsiac/LSIAC_PROGRAMME_STATE_v0_26.json"
-POINTER = ROOT / "records/research_operations/lsiac/CURRENT_STATE_POINTER.json"
+STATE_ROOT = ROOT / "records/research_operations/lsiac"
+BLOCKED_STATE = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_25.json"
+WP2_COMPLETED_STATE = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_26.json"
+POINTER = STATE_ROOT / "CURRENT_STATE_POINTER.json"
 WP0 = ROOT / "docs/programmes/lsiac-v0-1/rrscg-core-wp0-successor/RRSCG_CORE_WP0_SUCCESSOR_SOURCE_BINDING_MANIFEST_v0_1.json"
 ARTIFACT_POLICY = ROOT / "artifacts/README.md"
 
@@ -33,20 +34,27 @@ def test_historical_wp2_blocker_remains_exactly_a_source_availability_blocker():
     assert blocker["preflight_disposition"] == "BLOCKED"
 
 
-def test_blocker_state_is_preserved_but_current_state_has_advanced_forward_only():
+def test_blocker_and_wp2_completion_are_preserved_after_forward_progression():
     blocked = load(BLOCKED_STATE)
-    current = load(CURRENT_STATE)
+    completed = load(WP2_COMPLETED_STATE)
     pointer = load(POINTER)
+    current_path = STATE_ROOT / pointer["current_state"]
+    current = load(current_path)
+
     assert blocked["status"] == "BLOCKED"
     assert blocked["implementation_allowed"] is True
     assert blocked["implementation_exercisable_now"] is False
     assert blocked["d9_algorithm_implementation_written"] is False
     assert blocked["blockers"][0]["required_sha256"] == EXPECTED_IMPL
-    assert current["status"] == "APPROVED"
-    assert current["exact_d9_source_package_sha256"] == EXPECTED_IMPL
+
+    assert completed["status"] == "APPROVED"
+    assert completed["exact_d9_source_package_sha256"] == EXPECTED_IMPL
     assert pointer["prior_wp2_blocker_retained"] == BLOCKED_STATE.name
-    assert pointer["current_state"] == CURRENT_STATE.name
-    assert pointer["status"] == "APPROVED"
+    assert pointer["prior_wp2_completed_retained"] == WP2_COMPLETED_STATE.name
+
+    assert current_path.exists()
+    assert pointer["current_state"] != BLOCKED_STATE.name
+    assert current["programme_id"] == pointer["programme_id"]
 
 
 def test_source_rematerialisation_receipt_closes_only_execution_availability():
