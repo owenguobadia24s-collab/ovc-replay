@@ -61,6 +61,6 @@ This PASS changes no historical scientific claim, performs no algorithm reconstr
 
 After lawful integration, execution must stop at:
 
-`LSIAC-G-RRSCG-CORE-ACCESSION-AUTHORITY_AFTER-WP0-SOURCE-BINDING`
+`LSIAC-G-RRSCG-CORE-ACCESSION-AUTHORITY_AFTER_WP0_SOURCE_BINDING`
 
 The requested operator grant is limited to construction and conformance testing of the versioned **inactive** RRSCG Research Operations capability under the ratified core plan. Without explicit operator approval, WP1 implementation remains prohibited.
