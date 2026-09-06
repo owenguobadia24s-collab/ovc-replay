@@ -16,21 +16,23 @@ HISTORICAL_WP3_BLOCKER = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_27.json"
 PRIOR_WP3_COMPLETED = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_28.json"
 PRIOR_WP4_COMPLETED = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_29.json"
 PRIOR_WP5_COMPLETED = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_30.json"
-CURRENT_STATE = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_31.json"
+RRSCG_TERMINAL_STATE = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_31.json"
+CURRENT_STATE = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_32.json"
 
 
 def _load(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def test_lsiac_current_state_pointer_advances_terminal_wp5_without_rewriting_history():
+def test_lsiac_current_state_pointer_preserves_rrscg_and_advances_mcac_without_rewriting_history():
     rows = check_pointer(POINTER, repository_root=ROOT)
     assert len(rows) == 1
     assert rows[0]["status"] == "PASS"
     assert rows[0]["reason"] == "POINTER_STATE_CONSISTENT"
-    assert rows[0]["current_state"] == "LSIAC_PROGRAMME_STATE_v0_31.json"
+    assert rows[0]["current_state"] == "LSIAC_PROGRAMME_STATE_v0_32.json"
     pointer = _load(POINTER)
     current = _load(CURRENT_STATE)
+    rrscg_terminal = _load(RRSCG_TERMINAL_STATE)
     wp1_blocker = _load(HISTORICAL_WP1_BLOCKER)
     wp1_completed = _load(PRIOR_WP1_COMPLETED)
     wp2_blocker = _load(HISTORICAL_WP2_BLOCKER)
@@ -46,11 +48,14 @@ def test_lsiac_current_state_pointer_advances_terminal_wp5_without_rewriting_his
     assert pointer["prior_wp3_completed_retained"] == PRIOR_WP3_COMPLETED.name
     assert pointer["prior_wp4_completed_retained"] == PRIOR_WP4_COMPLETED.name
     assert pointer["prior_wp5_completed_retained"] == PRIOR_WP5_COMPLETED.name
+    assert pointer["prior_rrscg_terminal_retained"] == RRSCG_TERMINAL_STATE.name
     assert pointer["status"] == "COMPLETED"
     assert current["status"] == "COMPLETED"
-    assert current["packet_id"] == "RRSCG-CORE-WP5-PARITY-REPLAY-SCALE-QUALIFICATION"
-    assert current["next_packet"] == "NONE_RRSCG_CORE_COMPLETE"
+    assert current["packet_id"] == "MCAC-ACC-v0.1"
+    assert current["next_packet"] == "NONE_MCAC_V0_1_COMPLETE"
     assert current["blockers"] == []
+    assert rrscg_terminal["packet_id"] == "RRSCG-CORE-WP5-PARITY-REPLAY-SCALE-QUALIFICATION"
+    assert rrscg_terminal["next_packet"] == "NONE_RRSCG_CORE_COMPLETE"
     assert wp1_blocker["status"] == "BLOCKED"
     assert wp1_completed["status"] == "APPROVED"
     assert wp2_blocker["status"] == "BLOCKED"
