@@ -1,0 +1,48 @@
+{
+  "schema": "ovc-rrscg-core-wp0-exact-binding-matrix/v0.1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "packet_id": "RRSCG-CORE-WP0-SOURCE-RECOVERY-AND-EXACT-BINDING",
+  "binding_rule": "PASS requires currently retrievable exact algorithm-defining bytes and exact identity verification. Historical attestations alone are insufficient.",
+  "rows": [
+    {
+      "binding_id": "RRSCG-WP0-B01",
+      "object": "RRSCG_R2_CONTINUATION_CONSTRAINT_KERNEL",
+      "expected_sha256": "5426cd9340c93a2aff0f5c8f3093f9db876647d1790aaa82da3e444a4f3029b5",
+      "historical_source_passports": ["B0224", "B0225", "B0226", "B0227", "B0230", "B0231", "B0232"],
+      "historical_standing": "SOURCE_EXACT_AT_ORIGINAL_EXECUTION",
+      "current_exact_byte_locator": null,
+      "current_hash_verification": "NOT_POSSIBLE_BYTES_UNAVAILABLE",
+      "binding_status": "BLOCKED_UNMATERIALISED_EXACT_BYTES",
+      "implementation_eligible": false
+    },
+    {
+      "binding_id": "RRSCG-WP0-B02",
+      "object": "RRSCG_D9_DYNAMICS_AND_GEOMETRY_KINEMATICS",
+      "expected_package_sha256": "edbb3e0448845eee375dbefdf2f33fe2d6df3c1ffd4605b28dc117576d7ea398",
+      "expected_implementation_source_sha256": "15c4f3c5bca53e40894c54c8d4cffdca2675a8f62a537efe1b2533efb09bb23a",
+      "historical_source_passports": ["B0251", "B0252", "B0253", "B0254", "B0255", "B0256", "B0257", "B0258", "B0259", "B0260", "B0261"],
+      "historical_standing": "SOURCE_EXACT_AND_IMPLEMENTATION_SOURCE_PREVIOUSLY_HASH_VERIFIED",
+      "historical_intake_proof": "Implementation 0001 intake recorded expected=actual source-package SHA-256, SHA256SUMS 29/29 and pytest 6/6.",
+      "current_exact_byte_locator": null,
+      "current_hash_verification": "NOT_POSSIBLE_BYTES_UNAVAILABLE",
+      "binding_status": "BLOCKED_HISTORICALLY_VERIFIED_BYTES_CURRENTLY_UNRETRIEVABLE",
+      "implementation_eligible": false
+    },
+    {
+      "binding_id": "RRSCG-WP0-B03",
+      "object": "RRSCG_D10_REDUCER_SUBCOMPONENT",
+      "expected_full_package_sha256": null,
+      "known_hash_prefix": "6b58e",
+      "historical_source_passports": ["B0312", "B0313", "B0314", "B0315", "B0316", "B0317", "B0318"],
+      "historical_standing": "SOURCE_EXACT_AT_ORIGINAL_EXECUTION_AND_FRESH_EXACT_BYTE_REVIEW_PASS",
+      "current_exact_byte_locator": null,
+      "current_hash_verification": "NOT_POSSIBLE_BYTES_UNAVAILABLE_AND_FULL_EXPECTED_HASH_UNRECOVERED",
+      "binding_status": "BLOCKED_UNMATERIALISED_EXACT_BYTES_AND_INCOMPLETE_IDENTITY",
+      "implementation_eligible": false
+    }
+  ],
+  "all_required_bindings_pass": false,
+  "disposition": "BLOCK",
+  "fail_closed_effect": "RRSCG repository implementation, conformance and persistent accession SHALL NOT begin from summaries, result packs, reports, output behavior, hash prefixes or remembered algorithm semantics.",
+  "resume_condition": "A source custodian/operator materialises exact candidate bytes; WP0 independently hashes and verifies them against the preserved exact identities (and recovers a complete D10 identity) before any implementation packet is eligible."
+}

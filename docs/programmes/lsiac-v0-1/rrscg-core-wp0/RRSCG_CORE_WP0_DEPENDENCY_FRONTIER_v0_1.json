@@ -1,0 +1,21 @@
+{
+  "schema": "ovc-dependency-frontier/v1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "packet_id": "RRSCG-CORE-WP0-SOURCE-RECOVERY-AND-EXACT-BINDING",
+  "baseline_commit": "8dd38fede57a4f92603d9676c699cee7d8f5f53f",
+  "satisfied": [
+    {"id":"LSIAC_RRSCG_CORE_ACCESSION_PLAN","state":"PASS_AND_INTEGRATED","source":"main@8dd38fede57a4f92603d9676c699cee7d8f5f53f"},
+    {"id":"C2_OWNER_READ_HANDOFF","state":"PASS_AND_INTEGRATED","source":"registries/opt_b/c2/vnext/CURRENT_OWNER_STRUCTURAL_SNAPSHOT_READ_SURFACE.json"},
+    {"id":"IROF_EXECUTION_PLANE","state":"COMPLETED_INACTIVE_INFRASTRUCTURE_AVAILABLE","source":"registries/implementation/irof/CURRENT_STATE_POINTER.json"},
+    {"id":"LSIAC_SOURCE_PASSPORTS","state":"PRESERVED","source":"docs/programmes/lsiac-v0-1/source-census/LSIAC_SOURCE_PASSPORT_CODEBOOK_0221_0330.json"}
+  ],
+  "blocked": [
+    {"id":"RRSCG_R2_EXACT_BYTES","state":"UNMATERIALISED","required_sha256":"5426cd9340c93a2aff0f5c8f3093f9db876647d1790aaa82da3e444a4f3029b5"},
+    {"id":"RRSCG_D9_EXACT_BYTES","state":"UNMATERIALISED","required_package_sha256":"edbb3e0448845eee375dbefdf2f33fe2d6df3c1ffd4605b28dc117576d7ea398","required_implementation_source_sha256":"15c4f3c5bca53e40894c54c8d4cffdca2675a8f62a537efe1b2533efb09bb23a"},
+    {"id":"RRSCG_D10_EXACT_BYTES_AND_FULL_IDENTITY","state":"UNMATERIALISED_AND_IDENTITY_INCOMPLETE","known_hash_prefix":"6b58e"}
+  ],
+  "current_gate": "RRSCG-CORE-WP0-EXACT-SOURCE-BINDING",
+  "gate_status": "BLOCK",
+  "authority_delta": "NONE",
+  "resume_condition": "All three algorithm-defining source objects are materialised and independently hash-bound; D10 full expected package identity is recovered before comparison."
+}
