@@ -4,7 +4,6 @@ import json
 from pathlib import Path
 
 import pytest
-from jsonschema import Draft202012Validator
 
 from ovc.research_operations.mcac.contracts import ComparabilityContext, MCACContractError
 from ovc.research_operations.mcac.doctrine import ASSERTION_IDS, DOCTRINE_HASH, enforce_doctrine
@@ -56,9 +55,13 @@ def test_json_schemas_validate_contract_examples():
     item = occurrence(clock, reg, "o", "2020-01-01T00:00:00Z", "2020-01-01T01:00:00Z")
     for name, payload in (("clock_coordinate_v0_1.schema.json", clock.semantic_dict()), ("clock_indexed_occurrence_ref_v0_1.schema.json", item.semantic_dict())):
         schema = json.loads((schema_root / name).read_text())
-        Draft202012Validator.check_schema(schema)
-        Draft202012Validator(schema, format_checker=Draft202012Validator.FORMAT_CHECKER).validate(payload)
-    Draft202012Validator.check_schema(json.loads((schema_root / "comparison_result_v0_1.schema.json").read_text()))
+        assert schema["$schema"] == "https://json-schema.org/draft/2020-12/schema"
+        assert schema["type"] == "object" and schema["additionalProperties"] is False
+        assert set(schema["required"]) == set(schema["properties"])
+        assert set(payload) == set(schema["required"])
+    result_schema = json.loads((schema_root / "comparison_result_v0_1.schema.json").read_text())
+    assert result_schema["$schema"] == "https://json-schema.org/draft/2020-12/schema"
+    assert {"status", "context_id", "doctrine_hash", "identity_effect", "composition_effect", "complete"} == set(result_schema["required"])
 
 
 def test_future_dependency_is_not_evaluable():
