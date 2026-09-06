@@ -1,0 +1,48 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "plan_id": "OVC-RRSCG-CORE-ACCESSION-CONFORMANCE-PLAN-0.1",
+  "plan_version": "0.1",
+  "packet_id": "RRSCG-CORE-WP2-D9-OBSERVER-STATE-FACULTY",
+  "status": "BLOCKED",
+  "prerequisites": [
+    "RRSCG-CORE-G1-R2-CONFORMANCE:PASS_AND_INTEGRATED:2987ce9db16892e62dd8561423be40771b14dc7a",
+    "LSIAC-G-RRSCG-CORE-ACCESSION-AUTHORITY_AFTER_WP0_SOURCE_BINDING:PASS_AND_INTEGRATED:a0e0ccf48d5be18a6c101d17c3c99d0266b2b56d",
+    "RRSCG-D9-EXACT-SOURCE-BINDING:BOUND_EXACT:cfad75a814f7b10b975add7675982be30da7c6bc"
+  ],
+  "authority_required": "SATISFIED_FOR_INACTIVE_CONFORMANCE_CONSTRUCTION",
+  "authority_delta": "NONE_BLOCKER_RECORD_ONLY",
+  "baseline_commit": "2987ce9db16892e62dd8561423be40771b14dc7a",
+  "branch": "research/rrscg-core-wp2-d9-observer-state-20260906",
+  "candidate_commit": "RESOLVE_AT_PR_FINAL_HEAD",
+  "tests": "BLOCKER_STATE_TEST_PLUS_REPOSITORY_ASSURANCE_REQUIRED_BEFORE_INTEGRATION",
+  "qa_packet": "docs/programmes/lsiac-v0-1/rrscg-core-wp2/RRSCG_CORE_WP2_QA_v0_1.json",
+  "decision_record": "docs/programmes/lsiac-v0-1/rrscg-core-wp2/RRSCG_CORE_WP2_PREFLIGHT_AND_BLOCKER_v0_1.json",
+  "authority_manifest": "docs/programmes/lsiac-v0-1/rrscg-core-wp2/RRSCG_CORE_WP2_AUTHORITY_MANIFEST_v0_1.json",
+  "dependency_frontier": "docs/programmes/lsiac-v0-1/rrscg-core-wp2/RRSCG_CORE_WP2_DEPENDENCY_FRONTIER_v0_1.json",
+  "merge_commit": "RESOLVE_BY_POST_MERGE_COURT_RECORD",
+  "implementation_allowed": true,
+  "implementation_exercisable_now": false,
+  "d9_algorithm_implementation_written": false,
+  "capability_activation_allowed": false,
+  "rrscg_persistent_accession_construction_allowed": true,
+  "claim_cap": "DESCRIPTIVE_DEVELOPMENT_ONLY",
+  "validation": "LOCKED_UNCONSUMED",
+  "publication": "NONE",
+  "active_discovery_development_validation_authority": "NONE",
+  "probability_risk_exposure_e_h_execution_authority": "NONE",
+  "operator_decision_required_now": false,
+  "blockers": [
+    {
+      "blocker_id": "RRSCG_CORE_WP2_D9_SOURCE_BYTES_UNAVAILABLE_AT_EXECUTION",
+      "class": "REQUIRED_ARTIFACT_UNAVAILABLE",
+      "required_artifact": "OVC_EML_GRAMMAR_0003_RRSCG_D9_IMPLEMENTATION_0001(3).zip",
+      "required_sha256": "15c4f3c5bca53e40894c54c8d4cffdca2675a8f62a537efe1b2533efb09bb23a",
+      "resolution": "Rematerialise/mount exact D9 Implementation 0001 archive and verify before resuming WP2."
+    }
+  ],
+  "next_packet": "RRSCG-CORE-WP2-D9-OBSERVER-STATE-FACULTY",
+  "resume_condition": "D9 exact source bytes become execution-accessible and reverify byte-for-byte with all internal source hashes; then continue this packet without a new scientific authority grant.",
+  "next_gate_after_resume": "RRSCG-CORE-G2-D9-CONFORMANCE",
+  "rollback": "Forward-only. Preserve G1 completion, exact source-binding history and this blocker; no algorithm rollback is required because no D9 implementation was written."
+}

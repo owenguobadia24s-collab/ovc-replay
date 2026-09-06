@@ -1,0 +1,90 @@
+{
+  "schema": "ovc-rrscg-core-wp2-preflight-blocker/v0.1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "plan_id": "OVC-RRSCG-CORE-ACCESSION-CONFORMANCE-PLAN-0.1",
+  "packet_id": "RRSCG-CORE-WP2-D9-OBSERVER-STATE-FACULTY",
+  "baseline_main": "2987ce9db16892e62dd8561423be40771b14dc7a",
+  "authority_source": "LSIAC-G-RRSCG-CORE-ACCESSION-AUTHORITY_AFTER_WP0_SOURCE_BINDING",
+  "authority_scope": "INACTIVE_RRSCG_CORE_CAPABILITY_CONSTRUCTION_AND_CONFORMANCE_TESTING_ONLY",
+  "prerequisite_gate": "RRSCG-CORE-G1-R2-CONFORMANCE",
+  "prerequisite_gate_state": "PASS_AND_INTEGRATED:2987ce9db16892e62dd8561423be40771b14dc7a",
+  "preflight_disposition": "BLOCKED",
+  "blocker_id": "RRSCG_CORE_WP2_D9_SOURCE_BYTES_UNAVAILABLE_AT_EXECUTION",
+  "blocker_class": "REQUIRED_ARTIFACT_UNAVAILABLE_IN_CURRENT_EXECUTION_ENVIRONMENT",
+  "d9_implementation_written": false,
+  "court_record_source_binding": {
+    "state": "BOUND_EXACT",
+    "manifest": "docs/programmes/lsiac-v0-1/rrscg-core-wp0-successor/RRSCG_CORE_WP0_SUCCESSOR_SOURCE_BINDING_MANIFEST_v0_1.json",
+    "d9_release_bundle_sha256": "5898709a7c34a413d775ca1cbb88ef0851809851573e504386c5176b7328b1e5",
+    "d9_package_sha256": "edbb3e0448845eee375dbefdf2f33fe2d6df3c1ffd4605b28dc117576d7ea398",
+    "implementation_source_name": "OVC_EML_GRAMMAR_0003_RRSCG_D9_IMPLEMENTATION_0001(3).zip",
+    "implementation_source_sha256": "15c4f3c5bca53e40894c54c8d4cffdca2675a8f62a537efe1b2533efb09bb23a",
+    "implementation_internal_sha256sum_entries_verified": 29,
+    "historical_implementation_tests": "6_PASSED"
+  },
+  "execution_availability": {
+    "state": "D9_SOURCE_BYTES_UNAVAILABLE_AT_EXECUTION",
+    "reason": "The exact D9 implementation archive is intentionally external to ordinary Git. The current execution runtime exposes no mounted exact D9 implementation archive or extracted source tree, File Library search exposes only textual intake/handover evidence rather than the archive bytes, and no accessible GitHub repository named for the external artifact root was found. The prior exact binding proves identity but does not provide the algorithm-defining bytes required to transport D9.",
+    "ordinary_git_policy": "artifacts/README.md excludes duplicate engine ZIPs and keeps preserved package archives in the external artifact root.",
+    "implementation_from_summary_or_behaviour": "FORBIDDEN"
+  },
+  "no_reconstruction_rule": {
+    "binding_plan_section": "OVC_RRSCG_CORE_ACCESSION_CONFORMANCE_PLAN_v0_1.md section 3.2 / WP2",
+    "prohibited_sources_for_algorithm_reconstruction": [
+      "scientific summaries",
+      "journal prose",
+      "chat descriptions",
+      "output tables",
+      "downstream behaviour",
+      "handover prose",
+      "historical metric receipts"
+    ],
+    "effect": "NO_D9_IMPLEMENTATION_WRITTEN"
+  },
+  "historical_mechanical_targets_preserved": [
+    "6_OF_6_IMPLEMENTATION_TESTS",
+    "PARENT_R2_DIFFERENTIAL_1027_OF_1027",
+    "SYNTHETIC_FULL_CHAIN_PASS",
+    "TAMPER_REJECTION",
+    "INSTALLABLE_WHEEL_PASS",
+    "2018_PARENT_PARITY_3311_OF_3311",
+    "DENOMINATOR_RECONCILIATION_PASS"
+  ],
+  "claim_cap": "DESCRIPTIVE_DEVELOPMENT_ONLY",
+  "work_preserved": [
+    "WP1/G1 exact R2 conformance integrated on main@2987ce9db16892e62dd8561423be40771b14dc7a",
+    "D9 exact package/release/implementation identities remain source-bound",
+    "WP2 branch is isolated from the lawful merged main tip",
+    "no D9 algorithm semantics were guessed, reconstructed or inferred"
+  ],
+  "smallest_lawful_resolution": {
+    "action": "Rematerialise or mount the exact D9 Implementation 0001 source archive into an execution-accessible artifact surface for this agent/runtime.",
+    "required_file": "OVC_EML_GRAMMAR_0003_RRSCG_D9_IMPLEMENTATION_0001(3).zip",
+    "required_sha256": "15c4f3c5bca53e40894c54c8d4cffdca2675a8f62a537efe1b2533efb09bb23a",
+    "required_parent_d9_package_sha256": "edbb3e0448845eee375dbefdf2f33fe2d6df3c1ffd4605b28dc117576d7ea398",
+    "required_parent_r2_sha256": "5426cd9340c93a2aff0f5c8f3093f9db876647d1790aaa82da3e444a4f3029b5",
+    "verification_before_resume": "SHA-256 byte equality plus all 29 internal SHA256SUMS entries and the source package tests must pass before any WP2 implementation mutation.",
+    "new_operator_scientific_authority_required": false
+  },
+  "resume_packet": "RRSCG-CORE-WP2-D9-OBSERVER-STATE-FACULTY",
+  "next_gate_after_successful_implementation": "RRSCG-CORE-G2-D9-CONFORMANCE",
+  "next_gate_requirement": "INDEPENDENT_REVIEW_REQUIRED",
+  "retained_denials": [
+    "RECONSTRUCT_D9_FROM_SUMMARIES_OUTPUTS_OR_BEHAVIOUR",
+    "CAPABILITY_ACTIVATION",
+    "ACTIVE_DISCOVERY",
+    "ACTIVE_DEVELOPMENT",
+    "ACTIVE_VALIDATION",
+    "REGIME_OR_LATENT_STATE_ONTOLOGY",
+    "C2E_BOUNDARY_AUTHORITY",
+    "SFF_PROBABILITY_AUTHORITY",
+    "NEW_PROVIDER_INSTRUMENT_MARKET_SIDE_OR_CLOCK",
+    "SELECTOR_ACTIVATION_OR_REPLACEMENT",
+    "THRESHOLD_MODEL_FAMILY_CANDIDATE_THEORY_OR_SEMANTIC_PROMOTION",
+    "CANONICAL_OR_R2_PUBLICATION",
+    "PROBABILITY_RISK_EXPOSURE_EH_TRADING_OR_EXECUTION_AUTHORITY",
+    "AGENT_WRITE_AUTHORITY",
+    "C2_OWNER_SEMANTIC_MUTATION"
+  ],
+  "rollback": "No D9 implementation rollback is required because no D9 algorithm implementation was written. Preserve this blocker, exact source bindings, WP1/G1 integration and authority history; resume forward only after exact D9 source bytes are execution-accessible."
+}
