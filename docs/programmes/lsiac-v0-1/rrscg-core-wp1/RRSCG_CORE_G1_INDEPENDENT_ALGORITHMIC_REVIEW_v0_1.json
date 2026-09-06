@@ -1,0 +1,28 @@
+{
+  "authority_delta": "NONE",
+  "gate_id": "RRSCG-CORE-G1-R2-CONFORMANCE",
+  "packet_id": "RRSCG-CORE-WP1-R2-KERNEL-CONFORMANCE-IMPLEMENTATION",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "qa_recommendation": "PASS",
+  "review_basis": {
+    "exact_source_zip_sha256": "5426cd9340c93a2aff0f5c8f3093f9db876647d1790aaa82da3e444a4f3029b5",
+    "function_body_ast_comparisons": "20/20 MATCH",
+    "local_repository_transport_tests": "7/7 PASS",
+    "reference_oracle_fixture": "tests/fixtures/research_operations/rrscg/RRSCG_R2_REFERENCE_AND_ALGORITHMIC_ORACLE_v0_1.json",
+    "reference_oracle_git_blob": "8278bdd821733a59d79355653715baf7c57b6543",
+    "source_internal_sha256_entries_verified": "75/75",
+    "source_package_tests": "14/14 PASS"
+  },
+  "review_findings": [
+    "Primary R2 protocol values and dataclass field surface match the exact bound source.",
+    "Twenty load-bearing function bodies match exact-source AST identities after module relocation only.",
+    "Differential oracle reproduces full/coarse/minimal/abstain resolution states, support/frontier identities, constraint IDs, population metrics and explicit path-missingness abstention.",
+    "Operation and order remain excluded from primary constraint record identity.",
+    "No R2 semantics, threshold, support minimum, relation minimum, view set, resolution tier, target pack or identity hash rule changed."
+  ],
+  "review_id": "RRSCG-CORE-G1-R2-INDEPENDENT-ALGORITHMIC-REVIEW",
+  "rollback": "Preserve exact source and oracle; supersede repository transport if later defect is proven.",
+  "schema": "ovc-independent-algorithmic-review/v0.1",
+  "unresolved_issues": [],
+  "warnings": []
+}
