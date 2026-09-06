@@ -1,0 +1,180 @@
+//@version=6
+indicator("OVC-TV-2H-CLOCK-CONFIRM-0001 R1 — Clock Port / Parity Harness", overlay=false)
+
+import I8th/OVC_C2_CSM_P3R5T2S2_DEV/1 as c2
+
+// ============================================================================
+// OVC-TV-2H-CLOCK-CONFIRM-0001 R1
+// NON-AUTHORITATIVE NATIVE-CLOCK PERTURBATION HARNESS
+//
+// PURPOSE
+// 1) On 15M, run two independent EngineR4 instances with identical inputs and
+//    prove that the experimental wrapper is logically identical to the frozen
+//    wrapper when the clock is unchanged.
+// 2) On 120M, run ONLY the experimental wrapper against the exact same frozen
+//    P3-R5-T2-S2 library. The library itself is not edited.
+//
+// CLOCK INTERVENTION
+// Frozen/reference wrapper: logicEnabled = is15M
+// Experimental wrapper:     logicEnabled = is15M or is120M
+//
+// ALL P3/R5/T2/S2 mechanics remain library-owned and unchanged.
+// H4/H8/H16 remain 4/8/16 observations, so elapsed-time meaning changes with
+// the native chart clock. That confound is intentional and declared.
+// Authority delta: NONE.
+// ============================================================================
+
+string runMode = input.string("R1A_15M_PARITY", "Run mode", options=["R1A_15M_PARITY", "R1B_120M_PORT"], group="R1")
+int scopeStart = input.time(timestamp("21 Apr 2026 00:00 +0000"), "Scope start", group="R1")
+int scopeEnd = input.time(timestamp("22 Apr 2026 00:00 +0000"), "Scope end", group="R1")
+int checkpointEvery = input.int(16, "Checkpoint every N observations", minval=0, maxval=10000, group="R1")
+bool recordRelationOnly = input.bool(false, "Record relation-only changes", group="R1")
+bool recordInteractionOnly = input.bool(false, "Record interaction-only changes", group="R1")
+
+bool is15M = timeframe.isminutes and timeframe.multiplier == 15
+bool is120M = timeframe.isminutes and timeframe.multiplier == 120
+bool modeClockValid = runMode == "R1A_15M_PARITY" ? is15M : is120M
+
+if barstate.isfirst and not modeClockValid
+    runtime.error(runMode == "R1A_15M_PARITY" ? "R1A requires TradingView 15M." : "R1B requires TradingView 120M.")
+
+bool inWindow = time >= scopeStart and time < scopeEnd
+bool firstWindowBar = inWindow and (bar_index == 0 or not inWindow[1])
+int expectedBarMs = int(timeframe.in_seconds() * 1000)
+bool chartGap = inWindow and inWindow[1] and time - time[1] > expectedBarMs
+
+var int segmentObs = 0
+var int sequence = 0
+if not inWindow
+    segmentObs := 0
+    sequence := 0
+else if firstWindowBar
+    segmentObs := 1
+    sequence := 1
+else if chartGap
+    segmentObs := 1
+    sequence += 1
+else
+    segmentObs += 1
+    sequence += 1
+
+bool windowComplete = inWindow and time_close >= scopeEnd
+bool enabled = inWindow
+
+// Frozen wrapper semantics for parity arm.
+bool referenceLogicEnabled = is15M
+// Experimental intervention: only clock admission differs.
+bool experimentalLogicEnabled = is15M or is120M
+
+var c2.EngineR4 refEngine = c2.newEngineR4()
+var c2.EngineR4 expEngine = c2.newEngineR4()
+
+c2.R4Step refStep = c2.stepR4(
+    refEngine, enabled, referenceLogicEnabled, inWindow, firstWindowBar,
+    chartGap, segmentObs, bar_index, high, low, close, sequence, time_close,
+    windowComplete, checkpointEvery, recordRelationOnly, recordInteractionOnly)
+
+c2.R4Step expStep = c2.stepR4(
+    expEngine, enabled, experimentalLogicEnabled, inWindow, firstWindowBar,
+    chartGap, segmentObs, bar_index, high, low, close, sequence, time_close,
+    windowComplete, checkpointEvery, recordRelationOnly, recordInteractionOnly)
+
+// ============================================================================
+// R1A — 15M PARITY SURFACE
+// Compare load-bearing final/current state across independent engines.
+// ============================================================================
+
+bool pLife = refEngine.r3.r2.r1.lifeFormedCount == expEngine.r3.r2.r1.lifeFormedCount and
+             refEngine.r3.r2.r1.lifeActiveNow == expEngine.r3.r2.r1.lifeActiveNow and
+             refEngine.r3.r2.r1.lifeDormantNow == expEngine.r3.r2.r1.lifeDormantNow and
+             refEngine.r3.r2.r1.lifeRetiredNow == expEngine.r3.r2.r1.lifeRetiredNow
+
+bool pEnvelope = refEngine.r3.r2.envGeneration == expEngine.r3.r2.envGeneration and
+                 refEngine.r3.r2.envStatus == expEngine.r3.r2.envStatus and
+                 refEngine.r3.r2.envUpperUniqueId == expEngine.r3.r2.envUpperUniqueId and
+                 refEngine.r3.r2.envLowerUniqueId == expEngine.r3.r2.envLowerUniqueId and
+                 refEngine.r3.r2.envCurrentRelation == expEngine.r3.r2.envCurrentRelation and
+                 refEngine.r3.r2.envInternalCount == expEngine.r3.r2.envInternalCount and
+                 refEngine.r3.r2.envOutsideAboveCount == expEngine.r3.r2.envOutsideAboveCount and
+                 refEngine.r3.r2.envOutsideBelowCount == expEngine.r3.r2.envOutsideBelowCount
+
+bool pAtomic = refEngine.r3.etrTransitionCount == expEngine.r3.etrTransitionCount and
+               refEngine.r3.etrLatestClass == expEngine.r3.etrLatestClass and
+               refEngine.r3.etrUpperExpansionCount == expEngine.r3.etrUpperExpansionCount and
+               refEngine.r3.etrLowerExpansionCount == expEngine.r3.etrLowerExpansionCount and
+               refEngine.r3.etrUpperContractionCount == expEngine.r3.etrUpperContractionCount and
+               refEngine.r3.etrLowerContractionCount == expEngine.r3.etrLowerContractionCount
+
+bool pCompound = refEngine.r3.etrCompoundResolutionCount == expEngine.r3.etrCompoundResolutionCount and
+                 refEngine.r3.etrLatestCompoundClass == expEngine.r3.etrLatestCompoundClass and
+                 refEngine.r3.etrCompoundOpenState == expEngine.r3.etrCompoundOpenState and
+                 refEngine.r3.etrCompoundUpperLegCount == expEngine.r3.etrCompoundUpperLegCount and
+                 refEngine.r3.etrCompoundLowerLegCount == expEngine.r3.etrCompoundLowerLegCount
+
+bool pInteraction = refEngine.r3.r2.intContactEventTotal == expEngine.r3.r2.intContactEventTotal and
+                    refEngine.r3.r2.intRelationChangeEventTotal == expEngine.r3.r2.intRelationChangeEventTotal and
+                    refEngine.r3.r2.intDormantRevisitEventTotal == expEngine.r3.r2.intDormantRevisitEventTotal
+
+bool pLedger = refEngine.slogRecordCount == expEngine.slogRecordCount and
+               refEngine.slogRoleTriggerCount == expEngine.slogRoleTriggerCount and
+               refEngine.slogLifeTriggerCount == expEngine.slogLifeTriggerCount and
+               refEngine.slogCompoundTriggerCount == expEngine.slogCompoundTriggerCount and
+               refEngine.snapIntegrityPass == expEngine.snapIntegrityPass
+
+int mismatchFamilies = (pLife ? 0 : 1) + (pEnvelope ? 0 : 1) + (pAtomic ? 0 : 1) + (pCompound ? 0 : 1) + (pInteraction ? 0 : 1) + (pLedger ? 0 : 1)
+bool parityPass = is15M and mismatchFamilies == 0
+
+// ============================================================================
+// R1B — 120M PORT READINESS / MACHINE OUTPUT
+// No scientific comparison is made here.
+// ============================================================================
+
+int expObjects = expEngine.r3.r2.r1.lifeFormedCount
+int expActive = expEngine.r3.r2.r1.lifeActiveNow
+int expDormant = expEngine.r3.r2.r1.lifeDormantNow
+int expRetired = expEngine.r3.r2.r1.lifeRetiredNow
+int expEnvGen = expEngine.r3.r2.envGeneration
+int expAtomicN = expEngine.r3.etrTransitionCount
+int expCompoundN = expEngine.r3.etrCompoundResolutionCount
+int expLedgerN = expEngine.slogRecordCount
+int expContacts = expEngine.r3.r2.intContactEventTotal
+int expRelChanges = expEngine.r3.r2.intRelationChangeEventTotal
+int expRevisits = expEngine.r3.r2.intDormantRevisitEventTotal
+
+// Data Window outputs. Export these values from the final in-window bar.
+plot(is15M ? mismatchFamilies : na, "R1A_MISMATCH_FAMILIES", display=display.data_window)
+plot(is15M ? (parityPass ? 1 : 0) : na, "R1A_PARITY_PASS", display=display.data_window)
+plot(expObjects, "R1_EXP_OBJECTS", display=display.data_window)
+plot(expActive, "R1_EXP_ACTIVE", display=display.data_window)
+plot(expDormant, "R1_EXP_DORMANT", display=display.data_window)
+plot(expRetired, "R1_EXP_RETIRED", display=display.data_window)
+plot(expEnvGen, "R1_EXP_ENV_GENERATION", display=display.data_window)
+plot(expAtomicN, "R1_EXP_ATOMIC_TRANSITIONS", display=display.data_window)
+plot(expCompoundN, "R1_EXP_COMPOUND_RESOLUTIONS", display=display.data_window)
+plot(expLedgerN, "R1_EXP_LEDGER_RECORDS", display=display.data_window)
+plot(expContacts, "R1_EXP_CONTACTS", display=display.data_window)
+plot(expRelChanges, "R1_EXP_RELATION_CHANGES", display=display.data_window)
+plot(expRevisits, "R1_EXP_DORMANT_REVISITS", display=display.data_window)
+plot(expEngine.snapIntegrityPass ? 1 : 0, "R1_EXP_INTEGRITY_PASS", display=display.data_window)
+plot(segmentObs, "R1_SEGMENT_OBSERVATIONS", display=display.data_window)
+
+var table t = table.new(position.top_right, 2, 15, border_width=1)
+put(int r, string a, string b) =>
+    table.cell(t, 0, r, a)
+    table.cell(t, 1, r, b)
+
+if barstate.islast
+    put(0, "OVC-TV-2H R1", runMode)
+    put(1, "Chart clock", timeframe.period)
+    put(2, "Library", "P3-R5-T2-S2 DEV/1")
+    put(3, "Library edited", "NO")
+    put(4, "Only intervention", "clock admission")
+    put(5, "H16 elapsed", is15M ? "4h" : is120M ? "32h" : "N/A")
+    put(7, "Objects", str.tostring(expObjects))
+    put(8, "Envelope gen", str.tostring(expEnvGen))
+    put(9, "Atomic", str.tostring(expAtomicN))
+    put(10, "Compound", str.tostring(expCompoundN))
+    put(11, "Ledger", str.tostring(expLedgerN))
+    put(12, "Integrity", expEngine.snapIntegrityPass ? "PASS" : "FAIL")
+    put(13, "R1A mismatches", is15M ? str.tostring(mismatchFamilies) : "N/A")
+    put(14, "R1A parity", is15M ? (parityPass ? "PASS" : "FAIL") : "N/A")

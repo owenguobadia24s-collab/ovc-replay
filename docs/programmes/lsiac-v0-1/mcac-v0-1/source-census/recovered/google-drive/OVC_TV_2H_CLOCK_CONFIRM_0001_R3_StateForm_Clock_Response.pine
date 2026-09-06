@@ -1,0 +1,848 @@
+//@version=6
+indicator("OVC-TV-2H-CLOCK-CONFIRM-0001 R3 — StateForm Clock Response", overlay=false)
+
+import I8th/OVC_C2_CSM_P3R5T2S2_DEV/1 as c2
+
+// ============================================================================
+// OVC-TV-2H-CLOCK-CONFIRM-0001 — R3
+// STATEFORM CLOCK RESPONSE
+//
+// Exact admitted semantics:
+//   ProjectionProviderID:
+//     OVC-R0A-S1-P3R5T2S2-HISTORICAL-PROJECTION-PROVIDER-0001-R2
+//   RulePackID:
+//     OVC-R0A-S1-C0C-BEHAVIOURAL-EXACT-RULEPACK-0001
+//   Serializer/partition generation:
+//     SPTO-COMP-R0B-SUCCESSOR-0001 / OVC-SPTO-STATEFORM-G2
+//
+// IMPORTANT:
+// - The imported P3-R5-T2-S2 library is unchanged.
+// - R3/R5 semantic rules below are a Pine translation of the admitted,
+//   row-for-row C0C-qualified behavioural-exact provider/rulepack.
+// - Morphology census keys are injective partition keys over the exact
+//   CanonicalRepresentationValue fields. They are NOT presented as the
+//   SHA-256 RepresentationMorphologyID; the admitted Python serializer remains
+//   authority for those hashes.
+// - R3/R5 views remain dependent repeated views. No representation winner.
+// - Authority delta: NONE.
+// ============================================================================
+
+const float EPS = 1e-12
+const int MAX_NODES = 12
+const int EXPORT_SCHEMA_VERSION = 301
+
+string runMode = input.string("R3_15M", "Run mode", options=["R3_15M", "R3_120M"], group="R3")
+int scopeStart = input.time(timestamp("20 Nov 2025 00:00 +0000"), "Frozen calendar start", group="R3")
+int matureEvalStart = input.time(timestamp("24 Nov 2025 00:00 +0000"), "Mature evaluation start", group="R3")
+int scopeEnd = input.time(timestamp("28 Aug 2026 21:00 +0000"), "Frozen calendar end", group="R3")
+
+// C0B/C0C source anchors, already consumed.
+const int FROZEN_BARS = 19090
+const int FROZEN_MATURE = 18898
+const int C0B_FP = 883423963
+const int C0C_FP = 2103923516
+const int FROZEN_TRUE_SOURCE_GAPS = 6
+
+// C0B historical StateForm partition anchors.
+const int C0B_STATES = 5245
+const int C0B_R3_DISTINCT = 624
+const int C0B_R5O_DISTINCT = 168
+const int C0B_R5S_DISTINCT = 255
+
+// C0C successor StateForm semantic-golden anchors.
+const int C0C_STATES = 5246
+const int C0C_R3_DISTINCT = 627
+const int C0C_R5O_DISTINCT = 169
+const int C0C_R5S_DISTINCT = 256
+
+const int FP_MOD = 2147483629
+const int FP_MULT = 1000003
+
+bool is15M = timeframe.isminutes and timeframe.multiplier == 15
+bool is120M = timeframe.isminutes and timeframe.multiplier == 120
+bool clockValid = runMode == "R3_15M" ? is15M : is120M
+
+if barstate.isfirst and not clockValid
+    runtime.error(runMode == "R3_15M" ? "R3_15M requires FXCM GBPUSD 15M." : "R3_120M requires FXCM GBPUSD 120M.")
+
+// ============================================================================
+// SOURCE / CALENDAR
+//
+// R2 deliberately measured raw chart discontinuities. R3 now has the recovered
+// historical StateForm source contract, so the provider's actual source-break
+// rule is restored BEFORE any 120M StateForm result is inspected:
+//
+//   Friday -> Sunday = scheduled closure, NOT a C2 source break.
+//   Any other native-clock discontinuity = source break.
+//
+// This does not rewrite R2. R2 remains a RAW_BREAK_POLICY sensitivity receipt.
+// ============================================================================
+
+bool pairPass = syminfo.basecurrency == "GBP" and syminfo.currency == "USD"
+int expectedBarMs = int(timeframe.in_seconds() * 1000)
+
+// Same-calendar comparison: only complete native bars inside the frozen interval.
+bool inScope = time >= scopeStart and time_close <= scopeEnd
+bool inMature = time >= matureEvalStart and time_close <= scopeEnd
+bool firstInScope = inScope and (bar_index == 0 or not inScope[1])
+bool matureFrontierStart = inMature and (bar_index == 0 or not inMature[1])
+
+int rawMissingSlots = 0
+if inScope and inScope[1]
+    rawMissingSlots := math.max(int(math.round(float(time - time[1]) / float(expectedBarMs))) - 1, 0)
+
+bool rawGap = rawMissingSlots > 0
+int previousDowUtc = inScope and inScope[1] ? dayofweek(time[1], "UTC") : na
+int currentDowUtc = inScope ? dayofweek(time, "UTC") : na
+bool scheduledWeekendClosure = rawGap and previousDowUtc == dayofweek.friday and currentDowUtc == dayofweek.sunday
+bool sourceGap = rawGap and not scheduledWeekendClosure
+bool matureSourceGap = sourceGap and inMature
+
+fingerprintUpdate(int prior, int seq, int t, float o, float h, float l, float c) =>
+    int ot = int(math.round(o / syminfo.mintick))
+    int ht = int(math.round(h / syminfo.mintick))
+    int lt = int(math.round(l / syminfo.mintick))
+    int ct = int(math.round(c / syminfo.mintick))
+    int tm = int(math.floor(t / 60000)) % 10000000
+    int mix = ot * 31 + ht * 37 + lt * 41 + ct * 43 + seq * 47 + tm * 53
+    int next = int((prior * FP_MULT + mix) % FP_MOD)
+    next < 0 ? next + FP_MOD : next
+
+var int observedBars = 0
+var int observedFp = 17
+var int rawGapCount = 0
+var int scheduledClosureCount = 0
+var int sourceGapCount = 0
+var int matureObservations = 0
+var int segmentId = 0
+var int segmentObs = 0
+
+if firstInScope
+    observedBars := 0
+    observedFp := 17
+    rawGapCount := 0
+    scheduledClosureCount := 0
+    sourceGapCount := 0
+    matureObservations := 0
+    segmentId := 0
+    segmentObs := 0
+
+if inScope
+    observedBars += 1
+    observedFp := fingerprintUpdate(observedFp, observedBars, time, open, high, low, close)
+
+    if rawGap
+        rawGapCount += 1
+    if scheduledWeekendClosure
+        scheduledClosureCount += 1
+    if sourceGap
+        sourceGapCount += 1
+
+    if firstInScope or sourceGap
+        segmentObs := 1
+    else
+        segmentObs += 1
+
+if inMature
+    matureObservations += 1
+    if matureFrontierStart or matureSourceGap
+        segmentId += 1
+
+// ============================================================================
+// EXACT C2 OWNER STREAM — lean R3 transport.
+//
+// Historical TVX StateForm source uses EngineR3 and reconstructs R4's exact
+// core structural-snapshot predicate from previous observed scalar state.
+// ============================================================================
+
+var c2.EngineR3 eng = c2.newEngineR3()
+c2.R3Step c2Step = c2.stepR3(
+    eng,
+    true,
+    clockValid,
+    inScope,
+    firstInScope,
+    sourceGap,
+    segmentObs,
+    bar_index,
+    high,
+    low,
+    close
+)
+
+var bool r4PrevInitialised = false
+var int r4PrevFormed = 0
+var int r4PrevActive = 0
+var int r4PrevDormant = 0
+var int r4PrevRetired = 0
+var int r4PrevEnvGeneration = 0
+var int r4PrevEnvLifecycle = 2
+var int r4PrevCompoundResolutionCount = 0
+var int r4PrevCompoundOpenState = 0
+var int r4PrevCompoundUpperLegs = 0
+var int r4PrevCompoundLowerLegs = 0
+
+if firstInScope
+    r4PrevInitialised := false
+    r4PrevFormed := 0
+    r4PrevActive := 0
+    r4PrevDormant := 0
+    r4PrevRetired := 0
+    r4PrevEnvGeneration := 0
+    r4PrevEnvLifecycle := 2
+    r4PrevCompoundResolutionCount := 0
+    r4PrevCompoundOpenState := 0
+    r4PrevCompoundUpperLegs := 0
+    r4PrevCompoundLowerLegs := 0
+
+bool r4FormChanged = false
+bool r4LifeChanged = false
+bool r4RoleChanged = false
+bool r4BoundaryLifeChanged = false
+bool r4CompoundResolved = false
+bool r4OpenChanged = false
+
+if inScope and r4PrevInitialised
+    r4FormChanged := eng.r2.r1.lifeFormedCount != r4PrevFormed
+    r4LifeChanged := eng.r2.r1.lifeActiveNow != r4PrevActive or eng.r2.r1.lifeDormantNow != r4PrevDormant or eng.r2.r1.lifeRetiredNow != r4PrevRetired
+    r4RoleChanged := eng.r2.envGeneration != r4PrevEnvGeneration
+    r4BoundaryLifeChanged := eng.r2.envLifecycle != r4PrevEnvLifecycle
+    r4CompoundResolved := eng.etrCompoundResolutionCount != r4PrevCompoundResolutionCount
+    r4OpenChanged := eng.etrCompoundOpenState != r4PrevCompoundOpenState or eng.etrCompoundUpperLegCount != r4PrevCompoundUpperLegs or eng.etrCompoundLowerLegCount != r4PrevCompoundLowerLegs
+
+bool structuralSnapshot = inScope and (
+    r4FormChanged or
+    r4LifeChanged or
+    r4RoleChanged or
+    r4BoundaryLifeChanged or
+    r4CompoundResolved or
+    r4OpenChanged
+)
+
+if inScope
+    r4PrevInitialised := true
+    r4PrevFormed := eng.r2.r1.lifeFormedCount
+    r4PrevActive := eng.r2.r1.lifeActiveNow
+    r4PrevDormant := eng.r2.r1.lifeDormantNow
+    r4PrevRetired := eng.r2.r1.lifeRetiredNow
+    r4PrevEnvGeneration := eng.r2.envGeneration
+    r4PrevEnvLifecycle := eng.r2.envLifecycle
+    r4PrevCompoundResolutionCount := eng.etrCompoundResolutionCount
+    r4PrevCompoundOpenState := eng.etrCompoundOpenState
+    r4PrevCompoundUpperLegs := eng.etrCompoundUpperLegCount
+    r4PrevCompoundLowerLegs := eng.etrCompoundLowerLegCount
+
+// ============================================================================
+// EXACT ADMITTED STATEFORM RULES
+// ============================================================================
+
+signEps(float x) =>
+    x > EPS ? 1 : x < -EPS ? -1 : 0
+
+presenceClass(int firstCount, int secondCount) =>
+    (firstCount > 0 ? 1 : 0) + (secondCount > 0 ? 2 : 0)
+
+tok(int x) =>
+    na(x) ? "N" : str.tostring(x)
+
+pct(int n, int d) =>
+    d > 0 ? 100.0 * n / d : na
+
+// Per-view population counters.
+var int stateOpportunityCount = 0
+var int evaluableStateCount = 0
+var int geometryFailureCount = 0
+var int overflowStateCount = 0
+var int maxInternalNodes = 0
+
+var map<string,int> r3Freq = map.new<string,int>()
+var map<string,int> r5oFreq = map.new<string,int>()
+var map<string,int> r5sFreq = map.new<string,int>()
+var map<string,int> r3RunFreq = map.new<string,int>()
+var map<string,int> r5oRunFreq = map.new<string,int>()
+var map<string,int> r5sRunFreq = map.new<string,int>()
+var map<string,int> r3LastSegment = map.new<string,int>()
+var map<string,int> r5oLastSegment = map.new<string,int>()
+var map<string,int> r5sLastSegment = map.new<string,int>()
+var map<string,int> r3MultiSegment = map.new<string,int>()
+var map<string,int> r5oMultiSegment = map.new<string,int>()
+var map<string,int> r5sMultiSegment = map.new<string,int>()
+
+var int r3Distinct = 0
+var int r5oDistinct = 0
+var int r5sDistinct = 0
+var int r3Singletons = 0
+var int r5oSingletons = 0
+var int r5sSingletons = 0
+var int r3RepeatedForms = 0
+var int r5oRepeatedForms = 0
+var int r5sRepeatedForms = 0
+var int r3RepeatedOccurrences = 0
+var int r5oRepeatedOccurrences = 0
+var int r5sRepeatedOccurrences = 0
+var int r3MaxSupport = 0
+var int r5oMaxSupport = 0
+var int r5sMaxSupport = 0
+
+var int r3Runs = 0
+var int r5oRuns = 0
+var int r5sRuns = 0
+var int r3RepeatedRunOccurrences = 0
+var int r5oRepeatedRunOccurrences = 0
+var int r5sRepeatedRunOccurrences = 0
+var int r3RunMaxSupport = 0
+var int r5oRunMaxSupport = 0
+var int r5sRunMaxSupport = 0
+var int r3MultiSegmentForms = 0
+var int r5oMultiSegmentForms = 0
+var int r5sMultiSegmentForms = 0
+
+var string prevR3Key = ""
+var string prevR5OKey = ""
+var string prevR5SKey = ""
+var int prevR3Segment = na
+var int prevR5OSegment = na
+var int prevR5SSegment = na
+
+if firstInScope
+    stateOpportunityCount := 0
+    evaluableStateCount := 0
+    geometryFailureCount := 0
+    overflowStateCount := 0
+    maxInternalNodes := 0
+
+    map.clear(r3Freq)
+    map.clear(r5oFreq)
+    map.clear(r5sFreq)
+    map.clear(r3RunFreq)
+    map.clear(r5oRunFreq)
+    map.clear(r5sRunFreq)
+    map.clear(r3LastSegment)
+    map.clear(r5oLastSegment)
+    map.clear(r5sLastSegment)
+    map.clear(r3MultiSegment)
+    map.clear(r5oMultiSegment)
+    map.clear(r5sMultiSegment)
+
+    r3Distinct := 0
+    r5oDistinct := 0
+    r5sDistinct := 0
+    r3Singletons := 0
+    r5oSingletons := 0
+    r5sSingletons := 0
+    r3RepeatedForms := 0
+    r5oRepeatedForms := 0
+    r5sRepeatedForms := 0
+    r3RepeatedOccurrences := 0
+    r5oRepeatedOccurrences := 0
+    r5sRepeatedOccurrences := 0
+    r3MaxSupport := 0
+    r5oMaxSupport := 0
+    r5sMaxSupport := 0
+
+    r3Runs := 0
+    r5oRuns := 0
+    r5sRuns := 0
+    r3RepeatedRunOccurrences := 0
+    r5oRepeatedRunOccurrences := 0
+    r5sRepeatedRunOccurrences := 0
+    r3RunMaxSupport := 0
+    r5oRunMaxSupport := 0
+    r5sRunMaxSupport := 0
+    r3MultiSegmentForms := 0
+    r5oMultiSegmentForms := 0
+    r5sMultiSegmentForms := 0
+
+    prevR3Key := ""
+    prevR5OKey := ""
+    prevR5SKey := ""
+    prevR3Segment := na
+    prevR5OSegment := na
+    prevR5SSegment := na
+
+bool stateOpportunity = inMature and structuralSnapshot
+
+if stateOpportunity
+    stateOpportunityCount += 1
+
+    bool geometryValid = eng.r2.envGeometryValid and eng.r2.envUpperRoleValid and eng.r2.envLowerRoleValid
+    if not geometryValid
+        geometryFailureCount += 1
+    else
+        float upper = eng.r2.envUpperPrice
+        float lower = eng.r2.envLowerPrice
+        float mid = (upper + lower) / 2.0
+
+        // Reconstruct live population directly from owner arrays.
+        array<float> ip = array.new_float()
+        array<int> ik = array.new_int()
+        array<int> ist = array.new_int()
+
+        int aboveCount = 0
+        int belowCount = 0
+        float nearestAbove = na
+        float farthestAbove = na
+        float nearestBelow = na
+        float farthestBelow = na
+
+        int lifeN = array.size(eng.r2.r1.lifeId)
+        if lifeN > 0
+            for i = 0 to lifeN - 1
+                int lifeState = array.get(eng.r2.r1.lifeState, i)
+                if lifeState != c2.LIFE_RETIRED
+                    float p = array.get(eng.r2.r1.lifePrice, i)
+                    int kind = array.get(eng.r2.r1.lifeKind, i)
+
+                    bool isRole = i == eng.r2.envUpperSlotIndex or i == eng.r2.envLowerSlotIndex
+                    bool colocated = not isRole and (p == upper or p == lower)
+                    bool internal = not isRole and not colocated and p > lower and p < upper
+                    bool above = not isRole and not colocated and p > upper
+                    bool below = not isRole and not colocated and p < lower
+
+                    if internal
+                        int insertPos = array.size(ip)
+                        if array.size(ip) > 0
+                            for j = 0 to array.size(ip) - 1
+                                if p < array.get(ip, j)
+                                    insertPos := j
+                                    break
+                        array.insert(ip, insertPos, p)
+                        array.insert(ik, insertPos, kind)
+                        array.insert(ist, insertPos, lifeState)
+                    else if above
+                        float d = p - upper
+                        aboveCount += 1
+                        nearestAbove := na(nearestAbove) ? d : math.min(nearestAbove, d)
+                        farthestAbove := na(farthestAbove) ? d : math.max(farthestAbove, d)
+                    else if below
+                        float d = lower - p
+                        belowCount += 1
+                        nearestBelow := na(nearestBelow) ? d : math.min(nearestBelow, d)
+                        farthestBelow := na(farthestBelow) ? d : math.max(farthestBelow, d)
+
+        int n = array.size(ip)
+        maxInternalNodes := math.max(maxInternalNodes, n)
+
+        if n > MAX_NODES
+            overflowStateCount += 1
+        else
+            int internalHigh = 0
+            int internalLow = 0
+            int internalActive = 0
+            int internalDormant = 0
+            float sumInternal = 0.0
+            float sumHigh = 0.0
+            float sumLow = 0.0
+
+            array<int> nodeCodes = array.new_int()
+            if n > 0
+                for i = 0 to n - 1
+                    float p = array.get(ip, i)
+                    int kind = array.get(ik, i)
+                    int st = array.get(ist, i)
+
+                    sumInternal += p
+                    if kind == 1
+                        internalHigh += 1
+                        sumHigh += p
+                    else if kind == -1
+                        internalLow += 1
+                        sumLow += p
+
+                    if st == c2.LIFE_ACTIVE
+                        internalActive += 1
+                    else if st == c2.LIFE_DORMANT
+                        internalDormant += 1
+
+                    int nodeCode =
+                         kind == 1 and st == c2.LIFE_ACTIVE ? 1 :
+                         kind == 1 and st == c2.LIFE_DORMANT ? 2 :
+                         kind == -1 and st == c2.LIFE_ACTIVE ? 3 :
+                         kind == -1 and st == c2.LIFE_DORMANT ? 4 : 0
+                    array.push(nodeCodes, nodeCode)
+
+            float mint = n > 0 ? sumInternal / n : na
+            float mh = internalHigh > 0 ? sumHigh / internalHigh : na
+            float ml = internalLow > 0 ? sumLow / internalLow : na
+
+            int ud = eng.r2.envUpperBoundaryDormantCount
+            int ld = eng.r2.envLowerBoundaryDormantCount
+            int ul = eng.etrCompoundUpperLegCount
+            int ll = eng.etrCompoundLowerLegCount
+
+            // R3 exact 17 values.
+            array<int> r3v = array.new_int()
+            array.push(r3v, presenceClass(internalHigh, internalLow))
+            array.push(r3v, presenceClass(internalActive, internalDormant))
+            array.push(r3v, presenceClass(aboveCount, belowCount))
+            array.push(r3v, presenceClass(ud, ld))
+            array.push(r3v, signEps(close - mid))
+            array.push(r3v, na(mint) ? na : signEps(mint - mid))
+            array.push(r3v, na(mint) ? na : signEps(close - mint))
+            array.push(r3v, na(mh) or na(ml) ? na : signEps(mh - ml))
+            array.push(r3v, na(mh) ? na : signEps(close - mh))
+            array.push(r3v, na(ml) ? na : signEps(close - ml))
+            array.push(r3v, aboveCount == 0 or belowCount == 0 ? na : signEps(nearestBelow - nearestAbove))
+            array.push(r3v, aboveCount == 0 or belowCount == 0 ? na : signEps(farthestBelow - farthestAbove))
+            array.push(r3v, signEps(float(internalHigh - internalLow)))
+            array.push(r3v, signEps(float(internalActive - internalDormant)))
+            array.push(r3v, signEps(float(aboveCount - belowCount)))
+            array.push(r3v, signEps(float(ud - ld)))
+            array.push(r3v, signEps(float(ul - ll)))
+
+            string r3Key = "R3"
+            for i = 0 to array.size(r3v) - 1
+                r3Key += "|" + tok(array.get(r3v, i))
+
+            // R5 ordered exact value.
+            int envRelation = close > upper ? 1 : close < lower ? -1 : math.abs(close - upper) <= EPS or math.abs(close - lower) <= EPS ? 2 : 0
+            int priceZone = envRelation == -1 or envRelation == 1 ? envRelation : 0
+            int rank = 0
+            int coincidence = 0
+            if n > 0
+                for i = 0 to n - 1
+                    float p = array.get(ip, i)
+                    if p < close - EPS
+                        rank += 1
+                    if math.abs(p - close) <= EPS
+                        coincidence := 1
+
+            int outsidePresence = presenceClass(aboveCount, belowCount)
+            int boundaryDormancyPresence = presenceClass(ud, ld)
+
+            string r5oKey = "R5O|N:" + str.tostring(n) + "|NODE"
+            if n > 0
+                for i = 0 to n - 1
+                    r5oKey += ":" + str.tostring(array.get(nodeCodes, i))
+            r5oKey += "|PZ:" + str.tostring(priceZone)
+            r5oKey += "|RANK:" + str.tostring(rank)
+            r5oKey += "|COIN:" + str.tostring(coincidence)
+            r5oKey += "|OUT:" + str.tostring(outsidePresence)
+            r5oKey += "|BD:" + str.tostring(boundaryDormancyPresence)
+            r5oKey += "|ER:" + str.tostring(envRelation)
+
+            // R5 spacing exact value extends ordered.
+            array<float> gaps = array.new_float()
+            if n == 0
+                array.push(gaps, upper - lower)
+            else
+                array.push(gaps, array.get(ip, 0) - lower)
+                if n > 1
+                    for i = 1 to n - 1
+                        array.push(gaps, array.get(ip, i) - array.get(ip, i - 1))
+                array.push(gaps, upper - array.get(ip, n - 1))
+
+            array<int> gaprels = array.new_int()
+            if n > 0
+                for i = 0 to n - 1
+                    array.push(gaprels, signEps(array.get(gaps, i + 1) - array.get(gaps, i)))
+            int edgeGap = signEps(array.get(gaps, 0) - array.get(gaps, array.size(gaps) - 1))
+
+            string r5sKey = r5oKey + "|GC:" + str.tostring(n + 1) + "|GR"
+            if n > 0
+                for i = 0 to n - 1
+                    r5sKey += ":" + str.tostring(array.get(gaprels, i))
+            r5sKey += "|EDGE:" + str.tostring(edgeGap)
+
+            evaluableStateCount += 1
+
+            // ---------------------------------------------------------------
+            // FULL-OCCURRENCE CENSUS — R3
+            // ---------------------------------------------------------------
+            int oldR3 = map.contains(r3Freq, r3Key) ? map.get(r3Freq, r3Key) : 0
+            int newR3 = oldR3 + 1
+            map.put(r3Freq, r3Key, newR3)
+            if oldR3 == 0
+                r3Distinct += 1
+                r3Singletons += 1
+            else if oldR3 == 1
+                r3Singletons -= 1
+                r3RepeatedForms += 1
+                r3RepeatedOccurrences += 2
+            else
+                r3RepeatedOccurrences += 1
+            r3MaxSupport := math.max(r3MaxSupport, newR3)
+
+            // R5 ordered
+            int oldR5O = map.contains(r5oFreq, r5oKey) ? map.get(r5oFreq, r5oKey) : 0
+            int newR5O = oldR5O + 1
+            map.put(r5oFreq, r5oKey, newR5O)
+            if oldR5O == 0
+                r5oDistinct += 1
+                r5oSingletons += 1
+            else if oldR5O == 1
+                r5oSingletons -= 1
+                r5oRepeatedForms += 1
+                r5oRepeatedOccurrences += 2
+            else
+                r5oRepeatedOccurrences += 1
+            r5oMaxSupport := math.max(r5oMaxSupport, newR5O)
+
+            // R5 spacing
+            int oldR5S = map.contains(r5sFreq, r5sKey) ? map.get(r5sFreq, r5sKey) : 0
+            int newR5S = oldR5S + 1
+            map.put(r5sFreq, r5sKey, newR5S)
+            if oldR5S == 0
+                r5sDistinct += 1
+                r5sSingletons += 1
+            else if oldR5S == 1
+                r5sSingletons -= 1
+                r5sRepeatedForms += 1
+                r5sRepeatedOccurrences += 2
+            else
+                r5sRepeatedOccurrences += 1
+            r5sMaxSupport := math.max(r5sMaxSupport, newR5S)
+
+            // ---------------------------------------------------------------
+            // RUN-COLLAPSED / NON-LOCAL CENSUS
+            // ---------------------------------------------------------------
+            bool newR3Run = na(prevR3Segment) or segmentId != prevR3Segment or r3Key != prevR3Key
+            if newR3Run
+                r3Runs += 1
+                int oldRun = map.contains(r3RunFreq, r3Key) ? map.get(r3RunFreq, r3Key) : 0
+                int newRun = oldRun + 1
+                map.put(r3RunFreq, r3Key, newRun)
+                if oldRun == 1
+                    r3RepeatedRunOccurrences += 2
+                else if oldRun > 1
+                    r3RepeatedRunOccurrences += 1
+                r3RunMaxSupport := math.max(r3RunMaxSupport, newRun)
+            prevR3Key := r3Key
+            prevR3Segment := segmentId
+
+            bool newR5ORun = na(prevR5OSegment) or segmentId != prevR5OSegment or r5oKey != prevR5OKey
+            if newR5ORun
+                r5oRuns += 1
+                int oldRun = map.contains(r5oRunFreq, r5oKey) ? map.get(r5oRunFreq, r5oKey) : 0
+                int newRun = oldRun + 1
+                map.put(r5oRunFreq, r5oKey, newRun)
+                if oldRun == 1
+                    r5oRepeatedRunOccurrences += 2
+                else if oldRun > 1
+                    r5oRepeatedRunOccurrences += 1
+                r5oRunMaxSupport := math.max(r5oRunMaxSupport, newRun)
+            prevR5OKey := r5oKey
+            prevR5OSegment := segmentId
+
+            bool newR5SRun = na(prevR5SSegment) or segmentId != prevR5SSegment or r5sKey != prevR5SKey
+            if newR5SRun
+                r5sRuns += 1
+                int oldRun = map.contains(r5sRunFreq, r5sKey) ? map.get(r5sRunFreq, r5sKey) : 0
+                int newRun = oldRun + 1
+                map.put(r5sRunFreq, r5sKey, newRun)
+                if oldRun == 1
+                    r5sRepeatedRunOccurrences += 2
+                else if oldRun > 1
+                    r5sRepeatedRunOccurrences += 1
+                r5sRunMaxSupport := math.max(r5sRunMaxSupport, newRun)
+            prevR5SKey := r5sKey
+            prevR5SSegment := segmentId
+
+            // ---------------------------------------------------------------
+            // CROSS-SEGMENT BREADTH
+            // ---------------------------------------------------------------
+            if not map.contains(r3LastSegment, r3Key)
+                map.put(r3LastSegment, r3Key, segmentId)
+            else
+                int lastSeg = map.get(r3LastSegment, r3Key)
+                if lastSeg != segmentId
+                    if not map.contains(r3MultiSegment, r3Key)
+                        map.put(r3MultiSegment, r3Key, 1)
+                        r3MultiSegmentForms += 1
+                    map.put(r3LastSegment, r3Key, segmentId)
+
+            if not map.contains(r5oLastSegment, r5oKey)
+                map.put(r5oLastSegment, r5oKey, segmentId)
+            else
+                int lastSeg = map.get(r5oLastSegment, r5oKey)
+                if lastSeg != segmentId
+                    if not map.contains(r5oMultiSegment, r5oKey)
+                        map.put(r5oMultiSegment, r5oKey, 1)
+                        r5oMultiSegmentForms += 1
+                    map.put(r5oLastSegment, r5oKey, segmentId)
+
+            if not map.contains(r5sLastSegment, r5sKey)
+                map.put(r5sLastSegment, r5sKey, segmentId)
+            else
+                int lastSeg = map.get(r5sLastSegment, r5sKey)
+                if lastSeg != segmentId
+                    if not map.contains(r5sMultiSegment, r5sKey)
+                        map.put(r5sMultiSegment, r5sKey, 1)
+                        r5sMultiSegmentForms += 1
+                    map.put(r5sLastSegment, r5sKey, segmentId)
+
+// ============================================================================
+// QUALIFICATION / RECEIPT
+// ============================================================================
+
+bool sourceIsC0B = is15M and observedFp == C0B_FP
+bool sourceIsC0C = is15M and observedFp == C0C_FP
+string sourceClass = sourceIsC0B ? "C0B" : sourceIsC0C ? "C0C" : is15M ? "UNKNOWN_15M" : "TV120_NATIVE"
+
+int expectedStates = sourceIsC0B ? C0B_STATES : sourceIsC0C ? C0C_STATES : na
+int expectedR3 = sourceIsC0B ? C0B_R3_DISTINCT : sourceIsC0C ? C0C_R3_DISTINCT : na
+int expectedR5O = sourceIsC0B ? C0B_R5O_DISTINCT : sourceIsC0C ? C0C_R5O_DISTINCT : na
+int expectedR5S = sourceIsC0B ? C0B_R5S_DISTINCT : sourceIsC0C ? C0C_R5S_DISTINCT : na
+
+bool baseMechanicalPass =
+    pairPass and
+    clockValid and
+    observedBars > 0 and
+    evaluableStateCount > 0 and
+    geometryFailureCount == 0 and
+    overflowStateCount == 0
+
+bool parity15Pass =
+    is15M and
+    (sourceIsC0B or sourceIsC0C) and
+    observedBars == FROZEN_BARS and
+    matureObservations == FROZEN_MATURE and
+    sourceGapCount == FROZEN_TRUE_SOURCE_GAPS and
+    evaluableStateCount == expectedStates and
+    r3Distinct == expectedR3 and
+    r5oDistinct == expectedR5O and
+    r5sDistinct == expectedR5S and
+    baseMechanicalPass
+
+string qualification =
+    is15M ? (parity15Pass ? sourceClass + "_STATEFORM_PARITY_PASS" : "15M_PARITY_FAIL") :
+    baseMechanicalPass ? "120M_MECHANICAL_PASS" : "120M_MECHANICAL_FAIL"
+
+// Data Window terminal/full-history cumulative receipts.
+plot(EXPORT_SCHEMA_VERSION, "R3_EXPORT_SCHEMA_VERSION", display=display.data_window)
+plot(observedBars, "R3_OBSERVED_NATIVE_BARS", display=display.data_window)
+plot(observedFp, "R3_SOURCE_FINGERPRINT", display=display.data_window)
+plot(rawGapCount, "R3_RAW_GAPS", display=display.data_window)
+plot(scheduledClosureCount, "R3_SCHEDULED_CLOSURES", display=display.data_window)
+plot(sourceGapCount, "R3_TRUE_SOURCE_BREAKS", display=display.data_window)
+plot(segmentId, "R3_MATURE_SEGMENTS", display=display.data_window)
+plot(matureObservations, "R3_MATURE_OBSERVATIONS", display=display.data_window)
+plot(stateOpportunityCount, "R3_STATE_OPPORTUNITIES", display=display.data_window)
+plot(evaluableStateCount, "R3_EVALUABLE_STATES", display=display.data_window)
+plot(geometryFailureCount, "R3_GEOMETRY_FAILURES", display=display.data_window)
+plot(overflowStateCount, "R3_OVERFLOW_STATES", display=display.data_window)
+plot(maxInternalNodes, "R3_MAX_INTERNAL_NODES", display=display.data_window)
+plot(parity15Pass ? 1 : is15M ? 0 : na, "R3_15M_STATEFORM_PARITY_PASS", display=display.data_window)
+plot(baseMechanicalPass ? 1 : 0, "R3_MECHANICAL_PASS", display=display.data_window)
+
+plot(r3Distinct, "R3_VIEW_DISTINCT", display=display.data_window)
+plot(r3RepeatedForms, "R3_VIEW_REPEATED_FORMS", display=display.data_window)
+plot(r3RepeatedOccurrences, "R3_VIEW_RECURRENT_OCCURRENCES", display=display.data_window)
+plot(pct(r3RepeatedOccurrences, evaluableStateCount), "R3_VIEW_RECURRENCE_COVERAGE_PCT", display=display.data_window)
+plot(r3Runs, "R3_VIEW_RUNS", display=display.data_window)
+plot(pct(r3RepeatedRunOccurrences, r3Runs), "R3_VIEW_RUN_COLLAPSED_RECURRENCE_PCT", display=display.data_window)
+plot(r3MaxSupport, "R3_VIEW_MAX_SUPPORT", display=display.data_window)
+plot(r3MultiSegmentForms, "R3_VIEW_MULTI_SEGMENT_FORMS", display=display.data_window)
+
+plot(r5oDistinct, "R5O_VIEW_DISTINCT", display=display.data_window)
+plot(r5oRepeatedForms, "R5O_VIEW_REPEATED_FORMS", display=display.data_window)
+plot(r5oRepeatedOccurrences, "R5O_VIEW_RECURRENT_OCCURRENCES", display=display.data_window)
+plot(pct(r5oRepeatedOccurrences, evaluableStateCount), "R5O_VIEW_RECURRENCE_COVERAGE_PCT", display=display.data_window)
+plot(r5oRuns, "R5O_VIEW_RUNS", display=display.data_window)
+plot(pct(r5oRepeatedRunOccurrences, r5oRuns), "R5O_VIEW_RUN_COLLAPSED_RECURRENCE_PCT", display=display.data_window)
+plot(r5oMaxSupport, "R5O_VIEW_MAX_SUPPORT", display=display.data_window)
+plot(r5oMultiSegmentForms, "R5O_VIEW_MULTI_SEGMENT_FORMS", display=display.data_window)
+
+plot(r5sDistinct, "R5S_VIEW_DISTINCT", display=display.data_window)
+plot(r5sRepeatedForms, "R5S_VIEW_REPEATED_FORMS", display=display.data_window)
+plot(r5sRepeatedOccurrences, "R5S_VIEW_RECURRENT_OCCURRENCES", display=display.data_window)
+plot(pct(r5sRepeatedOccurrences, evaluableStateCount), "R5S_VIEW_RECURRENCE_COVERAGE_PCT", display=display.data_window)
+plot(r5sRuns, "R5S_VIEW_RUNS", display=display.data_window)
+plot(pct(r5sRepeatedRunOccurrences, r5sRuns), "R5S_VIEW_RUN_COLLAPSED_RECURRENCE_PCT", display=display.data_window)
+plot(r5sMaxSupport, "R5S_VIEW_MAX_SUPPORT", display=display.data_window)
+plot(r5sMultiSegmentForms, "R5S_VIEW_MULTI_SEGMENT_FORMS", display=display.data_window)
+
+// ============================================================================
+// SIDEBAR
+// ============================================================================
+
+var table t = table.new(position.top_right, 4, 19, border_width=1)
+
+put(int r, int c, string v) =>
+    table.cell(t, c, r, v)
+
+if barstate.islast
+    put(0,0,"OVC-TV-2H R3")
+    put(0,1,runMode)
+    put(0,2,"Source")
+    put(0,3,sourceClass)
+
+    put(1,0,"Clock")
+    put(1,1,timeframe.period)
+    put(1,2,"Fingerprint")
+    put(1,3,str.tostring(observedFp))
+
+    put(2,0,"Bars")
+    put(2,1,str.tostring(observedBars))
+    put(2,2,"Mature")
+    put(2,3,str.tostring(matureObservations))
+
+    put(3,0,"Raw gaps")
+    put(3,1,str.tostring(rawGapCount))
+    put(3,2,"Source breaks")
+    put(3,3,str.tostring(sourceGapCount))
+
+    put(4,0,"States")
+    put(4,1,str.tostring(evaluableStateCount))
+    put(4,2,"Max internal")
+    put(4,3,str.tostring(maxInternalNodes))
+
+    put(5,0,"Geometry fail")
+    put(5,1,str.tostring(geometryFailureCount))
+    put(5,2,"Overflow")
+    put(5,3,str.tostring(overflowStateCount))
+
+    put(6,0,"Qualification")
+    put(6,1,qualification)
+    put(6,2,"Library edited")
+    put(6,3,"NO")
+
+    put(8,0,"Metric")
+    put(8,1,"R3")
+    put(8,2,"R5 ORDER")
+    put(8,3,"R5 SPACE")
+
+    put(9,0,"Distinct")
+    put(9,1,str.tostring(r3Distinct))
+    put(9,2,str.tostring(r5oDistinct))
+    put(9,3,str.tostring(r5sDistinct))
+
+    put(10,0,"Repeated forms")
+    put(10,1,str.tostring(r3RepeatedForms))
+    put(10,2,str.tostring(r5oRepeatedForms))
+    put(10,3,str.tostring(r5sRepeatedForms))
+
+    put(11,0,"Recurrence %")
+    put(11,1,str.tostring(pct(r3RepeatedOccurrences,evaluableStateCount),"#.##"))
+    put(11,2,str.tostring(pct(r5oRepeatedOccurrences,evaluableStateCount),"#.##"))
+    put(11,3,str.tostring(pct(r5sRepeatedOccurrences,evaluableStateCount),"#.##"))
+
+    put(12,0,"Runs")
+    put(12,1,str.tostring(r3Runs))
+    put(12,2,str.tostring(r5oRuns))
+    put(12,3,str.tostring(r5sRuns))
+
+    put(13,0,"Run recur %")
+    put(13,1,str.tostring(pct(r3RepeatedRunOccurrences,r3Runs),"#.##"))
+    put(13,2,str.tostring(pct(r5oRepeatedRunOccurrences,r5oRuns),"#.##"))
+    put(13,3,str.tostring(pct(r5sRepeatedRunOccurrences,r5sRuns),"#.##"))
+
+    put(14,0,"Max support")
+    put(14,1,str.tostring(r3MaxSupport))
+    put(14,2,str.tostring(r5oMaxSupport))
+    put(14,3,str.tostring(r5sMaxSupport))
+
+    put(15,0,"Multi-seg forms")
+    put(15,1,str.tostring(r3MultiSegmentForms))
+    put(15,2,str.tostring(r5oMultiSegmentForms))
+    put(15,3,str.tostring(r5sMultiSegmentForms))
+
+    put(17,0,"Provider")
+    put(17,1,"R0A R2")
+    put(17,2,"RulePack")
+    put(17,3,"BEHAV-EXACT-1")
+
+    put(18,0,"Authority")
+    put(18,1,"NONE")
+    put(18,2,"Global verdict")
+    put(18,3,"NOT YET")

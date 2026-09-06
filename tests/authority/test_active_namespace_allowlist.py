@@ -45,6 +45,7 @@ EXPECTED_OVC_PACKAGES = {
     "ovc.research_operations.pattern_discovery",
     "ovc.research_operations.mta",
     "ovc.research_operations.mcarb",
+    "ovc.research_operations.mcac",
     "ovc.research_orchestration",
     "ovc.shared_systems",
     "ovc.system_atlas",
@@ -95,6 +96,11 @@ class ActiveNamespaceAllowlistTests(unittest.TestCase):
             for path in package_root.rglob("__init__.py")
         }
         self.assertEqual(EXPECTED_OVC_PACKAGES, actual)
+
+    def test_mcac_namespace_is_inactive_descriptive_conformance_only(self) -> None:
+        init_text = (SRC / "ovc" / "research_operations" / "mcac" / "__init__.py").read_text(encoding="utf-8").lower()
+        for phrase in ("inactive descriptive", "no clock or source authority", "shared state/phase ontology", "selector", "validation", "publication", "probability", "risk", "exposure", "trading", "execution", "agent-write authority", "fails closed"):
+            self.assertIn(phrase, init_text)
 
     def test_p1cdi_namespace_is_advisory_non_decision_bearing_conformance_only(self) -> None:
         init_text = (SRC / "ovc" / "research_operations" / "p1cdi" / "__init__.py").read_text(encoding="utf-8").lower()
