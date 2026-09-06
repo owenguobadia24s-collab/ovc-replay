@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research-operations/cbs/object-minimum/v0.1",
+  "title": "CBS object-minimum schema catalogue",
+  "type": "object",
+  "required": ["schema", "object_type", "payload"],
+  "properties": {
+    "schema": {"const": "ovc-cbs-object/v0.1"},
+    "object_type": {"enum": [
+      "CBSResearchGeneration", "CBSSourcePopulationManifest", "CBSSegmentationComparatorRegistry",
+      "ComparatorInputProjectionManifest", "ComparatorSupportManifest", "BoundaryEvaluationUniverse",
+      "CBSComparatorRunManifest", "BoundaryEstimate", "BoundaryCandidateRegion", "BoundaryCorrespondenceLedger",
+      "ReferenceBoundaryAudit", "ConsensusBoundaryDiscovery", "BoundarySupportVector",
+      "CausalBoundaryAdmissibilityVector", "BoundaryEvidenceDossier", "BoundaryConcordanceSurface",
+      "BoundaryUncertaintyRecord", "MethodDisagreementRecord", "BoundarySpecificationOpportunityLedger",
+      "BoundaryChallengeControlManifest", "NullAdequacyAssessment", "CBSScientificEndpointManifest",
+      "BoundaryStabilityMaterialityDeclaration", "BoundarySupportDecisionComplexityBudget",
+      "DecisionPackSearchExposureManifest", "CBSReplicationReservationManifest",
+      "CBSPreregistrationFreezeReceipt", "CBSPreregistrationAmendmentRecord",
+      "CBSIndependentAlgorithmReviewRecord", "B0ReferenceBoundaryProjectionManifest",
+      "CBSPrePlanExposureManifest", "CBSPrimaryRepresentationCoverageManifest", "CBSNullExecutionManifest",
+      "CBSAlgorithmReviewFrontierManifest", "CBSReplicationReservationAdoptionAssessment",
+      "CBSLabSourceArchiveManifest", "CBSExternalArtifactCapacityBinding", "CBSAuthorityCurrentnessManifest",
+      "CBSCapacityReceipt"
+    ]},
+    "payload": {"type": "object"},
+    "object_id": {"$ref": "#/$defs/sha256"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "gitSha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "instant": {"type": ["string", "null"], "format": "date-time"},
+    "estimand": {"enum": ["REFERENCE_BOUNDARY_AUDIT", "CONSENSUS_BOUNDARY_DISCOVERY"]},
+    "estimateState": {"enum": ["ESTIMATED", "NO_ESTIMATE", "NOT_EVALUABLE", "CENSORED"]},
+    "opportunityState": {"enum": ["ESTIMATED", "NO_ESTIMATE", "UNMATCHED", "AMBIGUOUS", "CENSORED", "NOT_EVALUABLE"]},
+    "temporalClass": {"enum": ["OWNER_DEFINED_ONLINE_CAUSAL", "ONLINE_CAUSAL", "CONFIRMATION_DELAYED", "RETROSPECTIVE", "CONTROL", "REFERENCE_ONLY"]},
+    "correspondenceState": {"enum": ["MATCHED_ONE_TO_ONE", "SPLIT", "MERGE", "UNMATCHED_REFERENCE", "UNMATCHED_COMPARATOR", "AMBIGUOUS", "CENSORED", "SOURCE_GAP"]},
+    "boundaryEstimate": {
+      "type": "object",
+      "required": ["estimate_id", "method_id", "family_id", "config_id", "temporal_class", "state", "candidate_onset_time", "effective_time", "confirmation_time", "first_valid_time", "evaluation_cutoff", "causal_admissibility"],
+      "properties": {
+        "estimate_id": {"$ref": "#/$defs/sha256"}, "method_id": {"type": "string"}, "family_id": {"type": "string"},
+        "config_id": {"type": "string"}, "temporal_class": {"$ref": "#/$defs/temporalClass"}, "state": {"$ref": "#/$defs/estimateState"},
+        "candidate_onset_time": {"$ref": "#/$defs/instant"}, "effective_time": {"$ref": "#/$defs/instant"},
+        "confirmation_time": {"$ref": "#/$defs/instant"}, "first_valid_time": {"$ref": "#/$defs/instant"},
+        "evaluation_cutoff": {"$ref": "#/$defs/instant"}, "causal_admissibility": {"type": "boolean"},
+        "reason_codes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      },
+      "additionalProperties": true
+    },
+    "evaluationUniverse": {
+      "type": "object",
+      "required": ["universe_id", "population_id", "formed_before_detection", "opportunity_count", "state_counts", "count_conserved"],
+      "properties": {
+        "universe_id": {"$ref": "#/$defs/sha256"}, "population_id": {"type": "string"}, "formed_before_detection": {"const": true},
+        "opportunity_count": {"type": "integer", "minimum": 0},
+        "state_counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+        "count_conserved": {"const": true}
+      },
+      "additionalProperties": true
+    }
+  }
+}

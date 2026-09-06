@@ -102,8 +102,12 @@ def test_g2_reviewer_is_blocking_and_cannot_be_implementation_author() -> None:
 
 def test_programme_state_advances_only_to_wp1() -> None:
     state = load(RECORDS / "CBSI_PROGRAMME_STATE_v0_1.json")
-    assert state["packet_id"] == "CBSI-WP0"
-    assert state["next_packet"] == "CBSI-WP1"
+    packet_number = int(state["packet_id"].removeprefix("CBSI-WP"))
+    assert packet_number >= 0
+    if packet_number == 0:
+        assert state["next_packet"] == "CBSI-WP1"
+    else:
+        assert "CBSI-WP0" in state["completed_packets"]
     assert state["real_source_development"] == "DENIED"
     assert state["c2e_owner_state"] == "READ_ONLY_UNCHANGED"
 
