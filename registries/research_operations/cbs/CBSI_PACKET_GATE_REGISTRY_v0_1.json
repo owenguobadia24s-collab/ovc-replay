@@ -1,0 +1,25 @@
+{
+  "schema": "ovc-cbsi-packet-gate-registry/v0.1",
+  "programme_id": "OVC-CBS-CONFORMANCE-PREREG-v0.1",
+  "plan_sha256": "fadf83075b0967168f2d354d1126d3e33d3ee8d63165a626d9cce7e4f9e56f77",
+  "packets": [
+    {"packet_id": "CBSI-WP0", "prerequisites": ["CBS-DG0", "CBSI-G0_EXTERNAL_PASS"], "gate_after": "CBSI-G0", "classification": "OPERATOR_PASS_RECORDED_MATERIALISATION"},
+    {"packet_id": "CBSI-WP1", "prerequisites": ["CBSI-WP0"], "gate_after": null, "classification": "AUTO"},
+    {"packet_id": "CBSI-WP2", "prerequisites": ["CBSI-WP1"], "gate_after": null, "classification": "AUTO"},
+    {"packet_id": "CBSI-WP3", "prerequisites": ["CBSI-WP2"], "gate_after": null, "classification": "AUTO"},
+    {"packet_id": "CBSI-WP4", "prerequisites": ["CBSI-WP3"], "gate_after": null, "classification": "AUTO"},
+    {"packet_id": "CBSI-WP5", "prerequisites": ["CBSI-WP4"], "gate_after": "CBSI-G1-SYNTH", "classification": "AUTO_RATIFIABLE_ON_EXACT_PASS"},
+    {"packet_id": "CBSI-WP6", "prerequisites": ["CBSI-G1-SYNTH"], "gate_after": "CBSI-G2-ALG", "classification": "AUTO_AFTER_INDEPENDENT_CONFLICT_FREE_PASS"},
+    {"packet_id": "CBSI-WP7", "prerequisites": ["CBSI-G2-ALG"], "gate_after": "CBSI-GREAL-DEV", "classification": "OPERATOR_REQUIRED"},
+    {"packet_id": "CBSI-WP8", "prerequisites": ["CBSI-GREAL-DEV"], "gate_after": null, "classification": "AUTO_WITHIN_EXACT_GREAL_ENVELOPE"},
+    {"packet_id": "CBSI-WP9", "prerequisites": ["CBSI-WP8"], "gate_after": null, "classification": "AUTO_WITHIN_EXACT_GREAL_ENVELOPE"},
+    {"packet_id": "CBSI-WP10", "prerequisites": ["CBSI-WP9"], "gate_after": null, "classification": "AUTO_WITHIN_EXACT_GREAL_ENVELOPE"},
+    {"packet_id": "CBSI-WP11", "prerequisites": ["CBSI-WP10"], "gate_after": "CBSI-GR5-FREEZE", "classification": "OPERATOR_REQUIRED"},
+    {"packet_id": "CBSI-WP12A", "prerequisites": ["CBSI-GR5-FREEZE"], "gate_after": "CBSI-GR6-REPL", "classification": "OPERATOR_REQUIRED"},
+    {"packet_id": "CBSI-WP12B", "prerequisites": ["CBSI-GR6-REPL"], "gate_after": "R6_DISPOSITION", "classification": "AUTO_WITHIN_EXACT_GR6_ENVELOPE"},
+    {"packet_id": "CBSI-WP13A", "prerequisites": ["CBSI-WP12B"], "gate_after": "CBSI-GR7-C2E-PACK", "classification": "OPERATOR_REQUIRED"},
+    {"packet_id": "CBSI-WP13B", "prerequisites": ["CBSI-GR7-C2E-PACK"], "gate_after": "TERMINAL_CLOSEOUT", "classification": "AUTO_WITHIN_EXACT_GR7_HANDOFF_ENVELOPE"}
+  ],
+  "first_incomplete_packet": "CBSI-WP0",
+  "next_after_wp0": "CBSI-WP1"
+}
