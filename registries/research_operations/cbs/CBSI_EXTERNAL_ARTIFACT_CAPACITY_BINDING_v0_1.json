@@ -1,0 +1,27 @@
+{
+  "schema": "ovc-cbsi-external-artifact-capacity-binding/v0.1",
+  "programme_id": "OVC-CBS-CONFORMANCE-PREREG-v0.1",
+  "packet_id": "CBSI-WP0",
+  "source_registry_ref": "registries/research_operations/external_artifact_roots_v0_1.json",
+  "source_registry_blob_sha": "ba8bfc2d862f0bb51f56c7acc95b15f3517e53b1",
+  "root_alias": "OVC_EXTERNAL_ARTIFACT_ROOT",
+  "programme_root": "OVC_EXTERNAL_ARTIFACT_ROOT/research-operations/cbs",
+  "provider_registry": "GOOGLE_DRIVE",
+  "local_root_verified": true,
+  "local_free_bytes_at_wp0": 65627291648,
+  "synthetic_minimum_free_bytes": 2147483648,
+  "capacity_status": "WP0_AND_SYNTHETIC_ENVELOPE_AVAILABLE",
+  "decision_bearing_development_capacity": "MUST_BE_FROZEN_AT_WP6_AND_REVALIDATED_AT_WP7_GREAL_AND_EVERY_RUN_RESTART",
+  "retention_floor": [
+    "ALL_DECLARED_COMPARATOR_CONFIGURATION_ESTIMATES",
+    "ALL_TOLERANCE_GRID_OUTPUTS",
+    "ALL_NULL_CONTROL_OUTPUTS",
+    "ALL_NO_ESTIMATE_NOT_EVALUABLE_CENSORED_AND_FAILED_PATHS",
+    "ALL_UNMATCHED_SPLIT_MERGE_AND_AMBIGUOUS_CORRESPONDENCE",
+    "ALL_DISAGREEMENT_AND_TRANSPORT_EVIDENCE",
+    "CHECKPOINT_RESTART_AND_CAPACITY_RECEIPTS"
+  ],
+  "forbidden": ["WINNER_ONLY_RETENTION", "TOP_N_RETENTION", "SILENT_PRUNING", "POPULATION_SAMPLING", "GRID_SHRINKAGE", "METHOD_DROPPING"],
+  "failure_state": "CAPACITY_EXCEEDED_OR_ARTIFACT_RETENTION_INCOMPLETE",
+  "rollback": "PRESERVE_PARTIAL_BYTES_AND_RECEIPTS_FORWARD_ONLY_NO_DESTRUCTIVE_CLEANUP"
+}

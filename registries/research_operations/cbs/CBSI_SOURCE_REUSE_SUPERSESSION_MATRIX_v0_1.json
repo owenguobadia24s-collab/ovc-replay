@@ -1,0 +1,39 @@
+{
+  "schema": "ovc-cbsi-source-reuse-supersession-matrix/v0.1",
+  "programme_id": "OVC-CBS-CONFORMANCE-PREREG-v0.1",
+  "packet_id": "CBSI-WP0",
+  "baseline_main": "c1bc6e32746fbf37cb9f8e6d053401092d0a44d4",
+  "baseline_tree": "d66c6d3066e94ba5b51073a499809cba1678f5d2",
+  "resolved_at": "2026-09-06T19:23:18+01:00",
+  "sources": [
+    {"path": "registries/governance/active_stack/OVC_ACTIVE_STACK_STATE_v0_1.json", "blob_sha": "790ea43e777c0fa9060179a4516477a7ecc2bb70", "role": "CURRENT_ACTIVE_STACK", "binding": "READ_ONLY_OWNER_AUTHORITY"},
+    {"path": "registries/opt_b/c2/vnext/C2_VNEXT_ACTIVE_RUNTIME_AUTHORITY_v0_1.json", "blob_sha": "bae84dc11b4036b275982cb4b1d43b1eb9864d1c", "role": "C2_VNEXT_OWNER_AUTHORITY", "binding": "READ_ONLY_OWNER_SOURCE"},
+    {"path": "registries/authority/C2E_ACTIVE_ENGINE_AUTHORITY_v0_1.json", "blob_sha": "428a3f4129857ce3d42045a679e7a7ca739a38d2", "role": "C2E_ACTIVE_ENGINE_AND_PACK", "binding": "READ_ONLY_COMPARATOR_SOURCE"},
+    {"path": "registries/research_operations/ACTIVE_FOUNDATION_AUTHORITY_v0_1.json", "blob_sha": "ecc6c4fd90001a275d659de3d0aa921be2278226", "role": "RESEARCH_OPERATIONS_AUTHORITY", "binding": "REUSE_WITHIN_EXISTING_READ_ONLY_AND_BOUNDED_APPEND_AUTHORITY"},
+    {"path": "registries/research_operations/external_artifact_roots_v0_1.json", "blob_sha": "ba8bfc2d862f0bb51f56c7acc95b15f3517e53b1", "role": "EXTERNAL_ARTIFACT_ROOT", "binding": "REUSE"},
+    {"path": "contracts/research_operations/EVIDENCE_ENVELOPE_AND_IDENTITY_CONTRACT_v0_1.md", "blob_sha": "dc04ed888daca11f675b21ffcd4b15babbc12620", "role": "EVIDENCE_IDENTITY", "binding": "REUSE"},
+    {"path": "contracts/research_operations/ADMISSIBLE_CUTOFF_AND_VALIDATION_ISOLATION_POLICY_v0_1.md", "blob_sha": "8b9ab160460722e3b1189b09ff89def3d246baaf", "role": "FVT_AND_VALIDATION_FIREWALL", "binding": "REUSE_BLOCKING"},
+    {"path": "src/ovc/research_operations/canonical.py", "blob_sha": "be9c0790707b4af611c48de2accec4e05b4aedf4", "role": "CANONICAL_JSON_IDENTITY", "binding": "REUSE_NO_PARALLEL_SERIALIZER"},
+    {"path": "src/ovc/research_operations/prsc/boundary.py", "blob_sha": "929407229290ba535e295b8888e6164da838a303", "role": "BOUNDARY_MATCHING_REUSE_CANDIDATE", "binding": "AUDIT_BEFORE_THIN_ADAPTER_OR_REUSE"},
+    {"path": "src/ovc/research_operations/prsc/dependence.py", "blob_sha": "23575ade1475ae71932f4d5b2d9af96580d77302", "role": "DEPENDENCE_REUSE_CANDIDATE", "binding": "AUDIT_BEFORE_REUSE"},
+    {"path": "src/ovc/research_operations/prsc/adversarial.py", "blob_sha": "13b9321fbfe5559525928c5e4f948f710e63a7cf", "role": "ADVERSARIAL_REUSE_CANDIDATE", "binding": "AUDIT_BEFORE_REUSE"},
+    {"path": "src/ovc/research_operations/prsc/assurance.py", "blob_sha": "db4ab50c5bb09bd3d30214f7f8319f4e07f5d475", "role": "ASSURANCE_REUSE_CANDIDATE", "binding": "AUDIT_BEFORE_REUSE"},
+    {"path": "src/ovc/research_operations/prsc/capacity.py", "blob_sha": "f4f5cb1254d9771174882731f824c1f03b1b4f07", "role": "CAPACITY_REUSE_CANDIDATE", "binding": "AUDIT_BEFORE_REUSE"},
+    {"path": "contracts/development/v0_5/OVC_DSAI3V_CIPR_REPOSITORY_ASSURANCE_CONTINUITY_AMENDMENT_v0_1.md", "blob_sha": "03fd64acc360435ce08f383fe1e2479a595a4641", "role": "DSAI_VIT_SIQ_GRT_ROUTE", "binding": "CURRENT_PERMANENT_INTEGRATION_ROUTE"},
+    {"path": "contracts/development/v0_5/OVC_NO_LATE_SURPRISES_PREQUALIFICATION_CONTRACT_v0_1.md", "blob_sha": "00ff3efb948fcee27241171b778eab31a0a59bd4", "role": "PREQUALIFICATION", "binding": "CURRENT_PERMANENT_INTEGRATION_ROUTE"},
+    {"path": "registries/development/skills/VIT_QUALIFICATION_WRITER_AUTHORITY_v0_1.json", "blob_sha": "d881e4df041606a061d2ee178a7741e9848c1adc", "role": "VIT_WRITER_AUTHORITY", "binding": "CURRENT_ROUTE"}
+  ],
+  "supersession": {
+    "planning_main": "3259ca58e3d55a3330853590422074e43ca0007f",
+    "current_main": "c1bc6e32746fbf37cb9f8e6d053401092d0a44d4",
+    "disposition": "CURRENT_MAIN_GOVERNS_NO_MEANING_BEARING_CBS_ENVELOPE_CONFLICT_FOUND"
+  },
+  "forbidden_inference": [
+    "NO_OWNER_FACT_RECONSTRUCTION",
+    "NO_UNMERGED_BRANCH_AS_AUTHORITY",
+    "NO_C2E_REVERSE_WRITE",
+    "NO_PRSCI_WHOLE_MODULE_REUSE_WITHOUT_CBS_SEMANTIC_AUDIT",
+    "NO_STORAGE_OR_INTEGRATION_AUTHORITY_TRANSITIVITY"
+  ],
+  "blockers": []
+}
