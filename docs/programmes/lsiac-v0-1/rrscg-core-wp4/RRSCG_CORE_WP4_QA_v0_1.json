@@ -1,0 +1,25 @@
+{
+  "schema": "ovc-qa-packet/v1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "plan_id": "OVC-RRSCG-CORE-ACCESSION-CONFORMANCE-PLAN-0.1",
+  "packet_id": "RRSCG-CORE-WP4-C2-OWNER-ADAPTER-IROF-TRANSPORT",
+  "baseline_commit": "82d781ca51f499b60370c8e4a1ae7e924aa59b6b",
+  "checks": [
+    {"id":"CURRENT_C2_OWNER_BINDING","status":"PASS","value":"AUTH.OPT-B.C2.vNext.OWNER_STRUCTURAL_SNAPSHOT.READ.v0.1"},
+    {"id":"OWNER_CONTENT_IDENTITY_AND_FVT","status":"PASS"},
+    {"id":"OWNER_NESTED_SEMANTICS_AND_MISSINGNESS","status":"PASS","value":"NO_FLATTENING_NO_INFERENCE"},
+    {"id":"IROF_STAGE_DAG","status":"PASS","value":"OWNER_TO_R2_TO_D9_TO_D10"},
+    {"id":"IROF_NATIVE_MODELS_ONLY","status":"PASS","value":"STAGESPEC_PIPELINEPROFILE_POPULATIONSPEC_AUTHORITYBINDING"},
+    {"id":"AUTHORITY_PREFLIGHT","status":"PASS","value":"READY_WITH_ZERO_TOKEN_CONSUMPTION"},
+    {"id":"CHECKPOINT_RESTART_IDENTITY","status":"PASS"},
+    {"id":"DESCENDANT_INVALIDATION_ON_DRIFT","status":"PASS"},
+    {"id":"REAL_SOURCE_EXECUTION","status":"DENIED_AS_REQUIRED"},
+    {"id":"VALIDATION","status":"LOCKED_UNCONSUMED"},
+    {"id":"DUPLICATE_ORCHESTRATION_PLANE","status":"ABSENT"},
+    {"id":"TARGETED_REPOSITORY_TESTS","status":"PASS","value":"173_TESTS"}
+  ],
+  "blockers": [],
+  "qa_recommendation": "PASS_PENDING_EXACT_FINAL_REPOSITORY_ASSURANCE",
+  "authority_delta": "NONE",
+  "rollback": "Supersede adapter and stage-pack registration forward; do not rewrite owner or IROF history."
+}

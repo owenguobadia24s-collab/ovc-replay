@@ -13,19 +13,20 @@ PRIOR_WP1_COMPLETED = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_24.json"
 HISTORICAL_WP2_BLOCKER = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_25.json"
 PRIOR_WP2_COMPLETED = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_26.json"
 HISTORICAL_WP3_BLOCKER = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_27.json"
-CURRENT_STATE = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_28.json"
+PRIOR_WP3_COMPLETED = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_28.json"
+CURRENT_STATE = STATE_ROOT / "LSIAC_PROGRAMME_STATE_v0_29.json"
 
 
 def _load(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def test_lsiac_current_state_pointer_advances_wp3_completion_without_rewriting_history():
+def test_lsiac_current_state_pointer_advances_wp4_completion_without_rewriting_history():
     rows = check_pointer(POINTER, repository_root=ROOT)
     assert len(rows) == 1
     assert rows[0]["status"] == "PASS"
     assert rows[0]["reason"] == "POINTER_STATE_CONSISTENT"
-    assert rows[0]["current_state"] == "LSIAC_PROGRAMME_STATE_v0_28.json"
+    assert rows[0]["current_state"] == "LSIAC_PROGRAMME_STATE_v0_29.json"
     pointer = _load(POINTER)
     current = _load(CURRENT_STATE)
     wp1_blocker = _load(HISTORICAL_WP1_BLOCKER)
@@ -33,14 +34,16 @@ def test_lsiac_current_state_pointer_advances_wp3_completion_without_rewriting_h
     wp2_blocker = _load(HISTORICAL_WP2_BLOCKER)
     wp2_completed = _load(PRIOR_WP2_COMPLETED)
     wp3_blocker = _load(HISTORICAL_WP3_BLOCKER)
+    wp3_completed = _load(PRIOR_WP3_COMPLETED)
     assert pointer["historical_blocker_retained"] == HISTORICAL_WP1_BLOCKER.name
     assert pointer["prior_wp2_blocker_retained"] == HISTORICAL_WP2_BLOCKER.name
     assert pointer["prior_wp2_completed_retained"] == PRIOR_WP2_COMPLETED.name
     assert pointer["prior_wp3_blocker_retained"] == HISTORICAL_WP3_BLOCKER.name
+    assert pointer["prior_wp3_completed_retained"] == PRIOR_WP3_COMPLETED.name
     assert pointer["status"] == "APPROVED"
     assert current["status"] == "APPROVED"
-    assert current["packet_id"] == "RRSCG-CORE-WP3-D10-REDUCER-SUBCOMPONENT"
-    assert current["next_packet"] == "RRSCG-CORE-WP4-C2-OWNER-ADAPTER-IROF-TRANSPORT"
+    assert current["packet_id"] == "RRSCG-CORE-WP4-C2-OWNER-ADAPTER-IROF-TRANSPORT"
+    assert current["next_packet"] == "RRSCG-CORE-WP5-PARITY-REPLAY-SCALE-QUALIFICATION"
     assert current["blockers"] == []
     assert wp1_blocker["status"] == "BLOCKED"
     assert wp1_completed["status"] == "APPROVED"
@@ -49,3 +52,4 @@ def test_lsiac_current_state_pointer_advances_wp3_completion_without_rewriting_h
     assert wp2_completed["status"] == "APPROVED"
     assert wp3_blocker["status"] == "BLOCKED"
     assert wp3_blocker["blockers"][0]["blocker_id"] == "RRSCG_CORE_WP3_D10_SOURCE_BYTES_UNAVAILABLE_AT_EXECUTION"
+    assert wp3_completed["status"] == "APPROVED"
