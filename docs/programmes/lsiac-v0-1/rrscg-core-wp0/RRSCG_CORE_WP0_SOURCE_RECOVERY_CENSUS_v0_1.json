@@ -1,0 +1,63 @@
+{
+  "schema": "ovc-rrscg-core-wp0-source-recovery-census/v0.1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "packet_id": "RRSCG-CORE-WP0-SOURCE-RECOVERY-AND-EXACT-BINDING",
+  "baseline_main": "8dd38fede57a4f92603d9676c699cee7d8f5f53f",
+  "authority_delta": "NONE_SOURCE_RECOVERY_AND_BINDING_ONLY",
+  "rule": "Historical source-exact attestations, hashes, reports and behavioral outputs do not substitute for currently materialisable algorithm-defining bytes. Reconstruction from summaries or outputs is prohibited.",
+  "search_classes": [
+    {
+      "surface": "REPOSITORY_MAIN_AND_GIT_HISTORY",
+      "result": "NO_EXACT_RRSCG_R2_D9_D10_ALGORITHM_SOURCE_BYTES_FOUND",
+      "notes": "Current main contains LSIAC source references and accession planning only. Commit searches for RRSCG, D9, D10, exact R2 hash and exact D9 implementation-source hash did not locate historical source commits."
+    },
+    {
+      "surface": "REPOSITORY_ARCHIVE_PROJECT_SOURCE_BRANCHES",
+      "result": "NO_RRSCG_CORE_SOURCE_BYTES_FOUND",
+      "notes": "The 2026-08-31 project-source archive records 23 unrelated retired project-source documents. It explicitly states exact binary bytes were not committed and external-artifact bindings remained UNBOUND."
+    },
+    {
+      "surface": "CHAT_FILE_LIBRARY_INDEX",
+      "result": "HISTORICAL_EXACTNESS_EVIDENCE_FOUND_BUT_SOURCE_ARCHIVES_NOT_MATERIALISABLE",
+      "notes": "Source-bound journals, phase ledgers, exact-hash handover records, a D9 Implementation 0001 intake receipt and frozen clock protocol are retrievable. Exact R2/D9/D10 source archives themselves are not exposed by the accessible file index."
+    }
+  ],
+  "historical_exactness_evidence": [
+    {
+      "object": "RRSCG_R2_CONTINUATION_CONSTRAINT_KERNEL",
+      "identity": "OVC-EML-GRAMMAR-0003-RRSCG-ALGORITHM-0.1-R2",
+      "expected_sha256": "5426cd9340c93a2aff0f5c8f3093f9db876647d1790aaa82da3e444a4f3029b5",
+      "attested_history": "Exact ZIP; 14/14 package tests; 22/22 independent checks; PASS_WITHOUT_REQUIRED_AMENDMENTS",
+      "current_byte_state": "UNMATERIALISED"
+    },
+    {
+      "object": "RRSCG_D9_DYNAMICS_PACKAGE",
+      "identity": "OVC-EML-GRAMMAR-0003-RRSCG-DYNAMICS-ALGORITHM-0.2-D9",
+      "expected_sha256": "edbb3e0448845eee375dbefdf2f33fe2d6df3c1ffd4605b28dc117576d7ea398",
+      "release_binding_sha256": "b4fea0c43622f7b7c689136be4844a406db4027c218a8a604eaacde17ae565c5",
+      "release_bundle_sha256": "5898709a7c34a413d775ca1cbb88ef0851809851573e504386c5176b7328b1e5",
+      "current_byte_state": "UNMATERIALISED"
+    },
+    {
+      "object": "RRSCG_D9_IMPLEMENTATION_0001_SOURCE_PACKAGE",
+      "identity": "OVC-EML-GRAMMAR-0003-RRSCG-D9-IMPLEMENTATION-0001",
+      "expected_sha256": "15c4f3c5bca53e40894c54c8d4cffdca2675a8f62a537efe1b2533efb09bb23a",
+      "wheel_sha256": "41aa8e608155e332cf202e9a57b38662c1b4cc9aefa0762eb67c62e50be98cab",
+      "release_binding_sha256": "7e9f915c640a609d3fe348681db2f0dbc4cb8bb9f8f9286fd733a7ad75b33e4e",
+      "release_bundle_sha256": "fd4489a8672bf9ac6be8071ed9425aaa8106dfa457a72b56e1ed9324dab7e11c",
+      "attested_history": "Exact intake receipt records expected=actual SHA-256, 29/29 SHA256SUMS entries and 6 pytest passes.",
+      "current_byte_state": "HISTORICALLY_MATERIALISED_AND_VERIFIED_BUT_CURRENTLY_UNRETRIEVABLE"
+    },
+    {
+      "object": "RRSCG_D10_REDUCER_SUBCOMPONENT",
+      "identity": "RRSCG-D10 forward reducer layer",
+      "expected_sha256": null,
+      "known_hash_prefix": "6b58e",
+      "attested_history": "Fresh exact-byte review PASS_WITHOUT_REQUIRED_AMENDMENTS and post-seal full-chain conformance PASS; exact full package hash is not presently recovered.",
+      "current_byte_state": "UNMATERIALISED_AND_FULL_HASH_NOT_RECOVERED"
+    }
+  ],
+  "disposition": "SOURCE_RECOVERY_EXHAUSTED_WITHIN_CURRENTLY_ACCESSIBLE_SURFACES",
+  "scientific_effect": "NONE",
+  "historical_result_effect": "NONE"
+}
