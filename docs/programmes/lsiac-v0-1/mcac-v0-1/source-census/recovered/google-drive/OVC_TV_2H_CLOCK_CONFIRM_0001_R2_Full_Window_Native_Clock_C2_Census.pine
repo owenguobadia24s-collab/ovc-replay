@@ -1,0 +1,230 @@
+//@version=6
+indicator("OVC-TV-2H-CLOCK-CONFIRM-0001 R2 — Full-Window Native-Clock C2 Census", overlay=false)
+
+import I8th/OVC_C2_CSM_P3R5T2S2_DEV/1 as c2
+
+// ============================================================================
+// OVC-TV-2H-CLOCK-CONFIRM-0001 — R2
+// FULL-WINDOW NATIVE-CLOCK C2 CENSUS
+//
+// R1 proved:
+//   - unchanged-clock 15M wrapper parity
+//   - native 120M execution with frozen library integrity PASS
+//
+// R2 does NOT yet claim RRSCG/StateForm/MicroPhase equivalence. It establishes
+// the same-calendar-window C2 descriptive census on 15M and 120M using the
+// exact frozen P3-R5-T2-S2 library.
+//
+// IMPORTANT CALENDAR RULE
+// A bar is admitted only when the COMPLETE native bar is inside the frozen
+// calendar interval:
+//      time >= scopeStart AND time_close <= scopeEnd
+// This prevents a 120M bar that straddles the interval end from importing
+// evidence outside the 15M comparison interval.
+//
+// "RAW_DISCONTINUITIES" means chart-time discontinuities only. It MUST NOT be
+// interpreted as the historical C0B "true source gap" count; scheduled market
+// closures and provider-source gaps are not separated in this R2 harness.
+//
+// Authority delta: NONE.
+// ============================================================================
+
+string runMode = input.string("R2_15M", "Run mode", options=["R2_15M", "R2_120M"], group="R2")
+int scopeStart = input.time(timestamp("20 Nov 2025 00:00 +0000"), "Frozen calendar start", group="R2")
+int scopeEnd = input.time(timestamp("28 Aug 2026 21:00 +0000"), "Frozen calendar end", group="R2")
+int checkpointEvery = input.int(16, "Checkpoint every N observations", minval=0, maxval=10000, group="R2")
+bool recordRelationOnly = input.bool(false, "Record relation-only changes", group="R2")
+bool recordInteractionOnly = input.bool(false, "Record interaction-only changes", group="R2")
+
+bool is15M = timeframe.isminutes and timeframe.multiplier == 15
+bool is120M = timeframe.isminutes and timeframe.multiplier == 120
+bool modeClockValid = runMode == "R2_15M" ? is15M : is120M
+
+if barstate.isfirst and not modeClockValid
+    runtime.error(runMode == "R2_15M" ? "R2_15M requires TradingView 15M." : "R2_120M requires TradingView 120M.")
+
+// Complete-bar-inside-calendar admission.
+bool inWindow = time >= scopeStart and time_close <= scopeEnd
+bool firstWindowBar = inWindow and (bar_index == 0 or not inWindow[1])
+
+int expectedBarMs = int(timeframe.in_seconds() * 1000)
+bool rawDiscontinuity = inWindow and inWindow[1] and time - time[1] > expectedBarMs
+
+var int segmentObs = 0
+var int sequence = 0
+var int observedBars = 0
+var int rawDiscontinuities = 0
+var int segmentCount = 0
+var int firstAdmittedTime = na
+var int lastAdmittedTimeClose = na
+
+if inWindow
+    observedBars += 1
+    if na(firstAdmittedTime)
+        firstAdmittedTime := time
+    lastAdmittedTimeClose := time_close
+
+    if firstWindowBar
+        segmentObs := 1
+        sequence := 1
+        segmentCount := 1
+    else if rawDiscontinuity
+        rawDiscontinuities += 1
+        segmentObs := 1
+        sequence += 1
+        segmentCount += 1
+    else
+        segmentObs += 1
+        sequence += 1
+else if time < scopeStart
+    segmentObs := 0
+    sequence := 0
+
+// Preserve the historical library-wrapper contract: engine enabled continuously;
+// inWindow is a separate case/population input.
+const bool enabled = true
+bool logicEnabled = is15M or is120M
+
+var c2.EngineR4 engine = c2.newEngineR4()
+
+c2.R4Step step = c2.stepR4(
+    engine,
+    enabled,
+    logicEnabled,
+    inWindow,
+    firstWindowBar,
+    rawDiscontinuity,
+    segmentObs,
+    bar_index,
+    high,
+    low,
+    close,
+    sequence,
+    time_close,
+    false,
+    checkpointEvery,
+    recordRelationOnly,
+    recordInteractionOnly)
+
+// Current engine surfaces.
+int objects = engine.r3.r2.r1.lifeFormedCount
+int active = engine.r3.r2.r1.lifeActiveNow
+int dormant = engine.r3.r2.r1.lifeDormantNow
+int retired = engine.r3.r2.r1.lifeRetiredNow
+int envGen = engine.r3.r2.envGeneration
+int atomicN = engine.r3.etrTransitionCount
+int compoundN = engine.r3.etrCompoundResolutionCount
+int ledgerN = engine.slogRecordCount
+int contacts = engine.r3.r2.intContactEventTotal
+int relChanges = engine.r3.r2.intRelationChangeEventTotal
+int revisits = engine.r3.r2.intDormantRevisitEventTotal
+int integrity = engine.snapIntegrityPass ? 1 : 0
+
+// Freeze the last admitted in-window state. Each in-window bar overwrites the
+// receipt; after the population ends the exact last admitted receipt persists.
+var bool receiptCaptured = false
+var int rObservedBars = na
+var int rRawDiscontinuities = na
+var int rSegmentCount = na
+var int rFirstAdmittedTime = na
+var int rLastAdmittedTimeClose = na
+var int rObjects = na
+var int rActive = na
+var int rDormant = na
+var int rRetired = na
+var int rEnvGen = na
+var int rAtomicN = na
+var int rCompoundN = na
+var int rLedgerN = na
+var int rContacts = na
+var int rRelChanges = na
+var int rRevisits = na
+var int rIntegrity = na
+
+if inWindow
+    receiptCaptured := true
+    rObservedBars := observedBars
+    rRawDiscontinuities := rawDiscontinuities
+    rSegmentCount := segmentCount
+    rFirstAdmittedTime := firstAdmittedTime
+    rLastAdmittedTimeClose := lastAdmittedTimeClose
+    rObjects := objects
+    rActive := active
+    rDormant := dormant
+    rRetired := retired
+    rEnvGen := envGen
+    rAtomicN := atomicN
+    rCompoundN := compoundN
+    rLedgerN := ledgerN
+    rContacts := contacts
+    rRelChanges := relChanges
+    rRevisits := revisits
+    rIntegrity := integrity
+
+float rate100(int x, int n) =>
+    n > 0 ? 100.0 * x / n : na
+
+float objRate = receiptCaptured ? rate100(rObjects, rObservedBars) : na
+float envRate = receiptCaptured ? rate100(rEnvGen, rObservedBars) : na
+float atomicRate = receiptCaptured ? rate100(rAtomicN, rObservedBars) : na
+float compoundRate = receiptCaptured ? rate100(rCompoundN, rObservedBars) : na
+float ledgerRate = receiptCaptured ? rate100(rLedgerN, rObservedBars) : na
+float contactRate = receiptCaptured ? rate100(rContacts, rObservedBars) : na
+float relChangeRate = receiptCaptured ? rate100(rRelChanges, rObservedBars) : na
+float revisitRate = receiptCaptured ? rate100(rRevisits, rObservedBars) : na
+float compoundPerAtomic = receiptCaptured and rAtomicN > 0 ? 1.0 * rCompoundN / rAtomicN : na
+
+// CSV/Data Window machine outputs.
+plot(receiptCaptured ? rObservedBars : na, "R2_OBSERVED_NATIVE_BARS", display=display.data_window)
+plot(receiptCaptured ? rRawDiscontinuities : na, "R2_RAW_DISCONTINUITIES", display=display.data_window)
+plot(receiptCaptured ? rSegmentCount : na, "R2_RAW_SEGMENTS", display=display.data_window)
+plot(receiptCaptured ? rFirstAdmittedTime : na, "R2_FIRST_ADMITTED_TIME_MS", display=display.data_window)
+plot(receiptCaptured ? rLastAdmittedTimeClose : na, "R2_LAST_ADMITTED_CLOSE_MS", display=display.data_window)
+
+plot(receiptCaptured ? rObjects : na, "R2_OBJECTS", display=display.data_window)
+plot(receiptCaptured ? rActive : na, "R2_ACTIVE_FINAL", display=display.data_window)
+plot(receiptCaptured ? rDormant : na, "R2_DORMANT_FINAL", display=display.data_window)
+plot(receiptCaptured ? rRetired : na, "R2_RETIRED_FINAL", display=display.data_window)
+plot(receiptCaptured ? rEnvGen : na, "R2_ENVELOPE_GENERATIONS", display=display.data_window)
+plot(receiptCaptured ? rAtomicN : na, "R2_ATOMIC_TRANSITIONS", display=display.data_window)
+plot(receiptCaptured ? rCompoundN : na, "R2_COMPOUND_RESOLUTIONS", display=display.data_window)
+plot(receiptCaptured ? rLedgerN : na, "R2_LEDGER_RECORDS", display=display.data_window)
+plot(receiptCaptured ? rContacts : na, "R2_CONTACTS", display=display.data_window)
+plot(receiptCaptured ? rRelChanges : na, "R2_RELATION_CHANGES", display=display.data_window)
+plot(receiptCaptured ? rRevisits : na, "R2_DORMANT_REVISITS", display=display.data_window)
+plot(receiptCaptured ? rIntegrity : na, "R2_INTEGRITY_PASS", display=display.data_window)
+
+plot(objRate, "R2_OBJECTS_PER_100_BARS", display=display.data_window)
+plot(envRate, "R2_ENVELOPE_GEN_PER_100_BARS", display=display.data_window)
+plot(atomicRate, "R2_ATOMIC_PER_100_BARS", display=display.data_window)
+plot(compoundRate, "R2_COMPOUND_PER_100_BARS", display=display.data_window)
+plot(ledgerRate, "R2_LEDGER_PER_100_BARS", display=display.data_window)
+plot(contactRate, "R2_CONTACTS_PER_100_BARS", display=display.data_window)
+plot(relChangeRate, "R2_REL_CHANGES_PER_100_BARS", display=display.data_window)
+plot(revisitRate, "R2_REVISITS_PER_100_BARS", display=display.data_window)
+plot(compoundPerAtomic, "R2_COMPOUND_PER_ATOMIC", display=display.data_window)
+
+var table t = table.new(position.top_right, 2, 18, border_width=1)
+put(int r, string a, string b) =>
+    table.cell(t, 0, r, a)
+    table.cell(t, 1, r, b)
+
+if barstate.islast
+    put(0, "OVC-TV-2H R2", runMode)
+    put(1, "Chart clock", timeframe.period)
+    put(2, "Library", "P3-R5-T2-S2 DEV/1")
+    put(3, "Calendar", "2025-11-20 -> 2026-08-28 21Z")
+    put(4, "Admission", "complete native bar inside")
+    put(5, "Observed bars", str.tostring(rObservedBars))
+    put(6, "Raw discontinuities", str.tostring(rRawDiscontinuities))
+    put(7, "Raw segments", str.tostring(rSegmentCount))
+    put(8, "Objects", str.tostring(rObjects))
+    put(9, "Envelope gen", str.tostring(rEnvGen))
+    put(10, "Atomic", str.tostring(rAtomicN))
+    put(11, "Compound", str.tostring(rCompoundN))
+    put(12, "Ledger", str.tostring(rLedgerN))
+    put(13, "Integrity", rIntegrity == 1 ? "PASS" : "FAIL")
+    put(14, "Objects/100 bars", str.tostring(objRate, "#.###"))
+    put(15, "Atomic/100 bars", str.tostring(atomicRate, "#.###"))
+    put(16, "Compound/100 bars", str.tostring(compoundRate, "#.###"))
+    put(17, "Ledger/100 bars", str.tostring(ledgerRate, "#.###"))
