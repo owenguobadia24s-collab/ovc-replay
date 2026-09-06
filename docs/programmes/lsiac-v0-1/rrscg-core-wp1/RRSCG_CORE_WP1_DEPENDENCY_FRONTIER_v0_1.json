@@ -1,0 +1,29 @@
+{
+  "schema": "ovc-dependency-frontier/v1",
+  "programme_id": "OVC-LSIAC-v0.1",
+  "plan_id": "OVC-RRSCG-CORE-ACCESSION-CONFORMANCE-PLAN-0.1",
+  "packet_id": "RRSCG-CORE-WP1-R2-KERNEL-CONFORMANCE-IMPLEMENTATION",
+  "baseline_commit": "a0e0ccf48d5be18a6c101d17c3c99d0266b2b56d",
+  "satisfied": [
+    {"id":"RRSCG_CORE_PLAN","state":"PASS_AND_INTEGRATED","source":"main@8dd38fede57a4f92603d9676c699cee7d8f5f53f"},
+    {"id":"RRSCG_CORE_G0_SOURCE_IDENTITY","state":"PASS_AND_INTEGRATED_BOUND_EXACT","source":"main@cfad75a814f7b10b975add7675982be30da7c6bc"},
+    {"id":"RRSCG_CORE_ACCESSION_AUTHORITY","state":"PASS_AND_INTEGRATED","source":"main@a0e0ccf48d5be18a6c101d17c3c99d0266b2b56d"},
+    {"id":"R2_EXPECTED_IDENTITY","state":"FROZEN","sha256":"5426cd9340c93a2aff0f5c8f3093f9db876647d1790aaa82da3e444a4f3029b5"},
+    {"id":"C2_OWNER_READ_HANDOFF","state":"PASS_AND_INTEGRATED","source":"registries/opt_b/c2/vnext/CURRENT_OWNER_STRUCTURAL_SNAPSHOT_READ_SURFACE.json"},
+    {"id":"IROF_EXECUTION_PLANE","state":"COMPLETED_INACTIVE_INFRASTRUCTURE_AVAILABLE","source":"registries/implementation/irof/CURRENT_STATE_POINTER.json"}
+  ],
+  "blocked": [
+    {
+      "id":"R2_EXACT_SOURCE_BYTES_EXECUTION_AVAILABILITY",
+      "state":"SOURCE_BYTES_UNAVAILABLE_AT_EXECUTION",
+      "required_artifact":"OVC_EML_GRAMMAR_0003_RRSCG_AlgorithmPack_v0_1_REVISED_2_FREEZE_CANDIDATE(2).zip",
+      "required_sha256":"5426cd9340c93a2aff0f5c8f3093f9db876647d1790aaa82da3e444a4f3029b5",
+      "reason":"Prior exact source binding is court-record effective, but the external package bytes are not mounted or otherwise file-addressable in the current execution environment."
+    }
+  ],
+  "status": "BLOCKED",
+  "blocker_class": "REQUIRED_ARTIFACT_UNAVAILABLE",
+  "resume_condition": "Make the exact R2 archive execution-accessible and reverify the frozen SHA-256/internal source manifest; do not reconstruct.",
+  "next_gate_after_resolution": "RRSCG-CORE-G1-R2-CONFORMANCE",
+  "authority_delta": "NONE_BLOCKER_RECORD_ONLY"
+}
