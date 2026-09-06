@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/rrscg_owner_input_v0_1.schema.json",
+  "title": "RRSCG exact C2 owner input envelope v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "adapter_id", "snapshot_id", "owner_generation_id", "owner_snapshot", "flattening", "scientific_inference", "content_id"],
+  "properties": {
+    "schema": {"const": "ovc-rrscg-owner-input/v0.1"},
+    "adapter_id": {"const": "RRSCG.C2.OWNER.STRUCTURAL.SNAPSHOT.ADAPTER.v0.1"},
+    "snapshot_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "owner_generation_id": {"const": "C2VNEXT.OWNER.GENERATION.ASR00.C2AR-PACKAGE-v1.READ-v0.1"},
+    "owner_snapshot": {"type": "object"},
+    "flattening": {"const": "NONE_OWNER_RECORDS_PRESERVED"},
+    "scientific_inference": {"const": "NONE"},
+    "content_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
