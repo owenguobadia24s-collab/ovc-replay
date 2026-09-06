@@ -18,6 +18,7 @@ from ovc.research_operations.rrscg import (
 TEST_ROOT = Path(__file__).resolve().parents[2]
 REPO_ROOT = TEST_ROOT.parent
 ORACLE = TEST_ROOT / "fixtures/research_operations/rrscg/RRSCG_R2_REFERENCE_AND_ALGORITHMIC_ORACLE_v0_1.json"
+FUNCTION_SOURCE_FINGERPRINTS = TEST_ROOT / "fixtures/research_operations/rrscg/RRSCG_R2_EXACT_FUNCTION_SOURCE_SHA256_v0_1.json"
 KERNEL = REPO_ROOT / "src/ovc/research_operations/rrscg/kernel.py"
 DOCS = REPO_ROOT / "docs/programmes/lsiac-v0-1/rrscg-core-wp1"
 STATE = REPO_ROOT / "records/research_operations/lsiac/LSIAC_PROGRAMME_STATE_v0_23.json"
@@ -132,14 +133,15 @@ def _load(path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def _function_ast_sha256(text: str, name: str) -> str:
+def _function_source_sha256(text: str, name: str) -> str:
     tree = ast.parse(text)
     node = next(
         n for n in tree.body
         if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)) and n.name == name
     )
-    payload = ast.dump(node, include_attributes=False, annotate_fields=True)
-    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+    segment = ast.get_source_segment(text, node)
+    assert segment is not None
+    return hashlib.sha256(segment.encode("utf-8")).hexdigest()
 
 
 def test_exact_bound_source_identity_and_population_oracle():
@@ -284,14 +286,16 @@ def test_primary_record_excludes_operation_and_order_identity():
     assert not hasattr(result, "factor_path_order")
 
 
-def test_twenty_load_bearing_function_bodies_match_exact_source_ast_fingerprints():
+def test_twenty_load_bearing_function_bodies_match_exact_source_text_fingerprints():
     oracle = _load(ORACLE)
-    fingerprints = oracle["algorithmic_fingerprints"]
-    assert fingerprints["all_function_body_ast_identities_match"] is True
-    assert fingerprints["comparison_count"] == 20
+    historical = oracle["algorithmic_fingerprints"]
+    fingerprints = _load(FUNCTION_SOURCE_FINGERPRINTS)
+    assert historical["comparison_count"] == fingerprints["comparison_count"] == 20
+    assert set(historical["functions"]) == set(fingerprints["functions"])
+    assert fingerprints["source_zip_sha256"] == EXPECTED_R2
     text = KERNEL.read_text(encoding="utf-8")
     for name, row in fingerprints["functions"].items():
-        assert _function_ast_sha256(text, name) == row["source_ast_sha256"]
+        assert _function_source_sha256(text, name) == row["source_text_sha256"]
 
 
 def test_source_rematerialisation_closes_only_execution_availability_blocker():

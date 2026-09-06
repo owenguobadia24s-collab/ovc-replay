@@ -37,6 +37,7 @@ EXPECTED_OVC_PACKAGES = {
     "ovc.research_operations.prsc",
     "ovc.research_operations.rccr",
     "ovc.research_operations.p2cti",
+    "ovc.research_operations.rrscg",
     "ovc.research_operations.sff",
     "ovc.research_operations.v0_2",
     "ovc.research_operations.v0_3",
