@@ -31,8 +31,10 @@ def test_terminal_state_is_effective_bounded_and_has_no_successor():
     pointer = _load(POINTER)
     assert state["status"] == pointer["status"] == "COMPLETED"
     assert state["terminal_state"] == "RRSCG_CORE_COMPLETE_REPOSITORY_EFFECTIVE"
-    assert state["merge_commit"] == pointer["primary_merge_commit"]
-    assert state["next_packet"] == pointer["next_packet"] == "NONE_RRSCG_CORE_COMPLETE"
+    assert state["merge_commit"] == "a13b4dc64eb7d22f8fec14c524f19d1f3fc3660e"
+    assert pointer["prior_rrscg_terminal_retained"] == "LSIAC_PROGRAMME_STATE_v0_31.json"
+    assert state["next_packet"] == "NONE_RRSCG_CORE_COMPLETE"
+    assert pointer["next_packet"] == "NONE_MCAC_V0_1_COMPLETE"
     assert state["next_action"] == "PROGRAMME_COMPLETED_NO_NEXT_PACKET"
     assert state["capability_state"] == "INACTIVE"
     assert state["real_source_execution"] == "NOT_AUTHORISED_NOT_PERFORMED"
