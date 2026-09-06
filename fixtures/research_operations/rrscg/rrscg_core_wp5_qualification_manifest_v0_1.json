@@ -1,0 +1,56 @@
+{
+  "schema": "ovc-rrscg-core-qualification-fixture-manifest/v0.1",
+  "fixture_id": "RRSCG.CORE.SYNTHETIC.SINGLE_CLOCK.QUALIFICATION.v0.1",
+  "source_generation_id": "RRSCG_SYNTHETIC_SINGLE_CLOCK_QUALIFICATION_v0.1",
+  "seed": 800031,
+  "scope": {
+    "instrument": "GBPUSD",
+    "side": "SYNTHETIC_OPERATION_FREE",
+    "local_clock": "15M",
+    "parent_clock": "2H_A_L",
+    "role": "DEVELOPMENT_CONFORMANCE",
+    "validation": "LOCKED_UNCONSUMED"
+  },
+  "synthetic_runs": {
+    "cases_1024": {
+      "content_sha256": "127e8fc5b60bee85c04458ea7fdd904e074f55bd68f6b604d196a8bfb60144e4",
+      "purpose": "DETERMINISTIC_REPLAY_CHUNK_AND_ORDER_EQUIVALENCE"
+    },
+    "cases_3068": {
+      "content_sha256": "8fa42242b249f351941ac02e349cab27a5de36ee34a0fad377ddc9b192a97f25",
+      "denominator_reconciliation": {
+        "expected_count": 3068,
+        "record_count": 3068,
+        "unique_case_count": 3068,
+        "unique_sequence_count": 3068,
+        "r2_resolved_count": 2608,
+        "d9_resolved_count": 2608,
+        "d10_resolved_count": 2608,
+        "d10_affected_count": 299,
+        "status": "PASS"
+      }
+    },
+    "cases_20000": {
+      "content_sha256": "2e5756e5dec82167067517a20fad7885eb9f57f6438ec60cd041a7923427ac6a",
+      "denominator_reconciliation": {
+        "expected_count": 20000,
+        "record_count": 20000,
+        "unique_case_count": 20000,
+        "unique_sequence_count": 20000,
+        "r2_resolved_count": 17129,
+        "d9_resolved_count": 17129,
+        "d10_resolved_count": 17129,
+        "d10_affected_count": 1935,
+        "status": "PASS"
+      },
+      "capacity_limits": {
+        "max_wall_seconds": 60,
+        "max_resident_growth_bytes": 536870912
+      },
+      "observed_local_wall_seconds_2026_09_06": 19.662,
+      "capacity_status": "PASS"
+    }
+  },
+  "content_identity_rule": "SHA256_CANONICAL_JSON_RECORD_SEQUENCE_SORTED_BY_SOURCE_SEQUENCE_INDEX_AND_CASE_ID",
+  "authority_effect": "NONE_SYNTHETIC_FIXTURE_ONLY"
+}

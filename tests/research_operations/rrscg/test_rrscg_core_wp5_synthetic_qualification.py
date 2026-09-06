@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import dataclasses
+import json
 import os
 import sys
 import time
+from pathlib import Path
 
 import pytest
 
@@ -16,6 +18,13 @@ from ovc.research_operations.rrscg.qualification import (
     run_synthetic_cases,
 )
 from ovc.research_orchestration.checkpoint import assert_fresh_resume_equivalent
+
+ROOT = Path(__file__).resolve().parents[3]
+QUALIFICATION_MANIFEST = ROOT / "fixtures/research_operations/rrscg/rrscg_core_wp5_qualification_manifest_v0_1.json"
+
+
+def _manifest():
+    return json.loads(QUALIFICATION_MANIFEST.read_text(encoding="utf-8"))
 
 
 def _resident_bytes() -> int:
@@ -62,6 +71,7 @@ def test_deterministic_replay_and_chunk_equivalence():
     chunked = run_synthetic_cases(cases, chunk_size=37)
     assert one == repeated == chunked
     assert qualification_content_hash(one) == qualification_content_hash(repeated) == qualification_content_hash(chunked)
+    assert qualification_content_hash(one) == _manifest()["synthetic_runs"]["cases_1024"]["content_sha256"]
 
 
 def test_order_independence_and_exact_chronology_recovery():
@@ -92,6 +102,9 @@ def test_denominator_reconciliation_and_reducer_scope():
     assert receipt.record_count == receipt.unique_case_count == receipt.unique_sequence_count == 3068
     assert receipt.r2_resolved_count == receipt.d9_resolved_count == receipt.d10_resolved_count
     assert receipt.d10_affected_count > 0
+    expected = _manifest()["synthetic_runs"]["cases_3068"]
+    assert qualification_content_hash(records) == expected["content_sha256"]
+    assert receipt.to_dict() == expected["denominator_reconciliation"]
     for record in records:
         if record.d10_resolution_tier != record.d9_resolution_tier:
             assert record.d9_resolution_tier == "MINIMAL_CONSTRAINT"
@@ -117,5 +130,8 @@ def test_bounded_20k_single_clock_capacity():
     resident_growth = max(0, _resident_bytes() - resident_before)
     receipt = reconcile_denominators(records, expected_count=20_000)
     assert receipt.status == "PASS"
+    expected = _manifest()["synthetic_runs"]["cases_20000"]
+    assert qualification_content_hash(records) == expected["content_sha256"]
+    assert receipt.to_dict() == expected["denominator_reconciliation"]
     assert elapsed < 60.0
     assert resident_growth < 512 * 1024 * 1024
