@@ -1,0 +1,61 @@
+{
+  "schema": "ovc-c2s-sptoi-wp4-owner-surface-binding/v0.1",
+  "programme_id": "OVC-EML-C2S-SPTO-CONFORMANCE-PREREG-v0.1",
+  "packet_id": "C2S-SPTOI-WP4-REENTRY",
+  "gate_id": "C2S-SPTOI-G4",
+  "baseline_main": "b363e0cf6b441e7d88b7c236d6cb1907a94efff4",
+  "baseline_tree": "f81e20df3cbb3b6d74e106b685389951f7e77b9d",
+  "blocker_closed_forward": "C2S-SPTOI-WP4:BLOCKED_OWNER_READ_SURFACE_REQUIRED@60195d6a7fcacc1cf58502bb6bc320ddc73b93d2",
+  "owner_handoff_main_commit": "c53f2580351cf75e494da769d408ca980ae14fc9",
+  "owner_handoff_effective_time": "2026-09-06T00:25:40+01:00",
+  "owner_authority_id": "AUTH.OPT-B.C2.vNext.ACTIVE.RUNTIME.v0.1",
+  "read_authority_id": "AUTH.OPT-B.C2.vNext.OWNER_STRUCTURAL_SNAPSHOT.READ.v0.1",
+  "owner_generation_id": "C2VNEXT.OWNER.GENERATION.ASR00.C2AR-PACKAGE-v1.READ-v0.1",
+  "owner_package_id": "C2AR.INTEGRATED.SHADOW.PACKAGE.v1",
+  "owner_package_sha256": "150de1997be8801baa59db6d0fe98b11cb21a6b70525b908537aeb31bfd00cc3",
+  "handoff_id": "C2.VNEXT.OWNER.STRUCTURAL.SNAPSHOT.READ.HANDOFF.v0.1",
+  "snapshot_schema": "ovc-c2-vnext-owner-structural-snapshot-read/v0.1",
+  "resolution_id": "634945e7589462b2c3eb25e446c23d24bd8f622208f6582431b2d3e58bdc8715",
+  "owner_artifact_git_blobs": {
+    "registries/opt_b/c2/vnext/CURRENT_OWNER_STRUCTURAL_SNAPSHOT_READ_SURFACE.json": "7876e821a42d06f126e39df4c9f745d4d7ec9715",
+    "registries/opt_b/c2/vnext/C2_OWNER_STRUCTURAL_SNAPSHOT_READ_AUTHORITY_v0_1.json": "3bbe8cb6f5335bb8ff362552e93a9720cdd39f17",
+    "registries/opt_b/c2/vnext/C2_OWNER_STRUCTURAL_SNAPSHOT_GENERATION_v0_1.json": "151acc5d81ddec202010dd1933c78ab731f56993",
+    "registries/opt_b/c2/vnext/C2_OWNER_STRUCTURAL_SNAPSHOT_FIELD_CATALOG_v0_1.json": "8e3e130c298aec8c24fbe15bffb400fd958235fc",
+    "docs/releases/active-stack-reclassification-v0-1/c2-owner-read-handoff/C2_OWNER_READ_HANDOFF_OPERATOR_DECISION_v0_1.json": "38a00b998832e20649efe3ad704fc070e096c780"
+  },
+  "spto_implementation_blobs": {
+    "src/ovc/research_operations/spto/source_binding.py": "b3f8d6b8cfc439a738c0f070cf757c413b7c4027",
+    "schemas/research_operations/spto/C2_OWNER_STREAM_BINDING_v0_1.schema.json": "4af680198e14e0ad4ea5362e699a8f16c245cf3d",
+    "schemas/research_operations/spto/FACTORISED_SOURCE_BINDING_MANIFEST_v0_1.schema.json": "36582f5f4dd2f71667a8bfc57c5474d0d65816d6"
+  },
+  "chronology": {
+    "effective_time": "OBSERVATION_INTERVAL_END",
+    "first_valid_time": "OWNER_OBSERVATION_FIRST_VALID_TIME",
+    "roles_collapsed": false,
+    "future_join_policy": "FAIL_CLOSED"
+  },
+  "warmup_break_missingness": {
+    "warmup": "OWNER_TYPED_TARGET_INELIGIBLE_RETAINED_IN_DENOMINATOR",
+    "breaks": ["SEGMENT_START", "GAP_RESET", "CLOSURE_BOUNDARY", "PARTITION_BOUNDARY", "UNKNOWN_BREAK"],
+    "cross_break_join": "DENIED",
+    "neutral_imputation": "PROHIBITED",
+    "component_absence": "OWNER_TYPED"
+  },
+  "reachable_field_classification": "registries/opt_b/c2/vnext/C2_OWNER_STRUCTURAL_SNAPSHOT_FIELD_CATALOG_v0_1.json",
+  "embedded_record_rule": "OWNER_SCHEMAS_ONLY_NO_SPTO_FLATTENING_OR_REPAIR",
+  "forbidden_dependency_reachability": {
+    "result": "PASS_NONE",
+    "forbidden": ["C2E", "C2P_GENERATING", "OPT_C", "OPT_D", "VALIDATION", "SFF", "OUTCOME", "PROBABILITY", "RISK", "EXPOSURE", "TRADING", "EXECUTION"],
+    "proof": "STATIC_IMPORT_CENSUS_PLUS_RUNTIME_AUTHORITY_AND_TOP_LEVEL_FIELD_REJECTION"
+  },
+  "source_release_scope": {
+    "instrument": "GBPUSD",
+    "sides": ["BID", "ASK"],
+    "local_clock": "15M",
+    "parent_clock": "2H_A_L",
+    "source_authority_and_objects": "REQUIRED_PER_INVOCATION_BY_OWNER_SOURCE_BINDING",
+    "protected_2021_2023_source": "NOT_ACCESSED"
+  },
+  "status": "BOUND_CURRENT_PUBLIC_OWNER_SURFACE",
+  "authority_effect": "READ_ONLY_CONSUMER_ADAPTER_QUALIFICATION_ONLY"
+}
