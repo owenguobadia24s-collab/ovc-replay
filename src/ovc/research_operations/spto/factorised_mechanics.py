@@ -559,6 +559,69 @@ def build_frontier_record(
     return ContinuationFrontierEvidenceRecord(*body, content_id("ContinuationFrontierEvidenceRecord/v1", body))
 
 
+def select_antecedent_backoff(
+    hierarchy_id: str,
+    supports_by_level: Mapping[str, int],
+    support_min: int = PRIMARY_SUPPORT_MIN,
+) -> tuple[str | None, int]:
+    """Select the first recurrence-qualified level in one frozen hierarchy."""
+    if hierarchy_id not in ANTECEDENT_HIERARCHIES:
+        raise MechanicsError("UNKNOWN_ANTECEDENT_HIERARCHY", hierarchy_id)
+    if support_min not in (PRIMARY_SUPPORT_MIN, *SUPPORT_SENSITIVITIES):
+        raise MechanicsError("UNDECLARED_SUPPORT_POLICY", str(support_min))
+    if any(not isinstance(count, int) or count < 0 for count in supports_by_level.values()):
+        raise MechanicsError("INVALID_SUPPORT_MAP", "support counts must be non-negative integers")
+    for level in ANTECEDENT_HIERARCHIES[hierarchy_id]:
+        support = int(supports_by_level.get(level, 0))
+        if support >= support_min:
+            return level, support
+    return None, max((int(supports_by_level.get(level, 0)) for level in ANTECEDENT_HIERARCHIES[hierarchy_id]), default=0)
+
+
+def select_target_resolution(
+    hierarchy_id: str,
+    relation_supports_by_pack: Mapping[str, int],
+    relation_min: int = RELATION_SUPPORT_MIN,
+) -> tuple[str | None, int]:
+    """Select the richest relation-qualified target in one frozen hierarchy."""
+    if hierarchy_id not in TARGET_HIERARCHIES:
+        raise MechanicsError("UNKNOWN_TARGET_HIERARCHY", hierarchy_id)
+    if relation_min < 1:
+        raise MechanicsError("INVALID_RELATION_SUPPORT_MIN", str(relation_min))
+    if any(not isinstance(count, int) or count < 0 for count in relation_supports_by_pack.values()):
+        raise MechanicsError("INVALID_SUPPORT_MAP", "relation counts must be non-negative integers")
+    for pack_id in TARGET_HIERARCHIES[hierarchy_id]:
+        support = int(relation_supports_by_pack.get(pack_id, 0))
+        if support >= relation_min:
+            return pack_id, support
+    return None, max((int(relation_supports_by_pack.get(pack_id, 0)) for pack_id in TARGET_HIERARCHIES[hierarchy_id]), default=0)
+
+
+def project_frontier_to_comparison_target(
+    source_pack_id: str,
+    target_supports: Mapping[str, int],
+    projection: Mapping[str, str] | None = None,
+) -> tuple[tuple[str, int], ...]:
+    """Project and aggregate a support map on the one frozen comparison alphabet."""
+    if source_pack_id not in TARGET_PACKS:
+        raise MechanicsError("UNKNOWN_TARGET_PACK", source_pack_id)
+    if any(not isinstance(count, int) or count < 0 for count in target_supports.values()):
+        raise MechanicsError("INVALID_SUPPORT_MAP", "target supports must be non-negative integers")
+    if source_pack_id == COMPARISON_TARGET_PACK_ID:
+        mapping = {target_id: target_id for target_id in target_supports}
+    else:
+        if projection is None or set(projection) != set(target_supports):
+            raise MechanicsError("COMPARISON_TARGET_PACK_MISSING", source_pack_id)
+        mapping = projection
+    aggregated: Counter[str] = Counter()
+    for target_id, count in target_supports.items():
+        comparison_id = mapping[target_id]
+        if not comparison_id:
+            raise MechanicsError("COMPARISON_TARGET_PACK_MISSING", target_id)
+        aggregated[comparison_id] += int(count)
+    return tuple(sorted(aggregated.items()))
+
+
 def build_trace_set(
     records: Sequence[ContinuationFrontierEvidenceRecord], source_generation_id: str
 ) -> GrammarRepresentationTraceSet:
