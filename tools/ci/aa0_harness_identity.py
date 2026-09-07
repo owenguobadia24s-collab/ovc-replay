@@ -9,13 +9,18 @@ from typing import Iterable, Sequence
 HARNESS_IDENTITY_VERSION = "ovc-aa0-assurance-harness/v1"
 DEFAULT_PATHSPECS: tuple[str, ...] = (
     ".github/workflows/tests.yml",
+    ".github/workflows/ovc-tiered-tests.yml",
     "pyproject.toml",
     "requirements-console-vnext.txt",
+    "contracts/development/OVC_TIERED_TEST_SELECTION_CONTRACT_v0_2.md",
+    "schemas/development/test_selection_manifest_v0_2.schema.json",
+    "registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_2.json",
     "registries/implementation/ci_performance/CIPR_POST_PYT_PYTEST_SHARD_CANONICAL_POLICY_v0_1.json",
     "tools/ci/aa0_harness_identity.py",
     "tools/ci/pytest_unittest_parity.py",
     "tools/ci/pytest_shard_shadow.py",
     "tools/ci/pytest_shard_canonical.py",
+    "tools/ci/tiered_profile_runner.py",
     "tests/**",
 )
 

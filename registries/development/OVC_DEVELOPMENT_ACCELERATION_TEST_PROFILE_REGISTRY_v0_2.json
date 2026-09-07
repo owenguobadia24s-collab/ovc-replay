@@ -1,0 +1,227 @@
+{
+  "schema": "ovc-test-profile-registry/v2",
+  "registry_id": "OVC.DEVELOPMENT.ACCELERATION.TEST-PROFILES.v0.2",
+  "programme_id": "OVC-CIPR-TIERED-BLOCKING-ASSURANCE-AMENDMENT-v0.1",
+  "profile_order": ["FAST", "PACKET", "FINAL_HEAD"],
+  "profiles": {
+    "FAST": {
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile FAST --changed-paths-file <manifest-path>"]
+    },
+    "PACKET": {
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile PACKET --changed-paths-file <manifest-path>"]
+    },
+    "FINAL_HEAD": {
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile FINAL_HEAD --changed-paths-file <manifest-path>"]
+    }
+  },
+  "rules": [
+    {
+      "rule_id": "TBA-NORMAL-CONTRACTS",
+      "pattern": "contracts/**",
+      "priority": 100,
+      "owner": "PACKET_OWNER",
+      "minimum_profile": "PACKET",
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile PACKET --changed-paths-file <manifest-path>"],
+      "retained_checks": ["contract-validation", "authority-boundary"]
+    },
+    {
+      "rule_id": "TBA-NORMAL-SCHEMAS",
+      "pattern": "schemas/**",
+      "priority": 100,
+      "owner": "PACKET_OWNER",
+      "minimum_profile": "PACKET",
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile PACKET --changed-paths-file <manifest-path>"],
+      "retained_checks": ["json-validation", "schema-boundary"]
+    },
+    {
+      "rule_id": "TBA-NORMAL-REGISTRIES",
+      "pattern": "registries/**",
+      "priority": 100,
+      "owner": "PACKET_OWNER",
+      "minimum_profile": "PACKET",
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile PACKET --changed-paths-file <manifest-path>"],
+      "retained_checks": ["json-validation", "registry-boundary"]
+    },
+    {
+      "rule_id": "TBA-NORMAL-FIXTURES",
+      "pattern": "fixtures/**",
+      "priority": 100,
+      "owner": "PACKET_OWNER",
+      "minimum_profile": "PACKET",
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile PACKET --changed-paths-file <manifest-path>"],
+      "retained_checks": ["fixture-integrity"]
+    },
+    {
+      "rule_id": "TBA-NORMAL-SOURCE",
+      "pattern": "src/**",
+      "priority": 100,
+      "owner": "PACKET_OWNER",
+      "minimum_profile": "PACKET",
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile PACKET --changed-paths-file <manifest-path>"],
+      "retained_checks": ["changed-packet-tests", "python-syntax", "authority-boundary"]
+    },
+    {
+      "rule_id": "TBA-NORMAL-SCRIPTS",
+      "pattern": "scripts/**",
+      "priority": 100,
+      "owner": "PACKET_OWNER",
+      "minimum_profile": "PACKET",
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile PACKET --changed-paths-file <manifest-path>"],
+      "retained_checks": ["changed-packet-tests", "python-syntax"]
+    },
+    {
+      "rule_id": "TBA-NORMAL-TESTS",
+      "pattern": "tests/**",
+      "priority": 100,
+      "owner": "PACKET_OWNER",
+      "minimum_profile": "PACKET",
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile PACKET --changed-paths-file <manifest-path>"],
+      "retained_checks": ["changed-packet-tests", "no-test-weakening"]
+    },
+    {
+      "rule_id": "TBA-NORMAL-DOCS",
+      "pattern": "docs/**",
+      "priority": 100,
+      "owner": "PACKET_OWNER",
+      "minimum_profile": "PACKET",
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile PACKET --changed-paths-file <manifest-path>"],
+      "retained_checks": ["court-record-integrity"]
+    },
+    {
+      "rule_id": "TBA-FAST-DESIGN-DOCS",
+      "pattern": "docs/design/**",
+      "priority": 200,
+      "owner": "DOCUMENTATION_OWNER",
+      "minimum_profile": "FAST",
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile FAST --changed-paths-file <manifest-path>"],
+      "retained_checks": ["documentation-integrity"]
+    },
+    {
+      "rule_id": "TBA-NORMAL-RECORDS",
+      "pattern": "records/**",
+      "priority": 100,
+      "owner": "PACKET_OWNER",
+      "minimum_profile": "PACKET",
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile PACKET --changed-paths-file <manifest-path>"],
+      "retained_checks": ["court-record-integrity"]
+    },
+    {
+      "rule_id": "TBA-RISK-WORKFLOWS",
+      "pattern": ".github/workflows/**",
+      "priority": 1000,
+      "owner": "ASSURANCE_HARNESS_OWNER",
+      "minimum_profile": "FINAL_HEAD",
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile FINAL_HEAD --changed-paths-file <manifest-path>"],
+      "retained_checks": ["complete-canonical-sweep", "pytest-unittest-parity", "runner-parity"]
+    },
+    {
+      "rule_id": "TBA-RISK-CI-TOOLS",
+      "pattern": "tools/ci/**",
+      "priority": 1000,
+      "owner": "ASSURANCE_HARNESS_OWNER",
+      "minimum_profile": "FINAL_HEAD",
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile FINAL_HEAD --changed-paths-file <manifest-path>"],
+      "retained_checks": ["complete-canonical-sweep", "pytest-unittest-parity", "runner-parity"]
+    },
+    {
+      "rule_id": "TBA-RISK-SELECTOR-SOURCE",
+      "pattern": "src/ovc/development/test_selection.py",
+      "priority": 1000,
+      "owner": "ASSURANCE_HARNESS_OWNER",
+      "minimum_profile": "FINAL_HEAD",
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile FINAL_HEAD --changed-paths-file <manifest-path>"],
+      "retained_checks": ["complete-canonical-sweep", "selector-self-test"]
+    },
+    {
+      "rule_id": "TBA-RISK-SELECTOR-CLI",
+      "pattern": "scripts/development/ovc_test_select.py",
+      "priority": 1000,
+      "owner": "ASSURANCE_HARNESS_OWNER",
+      "minimum_profile": "FINAL_HEAD",
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile FINAL_HEAD --changed-paths-file <manifest-path>"],
+      "retained_checks": ["complete-canonical-sweep", "selector-self-test"]
+    },
+    {
+      "rule_id": "TBA-RISK-ACTIVE-PROFILE-REGISTRY",
+      "pattern": "registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_2.json",
+      "priority": 1000,
+      "owner": "ASSURANCE_HARNESS_OWNER",
+      "minimum_profile": "FINAL_HEAD",
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile FINAL_HEAD --changed-paths-file <manifest-path>"],
+      "retained_checks": ["complete-canonical-sweep", "profile-policy-change"]
+    },
+    {
+      "rule_id": "TBA-RISK-ACTIVE-PROFILE-CONTRACT",
+      "pattern": "contracts/development/OVC_TIERED_TEST_SELECTION_CONTRACT_v0_2.md",
+      "priority": 1000,
+      "owner": "ASSURANCE_HARNESS_OWNER",
+      "minimum_profile": "FINAL_HEAD",
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile FINAL_HEAD --changed-paths-file <manifest-path>"],
+      "retained_checks": ["complete-canonical-sweep", "profile-policy-change"]
+    },
+    {
+      "rule_id": "TBA-RISK-ACTIVE-PROFILE-SCHEMA",
+      "pattern": "schemas/development/test_selection_manifest_v0_2.schema.json",
+      "priority": 1000,
+      "owner": "ASSURANCE_HARNESS_OWNER",
+      "minimum_profile": "FINAL_HEAD",
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile FINAL_HEAD --changed-paths-file <manifest-path>"],
+      "retained_checks": ["complete-canonical-sweep", "profile-policy-change"]
+    },
+    {
+      "rule_id": "TBA-RISK-ACTIVE-PROFILE-TEST",
+      "pattern": "tests/development/test_tiered_blocking_assurance.py",
+      "priority": 1000,
+      "owner": "ASSURANCE_HARNESS_OWNER",
+      "minimum_profile": "FINAL_HEAD",
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile FINAL_HEAD --changed-paths-file <manifest-path>"],
+      "retained_checks": ["complete-canonical-sweep", "profile-policy-change"]
+    },
+    {
+      "rule_id": "TBA-RISK-PYPROJECT",
+      "pattern": "pyproject.toml",
+      "priority": 1000,
+      "owner": "ASSURANCE_HARNESS_OWNER",
+      "minimum_profile": "FINAL_HEAD",
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile FINAL_HEAD --changed-paths-file <manifest-path>"],
+      "retained_checks": ["complete-canonical-sweep", "dependency-change"]
+    },
+    {
+      "rule_id": "TBA-RISK-REQUIREMENTS",
+      "pattern": "requirements*.txt",
+      "priority": 1000,
+      "owner": "ASSURANCE_HARNESS_OWNER",
+      "minimum_profile": "FINAL_HEAD",
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile FINAL_HEAD --changed-paths-file <manifest-path>"],
+      "retained_checks": ["complete-canonical-sweep", "dependency-change"]
+    },
+    {
+      "rule_id": "TBA-RISK-CONFTEST",
+      "pattern": "conftest.py",
+      "priority": 1000,
+      "owner": "ASSURANCE_HARNESS_OWNER",
+      "minimum_profile": "FINAL_HEAD",
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile FINAL_HEAD --changed-paths-file <manifest-path>"],
+      "retained_checks": ["complete-canonical-sweep", "pytest-collection-change"]
+    },
+    {
+      "rule_id": "TBA-RISK-TEST-CONFIG",
+      "pattern": "pytest.ini",
+      "priority": 1000,
+      "owner": "ASSURANCE_HARNESS_OWNER",
+      "minimum_profile": "FINAL_HEAD",
+      "commands": ["PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile FINAL_HEAD --changed-paths-file <manifest-path>"],
+      "retained_checks": ["complete-canonical-sweep", "pytest-collection-change"]
+    }
+  ],
+  "unknown_path_policy": "FINAL_HEAD",
+  "ambiguous_dependency_policy": "BLOCK_AND_REQUIRE_PROFILE_CORRECTION",
+  "final_assurance": {
+    "ordinary_blocking_assurance": "SELECTED_TIERED_PROFILE",
+    "complete_sweep_triggers": ["FINAL_HEAD", "SCHEDULED", "HARNESS_CHANGE", "RISK_TRIGGER"],
+    "pytest_unittest_parity": "COMPLETE_SWEEP_ONLY",
+    "required_after_base_change": "RESELECT_PROFILE_AND_REEVALUATE_DEPENDENCIES",
+    "gate_replay_substitution": "PROHIBITED",
+    "local_success_substitutes_remote_required_check": false
+  }
+}

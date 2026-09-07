@@ -36,11 +36,11 @@ class PostDiasiAa0PrewarmContractTests(unittest.TestCase):
         self.assertNotIn("github.event.pull_request.head.sha || github.sha", self.workflow)
         self.assertEqual(
             self.workflow.count("ref: ${{ env.OVC_ASSURANCE_TARGET_HEAD_SHA }}"),
-            7,
+            8,
         )
 
     def test_history_depth_matches_empirically_proven_dependencies(self) -> None:
-        self.assertEqual(self.workflow.count("fetch-depth: 0"), 3)
+        self.assertEqual(self.workflow.count("fetch-depth: 0"), 4)
         self.assertEqual(self.workflow.count("fetch-depth: 1"), 4)
         self.assertIn("fetch-depth: 0", self._job("pytest-shard-manifest", "pytest-shard"))
         self.assertIn("fetch-depth: 0", self._job("pytest-shard", "pytest-unified"))

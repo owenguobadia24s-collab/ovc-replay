@@ -5,6 +5,8 @@ on:
     branches: [main]
   push:
     branches: [main]
+  schedule:
+    - cron: "17 3 * * 1"
   workflow_dispatch:
     inputs:
       aa0_target_head_sha:
@@ -26,8 +28,50 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  complete-sweep-trigger:
+    name: complete assurance sweep trigger
+    runs-on: ubuntu-latest
+    outputs:
+      full_sweep_required: ${{ steps.trigger.outputs.full_sweep_required }}
+      trigger_reason: ${{ steps.trigger.outputs.trigger_reason }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.OVC_ASSURANCE_TARGET_HEAD_SHA }}
+          fetch-depth: 0
+          show-progress: false
+      - name: Classify final-head, scheduled, harness-change or risk trigger
+        id: trigger
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" != "pull_request" ]]; then
+            echo "full_sweep_required=true" >> "$GITHUB_OUTPUT"
+            echo "trigger_reason=${{ github.event_name }}" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git diff --name-only "${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}" > "$RUNNER_TEMP/changed-paths.txt"
+          test -s "$RUNNER_TEMP/changed-paths.txt"
+          PYTHONPATH=src python3 scripts/development/ovc_test_select.py \
+            --registry registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_2.json \
+            --changed-paths-file "$RUNNER_TEMP/changed-paths.txt" \
+            --output "$RUNNER_TEMP/test-selection-manifest.json" \
+            > "$RUNNER_TEMP/test-selection-stdout.json"
+          cmp "$RUNNER_TEMP/test-selection-manifest.json" "$RUNNER_TEMP/test-selection-stdout.json"
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, os
+          from pathlib import Path
+          manifest = json.loads((Path(os.environ["RUNNER_TEMP"]) / "test-selection-manifest.json").read_text())
+          assert manifest["schema"] == "ovc-test-selection-manifest/v2"
+          assert manifest["pytest_unittest_parity_required"] is manifest["complete_sweep_required"]
+          print("full_sweep_required=" + ("true" if manifest["complete_sweep_required"] else "false"))
+          print("trigger_reason=" + manifest["complete_sweep_reason"])
+          PY
+
   vit-routing-preflight:
     name: VIT routing preflight
+    needs: complete-sweep-trigger
+    if: needs.complete-sweep-trigger.outputs.full_sweep_required == 'true'
     runs-on: ubuntu-latest
     outputs:
       aa0_identity: ${{ steps.assurance.outputs.aa0_identity }}
@@ -118,7 +162,8 @@ jobs:
 
   pytest-assurance-plan:
     name: canonical pytest shard assurance plan
-    needs: vit-routing-preflight
+    needs: [complete-sweep-trigger, vit-routing-preflight]
+    if: needs.complete-sweep-trigger.outputs.full_sweep_required == 'true' && needs.vit-routing-preflight.result == 'success'
     runs-on: ubuntu-latest
     outputs:
       disposition: ${{ steps.aa0.outputs.disposition }}
@@ -285,7 +330,8 @@ jobs:
 
   pytest-unittest-parity:
     name: pytest-unittest-parity
-    needs: vit-routing-preflight
+    needs: [complete-sweep-trigger, vit-routing-preflight]
+    if: needs.complete-sweep-trigger.outputs.full_sweep_required == 'true' && needs.vit-routing-preflight.result == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -352,7 +398,8 @@ jobs:
 
   runner-parity:
     name: runner-parity
-    needs: vit-routing-preflight
+    needs: [complete-sweep-trigger, vit-routing-preflight]
+    if: needs.complete-sweep-trigger.outputs.full_sweep_required == 'true' && needs.vit-routing-preflight.result == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

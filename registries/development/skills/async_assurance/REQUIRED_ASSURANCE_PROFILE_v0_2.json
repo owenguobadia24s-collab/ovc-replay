@@ -1,0 +1,30 @@
+{
+  "schema": "ovc-dsai3v-required-assurance-profile/v2",
+  "profile_id": "DSAI3V-AA-REQUIRED-ASSURANCE-PROFILE-v0.2",
+  "status": "ACTIVE_SUPERSEDES_v0.1_FOR_NEW_PR_ASSURANCE",
+  "provider_adapter_id": "GITHUB_ACTIONS_READ_ONLY_v1",
+  "classification_rule": "EXPLICIT_TIERED_PROFILE_WITH_FAIL_CLOSED_FINAL_HEAD_ESCALATION",
+  "unknown_classification": {"assurance_class":"AA0_COMPLETE_SWEEP","reuse_class":"NO_REUSE"},
+  "ordinary_blocking_members": [
+    {"workflow_path":".github/workflows/ovc-tiered-tests.yml","workflow_name":"OVC tiered test selection shadow","check_name":"VIT routing preflight","assurance_class":"AA0_EXACT_HEAD_ROUTING","reuse_class":"NO_REUSE","dependency_scope":["candidate_head","vit_qualification","routing_contract"]},
+    {"workflow_path":".github/workflows/ovc-tiered-tests.yml","workflow_name":"OVC tiered test selection shadow","check_name":"OVC profile assurance","assurance_class":"AA0_TIERED_BLOCKING","reuse_class":"NO_REUSE","dependency_scope":["candidate_content","changed_path_inventory","test_profile_registry","packet_tests","authority_boundary"]},
+    {"workflow_path":".github/workflows/ovc-tiered-tests.yml","workflow_name":"OVC tiered test selection shadow","check_name":"SIQ READY admission","assurance_class":"AA2_MATERIALISATION_EDGE","reuse_class":"NO_REUSE","dependency_scope":["current_main","pull_request_base","required_base_independent_assurance"]},
+    {"workflow_path":".github/workflows/ovc-tiered-tests.yml","workflow_name":"OVC tiered test selection shadow","check_name":"OVC merge readiness","assurance_class":"AA2_MATERIALISATION_EDGE","reuse_class":"NO_REUSE","dependency_scope":["current_main","siq_exclusive_lease","exact_final_assurance"]}
+  ],
+  "complete_sweep_members": [
+    {"workflow_path":".github/workflows/tests.yml","workflow_name":"tests","check_name":"tests","assurance_class":"AA0_COMPLETE_SWEEP","reuse_class":"REUSE_IF_DEPENDENCIES_UNCHANGED","dependency_scope":["candidate_content","repository_test_surface","research_console_maintained_surface"]},
+    {"workflow_path":".github/workflows/tests.yml","workflow_name":"tests","check_name":"pytest-unittest-parity","assurance_class":"AA0_COMPLETE_SWEEP","reuse_class":"REUSE_IF_DEPENDENCIES_UNCHANGED","dependency_scope":["candidate_content","legacy_unittest_surface","pytest_collection_harness"]},
+    {"workflow_path":".github/workflows/tests.yml","workflow_name":"tests","check_name":"runner-parity","assurance_class":"AA0_COMPLETE_SWEEP","reuse_class":"REUSE_IF_DEPENDENCIES_UNCHANGED","dependency_scope":["candidate_content","test_collection_surface"]}
+  ],
+  "complete_sweep_triggers": ["FINAL_HEAD","SCHEDULED","HARNESS_CHANGE","RISK_TRIGGER"],
+  "pytest_unittest_parity_ordinary_blocking": false,
+  "pytest_unittest_parity_retained": true,
+  "v0_1_history_mutated": false,
+  "existing_required_workflow_removal_or_demotion": "OPERATOR_APPROVED_ORDINARY_PATH_DEMOTION_ONLY",
+  "provider_write_or_merge_capability": false,
+  "controller_identity": "DSAI_VIT_PHYSICAL_CONTROLLER",
+  "parallel_physical_merge": false,
+  "authority_effect": "TIERED_ASSURANCE_ORCHESTRATION_ONLY",
+  "activation": "OPERATOR_INSTRUCTION_2026_09_07_PENDING_REPOSITORY_EFFECTIVE_MERGE",
+  "rollback": "Forward-restore v0.1 ordinary complete-sweep prerequisites; preserve v0.2 evidence and Git history."
+}

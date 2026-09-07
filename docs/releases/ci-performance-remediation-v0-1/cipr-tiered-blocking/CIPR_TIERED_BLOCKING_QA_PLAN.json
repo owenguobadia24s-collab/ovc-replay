@@ -1,0 +1,23 @@
+{
+  "schema": "ovc-qa-plan/v1",
+  "programme_id": "OVC-CI-TIERED-BLOCKING-ASSURANCE-v0.2",
+  "packet_id": "CIPR-TIERED-BLOCKING-CUTOVER",
+  "baseline_main": "b363e0cf6b441e7d88b7c236d6cb1907a94efff4",
+  "acceptance": [
+    "Legacy unittest collection is an exact subset of canonical pytest collection with zero missing and zero unexpected cases.",
+    "FAST and PACKET select the tiered workflow as their fresh exact-head blocking assurance.",
+    "PACKET fails closed when executable implementation changes have no changed packet test.",
+    "FINAL_HEAD, scheduled, harness-change and risk-triggered runs require the complete canonical, legacy-parity and runner-parity sweep.",
+    "Unknown or ambiguous paths select FINAL_HEAD.",
+    "Local results never substitute for required remote assurance.",
+    "VIT routing, SIQ READY and merge readiness remain blocking.",
+    "The exact candidate head passes its triggered complete sweep before merge."
+  ],
+  "rollback_trigger": [
+    "tiered selection omission or false FAST/PACKET classification",
+    "legacy/canonical population divergence",
+    "required complete sweep fails to trigger",
+    "exact-head SIQ or merge-readiness regression"
+  ],
+  "rollback": "Forward-revert workflow routing to v0.1 complete-per-packet assurance and retain all failure evidence."
+}

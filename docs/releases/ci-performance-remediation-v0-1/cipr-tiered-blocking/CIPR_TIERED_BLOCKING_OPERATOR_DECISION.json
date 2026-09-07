@@ -1,0 +1,25 @@
+{
+  "schema": "ovc-operator-decision/v1",
+  "programme_id": "OVC-CI-TIERED-BLOCKING-ASSURANCE-v0.2",
+  "plan_id": "OVC-CIPR-TIERED-BLOCKING-PLAN-v0.1",
+  "packet_id": "CIPR-TIERED-BLOCKING-CUTOVER",
+  "decision_id": "CIPR-TIERED-BLOCKING-OPERATOR-PASS-2026-09-07",
+  "decision": "PASS",
+  "decision_authority": "OPERATOR_EXPLICIT_INSTRUCTION",
+  "instruction_date": "2026-09-07",
+  "instruction": "Remove pytest-unittest-parity from the ordinary per-packet blocking path once equivalence has been sufficiently qualified, make the tiered profile the normal blocking assurance, and reserve the complete legacy/canonical sweep for final-head, scheduled, harness-change, or risk-triggered runs.",
+  "qualification_condition": {
+    "status": "SATISFIED",
+    "legacy_cases": 1651,
+    "legacy_source_files": 297,
+    "missing_under_pytest": 0,
+    "unexpected_under_pytest": 0,
+    "canonical_population": 5644,
+    "canonical_population_hash": "041be46e15003d8c671a6bf99c9d2fa0ff1aab544c6a49a00dbc7a2747dcc0e3"
+  },
+  "authority_manifest_id": "532ae424ac3789c8d11bc47f84a1028d4e379a63ddb4f25d68c982f8c2dda62e",
+  "dependency_frontier_id": "0d955765b165cb5f2a00d3ca989611a60d42f198dc3195396c071f9ac9707276",
+  "implementation_disposition": "AUTHORIZED_EXACT_HEAD_FINAL_SWEEP_REQUIRED_BEFORE_MERGE",
+  "scientific_authority_delta": "NONE",
+  "rollback": "Forward-revert ordinary PR routing to complete per-packet assurance while preserving the retained sweep, qualification evidence and historical records."
+}
