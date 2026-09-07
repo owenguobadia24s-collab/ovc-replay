@@ -149,9 +149,12 @@ def test_g1_auto_pass_is_preserved_after_rolling_state_advances_beyond_wp3() -> 
     assert qa["result"] == "PASS"
     assert qa["checks"]["source_derived_semantics_used"] is False
     assert state["packet_id"] == "C2S-SPTOI-WP3"
-    assert current_state["packet_id"] == pointer["current_packet"] == "C2S-SPTOI-WP4-REENTRY"
+    assert current_state["packet_id"] == pointer["current_packet"]
+    assert pointer["current_packet"].startswith("C2S-SPTOI-WP")
+    assert pointer["current_packet"] != "C2S-SPTOI-WP3"
     assert state["next_packet"] == "C2S-SPTOI-WP3"
-    assert pointer["next_packet"] == "C2S-SPTOI-WP5"
+    assert pointer["next_packet"].startswith("C2S-SPTOI-WP")
+    assert pointer["next_packet"] != pointer["current_packet"]
     assert state["protected_source"] == pointer["protected_source"] == "DENIED"
     assert current_state["protected_source_access"] == "NONE"
     assert state["parity_status"] == "BLOCKED_WP3_FIVE_DIVERGENT_ORIGINAL_TRAJECTORIES_UNAVAILABLE"

@@ -1,0 +1,33 @@
+{
+  "schema": "ovc-c2s-sptoi-wp5-qa/v0.1",
+  "programme_id": "OVC-EML-C2S-SPTO-CONFORMANCE-PREREG-v0.1",
+  "packet_id": "C2S-SPTOI-WP5",
+  "gate_id": "C2S-SPTOI-G5",
+  "baseline_main": "aa3461625b1c8ad127d896b70413b65640bf4c8f",
+  "checks": [
+    {"id":"WP5-QA-01","assertion":"ALL_REQUIRED_TVX_ROUNDS_CENSUSED","result":"PASS"},
+    {"id":"WP5-QA-02","assertion":"R9X_R16_R21_EXPECTED_FILENAMES_AND_HASHES_BOUND","result":"PASS"},
+    {"id":"WP5-QA-03","assertion":"RECOVERY_FRAGMENTS_NOT_PROMOTED_TO_EXACT_SOURCE","result":"PASS"},
+    {"id":"WP5-QA-04","assertion":"C0B_BYTE_EQUIVALENCE_CLAIMED","result":"PASS_FALSE"},
+    {"id":"WP5-QA-05","assertion":"C0C_TIMESTAMP_OHLC_GENERATION_IDENTITY_REPRODUCED","result":"PASS_NOT_EXECUTED_SOURCE_ABSENT"},
+    {"id":"WP5-QA-06","assertion":"C0C_CROSS_EXPORT_JOIN_ELIGIBLE","result":"PASS_FALSE"},
+    {"id":"WP5-QA-07","assertion":"ANALYSIS_REPRODUCTION_EXECUTED_WITH_INCOMPLETE_SOURCE","result":"PASS_NOT_PERFORMED"},
+    {"id":"WP5-QA-08","assertion":"MISSING_MECHANICS_RECONSTRUCTED_FROM_HANDOFF_PROSE","result":"PASS_NOT_PERFORMED"},
+    {"id":"WP5-QA-09","assertion":"PARTIAL_SOURCE_LIMITED_CLASSIFICATION_IS_FAIL_CLOSED_AND_NOT_A_REPRODUCTION_MISMATCH","result":"PASS"},
+    {"id":"WP5-QA-10","assertion":"PROTECTED_2021_2023_SOURCE_ACCESSED","result":"PASS_NONE"},
+    {"id":"WP5-QA-11","assertion":"VALIDATION_CANDIDATE_SEMANTIC_OR_PUBLICATION_AUTHORITY_DELTA","result":"PASS_NONE"},
+    {"id":"WP5-QA-12","assertion":"WP6_SCOPE_RESTRICTED_TO_GENERIC_SOURCE_FREE_OR_EXACT_SOURCE_SUPPORTED_MECHANICS","result":"PASS"}
+  ],
+  "targeted_test": "tests/research_operations/spto/test_wp5_source_conformance.py",
+  "targeted_result": "PASS:7_COMBINED_WITH_WP4:19",
+  "dependent_historical_reference_result": "PASS:78_C2_CSM_REFERENCE_AND_SPTO",
+  "static_assurance": {
+    "json_schema_validation": "PASS",
+    "compileall": "PASS",
+    "git_diff_check": "PASS"
+  },
+  "repository_assurance": "PENDING_EXACT_HEAD_CI",
+  "qa_recommendation": "PASS_G5_PARTIAL_SOURCE_LIMITED_IF_EXACT_HEAD_ASSURANCE_REMAINS_GREEN",
+  "next_packet": "C2S-SPTOI-WP6",
+  "authority_effect": "SOURCE_CLASSIFICATION_ONLY_NO_REAL_SOURCE"
+}
