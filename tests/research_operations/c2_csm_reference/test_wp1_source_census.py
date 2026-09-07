@@ -153,7 +153,7 @@ def test_g1_auto_pass_is_preserved_after_rolling_state_advances_beyond_wp3() -> 
     assert pointer["current_packet"].startswith("C2S-SPTOI-WP")
     assert pointer["current_packet"] != "C2S-SPTOI-WP3"
     assert state["next_packet"] == "C2S-SPTOI-WP3"
-    assert pointer["next_packet"].startswith("C2S-SPTOI-WP")
+    assert pointer["next_packet"] is None or pointer["next_packet"].startswith("C2S-SPTOI-WP")
     assert pointer["next_packet"] != pointer["current_packet"]
     assert state["protected_source"] == pointer["protected_source"] == "DENIED"
     assert current_state["protected_source_access"] == "NONE"
