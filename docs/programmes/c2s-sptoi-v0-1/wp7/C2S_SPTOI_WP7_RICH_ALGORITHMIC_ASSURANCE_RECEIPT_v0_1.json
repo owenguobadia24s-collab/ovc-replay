@@ -1,0 +1,194 @@
+{
+  "assurance_version": "C2S-SPTOI-WP7-INDEPENDENT-ALGORITHMIC-ASSURANCE-v1",
+  "authority_effect": "NONE_ALGORITHMIC_ASSURANCE_ONLY",
+  "check_count": 14,
+  "checks": [
+    {
+      "assertion": "REGISTRY_CANONICAL_IDENTITY_REBUILDS",
+      "check_id": "WP7-ALG-01",
+      "evidence": "90289261417e1095c3dd212987d8def449d0450e4768f0fae304a709f9a70698",
+      "result": "PASS"
+    },
+    {
+      "assertion": "FRESH_REBUILD_EQUALS_FILED_FIXTURE",
+      "check_id": "WP7-ALG-02",
+      "evidence": "0a9d7ed4a60a1cd3dab50fe20d8e670dc2ee9af601caddc0ef9fb4c1480c3f03",
+      "result": "PASS"
+    },
+    {
+      "assertion": "OWNER_PRIMARY_AND_DENSE_SECONDARY_SOURCE_BOUNDARY_PRESERVED",
+      "check_id": "WP7-ALG-03",
+      "evidence": "EXACT_DENSE_SOURCE_PENDING_NO_SUBSTITUTION",
+      "result": "PASS"
+    },
+    {
+      "assertion": "C0C_CROSS_EXPORT_JOIN_REMAINS_DENIED",
+      "check_id": "WP7-ALG-04",
+      "evidence": "RECEIPT_CONCORDANT_NOT_BYTE_REPRODUCED",
+      "result": "PASS"
+    },
+    {
+      "assertion": "FACTOR_DECODER_EXACT_HI_MID_TRUTH_VECTOR",
+      "check_id": "WP7-ALG-05",
+      "evidence": "f6ebf3cd99ffd418a898c9af7e50caa4ca3dfa7f4f1b3e694d2602a69420fda6",
+      "result": "PASS"
+    },
+    {
+      "assertion": "CARRIER_AND_OPERATION_PACK_BUILDERS_EXACT",
+      "check_id": "WP7-ALG-06",
+      "evidence": "5a5bad10bb860c7e1dbfdc13ca04d312aa629a452b2d6d35ca3919c24f3aa715",
+      "result": "PASS"
+    },
+    {
+      "assertion": "ALL_ANTECEDENT_HIERARCHY_REDUCERS_MATCH_ORACLE",
+      "check_id": "WP7-ALG-07",
+      "evidence": {
+        "BASE": "HI",
+        "NO_HI": "MID",
+        "NO_MID": "HI",
+        "NO_PATH": "HI",
+        "PATH_BEFORE_MID": "HI"
+      },
+      "result": "PASS"
+    },
+    {
+      "assertion": "ALL_TARGET_HIERARCHY_REDUCERS_MATCH_ORACLE",
+      "check_id": "WP7-ALG-08",
+      "evidence": {
+        "BASE": "R18_MID_v1",
+        "COMPACT": "R18_MID_v1",
+        "NO_ETR": "R18_MID_v1",
+        "NO_MID": "ETR_v1",
+        "NO_T1": "R18_MID_v1"
+      },
+      "result": "PASS"
+    },
+    {
+      "assertion": "COMMON_TARGET_PROJECTION_AGGREGATES_SUPPORT_EXACTLY",
+      "check_id": "WP7-ALG-09",
+      "evidence": [
+        [
+          "mid-x",
+          5
+        ],
+        [
+          "mid-y",
+          1
+        ]
+      ],
+      "result": "PASS"
+    },
+    {
+      "assertion": "RELATION_SUPPORT_MAPS_AND_DENOMINATORS_LOSSLESS",
+      "check_id": "WP7-ALG-10",
+      "evidence": {
+        "BASE": [
+          [
+            "SYNTH.TARGET.A",
+            3
+          ],
+          [
+            "SYNTH.TARGET.B",
+            2
+          ]
+        ],
+        "NO_HI": [
+          [
+            "SYNTH.TARGET.A",
+            4
+          ],
+          [
+            "SYNTH.TARGET.C",
+            2
+          ]
+        ],
+        "NO_MID": [
+          [
+            "SYNTH.TARGET.A",
+            2
+          ],
+          [
+            "SYNTH.TARGET.B",
+            1
+          ]
+        ],
+        "NO_PATH": [
+          [
+            "SYNTH.TARGET.A",
+            2
+          ],
+          [
+            "SYNTH.TARGET.D",
+            2
+          ]
+        ],
+        "PATH_BEFORE_MID": [
+          [
+            "SYNTH.TARGET.A",
+            5
+          ],
+          [
+            "SYNTH.TARGET.C",
+            1
+          ]
+        ]
+      },
+      "result": "PASS"
+    },
+    {
+      "assertion": "DECLARED_SET_CORE_AND_SHELL_MATCH_INDEPENDENT_REDUCER",
+      "check_id": "WP7-ALG-11",
+      "evidence": {
+        "core": [
+          "SYNTH.TARGET.A"
+        ],
+        "shell": [
+          "SYNTH.TARGET.B",
+          "SYNTH.TARGET.C",
+          "SYNTH.TARGET.D"
+        ]
+      },
+      "result": "PASS"
+    },
+    {
+      "assertion": "FIVE_AXIS_STATE_COMPRESSION_MATCHES_ORACLE",
+      "check_id": "WP7-ALG-12",
+      "evidence": {
+        "ambiguity_shell_size": 3,
+        "antecedent_support_min": 3,
+        "backoff_level_set": [
+          "EXACT"
+        ],
+        "robust_core_size": 1,
+        "target_resolution_set": [
+          "R18_MID_v1"
+        ]
+      },
+      "result": "PASS"
+    },
+    {
+      "assertion": "TRACE_SET_REPLAYS_ALL_FRONTIER_RECORDS_IN_FROZEN_ORDER",
+      "check_id": "WP7-ALG-13",
+      "evidence": "348b54efedef7296420f48ae43ae0861023ca404264b3477ca8ec4441446098e",
+      "result": "PASS"
+    },
+    {
+      "assertion": "DERIVATION_CLOSURE_AND_PROSPECTIVE_IDENTITY_FIREWALL",
+      "check_id": "WP7-ALG-14",
+      "evidence": "13d17a2f1ccab655b119820929f6977818c8f1a05181ff9834507bc2cb5d929a",
+      "result": "PASS"
+    }
+  ],
+  "factorised_evidence_execution": "DENIED",
+  "fresh_process_requirement": "VERIFIED_BY_RUNNER_REEXECUTION_TEST",
+  "gate_id": "C2S-SPTOI-G7-RICH-ALG",
+  "packet_id": "C2S-SPTOI-WP7",
+  "programme_id": "OVC-EML-C2S-SPTO-CONFORMANCE-PREREG-v0.1",
+  "protected_source_access": "NONE",
+  "protocol_sha256": "a4eaaa43d051628e6fc6da4151ed9500f68a832d85240188cdf0f656a1893fd5",
+  "receipt_id": "ecdd97b4184f442da71c2bbbf3c00f73f4d56c791e71c48b943a97cba3ccf4d1",
+  "result": "PASS_SOURCE_FREE_ALGORITHMIC_ASSURANCE",
+  "schema": "ovc-c2s-sptoi-rich-algorithmic-assurance-receipt/v0.1",
+  "wp6_fixture_bundle_id": "0a9d7ed4a60a1cd3dab50fe20d8e670dc2ee9af601caddc0ef9fb4c1480c3f03",
+  "wp6_registry_id": "90289261417e1095c3dd212987d8def449d0450e4768f0fae304a709f9a70698"
+}
