@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.ovc.invalid/research_operations/spto/FACTORISED_NULL_QUALIFICATION_PACK_v0_1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "protocol_sha256", "source_fixture_id", "null_specs", "family_assessments", "replicas", "primary_replica_count", "sensitivity_replica_count", "total_replica_count", "all_representations_derived_from_one_world_per_replica", "independent_representation_draws", "protected_source_access", "factorised_evidence_execution", "result", "authority_effect", "pack_id"],
+  "properties": {
+    "schema": {"const": "ovc-c2s-sptoi-factorised-null-qualification-pack/v0.1"},
+    "protocol_sha256": {"const": "a4eaaa43d051628e6fc6da4151ed9500f68a832d85240188cdf0f656a1893fd5"},
+    "source_fixture_id": {"$ref": "#/$defs/sha"},
+    "null_specs": {"type": "object", "minProperties": 6, "maxProperties": 6},
+    "family_assessments": {"type": "object", "minProperties": 6, "maxProperties": 6},
+    "replicas": {"type": "array", "minItems": 768, "maxItems": 768, "items": {"$ref": "#/$defs/replica"}},
+    "primary_replica_count": {"const": 640},
+    "sensitivity_replica_count": {"const": 128},
+    "total_replica_count": {"const": 768},
+    "all_representations_derived_from_one_world_per_replica": {"const": true},
+    "independent_representation_draws": {"const": false},
+    "protected_source_access": {"const": "NONE"},
+    "factorised_evidence_execution": {"const": "DENIED"},
+    "result": {"const": "PASS_SOURCE_FREE_NULL_QUALIFICATION"},
+    "authority_effect": {"const": "NONE_NULL_MECHANICS_QUALIFICATION_ONLY"},
+    "pack_id": {"$ref": "#/$defs/sha"}
+  },
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "replica": {
+      "type": "object", "additionalProperties": false,
+      "required": ["null_id", "replica_index", "seed_hex", "source_world_id", "representation_bundle_id", "adequacy_assessment_id", "adequate"],
+      "properties": {
+        "null_id": {"enum": ["FG-NC", "FG-NO", "FG-NORD", "FG-NCORE", "FG-NFO", "FG-NBROAD"]},
+        "replica_index": {"type": "integer", "minimum": 0, "maximum": 127},
+        "seed_hex": {"$ref": "#/$defs/sha"},
+        "source_world_id": {"$ref": "#/$defs/sha"},
+        "representation_bundle_id": {"$ref": "#/$defs/sha"},
+        "adequacy_assessment_id": {"$ref": "#/$defs/sha"},
+        "adequate": {"const": true}
+      }
+    }
+  }
+}
