@@ -3,8 +3,7 @@
 This namespace is research-only and non-authoritative.  It grants no
 real-source access, market/selector activation, candidate freeze, semantic
 promotion, Validation consumption, canonical publication, probability, risk,
-exposure, trading, execution, or agent-write authority.  Every boundary fails
-closed.
+exposure, trading, execution, or agent-write authority.  The namespace fails closed.
 """
 
 from .source_binding import (
