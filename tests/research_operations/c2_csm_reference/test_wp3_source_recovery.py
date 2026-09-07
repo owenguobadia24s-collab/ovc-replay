@@ -68,14 +68,17 @@ def test_programme_state_pointer_advances_while_wp3_closeout_remains_exact() -> 
     matrix = load(MATRIX)
     current_state = load(ROOT / pointer["current_state"])
     assert state["packet_id"] == matrix["current_packet"] == "C2S-SPTOI-WP3"
-    assert pointer["current_packet"] == current_state["packet_id"] == "C2S-SPTOI-WP4-REENTRY"
-    assert pointer["current_gate"] == "C2S-SPTOI-G4"
+    assert pointer["current_packet"] == current_state["packet_id"]
+    assert pointer["current_packet"].startswith("C2S-SPTOI-WP")
+    assert pointer["current_packet"] != "C2S-SPTOI-WP3"
+    assert pointer["current_gate"].startswith("C2S-SPTOI-G")
     assert state["status"] == "COMPLETE_PARTIAL_SOURCE_LIMITED"
-    assert pointer["status"] == current_state["status"] == "COMPLETE_G4_PASS_PENDING_MAIN_MERGE"
+    assert pointer["status"] == current_state["status"]
     assert matrix["families"][0]["status"] == "PARTIAL_SOURCE_LIMITED_ACCEPTED_G3_ALG"
     assert state["source_completeness_manifest"] == matrix["families"][0]["manifest"]
     assert state["next_packet"] == matrix["next_packet"] == "C2S-SPTOI-WP4"
-    assert pointer["next_packet"] == current_state["next_packet"] == "C2S-SPTOI-WP5"
+    assert pointer["next_packet"] == current_state["next_packet"]
+    assert pointer["next_packet"].startswith("C2S-SPTOI-WP")
 
 
 def test_historical_source_recovery_qa_is_preserved_without_becoming_current() -> None:
