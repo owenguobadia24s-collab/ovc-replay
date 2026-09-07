@@ -43,6 +43,7 @@ class TestRule:
 
 @dataclass(frozen=True)
 class TestProfileRegistry:
+    schema: str
     registry_id: str
     programme_id: str
     profile_order: tuple[str, ...]
@@ -78,7 +79,8 @@ def parse_test_profile_registry(obj: Mapping[str, Any]) -> TestProfileRegistry:
     }
     if set(obj) != allowed:
         raise TestSelectionError(f"registry fields mismatch: {sorted(set(obj) ^ allowed)}")
-    if obj.get("schema") != "ovc-test-profile-registry/v1":
+    schema = obj.get("schema")
+    if schema not in {"ovc-test-profile-registry/v1", "ovc-test-profile-registry/v2"}:
         raise TestSelectionError("unsupported test profile registry schema")
 
     profile_order = _string_list(obj.get("profile_order"), "profile_order")
@@ -140,17 +142,33 @@ def parse_test_profile_registry(obj: Mapping[str, Any]) -> TestProfileRegistry:
         raise TestSelectionError("unsupported ambiguous dependency policy")
 
     assurance = obj.get("final_assurance")
-    required_assurance = {
-        "required_on_stable_pr_head": True,
-        "required_after_base_change": True,
-        "complete_repository_suite": True,
-        "gate_replay_substitution": "PROHIBITED",
-        "local_success_substitutes_remote_required_check": False,
-    }
+    if schema == "ovc-test-profile-registry/v1":
+        required_assurance = {
+            "required_on_stable_pr_head": True,
+            "required_after_base_change": True,
+            "complete_repository_suite": True,
+            "gate_replay_substitution": "PROHIBITED",
+            "local_success_substitutes_remote_required_check": False,
+        }
+    else:
+        required_assurance = {
+            "ordinary_blocking_assurance": "SELECTED_TIERED_PROFILE",
+            "complete_sweep_triggers": [
+                "FINAL_HEAD",
+                "SCHEDULED",
+                "HARNESS_CHANGE",
+                "RISK_TRIGGER",
+            ],
+            "pytest_unittest_parity": "COMPLETE_SWEEP_ONLY",
+            "required_after_base_change": "RESELECT_PROFILE_AND_REEVALUATE_DEPENDENCIES",
+            "gate_replay_substitution": "PROHIBITED",
+            "local_success_substitutes_remote_required_check": False,
+        }
     if assurance != required_assurance:
         raise TestSelectionError("final assurance may not be weakened")
 
     return TestProfileRegistry(
+        schema=schema,
         registry_id=_non_empty_string(obj["registry_id"], "registry_id"),
         programme_id=_non_empty_string(obj["programme_id"], "programme_id"),
         profile_order=profile_order,
@@ -257,8 +275,13 @@ def select_test_manifest(
             selected_profile = "FINAL_HEAD"
         commands.update(registry.profiles[selected_profile].commands)
 
+    complete_sweep_required = selected_profile in {"FINAL_HEAD", "GATE_REPLAY"}
     logical = {
-        "schema": "ovc-test-selection-manifest/v1",
+        "schema": (
+            "ovc-test-selection-manifest/v2"
+            if registry.schema == "ovc-test-profile-registry/v2"
+            else "ovc-test-selection-manifest/v1"
+        ),
         "registry_id": registry.registry_id,
         "registry_hash": registry.registry_hash,
         "stage": stage,
@@ -272,7 +295,11 @@ def select_test_manifest(
         "retained_checks": sorted(retained_checks),
         "blockers": blockers,
         "gate_id": gate_id,
-        "final_assurance_required": True,
+        "final_assurance_required": (
+            complete_sweep_required
+            if registry.schema == "ovc-test-profile-registry/v2"
+            else True
+        ),
         "final_assurance_profile": "FINAL_HEAD",
         "gate_replay_substitution": "PROHIBITED",
         "local_success_substitutes_remote_required_check": False,
@@ -288,4 +315,17 @@ def select_test_manifest(
             "validation": "DENIED",
         },
     }
+    if registry.schema == "ovc-test-profile-registry/v2":
+        logical.update({
+            "blocking_assurance_profile": selected_profile,
+            "complete_sweep_required": complete_sweep_required,
+            "complete_sweep_reason": (
+                "FINAL_HEAD_OR_RISK_TRIGGER"
+                if selected_profile == "FINAL_HEAD"
+                else "GATE_REPLAY_NON_SUBSTITUTION"
+                if selected_profile == "GATE_REPLAY"
+                else "NONE_TIERED_PROFILE_IS_BLOCKING"
+            ),
+            "pytest_unittest_parity_required": complete_sweep_required,
+        })
     return {**logical, "selection_manifest_id": canonical_sha256(logical, role="TEST_SELECTION_MANIFEST")}

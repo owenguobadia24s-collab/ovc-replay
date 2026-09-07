@@ -1,0 +1,57 @@
+{
+  "schema": "ovc-tiered-blocking-equivalence-evidence/v1",
+  "programme_id": "OVC-CI-TIERED-BLOCKING-ASSURANCE-v0.2",
+  "packet_id": "CIPR-TIERED-BLOCKING-CUTOVER",
+  "qualification_date": "2026-09-07",
+  "activation_baseline": "b363e0cf6b441e7d88b7c236d6cb1907a94efff4",
+  "baseline_collection_proof": {
+    "command": "PYTHONPATH=src:. python3 tools/ci/pytest_unittest_parity.py collect",
+    "status": "PASS",
+    "legacy_source_file_count": 297,
+    "legacy_unittest_count": 1651,
+    "pytest_legacy_count": 1651,
+    "missing": [],
+    "unexpected": []
+  },
+  "baseline_canonical_union_proof": {
+    "command": "PYTHONPATH=src:. python3 tools/ci/pytest_shard_canonical.py prove",
+    "status": "PASS",
+    "canonical_population_count": 5644,
+    "legacy_unittest_subset_count": 1651,
+    "pytest_native_count": 3993,
+    "population_hash": "041be46e15003d8c671a6bf99c9d2fa0ff1aab544c6a49a00dbc7a2747dcc0e3",
+    "manifest_hash": "19a4af1f9a14c6d2c55f5c58dcafcb31e268a73769a81167ef600911a60e34e0",
+    "zero_omissions": true,
+    "zero_duplicates": true
+  },
+  "baseline_legacy_execution": {
+    "command": "PYTHONPATH=src:. python3 tools/ci/pytest_unittest_parity.py run",
+    "status": "PASS",
+    "passed": 1651,
+    "failed": 0,
+    "pytest_seconds": 318.48,
+    "interpretation": "The retained legacy execution is clean and its five-minute local duration is the dominant work removed from ordinary packet blocking."
+  },
+  "historical_same_head_qualification": {
+    "record": "docs/releases/ci-performance-remediation-v0-1/cipr-wp5r-qualification/CIPR_WP5R_SHADOW_QUALIFICATION_EVIDENCE.json",
+    "qualified_head": "76d3ca0c5bd37f8dafacbf8e8bb85b29c88bee66",
+    "canonical_population_count": 4882,
+    "legacy_unittest_subset_count": 1567,
+    "canonical_complete_suite": "PASS",
+    "same_head_exact_union_runs": [32766504076, 32767614761],
+    "same_head_aggregate_equivalent": true
+  },
+  "candidate_acceptance_boundary": {
+    "classification": "FINAL_HEAD_HARNESS_CHANGE",
+    "required_remote_checks": ["tests", "pytest-unittest-parity", "runner-parity", "OVC profile assurance", "OVC merge readiness"],
+    "status": "PENDING_EXACT_HEAD_REMOTE_ASSURANCE_BEFORE_MERGE"
+  },
+  "local_serial_canonical_attempt": {
+    "status": "NOT_RELIED_ON",
+    "progress_before_stop_percent": 79,
+    "reason": "The non-authoritative serial worktree run entered repository Git-fetch integration work in the restricted local network environment and was stopped. The candidate is required to pass the authoritative four-shard remote sweep."
+  },
+  "qualification_conclusion": "PASS_EQUIVALENCE_SUFFICIENT_FOR_TRIGGERED_CUTOVER_WITH_EXACT_HEAD_REMOTE_FINAL_SWEEP_REQUIRED",
+  "blocking_warnings": [],
+  "scientific_authority_effect": "NONE"
+}

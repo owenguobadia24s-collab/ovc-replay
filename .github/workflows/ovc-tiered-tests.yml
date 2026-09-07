@@ -1,3 +1,6 @@
+# Historical workflow identity is retained because post-merge custody binds it.
+# The required OVC merge readiness job below now treats its selected profile as
+# normal blocking assurance; "shadow" survives only as a compatibility name.
 name: OVC tiered test selection shadow
 
 on:
@@ -15,11 +18,73 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  vit-routing-preflight:
+    name: VIT routing preflight
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          show-progress: false
+      - name: Verify VIT-owned physical-main protection
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const branch = context.payload.pull_request.base.ref;
+            if (branch !== 'main') {
+              core.setFailed(`PHYSICAL_MAIN_EXCLUSIVITY_TARGET_INVALID:${branch}`);
+              return;
+            }
+            const effective = await github.request('GET /repos/{owner}/{repo}/rules/branches/{branch}', {
+              owner, repo, branch,
+              headers: {'X-GitHub-Api-Version':'2022-11-28'}
+            });
+            const rules = effective.data;
+            const byType = type => rules.filter(rule => rule.type === type);
+            if (!byType('pull_request').length || !byType('non_fast_forward').length || !byType('deletion').length) {
+              core.setFailed('PHYSICAL_MAIN_EXCLUSIVITY_GUARDS_MISSING');
+              return;
+            }
+            const methods = byType('pull_request')[0].parameters?.allowed_merge_methods || [];
+            const contexts = byType('required_status_checks').flatMap(rule => rule.parameters?.required_status_checks || []).map(row => row.context);
+            if (methods.length !== 1 || methods[0] !== 'squash' || !contexts.includes('OVC merge readiness')) {
+              core.setFailed(`PHYSICAL_MAIN_EXCLUSIVITY_RULESET_INVALID:${methods.join(',')}:${contexts.join(',')}`);
+              return;
+            }
+            const rulesetIds = [...new Set(rules.map(rule => rule.ruleset_id).filter(Boolean))];
+            if (rulesetIds.length !== 1) {
+              core.setFailed(`PHYSICAL_MAIN_EXCLUSIVITY_RULESET_AMBIGUOUS:${rulesetIds.join(',')}`);
+              return;
+            }
+            const ruleset = await github.request('GET /repos/{owner}/{repo}/rulesets/{ruleset_id}', {
+              owner, repo, ruleset_id: rulesetIds[0],
+              headers: {'X-GitHub-Api-Version':'2022-11-28'}
+            });
+            if (ruleset.data.enforcement !== 'active' || (ruleset.data.bypass_actors || []).length !== 0) {
+              core.setFailed('PHYSICAL_MAIN_EXCLUSIVITY_ENFORCEMENT_INVALID');
+            }
+      - name: Resolve exact-head VIT assurance identity
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PYTHONPATH: src:.
+        run: python3 tools/ci/vit_assurance_preflight.py
+      - name: Require canonical VIT placement before permanent PR admission
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PYTHONPATH: src:.
+        run: python3 tools/ci/vit_routing_preflight.py
+
   profile:
     name: OVC profile assurance
+    needs: vit-routing-preflight
     runs-on: ubuntu-latest
     outputs:
       selected_profile: ${{ steps.select.outputs.profile }}
+      complete_sweep_required: ${{ steps.select.outputs.complete_sweep_required }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -45,7 +110,7 @@ jobs:
         run: |
           set -euo pipefail
           PYTHONPATH=src python scripts/development/ovc_test_select.py \
-            --registry registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_1.json \
+            --registry registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_2.json \
             --changed-paths-file "$RUNNER_TEMP/changed-paths.txt" \
             --output "$RUNNER_TEMP/test-selection-manifest.json" \
             > "$RUNNER_TEMP/test-selection-stdout.json"
@@ -55,39 +120,48 @@ jobs:
           from pathlib import Path
           manifest = json.loads((Path(os.environ["RUNNER_TEMP"]) / "test-selection-manifest.json").read_text())
           assert manifest["status"] == "PASS"
-          assert manifest["final_assurance_required"] is True
+          assert manifest["schema"] == "ovc-test-selection-manifest/v2"
+          assert manifest["blocking_assurance_profile"] == manifest["selected_profile"]
+          assert manifest["final_assurance_required"] is manifest["complete_sweep_required"]
+          assert manifest["pytest_unittest_parity_required"] is manifest["complete_sweep_required"]
           assert manifest["gate_replay_substitution"] == "PROHIBITED"
           print(manifest["selected_profile"])
           PY
           )
+          complete_sweep_required=$(python - <<'PY'
+          import json, os
+          from pathlib import Path
+          manifest = json.loads((Path(os.environ["RUNNER_TEMP"]) / "test-selection-manifest.json").read_text())
+          print("true" if manifest["complete_sweep_required"] else "false")
+          PY
+          )
           echo "profile=$profile" >> "$GITHUB_OUTPUT"
+          echo "complete_sweep_required=$complete_sweep_required" >> "$GITHUB_OUTPUT"
           echo "OVC_SELECTED_PROFILE=$profile" >> "$GITHUB_ENV"
+      - name: Install packet test dependencies
+        if: steps.select.outputs.profile != 'FAST'
+        run: python3 -m pip install -e ".[test]" -r requirements-console-vnext.txt
       - name: FAST profile BASE_INDEPENDENT assurance
         if: steps.select.outputs.profile == 'FAST'
-        run: |
-          python -m compileall -q src scripts
-          PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_*.py' -v
+        run: PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile FAST --changed-paths-file "$RUNNER_TEMP/changed-paths.txt"
       - name: PACKET profile BASE_INDEPENDENT assurance
         if: steps.select.outputs.profile == 'PACKET'
-        run: |
-          PYTHONPATH=src python -m unittest discover -s tests/development -v
-          PYTHONPATH=src python -m unittest discover -s tests/authority -v
+        run: PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile PACKET --changed-paths-file "$RUNNER_TEMP/changed-paths.txt"
       - name: FINAL_HEAD profile BASE_INDEPENDENT assurance
         if: steps.select.outputs.profile == 'FINAL_HEAD'
-        run: |
-          PYTHONPATH=src python -m unittest discover -s tests/development -v
-          PYTHONPATH=src python -m unittest discover -s tests/authority -v
+        run: PYTHONPATH=src:. python3 tools/ci/tiered_profile_runner.py --profile FINAL_HEAD --changed-paths-file "$RUNNER_TEMP/changed-paths.txt"
       - name: Validate orchestration contract as BASE_INDEPENDENT assurance
         run: |
           PYTHONPATH=src python -u scripts/development/v0_2/validate_da2_g1.py
           PYTHONPATH=src python -m unittest discover -s tests/development -p 'test_da2_g1_orchestration.py' -v
-      - name: Retain final assurance boundary
+      - name: Retain final assurance boundary as trigger-only
         shell: bash
         run: |
           set -euo pipefail
-          grep -q 'required_on_stable_pr_head.*true' registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_1.json
-          grep -q 'gate_replay_substitution.*PROHIBITED' registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_1.json
-          grep -q 'local_success_substitutes_remote_required_check.*false' registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_1.json
+          grep -q 'ordinary_blocking_assurance.*SELECTED_TIERED_PROFILE' registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_2.json
+          grep -q 'pytest_unittest_parity.*COMPLETE_SWEEP_ONLY' registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_2.json
+          grep -q 'gate_replay_substitution.*PROHIBITED' registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_2.json
+          grep -q 'local_success_substitutes_remote_required_check.*false' registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_2.json
 
   legacy-required-context:
     name: OVC tiered test selection shadow
@@ -120,6 +194,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PYTHONPATH: src:.
+          OVC_SELECTED_PROFILE: ${{ needs.profile.outputs.selected_profile }}
+          OVC_COMPLETE_SWEEP_REQUIRED: ${{ needs.profile.outputs.complete_sweep_required }}
         run: python3 tools/ci/prvitr_rac_ready.py
       - name: Prove READY identity is payload-bound rather than main-bound
         shell: bash
@@ -176,6 +252,37 @@ jobs:
           git cat-file -e "${OVC_PLACEMENT_COMMIT_SHA}^{commit}"
           test "$(git rev-parse "${OVC_PLACEMENT_COMMIT_SHA}^{tree}")" = "${OVC_PLACEMENT_TREE_SHA}"
           git checkout --detach "${OVC_PLACEMENT_COMMIT_SHA}"
+      - name: Re-select profile against the late-bound physical base
+        shell: bash
+        env:
+          OVC_LATE_BASE_SHA: ${{ steps.acquire.outputs.base_sha }}
+          OVC_PLACEMENT_COMMIT_SHA: ${{ steps.acquire.outputs.placement_commit_sha }}
+          OVC_EXPECTED_PROFILE: ${{ needs.profile.outputs.selected_profile }}
+          OVC_EXPECTED_COMPLETE_SWEEP: ${{ needs.profile.outputs.complete_sweep_required }}
+        run: |
+          set -euo pipefail
+          git diff --name-only "${OVC_LATE_BASE_SHA}" "${OVC_PLACEMENT_COMMIT_SHA}" > "$RUNNER_TEMP/late-bound-changed-paths.txt"
+          test -s "$RUNNER_TEMP/late-bound-changed-paths.txt"
+          PYTHONPATH=src python3 scripts/development/ovc_test_select.py \
+            --registry registries/development/OVC_DEVELOPMENT_ACCELERATION_TEST_PROFILE_REGISTRY_v0_2.json \
+            --changed-paths-file "$RUNNER_TEMP/late-bound-changed-paths.txt" \
+            --output "$RUNNER_TEMP/late-bound-test-selection-manifest.json" \
+            > "$RUNNER_TEMP/late-bound-test-selection-stdout.json"
+          cmp "$RUNNER_TEMP/late-bound-test-selection-manifest.json" "$RUNNER_TEMP/late-bound-test-selection-stdout.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          manifest = json.loads((Path(os.environ["RUNNER_TEMP"]) / "late-bound-test-selection-manifest.json").read_text())
+          expected_profile = os.environ["OVC_EXPECTED_PROFILE"]
+          expected_sweep = os.environ["OVC_EXPECTED_COMPLETE_SWEEP"].lower() == "true"
+          if manifest["selected_profile"] != expected_profile or manifest["complete_sweep_required"] is not expected_sweep:
+              raise SystemExit(
+                  "OVC_LATE_BOUND_PROFILE_CHANGED:"
+                  f"expected={expected_profile}/{expected_sweep}:"
+                  f"actual={manifest['selected_profile']}/{manifest['complete_sweep_required']}"
+              )
+          print(f"OVC_LATE_BOUND_PROFILE_RESELECTION=PASS:{expected_profile}")
+          PY
       - name: Run mandatory SIQ/PDC exact-final assurance inside lease
         shell: bash
         env:

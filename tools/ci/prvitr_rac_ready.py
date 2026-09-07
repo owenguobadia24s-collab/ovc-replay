@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import asdict
 import json
+import os
 from pathlib import Path
 import time
 from typing import Any, Mapping
@@ -20,6 +21,9 @@ PILOT_POLICY_PATH = Path(
     "registries/development/skills/REPOSITORY_ASSURANCE_PILOT_POLICY_v0_1.json"
 )
 PILOT_READY_POLICY_ID = "PRVITR-RAC-PILOT-READY-POLICY-v0.1"
+TIERED_READY_POLICY_ID = "PRVITR-TIERED-NORMAL-BLOCKING-POLICY-v0.1"
+TIERED_ORDINARY_PROFILES = {"FAST", "PACKET"}
+TIERED_REQUIRED_JOB_NAMES = ("VIT routing preflight", "OVC profile assurance")
 
 
 def _wait_required_job(
@@ -50,6 +54,32 @@ def _wait_required_job(
             return run, jobs[0]
         time.sleep(live.ACTIVE_POLL_SECONDS)
     raise RuntimeError(f"RAC_PILOT_REQUIRED_JOB_TIMEOUT:{workflow}:{job_name}")
+
+
+def _wait_required_jobs(
+    workflow: str,
+    pr_number: int,
+    head_sha: str,
+    job_names: tuple[str, ...],
+) -> tuple[Mapping[str, Any], tuple[Mapping[str, Any], ...]]:
+    """Wait for an exact-head set of jobs from one workflow run."""
+    deadline = time.monotonic() + live.READY_TIMEOUT_SECONDS
+    run: Mapping[str, Any] | None = None
+    while time.monotonic() < deadline:
+        if run is None:
+            run = live._exact_run(workflow, pr_number, head_sha)
+        if run is None:
+            time.sleep(live.DISCOVERY_POLL_SECONDS)
+            continue
+        state, jobs = live._run_job_state(run, job_names)
+        if state == "FAIL":
+            raise RuntimeError(
+                f"TIERED_READY_REQUIRED_JOBS_FAILED:{workflow}:{run.get('id')}"
+            )
+        if state == "PASS":
+            return run, jobs
+        time.sleep(live.ACTIVE_POLL_SECONDS)
+    raise RuntimeError(f"TIERED_READY_REQUIRED_JOBS_TIMEOUT:{workflow}")
 
 
 def _pilot_context(
@@ -110,7 +140,88 @@ def _build_verified_certificate(
     )
 
 
+def _command_tiered_ready(selected_profile: str) -> int:
+    event = live._event()
+    event_pr = live._event_pr(event)
+    pr_number = int(event.get("number", event_pr.get("number", -1)))
+    event_head = str((event_pr.get("head") or {}).get("sha", ""))
+    live_pr = live._live_pr(pr_number)
+    live_head = str((live_pr.get("head") or {}).get("sha", ""))
+    if live_head != event_head:
+        raise RuntimeError(f"OVC_SIQ_SUPERSEDED_EVENT_HEAD:event {event_head}, live {live_head}")
+    if str(live_pr.get("state", "")) != "open":
+        raise RuntimeError(f"OVC_SIQ_PR_NOT_OPEN:{pr_number}")
+
+    _, lineage, authority, frontier, qualification_id = live._payload_context(live_pr)
+    tiered_run, jobs = _wait_required_jobs(
+        live.TIERED_WORKFLOW,
+        pr_number,
+        live_head,
+        TIERED_REQUIRED_JOB_NAMES,
+    )
+
+    refreshed = live._live_pr(pr_number)
+    refreshed_head = str((refreshed.get("head") or {}).get("sha", ""))
+    if refreshed_head != live_head:
+        raise RuntimeError(
+            f"OVC_SIQ_SUPERSEDED_EVENT_HEAD:qualified {live_head}, live {refreshed_head}"
+        )
+    (
+        _,
+        refreshed_lineage,
+        refreshed_authority,
+        refreshed_frontier,
+        refreshed_qualification_id,
+    ) = live._payload_context(refreshed)
+    if refreshed_qualification_id != qualification_id:
+        raise RuntimeError("VIT_QUALIFICATION_CHANGED_DURING_ASSURANCE")
+    if (
+        refreshed_lineage.pip_id != lineage.pip_id
+        or refreshed_authority != authority
+        or refreshed_frontier != frontier
+    ):
+        raise RuntimeError("VIT_QUALIFICATION_CONTENT_CHANGED_DURING_ASSURANCE")
+
+    source_run_ids = tuple(
+        f"github-actions-run:{tiered_run['id']}:job:{job['id']}" for job in jobs
+    )
+    generation = BaseIndependentAssuranceGeneration(
+        pip_id=lineage.pip_id,
+        candidate_head_sha=live_head,
+        candidate_head_tree=live._tree(live_head),
+        authority_manifest_id=authority,
+        dependency_frontier_id=frontier,
+        policy_id=TIERED_READY_POLICY_ID,
+        source_run_ids=source_run_ids,
+    )
+    print(
+        "OVC_BASE_INDEPENDENT_ASSURANCE_GENERATION="
+        + json.dumps(asdict(generation), sort_keys=True, separators=(",", ":"))
+    )
+    live._write_output("head_sha", live_head)
+    live._write_output("pip_id", lineage.pip_id)
+    live._write_output("qualification_id", qualification_id)
+    live._write_output("assurance_generation_id", generation.generation_id)
+    live._write_output("tests_run_id", str(tiered_run["id"]))
+    live._write_output("profile_run_id", str(tiered_run["id"]))
+    print(f"OVC_TIERED_READY_DISPOSITION=PASS:{selected_profile}")
+    print("OVC_PYTEST_UNITTEST_PARITY_DISPOSITION=DEFERRED_TO_TRIGGERED_COMPLETE_SWEEP")
+    return 0
+
+
 def command_ready() -> int:
+    selected_profile = os.environ.get("OVC_SELECTED_PROFILE", "").strip().upper()
+    complete_sweep = os.environ.get("OVC_COMPLETE_SWEEP_REQUIRED", "").strip().lower()
+    if selected_profile:
+        if selected_profile in TIERED_ORDINARY_PROFILES:
+            if complete_sweep != "false":
+                raise RuntimeError("TIERED_READY_ORDINARY_PROFILE_SWEEP_FLAG_INVALID")
+            return _command_tiered_ready(selected_profile)
+        if selected_profile != "FINAL_HEAD" or complete_sweep != "true":
+            raise RuntimeError("TIERED_READY_PROFILE_OR_SWEEP_FLAG_INVALID")
+        print("OVC_TIERED_READY_DISPOSITION=FINAL_HEAD_COMPLETE_SWEEP_REQUIRED")
+        return live.command_ready()
+
     event = live._event()
     event_pr = live._event_pr(event)
     pr_number = int(event.get("number", event_pr.get("number", -1)))
