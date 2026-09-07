@@ -1,8 +1,10 @@
-"""C2S-SPTO conformance machinery.
+"""C2S-SPTO inactive repository-conformance machinery.
 
-The package is inactive repository qualification infrastructure.  It grants no
-real-source, candidate-generation, semantic, Validation, or publication
-authority.
+This namespace is research-only and non-authoritative.  It grants no
+real-source access, market/selector activation, candidate freeze, semantic
+promotion, Validation consumption, canonical publication, probability, risk,
+exposure, trading, execution, or agent-write authority.  Every boundary fails
+closed.
 """
 
 from .source_binding import (
