@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/spto/FACTORISED_DIAGNOSTIC_QUALIFICATION_PACK_v0_1.schema.json",
+  "title": "C2S-SPTOI Factorised Diagnostic Qualification Pack v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "programme_id",
+    "packet_id",
+    "protocol_id",
+    "protocol_sha256",
+    "maturity",
+    "population_id",
+    "population_manifest",
+    "recurrence",
+    "representation_set_completeness",
+    "backoff_hierarchy_target_sensitivity",
+    "temporal_segment_context",
+    "support_representation_uncertainty",
+    "source_generation_drift",
+    "specification_opportunity_ledger",
+    "design_exposure_manifest",
+    "claim_exposure_matrix",
+    "claim_freshness_cap",
+    "universal_population_rule",
+    "protected_source_access",
+    "factorised_evidence_execution",
+    "validation",
+    "scientific_claims",
+    "authority_effect",
+    "pack_id"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-c2s-sptoi-factorised-diagnostic-qualification-pack/v0.1"},
+    "programme_id": {"const": "OVC-EML-C2S-SPTO-CONFORMANCE-PREREG-v0.1"},
+    "packet_id": {"const": "C2S-SPTOI-WP9"},
+    "protocol_id": {"const": "OVC-EML-GRAMMAR-0002-RP-0.1-R1"},
+    "protocol_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "maturity": {"const": "SYNTHETIC_QUALIFICATION_ONLY"},
+    "population_id": {"type": "string", "minLength": 1},
+    "population_manifest": {
+      "type": "object",
+      "required": ["owner_transition_opportunities", "grammar_evaluation_opportunities", "representation_views", "manifest_id"]
+    },
+    "recurrence": {"type": "object", "required": ["universal_population", "raw", "run_collapsed"]},
+    "representation_set_completeness": {"type": "object", "required": ["declared_representation_set", "expected_view_denominator", "recorded_views", "computed_views"]},
+    "backoff_hierarchy_target_sensitivity": {"type": "object"},
+    "temporal_segment_context": {"type": "object"},
+    "support_representation_uncertainty": {"type": "object"},
+    "source_generation_drift": {"type": "object"},
+    "specification_opportunity_ledger": {
+      "type": "object",
+      "required": ["contract", "specification_denominator", "universal_opportunity_denominator", "row_denominator", "rows", "complete"],
+      "properties": {"contract": {"const": "TVXGrammarSpecificationOpportunityLedger"}}
+    },
+    "design_exposure_manifest": {
+      "type": "object",
+      "required": ["contract", "dimensions", "rows", "row_denominator", "complete"],
+      "properties": {"contract": {"const": "TVXDesignExposureManifest"}}
+    },
+    "claim_exposure_matrix": {"type": "array", "minItems": 4},
+    "claim_freshness_cap": {"type": "object"},
+    "universal_population_rule": {"const": "NO_CONDITIONAL_SURVIVOR_SUBSET_MAY_BE_REPORTED_AS_UNIVERSAL"},
+    "protected_source_access": {"const": "NONE"},
+    "factorised_evidence_execution": {"const": "DENIED"},
+    "validation": {"const": "LOCKED_UNCONSUMED"},
+    "scientific_claims": {"const": "NONE"},
+    "authority_effect": {"const": "NONE_SOURCE_FREE_DIAGNOSTIC_QUALIFICATION_ONLY"},
+    "pack_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
