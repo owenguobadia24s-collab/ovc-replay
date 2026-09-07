@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.ovc.invalid/research_operations/spto/FACTORISED_MECHANICS_SYNTHETIC_FIXTURE_v0_1.schema.json",
+  "title": "C2S-SPTOI Factorised Mechanics Synthetic Qualification Fixture v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "fixture_id", "maturity", "source_generation_id", "operation_view",
+    "carrier_views", "factorised_path", "population_manifest", "training_frontier_manifest",
+    "factorisation_constitution", "decoder_manifest", "comparison_target_manifest",
+    "frontier_records", "trace_set", "robust_frontier", "ambiguity_shell", "state_core",
+    "derivation_manifest", "realised_continuation_in_prospective_identity",
+    "protected_source_access", "authority_effect", "bundle_id"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-c2s-sptoi-factorised-mechanics-synthetic-fixture/v0.1"},
+    "fixture_id": {"const": "C2S-SPTOI-WP6-SYNTHETIC-TRUTH-v1"},
+    "maturity": {"const": "SYNTHETIC_QUALIFICATION_ONLY"},
+    "source_generation_id": {"const": "SYNTHETIC.WP6.GENERATION.v1"},
+    "operation_view": {"$ref": "#/$defs/object"},
+    "carrier_views": {
+      "type": "object", "additionalProperties": false,
+      "required": ["C_EXACT_v1", "R25_HI_v1", "R25_MID_v1", "C_BROAD_v1"],
+      "properties": {
+        "C_EXACT_v1": {"$ref": "#/$defs/object"},
+        "R25_HI_v1": {"$ref": "#/$defs/object"},
+        "R25_MID_v1": {"$ref": "#/$defs/object"},
+        "C_BROAD_v1": {"type": "null"}
+      }
+    },
+    "factorised_path": {"$ref": "#/$defs/object"},
+    "population_manifest": {"$ref": "#/$defs/population"},
+    "training_frontier_manifest": {"$ref": "#/$defs/training"},
+    "factorisation_constitution": {"$ref": "#/$defs/object"},
+    "decoder_manifest": {"$ref": "#/$defs/object"},
+    "comparison_target_manifest": {"$ref": "#/$defs/object"},
+    "frontier_records": {"type": "array", "minItems": 5, "maxItems": 5, "items": {"$ref": "#/$defs/frontier"}},
+    "trace_set": {"$ref": "#/$defs/object"},
+    "robust_frontier": {"$ref": "#/$defs/object"},
+    "ambiguity_shell": {"$ref": "#/$defs/object"},
+    "state_core": {"$ref": "#/$defs/stateCore"},
+    "derivation_manifest": {"$ref": "#/$defs/object"},
+    "realised_continuation_in_prospective_identity": {"const": false},
+    "protected_source_access": {"const": "NONE"},
+    "authority_effect": {"const": "NONE_SYNTHETIC_MECHANICAL_QUALIFICATION_ONLY"},
+    "bundle_id": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "object": {"type": "object", "minProperties": 2},
+    "population": {
+      "type": "object",
+      "required": ["owner_transition_opportunities", "micro_path_applicability", "grammar_evaluation_opportunities", "representation_views", "manifest_id"],
+      "properties": {"manifest_id": {"$ref": "#/$defs/sha256"}}
+    },
+    "training": {
+      "type": "object",
+      "required": ["cohort_id", "training_end_exclusive_utc", "evaluation_start_utc", "static_within_cohort", "frontier_id"],
+      "properties": {"static_within_cohort": {"const": true}, "frontier_id": {"$ref": "#/$defs/sha256"}}
+    },
+    "frontier": {
+      "type": "object",
+      "required": ["representation_id", "comparison_target_pack_id", "target_supports", "training_frontier_id", "record_id"],
+      "properties": {
+        "representation_id": {"enum": ["BASE", "NO_HI", "NO_MID", "PATH_BEFORE_MID", "NO_PATH"]},
+        "comparison_target_pack_id": {"const": "R18_MID_v1"},
+        "record_id": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "stateCore": {
+      "type": "object",
+      "required": ["antecedent_support_min", "backoff_level_set", "robust_core_size", "ambiguity_shell_size", "target_resolution_set", "scope", "status", "state_core_id"],
+      "properties": {
+        "scope": {"const": "DECLARED_REPRESENTATION_SET"},
+        "state_core_id": {"$ref": "#/$defs/sha256"}
+      },
+      "not": {"required": ["confidence"]}
+    }
+  }
+}
