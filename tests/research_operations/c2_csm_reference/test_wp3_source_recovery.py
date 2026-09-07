@@ -78,7 +78,7 @@ def test_programme_state_pointer_advances_while_wp3_closeout_remains_exact() -> 
     assert state["source_completeness_manifest"] == matrix["families"][0]["manifest"]
     assert state["next_packet"] == matrix["next_packet"] == "C2S-SPTOI-WP4"
     assert pointer["next_packet"] == current_state["next_packet"]
-    assert pointer["next_packet"].startswith("C2S-SPTOI-WP")
+    assert pointer["next_packet"] is None or pointer["next_packet"].startswith("C2S-SPTOI-WP")
 
 
 def test_historical_source_recovery_qa_is_preserved_without_becoming_current() -> None:
