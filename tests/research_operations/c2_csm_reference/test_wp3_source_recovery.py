@@ -62,16 +62,20 @@ def test_fixture_census_identity_and_population_are_preserved() -> None:
         assert expected_count in requirements
 
 
-def test_programme_state_pointer_and_matrix_agree_at_wp3_closeout() -> None:
+def test_programme_state_pointer_advances_while_wp3_closeout_remains_exact() -> None:
     state = load(STATE)
     pointer = load(POINTER)
     matrix = load(MATRIX)
-    assert state["packet_id"] == pointer["current_packet"] == matrix["current_packet"] == "C2S-SPTOI-WP3"
-    assert pointer["current_gate"] == "C2S-SPTOI-G3-ALG"
-    assert state["status"] == pointer["status"] == "COMPLETE_PARTIAL_SOURCE_LIMITED"
+    current_state = load(ROOT / pointer["current_state"])
+    assert state["packet_id"] == matrix["current_packet"] == "C2S-SPTOI-WP3"
+    assert pointer["current_packet"] == current_state["packet_id"] == "C2S-SPTOI-WP4-REENTRY"
+    assert pointer["current_gate"] == "C2S-SPTOI-G4"
+    assert state["status"] == "COMPLETE_PARTIAL_SOURCE_LIMITED"
+    assert pointer["status"] == current_state["status"] == "COMPLETE_G4_PASS_PENDING_MAIN_MERGE"
     assert matrix["families"][0]["status"] == "PARTIAL_SOURCE_LIMITED_ACCEPTED_G3_ALG"
     assert state["source_completeness_manifest"] == matrix["families"][0]["manifest"]
-    assert state["next_packet"] == pointer["next_packet"] == matrix["next_packet"] == "C2S-SPTOI-WP4"
+    assert state["next_packet"] == matrix["next_packet"] == "C2S-SPTOI-WP4"
+    assert pointer["next_packet"] == current_state["next_packet"] == "C2S-SPTOI-WP5"
 
 
 def test_historical_source_recovery_qa_is_preserved_without_becoming_current() -> None:

@@ -142,15 +142,18 @@ def test_g1_auto_pass_is_preserved_after_rolling_state_advances_beyond_wp3() -> 
     qa = load(WP1 / "C2S_SPTOI_WP1_QA_PACKET_v0_1.json")
     state = load(SPTO_RECORDS / "C2S_SPTOI_PROGRAMME_STATE_v0_1.json")
     pointer = load(POINTER)
+    current_state = load(ROOT / pointer["current_state"])
     assert decision["gate_class"] == "AUTO"
     assert decision["decision"] == "PASS"
     assert decision["authority_delta"] == "NONE_REFERENCE_ONLY_MACHINERY"
     assert qa["result"] == "PASS"
     assert qa["checks"]["source_derived_semantics_used"] is False
-    assert state["packet_id"] == pointer["current_packet"] == "C2S-SPTOI-WP3"
+    assert state["packet_id"] == "C2S-SPTOI-WP3"
+    assert current_state["packet_id"] == pointer["current_packet"] == "C2S-SPTOI-WP4-REENTRY"
     assert state["next_packet"] == "C2S-SPTOI-WP3"
-    assert pointer["next_packet"] == "C2S-SPTOI-WP4"
+    assert pointer["next_packet"] == "C2S-SPTOI-WP5"
     assert state["protected_source"] == pointer["protected_source"] == "DENIED"
+    assert current_state["protected_source_access"] == "NONE"
     assert state["parity_status"] == "BLOCKED_WP3_FIVE_DIVERGENT_ORIGINAL_TRAJECTORIES_UNAVAILABLE"
     assert state["validation"] == "LOCKED_UNCONSUMED"
     assert state["semantic_authority"] == "NONE"

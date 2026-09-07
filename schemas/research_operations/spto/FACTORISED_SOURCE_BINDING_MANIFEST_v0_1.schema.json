@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ovc://schemas/research_operations/spto/FACTORISED_SOURCE_BINDING_MANIFEST_v0_1.schema.json",
+  "title": "FactorisedSourceBindingManifest v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "factorised_source_binding_manifest_id", "programme_id", "protocol_id", "profile", "primary_source", "secondary_source", "c2e", "c2p", "opt_c_opt_d_validation_sff", "factorised_rich_execution_eligible", "status", "protected_source_access", "authority_effect"],
+  "properties": {
+    "schema": {"const": "ovc-c2s-sptoi-factorised-source-binding-manifest/v0.1"},
+    "factorised_source_binding_manifest_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "programme_id": {"const": "OVC-EML-C2S-SPTO-CONFORMANCE-PREREG-v0.1"},
+    "protocol_id": {"const": "OVC-EML-GRAMMAR-0002-RP-0.1-R1"},
+    "profile": {"const": "FACTORISED_RICH"},
+    "primary_source": {"type": "object"},
+    "secondary_source": {"type": "object"},
+    "c2e": {"const": "FORBIDDEN_PRIMARY_OR_SECONDARY_GENERATING_DEPENDENCY"},
+    "c2p": {"const": "NON_GENERATING_OPTIONAL_ONLY_IF_PROTOCOL_PERMITS"},
+    "opt_c_opt_d_validation_sff": {"const": "UNREACHABLE_FROM_CANDIDATE_GENERATING_PATH"},
+    "factorised_rich_execution_eligible": {"type": "boolean"},
+    "status": {"enum": ["COMPLETE", "PARTIAL_SECONDARY_SOURCE_PENDING"]},
+    "protected_source_access": {"const": "NONE"},
+    "authority_effect": {"const": "NONE_SOURCE_ROLE_BINDING_ONLY"}
+  }
+}
