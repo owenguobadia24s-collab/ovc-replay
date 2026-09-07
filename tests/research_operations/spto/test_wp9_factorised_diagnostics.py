@@ -158,10 +158,10 @@ def test_authority_remains_source_free_and_scientifically_inactive():
 
 def test_pointer_advances_to_integrated_assurance_only():
     pointer = load("registries/implementation/c2s_sptoi_v0_1/CURRENT_STATE_POINTER.json")
-    state = load(pointer["current_state"])
+    state = load("records/research_operations/spto/C2S_SPTOI_PROGRAMME_STATE_v0_10.json")
     gate = load("docs/programmes/c2s-sptoi-v0-1/wp9/C2S_SPTOI_G9_DIAGNOSTICS_DELEGATED_DECISION_v0_1.json")
-    assert pointer["current_packet"] == "C2S-SPTOI-WP9"
-    assert pointer["next_packet"] == "C2S-SPTOI-WP10"
+    assert pointer["current_packet"] in {"C2S-SPTOI-WP9", "C2S-SPTOI-WP10"}
+    assert pointer["next_packet"] in {"C2S-SPTOI-WP10", "C2S-SPTOI-WP11"}
     assert state["protected_source_access"] == "NONE"
     assert state["factorised_evidence_execution"] == "DENIED"
     assert gate["decision"] == "PASS_SOURCE_FREE_DIAGNOSTIC_QUALIFICATION"

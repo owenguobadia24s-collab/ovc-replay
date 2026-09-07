@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/spto/INTEGRATED_ASSURANCE_RECEIPT_v0_1.schema.json",
+  "title": "C2S-SPTOI Integrated Assurance Receipt v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "programme_id", "packet_id", "reference_snapshot_id", "artifact_reuse_snapshot_id", "sharded_null_pack_id", "equivalence", "failure_assurance", "retention", "derivation_dependency_change", "measured_capacity", "capacity_result", "protected_source_access", "factorised_evidence_execution", "validation", "scientific_claims", "authority_effect", "receipt_id"],
+  "properties": {
+    "schema": {"const": "ovc-c2s-sptoi-integrated-assurance-receipt/v0.1"},
+    "programme_id": {"const": "OVC-EML-C2S-SPTO-CONFORMANCE-PREREG-v0.1"},
+    "packet_id": {"const": "C2S-SPTOI-WP10"},
+    "reference_snapshot_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact_reuse_snapshot_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "sharded_null_pack_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "equivalence": {"type": "object"},
+    "failure_assurance": {"type": "object"},
+    "retention": {"type": "object", "required": ["expected", "observed", "support_maps_retained", "trace_set_retained", "joint_null_worlds_retained", "capacity_feature_removal"]},
+    "derivation_dependency_change": {"type": "object", "required": ["original_manifest_id", "mutated_manifest_id", "changed"]},
+    "measured_capacity": {"type": "object", "required": ["environment", "wall_time_ms", "peak_traced_memory_bytes", "wall_budget_ms", "peak_memory_budget_bytes"]},
+    "capacity_result": {"const": "PASS_MEASURED_WITHOUT_FEATURE_REMOVAL"},
+    "protected_source_access": {"const": "NONE"},
+    "factorised_evidence_execution": {"const": "DENIED"},
+    "validation": {"const": "LOCKED_UNCONSUMED"},
+    "scientific_claims": {"const": "NONE"},
+    "authority_effect": {"const": "NONE_INTEGRATED_SOURCE_FREE_ASSURANCE_ONLY"},
+    "receipt_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
