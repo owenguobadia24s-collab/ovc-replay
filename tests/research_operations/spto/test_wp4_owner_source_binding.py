@@ -1,5 +1,6 @@
 import ast
 import copy
+import hashlib
 import json
 from pathlib import Path
 
@@ -219,6 +220,13 @@ def test_wp4_reentry_court_record_closes_blocker_forward_without_real_source():
     factorised = json.loads(
         (ROOT / "docs/programmes/c2s-sptoi-v0-1/wp4/C2S_SPTOI_WP4_FACTORISED_SOURCE_BINDING_MANIFEST_v0_1.json").read_text()
     )
+    authority_manifest = json.loads(
+        (ROOT / "docs/programmes/c2s-sptoi-v0-1/wp4/C2S_SPTOI_WP4_REENTRY_AUTHORITY_MANIFEST_v0_1.json").read_text()
+    )
+    frontier = json.loads(
+        (ROOT / "docs/programmes/c2s-sptoi-v0-1/wp4/C2S_SPTOI_WP4_REENTRY_DEPENDENCY_FRONTIER_v0_1.json").read_text()
+    )
+    canonical = lambda value: json.dumps(value, sort_keys=True, separators=(",", ":")).encode()
     assert pointer["current_packet"] == "C2S-SPTOI-WP4-REENTRY"
     assert pointer["next_packet"] == "C2S-SPTOI-WP5"
     assert state["supersedes_state"].endswith("C2S_SPTOI_PROGRAMME_STATE_v0_4.json")
@@ -229,3 +237,6 @@ def test_wp4_reentry_court_record_closes_blocker_forward_without_real_source():
     assert owner_binding["population_mode"] == "SYNTHETIC_QUALIFICATION_FIXTURE"
     assert factorised["status"] == "PARTIAL_SECONDARY_SOURCE_PENDING"
     assert factorised["factorised_rich_execution_eligible"] is False
+    assert hashlib.sha256(canonical(authority_manifest["authority_manifest"])).hexdigest() == authority_manifest["authority_manifest_id"]
+    frontier_identity = frontier.pop("dependency_frontier_id")
+    assert hashlib.sha256(canonical(frontier)).hexdigest() == frontier_identity
