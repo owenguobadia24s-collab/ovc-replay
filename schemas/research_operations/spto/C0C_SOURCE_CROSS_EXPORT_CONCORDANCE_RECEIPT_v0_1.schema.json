@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openvariancecontrol.local/schemas/research_operations/spto/C0C_SOURCE_CROSS_EXPORT_CONCORDANCE_RECEIPT_v0_1.schema.json",
+  "title": "C0C source cross-export concordance receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "receipt_id", "programme_id", "packet_id", "left_export", "right_export", "historical_receipt_claim", "current_reproduction", "concordance_state", "join_eligibility", "authority_effect"],
+  "properties": {
+    "schema": {"const": "ovc-c0c-source-cross-export-concordance-receipt/v0.1"},
+    "receipt_id": {"type": "string", "minLength": 1},
+    "programme_id": {"const": "OVC-EML-C2S-SPTO-CONFORMANCE-PREREG-v0.1"},
+    "packet_id": {"const": "C2S-SPTOI-WP5"},
+    "left_export": {"$ref": "#/$defs/export"},
+    "right_export": {"$ref": "#/$defs/export"},
+    "historical_receipt_claim": {
+      "type": "object", "additionalProperties": false,
+      "required": ["timestamp_ohlc_identical_rows", "standing"],
+      "properties": {
+        "timestamp_ohlc_identical_rows": {"const": 20345},
+        "standing": {"const": "RECEIPT_CLAIM_NOT_CURRENTLY_REPRODUCED"}
+      }
+    },
+    "current_reproduction": {"const": "NOT_EXECUTED_RAW_EXPORT_BYTES_ABSENT"},
+    "concordance_state": {"const": "RECEIPT_CONCORDANT_NOT_BYTE_REPRODUCED"},
+    "join_eligibility": {"const": false},
+    "denial_reason": {"type": "string"},
+    "authority_effect": {"const": "NO_CROSS_EXPORT_JOIN_OR_GENERATION_IDENTITY_GRANT"}
+  },
+  "$defs": {
+    "export": {
+      "type": "object", "additionalProperties": false,
+      "required": ["round_id", "filename", "expected_sha256", "current_bytes"],
+      "properties": {
+        "round_id": {"enum": ["R16", "R21"]},
+        "filename": {"type": "string"},
+        "expected_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "current_bytes": {"const": "ABSENT"}
+      }
+    }
+  }
+}

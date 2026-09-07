@@ -210,7 +210,9 @@ def test_wp4_reentry_court_record_closes_blocker_forward_without_real_source():
     pointer = json.loads(
         (ROOT / "registries/implementation/c2s_sptoi_v0_1/CURRENT_STATE_POINTER.json").read_text()
     )
-    state = json.loads((ROOT / pointer["current_state"]).read_text())
+    state = json.loads(
+        (ROOT / "records/research_operations/spto/C2S_SPTOI_PROGRAMME_STATE_v0_5.json").read_text()
+    )
     gate = json.loads(
         (ROOT / "docs/programmes/c2s-sptoi-v0-1/wp4/C2S_SPTOI_G4_DELEGATED_DECISION_v0_1.json").read_text()
     )
@@ -227,8 +229,12 @@ def test_wp4_reentry_court_record_closes_blocker_forward_without_real_source():
         (ROOT / "docs/programmes/c2s-sptoi-v0-1/wp4/C2S_SPTOI_WP4_REENTRY_DEPENDENCY_FRONTIER_v0_1.json").read_text()
     )
     canonical = lambda value: json.dumps(value, sort_keys=True, separators=(",", ":")).encode()
-    assert pointer["current_packet"] == "C2S-SPTOI-WP4-REENTRY"
-    assert pointer["next_packet"] == "C2S-SPTOI-WP5"
+    assert pointer["current_packet"] in {"C2S-SPTOI-WP4-REENTRY", "C2S-SPTOI-WP5"}
+    if pointer["current_packet"] == "C2S-SPTOI-WP4-REENTRY":
+        assert pointer["next_packet"] == "C2S-SPTOI-WP5"
+    else:
+        assert pointer["next_packet"] == "C2S-SPTOI-WP6"
+    assert state["packet_id"] == "C2S-SPTOI-WP4-REENTRY"
     assert state["supersedes_state"].endswith("C2S_SPTOI_PROGRAMME_STATE_v0_4.json")
     assert state["protected_source_access"] == "NONE"
     assert gate["decision"] == "PASS"
