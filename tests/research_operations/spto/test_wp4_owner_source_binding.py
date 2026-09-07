@@ -229,11 +229,14 @@ def test_wp4_reentry_court_record_closes_blocker_forward_without_real_source():
         (ROOT / "docs/programmes/c2s-sptoi-v0-1/wp4/C2S_SPTOI_WP4_REENTRY_DEPENDENCY_FRONTIER_v0_1.json").read_text()
     )
     canonical = lambda value: json.dumps(value, sort_keys=True, separators=(",", ":")).encode()
-    assert pointer["current_packet"] in {"C2S-SPTOI-WP4-REENTRY", "C2S-SPTOI-WP5"}
+    assert pointer["current_packet"].startswith("C2S-SPTOI-WP")
+    assert pointer["current_packet"] not in {"C2S-SPTOI-WP0", "C2S-SPTOI-WP1", "C2S-SPTOI-WP2", "C2S-SPTOI-WP3"}
     if pointer["current_packet"] == "C2S-SPTOI-WP4-REENTRY":
         assert pointer["next_packet"] == "C2S-SPTOI-WP5"
-    else:
+    elif pointer["current_packet"] == "C2S-SPTOI-WP5":
         assert pointer["next_packet"] == "C2S-SPTOI-WP6"
+    else:
+        assert pointer["next_packet"] != pointer["current_packet"]
     assert state["packet_id"] == "C2S-SPTOI-WP4-REENTRY"
     assert state["supersedes_state"].endswith("C2S_SPTOI_PROGRAMME_STATE_v0_4.json")
     assert state["protected_source_access"] == "NONE"

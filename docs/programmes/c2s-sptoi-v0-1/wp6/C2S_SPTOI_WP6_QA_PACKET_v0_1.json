@@ -1,0 +1,39 @@
+{
+  "schema": "ovc-c2s-sptoi-wp6-qa/v0.1",
+  "programme_id": "OVC-EML-C2S-SPTO-CONFORMANCE-PREREG-v0.1",
+  "packet_id": "C2S-SPTOI-WP6",
+  "gate_id": "C2S-SPTOI-G6-RICH-MECH",
+  "baseline_main": "cf7ccd88848ab70345f14497c11ac4bd71e5e442",
+  "checks": [
+    {"id":"WP6-QA-01","assertion":"EXACT_PROTOCOL_AND_STUDY_GENERATION_BOUND","result":"PASS"},
+    {"id":"WP6-QA-02","assertion":"DENSE_SOURCE_ROLE_BOUND_WITH_EXACT_SOURCE_ABSENCE_PRESERVED","result":"PASS_SOURCE_FREE_ONLY"},
+    {"id":"WP6-QA-03","assertion":"CARRIER_OPERATION_BOUNDARY_AND_MISSINGNESS_SEMANTICS_FROZEN","result":"PASS"},
+    {"id":"WP6-QA-04","assertion":"C_EXACT_R25_HI_R25_MID_C_BROAD_PACKS_EXACT","result":"PASS_FIXTURE_ONLY"},
+    {"id":"WP6-QA-05","assertion":"POPULATION_MANIFEST_RECONCILES_ALL_APPLICABILITY_STATES","result":"PASS"},
+    {"id":"WP6-QA-06","assertion":"TRAINING_FRONTIER_IS_STATIC_WITHIN_COHORT_AND_STRICTLY_CAUSAL","result":"PASS"},
+    {"id":"WP6-QA-07","assertion":"SUPPORT_POLICY_2_PRIMARY_3_5_SENSITIVITY_AND_SUPPORT_1_DESCRIPTIVE","result":"PASS"},
+    {"id":"WP6-QA-08","assertion":"ALL_FIVE_ANTECEDENT_HIERARCHIES_DECLARED","result":"PASS"},
+    {"id":"WP6-QA-09","assertion":"ALL_TARGET_PACKS_AND_FIVE_TARGET_HIERARCHIES_DECLARED","result":"PASS"},
+    {"id":"WP6-QA-10","assertion":"EVERY_FRONTIER_USES_COMMON_R18_MID_COMPARISON_PACK","result":"PASS"},
+    {"id":"WP6-QA-11","assertion":"INCOMPLETE_DECLARED_SET_FAILS_CORE_CLOSED_AND_PRESERVES_TRACES","result":"PASS"},
+    {"id":"WP6-QA-12","assertion":"CORE_EQUALS_INTERSECTION_AND_SHELL_EQUALS_UNION_MINUS_INTERSECTION","result":"PASS"},
+    {"id":"WP6-QA-13","assertion":"FIVE_AXIS_STATE_CORE_RECONSTRUCTS_WITHOUT_SCALAR_CONFIDENCE","result":"PASS"},
+    {"id":"WP6-QA-14","assertion":"DERIVATION_ID_CHANGES_ON_ANY_BOUND_DEPENDENCY_CHANGE","result":"PASS"},
+    {"id":"WP6-QA-15","assertion":"ANTECEDENT_FVT_STRICTLY_PRECEDES_TARGET_FVT","result":"PASS"},
+    {"id":"WP6-QA-16","assertion":"SYNTHETIC_TRUTH_FIXTURE_CONTENT_ADDRESSED_SCHEMA_VALID_AND_EXACTLY_REPLAYABLE","result":"PASS"},
+    {"id":"WP6-QA-17","assertion":"PROTECTED_SOURCE_VALIDATION_CANDIDATE_SEMANTIC_PUBLICATION_OR_TRADING_AUTHORITY","result":"PASS_NONE"}
+  ],
+  "targeted_test": "tests/research_operations/spto/test_wp6_factorised_mechanics.py",
+  "targeted_result": "PASS:14",
+  "dependent_result": "PASS:92_SPTO_AND_C2_CSM_REFERENCE",
+  "static_assurance": {
+    "json_schema_validation": "PASS",
+    "compileall": "PASS",
+    "git_diff_check": "PASS"
+  },
+  "local_repository_assurance": "COLLECTION_NOT_EXECUTED_WINDOWS_RESOURCE_MODULE_UNAVAILABLE_IN_UNRELATED_C2P_MCARB_SRFD_MODULES",
+  "repository_assurance": "PENDING_EXACT_HEAD_CI",
+  "qa_recommendation": "PASS_G6_RICH_MECH_IF_EXACT_HEAD_ASSURANCE_REMAINS_GREEN",
+  "next_packet": "C2S-SPTOI-WP7",
+  "authority_effect": "NONE_MECHANICAL_QUALIFICATION_ONLY"
+}

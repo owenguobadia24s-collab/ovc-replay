@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.ovc.invalid/research_operations/spto/FACTORISED_MECHANICS_REGISTRY_v0_1.schema.json",
+  "title": "C2S-SPTOI Factorised Mechanics Registry v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "protocol_id", "protocol_sha256", "study_generation_id", "maturity",
+    "c0c_pack_maturity", "operation_pack", "carrier_packs", "antecedent_hierarchies",
+    "declared_representation_set", "target_packs", "target_hierarchies",
+    "comparison_target_pack", "support_policy", "population_units",
+    "micro_applicability_states", "protected_source_access", "factorised_evidence_execution",
+    "validation", "scalar_confidence", "authority_effect", "registry_id"
+  ],
+  "properties": {
+    "schema": {"const": "ovc-c2s-sptoi-factorised-mechanics-registry/v0.1"},
+    "protocol_id": {"const": "OVC-EML-GRAMMAR-0002-RP-0.1-R1"},
+    "protocol_sha256": {"const": "a4eaaa43d051628e6fc6da4151ed9500f68a832d85240188cdf0f656a1893fd5"},
+    "study_generation_id": {"const": "OVC-EML-GRAMMAR-0002-DEVELOPMENT-2021_2023-G1-R1"},
+    "maturity": {"const": "SOURCE_FREE_QUALIFICATION"},
+    "c0c_pack_maturity": {"const": "C0C_CONFORMANCE_FIXTURE_ONLY"},
+    "operation_pack": {
+      "type": "object", "additionalProperties": false,
+      "required": ["pack_id", "count_role_domain", "enum_role_domain", "boundary_referents_excluded", "maturity"],
+      "properties": {
+        "pack_id": {"const": "O_RELATION_v1"},
+        "count_role_domain": {"const": [-1, 0, 1]},
+        "enum_role_domain": {"const": ["CHANGED", "UNCHANGED"]},
+        "boundary_referents_excluded": {"const": true},
+        "maturity": {"const": "C0C_CONFORMANCE_FIXTURE_ONLY"}
+      }
+    },
+    "carrier_packs": {
+      "type": "object", "additionalProperties": false,
+      "required": ["C_EXACT_v1", "R25_HI_v1", "R25_MID_v1", "C_BROAD_v1"],
+      "properties": {
+        "C_EXACT_v1": {"$ref": "#/$defs/carrierPack"},
+        "R25_HI_v1": {"$ref": "#/$defs/carrierPack"},
+        "R25_MID_v1": {"$ref": "#/$defs/carrierPack"},
+        "C_BROAD_v1": {"$ref": "#/$defs/carrierPack"}
+      }
+    },
+    "antecedent_hierarchies": {"$ref": "#/$defs/hierarchyRegistry"},
+    "declared_representation_set": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "members", "scope"],
+      "properties": {
+        "id": {"const": "REPSET_FG_CORE_v1"},
+        "members": {"const": ["BASE", "NO_HI", "NO_MID", "PATH_BEFORE_MID", "NO_PATH"]},
+        "scope": {"const": "DECLARED_REPRESENTATION_SET"}
+      }
+    },
+    "target_packs": {"const": ["T0_v1", "T1_v1", "R18_MID_v1", "ETR_v1", "T2_v1", "T3_v1"]},
+    "target_hierarchies": {"$ref": "#/$defs/hierarchyRegistry"},
+    "comparison_target_pack": {
+      "type": "object", "additionalProperties": false,
+      "required": ["target_pack_id", "projection_rule", "target_hierarchy_ids", "manifest_id"],
+      "properties": {
+        "target_pack_id": {"const": "R18_MID_v1"},
+        "projection_rule": {"const": "PROJECT_EVERY_VIEW_TO_CANONICAL_R18_MID_ALPHABET_BEFORE_SET_REDUCTION"},
+        "target_hierarchy_ids": {"const": ["BASE", "NO_T1", "NO_MID", "NO_ETR", "COMPACT"]},
+        "manifest_id": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "support_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["primary", "relation", "sensitivities", "support_1"],
+      "properties": {
+        "primary": {"const": 2}, "relation": {"const": 2},
+        "sensitivities": {"const": [3, 5]}, "support_1": {"const": "DESCRIPTIVE_ONLY"}
+      }
+    },
+    "population_units": {"const": ["OwnerTransitionOpportunity", "MicroPathApplicability", "MicroFactorOccurrence", "MicroFactorisedPath", "GrammarEvaluationOpportunity", "RepresentationView", "DependenceCluster"]},
+    "micro_applicability_states": {"const": ["MICRO_BEARING", "NO_MICRO", "SEGMENT_HEAD_UNASSIGNABLE", "CENSORED", "NOT_EVALUABLE"]},
+    "protected_source_access": {"const": "NONE"},
+    "factorised_evidence_execution": {"const": "DENIED"},
+    "validation": {"const": "LOCKED_UNCONSUMED"},
+    "scalar_confidence": {"const": "FORBIDDEN"},
+    "authority_effect": {"const": "NONE_MECHANICAL_QUALIFICATION_ONLY"},
+    "registry_id": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "carrierPack": {
+      "type": "object", "additionalProperties": false,
+      "required": ["pack_id", "exact_fields", "coarse_fields", "omitted_fields", "maturity"],
+      "properties": {
+        "pack_id": {"enum": ["C_EXACT_v1", "R25_HI_v1", "R25_MID_v1", "C_BROAD_v1"]},
+        "exact_fields": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "coarse_fields": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "omitted_fields": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "maturity": {"const": "C0C_CONFORMANCE_FIXTURE_ONLY"}
+      }
+    },
+    "hierarchyRegistry": {
+      "type": "object", "minProperties": 5,
+      "additionalProperties": {"type": "array", "minItems": 3, "items": {"type": "string"}, "uniqueItems": true}
+    }
+  }
+}
