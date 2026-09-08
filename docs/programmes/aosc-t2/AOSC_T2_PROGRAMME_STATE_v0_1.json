@@ -3,25 +3,35 @@
   "programme_id": "OVC-AOSC-T2-ACTIVE-STATE-SUFFICIENCY-0.1",
   "plan_id": "OVC-AOSC-DESIGN-FREEZE-0.1",
   "plan_version": "0.1",
-  "status": "APPROVED",
-  "packet_id": "AOSC-T2-WP0",
+  "status": "RUNNING",
+  "packet_id": "AOSC-T2-WP1-B06",
   "prerequisites": [
     "AOSC-T1 COMPLETED",
-    "OVC-RR-OS-RESEARCH-PROTOCOL-0.1-R1 RATIFIED_DESIGN"
+    "OVC-RR-OS-RESEARCH-PROTOCOL-0.1-R1 RATIFIED_DESIGN",
+    "AOSC-T2-G0 PASS",
+    "B01 PASS",
+    "B03 PASS"
   ],
   "authority_required": "G0_APPROVED_BOUNDED_SOURCE_FREE_SUCCESSOR_WORK",
   "authority_delta": "APPROVED_T2_ONLY_SCIENTIFIC_PREREGISTRATION_FAMILY_64_SLOTS",
   "baseline_commit_at_original_gate_candidate": "4bd9b96b92135feff4dc6d592ab64cfaf4780b3e",
   "branch": "build/aosc-t2-g0-materialisation",
   "candidate_commit": null,
-  "tests": ["T2-G0 preflight QA 8/8 PASS"],
-  "qa_packet": "AOSC_T2_G0_PREFLIGHT_QA_v0_1.json",
+  "tests": [
+    "T2-G0 preflight QA 8/8 PASS",
+    "B01 observer binding 18/18 PASS",
+    "B03 feature binding 18/18 PASS",
+    "B06 contract QA 8/8 PASS",
+    "B06 optimized/reference smoke equivalence PASS"
+  ],
+  "qa_packet": "AOSC_T2_B06_RUNTIME_STATUS_v0_1.json",
   "decision_record": "AOSC_T2_G0_OPERATOR_DECISION_v0_1.json",
   "merge_commit": null,
   "blockers": [
     "B04 no exact verified EVAL-A/EVAL-B population pair",
     "new real-source intake requires separate operator authority when exact sources exist"
   ],
-  "next_packet": "AOSC-T2-WP1",
+  "current_work": "B06 full 30-case / 1000-replicate-per-case source-free synthetic assurance",
+  "next_packet": "B04 source inventory metadata audit after B06 PASS",
   "approved_at": "2026-09-08T19:21:00+01:00"
 }
