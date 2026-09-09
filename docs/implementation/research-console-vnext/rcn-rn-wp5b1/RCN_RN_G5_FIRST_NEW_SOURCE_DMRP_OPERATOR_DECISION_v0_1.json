@@ -1,0 +1,42 @@
+{
+  "schema": "ovc-operator-gate-decision/v1",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "plan_id": "OVC-RCN-RESEARCH-NATIVE-IMPLEMENTATION-PLAN-0.3-RATIFIED",
+  "packet_id": "RCN-RN-WP5B1",
+  "gate_id": "RCN-RN-G5-FIRST-NEW-SOURCE[DMRP]",
+  "decision": "PASS",
+  "decision_time": "2026-08-18T17:10:00+01:00",
+  "decision_source": "operator command: OVC APPROVE RCN-RN-G5-FIRST-NEW-SOURCE[DMRP]",
+  "gate_evidence_pr": 1193,
+  "gate_evidence_head": "b82a6e99eae5106d55eb9d4d3e49ff9415fad61b",
+  "authority_delta": "BOUNDED_READ_ONLY_DMRP_PRESENTATION_SOURCE_ADMISSION_ONLY",
+  "source_scope": "DMRP",
+  "transport": "GET_ONLY",
+  "read_only": true,
+  "non_transitive": true,
+  "accepted_conditions": [
+    "DMRP remains sole owner of Path 1/Path 2 semantics and ResearchCandidateGeneration identity.",
+    "Research Console may present, navigate, filter and drill down only; it may not construct, repair, merge, rank or promote research candidates.",
+    "Path provenance, negative/divergent evidence and exposure/independence state remain visible and non-collapsed when owner evidence exists.",
+    "Missing exposure evidence must not be interpreted as independence.",
+    "Transport remains GET/read-only with no governance write path.",
+    "This admission does not transit to RCCR, PRSC/EC1, OPT-C, OPT-D, C2P, C2.5 or C3.",
+    "Validation remains LOCKED_UNCONSUMED.",
+    "No publication, probability, risk, exposure, trading or execution authority is created."
+  ],
+  "explicit_non_grants": [
+    "DMRP_CANDIDATE_CONSTRUCTION_OR_REPAIR",
+    "CANDIDATE_IDENTITY_MERGE",
+    "PATH_RANKING_OR_WINNER_SELECTION",
+    "CANDIDATE_OR_THEORY_PROMOTION",
+    "RCCR_SOURCE_ADMISSION",
+    "PRSC_EC1_SOURCE_ADMISSION",
+    "OPT_C_OR_OPT_D_SOURCE_ADMISSION",
+    "C2P_C2_5_C3_SOURCE_ADMISSION",
+    "VALIDATION_ACCESS",
+    "CONSOLE_WRITE_AUTHORITY",
+    "PUBLICATION_PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION"
+  ],
+  "rollback": "Disable or remove the DMRP real-source Console binding and return WP5B1 to fixture/shadow-only presentation while preserving DMRP owner records, the WP5 architecture reconciliation, and this decision evidence.",
+  "next_work": "Implement and qualify RCN-RN-WP5B1, then continue to RCN-RN-WP5B2 under an independent RCCR source-admission preflight."
+}

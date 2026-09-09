@@ -10,9 +10,11 @@ import type {
   ReadEnvelope,
   SourceIdentity,
   WP5ARepresentationSnapshot,
+  WP5B1DMRPSnapshot,
 } from "./types";
 
 const API_ROOT = "/api/v1";
+const DMRP_SNAPSHOT_PATH = "/research/dmrp/snapshot";
 
 export class FixtureBoundaryError extends Error {
   readonly reasonCode: string;
@@ -76,4 +78,31 @@ export async function getFamilies(): Promise<ReadEnvelope<FamilyEvidenceView[]>>
 }
 export async function getRepresentationSnapshot(): Promise<ReadEnvelope<WP5ARepresentationSnapshot>> {
   return get<WP5ARepresentationSnapshot>("/research/representations/snapshot");
+}
+
+export async function getDMRPSnapshot(): Promise<any> {
+  const response = await fetch(`${API_ROOT}${DMRP_SNAPSHOT_PATH}`, {
+    method: "GET",
+    headers: { Accept: "application/json" },
+  });
+  if (!response.ok) {
+    throw new FixtureBoundaryError(`HTTP_${response.status}`);
+  }
+  const value = await response.json();
+  if (value?.fixture_banner) {
+    return requireFixtureEnvelope(value as ReadEnvelope<WP5B1DMRPSnapshot>);
+  }
+  const banner = value?.real_source_banner;
+  if (
+    banner?.mode !== "REAL_SOURCE_READ_ONLY" ||
+    banner?.data_classification !== "DMRP_OWNER_COURT_RECORD" ||
+    banner?.presentation_authority !== "RCN-RN-G5-FIRST-NEW-SOURCE[DMRP]" ||
+    banner?.source_owner_authority !== "UNCHANGED" ||
+    banner?.authority_effect !== "NONE" ||
+    banner?.fixture_fallback !== "PROHIBITED" ||
+    banner?.source_admission_transitivity !== "PROHIBITED"
+  ) {
+    throw new FixtureBoundaryError("DMRP_REAL_SOURCE_AUTHORITY_VIOLATION");
+  }
+  return value;
 }
