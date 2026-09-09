@@ -1,0 +1,87 @@
+{
+  "schema": "ovc-prvit-operator-gate-packet/v0.1",
+  "gate_id": "PRVIT-G0",
+  "title": "Ratify bounded PR/VIT Pipeline Conformance & Corrective Audit",
+  "programme_id": "OVC-PRVIT-PIPELINE-CONFORMANCE-CORRECTIVE-AUDIT-v0.1",
+  "plan_id": "OVC-PRVIT-PCCA-v0.1-PROPOSED",
+  "plan_version": "0.1",
+  "status": "GATE_READY",
+  "authority_required": "OPERATOR_REQUIRED",
+  "baseline_commit": "566903dcdde4fcc0aa6ab43a95bc36b947fafa15",
+  "baseline_tree": "ac7e76b9100e5720d4fb0e07bbd1b775dffc0bbc",
+  "candidate_commit": "62ded72a36de3b75b0959764398553607f0cbe15",
+  "candidate_tree": "03d3dca9f841e4a098e08e8632b39e412fc7aaa4",
+  "completed_packets": ["PRVIT-WP0"],
+  "current_authority": {
+    "prvit_execution": "NOT_AUTHORISED_PENDING_G0",
+    "live_pipeline": "UNCHANGED",
+    "physical_main": "UNCHANGED",
+    "pr1106_one_run_authority": "PRESERVED_UNCONSUMED_BY_PRVIT"
+  },
+  "proposed_authority_delta": {
+    "decision_if_pass": "AUTHORISE_READ_ONLY_SHADOW_PRVIT_WP1_THROUGH_WP7",
+    "authority_delta": "NONE_TO_LIVE_PIPELINE",
+    "allowed": [
+      "READ_ONLY_REPOSITORY_AND_GITHUB_EVIDENCE_COLLECTION",
+      "ISOLATED_SHADOW_CONTRACTS_AND_REFERENCE_IMPLEMENTATION",
+      "LOCAL_OR_BRANCH_ONLY_SHADOW_REPLAY",
+      "TEN_REGRESSION_ADVERSARIAL_TESTS",
+      "LAST20_HISTORICAL_SHADOW_REPLAY",
+      "COUNTERFACTUAL_SHADOW_PERTURBATION",
+      "ROOT_CAUSE_AND_PATCH_MAP_PREPARATION"
+    ],
+    "denied": [
+      "LIVE_WORKFLOW_ROUTING_CHANGE",
+      "LIVE_REQUIRED_CHECK_CHANGE",
+      "LIVE_RULESET_CHANGE",
+      "LIVE_VIT_SIQ_GRT_ADMISSION_CHANGE",
+      "PHYSICAL_MAIN_WRITE_OUTSIDE_ELIGIBLE_PACKET_INTEGRATION",
+      "PR1106_REAL_SOURCE_AUTHORITY_CONSUMPTION",
+      "FORCE_PUSH",
+      "HISTORY_REWRITE",
+      "DESTRUCTIVE_CLEANUP",
+      "LIVE_CUTOVER"
+    ],
+    "mandatory_stop": "PRVIT-G-CUTOVER-READINESS"
+  },
+  "acceptance_conditions": [
+    "WP0 source freeze resolves exact current main commit/tree.",
+    "Active main ruleset and OVC merge readiness requirement are frozen without modification.",
+    "Four governing source identities and two audit proposal artifact identities are SHA-256 bound.",
+    "Primary replay population is exactly the frozen 20 PRs from #1088 through #1109 as enumerated; later PRs cannot silently replace them.",
+    "PRVIT-R01 through PRVIT-R10 are the canonical regression registry.",
+    "PR #1106 is replay-only for this programme and its one-run authority cannot be launched, consumed, renewed or broadened.",
+    "Live-path hard denies are explicit and fail closed.",
+    "WP0 QA recommends READY_FOR_OPERATOR_DECISION with no unresolved technical blocker other than operator authority."
+  ],
+  "tests_and_qa": {
+    "wp0_qa": "docs/programmes/prvit-v0-1/wp0/PRVIT_WP0_QA_PACKET_v0_1.json",
+    "qa_result": "PASS",
+    "qa_recommendation": "READY_FOR_OPERATOR_DECISION",
+    "mechanical_checks": "10/10 PASS",
+    "repository_wide_tests": "NOT_REQUIRED_FOR_METADATA_ONLY_WP0; NO EXECUTABLE OR LIVE PIPELINE FILE CHANGED"
+  },
+  "warnings": [
+    "Repository activity continued after the proposal snapshot; #1110-#1112 were observed and are excluded from the frozen primary cohort by design.",
+    "PASS at PRVIT-G0 authorises only shadow audit execution. It does not authorise any live corrective cutover."
+  ],
+  "unresolved_issues": [],
+  "changed_files_candidate": [
+    "docs/programmes/prvit-v0-1/PRVIT_PLAN_IDENTITY_v0_1.json",
+    "docs/programmes/prvit-v0-1/wp0/PRVIT_WP0_SOURCE_FREEZE_v0_1.json",
+    "docs/programmes/prvit-v0-1/wp0/PRVIT_WP0_QA_PACKET_v0_1.json"
+  ],
+  "external_artifact_hashes": {
+    "audit_proposal_docx_sha256": "1e262a77b9e7480cb3950c8317dc4f64ed91646ce6a0458eb3257f163e0a8492",
+    "audit_manifest_sha256": "482c761e987946ef5c100a5e50f57e18da74a3bb4d2669c8a4fad96763e979a8",
+    "dsai_v0_3_design_sha256": "1755d8e0eac857ff2b741b00e014250913ed919402555d08abe79616748fcc4e",
+    "dsai_v0_3_plan_sha256": "6ea429c0150f837ccf0619085896b3b7b7156b4e3c194619dd89b0254355f15f",
+    "grt_v0_2_design_sha256": "bee3b1d9095a5f45f141abae550af35acb1a2aceca1bee555e59ddd2a19de9d7",
+    "grt_v0_2_plan_sha256": "c81e1368f4e25c77906d378772379b04910b5c8f93fc9b21f988749602a9bedb"
+  },
+  "rollback": "If BLOCK/DEFER/QUARANTINE, preserve this branch and evidence or abandon it without merge. No live workflow, ruleset, VIT/SIQ/GRT route, main tree or PR #1106 authority requires restoration because none was changed.",
+  "recommended_decision": "PASS",
+  "allowed_decisions": ["PASS","DEFER","BLOCK","QUARANTINE","SUPERSEDE"],
+  "exact_work_after_pass": "Materialise operator PRVIT-G0 PASS, transition PRVIT-WP0 to COMPLETED, then execute PRVIT-WP1 through eligible AUTO gates continuously in READ_ONLY_SHADOW mode. Stop at PRVIT-G-CUTOVER-READINESS or earlier blocker/authority conflict.",
+  "operator_command_for_pass": "OVC APPROVE PRVIT-G0"
+}
