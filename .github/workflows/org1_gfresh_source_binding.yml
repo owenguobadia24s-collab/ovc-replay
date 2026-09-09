@@ -1,0 +1,47 @@
+name: ORG1 GFRESH source binding
+
+on:
+  push:
+    branches:
+      - org1/gfresh-gnew-source-20260909
+    paths:
+      - '.github/workflows/org1_gfresh_source_binding.yml'
+      - 'docs/programmes/org1-v0-1/gfresh/**'
+      - 'records/research_operations/org1/**'
+      - 'scripts/research_operations/org1/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-binding:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate bounded operator authority
+        run: python scripts/research_operations/org1/validate_gfresh_source_authority.py
+      - name: Self-test source materializer
+        run: python scripts/research_operations/org1/materialize_gfresh_sources.py --self-test
+      - name: Materialize outcome-blind source bindings
+        run: python scripts/research_operations/org1/materialize_gfresh_sources.py --out org1_gfresh_source_binding
+      - name: Prove target firewall in generated binding
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('org1_gfresh_source_binding/ORG1_GFRESH_SOURCE_BINDING_CANDIDATE_v0_1.json')
+          x=json.loads(p.read_text())
+          assert x['target_firewall']=='CLOSED_NO_ORG1_D_L_O_COMPUTED'
+          assert x['mutually_disjoint'] is True
+          assert [r['year'] for r in x['roles']]==[2012,2013]
+          print('ORG1_GFRESH_GENERATED_TARGET_FIREWALL_PASS')
+          PY
+      - name: Upload exact source-binding artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: org1-gfresh-source-binding-2012-2013
+          path: org1_gfresh_source_binding
+          if-no-files-found: error
+          retention-days: 30
