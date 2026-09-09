@@ -1,0 +1,50 @@
+{
+  "schema": "ovc-org1-gfresh-source-selection/v1",
+  "programme_id": "OVC-SFF-AOSC-ORG1-v0.1",
+  "packet_id": "ORG1-GFRESH-SOURCE-BINDING",
+  "authority_source": "ORG1-GFRESH-GNEW-SOURCE.OPERATOR.PASS.20260909T122518+0100",
+  "freeze_time": "2026-09-09T12:25:18+01:00",
+  "selection_basis": "CHRONOLOGY_ADMISSIBILITY_EXPOSURE_ONLY",
+  "source_family": {
+    "provider": "FXCM_PUBLIC_CANDLEDATA",
+    "instrument": "GBPUSD",
+    "raw_periodicity": "M1",
+    "target_clock": "15M",
+    "price_side": "BID",
+    "timestamp_semantics": "UTC",
+    "url_pattern": "https://candledata.fxcorporate.com/m1/GBPUSD/{year}/{week}.csv.gz",
+    "public_availability_reference": "FXCM MarketData/CandleData README: public weekly M1 data from 2012 onward"
+  },
+  "pre_intake_exposure_census": {
+    "repository_main": "NO_2012_GBPUSD_OR_2013_GBPUSD_SOURCE_POPULATION_BINDING_FOUND",
+    "laboratory_catalogue": "NO_2012_OR_2013_GBPUSD_15M_POPULATION_BINDING_FOUND",
+    "file_library": "NO_2012_OR_2013_GBPUSD_SOURCE_DATA_POPULATION_FOUND",
+    "known_exposed_years_excluded": [2016, 2017, 2018, 2019, 2024, 2025, 2026],
+    "protected_interval_excluded": "2021-01-01/2024-01-01 EC1 protected Discovery"
+  },
+  "tie_break_rule": "EARLIEST_ELIGIBLE_WHOLE_CALENDAR_INTERVAL_THEN_SOURCE_SHA256",
+  "candidate_assignments": [
+    {
+      "role": "EVAL-A-CANDIDATE",
+      "interval": "[2012-01-01T00:00:00Z,2013-01-01T00:00:00Z)",
+      "year": 2012,
+      "binding_status": "PENDING_SOURCE_BYTE_INTAKE_AND_EXACT_AUDIT"
+    },
+    {
+      "role": "EVAL-B-CANDIDATE",
+      "interval": "[2013-01-01T00:00:00Z,2014-01-01T00:00:00Z)",
+      "year": 2013,
+      "binding_status": "PENDING_SOURCE_BYTE_INTAKE_AND_EXACT_AUDIT"
+    }
+  ],
+  "prohibited_selection_inputs": [
+    "D_L_O_OUTCOMES",
+    "HANDOVER_DENSITY",
+    "CLASS_BALANCE",
+    "B0_B1_B2_B3_M4_SCORES",
+    "FORECAST_EFFECT",
+    "POST_INTAKE_TARGET_INSPECTION"
+  ],
+  "failure_rule": "IF_EITHER_SOURCE_FAILS_EXPOSURE_SEMANTIC_REPRODUCIBILITY_OR_MINIMUM_MATURE_CUTOFF_ADMISSION_REQUIREMENT_STOP_AND_RETURN_TO_SOURCE_SELECTION_WITHOUT_INSPECTING_ORG1_TARGETS",
+  "target_firewall": "CLOSED"
+}
