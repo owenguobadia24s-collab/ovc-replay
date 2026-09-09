@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "authority_effect": {
+      "const": "NONE_PRELAUNCH_HARDENING_ONLY"
+    },
+    "checks": {
+      "additionalProperties": {
+        "enum": [
+          "PASS",
+          "PENDING",
+          "BLOCKED"
+        ]
+      },
+      "type": "object"
+    },
+    "f0_a": {
+      "const": "HOLD_UNCHANGED"
+    },
+    "packet_id": {
+      "const": "EC1-F0-PRELAUNCH-NO-SURPRISES"
+    },
+    "schema": {
+      "const": "ovc-ec1-f0-prelaunch-packet/v1"
+    },
+    "status": {
+      "enum": [
+        "IMPLEMENTED_AWAITING_ASSURANCE",
+        "QA_REVIEW",
+        "APPROVED",
+        "COMPLETED",
+        "BLOCKED",
+        "QUARANTINED"
+      ]
+    },
+    "validation": {
+      "const": "LOCKED_UNCONSUMED"
+    }
+  },
+  "required": [
+    "schema",
+    "packet_id",
+    "status",
+    "authority_effect",
+    "checks",
+    "f0_a",
+    "validation"
+  ],
+  "title": "EC1 F0 Prelaunch Packet v0.1",
+  "type": "object"
+}
