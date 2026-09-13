@@ -1,0 +1,29 @@
+{
+  "schema": "ovc-bcwt-r2-vit-dependency-frontier/v0_1",
+  "programme_id": "OVC-BCWT-v0.1",
+  "packet_id": "BCWT-R2",
+  "baseline_commit": "4030b78297ab11b08508d7d9518a7d4f5d141fc9",
+  "baseline_tree": "aea2ba83078773afede6f49e1a1b0cf8b748230d",
+  "required_existing": [
+    "src/ovc/research_operations/canonical.py",
+    "src/ovc/research_operations/identity.py",
+    "src/ovc/research_operations/lifecycle.py",
+    "src/ovc/research_operations/storage.py",
+    "src/ovc/research_operations/validation.py",
+    "src/ovc/research_operations/qa.py",
+    "registries/governance/active_stack/OVC_ACTIVE_STACK_STATE_v0_1.json"
+  ],
+  "required_prior": [
+    "BCWT-R0_COMPLETE_CHAT_SIDE",
+    "BCWT-R1_PASS_WITH_SCOPE_RESTRICTIONS"
+  ],
+  "forbidden_dependency_classes": [
+    "legacy/quarantine OPT-C runtime",
+    "Validation payload",
+    "new provider/instrument/clock/side/source",
+    "OPT-C.NEXT activation",
+    "OPT-D.NEXT activation"
+  ],
+  "dependency_effect": "NONE",
+  "dependency_frontier_id": "c123beeef5741d3a3997e77f717df0e8ea324f53dc0efaa654a0281b4da1021a"
+}
