@@ -31,6 +31,7 @@ EXPECTED_OVC_PACKAGES = {
     "ovc.programme_genesis.grt_v0_2",
     "ovc.research_operations",
     "ovc.research_operations.asocs",
+    "ovc.research_operations.bcwt",
     "ovc.research_operations.cbs",
     "ovc.research_operations.cbs.comparators",
     "ovc.research_operations.c2_csm_reference",
