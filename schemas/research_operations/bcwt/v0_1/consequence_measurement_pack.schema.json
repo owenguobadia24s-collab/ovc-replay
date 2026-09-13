@@ -1,0 +1,28 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://ovc.local/schemas/research_operations/bcwt/v0_1/consequence_measurement_pack.schema.json",
+  "title":"BCWT Consequence Measurement Pack v0.1",
+  "type":"object",
+  "required":["schema","consequence_pack_id","version","source_binding","price_side_policy","path_clock","anchor_specs","fixed_horizons_observed_bars","measurement_specs","structural_consequence_specs","censoring_rules","gap_rules","missingness_rules","prohibited_semantics","created_before_payload_access","authority_effect","scientific_effect","fixture_only"],
+  "properties":{
+    "schema":{"const":"ovc-bcwt-consequence-measurement/v0_1"},
+    "consequence_pack_id":{"type":"string","pattern":"^bcwt:consequence_pack:"},
+    "version":{"const":"0.1"},
+    "source_binding":{"type":"object","required":["release_id","instrument","side","clock","provider","role"],"additionalProperties":true},
+    "price_side_policy":{"const":"SOURCE_BOUND_SINGLE_SIDE"},
+    "path_clock":{"type":"string","minLength":1},
+    "anchor_specs":{"type":"array","minItems":1,"items":{"enum":["FIRST_VALID_KNOWLEDGE_ANCHOR","STRUCTURAL_EFFECTIVE_ANCHOR","EPISODE_COMPLETION_ANCHOR","EVENT_CONFIRMATION_ANCHOR"]}},
+    "fixed_horizons_observed_bars":{"type":"array","minItems":1,"items":{"type":"integer","minimum":1},"uniqueItems":true},
+    "measurement_specs":{"type":"array","minItems":1,"items":{"type":"string"},"uniqueItems":true},
+    "structural_consequence_specs":{"type":"array"},
+    "censoring_rules":{"type":"array","items":{"type":"string"}},
+    "gap_rules":{"type":"array","items":{"type":"string"}},
+    "missingness_rules":{"type":"array","items":{"type":"string"}},
+    "prohibited_semantics":{"type":"array","items":{"type":"string"}},
+    "created_before_payload_access":{"const":true},
+    "authority_effect":{"const":"NONE"},
+    "scientific_effect":{"const":"NONE"},
+    "fixture_only":{"type":"boolean"}
+  },
+  "additionalProperties":false
+}

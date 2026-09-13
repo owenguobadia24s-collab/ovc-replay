@@ -6,6 +6,7 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Any, Iterable
 
+from .bcwt.records import BCWT_RECORD_DIRECTORIES
 from .canonical import canonical_json_bytes, canonical_sha256
 from .lifecycle import freeze_record, supersede_record, verify_frozen_record
 
@@ -29,6 +30,7 @@ RECORD_DIRECTORIES = {
     "RO4_C2E_FRICTION_RECORD.v0.1": "ro4/c2e_friction_records",
     "RO4_PROSPECTIVE_SEQUENCE_REVIEW.v0.1": "ro4/prospective_sequence_reviews",
     "RO4_SIGNATURE_CONCENTRATION_ACKNOWLEDGEMENT.v0.1": "ro4/signature_concentration_acknowledgements",
+    **BCWT_RECORD_DIRECTORIES,
 }
 
 

@@ -1,0 +1,24 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://ovc.local/schemas/research_operations/bcwt/v0_1/outcome_record.schema.json",
+  "title":"BCWT Outcome Record v0.1",
+  "type":"object",
+  "required":["schema","logical_id","origin_id","observer_state_id","consequence_pack_id","join_manifest_id","anchor_spec_id","horizon_observed_bars","measurement_spec_id","terminal_status","measurement_state","value","authority_effect","scientific_effect"],
+  "properties":{
+    "schema":{"const":"ovc-bcwt-outcome-record/v0_1"},
+    "logical_id":{"type":"string","pattern":"^bcwt:outcome:"},
+    "origin_id":{"type":"string"},
+    "observer_state_id":{"type":"string"},
+    "consequence_pack_id":{"type":"string"},
+    "join_manifest_id":{"type":"string"},
+    "anchor_spec_id":{"type":"string"},
+    "horizon_observed_bars":{"type":"integer","minimum":1},
+    "measurement_spec_id":{"type":"string"},
+    "terminal_status":{"enum":["OBSERVED","CENSORED_GAP","CENSORED_RELEASE_END","NOT_EVALUABLE","NOT_COMPARABLE","QUARANTINED","PROCESS_INVALID"]},
+    "measurement_state":{"type":"string"},
+    "value":{"type":["number","integer","null"]},
+    "authority_effect":{"const":"NONE"},
+    "scientific_effect":{"const":"NONE"}
+  },
+  "additionalProperties":false
+}

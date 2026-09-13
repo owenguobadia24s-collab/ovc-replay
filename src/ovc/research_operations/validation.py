@@ -4,6 +4,8 @@ from datetime import datetime, timezone
 from typing import Any
 
 from .availability import derive_reproducibility_state
+from .bcwt.records import BCWT_PAYLOAD_REQUIRED, BCWT_RECORD_TYPES, validate_bcwt_payload
+from .bcwt.mechanical import BCWTValidationError
 
 RECORD_TYPES = {
     "DATA_RELEASE_REF", "RESEARCH_SESSION", "OBSERVATION_SNAPSHOT", "CLAIM_RECORD",
@@ -11,7 +13,7 @@ RECORD_TYPES = {
     "DECISION_RECORD", "AUDIT_EVENT",
     "RO4_SEQUENCE_BOUNDARY_ANNOTATION.v0.1", "RO4_C2E_FRICTION_RECORD.v0.1",
     "RO4_PROSPECTIVE_SEQUENCE_REVIEW.v0.1", "RO4_SIGNATURE_CONCENTRATION_ACKNOWLEDGEMENT.v0.1",
-}
+} | set(BCWT_RECORD_TYPES)
 PAYLOAD_REQUIRED = {
     "DATA_RELEASE_REF": {"release_id", "manifest_id", "manifest_sha256", "role", "instrument", "coverage_start", "coverage_end", "clocks", "sides", "qa_state", "validation_access_state"},
     "RESEARCH_SESSION": {"objective", "instrument", "research_role", "session_state", "objects_reviewed"},
@@ -42,6 +44,7 @@ PAYLOAD_REQUIRED = {
         "population_id", "diversity_audit_logical_hash", "warning_status", "acknowledgement",
         "record_authority", "promotion_authority",
     },
+    **BCWT_PAYLOAD_REQUIRED,
 }
 COMMON_REQUIRED = {
     "record_type", "schema_version", "lifecycle_state", "created_at", "frozen_at",
@@ -101,6 +104,12 @@ def validate_record(record: dict[str, Any]) -> None:
     payload_missing = PAYLOAD_REQUIRED[record_type] - set(record["payload"])
     if payload_missing:
         raise RecordValidationError("MISSING_PAYLOAD_FIELD", ",".join(sorted(payload_missing)))
+
+    if record_type in BCWT_RECORD_TYPES:
+        try:
+            validate_bcwt_payload(record_type, record["payload"])
+        except BCWTValidationError as exc:
+            raise RecordValidationError("BCWT_R2_INVALID", str(exc)) from exc
 
     cutoff = _dt(record["admissible_cutoff"])
     for group in ("source_release_refs", "artifact_refs", "model_refs"):
