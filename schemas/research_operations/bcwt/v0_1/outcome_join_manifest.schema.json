@@ -1,0 +1,29 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://ovc.local/schemas/research_operations/bcwt/v0_1/outcome_join_manifest.schema.json",
+  "title":"BCWT Outcome Join Manifest v0.1",
+  "type":"object",
+  "required":["schema","logical_id","execution_role","candidate_generation_id_or_none","candidate_population_binding_or_none","candidate_occurrence_set_hash_or_none","candidate_evaluation_admission_id_or_none","mechanical_origin_set_hash","origin_contract_id","reference_id","consequence_pack_id","source_release_ref","instrument","side","clock","anchor_spec_id","censoring_policy_id","authority_effect","scientific_effect"],
+  "properties":{
+    "schema":{"const":"ovc-bcwt-outcome-join-manifest/v0_1"},
+    "logical_id":{"type":"string","pattern":"^bcwt:join:"},
+    "execution_role":{"enum":["MECHANICAL_REFERENCE_ONLY","C_ADMITTED_SCIENTIFIC"]},
+    "candidate_generation_id_or_none":{"type":["string","null"]},
+    "candidate_population_binding_or_none":{"type":["object","null"]},
+    "candidate_occurrence_set_hash_or_none":{"type":["string","null"]},
+    "candidate_evaluation_admission_id_or_none":{"type":["string","null"]},
+    "mechanical_origin_set_hash":{"type":"string","minLength":1},
+    "origin_contract_id":{"const":"OVC-BCWT-B-TO-C-ORIGIN-CONTRACT-0.1"},
+    "reference_id":{"type":"string","minLength":1},
+    "consequence_pack_id":{"type":"string","minLength":1},
+    "source_release_ref":{"type":"object"},
+    "instrument":{"type":"string"},
+    "side":{"type":"string"},
+    "clock":{"type":"string"},
+    "anchor_spec_id":{"type":"string"},
+    "censoring_policy_id":{"type":"string"},
+    "authority_effect":{"const":"NONE"},
+    "scientific_effect":{"const":"NONE"}
+  },
+  "additionalProperties":false
+}

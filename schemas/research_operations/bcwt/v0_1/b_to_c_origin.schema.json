@@ -1,0 +1,31 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://ovc.local/schemas/research_operations/bcwt/v0_1/b_to_c_origin.schema.json",
+  "title":"BCWT B-to-C Origin v0.1",
+  "type":"object",
+  "required":["schema","logical_id","origin_contract_id","reference_id","observer_state_id","observer_generation","segment_id","origin_cutoff_fvt_ms","input_prefix_chain_sha256","shared_fixed_asset_set_id","source_population_ref","state_row_sha256","component_status_map","epistemic_non_knowledge","source_break_state","candidate_generation_id_or_none","candidate_occurrence_id_or_none","candidate_evaluation_admission_id_or_none","origin_role","authority_effect","scientific_effect"],
+  "properties":{
+    "schema":{"const":"ovc-bcwt-b-to-c-origin/v0_1"},
+    "logical_id":{"type":"string","pattern":"^bcwt:origin:"},
+    "origin_contract_id":{"const":"OVC-BCWT-B-TO-C-ORIGIN-CONTRACT-0.1"},
+    "reference_id":{"type":"string","minLength":1},
+    "observer_state_id":{"type":"string","minLength":1},
+    "observer_generation":{"type":"string","minLength":1},
+    "segment_id":{"type":"string","minLength":1},
+    "origin_cutoff_fvt_ms":{"type":"integer"},
+    "input_prefix_chain_sha256":{"type":"string","minLength":1},
+    "shared_fixed_asset_set_id":{"type":"string","minLength":1},
+    "source_population_ref":{"type":"string","minLength":1},
+    "state_row_sha256":{"type":"string","minLength":1},
+    "component_status_map":{"type":"object"},
+    "epistemic_non_knowledge":{"type":"array","items":{"type":"string"}},
+    "source_break_state":{"type":"string"},
+    "candidate_generation_id_or_none":{"type":["string","null"]},
+    "candidate_occurrence_id_or_none":{"type":["string","null"]},
+    "candidate_evaluation_admission_id_or_none":{"type":["string","null"]},
+    "origin_role":{"enum":["MECHANICAL_REFERENCE_ORIGIN","C_ADMITTED_SCIENTIFIC_ORIGIN"]},
+    "authority_effect":{"const":"NONE"},
+    "scientific_effect":{"const":"NONE"}
+  },
+  "additionalProperties":false
+}
