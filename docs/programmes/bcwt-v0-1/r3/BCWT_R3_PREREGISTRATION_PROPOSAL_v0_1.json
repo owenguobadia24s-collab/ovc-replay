@@ -1,0 +1,149 @@
+{
+  "schema": "ovc-bcwt-r3-preregistration-proposal/v0_1",
+  "status": "PROPOSED_NOT_FROZEN",
+  "authority_effect": "NONE",
+  "scientific_effect": "NONE_PRE_FREEZE",
+  "programme_id": "OVC-BCWT-v0.1",
+  "packet_id": "BCWT-R3",
+  "proposal_id": "OVC-BCWT-R3-PREREG-PROPOSAL-0.1",
+  "origin_mode": "PATH_2_THEORY_FORMALISATION",
+  "research_role": "CONSUMED_SOURCE_DEVELOPMENT_DIAGNOSTIC_NOT_CONFIRMATION",
+  "task_question": "Can a cutoff-safe whole observer distinguish organisation-preserving movement from organisational reconfiguration, retain explicit unresolved/non-evaluable states while the distinction develops, and measure what follows without hindsight?",
+  "reference": {
+    "reference_id": "OVC-BCWT-BREF-0.1",
+    "observer_generation": "AOSC-WHOLE-STATE-SUCCESSOR-0.2",
+    "whole_observer_state_sha256": "56013c2438808cd2bf1e643276fa40f94bf171aaed8a1e5f8bcff40e918a6826",
+    "state_count": 5245,
+    "qualification": "L0_CLOSED_EXACT_BYTES__L1_CLOSED_CONDITIONAL__L2_RAW_TO_STRUCTURAL_NOT_QUALIFIED__L3_LIVE_NOT_QUALIFIED",
+    "opgs_transition_account_count": 5238,
+    "opgs_transition_stream_sha256": "86ea8dafdf7183ebf19c4b5c6d208f1f34f035d3a557c35ccbeef4efa5326d07"
+  },
+  "source_binding": {
+    "provider": "FXCM_AS_NAMED_BY_CONSUMED_C0B_SOURCE",
+    "instrument": "GBPUSD",
+    "clock": "15M",
+    "price_side_policy": "ARCHIVED_C0B_NATIVE_OHLC_COLUMNS_NO_BID_ASK_REINTERPRETATION",
+    "source_role": "ALREADY_CONSUMED_DEVELOPMENT_REHEARSAL",
+    "source_export": "TVX2_R1B_CSV_FIRST_FXCM_GBPUSD_15M_C0B.csv",
+    "source_export_sha256": "b820edad67f54fbbb41e8f114a346cc5d71b6525d18e8633d9f00bacd5c7db07",
+    "bar_count": 19090,
+    "source_segments": 7,
+    "true_source_breaks": 6,
+    "raw_to_structural_availability": "NOT_QUALIFIED",
+    "provider_receipt_latency": "NOT_QUALIFIED"
+  },
+  "population": {
+    "unit": "lawful adjacent final-returned structural update pair within one uninterrupted source segment",
+    "opportunity_universe_count": 5238,
+    "segment_head_rule": "seven segment heads have no incoming occurrence and are excluded by construction",
+    "source_break_rule": "cross-segment occurrence prohibited",
+    "origin_anchor": "max(final returned observer cutoff, candidate first-valid knowledge time)",
+    "carried_state_rule": "bar-carried state without fresh structural update is not a new occurrence",
+    "intermediate_latent_rule": "superseded/cleared intra-update emissions are not occurrences",
+    "missingness": "retain AMBIGUOUS, NOT_EVALUABLE, NOT_COMPARABLE, CENSORED, QUARANTINED, OUT_OF_SCOPE and PROCESS_INVALID explicitly"
+  },
+  "candidate_generation_design": {
+    "series_id": "BCWT-ORG-RECONFIGURATION",
+    "generation": 1,
+    "frozen": false,
+    "candidate_name": "EXPLICIT_ORGANISATIONAL_RECONFIGURATION",
+    "match_rule": {
+      "all": [
+        "same source segment",
+        "adjacent frozen OPGS-R3 transition account",
+        "D17 does not make the load-bearing fields non-evaluable"
+      ],
+      "any_explicit_reconfiguration": [
+        "D10 local-frame relocation state == OBSERVED",
+        "D14 internal reorganisation state == OBSERVED",
+        "D16 nested local-vs-mesoscopic organisation has an explicit evaluable relation change between before and after"
+      ],
+      "result": "MATCH"
+    },
+    "non_match_rule": {
+      "all": [
+        "D12 observed continuation/persistence state == OBSERVED",
+        "D10 local-frame relocation state != OBSERVED",
+        "D14 internal reorganisation state != OBSERVED",
+        "D16 nested local-vs-mesoscopic relation is evaluable and unchanged",
+        "D15 source-gap/closure continuity confirms same uninterrupted segment"
+      ],
+      "result": "NON_MATCH_ORGANISATION_PRESERVED"
+    },
+    "ambiguity_rule": "If neither exact MATCH nor exact NON_MATCH rule is satisfied, retain the DMRP membership state implied by source/epistemic standing; never coerce to either class.",
+    "threshold_rule": "No new numeric movement, graduality, abruptness or low-net threshold is introduced.",
+    "excluded_from_identity": [
+      "future consequences",
+      "price outcomes after anchor",
+      "MOC predictive readouts",
+      "C2E episode IDs",
+      "C2P persistent identity",
+      "C3 prose",
+      "EROC unratified runtime objects"
+    ]
+  },
+  "consequence_pack_design": {
+    "anchor_spec": "FIRST_VALID_KNOWLEDGE_ANCHOR",
+    "fixed_horizons_observed_bars": [4, 8, 16, 32],
+    "horizon_rationale": "pre-C scale alignment to already-frozen K4/K8/K16/K32 and OPGS H4/H8/H16/H32 surfaces; not selected from task outcomes",
+    "primary_structural_measure": "TASK_INVARIANT_PRESERVED_AT_H",
+    "primary_measure_rule": "At each horizon, use the last lawful current-segment returned observer state available as-of the horizon bar; compare the same frozen task invariant. A source break/release end censors rather than implying change.",
+    "secondary_structural_measures": ["FIRST_EXPLICIT_RECONFIGURATION_OFFSET_OBSERVED_BARS", "OBSERVER_REVISION_COUNT"],
+    "secondary_neutral_path_measures": ["SIGNED_DISPLACEMENT_TICKS", "ABSOLUTE_DISPLACEMENT_TICKS", "MAX_UP_EXCURSION_TICKS", "MAX_DOWN_EXCURSION_TICKS", "OBSERVED_RANGE_TICKS"],
+    "censoring": ["first true source break", "release end", "insufficient future bars", "process invalid"],
+    "forbidden": ["trade direction", "return optimisation", "probability calibration", "best-horizon selection", "post-outcome relabelling"]
+  },
+  "comparators": {
+    "simple_price_challenger": {
+      "id": "BCWT-R3-CMP-PRICE-SIGN-0.1",
+      "definition": "Antecedent realised transition net displacement sign only: NEGATIVE, ZERO or POSITIVE; exact zero has no tolerance."
+    },
+    "information_matched_structural_challenger": {
+      "id": "BCWT-R3-CMP-OPGS-ATOM-0.1",
+      "definition": "Existing frozen OPGS low-expressivity atom (path_mode_against_start_frame, frame_event_after_path); no consequence-trained fitting."
+    },
+    "whole_observer_candidate_partition": {
+      "id": "BCWT-R3-CMP-WHOLE-OBSERVER-0.1",
+      "definition": "MATCH vs NON_MATCH under the candidate rules above; unresolved states remain outside the binary contrast but remain in the complete denominator ledger."
+    }
+  },
+  "dependence": {
+    "overlap_rule": "For each horizon h, two evaluable origins are dependent when their forward bar windows overlap within a source segment.",
+    "multi_horizon_rule": "Rows from the same origin across horizons are one dependent family and never independent replications.",
+    "segment_rule": "source segments are never bridged",
+    "reporting": "R4 must report raw rows, unique origins, overlap-connected components and per-segment support before any comparative conclusion.",
+    "independence_claim": "NONE"
+  },
+  "support_and_decision_rules": {
+    "engineering_pass": "complete expected occurrence x horizon x measurement ledger, deterministic replay, zero silent missing rows, all censoring explicit",
+    "minimum_scientific_support": "For a horizon to enter the primary contrast, each binary class must contribute at least 32 evaluable origins AND be represented in at least 4 source segments; otherwise that horizon is INDETERMINATE_SUPPORT.",
+    "primary_effect": "delta_h = observed fraction TASK_INVARIANT_PRESERVED_AT_H in NON_MATCH_ORGANISATION_PRESERVED minus the same fraction in MATCH",
+    "materiality_margin_absolute_fraction": 0.10,
+    "horizon_support": "MATERIAL_DIFFERENCE only when abs(delta_h) >= 0.10 and the sign of delta_h is the same in at least 4 source segments that contain both classes and evaluable outcomes.",
+    "global_support": "SUPPORTED_DESCRIPTIVE_DIFFERENCE when at least 2 of 4 horizons are MATERIAL_DIFFERENCE with the same direction and no horizon meeting the materiality rule in the opposite direction.",
+    "global_null": "NO_MATERIAL_DIFFERENCE only when all four horizons meet minimum support and abs(delta_h) < 0.10 at all four horizons.",
+    "otherwise": "INDETERMINATE_SUPPORT",
+    "comparator_rule": "The same outcome ledger is partitioned by the price-sign and frozen OPGS-atom comparators. A whole-observer utility claim is not earned in R4 merely because its raw separation is larger; any later incremental/equivalence claim requires a separately frozen D protocol.",
+    "non_significance_rule": "Non-significance or failure to cross the descriptive materiality rule never proves B redundancy."
+  },
+  "exposure": {
+    "population_exposure": "CONSUMED_C0B",
+    "conceptual_exposure": ["OPGS", "AOSC", "EROC", "MOC", "ORG1", "BCWT-R0/R1/R2"],
+    "outcome_exposure": "No BCWT-R4 consequence ledger has been computed under this task definition before the proposed freeze.",
+    "confirmation_claim": "FORBIDDEN"
+  },
+  "post_freeze_sequence": [
+    "canonicalise exact semantic bytes and create frozen ResearchCandidateGeneration only after operator G0 PASS",
+    "compile complete outcome-blind membership ledger over the 5,238-opportunity universe",
+    "run deterministic replay/counterevidence/source/FVT/denominator QA",
+    "prepare separate operator-required CandidateEvaluationAdmission G1; do not view scientific C payload before G1 PASS",
+    "after G1 PASS, execute BCWT-R4 inside the exact frozen envelope"
+  ],
+  "non_grants": [
+    "no candidate freeze yet",
+    "no C admission",
+    "no real-source consequence execution",
+    "no OPT-C/OPT-D activation",
+    "no predictive/probability/risk/exposure/trading authority"
+  ]
+}
