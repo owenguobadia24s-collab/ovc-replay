@@ -33,10 +33,13 @@ class TestWp5ArchitectureReconciliation(unittest.TestCase):
         graph = load(RECON / "RCN_RN_WP5_RECONCILED_PACKET_GRAPH_v0_1.json")
         self.assertEqual(next(node for node in graph["nodes"] if node["packet_id"] == "RCN-RN-WP5B2")["console_role"], "PROJECT_OWNER_READ_MODELS_DO_NOT_REIMPLEMENT")
         self.assertFalse(graph["atlas_integration"]["correctness_dependency"])
-    def test_state_advances_only_to_wp5b1(self) -> None:
+    def test_state_advances_from_reconciliation_into_wp5b1_only(self) -> None:
         state = load(STATE)
         self.assertEqual(state["authority_delta"], "NONE")
-        self.assertEqual(state["next_packet"], "RCN-RN-WP5B1")
+        self.assertEqual(state["current_packet"], "RCN-RN-WP5B1")
+        self.assertEqual(state["next_packet"], "RCN-RN-WP5B2")
         self.assertEqual(state["stop_boundary"], "RCN-RN-G5-FIRST-NEW-SOURCE_OR_OTHER_RESERVED_AUTHORITY_CHANGE")
+        self.assertEqual(state["source_authority_overlays"]["DMRP"]["gate_id"], "RCN-RN-G5-FIRST-NEW-SOURCE[DMRP]")
+        self.assertFalse(state["source_authority_overlays"]["DMRP"]["transitive"])
 if __name__ == "__main__":
     unittest.main()
