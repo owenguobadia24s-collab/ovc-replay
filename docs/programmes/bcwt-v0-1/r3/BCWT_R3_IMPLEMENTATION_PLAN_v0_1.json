@@ -1,0 +1,38 @@
+{
+  "schema": "ovc-bcwt-r3-plan/v0_1",
+  "programme_id": "OVC-BCWT-v0.1",
+  "packet_id": "BCWT-R3",
+  "plan_id": "OVC-BCWT-R3-OBSERVER-TASK-AND-SCIENTIFIC-PREREGISTRATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "baseline_commit": "e278ecc32010f2fe6b416790f5acfb41cc2ab38e",
+  "branch": "build/bcwt-r3-prereg-20260914",
+  "operator_authority_source": "OVC RUN BCWT-R3",
+  "purpose": "Bind one exact whole-observer task, candidate definition, source/population, neutral consequence surface, comparators, dependence treatment, support rules and decision rules before any scientific C payload is viewed.",
+  "prerequisites": [
+    "BCWT-R2_COMPLETED_MAIN_e278ecc32010f2fe6b416790f5acfb41cc2ab38e",
+    "OVC-BCWT-BREF-0.1_ARCHIVED_STATE_L0_CLOSED_EXACT_BYTES",
+    "OVC-BCWT-BREF-0.1_ARCHIVED_INTERFACE_L1_CLOSED_CONDITIONAL",
+    "DMRP_REVISED_2_RATIFIED_DESIGN_CANON"
+  ],
+  "work_packages": [
+    {"id":"R3-WP0","title":"court-record/source/exposure preflight","authority":"AUTO_EXECUTABLE","status":"COMPLETE"},
+    {"id":"R3-WP1","title":"task and candidate preregistration proposal","authority":"AUTO_EXECUTABLE_PREPARATION_ONLY","status":"COMPLETE"},
+    {"id":"R3-WP2","title":"source, consequence, comparator, dependence and support binding","authority":"AUTO_EXECUTABLE_PREPARATION_ONLY","status":"COMPLETE"},
+    {"id":"R3-G0","title":"semantic/candidate preregistration freeze","authority":"OPERATOR_REQUIRED","status":"GATE_READY"},
+    {"id":"R3-WP3","title":"post-freeze deterministic candidate compiler and complete membership ledger","authority":"AUTO_EXECUTABLE_AFTER_G0_PASS","status":"BLOCKED_BY_G0"},
+    {"id":"R3-G1","title":"CandidateEvaluationAdmission / ADMIT_C","authority":"OPERATOR_REQUIRED","status":"NOT_YET_ELIGIBLE"},
+    {"id":"R3-CLOSEOUT","title":"R3 closeout and R4 handoff","authority":"AUTO_EXECUTABLE_AFTER_REQUIRED_GATES","status":"NOT_STARTED"}
+  ],
+  "reserved_actions_not_granted": [
+    "freeze ResearchCandidateGeneration or semantic bytes before G0 PASS",
+    "CandidateEvaluationAdmission/ADMIT_C",
+    "real-source consequence execution",
+    "OPT-C.NEXT or OPT-D.NEXT activation",
+    "ACTIVE_DISCOVERY, ACTIVE_DEVELOPMENT or ACTIVE_VALIDATION",
+    "semantic/threshold/model/family/candidate/theory promotion",
+    "new provider/instrument/market/clock/side or undeclared dependency",
+    "canonical/R2 publication or immutable release identity",
+    "probability/risk/exposure/E-H/trading/execution/agent-write authority"
+  ],
+  "rollback": "Delete or supersede only the unapproved R3 proposal branch/records; preserve R2 main, source evidence and Laboratory custody. Never rewrite history."
+}
