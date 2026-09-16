@@ -1,33 +1,53 @@
 {
   "schema": "ovc-bcwt-v0-1-state/v0_1",
   "programme_id": "OVC-BCWT-v0.1",
-  "packet_id": "BCWT-R3",
+  "packet_id": "BCWT-R3-WP3",
   "plan_id": "OVC-BCWT-R3-OBSERVER-TASK-AND-SCIENTIFIC-PREREGISTRATION-PLAN-0.1",
   "plan_version": "0.1",
-  "status": "APPROVED",
+  "status": "BLOCKED",
   "prerequisites": [
     "BCWT-R2_COMPLETED_MAIN_e278ecc32010f2fe6b416790f5acfb41cc2ab38e",
+    "BCWT-R3-G0_PASS_AND_INTEGRATED_MAIN_2ddc41ee419f0d6978da3b907c841a81e13d90ae",
     "BCWT-R1_PASS_WITH_SCOPE_RESTRICTIONS",
     "DMRP_REVISED_2_RATIFIED_DESIGN_CANON"
   ],
   "authority_required": "BCWT-R3-G0_SATISFIED__BCWT-R3-G1_OPERATOR_REQUIRED_BEFORE_C_ADMISSION",
-  "authority_delta": "G0_SEMANTIC_CANDIDATE_FREEZE_ONLY__NO_C_ADMISSION",
-  "baseline_commit": "e278ecc32010f2fe6b416790f5acfb41cc2ab38e",
-  "branch": "build/bcwt-r3-prereg-20260914",
+  "authority_delta": "NONE_WP3_OUTCOME_BLIND_IMPLEMENTATION_ONLY",
+  "baseline_commit": "2ddc41ee419f0d6978da3b907c841a81e13d90ae",
+  "branch": "build/bcwt-r3-wp3-20260914",
   "candidate_commit": "394c738c9b94dc1359afe6b4e21013dbaf66b984",
   "candidate_role": "G0_FROZEN_SEMANTIC_PAYLOAD_HEAD",
-  "tests": ["CONTROL_JSON_PROVIDER_ROUNDTRIP_PASS", "SCIENTIFIC_OUTCOME_ACCESS_NONE", "WP3_MEMBERSHIP_QA_REQUIRED_BEFORE_G1"],
-  "qa_packet": "docs/programmes/bcwt-v0-1/r3/g0/BCWT_R3_G0_GATE_PACKET_v0_1.json",
+  "tests": [
+    "WP3_SYNTHETIC_MEMBERSHIP_TESTS_IMPLEMENTED_PENDING_CI",
+    "OUTCOME_BLIND_FIREWALL_TEST_IMPLEMENTED_PENDING_CI",
+    "COMPLETE_5238_SOURCE_REPLAY_NOT_RUN_SOURCE_UNAVAILABLE",
+    "SCIENTIFIC_OUTCOME_ACCESS_NONE"
+  ],
+  "qa_packet": "docs/programmes/bcwt-v0-1/r3/wp3/BCWT_R3_WP3_QA_v0_1.json",
   "decision_record": "docs/programmes/bcwt-v0-1/r3/g0/BCWT_R3_G0_OPERATOR_DECISION_v0_1.json",
   "freeze_manifest": "docs/programmes/bcwt-v0-1/r3/g0/BCWT_R3_G0_CANDIDATE_FREEZE_MANIFEST_v0_1.json",
   "merge_commit": null,
-  "blockers": [],
-  "next_packet": "BCWT-R3-WP3",
+  "blockers": [
+    {
+      "id": "BCWT-R3-WP3-BLOCKER-EXACT-OPGS-R3-SOURCE-0001",
+      "path": "docs/programmes/bcwt-v0-1/r3/wp3/BCWT_R3_WP3_SOURCE_RECOVERY_BLOCKER_v0_1.json",
+      "reason": "Exact frozen OPGS-R3 5,238-account transition payload with D10/D12/D14/D15/D16/D17 evidence is not currently reproducible from accessible durable artifacts."
+    }
+  ],
+  "next_packet": "BCWT-R3-WP3_SOURCE_RECOVERY_RESUME",
   "active_stack_effect": "NONE",
   "opt_c_activation": "DENIED",
   "opt_d_activation": "DENIED",
   "scientific_execution": "DENIED_PENDING_BCWT-R3-G1",
   "candidate_freeze": "FROZEN_BY_BCWT-R3-G0_PASS",
   "candidate_evaluation_admission": "NOT_GRANTED",
-  "g0_operator_decision_at": "2026-09-14T15:20:00+01:00"
+  "g0_operator_decision_at": "2026-09-14T15:20:00+01:00",
+  "wp3_authority_source": "OVC CONTINUE BCWT-R3-WP3",
+  "wp3_prepared_surface": [
+    "src/ovc/research_operations/bcwt/candidate.py",
+    "schemas/research_operations/bcwt/v0_1/candidate_membership_ledger.schema.json",
+    "contracts/research_operations/bcwt/BCWT_R3_CANDIDATE_MEMBERSHIP_COMPILER_CONTRACT_v0_1.md",
+    "fixtures/research_operations/bcwt/v0_1/candidate_membership_rows.json",
+    "tests/research_operations/bcwt/test_bcwt_r3_candidate_membership.py"
+  ]
 }
