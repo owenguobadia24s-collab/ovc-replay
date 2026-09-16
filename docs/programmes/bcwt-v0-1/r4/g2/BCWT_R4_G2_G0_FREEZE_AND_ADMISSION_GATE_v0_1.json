@@ -1,0 +1,31 @@
+{
+  "schema": "ovc-bcwt-r4-g2-freeze-admission-gate/v0_1",
+  "programme_id": "OVC-BCWT-v0.1",
+  "gate_id": "BCWT-R4-G2-G0",
+  "title": "Generation-2 Task-Invariant Semantic Freeze and CandidateEvaluationAdmission",
+  "baseline_main": "eea59905d76181e0205a7d4b053c63296e570f03",
+  "branch": "build/bcwt-r4-consequence-20260916",
+  "authority_source": "BCWT-R4-G0 operator SUPERSEDE authorizes proposal/assurance only",
+  "proposal": "docs/programmes/bcwt-v0-1/r4/g2/BCWT_R4_GENERATION_2_SEMANTIC_REPAIR_PROPOSAL_v0_1.json",
+  "qa": "docs/programmes/bcwt-v0-1/r4/g2/BCWT_R4_GENERATION_2_SEMANTIC_REPAIR_QA_v0_1.json",
+  "current_authority": "PRE_OUTCOME_GENERATION_2_REPAIR_PROPOSAL_ONLY",
+  "proposed_delta": "Freeze BCWT-ORG-RECONFIGURATION generation 2 with unchanged generation-1 candidate membership and exact TASK_ORGANISATIONAL_SIGNATURE_V0_1 consequence predicate, then grant CandidateEvaluationAdmission only for the prebound R4 envelope.",
+  "acceptance_conditions": {
+    "generation_1_history_append_only": true,
+    "generation_1_membership_identity_preserved": "5ea4c39f2433c539ed1d770197d6e488a8afdc659b862f150585a921b75b8d2c",
+    "task_projection_exact": true,
+    "task_equality_exact": true,
+    "missingness_fail_closed": true,
+    "synthetic_metamorphic_assurance": "PASS_8_OF_8",
+    "scientific_outcome_access_before_gate": "NONE"
+  },
+  "warnings": [
+    "Generation 2 changes consequence semantics and therefore requires explicit operator freeze/admission.",
+    "PASS authorizes only the exact prebound BCWT-R4 consequence execution. It does not activate OPT-C/OPT-D, ACTIVE_* states, probability, risk, exposure, trading, execution or agent-write authority."
+  ],
+  "rollback": "Leave generation 2 proposal-only and preserve generation 1 historical records if not approved.",
+  "recommendation": "PASS",
+  "allowed_decisions": ["PASS","DEFER","BLOCK","QUARANTINE","SUPERSEDE"],
+  "exact_post_approval_work": "Materialise generation-2 freeze and admission record, then compute only the frozen neutral BCWT-R4 consequence ledger at H4/H8/H16/H32 with source-break/release-end/insufficient-future-bar censoring, run complete denominator/dependence/support QA, and stop at any later operator-reserved promotion or claim gate.",
+  "authority_effect": "NONE_PENDING_OPERATOR_DECISION"
+}

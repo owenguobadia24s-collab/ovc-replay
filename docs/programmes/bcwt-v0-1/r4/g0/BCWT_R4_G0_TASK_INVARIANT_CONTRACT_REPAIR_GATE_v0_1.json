@@ -1,0 +1,51 @@
+{
+  "schema": "ovc-bcwt-r4-g0-contract-repair-gate/v0_1",
+  "programme_id": "OVC-BCWT-v0.1",
+  "packet_id": "BCWT-R4",
+  "gate_id": "BCWT-R4-G0",
+  "title": "Task-Invariant Predicate Contract Repair / Successor-Generation Authority",
+  "baseline_main": "eea59905d76181e0205a7d4b053c63296e570f03",
+  "branch": "build/bcwt-r4-consequence-20260916",
+  "completed_packets": ["BCWT-R3-CLOSEOUT","BCWT-R3-G1"],
+  "current_authority": "ADMIT_C_FOR_BCWT-ORG-RECONFIGURATION_GENERATION_1_AND_EXACT_PREBOUND_R4_ENVELOPE_ONLY",
+  "blocking_record": "docs/programmes/bcwt-v0-1/r4/BCWT_R4_PREEXECUTION_CONTRACT_PREFLIGHT_v0_1.json",
+  "proposed_delta": "SUPERSEDE_THE_INCOMPLETE_GENERATION_1_CONSEQUENCE_ENVELOPE_FORWARD_WITH_A_SUCCESSOR_RESEARCHCANDIDATEGENERATION_REPAIR_PROCESS_BEFORE_ANY_R4_OUTCOME_ACCESS",
+  "acceptance_conditions": {
+    "no_r4_scientific_consequence_rows_computed": true,
+    "g0_g1_generation_1_history_preserved_append_only": true,
+    "exact_wp3_membership_ledger_preserved": true,
+    "missing_definition_confirmed": "TASK_INVARIANT_PRESERVED_AT_H lacks an exact frozen task-invariant projection/equality predicate",
+    "dmrp_material_change_rule": "changed semantics require a new ResearchCandidateGeneration; ambiguous material-change cases fail toward a new generation"
+  },
+  "tests_and_qa": {
+    "moc_r1_source_pack_available": "PASS",
+    "whole_observer_reference_available": "PASS_5245_STATES",
+    "bar_replay_reference_available": "PASS_19090_BARS",
+    "c0b_source_identity": "PASS_SHA256_b820edad67f54fbbb41e8f114a346cc5d71b6525d18e8633d9f00bacd5c7db07",
+    "wp3_membership_identity": "PASS_SHA256_5ea4c39f2433c539ed1d770197d6e488a8afdc659b862f150585a921b75b8d2c",
+    "primary_outcome_predicate_completeness": "FAIL_MISSING_LOAD_BEARING_SEMANTICS",
+    "outcome_access": "NONE"
+  },
+  "warnings": [
+    "BCWT-R3-G1 PASS remains a valid historical decision for generation 1, but it cannot make an undefined predicate executable.",
+    "Defining the predicate now in place would violate the G0 freeze and DMRP hindsight firewall.",
+    "A successor-generation repair must itself be frozen before scientific consequence access; prior membership evidence may be reused only where the successor definition explicitly preserves it."
+  ],
+  "unresolved_issues": [
+    "Exact task-invariant projection fields are not frozen.",
+    "Exact equality/preservation semantics are not frozen.",
+    "Unavailable/partially evaluable horizon-state treatment for the task invariant is not frozen."
+  ],
+  "rollback": "Keep BCWT-ORG-RECONFIGURATION generation 1, G0/G1 decisions, WP3 membership, source artifacts and R3 merge immutable. Do not compute R4 consequences under generation 1. If this gate is not approved, leave BCWT-R4 blocked.",
+  "recommendation": "SUPERSEDE",
+  "allowed_decisions": ["PASS","DEFER","BLOCK","QUARANTINE","SUPERSEDE"],
+  "decision_semantics": {
+    "SUPERSEDE": "Authorize a bounded successor ResearchCandidateGeneration repair cycle, pre-outcome, to define the missing task-invariant predicate and then return to a separate operator freeze/admission gate before consequence execution.",
+    "DEFER": "Preserve the blocker and await an externally supplied exact predicate definition; no R4 consequence access.",
+    "BLOCK": "Terminate this R4 route under the current candidate lineage; preserve all prior evidence.",
+    "QUARANTINE": "Isolate the R4 consequence design pending broader audit; no consequence access.",
+    "PASS": "Not recommended because there is no exact semantic delta to pass without first creating a successor predicate definition."
+  },
+  "exact_post_decision_work_if_supersede": "Create generation-2 pre-evidentiary semantic-repair proposal only; bind an exact task-invariant projection/equality/missingness rule using pre-outcome owner fields; run synthetic/metamorphic tests; prepare a separate operator freeze/admission gate. Do not compute any R4 scientific outcome before that later PASS.",
+  "authority_effect": "NONE_PENDING_OPERATOR_DECISION"
+}

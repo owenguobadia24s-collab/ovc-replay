@@ -1,0 +1,41 @@
+{
+  "schema": "ovc-bcwt-r4-generation-2-semantic-repair-proposal/v0_1",
+  "programme_id": "OVC-BCWT-v0.1",
+  "proposal_id": "BCWT-ORG-RECONFIGURATION:2-PROPOSED",
+  "status": "PRE_EVIDENTIARY_PROPOSAL_ONLY",
+  "parent_generation": "BCWT-ORG-RECONFIGURATION:1",
+  "supersession_basis": "BCWT-R4-G0 SUPERSEDE",
+  "candidate_membership_change": "NONE_PROPOSED",
+  "membership_inheritance": {
+    "ledger_sha256": "5ea4c39f2433c539ed1d770197d6e488a8afdc659b862f150585a921b75b8d2c",
+    "counts": {"MATCH":425,"NON_MATCH":2964,"AMBIGUOUS":1544,"NOT_EVALUABLE":305},
+    "rule": "Generation 2 proposes to inherit generation-1 candidate membership byte-for-byte because the repair changes only the task-specific consequence predicate. Any later candidate-membership change requires a different successor proposal."
+  },
+  "task_invariant": {
+    "name": "TASK_ORGANISATIONAL_SIGNATURE_V0_1",
+    "owner_surface": "returned whole-observer state AOSC-WHOLE-STATE-SUCCESSOR-0.2",
+    "projection": {
+      "Gamma_t": ["status","current_family","relation.current.code","relation.current.layer","relation.current.polarity"],
+      "Z_t": ["status","masking_regime when AVAILABLE","regime when AVAILABLE","current_masking_family when AVAILABLE","initial_concealer_family when AVAILABLE"],
+      "S_t": ["normalized unordered candidate multiset of side,stage,dominance_state,H4_overlap,H8_overlap,support_depth,expiry_critical"],
+      "Phi_t": ["status","phase_t when AVAILABLE","coupling.status","coupling.handover_ready"]
+    },
+    "explicit_exclusions": [
+      "observer_state_id and all content-address IDs",
+      "track_id, seq, track_age, depth_age and price-component coordinates",
+      "viability scalar and other post-hoc/non-task numeric scores",
+      "future price or consequence fields"
+    ],
+    "equality_rule": "PRESERVED iff anchor and horizon task signatures are both evaluable and exactly equal after canonical projection; otherwise exact inequality is RECONFIGURED.",
+    "missingness_rule": "Source break is CENSORED. Gamma statuses AVAILABLE/NONE/SOURCE_BREAK are comparable typed states; Z AVAILABLE/NOT_ESTABLISHED are comparable typed states; S must be AVAILABLE with a valid candidate list; Phi AVAILABLE/NOT_EVALUABLE are comparable typed states. Any other required-component state is NOT_EVALUABLE, never coerced to preserved or reconfigured.",
+    "horizon_sampling": "Retain frozen R3 rule: at H in {4,8,16,32} observed bars, use the last lawful current-segment returned observer state available as-of the horizon bar; source break/release end/insufficient future bars censor."
+  },
+  "decision_surface_unchanged": {
+    "horizons": [4,8,16,32],
+    "primary_effect": "fraction TASK_INVARIANT_PRESERVED_AT_H in NON_MATCH minus same fraction in MATCH",
+    "support_floor": "each binary class >=32 evaluable origins and >=4 source segments",
+    "materiality_margin_absolute_fraction": 0.10
+  },
+  "scientific_outcome_access": "NONE",
+  "authority_effect": "NONE_PENDING_SEPARATE_OPERATOR_FREEZE_AND_ADMISSION"
+}
