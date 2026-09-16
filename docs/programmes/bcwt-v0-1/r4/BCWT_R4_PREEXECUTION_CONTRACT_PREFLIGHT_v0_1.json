@@ -1,0 +1,47 @@
+{
+  "schema": "ovc-bcwt-r4-preexecution-contract-preflight/v0_1",
+  "programme_id": "OVC-BCWT-v0.1",
+  "packet_id": "BCWT-R4",
+  "baseline_main": "eea59905d76181e0205a7d4b053c63296e570f03",
+  "branch": "build/bcwt-r4-consequence-20260916",
+  "authority_source": "OVC APPROVE BCWT-R3-G1",
+  "authority_scope": "PREBOUND_BCWT_R4_CONSEQUENCE_PROTOCOL_ONLY",
+  "status": "BLOCKED_BEFORE_CONSEQUENCE_ACCESS",
+  "source_preflight": {
+    "moc_r1_pack_drive_id": "15LHXgVWBfaewOIGjKrdCmtUUZ5QmXl9P",
+    "moc_r1_pack_sha256": "80ffc30a547d875fe5a31e065d130f4afdeddd0cb9ab5dd05826369f3bbf28c5",
+    "whole_observer_state_count": 5245,
+    "whole_observer_state_sha256": "56013c2438808cd2bf1e643276fa40f94bf171aaed8a1e5f8bcff40e918a6826",
+    "bar_replay_count": 19090,
+    "bar_replay_index_sha256": "6a1191c997b838c5e025c6ece3dbf1b8d16e53e3dbdf4e5f27d07e7ad30839bc",
+    "c0b_source_sha256": "b820edad67f54fbbb41e8f114a346cc5d71b6525d18e8633d9f00bacd5c7db07",
+    "wp3_membership_ledger_sha256": "5ea4c39f2433c539ed1d770197d6e488a8afdc659b862f150585a921b75b8d2c",
+    "wp3_opportunity_count": 5238,
+    "source_material_available": true
+  },
+  "frozen_consequence_surface": {
+    "horizons_observed_bars": [4, 8, 16, 32],
+    "primary_structural_measure": "TASK_INVARIANT_PRESERVED_AT_H",
+    "primary_measure_sampling_rule": "At each horizon, use the last lawful current-segment returned observer state available as-of the horizon bar; compare the same frozen task invariant; source break/release end censors.",
+    "secondary_structural_measures": ["FIRST_EXPLICIT_RECONFIGURATION_OFFSET_OBSERVED_BARS", "OBSERVER_REVISION_COUNT"],
+    "neutral_path_measures": ["SIGNED_DISPLACEMENT_TICKS", "ABSOLUTE_DISPLACEMENT_TICKS", "MAX_UP_EXCURSION_TICKS", "MAX_DOWN_EXCURSION_TICKS", "OBSERVED_RANGE_TICKS"]
+  },
+  "contract_gap": {
+    "id": "BCWT-R4-BLOCKER-TASK-INVARIANT-PREDICATE-0001",
+    "missing_required_definition": "No frozen repository or controlling G0 record defines the exact task-invariant projection/equality predicate that maps an origin whole-observer state and an as-of-horizon whole-observer state to TASK_INVARIANT_PRESERVED_AT_H.",
+    "r1_requirement": "BCWT-R1 states that a later ObserverTaskPredicatePack may define invariant-preserved-at-horizon only after its predicates and first-valid semantics are frozen in BCWT-R3.",
+    "r3_record_observation": "BCWT-R3-G0 freezes the measure name and horizon sampling rule but does not define the task-invariant fields, canonical projection, unavailable-state treatment, or equality/preservation rule.",
+    "why_execution_is_forbidden": "Choosing those semantics after G1 and after scientific consequence access would be a material frozen-contract semantic change and could make the primary outcome post-hoc. The G1 authority grants execution only inside the exact prebound envelope; it does not grant semantic completion or amendment.",
+    "consequence_access": "NONE_R4_SCIENTIFIC_ROWS_COMPUTED"
+  },
+  "lawful_disposition": "BLOCK",
+  "smallest_lawful_resolution": "Operator-governed successor semantic amendment: explicitly define and freeze the task-invariant projection/equality and missingness semantics before any R4 consequence payload is computed. Because this changes a load-bearing frozen consequence predicate, preserve generation 1 and G0/G1 history append-only and issue the required successor/amendment authority rather than silently filling the gap.",
+  "non_grants_preserved": [
+    "no post-outcome predicate selection",
+    "no semantic/threshold/model/family/theory promotion",
+    "no OPT-C/OPT-D activation",
+    "no ACTIVE_* state",
+    "no probability/risk/exposure/trading/execution authority"
+  ],
+  "authority_effect": "NONE_BLOCKER_RECORD_ONLY"
+}
