@@ -1,0 +1,40 @@
+{
+  "schema": "ovc-prvit-plan-identity/v0.1",
+  "plan_id": "OVC-PRVIT-PCCA-v0.1-PROPOSED",
+  "programme_id": "OVC-PRVIT-PIPELINE-CONFORMANCE-CORRECTIVE-AUDIT-v0.1",
+  "title": "OVC PR/VIT Pipeline Conformance & Corrective Audit v0.1",
+  "status": "GATE_READY_PENDING_OPERATOR_RATIFICATION",
+  "execution_mode_if_approved": "READ_ONLY_SHADOW",
+  "authority_delta_if_approved": "NONE",
+  "live_path_mutation_allowed": false,
+  "proposal_artifacts": {
+    "design_plan_docx": {
+      "filename": "OVC_PR_VIT_Pipeline_Conformance_and_Corrective_Audit_v0_1_PROPOSED.docx",
+      "sha256": "1e262a77b9e7480cb3950c8317dc4f64ed91646ce6a0458eb3257f163e0a8492"
+    },
+    "machine_manifest": {
+      "filename": "OVC_PR_VIT_Pipeline_Conformance_and_Corrective_Audit_v0_1_manifest.json",
+      "sha256": "482c761e987946ef5c100a5e50f57e18da74a3bb4d2669c8a4fad96763e979a8"
+    }
+  },
+  "governing_sources": [
+    {"id":"DSAI_V0_3_VIT_DESIGN","sha256":"1755d8e0eac857ff2b741b00e014250913ed919402555d08abe79616748fcc4e"},
+    {"id":"DSAI_V0_3_VIT_CONFORMANCE_PLAN_R1_RATIFIED","sha256":"6ea429c0150f837ccf0619085896b3b7b7156b4e3c194619dd89b0254355f15f"},
+    {"id":"GRT_V0_2_REPOSITORY_CONSTITUTION_R1_RATIFIED","sha256":"bee3b1d9095a5f45f141abae550af35acb1a2aceca1bee555e59ddd2a19de9d7"},
+    {"id":"GRT_V0_2_CONFORMANCE_PLAN_RATIFIED","sha256":"c81e1368f4e25c77906d378772379b04910b5c8f93fc9b21f988749602a9bedb"}
+  ],
+  "work_packets": ["PRVIT-WP0","PRVIT-WP1","PRVIT-WP2","PRVIT-WP3","PRVIT-WP4","PRVIT-WP5","PRVIT-WP6","PRVIT-WP7","PRVIT-WP8"],
+  "auto_gates_after_g0": ["PRVIT-G1","PRVIT-G2","PRVIT-G3","PRVIT-G4","PRVIT-G5","PRVIT-G6","PRVIT-G7"],
+  "operator_gates": ["PRVIT-G0","PRVIT-G-CUTOVER-READINESS"],
+  "final_boundary": "PRVIT-G-CUTOVER-READINESS",
+  "ratification_effect": "AUTHORISE_BOUNDED_SHADOW_AUDIT_ONLY",
+  "explicit_non_effects": [
+    "NO_LIVE_WORKFLOW_CHANGE",
+    "NO_REQUIRED_CHECK_CHANGE",
+    "NO_RULESET_CHANGE",
+    "NO_LIVE_VIT_SIQ_GRT_ADMISSION_CHANGE",
+    "NO_PHYSICAL_MAIN_WRITE_AUTHORITY",
+    "NO_PR1106_REAL_SOURCE_AUTHORITY_CONSUMPTION",
+    "NO_FORCE_PUSH_OR_HISTORY_REWRITE"
+  ]
+}
