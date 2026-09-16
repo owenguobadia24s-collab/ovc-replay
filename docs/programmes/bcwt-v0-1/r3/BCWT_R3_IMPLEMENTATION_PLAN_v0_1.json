@@ -7,35 +7,21 @@
   "baseline_commit": "e278ecc32010f2fe6b416790f5acfb41cc2ab38e",
   "wp3_baseline_commit": "2ddc41ee419f0d6978da3b907c841a81e13d90ae",
   "branch": "build/bcwt-r3-wp3-20260914",
-  "operator_authority_source": "OVC RUN BCWT-R3 + OVC APPROVE BCWT-R3-G0 + OVC CONTINUE BCWT-R3-WP3",
+  "operator_authority_source": "OVC RUN BCWT-R3 + OVC APPROVE BCWT-R3-G0 + OVC CONTINUE",
   "purpose": "Bind one exact whole-observer task, candidate definition, source/population, neutral consequence surface, comparators, dependence treatment, support rules and decision rules before any scientific C payload is viewed.",
-  "prerequisites": [
-    "BCWT-R2_COMPLETED_MAIN_e278ecc32010f2fe6b416790f5acfb41cc2ab38e",
-    "OVC-BCWT-BREF-0.1_ARCHIVED_STATE_L0_CLOSED_EXACT_BYTES",
-    "OVC-BCWT-BREF-0.1_ARCHIVED_INTERFACE_L1_CLOSED_CONDITIONAL",
-    "DMRP_REVISED_2_RATIFIED_DESIGN_CANON"
-  ],
+  "prerequisites": ["BCWT-R2_COMPLETED_MAIN_e278ecc32010f2fe6b416790f5acfb41cc2ab38e","OVC-BCWT-BREF-0.1_ARCHIVED_STATE_L0_CLOSED_EXACT_BYTES","OVC-BCWT-BREF-0.1_ARCHIVED_INTERFACE_L1_CLOSED_CONDITIONAL","DMRP_REVISED_2_RATIFIED_DESIGN_CANON"],
   "work_packages": [
     {"id":"R3-WP0","title":"court-record/source/exposure preflight","authority":"AUTO_EXECUTABLE","status":"COMPLETE"},
     {"id":"R3-WP1","title":"task and candidate preregistration proposal","authority":"AUTO_EXECUTABLE_PREPARATION_ONLY","status":"COMPLETE"},
     {"id":"R3-WP2","title":"source, consequence, comparator, dependence and support binding","authority":"AUTO_EXECUTABLE_PREPARATION_ONLY","status":"COMPLETE"},
     {"id":"R3-G0","title":"semantic/candidate preregistration freeze","authority":"OPERATOR_REQUIRED","status":"APPROVED","decision_record":"docs/programmes/bcwt-v0-1/r3/g0/BCWT_R3_G0_OPERATOR_DECISION_v0_1.json"},
-    {"id":"R3-WP3","title":"post-freeze deterministic candidate compiler and complete membership ledger","authority":"AUTO_EXECUTABLE_AFTER_G0_PASS","status":"BLOCKED","blocker":"docs/programmes/bcwt-v0-1/r3/wp3/BCWT_R3_WP3_SOURCE_RECOVERY_BLOCKER_v0_1.json"},
-    {"id":"R3-G1","title":"CandidateEvaluationAdmission / ADMIT_C","authority":"OPERATOR_REQUIRED","status":"NOT_YET_ELIGIBLE"},
+    {"id":"R3-WP3","title":"post-freeze deterministic candidate compiler and complete membership ledger","authority":"AUTO_EXECUTABLE_AFTER_G0_PASS","status":"COMPLETE","result":"docs/programmes/bcwt-v0-1/r3/wp3/BCWT_R3_WP3_EXACT_SOURCE_RECOVERY_AND_MEMBERSHIP_RESULT_v0_1.json","qa":"docs/programmes/bcwt-v0-1/r3/wp3/BCWT_R3_WP3_QA_v0_1.json"},
+    {"id":"R3-G1","title":"CandidateEvaluationAdmission / ADMIT_C","authority":"OPERATOR_REQUIRED","status":"GATE_READY"},
     {"id":"R3-CLOSEOUT","title":"R3 closeout and R4 handoff","authority":"AUTO_EXECUTABLE_AFTER_REQUIRED_GATES","status":"NOT_STARTED"}
   ],
   "g0_freeze_manifest": "docs/programmes/bcwt-v0-1/r3/g0/BCWT_R3_G0_CANDIDATE_FREEZE_MANIFEST_v0_1.json",
-  "wp3_blocker": "docs/programmes/bcwt-v0-1/r3/wp3/BCWT_R3_WP3_SOURCE_RECOVERY_BLOCKER_v0_1.json",
-  "wp3_status_note": "Compiler/schema/contract/synthetic fixtures/tests are prepared outcome-blind, but the exact frozen OPGS-R3 5,238-account source payload required for complete membership compilation is not currently recoverable from repository, Drive or File Library. No substitute or inferred D10/D12/D14/D15/D16/D17 payload is lawful.",
-  "reserved_actions_not_granted": [
-    "CandidateEvaluationAdmission/ADMIT_C",
-    "real-source consequence execution",
-    "OPT-C.NEXT or OPT-D.NEXT activation",
-    "ACTIVE_DISCOVERY, ACTIVE_DEVELOPMENT or ACTIVE_VALIDATION",
-    "semantic/threshold/model/family/candidate/theory promotion beyond the exact G0-frozen generation",
-    "new provider/instrument/market/clock/side or undeclared dependency",
-    "canonical/R2 publication or new immutable release identity outside the approved candidate freeze",
-    "probability/risk/exposure/E-H/trading/execution/agent-write authority"
-  ],
-  "rollback": "Preserve the G0 PASS and frozen semantic bytes append-only. Preserve WP3 prepared deterministic implementation and blocker evidence. Any semantic correction requires a successor ResearchCandidateGeneration; never rewrite frozen history."
+  "wp3_prior_blocker": "docs/programmes/bcwt-v0-1/r3/wp3/BCWT_R3_WP3_SOURCE_RECOVERY_BLOCKER_v0_1.json",
+  "wp3_status_note": "Exact OPGS-R3 source recovered and hash-verified; complete outcome-blind 5,238-row membership ledger compiled and placed under Laboratory custody. No consequence payload accessed.",
+  "reserved_actions_not_granted": ["CandidateEvaluationAdmission/ADMIT_C","real-source consequence execution","OPT-C.NEXT or OPT-D.NEXT activation","ACTIVE_DISCOVERY, ACTIVE_DEVELOPMENT or ACTIVE_VALIDATION","semantic/threshold/model/family/candidate/theory promotion beyond the exact G0-frozen generation","new provider/instrument/market/clock/side or undeclared dependency","canonical/R2 publication or new immutable release identity outside the approved candidate freeze","probability/risk/exposure/E-H/trading/execution/agent-write authority"],
+  "rollback": "Preserve the G0 PASS and frozen semantic bytes append-only. Preserve exact WP3 source, ledger, custody and QA. G1 remains operator-required before any consequence access."
 }
