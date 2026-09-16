@@ -1,0 +1,60 @@
+{
+  "schema": "ovc-bcwt-r3-g1-operator-decision/v0_1",
+  "programme_id": "OVC-BCWT-v0.1",
+  "packet_id": "BCWT-R3",
+  "gate_id": "BCWT-R3-G1",
+  "gate_title": "CandidateEvaluationAdmission / ADMIT_C",
+  "plan_id": "OVC-BCWT-R3-OBSERVER-TASK-AND-SCIENTIFIC-PREREGISTRATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "decision": "PASS",
+  "operator_instruction": "OVC APPROVE BCWT-R3-G1",
+  "operator_decision_at": "2026-09-16T16:26:00+01:00",
+  "authority_source": [
+    "OVC RUN BCWT-R3",
+    "OVC APPROVE BCWT-R3-G0",
+    "OVC CONTINUE",
+    "OVC APPROVE BCWT-R3-G1"
+  ],
+  "baseline_main": "2ddc41ee419f0d6978da3b907c841a81e13d90ae",
+  "gate_ready_branch_head": "5b6fe9d1202b0031e67cd6d7c554e97ae820cff2",
+  "gate_packet": "docs/programmes/bcwt-v0-1/r3/g1/BCWT_R3_G1_GATE_PACKET_v0_1.json",
+  "wp3_qa": "docs/programmes/bcwt-v0-1/r3/wp3/BCWT_R3_WP3_QA_v0_1.json",
+  "frozen_candidate": {
+    "series_id": "BCWT-ORG-RECONFIGURATION",
+    "generation": 1,
+    "semantic_payload_commit": "394c738c9b94dc1359afe6b4e21013dbaf66b984",
+    "membership_ledger_sha256": "5ea4c39f2433c539ed1d770197d6e488a8afdc659b862f150585a921b75b8d2c",
+    "opportunity_count": 5238,
+    "match_count": 425,
+    "non_match_count": 2964,
+    "ambiguous_count": 1544,
+    "not_evaluable_count": 305
+  },
+  "authority_delta": "ADMIT_C_FOR_EXACT_G0_FROZEN_GENERATION_AND_PREBOUND_BCWT_R4_CONSEQUENCE_PROTOCOL_ONLY",
+  "grants": [
+    "CandidateEvaluationAdmission / ADMIT_C for BCWT-ORG-RECONFIGURATION generation 1",
+    "access and execution of the prebound BCWT-R4 consequence protocol at horizons 4, 8, 16 and 32 observed bars",
+    "explicit prebound censoring, dependence accounting and comparator evaluation required by the frozen protocol"
+  ],
+  "non_grants": [
+    "no candidate semantic or threshold change",
+    "no model/family/theory promotion",
+    "no OPT-C or OPT-D activation",
+    "no ACTIVE_DISCOVERY, ACTIVE_DEVELOPMENT or ACTIVE_VALIDATION",
+    "no new provider, instrument, market, clock, price side or undeclared dependency",
+    "no probability calibration or probability authority",
+    "no risk, exposure, E-H, trading, execution or agent-write authority",
+    "no canonical/R2 publication or new immutable release identity beyond the existing frozen candidate"
+  ],
+  "acceptance_basis": {
+    "exact_source_identity": "PASS",
+    "exact_5238_transition_stream": "PASS",
+    "complete_membership_ledger": "PASS",
+    "zero_silent_missing_rows": "PASS",
+    "outcome_blindness_before_g1": "PASS",
+    "laboratory_custody": "FILED_VERIFIED",
+    "blocking_warnings": []
+  },
+  "rollback": "Revoke future scientific execution by stopping before any successor authority; preserve G0 frozen semantics, WP3 source/ledger/QA and this G1 decision append-only. Any semantic correction requires a successor ResearchCandidateGeneration rather than rewriting this approval.",
+  "next_authorized_work": "Record G1 PASS, integrate the completed R3 packet when repository assurance is green, then execute only the prebound BCWT-R4 consequence protocol on a fresh bounded branch from lawful main."
+}

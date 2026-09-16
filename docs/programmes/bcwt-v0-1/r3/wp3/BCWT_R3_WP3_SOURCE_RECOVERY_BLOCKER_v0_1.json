@@ -1,0 +1,73 @@
+{
+  "schema": "ovc-bcwt-r3-wp3-blocker/v0_1",
+  "programme_id": "OVC-BCWT-v0.1",
+  "packet_id": "BCWT-R3-WP3",
+  "plan_id": "OVC-BCWT-R3-OBSERVER-TASK-AND-SCIENTIFIC-PREREGISTRATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "BLOCKED",
+  "blocker_id": "BCWT-R3-WP3-BLOCKER-EXACT-OPGS-R3-SOURCE-0001",
+  "authority_source": "OVC CONTINUE",
+  "baseline_main": "2ddc41ee419f0d6978da3b907c841a81e13d90ae",
+  "branch": "build/bcwt-r3-wp3-20260914",
+  "frozen_candidate": {
+    "series_id": "BCWT-ORG-RECONFIGURATION",
+    "generation": 1,
+    "opportunity_universe_count": 5238,
+    "required_transition_stream_sha256": "86ea8dafdf7183ebf19c4b5c6d208f1f34f035d3a557c35ccbeef4efa5326d07"
+  },
+  "required_source": {
+    "reference_generation": "OPGS-R3-REF-0.1",
+    "required_object": "complete 5,238-row OrganisationalTransitionAccount stream with exact D10/D12/D14/D15/D16/D17 evidence and source/FVT identity",
+    "r3_compiler_freeze_id": "dbe7364a3d996017d66e321c85a99462854656c10129e5d7fc10bade51cf78f7",
+    "integrated_r3_research_package_freeze": "f3445dc944a22139c6f4734b0e6b81e06d384974285eabe3d82b5887a7ffce83"
+  },
+  "recovery_evidence": {
+    "pmm_source_binding_drive_id": "1O0O80Ystc3S_dg9dwKLUNVu3mVkQjK85",
+    "parent_opgs_archive_filename": "OVC_OPGS_R2_Frozen_Compiler_and_Pressure_Test_v0_1_REVISED_1(1)(1)(4).zip",
+    "parent_opgs_archive_sha256": "9ec795484cdc1358fb8ede4ad222c5fc70e01a4e4012b4083b57c21c8b10e8ca",
+    "parent_opgs_archive_drive_id": "1WY5Dr26Wpyfy3S3OLOCd4pWBrWTfQk8s",
+    "parent_opgs_archive_recovery": "RECOVERED_AND_HASH_VERIFIED",
+    "parent_release_verification": "PASS_ALL_41_DELIVERY_FILES_AND_BOTH_COMPILER_MANIFESTS",
+    "parent_snapshot_stream_sha256": "c61c03236c03ba0b2fd284ef85673aceee78ded3cff8c4b5206f01eafb0ea449",
+    "parent_compiler_sha256": "fa396352d89202a10412d6278a45e6371ecdaa41ed2e5154b18ae64c15b2df96",
+    "parent_rules_sha256": "3fc3231d658e282116b5eca721f76413499c29392a8edf7a5b7e0e54940fe001",
+    "standalone_machinery_filename": "OPGS_STANDALONE_MACHINERY_FREEZE_v0_1_2026-09-16(1).zip",
+    "standalone_machinery_sha256": "11fa28ecbb9dc995b2f5c489a43841a64d9256a6641f8ef97935f9f55f219408",
+    "standalone_machinery_drive_id": "1YPTKtP1_Y6SSVXV31RSzuCtaSYJQ7vOG",
+    "r3_extracted_subarchive_sha256": "1bd374b8ff4d9b42935d70a691d16f27d728edd0b1630e0526598e70693871aa",
+    "r3_extracted_freeze_standing": "CONTRACT_EXTRACTED_WITH_REFERENCE_HARNESS__EXACT_HISTORICAL_EXECUTABLE_NOT_RECOVERED",
+    "current_recovery_result": "EXACT_PARENT_R2_ARCHIVE_RECOVERED__EXACT_R3_EXECUTABLE_AND_5238_ACCOUNT_STREAM_STILL_UNRECOVERED"
+  },
+  "continuation_reinspection_2026_09_16": {
+    "operator_instruction": "OVC CONTINUE",
+    "repository_main": "2ddc41ee419f0d6978da3b907c841a81e13d90ae",
+    "recovery_update_record": "docs/programmes/bcwt-v0-1/r3/wp3/BCWT_R3_WP3_SOURCE_RECOVERY_UPDATE_2026_09_16_v0_1.json",
+    "resolution_status": "PARTIAL_RECOVERY_BLOCKER_REMAINS"
+  },
+  "partial_recovery": {
+    "observer_replay_drive_id": "1fY4FeY0SKsM_Wr-AW5QoZa7nq9SxTJI4",
+    "observer_replay_title": "OVC_Observer_Replay_v0_1.html",
+    "embedded_structural_snapshots": 5245,
+    "standing": "INSUFFICIENT_FOR_WP3_MEMBERSHIP_COMPILATION",
+    "reason": "The simplified replay does not contain the exact historical R3 OrganisationalTransitionAccount D01-D20 payload, and the newly recovered standalone R3 extraction explicitly marks its helper as a contract-derived reference harness rather than the missing historical compiler."
+  },
+  "prepared_work": [
+    "src/ovc/research_operations/bcwt/candidate.py",
+    "schemas/research_operations/bcwt/v0_1/candidate_membership_ledger.schema.json",
+    "contracts/research_operations/bcwt/BCWT_R3_CANDIDATE_MEMBERSHIP_COMPILER_CONTRACT_v0_1.md",
+    "fixtures/research_operations/bcwt/v0_1/candidate_membership_rows.json",
+    "tests/research_operations/bcwt/test_bcwt_r3_candidate_membership.py"
+  ],
+  "prohibited_substitutions": [
+    "infer D10/D12/D14/D15/D16/D17 from prose",
+    "substitute 2016 or other fresh OPGS transition populations for the frozen C0B population",
+    "treat simplified OBR percept snapshots as byte-equivalent R3 transition accounts",
+    "treat the contract-derived standalone transition harness as the historical OPGS-R3-REF-0.1 executable",
+    "access BCWT consequence/outcome payloads",
+    "coerce unavailable rows into MATCH or NON_MATCH"
+  ],
+  "smallest_lawful_resolution": "Recover the exact frozen OPGS R3 transition stream, or recover the exact historical OPGS-R3-REF-0.1 executable/replay package needed to deterministically rematerialise that stream from the now-recovered exact R2 parent archive and verify the frozen 5,238-row identity/hash. Then resume WP3, compile the complete outcome-blind ledger, run deterministic/FVT/denominator/counterevidence/source QA, and prepare G1.",
+  "g1_state": "NOT_ELIGIBLE",
+  "scientific_consequence_access": "DENIED",
+  "authority_effect": "NONE"
+}

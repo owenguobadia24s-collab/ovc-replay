@@ -1,0 +1,71 @@
+{
+  "schema": "ovc-bcwt-r3-g1-gate-packet/v0_1",
+  "gate_id": "BCWT-R3-G1",
+  "title": "CandidateEvaluationAdmission / ADMIT_C",
+  "plan_id": "OVC-BCWT-R3-OBSERVER-TASK-AND-SCIENTIFIC-PREREGISTRATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "baseline_main": "2ddc41ee419f0d6978da3b907c841a81e13d90ae",
+  "gate_packet_branch": "build/bcwt-r3-wp3-20260914",
+  "frozen_semantic_candidate_commit": "394c738c9b94dc1359afe6b4e21013dbaf66b984",
+  "completed_packets": ["BCWT-R3-WP0","BCWT-R3-WP1","BCWT-R3-WP2","BCWT-R3-G0","BCWT-R3-WP3"],
+  "current_authority": "G0_FROZEN_CANDIDATE_PLUS_OUTCOME_BLIND_WP3_ONLY__NO_C_ADMISSION",
+  "proposed_delta": "ADMIT_C_FOR_EXACT_G0_FROZEN_GENERATION_AND_PREBOUND_CONSEQUENCE_PROTOCOL_ONLY",
+  "acceptance_conditions": {
+    "exact_source_identity": "PASS",
+    "opgs_r3_stream_sha256": "86ea8dafdf7183ebf19c4b5c6d208f1f34f035d3a557c35ccbeef4efa5326d07",
+    "opportunity_count": 5238,
+    "unique_population_units": 5238,
+    "complete_membership_ledger": "PASS",
+    "zero_silent_missing_rows": "PASS",
+    "outcome_blindness_before_g1": "PASS",
+    "laboratory_custody": "FILED_VERIFIED"
+  },
+  "membership": {
+    "ledger_sha256": "5ea4c39f2433c539ed1d770197d6e488a8afdc659b862f150585a921b75b8d2c",
+    "MATCH": 425,
+    "NON_MATCH": 2964,
+    "AMBIGUOUS": 1544,
+    "NOT_EVALUABLE": 305,
+    "candidate_occurrences": 425
+  },
+  "tests": [
+    "OPGS_R3_FREEZE_VERIFIER_PASS",
+    "FREEZE_MEMBER_HASHES_PASS",
+    "EXACT_5238_STREAM_HASH_PASS",
+    "5238_UNIQUE_ACCOUNT_IDS_PASS",
+    "SEVEN_WITHIN_SEGMENT_ADJACENCY_CHAINS_PASS",
+    "DETERMINISTIC_CANONICAL_MEMBERSHIP_DIGEST_PASS",
+    "OUTCOME_BEARING_INPUT_FIREWALL_IMPLEMENTED",
+    "SCIENTIFIC_OUTCOME_ACCESS_NONE"
+  ],
+  "qa": "docs/programmes/bcwt-v0-1/r3/wp3/BCWT_R3_WP3_QA_v0_1.json",
+  "warnings": [
+    "This is a consumed-source development diagnostic, not fresh confirmation.",
+    "G1 would admit only the exact frozen candidate to the prebound consequence evaluation; it does not activate OPT-C, OPT-D, ACTIVE_* or trading authority.",
+    "No semantic, threshold, family, model or candidate promotion is authorised by G1 beyond the existing G0-frozen generation."
+  ],
+  "unresolved_issues": [],
+  "changed_files_scope": [
+    "src/ovc/research_operations/bcwt/candidate.py",
+    "src/ovc/research_operations/bcwt/opgs_r3_adapter.py",
+    "schemas/research_operations/bcwt/v0_1/candidate_membership_ledger.schema.json",
+    "contracts/research_operations/bcwt/BCWT_R3_CANDIDATE_MEMBERSHIP_COMPILER_CONTRACT_v0_1.md",
+    "fixtures/research_operations/bcwt/v0_1/candidate_membership_rows.json",
+    "tests/research_operations/bcwt/test_bcwt_r3_candidate_membership.py",
+    "docs/programmes/bcwt-v0-1/r3/wp3/*",
+    "docs/programmes/bcwt-v0-1/r3/g1/BCWT_R3_G1_GATE_PACKET_v0_1.json",
+    "docs/programmes/bcwt-v0-1/r3/BCWT_R3_IMPLEMENTATION_PLAN_v0_1.json",
+    "registries/implementation/bcwt_v0_1/BCWT_V0_1_STATE_v0_1.json"
+  ],
+  "external_artifact_hashes": {
+    "opgs_r3_archive_sha256": "ae4052ae3197502cc50f452b7717a6b3feba06ca9fc2059bafcde2c89877541b",
+    "compressed_accounts_sha256": "9e4427b784b54f6285b86196d2339980999d6cc2d5b0ac3c3e22bf9e69a524c6",
+    "normalized_rows_gzip_sha256": "14b6c57ce7b4aaa82eb4a84ff2585554680cffc2ce04d488eab3a812038c25c8",
+    "membership_ledger_gzip_sha256": "6a4480cb72a341d1aa6a3a42f5ae788328b87444993860b3ab3c6b05b4ddca14",
+    "candidate_occurrences_gzip_sha256": "d8d8113d12d828694f6b91830c08760f15f0effd6b59bf13297c82a8282f785e"
+  },
+  "rollback": "DEFER or BLOCK G1 and preserve the G0 freeze, exact recovered source, complete WP3 ledger, QA and custody append-only. No consequence access occurs without PASS.",
+  "recommendation": "PASS",
+  "allowed_decisions": ["PASS","DEFER","BLOCK","QUARANTINE","SUPERSEDE"],
+  "exact_post_approval_work": "If and only if G1 PASS is explicitly granted: record the operator decision, grant CandidateEvaluationAdmission for the exact frozen generation, then execute the prebound BCWT-R4 consequence protocol at horizons 4/8/16/32 with explicit censoring, dependence accounting and comparators. Do not alter candidate identity or access any authority outside that bounded evaluation."
+}

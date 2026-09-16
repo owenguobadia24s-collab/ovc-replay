@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/bcwt/v0_1/candidate_membership_ledger.schema.json",
+  "title": "BCWT R3 outcome-blind candidate membership ledger v0.1",
+  "type": "object",
+  "required": ["schema","candidate_generation_id","expected_opportunities","actual_opportunities","membership_state_counts","entries","source_rows_sha256","ledger_sha256","authority_effect","scientific_effect"],
+  "properties": {
+    "schema": {"const": "ovc-bcwt-r3-membership-ledger/v0_1"},
+    "candidate_generation_id": {"const": "BCWT-ORG-RECONFIGURATION:1"},
+    "expected_opportunities": {"const": 5238},
+    "actual_opportunities": {"const": 5238},
+    "membership_state_counts": {"type":"object"},
+    "entries": {
+      "type":"array",
+      "minItems":5238,
+      "maxItems":5238,
+      "items": {
+        "type":"object",
+        "required":["population_unit_id","state","first_valid_time","reason_codes","source_ref"],
+        "properties": {
+          "population_unit_id":{"type":"string","minLength":1},
+          "state":{"enum":["MATCH","NON_MATCH","AMBIGUOUS","NOT_EVALUABLE","NOT_COMPARABLE","CENSORED","QUARANTINED","OUT_OF_SCOPE","PROCESS_INVALID"]},
+          "first_valid_time":{"type":["string","null"]},
+          "reason_codes":{"type":"array","items":{"type":"string"}},
+          "source_ref":{}
+        },
+        "additionalProperties":false
+      }
+    },
+    "source_rows_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "ledger_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "authority_effect":{"const":"NONE"},
+    "scientific_effect":{"const":"NONE_OUTCOME_BLIND_MEMBERSHIP_ONLY"}
+  },
+  "additionalProperties":false
+}
