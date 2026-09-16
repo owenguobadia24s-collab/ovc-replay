@@ -1,0 +1,31 @@
+{
+  "schema": "ovc-bcwt-r4-g2-semantic-repair-qa/v0_1",
+  "packet_id": "BCWT-R4-G2-PREOUTCOME-SEMANTIC-REPAIR",
+  "status": "PASS_PROPOSAL_ASSURANCE_ONLY",
+  "operator_basis": "BCWT-R4-G0 SUPERSEDE",
+  "checks": {
+    "generation_1_history_preserved": "PASS",
+    "generation_1_membership_reused_without_change": "PASS_PROPOSED",
+    "projection_uses_pre_outcome_owner_fields_only": "PASS",
+    "identity_age_sequence_and_price_coordinate_fields_excluded": "PASS",
+    "exact_equality_rule_defined": "PASS",
+    "missingness_and_source_break_rule_defined": "PASS",
+    "synthetic_reference_harness": "PASS_8_OF_8",
+    "scientific_outcome_access": "NONE"
+  },
+  "synthetic_tests": [
+    "exact same signature -> PRESERVED",
+    "Gamma family change -> RECONFIGURED",
+    "track ID/age/seq changes alone -> PRESERVED",
+    "successor candidate stage change -> RECONFIGURED",
+    "source break -> CENSORED",
+    "uncomparable Gamma -> NOT_EVALUABLE",
+    "Z NOT_ESTABLISHED is explicit comparable typed absence",
+    "available Z regime change -> RECONFIGURED"
+  ],
+  "warnings": [
+    "This QA validates deterministic semantics and fail-closed behavior only; it does not validate scientific usefulness or empirical support.",
+    "No R4 consequence row may be computed until the separate generation-2 freeze/admission gate receives operator PASS."
+  ],
+  "authority_effect": "NONE"
+}
