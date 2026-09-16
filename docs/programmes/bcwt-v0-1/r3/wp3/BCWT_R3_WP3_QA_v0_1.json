@@ -1,0 +1,50 @@
+{
+  "schema": "ovc-bcwt-r3-wp3-qa/v0_1",
+  "programme_id": "OVC-BCWT-v0.1",
+  "packet_id": "BCWT-R3-WP3",
+  "plan_id": "OVC-BCWT-R3-OBSERVER-TASK-AND-SCIENTIFIC-PREREGISTRATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "BLOCKED",
+  "baseline_commit": "2ddc41ee419f0d6978da3b907c841a81e13d90ae",
+  "branch": "build/bcwt-r3-wp3-20260914",
+  "authority": {
+    "source": "OVC CONTINUE BCWT-R3-WP3",
+    "scope": "OUTCOME_BLIND_MEMBERSHIP_COMPILER_AND_COMPLETE_MEMBERSHIP_LEDGER_ONLY",
+    "authority_effect": "NONE",
+    "candidate_evaluation_admission": "NOT_GRANTED",
+    "scientific_consequence_access": "DENIED"
+  },
+  "qa": {
+    "frozen_candidate_semantics_preserved": "PASS",
+    "outcome_blind_compiler_surface_prepared": "PASS",
+    "complete_membership_schema_prepared": "PASS",
+    "positive_occurrence_separated_from_complete_denominator": "PASS",
+    "synthetic_truth_worlds_and_fail_closed_tests_prepared": "PASS",
+    "source_fidelity": "BLOCK",
+    "exact_5238_transition_stream_available": "NO",
+    "complete_denominator_compile": "NOT_RUN_BLOCKED_BY_SOURCE",
+    "deterministic_exact_source_replay": "NOT_RUN_BLOCKED_BY_SOURCE",
+    "fvt_and_source_identity_reconciliation": "NOT_RUN_BLOCKED_BY_SOURCE",
+    "counterevidence_and_missingness_census": "NOT_RUN_BLOCKED_BY_SOURCE",
+    "scientific_outcome_access": "NONE"
+  },
+  "tests": {
+    "targeted_wp3_synthetic": "PENDING_CI",
+    "repository_tests": "PENDING_CI",
+    "tiered_assurance": "PENDING_CI"
+  },
+  "blocking_warning": {
+    "id": "BCWT-R3-WP3-BLOCKER-EXACT-OPGS-R3-SOURCE-0001",
+    "record": "docs/programmes/bcwt-v0-1/r3/wp3/BCWT_R3_WP3_SOURCE_RECOVERY_BLOCKER_v0_1.json",
+    "reason": "The exact frozen OPGS-R3 OrganisationalTransitionAccount stream required by the G0-frozen membership predicate is not available as a reproducible durable payload. Simplified projections and prose do not contain the required per-transition D10/D12/D14/D15/D16/D17 evidence and are forbidden substitutes."
+  },
+  "acceptance": {
+    "complete_5238_unique_population_units": "NOT_MET",
+    "zero_silent_missing_rows": "NOT_PROVABLE",
+    "deterministic_replay": "NOT_PROVABLE_ON_EXACT_SOURCE",
+    "outcome_blindness": "IMPLEMENTED_PENDING_CI",
+    "g1_readiness": "FAIL_CLOSED_NOT_ELIGIBLE"
+  },
+  "smallest_lawful_resolution": "Recover the exact OPGS-R3 stream or exact parent archive plus exact R3 compiler/replay artifacts, rematerialise and verify the 5,238-account identity, then resume the complete membership compile and QA without changing the frozen candidate generation.",
+  "rollback": "Preserve the G0 freeze and WP3 prepared implementation. Do not merge incomplete WP3, do not infer missing owner evidence, and do not access consequence payloads."
+}
