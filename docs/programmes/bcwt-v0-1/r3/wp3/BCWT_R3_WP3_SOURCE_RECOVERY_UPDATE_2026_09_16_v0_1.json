@@ -1,0 +1,41 @@
+{
+  "schema": "ovc-bcwt-r3-wp3-source-recovery-update/v0_1",
+  "programme_id": "OVC-BCWT-v0.1",
+  "packet_id": "BCWT-R3-WP3",
+  "status": "PARTIAL_RECOVERY_BLOCKER_REMAINS",
+  "authority_source": "OVC CONTINUE",
+  "authority_effect": "NONE",
+  "baseline_main": "2ddc41ee419f0d6978da3b907c841a81e13d90ae",
+  "branch": "build/bcwt-r3-wp3-20260914",
+  "required_transition_stream_sha256": "86ea8dafdf7183ebf19c4b5c6d208f1f34f035d3a557c35ccbeef4efa5326d07",
+  "uploaded_recovery_artifacts": [
+    {
+      "filename": "OVC_OPGS_R2_Frozen_Compiler_and_Pressure_Test_v0_1_REVISED_1(1)(1)(4).zip",
+      "sha256": "9ec795484cdc1358fb8ede4ad222c5fc70e01a4e4012b4083b57c21c8b10e8ca",
+      "standing": "EXACT_PARENT_OPGS_R2_ARCHIVE_RECOVERED",
+      "drive_id": "1WY5Dr26Wpyfy3S3OLOCd4pWBrWTfQk8s",
+      "laboratory_folder_id": "1eTsXi7XjEdCPa9GdaT3zGQbaUDgme2ti",
+      "verification": "verify_release.py PASS; all 41 delivery files and both compiler manifests verified; current freeze a05e41b075b6dc0fe7a8b9bf8d6cfa73276cbdd81da244cd4018fac8bc00e43b"
+    },
+    {
+      "filename": "OPGS_STANDALONE_MACHINERY_FREEZE_v0_1_2026-09-16(1).zip",
+      "sha256": "11fa28ecbb9dc995b2f5c489a43841a64d9256a6641f8ef97935f9f55f219408",
+      "standing": "CONTRACT_AND_REFERENCE_MACHINERY_RECOVERED_NOT_HISTORICAL_R3_EXECUTABLE",
+      "drive_id": "1YPTKtP1_Y6SSVXV31RSzuCtaSYJQ7vOG",
+      "laboratory_folder_id": "1eTsXi7XjEdCPa9GdaT3zGQbaUDgme2ti",
+      "r3_subarchive_sha256": "1bd374b8ff4d9b42935d70a691d16f27d728edd0b1630e0526598e70693871aa",
+      "r3_freeze_manifest_standing": "exact_historical_executable=NOT_RECOVERED_FROM_AVAILABLE_ARTIFACTS; freeze_class=CONTRACT_EXTRACTED_WITH_REFERENCE_HARNESS"
+    }
+  ],
+  "recovery_result": {
+    "parent_opgs_r2_archive": "RECOVERED_AND_HASH_VERIFIED",
+    "exact_historical_opgs_r3_executable": "NOT_RECOVERED",
+    "exact_5238_row_r3_transition_stream": "NOT_RECOVERED",
+    "wp3_complete_membership_compile": "BLOCKED",
+    "g1_eligibility": "NOT_ELIGIBLE"
+  },
+  "reason_blocker_remains": "The recovered standalone R3 package explicitly states that the exact historical OPGS-R3-REF-0.1 executable was not recovered and that its transition_contract.py is only a contract-derived reference harness. It cannot lawfully establish byte-exact historical replay or generate a substitute transition stream for the frozen BCWT candidate predicate.",
+  "smallest_lawful_resolution": "Recover the exact 5,238-row historical R3 OrganisationalTransitionAccount stream, or the exact historical OPGS-R3-REF-0.1 executable/replay package sufficient to deterministically rematerialise that stream from the now-recovered exact R2 parent archive and verify SHA-256 86ea8dafdf7183ebf19c4b5c6d208f1f34f035d3a557c35ccbeef4efa5326d07.",
+  "scientific_consequence_access": "DENIED",
+  "candidate_evaluation_admission": "NOT_GRANTED"
+}
