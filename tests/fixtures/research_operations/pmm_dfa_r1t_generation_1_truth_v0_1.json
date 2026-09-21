@@ -1,0 +1,102 @@
+{
+  "schema": "ovc-pmm-dfa-r1t-generation-1-synthetic-truth/v0.1",
+  "generation_semantic_sha256": "2ff95fa8e4cbd1038b11edd12b38cc993b23c09569a691b5fd162a478b1066d4",
+  "cases": [
+    {
+      "case_id": "NODE_P0_MATCH",
+      "candidate_id": "R1T-N01",
+      "projection": "P0",
+      "observed": {
+        "depth": 1,
+        "anchor": "ABOVE_SHELL",
+        "current_zone": "BELOW_SHELL",
+        "polarity": "D",
+        "future_price_behaviour": "IGNORED_SENTINEL"
+      },
+      "expected_state": "MATCH"
+    },
+    {
+      "case_id": "NODE_P0_NON_MATCH_P1_MATCH",
+      "candidate_id": "R1T-N01",
+      "projection": "P0",
+      "observed": {
+        "depth": 1,
+        "anchor": "ABOVE_SHELL",
+        "current_zone": "BELOW_SHELL",
+        "polarity": "U"
+      },
+      "expected_state": "NON_MATCH",
+      "alternate_projection": "P1",
+      "alternate_expected_state": "MATCH"
+    },
+    {
+      "case_id": "NODE_MISSING_COORDINATE",
+      "candidate_id": "R1T-N01",
+      "projection": "P0",
+      "observed": {
+        "depth": 1,
+        "anchor": "ABOVE_SHELL",
+        "current_zone": "BELOW_SHELL"
+      },
+      "expected_state": "NOT_EVALUABLE"
+    },
+    {
+      "case_id": "CORRIDOR_P0_MATCH",
+      "candidate_id": "R1T-C01",
+      "projection": "P0",
+      "previous": {
+        "depth": 1,
+        "anchor": "CORE",
+        "current_zone": "UPPER_MARGIN",
+        "polarity": "U"
+      },
+      "current": {
+        "depth": 2,
+        "anchor": "CORE",
+        "current_zone": "BELOW_SHELL",
+        "polarity": "D"
+      },
+      "same_live_hypothesis": true,
+      "expected_state": "MATCH"
+    },
+    {
+      "case_id": "CORRIDOR_HYPOTHESIS_BREAK",
+      "candidate_id": "R1T-C01",
+      "projection": "P0",
+      "previous": {
+        "depth": 1,
+        "anchor": "CORE",
+        "current_zone": "UPPER_MARGIN",
+        "polarity": "U"
+      },
+      "current": {
+        "depth": 2,
+        "anchor": "CORE",
+        "current_zone": "BELOW_SHELL",
+        "polarity": "D"
+      },
+      "same_live_hypothesis": false,
+      "expected_state": "NOT_COMPARABLE"
+    },
+    {
+      "case_id": "CORRIDOR_SOURCE_BREAK",
+      "candidate_id": "R1T-C01",
+      "projection": "P0",
+      "previous": {
+        "depth": 1,
+        "anchor": "CORE",
+        "current_zone": "UPPER_MARGIN",
+        "polarity": "U"
+      },
+      "current": {
+        "depth": 2,
+        "anchor": "CORE",
+        "current_zone": "BELOW_SHELL",
+        "polarity": "D",
+        "eligibility_state": "SOURCE_BREAK"
+      },
+      "same_live_hypothesis": true,
+      "expected_state": "CENSORED"
+    }
+  ]
+}
