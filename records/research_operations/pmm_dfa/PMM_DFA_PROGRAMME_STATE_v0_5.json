@@ -1,0 +1,68 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-PMM-0001",
+  "programme_line": "PMM-DFA-v0.1",
+  "packet_id": "PMM-DFA-R1T-WP1",
+  "plan_id": "OVC-PMM-DFA-R1T-PROTECTED-DEVELOPMENT-CHALLENGE-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "BLOCKED",
+  "supersedes_state": "records/research_operations/pmm_dfa/PMM_DFA_PROGRAMME_STATE_v0_4.json",
+  "prerequisites": [
+    "PMM-DFA-R1T-G0_PASS",
+    "PMM-DFA-R1T-G0_GATE_PACKET_MERGED",
+    "R1T_GENERATION_1_FROZEN"
+  ],
+  "authority_required": "G0_SATISFIED_FOR_FREEZE_AND_WP1_ONLY",
+  "authority_delta": "GENERATION_1_FROZEN / WP1_COMPLETE_TO_SOURCE_BINDING_FRONTIER / ACTIVE_DEVELOPMENT_NOT_GRANTED",
+  "baseline_commit": "bb307662f8daa503793b6287049f6d73013b6189",
+  "branch": "run/pmm-dfa-r1t-wp1-20260922",
+  "candidate_commit": "60e38f8a7919d0c8146eea127374bab59792e750",
+  "tests": [
+    {
+      "scope": "GitHub tests workflow",
+      "run_id": 35668563794,
+      "result": "PASS"
+    },
+    {
+      "scope": "VIT routing / PACKET profile / SIQ READY / exact-final merge readiness",
+      "run_id": 35668563805,
+      "result": "PASS"
+    }
+  ],
+  "qa_packet": "docs/programmes/pmm-dfa-v0-1/r1t/wp1/PMM_DFA_R1T_WP1_CLOSEOUT_QA_v0_1.json",
+  "decision_record": "docs/programmes/pmm-dfa-v0-1/r1t/g0/PMM_DFA_R1T_G0_OPERATOR_DECISION_v0_1.json",
+  "generation_freeze": "docs/programmes/pmm-dfa-v0-1/r1t/generation-1/PMM_DFA_R1T_GENERATION_1_FREEZE_MANIFEST_v0_1.json",
+  "source_census": "docs/programmes/pmm-dfa-v0-1/r1t/wp1/PMM_DFA_R1T_PROTECTED_DEVELOPMENT_SOURCE_CENSUS_v0_1.json",
+  "merge_receipt": "docs/programmes/pmm-dfa-v0-1/r1t/wp1/PMM_DFA_R1T_WP1_MERGE_CUSTODY_RECEIPT_v0_1.json",
+  "merge_commit": "df73916213e02ff524d74a45a3ff2f41ae21c135",
+  "candidate_generation_id": "rcg:2ff95fa8e4cbd1038b11edd12b38cc993b23c09569a691b5fd162a478b1066d4",
+  "laboratory_custody": {
+    "drive_file_id": "1Jt2GgP0XeKatw-FwwxQGrICNxh_NmSnAtXtEIhuxTns",
+    "catalogue_rows": [
+      715,
+      716
+    ],
+    "routing_event_rows": [
+      1081,
+      1082
+    ],
+    "status": "FILED_VERIFIED"
+  },
+  "blockers": [
+    "NO_ELIGIBLE_FILED_UNTOUCHED_SAME_LINEAGE_PROTECTED_DEVELOPMENT_SOURCE"
+  ],
+  "current_authority": "R1T_GENERATION_1_FROZEN / ACTIVE_DEVELOPMENT_DENIED / PROTECTED_SOURCE_ACCESS_LOCKED_UNCONSUMED",
+  "retained_denials": [
+    "PROTECTED_DEVELOPMENT_PAYLOAD_ACCESS",
+    "ACTIVE_DEVELOPMENT",
+    "ACTIVE_VALIDATION",
+    "VALIDATION_CONSUMPTION",
+    "ATLAS_ACCESSION",
+    "SEMANTIC_FAMILY_MODEL_THRESHOLD_THEORY_PROMOTION",
+    "NEW_REAL_PROVIDER_INTAKE",
+    "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_AGENT_WRITE"
+  ],
+  "next_packet": "PMM-DFA-R1T-G1",
+  "next_operator_gate": "PMM-DFA-R1T-G1_NOT_READY_MISSING_EXACT_SOURCE_BINDING",
+  "rollback": "Generation 1 remains immutable. Forward-supersede closeout metadata only; preserve G0 PASS, payload merge, QA, custody and blocker evidence."
+}
