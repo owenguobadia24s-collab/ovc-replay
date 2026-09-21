@@ -1,0 +1,51 @@
+{
+  "schema": "ovc-pmm-dfa-r1t-challenge-pack-proposal/v0.1",
+  "programme_id": "OVC-PMM-0001",
+  "packet_id": "PMM-DFA-R1T-G0",
+  "status": "PROPOSAL_ONLY_NOT_FROZEN",
+  "candidate_registry": "registries/research/pmm_dfa/PMM_DFA_R1T_CANDIDATE_PROPOSALS_v0_1.json",
+  "representation_challenges": {
+    "P0": {"role": "PRIMARY_IDENTITY", "transform": "exact R1Q topology"},
+    "P1": {"role": "REQUIRED_SURVIVAL", "transform": "remove U/D/O polarity"},
+    "P2": {"role": "REQUIRED_SURVIVAL", "transform": "merge CORE and INTER_CORE"},
+    "P3": {"role": "REQUIRED_SURVIVAL", "transform": "P1 plus P2"},
+    "P4": {"role": "DIAGNOSTIC_ONLY", "transform": "collapse margin/shell to LOWER/CENTRAL/UPPER"},
+    "P5": {"role": "DIAGNOSTIC_ONLY", "transform": "polarity/zone reflection"}
+  },
+  "protected_development_design": {
+    "required_population_relation": "DISJOINT_FROM_C0B_AND_2015_EXPOSED_DFA_POPULATIONS",
+    "preferred_instrument": "GBPUSD",
+    "preferred_side": "BID",
+    "preferred_clock": "15M",
+    "selection_rule": "METADATA_ONLY_BEFORE_FIRST_CANDIDATE_BEARING_ACCESS",
+    "temporal_blocks": 10,
+    "candidate_development_replicated_rule": "AT_LEAST_3_EXACT_OCCURRENCES_ACROSS_AT_LEAST_2_PREDECLARED_TEMPORAL_BLOCKS",
+    "candidate_development_robust_rule": "REPLICATED_AND_SURVIVES_P1_P2_P3_WITHOUT_RETUNING",
+    "allowed_candidate_dispositions": [
+      "DEVELOPMENT_ROBUST",
+      "DEVELOPMENT_REPRESENTATION_SENSITIVE",
+      "OBSERVED_INSUFFICIENT_SUPPORT",
+      "NOT_REPLICATED",
+      "NOT_EVALUATABLE",
+      "QUARANTINED"
+    ],
+    "negative_controls": "RETAIN_R1S_SINGLETON_AND_NON_ROBUST_NOVELTY_FIELD_WHERE_EXACT_LEDGER_IS_AVAILABLE",
+    "provider_intake": "DENIED_UNTIL_SEPARATE_OPERATOR_AUTHORITY_IF_NEW_REAL_PROVIDER_INTAKE_IS_REQUIRED"
+  },
+  "explicit_non_grants": [
+    "CANDIDATE_FREEZE",
+    "DEVELOPMENT_ACCESS",
+    "ACTIVE_DEVELOPMENT",
+    "VALIDATION_ACCESS",
+    "ACTIVE_VALIDATION",
+    "ATLAS_ACCESSION",
+    "SEMANTIC_PROMOTION",
+    "PREDICTION",
+    "PROBABILITY",
+    "RISK",
+    "EXPOSURE",
+    "TRADING",
+    "EXECUTION",
+    "PUBLICATION"
+  ]
+}
