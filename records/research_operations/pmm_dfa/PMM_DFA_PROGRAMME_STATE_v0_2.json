@@ -1,0 +1,53 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-PMM-0001",
+  "programme_line": "PMM-DFA-v0.1",
+  "packet_id": "PMM-DFA-BOOTSTRAP-0001",
+  "plan_id": "OVC-PMM-DFA-BOOTSTRAP-MATERIALISATION-PLAN-0.1",
+  "plan_version": "0.1",
+  "status": "COMPLETED",
+  "supersedes_state": "records/research_operations/pmm_dfa/PMM_DFA_PROGRAMME_STATE_v0_1.json",
+  "prerequisites": [
+    "PMM_FILED_LABORATORY_LINEAGE_BOUND",
+    "PMM_DFA_FORMAL_SYNTHESIS_FILED_VERIFIED",
+    "EXPLICIT_OPERATOR_BOOTSTRAP_INSTRUCTION_2026_09_21"
+  ],
+  "authority_required": "OPERATOR_INSTRUCTION_SATISFIED_FOR_BOOTSTRAP_ONLY",
+  "authority_delta": "REPOSITORY_GOVERNANCE_MATERIALISATION_ONLY",
+  "baseline_commit": "4a84b823d8bbd33711acce89d9a66f114b4c9caf",
+  "branch": "build/pmm-dfa-bootstrap-20260921",
+  "candidate_commit": "1fd477dfbba4da6e55a50d5e4e96763c9a5c2e80",
+  "tests": [
+    {
+      "scope": "GitHub tests workflow",
+      "run_id": 35642903918,
+      "result": "PASS"
+    },
+    {
+      "scope": "VIT routing preflight / profile / SIQ READY / tiered / merge readiness",
+      "run_id": 35642903912,
+      "result": "PASS"
+    }
+  ],
+  "qa_packet": "docs/programmes/pmm-dfa-v0-1/bootstrap/PMM_DFA_BOOTSTRAP_CLOSEOUT_QA_v0_1.json",
+  "decision_record": "docs/programmes/pmm-dfa-v0-1/bootstrap/PMM_DFA_BOOTSTRAP_AUTHORITY_RECORD_v0_1.json",
+  "merge_receipt": "docs/programmes/pmm-dfa-v0-1/bootstrap/PMM_DFA_BOOTSTRAP_MERGE_RECEIPT_v0_1.json",
+  "merge_commit": "fbddebfe63ee4b0a56aa2ab4cf57503abc65df4d",
+  "blockers": [],
+  "current_authority": "PMM_DFA_REPOSITORY_GOVERNANCE_MATERIALISED / R1T_PROPOSAL_ONLY / NO_CANDIDATE_FREEZE / DEVELOPMENT_LOCKED",
+  "retained_denials": [
+    "CANDIDATE_GENERATION_FREEZE",
+    "ACTIVE_DISCOVERY",
+    "ACTIVE_DEVELOPMENT",
+    "ACTIVE_VALIDATION",
+    "PROTECTED_DEVELOPMENT_SOURCE_ACCESS",
+    "VALIDATION_CONSUMPTION",
+    "ATLAS_ACCESSION",
+    "SEMANTIC_FAMILY_MODEL_THRESHOLD_THEORY_PROMOTION",
+    "NEW_PROVIDER_INTAKE",
+    "PROBABILITY_RISK_EXPOSURE_TRADING_EXECUTION_AGENT_WRITE"
+  ],
+  "next_packet": "PMM-DFA-R1T-G0",
+  "next_operator_gate": "PMM-DFA-R1T-G0",
+  "rollback": "Forward-supersede only; preserve bootstrap payload, VIT qualification, merge receipt and historical programme state."
+}
