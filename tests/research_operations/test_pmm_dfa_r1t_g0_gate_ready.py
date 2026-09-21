@@ -37,7 +37,7 @@ def test_pmm_dfa_r1t_g0_gate_ready_contract():
     assert gate["recommendation"] == "PASS"
     assert gate["current_authority"]["r1t_candidate_generation"] == "PROPOSAL_ONLY_NOT_FROZEN"
     assert gate["current_authority"]["protected_development_source_access"] == "LOCKED_UNCONSUMED"
-    assert "ACTIVE_DEVELOPMENT" not in gate["proposed_delta"]
+    assert "does NOT grant protected payload access, ACTIVE_DEVELOPMENT or Validation" in gate["proposed_delta"]
     assert gate["exact_post_approval_work"][-1].startswith("Prepare PMM-DFA-R1T-G1")
 
     assert state["status"] == "GATE_READY"
