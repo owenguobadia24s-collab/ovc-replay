@@ -1,0 +1,41 @@
+{
+  "schema": "ovc-pmm-dfa-r1t-g0-authority-manifest/v0.1",
+  "programme_id": "OVC-PMM-0001",
+  "plan_id": "OVC-PMM-DFA-BOOTSTRAP-AND-R1T-FREEZE-PLAN-0.1",
+  "plan_version": "0.1",
+  "gate_id": "PMM-DFA-R1T-G0",
+  "gate_class": "OPERATOR_REQUIRED",
+  "status": "NOT_APPROVED",
+  "current_authority": {
+    "candidate_proposals": "MATERIALISED_PROPOSAL_ONLY",
+    "candidate_freeze": "NONE",
+    "development_population_reservation": "NONE",
+    "development_access": "LOCKED_UNCONSUMED",
+    "validation": "LOCKED_UNCONSUMED",
+    "atlas_reference_generation": "UNCHANGED_C0B_REFERENCE",
+    "semantic_promotion": "NONE",
+    "probability_risk_exposure_trading_execution": "NONE"
+  },
+  "proposed_delta_if_operator_passes_future_gate": {
+    "candidate_generation": "FREEZE_EXACT_SIX_R1T_STRUCTURAL_IDENTITIES_AND_CHALLENGE_PACK",
+    "development_population": "RESERVE_EXACT_UNTOUCHED_POPULATION_BY_PREBOUND_METADATA_ONLY_SELECTION_RULE",
+    "development_access": "AUTHORISE_ONLY_THE_PREBOUND_R1T_DEVELOPMENT_EXECUTION_AFTER_POPULATION_AND_IMPLEMENTATION_HASHES_ARE_RECORDED",
+    "validation": "REMAINS_LOCKED_UNCONSUMED",
+    "atlas_accession": "NONE",
+    "semantic_promotion": "NONE",
+    "probability_risk_exposure_trading_execution": "NONE"
+  },
+  "prerequisites_before_gate_can_be_presented_as_pass_ready": [
+    "bootstrap packet merged to lawful main",
+    "exact six-candidate proposal hash resolved from lawful main",
+    "exact challenge-pack hash resolved from lawful main",
+    "protected Development source/population selected from metadata only without candidate-bearing inspection",
+    "source and population hashes/custody bindings recorded",
+    "deterministic occurrence compiler implementation and tests present",
+    "complete negative-control ledger binding present or explicit dependency-unavailable standing",
+    "repository and targeted assurance pass on exact candidate tree"
+  ],
+  "allowed_operator_decisions": ["PASS", "DEFER", "BLOCK", "QUARANTINE", "SUPERSEDE"],
+  "exact_operator_command_for_reserved_delta": "OVC APPROVE PMM-DFA-R1T-G0",
+  "rollback": "Do not grant freeze/access. Preserve proposal/source-binding/bootstrap history and supersede forward-only if the gate design changes."
+}
