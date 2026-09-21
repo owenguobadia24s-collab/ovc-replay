@@ -1,0 +1,35 @@
+{
+  "schema": "ovc-pmm-dfa-r1t-wp1-qa/v0.1",
+  "programme_id": "OVC-PMM-0001",
+  "packet_id": "PMM-DFA-R1T-WP1",
+  "baseline_commit": "bb307662f8daa503793b6287049f6d73013b6189",
+  "branch": "run/pmm-dfa-r1t-wp1-20260922",
+  "checks": {
+    "operator_g0_pass_recorded": "PASS",
+    "proposal_blob_exact": "PASS",
+    "candidate_count": "PASS_EXACTLY_6",
+    "generation_semantic_sha256": "2ff95fa8e4cbd1038b11edd12b38cc993b23c09569a691b5fd162a478b1066d4",
+    "generation_schema_shape": "PASS_DMRP_RESEARCH_CANDIDATE_GENERATION_CORE",
+    "candidate_definitions_byte_semantic_copy": "PASS_NO_REINTERPRETATION",
+    "compiler_scope": "PASS_P0_P1_P2_P3_ONLY_SYNTHETIC_NO_MARKET_SOURCE_IO",
+    "compiler_outcome_blind": "PASS",
+    "protected_development_payload_access": "LOCKED_UNCONSUMED",
+    "validation_consumption": "LOCKED_UNCONSUMED",
+    "source_census": "BLOCKED_NO_ELIGIBLE_FILED_SOURCE",
+    "new_provider_intake": "NOT_ATTEMPTED_DENIED"
+  },
+  "tests": {
+    "targeted": "tests/research_operations/test_pmm_dfa_r1t_generation_1.py",
+    "repository_ci": "REQUIRED_ON_EXACT_PR_HEAD",
+    "vit_siq": "REQUIRED_ON_EXACT_PR_HEAD"
+  },
+  "warnings": [
+    "No eligible filed untouched same-lineage GBPUSD BID 15M protected Development source was identified by metadata-only census.",
+    "2026 Dukascopy/RPS holdings are not silently substitutable: new real-provider/source-generation intake is operator-reserved.",
+    "The 2015 R4 population remains exposed to the DFA lineage and is ineligible for R1T protected Development."
+  ],
+  "unresolved_issues": [
+    "EXACT_PROTECTED_DEVELOPMENT_SOURCE_BINDING_UNAVAILABLE"
+  ],
+  "result": "BLOCKED_AFTER_SUCCESSFUL_G0_FREEZE_MATERIALISATION_AND_SYNTHETIC_COMPILER_ASSURANCE"
+}
