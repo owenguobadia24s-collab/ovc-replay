@@ -1,0 +1,64 @@
+{
+  "schema": "ovc-pmm-dfa-r1t-candidate-proposals/v0.1",
+  "programme_id": "OVC-PMM-0001",
+  "generation": "PMM-DFA-R1T-PROPOSAL-0.1",
+  "status": "PROPOSAL_ONLY_NOT_FROZEN",
+  "authority_effect": "NONE",
+  "identity_coordinate": ["depth", "anchor_zone", "current_zone", "resultant_polarity"],
+  "explicitly_excluded_from_primary_identity": [
+    "balance_band",
+    "E2",
+    "E4",
+    "eventual_clause_family",
+    "eventual_closure",
+    "future_price_or_outcome"
+  ],
+  "candidates": [
+    {
+      "candidate_id": "R1T-N01",
+      "object_type": "NODE",
+      "state": {"depth": 1, "anchor_zone": "ABOVE_SHELL", "current_zone": "BELOW_SHELL", "resultant_polarity": "D"},
+      "r1s_standing": "PERSISTENT_STRUCTURAL_NOVELTY"
+    },
+    {
+      "candidate_id": "R1T-C01",
+      "object_type": "CORRIDOR",
+      "source_state": {"depth": 1, "anchor_zone": "CORE", "current_zone": "UPPER_MARGIN", "resultant_polarity": "U"},
+      "target_state": {"depth": 2, "anchor_zone": "CORE", "current_zone": "BELOW_SHELL", "resultant_polarity": "D"},
+      "r1s_standing": "ROBUST_RECURRENT_CORRIDOR_CANDIDATE"
+    },
+    {
+      "candidate_id": "R1T-C02",
+      "object_type": "CORRIDOR",
+      "source_state": {"depth": 1, "anchor_zone": "LOWER_MARGIN", "current_zone": "ABOVE_SHELL", "resultant_polarity": "U"},
+      "target_state": {"depth": 2, "anchor_zone": "LOWER_MARGIN", "current_zone": "CORE", "resultant_polarity": "U"},
+      "r1s_standing": "ROBUST_RECURRENT_CORRIDOR_CANDIDATE"
+    },
+    {
+      "candidate_id": "R1T-C03",
+      "object_type": "CORRIDOR",
+      "source_state": {"depth": 1, "anchor_zone": "UPPER_MARGIN", "current_zone": "LOWER_MARGIN", "resultant_polarity": "D"},
+      "target_state": {"depth": 2, "anchor_zone": "UPPER_MARGIN", "current_zone": "ABOVE_SHELL", "resultant_polarity": "U"},
+      "r1s_standing": "ROBUST_RECURRENT_CORRIDOR_CANDIDATE"
+    },
+    {
+      "candidate_id": "R1T-C04",
+      "object_type": "CORRIDOR",
+      "source_state": {"depth": 2, "anchor_zone": "ABOVE_SHELL", "current_zone": "BELOW_SHELL", "resultant_polarity": "D"},
+      "target_state": {"depth": 3, "anchor_zone": "ABOVE_SHELL", "current_zone": "LOWER_MARGIN", "resultant_polarity": "D"},
+      "r1s_standing": "ROBUST_RECURRENT_CORRIDOR_CANDIDATE"
+    },
+    {
+      "candidate_id": "R1T-C05",
+      "object_type": "CORRIDOR",
+      "source_state": {"depth": 2, "anchor_zone": "UPPER_MARGIN", "current_zone": "BELOW_SHELL", "resultant_polarity": "D"},
+      "target_state": {"depth": 3, "anchor_zone": "UPPER_MARGIN", "current_zone": "CORE", "resultant_polarity": "D"},
+      "r1s_standing": "ROBUST_RECURRENT_CORRIDOR_CANDIDATE"
+    }
+  ],
+  "candidate_count": 6,
+  "same_generation_mutation": "PROHIBITED_AFTER_ANY_FUTURE_FREEZE",
+  "freeze_state": "NONE",
+  "development_access": "LOCKED_UNCONSUMED",
+  "validation": "LOCKED_UNCONSUMED"
+}
