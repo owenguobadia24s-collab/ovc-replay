@@ -1,0 +1,202 @@
+{
+  "schema": "ovc-pmm-dfa-r1t-challenge-pack-proposal/v0.1",
+  "programme_id": "OVC-PMM-0001",
+  "programme_line": "PMM-DFA-v0.1",
+  "packet_id": "PMM-DFA-R1T-G0-PROPOSAL",
+  "status": "PROPOSAL_ONLY_NOT_FROZEN",
+  "source_synthesis_artifact": "OVC-PMM-DFA-FORMAL-SYNTHESIS-MONOGRAPH-0.1",
+  "candidate_set": [
+    {
+      "candidate_id": "R1T-N01",
+      "type": "NODE",
+      "exact_identity": {
+        "depth": 1,
+        "anchor": "ABOVE_SHELL",
+        "current_zone": "BELOW_SHELL",
+        "polarity": "D"
+      }
+    },
+    {
+      "candidate_id": "R1T-C01",
+      "type": "CORRIDOR",
+      "from": {
+        "depth": 1,
+        "anchor": "CORE",
+        "current_zone": "UPPER_MARGIN",
+        "polarity": "U"
+      },
+      "to": {
+        "depth": 2,
+        "anchor": "CORE",
+        "current_zone": "BELOW_SHELL",
+        "polarity": "D"
+      }
+    },
+    {
+      "candidate_id": "R1T-C02",
+      "type": "CORRIDOR",
+      "from": {
+        "depth": 1,
+        "anchor": "LOWER_MARGIN",
+        "current_zone": "ABOVE_SHELL",
+        "polarity": "U"
+      },
+      "to": {
+        "depth": 2,
+        "anchor": "LOWER_MARGIN",
+        "current_zone": "CORE",
+        "polarity": "U"
+      }
+    },
+    {
+      "candidate_id": "R1T-C03",
+      "type": "CORRIDOR",
+      "from": {
+        "depth": 1,
+        "anchor": "UPPER_MARGIN",
+        "current_zone": "LOWER_MARGIN",
+        "polarity": "D"
+      },
+      "to": {
+        "depth": 2,
+        "anchor": "UPPER_MARGIN",
+        "current_zone": "ABOVE_SHELL",
+        "polarity": "U"
+      }
+    },
+    {
+      "candidate_id": "R1T-C04",
+      "type": "CORRIDOR",
+      "from": {
+        "depth": 2,
+        "anchor": "ABOVE_SHELL",
+        "current_zone": "BELOW_SHELL",
+        "polarity": "D"
+      },
+      "to": {
+        "depth": 3,
+        "anchor": "ABOVE_SHELL",
+        "current_zone": "LOWER_MARGIN",
+        "polarity": "D"
+      }
+    },
+    {
+      "candidate_id": "R1T-C05",
+      "type": "CORRIDOR",
+      "from": {
+        "depth": 2,
+        "anchor": "UPPER_MARGIN",
+        "current_zone": "BELOW_SHELL",
+        "polarity": "D"
+      },
+      "to": {
+        "depth": 3,
+        "anchor": "UPPER_MARGIN",
+        "current_zone": "CORE",
+        "polarity": "D"
+      }
+    }
+  ],
+  "primary_topological_coordinate": [
+    "depth",
+    "anchor",
+    "current_zone",
+    "polarity"
+  ],
+  "excluded_from_identity": [
+    "balance_band",
+    "E2",
+    "E4",
+    "eventual_clause_family",
+    "eventual_closure",
+    "future_price_behaviour"
+  ],
+  "representation_challenge_envelope": [
+    {
+      "projection_id": "P0",
+      "rule": "EXACT_R1Q_TOPOLOGY",
+      "decision_role": "PRIMARY_IDENTITY"
+    },
+    {
+      "projection_id": "P1",
+      "rule": "REMOVE_POLARITY",
+      "decision_role": "REQUIRED_STRUCTURAL_SURVIVAL_CHALLENGE"
+    },
+    {
+      "projection_id": "P2",
+      "rule": "MERGE_CORE_AND_INTER_CORE",
+      "decision_role": "REQUIRED_BOUNDARY_RESOLUTION_CHALLENGE"
+    },
+    {
+      "projection_id": "P3",
+      "rule": "P1_AND_P2",
+      "decision_role": "REQUIRED_JOINT_CHALLENGE"
+    },
+    {
+      "projection_id": "P4",
+      "rule": "COLLAPSE_MARGIN_AND_SHELL_TO_LOWER_CENTRAL_UPPER",
+      "decision_role": "DESTRUCTIVE_COARSE_DIAGNOSTIC_NOT_REQUIRED_PASS"
+    },
+    {
+      "projection_id": "P5",
+      "rule": "POLARITY_ZONE_REFLECTION",
+      "decision_role": "SYMMETRY_DIAGNOSTIC_ONLY_NOT_IDENTITY"
+    }
+  ],
+  "occurrence_contract": {
+    "node_first_valid_time": "first cutoff at which depth, anchor, current zone and realised cumulative polarity are causally known",
+    "corridor_first_valid_time": "target-node first-valid time after both endpoints are causally observed in the same live hypothesis",
+    "compiler_properties": [
+      "PREFIX_SAFE",
+      "DETERMINISTIC",
+      "OUTCOME_BLIND"
+    ],
+    "denominator": [
+      "EVERY_LAWFUL_EVALUABLE_OPEN_STATE_CUTOFF_FOR_NODES",
+      "EVERY_LAWFUL_WITHIN_HYPOTHESIS_ADJACENT_TOPOLOGICAL_TRANSITION_FOR_CORRIDORS"
+    ],
+    "explicit_non_evaluable_states": [
+      "NOT_EVALUABLE",
+      "CENSORED",
+      "QUARANTINED",
+      "SOURCE_BREAK"
+    ]
+  },
+  "development_design": {
+    "required_instrument": "GBPUSD",
+    "required_side": "BID",
+    "required_clock": "15M",
+    "required_lineage": "SAME_LAWFUL_C2_OPGS_PMM_COMPILER_LINEAGE",
+    "population_selection": "metadata-only chronological deterministic rule; candidate-bearing payload must remain unread before source freeze",
+    "preferred_scale": "approximately 20000 eligible bars when sufficient contiguous source exists",
+    "temporal_blocks": 10,
+    "individual_development_replicated_rule": {
+      "minimum_exact_occurrences": 3,
+      "minimum_distinct_predeclared_temporal_blocks": 2,
+      "retuning_allowed": false
+    },
+    "development_robust_rule": "DEVELOPMENT_REPLICATED plus novelty survival under P1, P2 and P3",
+    "possible_dispositions": [
+      "DEVELOPMENT_ROBUST",
+      "DEVELOPMENT_REPRESENTATION_SENSITIVE",
+      "OBSERVED_INSUFFICIENT_SUPPORT",
+      "NOT_REPLICATED",
+      "NOT_EVALUABLE",
+      "QUARANTINED"
+    ]
+  },
+  "negative_control_requirements": [
+    "carry the full previously singleton/off-map node field",
+    "carry the full previously singleton/off-corridor field",
+    "report complete protected novelty surface rather than targeted hits only"
+  ],
+  "reserved_actions": [
+    "CANDIDATE_GENERATION_FREEZE",
+    "ACTIVE_DEVELOPMENT_ACCESS",
+    "PROTECTED_SOURCE_ACCESS",
+    "VALIDATION_ACCESS",
+    "ATLAS_ACCESSION",
+    "SEMANTIC_OR_FAMILY_PROMOTION"
+  ],
+  "authority_effect": "NONE_PENDING_PMM_DFA_R1T_G0_OPERATOR_DECISION"
+}
