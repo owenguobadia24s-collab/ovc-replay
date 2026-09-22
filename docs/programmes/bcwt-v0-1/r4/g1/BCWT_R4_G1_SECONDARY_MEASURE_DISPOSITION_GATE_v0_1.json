@@ -1,0 +1,57 @@
+{
+  "schema": "ovc-bcwt-r4-g1-secondary-measure-disposition-gate/v0_1",
+  "programme_id": "OVC-BCWT-v0.1",
+  "gate_id": "BCWT-R4-G1",
+  "title": "Secondary Structural Measure Contract Disposition",
+  "baseline_main": "4a84b823d8bbd33711acce89d9a66f114b4c9caf",
+  "branch": "build/bcwt-r4-execution-20260916",
+  "completed_packets": ["BCWT-R4-G2-G0_PASS_AND_INTEGRATED","BCWT-R4_PRIMARY_CONSEQUENCE_EXECUTION"],
+  "current_authority": "AUTHORIZED_CONSUMED_C0B_R4_DIAGNOSTIC_ONLY__NO_PROMOTION",
+  "proposed_delta": "Choose the disposition of two predeclared but semantically underdefined secondary structural measures without altering the already-frozen generation-2 primary task invariant or candidate membership.",
+  "acceptance_conditions": {
+    "generation_2_primary_predicate_unchanged": true,
+    "generation_2_membership_unchanged": true,
+    "primary_result_preserved_append_only": "NO_MATERIAL_DIFFERENCE under the frozen primary rule on consumed C0B",
+    "secondary_underdefinition": ["FIRST_EXPLICIT_RECONFIGURATION_OFFSET_OBSERVED_BARS","OBSERVER_REVISION_COUNT"],
+    "post_outcome_semantics_not_invented": true,
+    "promotion_authority": "NONE"
+  },
+  "tests_and_qa": {
+    "opportunity_denominator": "PASS_5238",
+    "origin_horizon_rows": "PASS_20952",
+    "measurement_ledger_rows": "PASS_167616_ZERO_SILENT_MISSING",
+    "anchor_snapshot_reconciliation": "PASS_0_MISMATCHES",
+    "primary_horizons_support_eligible": "PASS_4_OF_4",
+    "secondary_structural_contract": "BLOCKED_UNDERDEFINED",
+    "result_artifact_sha256": "accbcf63f1c41fa2fcb6f1aaefd8c8e10b3ae6b3e3e0d54f5f18eea6ca94c126",
+    "qa_artifact_sha256": "9b49f2923c05642f1859b42c4dfca0f0c13d340ae134949943f32fba9653ede1"
+  },
+  "primary_observation": {
+    "H4_delta_non_match_minus_match": -0.013444513994455842,
+    "H8_delta_non_match_minus_match": -0.007795742325345384,
+    "H16_delta_non_match_minus_match": 0.0008169934640522864,
+    "H32_delta_non_match_minus_match": 0.0016806722689075631,
+    "frozen_global_rule_result": "NO_MATERIAL_DIFFERENCE"
+  },
+  "warnings": [
+    "This is consumed-source Development diagnostic evidence, not confirmation.",
+    "The primary result does not establish observer redundancy or utility equivalence; the frozen protocol explicitly forbids that inference.",
+    "Defining the two secondary structural measures now would be post-outcome semantic work and therefore cannot be silently added to generation 2."
+  ],
+  "unresolved_issues": [
+    "FIRST_EXPLICIT_RECONFIGURATION_OFFSET_OBSERVED_BARS lacks exact frozen event and counting semantics.",
+    "OBSERVER_REVISION_COUNT lacks exact frozen revision-counting semantics."
+  ],
+  "rollback": "Preserve all generation-2 and R4 primary evidence append-only. Do not alter candidate membership, primary predicate, or computed consequence rows.",
+  "recommendation": "DEFER",
+  "allowed_decisions": ["PASS","DEFER","BLOCK","QUARANTINE","SUPERSEDE"],
+  "decision_semantics": {
+    "DEFER": "Keep the primary and neutral-path R4 diagnostic as preserved evidence, leave R4 secondary completion unresolved, and grant no promotion.",
+    "PASS": "Explicitly waive the two underdefined secondary structural measures for this consumed-development R4 execution and close R4 as primary-plus-neutral-path diagnostic only; no theory/model promotion follows.",
+    "SUPERSEDE": "Authorize a successor-generation secondary-measure specification process. Because generation-2 outcomes are now exposed, the same C0B population remains consumed-development evidence only and cannot become fresh confirmation.",
+    "QUARANTINE": "Quarantine the R4 result pending broader audit; preserve all bytes and hashes.",
+    "BLOCK": "Terminate the current R4 route without promotion; preserve all evidence."
+  },
+  "exact_post_decision_work_if_pass": "Record the explicit secondary-measure waiver, complete R4 custody/closeout as a consumed-development primary-plus-neutral-path diagnostic, integrate if checks pass, and stop before any promotion or downstream D claim authority.",
+  "authority_effect": "NONE_PENDING_OPERATOR_DECISION"
+}
