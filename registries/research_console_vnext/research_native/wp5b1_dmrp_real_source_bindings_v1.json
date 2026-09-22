@@ -1,0 +1,46 @@
+{
+  "schema": "ovc-rcn-rn-wp5b1-dmrp-real-source-bindings/v1",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "packet_id": "RCN-RN-WP5B1",
+  "owner": "DMRP",
+  "transport": "GET_ONLY",
+  "writes": "NONE",
+  "presentation_mode": "REAL_SOURCE_READ_ONLY",
+  "evidence_status": "OWNER_SOURCE_BOUND",
+  "authority_effect": "NONE",
+  "validation_consumption": "LOCKED_UNCONSUMED",
+  "first_new_real_research_source": true,
+  "gate_id": "RCN-RN-G5-FIRST-NEW-SOURCE[DMRP]",
+  "gate_decision": {
+    "path": "docs/implementation/research-console-vnext/rcn-rn-wp5b1/RCN_RN_G5_FIRST_NEW_SOURCE_DMRP_OPERATOR_DECISION_v0_1.json",
+    "git_blob_sha": "2a3633d843d877543407d1c2992dc8dc30fb0759",
+    "decision": "PASS"
+  },
+  "sources": [
+    {
+      "source_id": "DMRP_CURRENT_STATE_POINTER",
+      "source_class": "DMRP_OWNER_COURT_RECORD",
+      "path": "registries/implementation/ec1_dmrp_v0_1/CURRENT_STATE_POINTER.json",
+      "git_blob_sha": "e7b71010d2463ed2c8d610ab55397d65c8eeb916",
+      "schema": "ovc-programme-current-state-pointer/v1"
+    },
+    {
+      "source_id": "DMRP_GREAL_EC1_STATE",
+      "source_class": "DMRP_OWNER_COURT_RECORD",
+      "path": "registries/implementation/ec1_dmrp_v0_1/DMRPI_GREAL_EC1_STATE.json",
+      "git_blob_sha": "a7646ed5791313c4f703274ecb9b5de00b7a0208",
+      "schema": "ovc-programme-state/v1"
+    },
+    {
+      "source_id": "DMRP_OBJECT_TYPE_REGISTRY",
+      "source_class": "DMRP_OWNER_CONTRACT_REGISTRY",
+      "path": "registries/research_operations/DMRP_OBJECT_TYPE_REGISTRY_v0_1.json",
+      "git_blob_sha": "e156b971c1faf752abec64eb5696e9ebf06d9ebf",
+      "schema": "ovc-dmrp-object-type-registry/v1"
+    }
+  ],
+  "fixture_fallback": "PROHIBITED_IN_REAL_MODE",
+  "source_admission_transitivity": "PROHIBITED",
+  "independence_inference_from_missing_exposure": "PROHIBITED",
+  "candidate_mutation": "PROHIBITED"
+}

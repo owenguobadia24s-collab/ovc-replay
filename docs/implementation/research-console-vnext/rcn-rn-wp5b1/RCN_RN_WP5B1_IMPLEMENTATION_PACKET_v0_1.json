@@ -1,0 +1,36 @@
+{
+  "schema": "ovc-rcn-rn-wp5b1-implementation-packet/v1",
+  "programme_id": "OVC-RC-VNEXT-GREENFIELD-v0.1",
+  "plan_id": "OVC-RCN-RESEARCH-NATIVE-IMPLEMENTATION-PLAN-0.3-RATIFIED",
+  "packet_id": "RCN-RN-WP5B1",
+  "original_baseline_commit": "a53ce9d0ea950faa5f2943a393f152fbb896c645",
+  "original_baseline_tree": "dacbf7e04ba88023d8126656926a6f4caae6d5b6",
+  "current_baseline_commit": "57995c54e2963984776832b7522841e6b7c834b0",
+  "current_baseline_tree": "f67c49b8c3422948bfd96e1e2f7de3f1e19459a8",
+  "reanchor_record": "docs/implementation/research-console-vnext/rcn-rn-wp5b1/RCN_RN_WP5B1_REANCHOR_v0_1.json",
+  "operator_gate": "RCN-RN-G5-FIRST-NEW-SOURCE[DMRP]",
+  "operator_decision": "PASS",
+  "authority_delta": "BOUNDED_READ_ONLY_DMRP_PRESENTATION_SOURCE_ADMISSION_ONLY",
+  "implementation": {
+    "fixture_mode": "PRESERVED_NON_EVIDENTIARY",
+    "real_mode": "DMRP_OWNER_SOURCE_BOUND_GET_ONLY",
+    "real_fixture_fallback": "PROHIBITED",
+    "validation": "LOCKED_UNCONSUMED",
+    "source_admission_transitivity": "PROHIBITED",
+    "candidate_construction": "PROHIBITED",
+    "candidate_repair": "PROHIBITED",
+    "candidate_identity_merge": "PROHIBITED",
+    "candidate_promotion": "NONE",
+    "path_ranking": "NONE",
+    "missing_exposure_implies_independence": false
+  },
+  "owner_sources": [
+    "registries/implementation/ec1_dmrp_v0_1/CURRENT_STATE_POINTER.json",
+    "registries/implementation/ec1_dmrp_v0_1/DMRPI_GREAL_EC1_STATE.json",
+    "registries/research_operations/DMRP_OBJECT_TYPE_REGISTRY_v0_1.json"
+  ],
+  "decision_record": "docs/implementation/research-console-vnext/rcn-rn-wp5b1/RCN_RN_G5_FIRST_NEW_SOURCE_DMRP_OPERATOR_DECISION_v0_1.json",
+  "qa_packet": "docs/implementation/research-console-vnext/rcn-rn-wp5b1/RCN_RN_WP5B1_QA_v0_1.json",
+  "rollback": "Disable the DMRP real-source binding and return WP5B1 to fixture/shadow-only presentation while preserving DMRP owner records and gate evidence.",
+  "next_packet": "RCN-RN-WP5B2"
+}
