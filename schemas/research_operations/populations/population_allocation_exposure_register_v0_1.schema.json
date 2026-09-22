@@ -1,0 +1,239 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovc.local/schemas/research_operations/populations/population_allocation_exposure_register_v0_1.schema.json",
+  "title": "OVC Population Allocation & Exposure Register v0.1",
+  "type": "object",
+  "required": [
+    "schema",
+    "registry_id",
+    "status",
+    "authority_effect",
+    "source_folder",
+    "identity_rule",
+    "population_count",
+    "clock_view_count",
+    "populations",
+    "exposure_events",
+    "non_grants"
+  ],
+  "properties": {
+    "schema": {
+      "const": "ovc-population-allocation-exposure-register/v0.1"
+    },
+    "registry_id": {
+      "const": "OVC.POPULATION.ALLOCATION.EXPOSURE.REGISTER.v0.1"
+    },
+    "status": {
+      "type": "string"
+    },
+    "authority_effect": {
+      "const": "NONE"
+    },
+    "source_folder": {
+      "type": "object"
+    },
+    "identity_rule": {
+      "type": "string",
+      "minLength": 1
+    },
+    "population_count": {
+      "const": 32
+    },
+    "clock_view_count": {
+      "const": 64
+    },
+    "populations": {
+      "type": "array",
+      "minItems": 32,
+      "maxItems": 32,
+      "items": {
+        "$ref": "#/$defs/population"
+      }
+    },
+    "exposure_events": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/event"
+      }
+    },
+    "non_grants": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "clockView": {
+      "type": "object",
+      "required": [
+        "clock",
+        "archive_name",
+        "archive_drive_file_id",
+        "partition_member_hint",
+        "binding_status"
+      ],
+      "properties": {
+        "clock": {
+          "enum": [
+            "15M",
+            "120M"
+          ]
+        },
+        "archive_name": {
+          "type": "string"
+        },
+        "archive_drive_file_id": {
+          "type": "string"
+        },
+        "partition_member_hint": {
+          "type": "string"
+        },
+        "binding_status": {
+          "const": "DRIVE_ARCHIVE_AND_PARTITION_NAME_BOUND"
+        }
+      },
+      "additionalProperties": false
+    },
+    "population": {
+      "type": "object",
+      "required": [
+        "population_id",
+        "evidence_group_id",
+        "instrument",
+        "partition_id",
+        "historical_bank_label",
+        "start_year",
+        "end_year",
+        "exposure_state",
+        "role_eligibility",
+        "clock_views"
+      ],
+      "properties": {
+        "population_id": {
+          "type": "string",
+          "pattern": "^OVC\\\\.POP\\\\."
+        },
+        "evidence_group_id": {
+          "type": "string",
+          "pattern": "^OVC\\\\.EVIDENCE_GROUP\\\\."
+        },
+        "instrument": {
+          "type": "string"
+        },
+        "partition_id": {
+          "enum": [
+            "P1",
+            "P2",
+            "P3",
+            "P4"
+          ]
+        },
+        "historical_bank_label": {
+          "type": "string"
+        },
+        "start_year": {
+          "type": "integer"
+        },
+        "end_year": {
+          "type": "integer"
+        },
+        "exposure_state": {
+          "const": "UNKNOWN_PENDING_RECONCILIATION"
+        },
+        "role_eligibility": {
+          "type": "object"
+        },
+        "clock_views": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "$ref": "#/$defs/clockView"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "event": {
+      "type": "object",
+      "required": [
+        "event_id",
+        "population_id",
+        "programme_id",
+        "study_id",
+        "research_role",
+        "exposure_kind",
+        "occurred_at",
+        "clock",
+        "candidate_generation_id",
+        "protocol_id",
+        "detail_refs",
+        "authority_effect"
+      ],
+      "properties": {
+        "event_id": {
+          "type": "string",
+          "pattern": "^OVC\\\\.POP\\\\.EXPOSURE\\\\.[0-9a-f]{64}$"
+        },
+        "population_id": {
+          "type": "string"
+        },
+        "programme_id": {
+          "type": "string"
+        },
+        "study_id": {
+          "type": "string"
+        },
+        "research_role": {
+          "enum": [
+            "DISCOVERY",
+            "DEVELOPMENT",
+            "VALIDATION"
+          ]
+        },
+        "exposure_kind": {
+          "enum": [
+            "METADATA_ONLY",
+            "PAYLOAD_READ",
+            "DERIVED_ANALYSIS",
+            "RESULT_REVEAL",
+            "OUTCOME_JOIN"
+          ]
+        },
+        "occurred_at": {
+          "type": "string"
+        },
+        "clock": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "candidate_generation_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "protocol_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "detail_refs": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "authority_effect": {
+          "const": "NONE"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
