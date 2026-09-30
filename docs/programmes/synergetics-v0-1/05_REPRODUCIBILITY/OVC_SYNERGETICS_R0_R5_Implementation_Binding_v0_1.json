@@ -1,0 +1,35 @@
+{
+  "artifact_id": "OVC-SYNERGETICS-R0-R5-IMPLEMENTATION-BINDING-0.1",
+  "authority_effect": "NONE",
+  "bundle": {
+    "drive_file_id": "1XrWZouHD4_fX4p3dQ-B5Pkqk-w-kcgpK",
+    "filename": "OVC_SYNERGETICS_R0_R5_Reproducibility_Bundle_v0_1.zip",
+    "sha256": "cfd70605f14926376a9f8f27b77758b6e6fe6c499dc9ac17ccbd342aa74e2101"
+  },
+  "environment_receipt_sha256": "2c735b8fab65299c1fe9d335749fde2472c31344905bb3c0d9ec770beac0f22b",
+  "implementation": {
+    "bundle_path": "05_REPRODUCIBILITY/synergetics_reproduce.py",
+    "sha256": "cee1194f1daba444048b482eec8a1f18d6682c0996bf8c479498d6310802e38f"
+  },
+  "programme_id": "OVC-SYNERGETICS-0001",
+  "reproduction_contract": {
+    "decision_bearing_inputs": "the seven exact AC-AI ZIP members embedded under 05_REPRODUCIBILITY/input_archives/",
+    "expected_outputs": {
+      "OVC_SYNERGETICS_R0_R5_QA_v0_1.json": "47d7b5a8bee3e847364bc585e299fbfa380ac07fe4ab757622142050c029a6cf",
+      "OVC_SYNERGETICS_R0_R5_Result_Ledger_v0_1.json": "5be6edfa9a7db488ed62f1fa1c13fc31e01888345f6a1cdc53770101583be887",
+      "OVC_SYNERGETICS_R5_Reciprocal_Model_Scores_v0_1.csv": "538237b8793ee3892d6aefd685160504a78c7021a0b06a28bc03d1a2e79d2192"
+    },
+    "run": "From the extracted bundle's 05_REPRODUCIBILITY directory, run: python test_synergetics_reproduce.py. A full regeneration is: python synergetics_reproduce.py --bundle-root <bundle-root> --output-dir <clean-output-dir>.",
+    "standing": "retrospective source-bound reproducibility only"
+  },
+  "schema": "ovc-synergetics-r0-r5-implementation-binding/v0.1",
+  "standalone_test": {
+    "bundle_path": "05_REPRODUCIBILITY/test_synergetics_reproduce.py",
+    "sha256": "bcc0c49c3b6ec03a9d975cf5b1019ab6f242bb5327f45c40157c0c294f9cd419"
+  },
+  "verification": {
+    "clean_reruns": 2,
+    "result": "PASS_BYTE_IDENTICAL",
+    "seed": 20260930
+  }
+}
