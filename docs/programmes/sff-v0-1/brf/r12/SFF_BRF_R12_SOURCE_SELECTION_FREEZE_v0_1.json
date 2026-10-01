@@ -1,0 +1,40 @@
+{
+  "schema": "sff-brf-r12-source-selection-freeze/v0.1",
+  "artifact_id": "OVC-SFF-BRF-R12-SOURCE-SELECTION-FREEZE-0.1",
+  "packet_id": "SFF-BRF-R12",
+  "programme_id": "OVC-SFF-CONFORMANCE-PREREG-v0.1",
+  "status": "FROZEN_BEFORE_NEW_SOURCE_BYTES_OPEN",
+  "authority_source": "OVC APPROVE SFF-BRF-GNEW-SOURCE-INTAKE",
+  "baseline_main": "7fda2e02824db6e40305a3b0dcd06c072ef88d7c",
+  "provider": "FXCM_PUBLIC_CANDLEDATA",
+  "provider_documentation": "https://github.com/fxcm/MarketData/tree/master/CandleData",
+  "instrument": "GBPUSD",
+  "side": "BID",
+  "target_clock": "15M",
+  "raw_periodicity": "m1",
+  "selected_calendar_years": [
+    2014,
+    2016,
+    2018,
+    2019
+  ],
+  "selection_rule": "Consume all four previously missing nonprotected nonquarantined calendar years identified by R11 (2014,2016,2018,2019) as one fixed batch; no adaptive stopping or year substitution after any source/outcome inspection.",
+  "raw_url_template": "https://candledata.fxcorporate.com/m1/GBPUSD/{year}/{iso_week}.csv.gz",
+  "expected_week_probe": "1..53; file presence determined mechanically, missing week allowed only as typed source absence",
+  "aggregation": "UTC-aligned complete 15-minute bins from M1 BidOpen/BidHigh/BidLow/BidClose; incomplete bins dropped; preserve gap-break/segment accounting identical to ORG1 GFRESH source binding",
+  "event_firewall": "NO_BRF_EXACT_JOINT_OUTCOME_INSPECTION_UNTIL_SOURCE_IDENTITY_OPGS_R2_AND_DIRECT_S4_BRIDGE_ARE_HASH_BOUND",
+  "brf_semantics": "UNCHANGED_R7_R8_EXACT2_CODOM_PHASE_READY_STRICT_BASE_AND_RJ2_EXACT_INTERVAL_SET_ORACLE",
+  "support_threshold": "100 uncensored opportunities AND 20 exact joint events across >=2 populations before any probability fit may be considered",
+  "authority_effect": "BOUNDED_NEW_SOURCE_INTAKE_ONLY",
+  "explicit_non_grants": [
+    "SEMANTIC_PROMOTION",
+    "MODEL_PROMOTION",
+    "CALIBRATED_PROBABILITY",
+    "ACTIVE_VALIDATION",
+    "RISK",
+    "EXPOSURE",
+    "TRADING",
+    "EXECUTION",
+    "AGENT_WRITE"
+  ]
+}
