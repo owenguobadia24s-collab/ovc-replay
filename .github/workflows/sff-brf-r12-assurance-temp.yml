@@ -1,0 +1,31 @@
+name: SFF-BRF-R12 temporary assurance
+
+on:
+  push:
+    branches:
+      - build/sff-brf-r12-new-source-intake-20261001
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sff-brf-r12-assurance-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  assurance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install package and pytest
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e . pytest
+      - name: Targeted R12 authority tests
+        run: python -m pytest -q tests/research_operations/sff/test_sff_brf_r12_source_intake_authority.py --tb=short
+      - name: Full repository pytest
+        run: python -m pytest -q tests --tb=short
