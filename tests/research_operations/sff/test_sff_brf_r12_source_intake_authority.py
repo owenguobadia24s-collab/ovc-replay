@@ -1,3 +1,4 @@
+import hashlib
 import json
 from pathlib import Path
 
@@ -8,6 +9,10 @@ STATE = ROOT / "records/research_operations/sff/SFF_BRF_PROGRAMME_STATE_v0_1.jso
 
 def read(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def canonical_sha256(value: dict) -> str:
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
 
 def test_operator_pass_is_exact_and_bounded():
@@ -31,6 +36,16 @@ def test_source_selection_is_frozen_before_bytes_and_nonadaptive():
     assert freeze["selected_calendar_years"] == [2014, 2016, 2018, 2019]
     assert "no adaptive stopping" in freeze["selection_rule"]
     assert "NO_BRF_EXACT_JOINT_OUTCOME_INSPECTION" in freeze["event_firewall"]
+
+
+def test_authority_and_dependency_frontier_identities_are_exact():
+    authority = read(R12 / "SFF_BRF_R12_AUTHORITY_MANIFEST_v0_1.json")
+    frontier = read(R12 / "SFF_BRF_R12_DEPENDENCY_FRONTIER_v0_1.json")
+    state = read(STATE)
+    assert state["authority_manifest_id"] == canonical_sha256(authority)
+    assert state["dependency_frontier_id"] == canonical_sha256(frontier)
+    assert frontier["blockers"] == []
+    assert frontier["next_packet"] == "SFF-BRF-R12-SOURCE-BINDING"
 
 
 def test_programme_state_stops_short_of_reserved_authority():
