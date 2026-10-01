@@ -4,10 +4,12 @@
   "plan_id": "SFF-BRF-DEVELOPMENT-LINEAGE",
   "plan_version": "R12",
   "packet_id": "SFF-BRF-R12",
-  "status": "APPROVED_SOURCE_SELECTION_FROZEN_PENDING_SOURCE_BINDING",
+  "status": "COMPLETED",
   "prerequisites": [
     "SFF-BRF-R11_CUSTODY_COMPLETE",
-    "SFF-BRF-GNEW-SOURCE-INTAKE_OPERATOR_PASS"
+    "SFF-BRF-GNEW-SOURCE-INTAKE_OPERATOR_PASS",
+    "SFF-BRF-R12_SOURCE_SELECTION_FROZEN",
+    "SFF-BRF-R12_SOURCE_BINDING_PASS_AND_CUSTODY_COMPLETE"
   ],
   "authority_required": "SATISFIED_BY_DIRECT_OPERATOR_COMMAND",
   "authority_delta": "BOUNDED_NEW_SOURCE_INTAKE_ONLY",
@@ -15,21 +17,37 @@
   "authority_manifest_id": "c246e21f0cc53c608712542142179baa6ec082cd124c1cc6012230442a1e9e06",
   "dependency_frontier": "docs/programmes/sff-v0-1/brf/r12/SFF_BRF_R12_DEPENDENCY_FRONTIER_v0_1.json",
   "dependency_frontier_id": "8672c2543ea6868830f8710e288caab817999d08ea74a2c7d4d8c922aa1a6f87",
-  "baseline_commit": "7fda2e02824db6e40305a3b0dcd06c072ef88d7c",
-  "branch": "build/sff-brf-r12-new-source-intake-20261001",
+  "baseline_commit": "47ad0fe3c068d6ffa445196caf28d7bb15ff357f",
+  "branch": "build/sff-brf-r12-source-binding-20261001",
   "candidate_commit": null,
   "tests": [
-    "tests/research_operations/sff/test_sff_brf_r12_source_intake_authority.py"
+    "tests/research_operations/sff/test_sff_brf_r12_source_intake_authority.py",
+    "GITHUB_ACTIONS_SOURCE_BINDING_RUN_36934872225_PASS",
+    "SOURCE_BINDING_ARTIFACT_SHA256_a0353de6c8940275cabdfb706ad8d23c0bdf4de3039653ee6729c212eae4670b",
+    "LABORATORY_REMOTE_RAW_SHA256_5_OF_5_PASS",
+    "SOURCE_BINDING_PACKET_QA_PASS__INTEGRATION_ASSURANCE_EXTERNAL_VIT"
   ],
-  "qa_packet": null,
+  "qa_packet": "docs/programmes/sff-v0-1/brf/r12/SFF_BRF_R12_SOURCE_BINDING_SUCCESS_RECEIPT_v0_1.json",
   "decision_record": "docs/programmes/sff-v0-1/brf/r12/SFF_BRF_GNEW_SOURCE_INTAKE_OPERATOR_DECISION_v0_1.json",
   "merge_commit": null,
   "blockers": [],
-  "next_packet": "SFF-BRF-R12-SOURCE-BINDING",
-  "current_gate": "NONE_AFTER_OPERATOR_PASS_WITHIN_APPROVED_DELTA",
+  "resolved_blockers": [
+    "docs/programmes/sff-v0-1/brf/r12/SFF_BRF_R12_SOURCE_BINDING_EXECUTION_BLOCKER_v0_1.json",
+    "docs/programmes/sff-v0-1/brf/r12/SFF_BRF_R12_SOURCE_BINDING_BLOCKER_RECOVERY_v0_1.json"
+  ],
+  "next_packet": "SFF-BRF-R12-OPGS-R2-BUILD-AND-VERIFICATION",
+  "current_gate": "NONE_WITHIN_APPROVED_DELTA",
   "support_baseline": {
     "uncensored_opportunities": 5,
     "exact_joint_events": 3
+  },
+  "source_binding": {
+    "workflow_run_id": 36934872225,
+    "workflow_artifact_id": 11197615751,
+    "workflow_artifact_sha256": "a0353de6c8940275cabdfb706ad8d23c0bdf4de3039653ee6729c212eae4670b",
+    "manifest_sha256": "a1bf1b3806bf53734bda5bfe8659c75477e2662ba5a17ccd4dbef798af0b5291",
+    "brf_outcomes_inspected": false,
+    "laboratory_custody": "COMPLETE"
   },
   "explicit_non_grants": [
     "SEMANTIC_PROMOTION",
