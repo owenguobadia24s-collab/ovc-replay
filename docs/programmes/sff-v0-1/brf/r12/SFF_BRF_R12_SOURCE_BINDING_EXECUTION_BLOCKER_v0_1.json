@@ -1,0 +1,73 @@
+{
+  "schema": "ovc-execution-blocker/v1",
+  "programme_id": "OVC-SFF-CONFORMANCE-PREREG-v0.1",
+  "packet_id": "SFF-BRF-R12-SOURCE-BINDING",
+  "blocker_id": "SFF-BRF-R12-SOURCE-BINDING-EXECUTION-ENVIRONMENT-BLOCKER-0.1",
+  "status": "BLOCKED",
+  "authority_source": "OVC APPROVE SFF-BRF-GNEW-SOURCE-INTAKE",
+  "authority_status": "SATISFIED_BOUNDED_NEW_SOURCE_INTAKE",
+  "lawful_main": "47ad0fe3c068d6ffa445196caf28d7bb15ff357f",
+  "branch": "build/sff-brf-r12-source-binding-20261001",
+  "source_selection_freeze": "docs/programmes/sff-v0-1/brf/r12/SFF_BRF_R12_SOURCE_SELECTION_FREEZE_v0_1.json",
+  "frozen_batch": {
+    "provider": "FXCM_PUBLIC_CANDLEDATA",
+    "instrument": "GBPUSD",
+    "side": "BID",
+    "raw_periodicity": "m1",
+    "target_clock": "15M",
+    "years": [
+      2014,
+      2016,
+      2018,
+      2019
+    ]
+  },
+  "failed_execution_paths": [
+    {
+      "path": "container_python_direct_provider_fetch",
+      "result": "BLOCKED_NO_OUTBOUND_DNS_NETWORK"
+    },
+    {
+      "path": "web_binary_fetch",
+      "result": "BLOCKED_BINARY_SOURCE_URL_NOT_ACCESSIBLE"
+    },
+    {
+      "path": "remote_desktop_commander",
+      "result": "BLOCKED_DEVICE_OFFLINE"
+    },
+    {
+      "path": "github_actions_push_runner",
+      "result": "BLOCKED_NO_WORKFLOW_RUN_CREATED"
+    },
+    {
+      "path": "github_actions_pull_request_runner",
+      "result": "BLOCKED_NO_WORKFLOW_RUN_CREATED"
+    }
+  ],
+  "recovery_actions": [
+    "Reinspected lawful main, source-selection freeze, authority manifest, dependency frontier and source-binding branch.",
+    "Created deterministic standard-library FXCM source-binding runner without opening BRF outcomes.",
+    "Created bounded GitHub Actions execution wrapper using existing repository CI infrastructure.",
+    "Triggered workflow by push and by draft pull request; GitHub reported no workflow runs.",
+    "Verified source/outcome firewall remained closed and no source bytes were partially ingested."
+  ],
+  "source_bytes_opened": false,
+  "scientific_outcomes_inspected": false,
+  "support_state_preserved": {
+    "uncensored_opportunities": 5,
+    "exact_joint_events": 3
+  },
+  "smallest_lawful_resolution": "Provide an online execution environment with outbound access to candledata.fxcorporate.com or restore GitHub Actions/authorized remote execution, then rerun the frozen nonadaptive 2014/2016/2018/2019 source-binding packet unchanged.",
+  "rollback": "Close the draft tooling PR and preserve main at the approved source-selection freeze; no scientific state changes occurred.",
+  "reserved_authority_unchanged": [
+    "SEMANTIC_PROMOTION",
+    "MODEL_PROMOTION",
+    "CALIBRATED_PROBABILITY_BEFORE_100_20_SUPPORT",
+    "ACTIVE_VALIDATION",
+    "RISK",
+    "EXPOSURE",
+    "TRADING",
+    "EXECUTION",
+    "AGENT_WRITE"
+  ]
+}
