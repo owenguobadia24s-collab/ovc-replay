@@ -1,0 +1,63 @@
+{
+  "schema": "ovc-prvit-source-freeze/v0.1",
+  "programme_id": "OVC-PRVIT-PIPELINE-CONFORMANCE-CORRECTIVE-AUDIT-v0.1",
+  "packet_id": "PRVIT-WP0",
+  "gate_id": "PRVIT-G0",
+  "captured_at": "2026-08-17T20:40:00+01:00",
+  "repository": "owenguobadia24s-collab/ovc-replay",
+  "baseline": {
+    "main_commit": "566903dcdde4fcc0aa6ab43a95bc36b947fafa15",
+    "main_tree": "ac7e76b9100e5720d4fb0e07bbd1b775dffc0bbc",
+    "main_message": "C2P2-RS0: record fresh GRUN PASS authority (#1097)"
+  },
+  "physical_main_protection": {
+    "ruleset_id": 20229411,
+    "ruleset_name": "OVC main protection",
+    "enforcement": "active",
+    "bypass_actor_count": 0,
+    "allowed_merge_methods": ["squash"],
+    "required_status_contexts": ["OVC merge readiness"],
+    "strict_required_status_checks_policy": true
+  },
+  "frozen_replay_population": {
+    "population_id": "PRVIT-LAST20-FROZEN-20260817-v0.1",
+    "count": 20,
+    "pr_numbers": [1088,1089,1090,1091,1092,1093,1094,1095,1097,1098,1099,1101,1102,1103,1104,1105,1106,1107,1108,1109],
+    "replacement_policy": "IMMUTABLE_FOR_PRIMARY_REPLAY",
+    "newer_prs_observed_after_proposal": [1110,1111,1112],
+    "newer_pr_policy": "EXCLUDED_FROM_PRIMARY_COHORT; MAY_BE_ADDITIVE_SUPPLEMENT_ONLY"
+  },
+  "regression_registry": ["PRVIT-R01","PRVIT-R02","PRVIT-R03","PRVIT-R04","PRVIT-R05","PRVIT-R06","PRVIT-R07","PRVIT-R08","PRVIT-R09","PRVIT-R10"],
+  "protected_live_authority": {
+    "pr": 1106,
+    "observed_head": "41cb0d578d5ac9a490f86dfa39d718436b5c1829",
+    "rule": "AUDIT_REPLAY_ONLY",
+    "consumption_allowed": false,
+    "launch_allowed": false,
+    "renewal_allowed": false,
+    "broadening_allowed": false
+  },
+  "governing_source_sha256": {
+    "DSAI_V0_3_VIT_DESIGN": "1755d8e0eac857ff2b741b00e014250913ed919402555d08abe79616748fcc4e",
+    "DSAI_V0_3_VIT_CONFORMANCE_PLAN_R1_RATIFIED": "6ea429c0150f837ccf0619085896b3b7b7156b4e3c194619dd89b0254355f15f",
+    "GRT_V0_2_REPOSITORY_CONSTITUTION_R1_RATIFIED": "bee3b1d9095a5f45f141abae550af35acb1a2aceca1bee555e59ddd2a19de9d7",
+    "GRT_V0_2_CONFORMANCE_PLAN_RATIFIED": "c81e1368f4e25c77906d378772379b04910b5c8f93fc9b21f988749602a9bedb"
+  },
+  "audit_source_sha256": {
+    "proposal_docx": "1e262a77b9e7480cb3950c8317dc4f64ed91646ce6a0458eb3257f163e0a8492",
+    "proposal_manifest_json": "482c761e987946ef5c100a5e50f57e18da74a3bb4d2669c8a4fad96763e979a8"
+  },
+  "hard_denies": [
+    "LIVE_WORKFLOW_ROUTING_CHANGE",
+    "LIVE_REQUIRED_CHECK_CHANGE",
+    "LIVE_RULESET_CHANGE",
+    "LIVE_VIT_SIQ_GRT_ADMISSION_CHANGE",
+    "PHYSICAL_MAIN_WRITE",
+    "PR1106_REAL_SOURCE_AUTHORITY_CONSUMPTION",
+    "FORCE_PUSH",
+    "HISTORY_REWRITE",
+    "DESTRUCTIVE_CLEANUP"
+  ],
+  "source_discipline": "MISSING_DECISION_EVIDENCE_IS_NOT_EVALUABLE; NO CHAT_OR_NAMING_INFERENCE",
+  "full_pr_evidence_freeze_deferred_to": "PRVIT-WP2"
+}

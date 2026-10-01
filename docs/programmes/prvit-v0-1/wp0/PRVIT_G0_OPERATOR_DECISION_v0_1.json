@@ -1,0 +1,33 @@
+{
+  "schema": "ovc-prvit-operator-decision/v0.1",
+  "gate_id": "PRVIT-G0",
+  "programme_id": "OVC-PRVIT-PIPELINE-CONFORMANCE-CORRECTIVE-AUDIT-v0.1",
+  "plan_id": "OVC-PRVIT-PCCA-v0.1-PROPOSED",
+  "plan_version": "0.1",
+  "decision": "PASS",
+  "authority": "OPERATOR",
+  "operator_command": "OVC APPROVE PRVIT-G0 CONTINUE UNTIL NEXT BOUNDARY",
+  "recorded_at_local": "2026-08-17T20:48:00+01:00",
+  "baseline_commit": "566903dcdde4fcc0aa6ab43a95bc36b947fafa15",
+  "gate_ready_commit": "9a696d1b64efcc4ee22705ab296828c48d318b72",
+  "authority_granted": {
+    "execution_mode": "READ_ONLY_SHADOW",
+    "packets": ["PRVIT-WP1","PRVIT-WP2","PRVIT-WP3","PRVIT-WP4","PRVIT-WP5","PRVIT-WP6","PRVIT-WP7","PRVIT-WP8_GATE_PACKET_PREPARATION_ONLY"],
+    "auto_gates": ["PRVIT-G1","PRVIT-G2","PRVIT-G3","PRVIT-G4","PRVIT-G5","PRVIT-G6","PRVIT-G7"],
+    "final_boundary": "PRVIT-G-CUTOVER-READINESS"
+  },
+  "hard_denies_preserved": [
+    "LIVE_WORKFLOW_ROUTING_CHANGE",
+    "LIVE_REQUIRED_CHECK_CHANGE",
+    "LIVE_RULESET_CHANGE",
+    "LIVE_VIT_SIQ_GRT_ADMISSION_CHANGE",
+    "LIVE_CUTOVER",
+    "PR1106_REAL_SOURCE_AUTHORITY_CONSUMPTION",
+    "FORCE_PUSH",
+    "HISTORY_REWRITE",
+    "DESTRUCTIVE_CLEANUP"
+  ],
+  "authority_delta_to_live_pipeline": "NONE",
+  "rollback": "Forward preserve/supersede shadow audit artifacts; live integration path remains unchanged.",
+  "next_packet": "PRVIT-WP1"
+}
