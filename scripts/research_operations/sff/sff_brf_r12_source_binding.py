@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Frozen R12 source-binding runner; source/outcome firewall remains closed.
 import argparse,csv,datetime as dt,gzip,hashlib,io,json,os,time,urllib.error,urllib.request
 from collections import defaultdict
 from pathlib import Path
