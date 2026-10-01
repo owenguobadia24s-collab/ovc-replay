@@ -1,0 +1,218 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OVC Population Allocation & Exposure Register v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "register_id",
+    "authority_effect",
+    "resources",
+    "allocations",
+    "exposure_events",
+    "notes"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "ovc.population_allocation_exposure_register.v0.1"
+    },
+    "register_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authority_effect": {
+      "const": "NONE"
+    },
+    "resources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/resource"
+      }
+    },
+    "allocations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/allocation"
+      }
+    },
+    "exposure_events": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/exposure"
+      }
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "resource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "population_id",
+        "instrument",
+        "partition_label",
+        "declared_years",
+        "clock_views",
+        "source_archives",
+        "current_exposure_state",
+        "authority_effect"
+      ],
+      "properties": {
+        "population_id": {
+          "type": "string"
+        },
+        "instrument": {
+          "type": "string"
+        },
+        "partition_label": {
+          "type": "string"
+        },
+        "declared_years": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "integer"
+          }
+        },
+        "clock_views": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "15M",
+              "120M",
+              "M1",
+              "OTHER"
+            ]
+          }
+        },
+        "source_archives": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "current_exposure_state": {
+          "enum": [
+            "UNKNOWN_REQUIRES_CENSUS",
+            "UNEXPOSED_VERIFIED",
+            "EXPOSED",
+            "QUARANTINED"
+          ]
+        },
+        "authority_effect": {
+          "const": "NONE"
+        }
+      }
+    },
+    "allocation": {
+      "type": "object",
+      "required": [
+        "allocation_id",
+        "population_id",
+        "programme_id",
+        "role",
+        "state",
+        "authority_effect"
+      ],
+      "properties": {
+        "allocation_id": {
+          "type": "string"
+        },
+        "population_id": {
+          "type": "string"
+        },
+        "programme_id": {
+          "type": "string"
+        },
+        "study_id": {
+          "type": "string"
+        },
+        "candidate_generation_ref": {
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "DISCOVERY",
+            "DEVELOPMENT",
+            "VALIDATION",
+            "REPLAY_QA",
+            "HISTORICAL_REPLICATION"
+          ]
+        },
+        "state": {
+          "enum": [
+            "PROPOSED",
+            "RESERVED_UNCONSUMED",
+            "CONSUMED",
+            "RELEASED",
+            "BLOCKED",
+            "SUPERSEDED"
+          ]
+        },
+        "authority_ref": {
+          "type": "string"
+        },
+        "authority_effect": {
+          "const": "NONE"
+        }
+      },
+      "additionalProperties": true
+    },
+    "exposure": {
+      "type": "object",
+      "required": [
+        "event_id",
+        "population_id",
+        "programme_id",
+        "channel",
+        "observed_at",
+        "source_ref",
+        "irreversible",
+        "authority_effect"
+      ],
+      "properties": {
+        "event_id": {
+          "type": "string"
+        },
+        "population_id": {
+          "type": "string"
+        },
+        "programme_id": {
+          "type": "string"
+        },
+        "study_id": {
+          "type": "string"
+        },
+        "candidate_generation_ref": {
+          "type": "string"
+        },
+        "channel": {
+          "enum": [
+            "HUMAN",
+            "ALGORITHM",
+            "SUMMARY"
+          ]
+        },
+        "observed_at": {
+          "type": "string"
+        },
+        "source_ref": {
+          "type": "string"
+        },
+        "irreversible": {
+          "const": true
+        },
+        "authority_effect": {
+          "const": "NONE"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
