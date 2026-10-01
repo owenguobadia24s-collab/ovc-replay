@@ -4,10 +4,12 @@
   "plan_id": "SFF-BRF-DEVELOPMENT-LINEAGE",
   "plan_version": "R12",
   "packet_id": "SFF-BRF-R12",
-  "status": "BLOCKED",
+  "status": "QA_REVIEW",
   "prerequisites": [
     "SFF-BRF-R11_CUSTODY_COMPLETE",
-    "SFF-BRF-GNEW-SOURCE-INTAKE_OPERATOR_PASS"
+    "SFF-BRF-GNEW-SOURCE-INTAKE_OPERATOR_PASS",
+    "SFF-BRF-R12_SOURCE_SELECTION_FROZEN",
+    "SFF-BRF-R12_SOURCE_BINDING_PASS_AND_CUSTODY_COMPLETE"
   ],
   "authority_required": "SATISFIED_BY_DIRECT_OPERATOR_COMMAND",
   "authority_delta": "BOUNDED_NEW_SOURCE_INTAKE_ONLY",
@@ -20,19 +22,32 @@
   "candidate_commit": null,
   "tests": [
     "tests/research_operations/sff/test_sff_brf_r12_source_intake_authority.py",
-    "SOURCE_BINDING_RUNTIME_NOT_EXECUTABLE_IN_AVAILABLE_ENVIRONMENT"
+    "GITHUB_ACTIONS_SOURCE_BINDING_RUN_36934872225_PASS",
+    "SOURCE_BINDING_ARTIFACT_SHA256_a0353de6c8940275cabdfb706ad8d23c0bdf4de3039653ee6729c212eae4670b",
+    "LABORATORY_REMOTE_RAW_SHA256_5_OF_5_PASS",
+    "VIT_AND_REPOSITORY_ASSURANCE_PENDING_FINAL_HEAD_QUALIFICATION"
   ],
-  "qa_packet": "docs/programmes/sff-v0-1/brf/r12/SFF_BRF_R12_SOURCE_BINDING_EXECUTION_BLOCKER_v0_1.json",
+  "qa_packet": "docs/programmes/sff-v0-1/brf/r12/SFF_BRF_R12_SOURCE_BINDING_SUCCESS_RECEIPT_v0_1.json",
   "decision_record": "docs/programmes/sff-v0-1/brf/r12/SFF_BRF_GNEW_SOURCE_INTAKE_OPERATOR_DECISION_v0_1.json",
   "merge_commit": null,
-  "blockers": [
-    "docs/programmes/sff-v0-1/brf/r12/SFF_BRF_R12_SOURCE_BINDING_EXECUTION_BLOCKER_v0_1.json"
+  "blockers": [],
+  "resolved_blockers": [
+    "docs/programmes/sff-v0-1/brf/r12/SFF_BRF_R12_SOURCE_BINDING_EXECUTION_BLOCKER_v0_1.json",
+    "docs/programmes/sff-v0-1/brf/r12/SFF_BRF_R12_SOURCE_BINDING_BLOCKER_RECOVERY_v0_1.json"
   ],
-  "next_packet": "SFF-BRF-R12-SOURCE-BINDING",
-  "current_gate": "BLOCKED_EXECUTION_ENVIRONMENT_SOURCE_RETRIEVAL",
+  "next_packet": "SFF-BRF-R12-OPGS-R2-BUILD-AND-VERIFICATION",
+  "current_gate": "NONE_WITHIN_APPROVED_DELTA__INTEGRATION_QUALIFICATION_PENDING",
   "support_baseline": {
     "uncensored_opportunities": 5,
     "exact_joint_events": 3
+  },
+  "source_binding": {
+    "workflow_run_id": 36934872225,
+    "workflow_artifact_id": 11197615751,
+    "workflow_artifact_sha256": "a0353de6c8940275cabdfb706ad8d23c0bdf4de3039653ee6729c212eae4670b",
+    "manifest_sha256": "a1bf1b3806bf53734bda5bfe8659c75477e2662ba5a17ccd4dbef798af0b5291",
+    "brf_outcomes_inspected": false,
+    "laboratory_custody": "COMPLETE"
   },
   "explicit_non_grants": [
     "SEMANTIC_PROMOTION",
