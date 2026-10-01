@@ -1,0 +1,45 @@
+name: SFF BRF R12 source binding
+
+on:
+  push:
+    branches:
+      - build/sff-brf-r12-source-binding-20261001
+    paths:
+      - "scripts/research_operations/sff/sff_brf_r12_source_binding.py"
+      - ".github/workflows/sff-brf-r12-source-binding.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-binding:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify governing source freeze
+        run: |
+          python - <<'PY'
+          import json
+          p="docs/programmes/sff-v0-1/brf/r12/SFF_BRF_R12_SOURCE_SELECTION_FREEZE_v0_1.json"
+          x=json.load(open(p,encoding="utf-8"))
+          assert x["status"]=="FROZEN_BEFORE_NEW_SOURCE_BYTES_OPEN"
+          assert x["selected_calendar_years"]==[2014,2016,2018,2019]
+          assert x["provider"]=="FXCM_PUBLIC_CANDLEDATA"
+          assert x["instrument"]=="GBPUSD"
+          assert x["side"]=="BID"
+          assert x["target_clock"]=="15M"
+          assert "NO_BRF_EXACT_JOINT_OUTCOME_INSPECTION" in x["event_firewall"]
+          print("governing freeze verified")
+          PY
+      - name: Fetch and bind frozen FXCM source batch
+        run: |
+          python scripts/research_operations/sff/sff_brf_r12_source_binding.py --out "$RUNNER_TEMP/sff-brf-r12-source-binding"
+      - name: Upload source binding artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sff-brf-r12-source-binding
+          path: ${{ runner.temp }}/sff-brf-r12-source-binding
+          if-no-files-found: error
+          retention-days: 7
