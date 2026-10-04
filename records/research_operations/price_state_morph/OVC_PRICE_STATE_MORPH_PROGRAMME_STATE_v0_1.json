@@ -1,0 +1,45 @@
+{
+  "schema": "ovc-programme-state/v1",
+  "programme_id": "OVC-PRICE-STATE-MORPH-0001",
+  "plan_id": "OVC-PRICE-STATE-MORPH",
+  "plan_version": "0.1",
+  "packet_id": "OVC-PRICE-STATE-MORPH-R3",
+  "status": "COMPLETED",
+  "prerequisites": [
+    "OVC-PRICE-STATE-MORPH-R2:PASS_MINIMAL_TWO_COORDINATE_STATE_SUFFICIENCY",
+    "OVC-PRICE-STATE-MORPH-R3-G0:PASS"
+  ],
+  "authority_required": "SATISFIED_FOR_R3_CONSUMED_DISCOVERY_ONLY",
+  "authority_delta": "ACTIVE_DISCOVERY_R3_CONSUMED_ONLY__COMPLETED",
+  "baseline_commit": "47ad0fe3c068d6ffa445196caf28d7bb15ff357f",
+  "branch": "build/price-state-morph-r3-20261004",
+  "candidate_commit": "PENDING_EXACT_PR_HEAD",
+  "tests": [
+    "tests/research_operations/price_state_morph/test_price_state_morph_r3_gate_and_closeout.py",
+    "repository_ci_on_exact_pr_head"
+  ],
+  "qa_packet": "external:OVC-PSM-R3-QA-0.1 sha256=4423b89f2e796e655ca9f8db1c9685fd5af16c325f3b271159f8610ccc8674dd",
+  "decision_record": "docs/programmes/price-state-morph-v0-1/r3/OVC_PRICE_STATE_MORPH_R3_GATE_DECISION_AND_CLOSEOUT_v0_1.json",
+  "merge_commit": null,
+  "blockers": [],
+  "scientific_decision": "A0_A1_EQUIVALENCE_UNSTABLE_ACROSS_GRID",
+  "canonical_package_sha256": "9cb4d3da2f4e3ad11c6d768271c6785ead87af962c43243923fdbc11b0ecda71",
+  "laboratory_custody": "VERIFIED",
+  "next_packet": "OVC-PRICE-STATE-MORPH-R4-G0",
+  "next_gate": "OVC-PRICE-STATE-MORPH-R4-G0",
+  "next_gate_status": "GATE_READY_AWAITING_OPERATOR",
+  "fresh_source_selected": false,
+  "retained_denials": [
+    "FRESH_SOURCE_INTAKE",
+    "ACTIVE_DEVELOPMENT",
+    "ACTIVE_VALIDATION",
+    "SEMANTIC_MODEL_CANDIDATE_FAMILY_THEORY_PROMOTION",
+    "CALIBRATED_PROBABILITY",
+    "RISK",
+    "EXPOSURE",
+    "TRADING",
+    "EXECUTION",
+    "AGENT_WRITE"
+  ],
+  "rollback": "Forward-supersede repository integration only; preserve external R3 Laboratory evidence and decision."
+}
