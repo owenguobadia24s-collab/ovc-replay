@@ -1,0 +1,100 @@
+{
+  "schema": "ovc-price-state-morph-r3-gate-decision-closeout/v0.1",
+  "programme_id": "OVC-PRICE-STATE-MORPH-0001",
+  "packet_id": "OVC-PRICE-STATE-MORPH-R3",
+  "gate_id": "OVC-PRICE-STATE-MORPH-R3-G0",
+  "plan_version": "0.1",
+  "baseline_commit": "47ad0fe3c068d6ffa445196caf28d7bb15ff357f",
+  "operator_decision": {
+    "decision": "PASS",
+    "decision_authority": "DIRECT_OPERATOR",
+    "operator_command": "APPROVE OVC-PRICE-STATE-MORPH-R3-G0",
+    "decision_time": "2026-10-04T19:32:00+01:00",
+    "gate_packet_sha256": "a7b2d984474e343738e85691b1497766ec4927f53ba2f15aa6bb1fbbb5077366",
+    "approved_delta": "ACTIVE_DISCOVERY_R3_CONSUMED_ONLY"
+  },
+  "protocol": {
+    "status": "FROZEN_BEFORE_R3_SCORING",
+    "sha256": "71ccbfd00c9db6c767d66ca57f2e3b02410632b1ed4717d004f377f475bb1347",
+    "laboratory_drive_id": "1SN-Zl-Qg5XZJ2w4GXioKbDLXW4XWpuFC",
+    "scope": "Bounded memory, inherited horizon and deterministic M1-F5 morphology-resolution robustness on already-consumed C0B + 2024 only.",
+    "equivalence_margin_bits_per_outcome": 0.01,
+    "bootstrap": {
+      "method": "circular_moving_block",
+      "block_length": 32,
+      "replicates": 10000,
+      "seed": 20261004
+    },
+    "estimator": {
+      "criterion": "log_loss",
+      "splitter": "best",
+      "max_leaf_nodes": 6,
+      "min_samples_leaf": 50,
+      "random_state": 20261004
+    }
+  },
+  "source_bindings": {
+    "r2_canonical_package_sha256": "fbc0f37e25c7cf49df3c1d6ebcb524d0835ebc5011f9672d0d0c19f0d580786b",
+    "r1a_alignment_sha256": "cc760c28df8f2cb183ca488e677df98168f78c525fdbaebc9270c08f4f27c987",
+    "population": "C0B_AND_2024_CONSUMED",
+    "instrument": "GBPUSD",
+    "clock": "15M",
+    "fresh_source_opened": false
+  },
+  "results": {
+    "primary_decision": "A0_A1_EQUIVALENCE_UNSTABLE_ACROSS_GRID",
+    "module_m": "PASS_BOUNDED_MEMORY_CLOSURE",
+    "memory_panel_n": 10100,
+    "horizon_resolution_common_support_n": 10068,
+    "a0_positive_information_all_18_cells": true,
+    "a0_a1_equivalence_failures": [
+      {
+        "cell": "K4__R0_EXACT_7ZONE_TRACE",
+        "combined_ce_a0_minus_a1": -0.0030714584,
+        "combined_ci95": [
+          -0.011707504,
+          0.0052827171
+        ]
+      },
+      {
+        "cell": "B16__R0_EXACT_7ZONE_TRACE",
+        "combined_ce_a0_minus_a1": -0.03107085,
+        "combined_ci95": [
+          -0.04283495,
+          -0.02027433
+        ]
+      }
+    ],
+    "claim_cap": "A0 remains positively informative across every frozen consumed-data challenge, but full-price practical equivalence is not robust across the exact-trace grid."
+  },
+  "qa": {
+    "status": "PASS",
+    "replay": "PASS_TWO_RUNS_BYTE_IDENTICAL",
+    "frozen_components_replayed": 19,
+    "k1_exact_trace_parity": "10068/10068",
+    "post_execution_review": "PASS_WITH_PRIMARY_NONPASS_PRESERVED",
+    "no_post_result_rescue": true
+  },
+  "laboratory_custody": {
+    "status": "VERIFIED",
+    "catalogue_rows": "3189:3211",
+    "routing_rows": "3040:3062",
+    "decision_ids": [
+      "OVC-PSM-R3-G0-APPROVAL-2026-10-04",
+      "OVC-PSM-R3-CLOSEOUT-2026-10-04",
+      "OVC-PSM-R4-G0-READY-2026-10-04"
+    ],
+    "closeout_drive_id": "1RRDYAyVhxjgv2MaNKU1G1t6-CO0mC43v"
+  },
+  "canonical_package": {
+    "filename": "OVC_PRICE_STATE_MORPH_R3_Memory_Horizon_Morphology_Robustness_v0_1.zip",
+    "sha256": "9cb4d3da2f4e3ad11c6d768271c6785ead87af962c43243923fdbc11b0ecda71",
+    "laboratory_drive_id": "1SMXRPlWzo8GibifU25mw-gwUZGMrwbjd"
+  },
+  "decision": "A0_A1_EQUIVALENCE_UNSTABLE_ACROSS_GRID",
+  "status": "COMPLETED",
+  "next_gate": "OVC-PRICE-STATE-MORPH-R4-G0",
+  "stop_reason": "OPERATOR_REQUIRED_FRESH_SOURCE_INTAKE",
+  "rollback": "Forward-supersede repository integration records only. Preserve the immutable R3 Laboratory package, primary non-pass and R2 parent; never widen the equivalence band or drop exact cells post result.",
+  "authority_effect": "NONE_BEYOND_COMPLETED_R3_CONSUMED_DISCOVERY"
+}
